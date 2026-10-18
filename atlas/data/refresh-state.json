@@ -1,5 +1,17 @@
 {
  "version": 1,
- "entries": {},
- "moved": {}
+ "entries": {
+  "vynly": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-10-18T06:49:28Z",
+   "last_error": "HTTP 402"
+  },
+  "meta-muse": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-10-18T06:49:28Z",
+   "last_error": "refused: too many redirects"
+  }
+ },
+ "moved": {},
+ "updated_at": "2026-10-18T06:49:28Z"
 }

@@ -1,7 +1,7 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-16T01:55:00Z",
+ "generated_at": "2026-10-18T06:49:00Z",
  "id": "x402-list",
  "name": "x402-list",
  "url": "https://commonworld.one/atlas/platforms/x402-list/",
@@ -43,18 +43,18 @@
  ],
  "key_number": {
   "kind": "metric",
-  "value": 1024,
+  "value": 1020,
   "unit": "services",
   "window": "2026-10-15",
   "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:08:00Z",
+  "observed_at": "2026-10-18T06:49:00Z",
   "source_url": "https://x402-list.com/api/v1/stats"
  },
- "verified_at": "2026-10-15T21:40:00Z",
- "last_checked": "2026-10-15T21:40:00Z",
+ "verified_at": "2026-10-18T06:49:00Z",
+ "last_checked": "2026-10-18T06:49:00Z",
  "claims_count": 4,
  "disclosure": null,
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-10-18",
  "badge_svg": "https://commonworld.one/atlas/badge/x402-list.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402-list-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -78,17 +78,34 @@
   {
    "kind": "metric",
    "statement": "1,024 services, 7,700 endpoints, 35 mainnet networks; 928 answering, 959 payment-ready.",
-   "value": 1024,
+   "value": 1020,
    "unit": "services",
    "window": "2026-10-15",
    "basis": "direct_observation",
    "source_url": "https://x402-list.com/api/v1/stats",
-   "quote": "\"total_services\":1024,\"total_endpoints\":7700,\"total_networks\":35",
-   "observed_at": "2026-10-15T18:08:00Z",
+   "quote": "\"total_services\":1020,\"total_endpoints\":7705",
+   "observed_at": "2026-10-18T06:49:28Z",
    "methods": [
-    "curl API"
+    "GET https://x402-list.com/api/v1/stats",
+    "read data.total_services"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "history": [
+    {
+     "value": 1024,
+     "unit": "services",
+     "window": "2026-10-15",
+     "statement": "1,024 services, 7,700 endpoints, 35 mainnet networks; 928 answering, 959 payment-ready.",
+     "quote": "\"total_services\":1024,\"total_endpoints\":7700,\"total_networks\":35",
+     "source_url": "https://x402-list.com/api/v1/stats",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "basis": "direct_observation",
+     "outcome": "supported",
+     "superseded_at": "2026-10-18T06:49:28Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
+    }
+   ],
+   "refresh_id": "x402-list-services"
   },
   {
    "kind": "economic_flow",

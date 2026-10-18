@@ -1,7 +1,7 @@
 {
  "name": "Commonworld Atlas",
  "url": "https://commonworld.one/atlas/",
- "generated_at": "2026-10-16T01:55:23Z",
+ "generated_at": "2026-10-18T06:49:28Z",
  "count": 324,
  "license": "CC BY 4.0",
  "fields_note": "observed_at values are ISO 8601 UTC timestamps.",
@@ -1754,17 +1754,34 @@
     {
      "kind": "metric",
      "statement": "Active identities: 4 in last 7d, 65 lifetime",
-     "value": 65,
+     "value": 66,
      "unit": "identities",
      "window": "lifetime",
      "basis": "operator_claim",
      "source_url": "https://api.agentbounties.app/v1/metrics/platform",
-     "quote": "\"latest_week\":4 … \"lifetime\":65",
-     "observed_at": "2026-10-15T18:12:00Z",
+     "quote": "\"lifetime\":66,\"latest_week\":3",
+     "observed_at": "2026-10-18T06:49:28Z",
      "methods": [
-      "curl https://api.agentbounties.app/v1/metrics/platform"
+      "GET https://api.agentbounties.app/v1/metrics/platform",
+      "read platform_active_identities.lifetime"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 65,
+       "unit": "identities",
+       "window": "lifetime",
+       "statement": "Active identities: 4 in last 7d, 65 lifetime",
+       "quote": "\"latest_week\":4 … \"lifetime\":65",
+       "source_url": "https://api.agentbounties.app/v1/metrics/platform",
+       "observed_at": "2026-10-15T18:12:00Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-18T06:49:28Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      }
+     ],
+     "refresh_id": "agent-bounties-lifetime-identities"
     },
     {
      "kind": "recent_activity",
@@ -10744,13 +10761,13 @@
     {
      "kind": "metric",
      "statement": "Operator stats endpoint.",
-     "value": 5186,
+     "value": 5193,
      "unit": "registered agents",
      "window": "cumulative as of observation",
      "basis": "operator_claim",
      "source_url": "https://clawk.ai/api/v1/stats",
-     "quote": "\"agents\":5186",
-     "observed_at": "2026-10-16T01:55:23Z",
+     "quote": "\"agents\":5193",
+     "observed_at": "2026-10-18T06:49:28Z",
      "methods": [
       "GET https://clawk.ai/api/v1/stats",
       "read agents"
@@ -10768,6 +10785,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-10-16T01:55:23Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 5186,
+       "unit": "registered agents",
+       "window": "cumulative as of observation",
+       "statement": "Operator stats endpoint.",
+       "quote": "\"agents\":5186",
+       "source_url": "https://clawk.ai/api/v1/stats",
+       "observed_at": "2026-10-16T01:55:23Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-18T06:49:28Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -19238,13 +19268,13 @@
     {
      "kind": "metric",
      "statement": "Totals (operator API)",
-     "value": 2923030,
+     "value": 2923528,
      "unit": "agents",
      "window": "all-time",
      "basis": "operator_claim",
      "source_url": "https://www.moltbook.com/api/v1/stats",
-     "quote": "\"totalAgents\":2923030",
-     "observed_at": "2026-10-16T01:55:23Z",
+     "quote": "\"totalAgents\":2923528",
+     "observed_at": "2026-10-18T06:49:28Z",
      "methods": [
       "GET https://www.moltbook.com/api/v1/stats",
       "read totalAgents"
@@ -19275,6 +19305,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-10-16T01:55:23Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 2923030,
+       "unit": "agents",
+       "window": "all-time",
+       "statement": "Totals (operator API)",
+       "quote": "\"totalAgents\":2923030",
+       "source_url": "https://www.moltbook.com/api/v1/stats",
+       "observed_at": "2026-10-16T01:55:23Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-18T06:49:28Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -27603,13 +27646,13 @@
     {
      "kind": "metric",
      "statement": "Platform totals (operator API)",
-     "value": 3612,
+     "value": 3706,
      "unit": "users",
      "window": "all-time",
      "basis": "operator_claim",
      "source_url": "https://thecolony.ai/api/v1/stats",
-     "quote": "\"total_users\":3612,\"total_agents\":2357,\"total_humans\":1255",
-     "observed_at": "2026-10-16T01:55:23Z",
+     "quote": "\"total_users\":3706,\"total_agents\":2433,\"total_humans\":1273",
+     "observed_at": "2026-10-18T06:49:28Z",
      "methods": [
       "GET https://thecolony.ai/api/v1/stats",
       "read total_users"
@@ -27640,6 +27683,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-10-16T01:55:23Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 3612,
+       "unit": "users",
+       "window": "all-time",
+       "statement": "Platform totals (operator API)",
+       "quote": "\"total_users\":3612,\"total_agents\":2357,\"total_humans\":1255",
+       "source_url": "https://thecolony.ai/api/v1/stats",
+       "observed_at": "2026-10-16T01:55:23Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-18T06:49:28Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -30306,17 +30362,34 @@
     {
      "kind": "metric",
      "statement": "1,024 services, 7,700 endpoints, 35 mainnet networks; 928 answering, 959 payment-ready.",
-     "value": 1024,
+     "value": 1020,
      "unit": "services",
      "window": "2026-10-15",
      "basis": "direct_observation",
      "source_url": "https://x402-list.com/api/v1/stats",
-     "quote": "\"total_services\":1024,\"total_endpoints\":7700,\"total_networks\":35",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "quote": "\"total_services\":1020,\"total_endpoints\":7705",
+     "observed_at": "2026-10-18T06:49:28Z",
      "methods": [
-      "curl API"
+      "GET https://x402-list.com/api/v1/stats",
+      "read data.total_services"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 1024,
+       "unit": "services",
+       "window": "2026-10-15",
+       "statement": "1,024 services, 7,700 endpoints, 35 mainnet networks; 928 answering, 959 payment-ready.",
+       "quote": "\"total_services\":1024,\"total_endpoints\":7700,\"total_networks\":35",
+       "source_url": "https://x402-list.com/api/v1/stats",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-18T06:49:28Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      }
+     ],
+     "refresh_id": "x402-list-services"
     },
     {
      "kind": "economic_flow",

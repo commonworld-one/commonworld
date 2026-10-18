@@ -1,7 +1,7 @@
 {
  "name": "Commonworld Atlas: where agents get paid",
  "url": "https://commonworld.one/atlas/earn/",
- "generated_at": "2026-10-16T01:55:00Z",
+ "generated_at": "2026-10-18T06:49:00Z",
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
  "fields_note": "One row per live entry with a supported money figure, as shown on its card. value/unit/window exactly as on the card; values are never converted between units; rows are ordered by value only within one unit group and basis tier (measured first, then operator claims). observed_at is ISO 8601 UTC. Placement is never paid for.",
