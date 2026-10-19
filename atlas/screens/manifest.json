@@ -379,6 +379,19 @@
    "height": 750,
    "bytes": 46976
   },
+  "agent4science": {
+   "file": "agent4science.webp",
+   "sha256": "8d356d12336af7e9891f7b5a5f0e6148e945ceb00a3a794928ae1ca1a9fb1dc8",
+   "dhash": "3170712264106269",
+   "website": "https://agent4science.org",
+   "source_url": "https://agent4science.org/",
+   "http_status": 200,
+   "title": "Agent4Science - Where AI Scientists Discuss Research",
+   "captured_at": "2026-10-19T18:42:08Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 28192
+  },
   "agentagon": {
    "file": "agentagon.webp",
    "sha256": "868efbe5b1c05f2da71d7efded41ce86bcfb9e8dd530ac7a72424109602c62fa",
@@ -508,6 +521,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 30496
+  },
+  "agentgigs": {
+   "file": "agentgigs.webp",
+   "sha256": "eb0402c1a3c52d7050ceb483211f819acf1e32fd50872452acd130f523e20ea4",
+   "dhash": "0300476527e5e563",
+   "website": "https://www.agentgigs.io/",
+   "source_url": "https://www.agentgigs.io/",
+   "http_status": 200,
+   "title": "AgentGigs — The Autonomous AI Agent Marketplace",
+   "captured_at": "2026-10-19T18:42:08Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 41376
   },
   "agentgram": {
    "file": "agentgram.webp",
@@ -743,6 +769,19 @@
    "height": 750,
    "bytes": 63658
   },
+  "agentstore-agentpay": {
+   "file": "agentstore-agentpay.webp",
+   "sha256": "2792413e35fbddb41d28f7e0d0bece41ffff6ab9e37b1a500aee0c9160c5bba2",
+   "dhash": "070c270e4c260b71",
+   "website": "https://agentpaystore.com/",
+   "source_url": "https://agentpaystore.com/",
+   "http_status": 200,
+   "title": "AI Agent Store — Build, Own & Mint Your AI Agent (Earns USDC) | AgentPay",
+   "captured_at": "2026-10-19T18:42:21Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 46156
+  },
   "agentsy": {
    "file": "agentsy.webp",
    "sha256": "929891b08c5a29abe87011e8ede5392da7344fc078096b8a24b8f7e0dec4a992",
@@ -755,6 +794,32 @@
    "width": 1200,
    "height": 750,
    "bytes": 54622
+  },
+  "agentworld": {
+   "file": "agentworld.webp",
+   "sha256": "679c50923752a6c586b941885497bb802061bcb48f22340a6302642fa75ebc1d",
+   "dhash": "e20f9e170f9e9704",
+   "website": "https://agentworld.me/",
+   "source_url": "https://agentworld.me/",
+   "http_status": 200,
+   "title": "Agent World — 380+ AI Agents Living, Earning & Paying Real USDC",
+   "captured_at": "2026-10-19T18:42:08Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 42318
+  },
+  "agenty": {
+   "file": "agenty.webp",
+   "sha256": "db788cee68e5b8ebc42c7a73dac0f071336e73d6b528ecd279bc5dbc520456d5",
+   "dhash": "51ce4d961e5c4c4c",
+   "website": "https://agenty.im/",
+   "source_url": "https://agenty.im/",
+   "http_status": 200,
+   "title": "Agenty — one link, every handle",
+   "captured_at": "2026-10-19T18:42:07Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 28526
   },
   "agonaut": {
    "file": "agonaut.webp",
@@ -794,6 +859,32 @@
    "width": 1200,
    "height": 750,
    "bytes": 31346
+  },
+  "agoragentic": {
+   "file": "agoragentic.webp",
+   "sha256": "fb1b11d88641eff46af81da5ffcc883c2a064f5a6b979ca571e6024320e844f3",
+   "dhash": "e48acedede9e9e61",
+   "website": "https://agoragentic.com/",
+   "source_url": "https://agoragentic.com/",
+   "http_status": 200,
+   "title": "Agoragentic | Control and Proof for Autonomous Agents",
+   "captured_at": "2026-10-19T18:42:06Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 61346
+  },
+  "agrenting": {
+   "file": "agrenting.webp",
+   "sha256": "b0a440c8c3be07509b4ad528d70d65d3f33dd9e1245fc4d123e941b22571c61d",
+   "dhash": "71b8262323dc9a2a",
+   "website": "https://agrenting.com/",
+   "source_url": "https://agrenting.com/",
+   "http_status": 200,
+   "title": "Rent AI Agents or Earn Money | Agrenting",
+   "captured_at": "2026-10-19T18:42:15Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 36274
   },
   "ai-agent-message-board": {
    "file": "ai-agent-message-board.webp",
@@ -976,6 +1067,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 42024
+  },
+  "amazon-alexa-for-shopping": {
+   "file": "amazon-alexa-for-shopping.webp",
+   "sha256": "66ce4cac873b45b5c5ec905879fd37c9d041e190768c42f974f90fd6398fdb7d",
+   "dhash": "0ec0d050c6a2b2aa",
+   "website": "https://www.aboutamazon.com/news/retail/alexa-for-shopping-ai-assistant",
+   "source_url": "https://www.aboutamazon.com/news/retail/alexa-for-shopping-ai-assistant",
+   "http_status": 200,
+   "title": "Alexa for Shopping: Amazon's AI assistant for personalized shopping",
+   "captured_at": "2026-10-19T18:42:17Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 29650
   },
   "anthropic-claude-commerce-agents-blueprint": {
    "file": "anthropic-claude-commerce-agents-blueprint.webp",
@@ -1198,6 +1302,19 @@
    "height": 750,
    "bytes": 34128
   },
+  "bountix": {
+   "file": "bountix.webp",
+   "sha256": "af304f284a32b9cb9b9d3fcdc91f21c99d95fbf1c3cf54555be715973e34bedb",
+   "dhash": "8c6358781958f8b0",
+   "website": "https://bountix.ai/",
+   "source_url": "https://bountix.ai/",
+   "http_status": 200,
+   "title": "Agent Bounty Platform | Bountix",
+   "captured_at": "2026-10-19T18:42:20Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 30958
+  },
   "bountyhub": {
    "file": "bountyhub.webp",
    "sha256": "0d73319e04df6a275d96336333bc089c8f633da98014f9b90f25bbe7760a8462",
@@ -1275,6 +1392,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 40998
+  },
+  "chirper": {
+   "file": "chirper.webp",
+   "sha256": "7cb74f42e84ec88960c100a4d36cd8e581896424378785983ef73efa96c64f66",
+   "dhash": "4242cc4860686478",
+   "website": "https://chirper.ai/",
+   "source_url": "https://chirper.ai/",
+   "http_status": 200,
+   "title": "Chirper - AI-Powered Social Network",
+   "captured_at": "2026-10-19T18:42:29Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 50982
   },
   "church-of-molt": {
    "file": "church-of-molt.webp",
@@ -1380,6 +1510,19 @@
    "height": 750,
    "bytes": 52888
   },
+  "clawcaster": {
+   "file": "clawcaster.webp",
+   "sha256": "d217951a84a03a13781af9a8ef52f204d3b7bba19299efb0503c6479238f536b",
+   "dhash": "ef733b9b333b9332",
+   "website": "https://clawcaster.com/",
+   "source_url": "https://clawcaster.com/",
+   "http_status": 200,
+   "title": "Clawcaster - Where agents go social",
+   "captured_at": "2026-10-19T18:42:32Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 59572
+  },
   "clawcredit": {
    "file": "clawcredit.webp",
    "sha256": "70c23b313c047d918b56623acf549b68bfe5d1d66bfda55fe3293dc10505674a",
@@ -1418,6 +1561,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 44514
+  },
+  "clawhunt": {
+   "file": "clawhunt.webp",
+   "sha256": "ab28ddacba0cbc7c752c07753c317f693ff5c50f4b3c9d81b5a13a4828bc8558",
+   "dhash": "e29668f07020e880",
+   "website": "https://clawhunt.app/",
+   "source_url": "https://clawhunt.app/",
+   "http_status": 200,
+   "title": "ClawHunt — Discover Agentic Products",
+   "captured_at": "2026-10-19T18:42:32Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 26772
   },
   "clawk": {
    "file": "clawk.webp",
@@ -1484,6 +1640,19 @@
    "height": 750,
    "bytes": 39600
   },
+  "clawsino": {
+   "file": "clawsino.webp",
+   "sha256": "1d32c0ac146bdb98c3c95bfa1c57fd07409d412970a6c8f3acd0664a9107acac",
+   "dhash": "0c4c0c3c0f0b0f27",
+   "website": "https://clawsino.ai/",
+   "source_url": "https://clawsino.ai/",
+   "http_status": 200,
+   "title": "Clawsino - Daily Lottery for AI Agents",
+   "captured_at": "2026-10-19T18:42:29Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 17844
+  },
   "clawsites": {
    "file": "clawsites.webp",
    "sha256": "9ff12664d0afee43f4e8dde490253fcb2d124b6bddd8bfd235ead47e89c2420b",
@@ -1535,6 +1704,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 28558
+  },
+  "clawxiv": {
+   "file": "clawxiv.webp",
+   "sha256": "a49e95f174275ec45e7e76c7773b1fafaf914df01393c3ad9b6569242ac8bfa8",
+   "dhash": "2783ccb9c0c4c4c0",
+   "website": "https://www.clawxiv.org",
+   "source_url": "https://www.clawxiv.org/",
+   "http_status": 200,
+   "title": "clawXiv.org - e-Print archive for agents",
+   "captured_at": "2026-10-19T18:42:33Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 53152
   },
   "cloudflare-monetization-gateway": {
    "file": "cloudflare-monetization-gateway.webp",
@@ -1627,6 +1809,19 @@
    "height": 750,
    "bytes": 39852
   },
+  "commonlog": {
+   "file": "commonlog.webp",
+   "sha256": "589d660ccf947db894af563d52751c5ad1bb4d12a3245f2ea94bd116fb11deb7",
+   "dhash": "0010804e00c00430",
+   "website": "https://commonlog.ai/",
+   "source_url": "https://commonlog.ai/",
+   "http_status": 200,
+   "title": "Email for AI agents across products · commonlog",
+   "captured_at": "2026-10-19T18:42:36Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 64474
+  },
   "corbits": {
    "file": "corbits.webp",
    "sha256": "acad731aa3e89206279da040c07047f34c043c9c551032418f758a85cdb579c2",
@@ -1717,6 +1912,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 30342
+  },
+  "deskcrew": {
+   "file": "deskcrew.webp",
+   "sha256": "433b3cf758909260e0e26adc0ff3d1bde125a08d8ec5ddd27f63dfd238fddced",
+   "dhash": "0c43193919737372",
+   "website": "https://deskcrew.io/",
+   "source_url": "https://deskcrew.io/",
+   "http_status": 200,
+   "title": "DeskCrew: The agent-native helpdesk for humans + AI agents",
+   "captured_at": "2026-10-19T18:42:43Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 50344
   },
   "devaintart": {
    "file": "devaintart.webp",
@@ -1939,6 +2147,19 @@
    "height": 750,
    "bytes": 50970
   },
+  "hal-holistic-agent-leaderboard": {
+   "file": "hal-holistic-agent-leaderboard.webp",
+   "sha256": "019ac16f43cd2815d089708b88b1aa7cb3a07eaed0ce72806d4e6b451ab1f2f2",
+   "dhash": "2327c9caccc898c4",
+   "website": "https://hal.cs.princeton.edu",
+   "source_url": "https://hal.cs.princeton.edu/",
+   "http_status": 200,
+   "title": "HAL: Holistic Agent Leaderboard",
+   "captured_at": "2026-10-19T18:42:44Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 53102
+  },
   "heurist-x402-facilitator": {
    "file": "heurist-x402-facilitator.webp",
    "sha256": "c1264ef72f599b7080c64c5c0f8ccbe79af50f3b3cc9d07bf77ddecda22d3de7",
@@ -1991,6 +2212,19 @@
    "height": 750,
    "bytes": 27934
   },
+  "inwith-ai": {
+   "file": "inwith-ai.webp",
+   "sha256": "ba96dd68231c76be1f4f51774ffdebd6b927a7b6ea4fdfd0ac91eae5275fb40c",
+   "dhash": "d40f4d4d4d4d4d4d",
+   "website": "https://inwithai.com",
+   "source_url": "https://inwithai.com/",
+   "http_status": 200,
+   "title": "InWith AI – AI Agent Generation Platform",
+   "captured_at": "2026-10-19T18:42:43Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 39778
+  },
   "issuehunt": {
    "file": "issuehunt.webp",
    "sha256": "18df0b4acaf1b06d03c2358d1fe0a4f08d0958ec5e9b209026cd57dc3d57399c",
@@ -2004,6 +2238,19 @@
    "height": 750,
    "bytes": 22402
   },
+  "jobbi-agent-gig-index": {
+   "file": "jobbi-agent-gig-index.webp",
+   "sha256": "022d58a9c1bf0088890560f1b40f3635fc2ba151b5ed0441e448d53880942d79",
+   "dhash": "b4e0d4d48080d4d0",
+   "website": "https://jobbi.org/gigs",
+   "source_url": "https://jobbi.org/gigs",
+   "http_status": 200,
+   "title": "Jobbi — The Index of Agent Gigs",
+   "captured_at": "2026-10-19T18:42:46Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 59104
+  },
   "kaggle-agent-competitions": {
    "file": "kaggle-agent-competitions.webp",
    "sha256": "a3aa472b55124f6b7aaabc2fb95e83e119e1c9bee0c784c536f6d44c6ca4a2a4",
@@ -2016,6 +2263,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 41462
+  },
+  "keyring-agent": {
+   "file": "keyring-agent.webp",
+   "sha256": "783c0a1e8bd96ab1f58bbbf9d9c3e4187cc3052ad9a26e12d6e1913693a50711",
+   "dhash": "90888e8e0f0e0749",
+   "website": "https://keyring-agent.blockchhub.link",
+   "source_url": "https://keyring.app/",
+   "http_status": 200,
+   "title": "KEYRING PRO | Secure Ethereum & EVM Crypto Wallet",
+   "captured_at": "2026-10-19T18:43:14Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 26346
   },
   "kite-ai": {
    "file": "kite-ai.webp",
@@ -2134,6 +2394,19 @@
    "height": 750,
    "bytes": 33680
   },
+  "lockzone-qevrulan": {
+   "file": "lockzone-qevrulan.webp",
+   "sha256": "1b9dbad8b2e3cbe55953deb2984a75ed4391a4e82d46c2211f8e517f0884c2ed",
+   "dhash": "38a246245c502100",
+   "website": "https://qevrulan.com/.well-known/lockzone-recipe",
+   "source_url": "https://qevrulan.com/.well-known/lockzone-recipe",
+   "http_status": 200,
+   "title": "",
+   "captured_at": "2026-10-19T18:42:54Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 114186
+  },
   "machins": {
    "file": "machins.webp",
    "sha256": "1b8dbd21a25d5e78959b644ba2358545f6c89b2bca4da82ce36b6130446b981b",
@@ -2250,6 +2523,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 28728
+  },
+  "memecorp": {
+   "file": "memecorp.webp",
+   "sha256": "6eed81e2992c2abdf8e10e1ad9542bfb0b9dd796b733bcbbee14af2bbf9e8e22",
+   "dhash": "83040d2b0f0f3a3a",
+   "website": "https://memecorp.us/",
+   "source_url": "https://memecorp.us/",
+   "http_status": 200,
+   "title": "memecorp · real memes, real DOGE, real aura",
+   "captured_at": "2026-10-19T18:42:56Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 27378
   },
   "meridian-mrdn": {
    "file": "meridian-mrdn.webp",
@@ -2498,6 +2784,19 @@
    "height": 750,
    "bytes": 30578
   },
+  "nebils": {
+   "file": "nebils.webp",
+   "sha256": "e1c2167e60111cec469e9f21f54c0a95477f7902ea66f3c8dbcd628e5d2bc3eb",
+   "dhash": "d083337775730104",
+   "website": "https://nebils.com/",
+   "source_url": "https://nebils.com/",
+   "http_status": 200,
+   "title": "Nebils — A Social Network Where Humans, Agents & AI Models Hang Out Together",
+   "captured_at": "2026-10-19T18:43:07Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 27740
+  },
   "nekuda": {
    "file": "nekuda.webp",
    "sha256": "c9fe49a260faf42d46e63c04aaf579e6b6c5c6736f363bf0db819261341de9d7",
@@ -2523,6 +2822,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 38482
+  },
+  "nexus-0": {
+   "file": "nexus-0.webp",
+   "sha256": "e5d599f9b814a5b69605720e0bb3a7ae5d716f16d3260988d0e32a4391481ade",
+   "dhash": "d393537173738302",
+   "website": "https://nexus0.ai/",
+   "source_url": "https://nexus0.ai/",
+   "http_status": 200,
+   "title": "Nexus-0 | AI-Native Social Platform for AI Creators",
+   "captured_at": "2026-10-19T18:43:09Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 47178
   },
   "nothing-gripe": {
    "file": "nothing-gripe.webp",
@@ -3148,6 +3460,19 @@
    "height": 750,
    "bytes": 54202
   },
+  "t2000": {
+   "file": "t2000.webp",
+   "sha256": "839f423434cedfb46ef59086522c144edba989f20d3d02a03e5b4abaeb427278",
+   "dhash": "542b2bcc0f33132f",
+   "website": "https://t2000.ai/",
+   "source_url": "https://t2000.ai/",
+   "http_status": 200,
+   "title": "t2000 — the open marketplace.",
+   "captured_at": "2026-10-19T18:44:18Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 28368
+  },
   "tantive-space": {
    "file": "tantive-space.webp",
    "sha256": "76e5183e68dbb1cc85d97f7fdb32377c73123d4f2fa716529aa8b7644aebffe7",
@@ -3199,6 +3524,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 26584
+  },
+  "the-agent-museum": {
+   "file": "the-agent-museum.webp",
+   "sha256": "9e5c6cf1d610615dab988b850414e143fd40633615f42b0f13c7c0c9b74cc854",
+   "dhash": "9291b0d4acf86164",
+   "website": "https://agentmuseum.org/",
+   "source_url": "https://agentmuseum.org/",
+   "http_status": 200,
+   "title": "The Agent Museum — The first museum of the agent era",
+   "captured_at": "2026-10-19T18:44:10Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 37046
   },
   "the-agent-must-grow": {
    "file": "the-agent-must-grow.webp",
@@ -3382,6 +3720,19 @@
    "height": 750,
    "bytes": 58310
   },
+  "touchstone": {
+   "file": "touchstone.webp",
+   "sha256": "f85287f44b9df53b9720612d900861cfdcd258a8cb32b03a0bc989e07e9e7d1e",
+   "dhash": "8fd89290e89494a4",
+   "website": "https://touchstone.cv/",
+   "source_url": "https://touchstone.cv/",
+   "http_status": 200,
+   "title": "Touchstone — the black box for your agents",
+   "captured_at": "2026-10-19T18:44:11Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 58082
+  },
   "trust-authority-ai": {
    "file": "trust-authority-ai.webp",
    "sha256": "1f9b3e2fdc725763b087662106abbe6f9cbdebccb75a2ad28fcae8dd4807d47c",
@@ -3407,6 +3758,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 61700
+  },
+  "trybounty": {
+   "file": "trybounty.webp",
+   "sha256": "503170a158f36c2392a14cdfa2e193dd3fd86fef1828b43ab42427255b6de34b",
+   "dhash": "3361c86963493262",
+   "website": "https://trybounty.ai/",
+   "source_url": "https://trybounty.ai/",
+   "http_status": 200,
+   "title": "Bounty | Get Work Done by AI Agents",
+   "captured_at": "2026-10-19T18:42:18Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 32804
   },
   "ugig-net": {
    "file": "ugig-net.webp",
@@ -3577,6 +3941,19 @@
    "height": 750,
    "bytes": 23990
   },
+  "x-pay-api-xpay": {
+   "file": "x-pay-api-xpay.webp",
+   "sha256": "774e32e85a4732042ef6d0bd29f36dffb179f4997afe36f38668225e370bfaeb",
+   "dhash": "0000000000000000",
+   "website": "https://www.api-xpay.com",
+   "source_url": "https://www.api-xpay.com/",
+   "http_status": 200,
+   "title": "X Pay",
+   "captured_at": "2026-10-19T18:44:18Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 6552
+  },
   "x402-foundation": {
    "file": "x402-foundation.webp",
    "sha256": "5bd93c7d268c54758dfc635b656fab343dcba9fe1e06d38954416e797004cc7b",
@@ -3643,5 +4020,5 @@
    "bytes": 25826
   }
  },
- "updated_at": "2026-10-19T18:10:32Z"
+ "updated_at": "2026-10-19T18:46:14Z"
 }
