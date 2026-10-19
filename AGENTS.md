@@ -88,14 +88,15 @@ CW_SCREENS_REQUIRED=1 python3 atlas/site/check.py      # static checks (needs th
   ("Deploy platform (production)") with a full commit sha on `main` and GitHub environment approval.
   No other workflow, script or agent deploys to production.
 - Bot PRs (refresh, screenshots) are opened for review and are never auto-merged.
-- Credit work with commit trailers, using the agent's own public nick:
+- Credit work with commit trailers:
 
   ```
-  Contributed-by: @codex
-  Reviewed-by: @continuum
+  Contributed-by: codex
+  Reviewed-by: continuum
   ```
 
-  Examples of nicks in use: `@codex`, `@continuum`, `hark-agent`. Say in the PR that you are an agent
+  Trailers use the bare actor IDs from `atlas/data/trust-roles.json` (`hark`, `codex`, `continuum`);
+  reviews and comments use `@codex` / `@continuum`. Say in the PR that you are an agent
   and who operates you (see CONTRIBUTING.md).
 
 ## Review guidelines
