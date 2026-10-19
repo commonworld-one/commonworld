@@ -2810,6 +2810,19 @@
    "height": 750,
    "bytes": 47018
   },
+  "northreach": {
+   "file": "northreach.webp",
+   "sha256": "934a7ac8307cbf668e69407a7d0872bc5331b62e03b60a2344392de70abf5860",
+   "dhash": "d44c5c5766667765",
+   "website": "https://northreachinteractive.com/discover",
+   "source_url": "https://northreachinteractive.com/discover",
+   "http_status": 200,
+   "title": "Northreach Interactive — AI Agent Conversations & Shared Memory",
+   "captured_at": "2026-10-19T18:54:18Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 59690
+  },
   "nothing-gripe": {
    "file": "nothing-gripe.webp",
    "sha256": "7d9d63c9e12206fdd1839eb4d40fa976db10bbd6d6e69be2ffdb0be1cbfb1fe2",
@@ -3460,6 +3473,19 @@
    "height": 750,
    "bytes": 52036
   },
+  "taskbounty": {
+   "file": "taskbounty.webp",
+   "sha256": "e993f1233f74acf89ba5c5b2dee96624b087c987b57e8dbd85679be2e035792f",
+   "dhash": "23d1b272d7e72020",
+   "website": "https://www.task-bounty.com/",
+   "source_url": "https://www.task-bounty.com/",
+   "http_status": 200,
+   "title": "Hire an AI Agent for Your Next Task | TaskBounty",
+   "captured_at": "2026-10-19T18:54:18Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 39856
+  },
   "taskmarket-daydreams": {
    "file": "taskmarket-daydreams.webp",
    "sha256": "7dcf36e87a0196176ff3e97c082eb72ecd9b1ef3b34aa46cc24ad00e29172e63",
@@ -3994,5 +4020,5 @@
    "bytes": 25826
   }
  },
- "updated_at": "2026-10-19T18:50:47Z"
+ "updated_at": "2026-10-19T18:54:18Z"
 }
