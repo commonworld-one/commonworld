@@ -93,6 +93,19 @@
    "height": 750,
    "bytes": 35694
   },
+  "a2a-list": {
+   "file": "a2a-list.webp",
+   "sha256": "d85d9784004102f764fd05a89c87d658fa0a72819880f8118beb9b7d3c9f3a9a",
+   "dhash": "9880829494165216",
+   "website": "https://a2alist.ai/",
+   "source_url": "https://a2alist.ai/",
+   "http_status": 200,
+   "title": "A2A Agent Directory — 101 x402 & A2A Protocol Agents | a2alist.ai",
+   "captured_at": "2026-10-19T18:10:10Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 46144
+  },
   "a2a-protocol": {
    "file": "a2a-protocol.webp",
    "sha256": "421fa3e80bc8f2bffd46cf3dfeb7896cc06db31fab2d7ea893a30b54745c9afc",
@@ -353,6 +366,19 @@
    "height": 750,
    "bytes": 26250
   },
+  "agent402-tools": {
+   "file": "agent402-tools.webp",
+   "sha256": "61f841e67f2b3e6b95a7d23fd7c606be53c8454a769dd3ac0dc8eb98a132e3fd",
+   "dhash": "21dadadada9a9ada",
+   "website": "https://agent402.tools/",
+   "source_url": "https://agent402.tools/",
+   "http_status": 200,
+   "title": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+   "captured_at": "2026-10-19T18:10:08Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 46976
+  },
   "agentagon": {
    "file": "agentagon.webp",
    "sha256": "868efbe5b1c05f2da71d7efded41ce86bcfb9e8dd530ac7a72424109602c62fa",
@@ -548,6 +574,19 @@
    "height": 750,
    "bytes": 47310
   },
+  "agentindex-x402looker": {
+   "file": "agentindex-x402looker.webp",
+   "sha256": "74be135337d7cbfd23bf9dc82c712f1497bbe0ca60df0d0aa2263bb92462f331",
+   "dhash": "223c0e363c370e3e",
+   "website": "https://x402looker.com/",
+   "source_url": "https://x402looker.com/",
+   "http_status": 200,
+   "title": "AgentIndex — x402-Enabled Agent Services Directory",
+   "captured_at": "2026-10-19T18:10:08Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 48596
+  },
   "agentleague": {
    "file": "agentleague.webp",
    "sha256": "892818218499fc620dc1662124c0b6081113100448e0d6bc345fcd0363819e73",
@@ -690,6 +729,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 37470
+  },
+  "agentsports": {
+   "file": "agentsports.webp",
+   "sha256": "82addfe43cdb7329afe4ac30738b41c212452c96f925acc299faeb9a167b823d",
+   "dhash": "cccce8d957d3cbc6",
+   "website": "https://www.agentsports.io/",
+   "source_url": "https://www.agentsports.io/",
+   "http_status": 200,
+   "title": "AgentSports - AI vs Human Prediction Competition",
+   "captured_at": "2026-10-19T18:10:13Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 63658
   },
   "agentsy": {
    "file": "agentsy.webp",
@@ -963,6 +1015,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 63456
+  },
+  "arenabot": {
+   "file": "arenabot.webp",
+   "sha256": "18f02c9583027c4bb54b6ed656bbd09510c8c4dffbcb3279cb1a05609c91851d",
+   "dhash": "cc3e4c4d0e2f27c6",
+   "website": "https://arenabot.io/",
+   "source_url": "https://arenabot.io/",
+   "http_status": 200,
+   "title": "ArenaBot — Where AI Agents Battle for Glory",
+   "captured_at": "2026-10-19T18:10:09Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 30466
   },
   "artifact-council": {
    "file": "artifact-council.webp",
@@ -1496,6 +1561,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 13658
+  },
+  "coarena": {
+   "file": "coarena.webp",
+   "sha256": "d4b4789795ab2c3e13266e5ce65470b8f0db4851666816243decf4ba658e2d94",
+   "dhash": "8c17712d1d170d01",
+   "website": "https://coarena.ai/",
+   "source_url": "https://coarena.ai/",
+   "http_status": 200,
+   "title": "Computer-use AI benchmark & model leaderboard — Coarena",
+   "captured_at": "2026-10-19T18:10:09Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 18812
   },
   "coinbase-agentic-wallet": {
    "file": "coinbase-agentic-wallet.webp",
@@ -2159,6 +2237,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 37020
+  },
+  "meatlayer": {
+   "file": "meatlayer.webp",
+   "sha256": "ea180068d3eeb5a29d374a21cef075f3b4d643aa0a7eb7e767aab4d239923b78",
+   "dhash": "2f809a1a5a9a9c63",
+   "website": "https://meatlayer.ai/",
+   "source_url": "https://meatlayer.ai/",
+   "http_status": 200,
+   "title": "MeatLayer | The AI-to-Human Hiring Marketplace",
+   "captured_at": "2026-10-19T18:10:32Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 28728
   },
   "meridian-mrdn": {
    "file": "meridian-mrdn.webp",
@@ -3551,5 +3642,6 @@
    "height": 750,
    "bytes": 25826
   }
- }
+ },
+ "updated_at": "2026-10-19T18:10:32Z"
 }
