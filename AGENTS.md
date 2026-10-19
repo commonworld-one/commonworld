@@ -40,12 +40,14 @@ Run from the repo root. Python 3.12 is what CI uses; the generator itself is std
 python3 -m pip install -r requirements.txt            # Pillow for Open Graph images
 python3 -m unittest discover -s tests -p 'test_*.py'   # unit tests
 python3 atlas/site/build.py                            # build atlas/site/dist/ and refresh atlas/public/
-git diff --exit-code -- atlas/public                   # the mirror must be committed in sync
+git status --porcelain -- atlas/public                 # must print nothing: the mirror is committed in sync
 CW_SCREENS_REQUIRED=1 python3 atlas/site/check.py      # static checks (needs the atlas-screens branch fetched)
 ```
 
 - Homepage screenshots live on the orphan branch `atlas-screens`. Fetch it before a strict check:
-  `git fetch --depth=1 --no-tags origin +refs/heads/atlas-screens:refs/remotes/origin/atlas-screens`.
+  `git fetch --no-tags origin +refs/heads/atlas-screens:refs/remotes/origin/atlas-screens`.
+  Add `--depth=1` only in a clone that is already shallow (as `atlas/site/screens.py` does);
+  in a full clone it would make the repository shallow.
 - CI also validates API v1 against its JSON Schemas
   (`python3 atlas/site/tools/validate_jsonschema.py atlas/site/dist/api/v1`, needs `requirements-ci.txt`)
   and runs a browser smoke test (`atlas/site/tools/smoke_test.py`, needs Playwright + Chromium).
@@ -64,8 +66,10 @@ CW_SCREENS_REQUIRED=1 python3 atlas/site/check.py      # static checks (needs th
    - A slug is forever. Never rename or reuse one.
    - Never delete an indexed URL. A dead platform becomes a history card (closed, page kept).
      Safety removals use the neutral noindex stub and a public entry in the decision log.
-   - Only verified facts: every claim has a public source, basis, outcome and observation time.
-     No guesses, no marketing copy, no invented numbers.
+   - Only verified facts: every supported factual claim has a public source (`source_url`), basis,
+     outcome and observation time (`observed_at`). Unknown, unchecked or negative observations keep
+     `null` in those fields instead of a made-up value (see `atlas/PROTOCOL.md` and the nullable
+     fields in `atlas/site/api_v1.py`). No guesses, no marketing copy, no invented numbers.
    - The Atlas lists places (platforms where agents act), not individual people.
 5. **Definition of done** for a user-facing feature: the HTML page, its Markdown twin, its JSON,
    tests (or `check.py` assertions), README, `llms.txt`, changelog, and API docs where the API changes.
@@ -116,9 +120,11 @@ Report only real findings. Say the file and line, why it matters, and a concrete
 - **Injection:** HTML/Markdown/JSON output is escaped; no shell, SQL or template injection; parameterised
   D1 queries; no `eval` of untrusted input.
 - **Auth and permissions:** endpoints check who is calling; workflows use least-privilege `permissions:`.
-- **Atlas cards:** outbound URLs are `https`, point to the platform's official domain, carry no tracking
-  or affiliate parameters, and never contain commands, scripts or install one-liners to copy and run.
-  New facts have a source, basis and date.
+- **Atlas cards:** outbound URLs are `https`, carry no tracking or affiliate parameters, and never
+  contain commands, scripts or install one-liners to copy and run. Canonical and platform-owned URLs
+  point to the platform's official domain; evidence URLs may also be vetted independent sources
+  (reports, repositories, public APIs), as `atlas/PROTOCOL.md` allows. Supported new facts have a
+  source, basis and date.
 - **Fail closed:** validation, safety checks and gates reject on missing or malformed input instead of
   passing it through.
 - **Migrations:** backward compatible, in the order expand → deploy → contract. Destructive SQL needs an
@@ -126,7 +132,8 @@ Report only real findings. Say the file and line, why it matters, and a concrete
 - **GitHub Actions:** every third-party action pinned by full commit SHA (with a version comment);
   no secrets exposed to workflows triggered by fork pull requests (`pull_request_target` with checkout
   of PR code is a P0).
-- **Generated files in sync:** `atlas/public/` matches a fresh `build.py`; banners and API files are rebuilt.
+- **Generated files in sync:** after a fresh `build.py`, `git status --porcelain -- atlas/public` prints
+  nothing (this also catches untracked files); banners and API files are rebuilt.
 - **Tests:** changed behaviour comes with tests or `check.py` assertions; the definition of done above holds.
 - **Atlas rules:** no slug renames, no deleted indexed URLs, closed platforms kept as history.
 
