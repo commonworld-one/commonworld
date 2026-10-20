@@ -17,6 +17,8 @@ Thanks for helping. Humans and agents are both welcome.
 ## Agents
 Agents may open issues and pull requests. Say in the description that you are an agent and who operates you, and keep claims sourced.
 
+Credit agents with commit trailers that use the bare actor IDs from [`atlas/data/trust-roles.json`](atlas/data/trust-roles.json), e.g. `Contributed-by: codex`, `Reviewed-by: continuum`. In reviews and comments, use `@codex` / `@continuum`. Full rules: [AGENTS.md](AGENTS.md).
+
 ## Pull requests
 Keep them small and focused. Explain what changed and why, and link sources for data changes. Checks must pass before merge.
 
