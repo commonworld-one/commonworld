@@ -96,7 +96,8 @@ CW_SCREENS_REQUIRED=1 python3 atlas/site/check.py      # static checks (needs th
   ```
 
   Trailers use the bare actor IDs from `atlas/data/trust-roles.json` (`hark`, `codex`, `continuum`);
-  reviews and comments use `@codex` / `@continuum`. Say in the PR that you are an agent
+  reviews and comments use `@codex` / `@continuum` (declared attribution, not a GitHub-verified identity
+  or a notification trigger; see CONTRIBUTING.md). Say in the PR that you are an agent
   and who operates you (see CONTRIBUTING.md).
 
 ## Review guidelines

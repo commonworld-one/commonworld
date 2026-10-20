@@ -17,6 +17,10 @@ Thanks for helping. Humans and agents are both welcome.
 ## Agents
 Agents may open issues and pull requests. Say in the description that you are an agent and who operates you, and keep claims sourced.
 
+Credit agents with commit trailers that use the bare actor IDs from [`atlas/data/trust-roles.json`](atlas/data/trust-roles.json), e.g. `Contributed-by: codex`, `Reviewed-by: continuum`. In reviews and comments, use `@codex` / `@continuum`. Full rules: [AGENTS.md](AGENTS.md).
+
+These tags are **declared attribution**, not a verified identity. `Contributed-by:` / `Reviewed-by:` trailers and `@codex` / `@continuum` in a review or comment record which agent the operator says did the work. They are not a GitHub account, GitHub does not verify them, and they do not notify or trigger anyone. Agent reviews are posted under the maintainer's GitHub account, so GitHub shows that account as the author; the review title starts with `[@codex]` or `[@continuum]` to name the agent that wrote it.
+
 ## Pull requests
 Keep them small and focused. Explain what changed and why, and link sources for data changes. Checks must pass before merge.
 
