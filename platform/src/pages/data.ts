@@ -5,7 +5,7 @@
  * same visibility rules (views.ts: POST_SELECT, COMMENT_SELECT, PORCH_SELECT, hiddenAncestorSql).
  */
 import type { Env } from '../env';
-import { readSiteCounters } from '../counters';
+import { ensureCounters, readSiteCounters } from '../counters';
 import { catalogData } from '../routes/content';
 import { COMMENT_SELECT, PORCH_SELECT, POST_SELECT, bannedSql, commentView, disabledSql, hiddenAncestorSql, notDisabledSql, porchView, postView, shownCommentSql, shownPorchSql, shownPostSql } from '../views';
 
@@ -136,11 +136,28 @@ export async function search(env: Env, q: string, limit = 20) {
 
 // ---------- sitemap ----------
 
+/**
+ * An empty profile: no public posts, comments or porch lines (the profile counts) and no verified links, the only
+ * self-description a citizen has (there is no bio field). It stays reachable (200) but is noindex and not in the
+ * sitemap until the citizen writes something or proves a link (thin-content rule, 2026-10-21).
+ */
+export const isEmptyProfile = (prof: { counts: { posts: number; comments: number; porch: number }; verified_links: unknown[] }): boolean =>
+  prof.counts.posts + prof.counts.comments + prof.counts.porch === 0 && prof.verified_links.length === 0;
+
+/** Robots value of a profile: indexable only while active and not empty. */
+export const profileRobots = (prof: { account: { status: string }; counts: { posts: number; comments: number; porch: number }; verified_links: unknown[] }): 'index' | 'noindex' =>
+  prof.account.status === 'active' && !isEmptyProfile(prof) ? 'index' : 'noindex';
+
 export async function sitemapRows(env: Env) {
+  await ensureCounters(env); // account_stats is filled on first use
   const [posts, citizens, sections, tags] = await env.DB.batch([
     env.DB.prepare(`SELECT p.number, MAX(p.created_at, COALESCE((SELECT MAX(c.created_at) FROM comments c WHERE c.post_number = p.number AND c.status = 'visible' AND ${notDisabledSql('c.author_id')}), '')) AS lastmod
       FROM posts p WHERE ${shownPostSql('p')} AND ${notDisabledSql('p.author_id')} AND p.withdrawn_at IS NULL ORDER BY p.number LIMIT 45000`),
-    env.DB.prepare(`SELECT handle, created_at FROM accounts WHERE status = 'active' ORDER BY number LIMIT 4000`),
+    // active citizens with something public to read (see isEmptyProfile): an empty profile is noindex and stays out
+    env.DB.prepare(`SELECT a.handle, a.created_at FROM accounts a LEFT JOIN account_stats s ON s.account_id = a.id
+      WHERE a.status = 'active' AND (COALESCE(s.posts, 0) + COALESCE(s.comments, 0) + COALESCE(s.porch, 0) > 0
+        OR EXISTS (SELECT 1 FROM linked_identities li WHERE li.account_id = a.id AND li.status = 'verified'))
+      ORDER BY a.number LIMIT 4000`),
     env.DB.prepare(`SELECT s.slug, MAX(p.created_at) AS lastmod FROM sections s JOIN posts p ON p.section_slug = s.slug AND ${shownPostSql('p')} AND ${notDisabledSql('p.author_id')} AND p.withdrawn_at IS NULL
       WHERE s.status = 'active' GROUP BY s.slug ORDER BY s.number`),
     env.DB.prepare(`SELECT t.slug, MAX(p.created_at) AS lastmod FROM tags t JOIN post_tags pt ON pt.tag_slug = t.slug JOIN posts p ON p.number = pt.post_number AND ${shownPostSql('p')} AND ${notDisabledSql('p.author_id')} AND p.withdrawn_at IS NULL

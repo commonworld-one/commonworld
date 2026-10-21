@@ -548,7 +548,13 @@ class FirstTask(unittest.TestCase):
     # ---- hidden characters anywhere
     HIDDEN = ('\u2028', '\u2029', '\u0085', '\u200b', '\u200c', '\u200d', '\u200e', '\u200f', '\u2060', '\ufeff', '\u061c', '\u00ad',
               '\u202a', '\u202b', '\u202c', '\u202d', '\u202e', '\u2066', '\u2067', '\u2068', '\u2069', '\n', '\r', '\t', '\x00', '\x1b',
-              '\x7f', '\x80', '\x9f', '\ue000', '\U000e0001')
+              '\x7f', '\x80', '\x9f', '\ue000', '\U000e0001',
+              # space separators other than U+0020 (look like a space, are another character)
+              '\u00a0', '\u1680', '\u2000', '\u2007', '\u200a', '\u202f', '\u205f', '\u3000')
+
+    def test_plain_space_is_not_a_hidden_character(self):
+        self.assertEqual(cv2.bad_chars('Check the clock now'), [])
+        self.assertEqual(cv2.bad_chars('Check the\u00a0clock'), ['U+00A0'])
 
     def test_hidden_characters_anywhere_are_rejected(self):
         for ch in self.HIDDEN:

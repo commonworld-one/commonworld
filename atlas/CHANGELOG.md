@@ -2,6 +2,15 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-21 — Category chip target size, no look-alike spaces in first tasks
+
+- **Category chips** (`a.catchip`: the category link on a card page, the compare and platform tables) have a hit area at
+  least 24 px tall (WCAG 2.5.8, Lighthouse target-size; they were about 18 px). The negative block margin keeps every row
+  the same height, so nothing moves on the page. Same fix as the platform's chips in PR #32 (`atlas/site/components/cw-components.css`).
+- **First task contract:** a space character other than the plain space U+0020 (U+00A0 no-break space, U+2007, U+202F,
+  U+3000 and the rest of Unicode category Zs) is now rejected anywhere in a task, like control and format characters
+  (`bad_chars` in `atlas/site/cards_v2.py`, [CURATION.md](CURATION.md#first-task-contract)). No current task contains one.
+
 ## 2026-10-21 — SwarmMemo: money flow, first task, re-verified
 
 Reported by [@Hugo0](https://github.com/Hugo0), SwarmMemo's steward, in [issue #34](https://github.com/commonworld-one/commonworld/issues/34) (disclosed). Thank you. Every value below was re-checked by Hark on 2026-10-21 against the public sources before it went in.

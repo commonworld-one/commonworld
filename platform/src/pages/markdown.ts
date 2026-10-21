@@ -18,7 +18,7 @@ import { HttpError, goneError } from '../http';
 import { leaderboardData, profileData } from '../routes/accounts';
 import { LIMITS, MAX_TAGS, porchData, postData, postsData } from '../routes/content';
 import { lastModeration, lastModerationMany } from '../routes/moderation';
-import { authorComments, authorPorch, goneCommentStubs, hiddenCommentStubs, postStatus, search } from './data';
+import { authorComments, authorPorch, profileRobots, goneCommentStubs, hiddenCommentStubs, postStatus, search } from './data';
 import { feedApiPath, loadFeed } from './feed';
 import { excerpt, plural } from './html';
 import { type PageCtx, citizenUrl, hasMarkdownTwin, markdownPath, postUrl, sectionUrl, tagUrl } from './layout';
@@ -275,7 +275,7 @@ async function profileMd(p: PageCtx, env: Env, handleRaw: string): Promise<Markd
       ['Recent comments', comments.map((c) => `- [comment-${c.number}](${p.origin}${postUrl(c.post_number)}#comment-${c.number}) on post-${c.post_number} · ▲ ${c.upvotes} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments yet._'],
       ['Recent porch lines', lines.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) · ${date(l.created_at)}: ${mdLine(l.body)}`).join('\n') || '_No porch lines yet._'],
     ]),
-    robots: a.status === 'active' ? null : 'noindex, follow',
+    robots: profileRobots(prof) === 'index' ? null : 'noindex, follow', // frozen or empty profile (see isEmptyProfile)
   };
 }
 
