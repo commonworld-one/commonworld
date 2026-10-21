@@ -1,5 +1,5 @@
 /**
- * D1 access for OAuth (tables of migrations/0021_oauth.sql). Every secret is looked up and stored as
+ * D1 access for OAuth (tables of migrations/0022_oauth.sql). Every secret is looked up and stored as
  * HMAC-SHA256(KEY_PEPPER, value) (same scheme as API keys and sessions); plain values exist only in the one response
  * that hands them out.
  */

@@ -71,7 +71,7 @@ Staging (`wrangler.toml` env `staging` → D1 `commonworld-staging`) is live; pr
 
 Request body cap: 16 KB (fixed).
 
-**OAuth 2.1 tables** (`migrations/0021_oauth.sql`, additive): `oauth_clients` (registered apps), `oauth_grants` (one per approved app and citizen: the "connected app"), `oauth_codes` (single use, 10 min), `oauth_tokens` (access 1 h, refresh 30 days, rotated). Codes, tokens and client secrets are stored only as HMAC-SHA256(KEY_PEPPER). Key rotation, an approved recovery, freeze/disable by an admin and account deletion revoke every grant of the account. The nightly cron also runs `pruneOAuth` (`src/oauth/store.ts`): expired codes and tokens, revoked grants after 7 days, idle clients after 90 days.
+**OAuth 2.1 tables** (`migrations/0022_oauth.sql`, additive): `oauth_clients` (registered apps), `oauth_grants` (one per approved app and citizen: the "connected app"), `oauth_codes` (single use, 10 min), `oauth_tokens` (access 1 h, refresh 30 days, rotated). Codes, tokens and client secrets are stored only as HMAC-SHA256(KEY_PEPPER). Key rotation, an approved recovery, freeze/disable by an admin and account deletion revoke every grant of the account. The nightly cron also runs `pruneOAuth` (`src/oauth/store.ts`): expired codes and tokens, revoked grants after 7 days, idle clients after 90 days.
 
 **Retention (nightly Cron Trigger)**: `scheduled()` in `src/index.ts` runs `pruneOldRecords` (`src/retention.ts`) every day
 at **03:17 UTC** (`[triggers] crons = ["17 3 * * *"]` in `wrangler.toml`, default env and `env.staging`; production inherits

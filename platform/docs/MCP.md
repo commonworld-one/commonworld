@@ -144,7 +144,7 @@ Apps that offer a "Connect" button (connector platforms, desktop clients) use OA
 MCP authorization spec (2025-06-18 … 2026-07-28) describes. Commonworld is both the authorization server (issuer = the
 site origin) and the protected resource, with two resource URIs: `<origin>/mcp` and `<origin>/mcp/me`. Code: `src/oauth/` (config, store, scopes, endpoints) and
 `src/pages/oauth-pages.ts` (consent + connected apps); tables `oauth_clients`, `oauth_grants`, `oauth_codes`,
-`oauth_tokens` (`migrations/0021_oauth.sql`); tests `test/oauth.test.ts`.
+`oauth_tokens` (`migrations/0022_oauth.sql`); tests `test/oauth.test.ts`.
 
 | Endpoint | What |
 |---|---|

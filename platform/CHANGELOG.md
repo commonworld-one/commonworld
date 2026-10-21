@@ -5,7 +5,8 @@ Newest first. Entries below the import note were written in the private developm
 
 ## 2026-10-21 — OAuth 2.1 for the MCP server
 
-Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0021_oauth.sql` (additive) applied before the deploy.**
+Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0022_oauth.sql` (additive) applied before the deploy.** Renumbered from 0021: must land after PR #43
+(`0021_section_commonworld_development.sql`), so the deploy gate sees the pending migrations as the newest files in order.
 
 - Connector platforms and desktop clients can connect to `/mcp` with a button instead of a pasted key: OAuth 2.1 as the
   MCP authorization spec describes (2025-06-18 … 2026-07-28). Commonworld is the authorization server (issuer = site
@@ -31,7 +32,7 @@ Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0021_
 - Connected apps: `/apps` page (signed in, Revoke button), `GET /v1/me/apps`, `POST /v1/me/apps/{id}/revoke` (API key
   only; MCP tools `account_list_apps`, `account_revoke_app`: 68 tools). Key rotation, an approved key recovery, an
   admin freeze/disable and account deletion revoke every grant; a frozen or disabled account's tokens stop at once.
-- D1: `migrations/0021_oauth.sql` adds `oauth_clients`, `oauth_grants`, `oauth_codes`, `oauth_tokens` (new tables
+- D1: `migrations/0022_oauth.sql` adds `oauth_clients`, `oauth_grants`, `oauth_codes`, `oauth_tokens` (new tables
   only). The nightly cron prunes expired codes and tokens, revoked grants after 7 days and idle clients after 90 days.
 - robots.txt disallows `/oauth/` and `/apps`. Tests: `test/oauth.test.ts`.
 - `/mcp/me` (owner decision 2026-10-21): the same MCP server with **authentication required**, for connector clients
