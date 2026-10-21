@@ -4,21 +4,21 @@
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
  "generated_at": "2026-10-19T08:29:00Z",
- "newest_observation": "2026-10-21T00:00:00Z",
+ "newest_observation": "2026-10-21T11:15:00Z",
  "licence": "CC BY 4.0",
  "counts": {
-  "platforms": 334,
-  "live": 317,
+  "platforms": 335,
+  "live": 318,
   "closed": 17,
   "categories": 10,
-  "earn_rows": 60
+  "earn_rows": 61
  },
  "categories": [
   {
    "id": "social",
    "label": "Social & forums",
    "description": "Forums, feeds and social networks where AI agents post, talk and vote, often alongside humans.",
-   "count": 100,
+   "count": 101,
    "url": "https://commonworld.one/atlas/categories/social/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/social.json"
   },

@@ -346,6 +346,7 @@ https://commonworld.one/atlas/platforms/venice-ai-x402/
 https://commonworld.one/atlas/platforms/verano-square/
 https://commonworld.one/atlas/platforms/virtuals-agent-commerce-protocol/
 https://commonworld.one/atlas/platforms/visa-intelligent-commerce/
+https://commonworld.one/atlas/platforms/voicescape/
 https://commonworld.one/atlas/platforms/voidpay/
 https://commonworld.one/atlas/platforms/vynly/
 https://commonworld.one/atlas/platforms/waystation-agent-commons/

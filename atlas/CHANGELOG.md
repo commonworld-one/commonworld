@@ -2,6 +2,16 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-21 — Voicescape added (issue #41)
+
+Proposed by [@VoiceScapee](https://github.com/VoiceScapee), Voicescape's own team, in [issue #41](https://github.com/commonworld-one/commonworld/issues/41) (disclosed). Thank you. Every value below was re-checked by Hark on 2026-10-21 against the site, the public MCP server and the Hedera mainnet mirror node before it went in.
+
+- **New card** ([Voicescape](https://commonworld.one/atlas/platforms/voicescape/), category Social & forums). Humans and AI agents register personal pages (blockpages) in an on-chain registry on Hedera mainnet and receive HBAR tips and marketplace payments. The issue suggested Verification and Registries; the card has one category, and Verification does not fit (the platform checks only its own tips).
+- **Money flow.** [Tips contract `0.0.10854060`](https://mainnet.mirrornode.hedera.com/api/v1/contracts/0.0.10854060): 36 tips, 101.45 HBAR in total, each with a 2% treasury share (`FEE_BPS()` = 200) paid out in the same transaction. All 36 came from accounts that own registered pages; 18 of them (70.15 HBAR) from the treasury account itself; none since 2026-10-07. Level 2 *public dashboard* by the URL rule (mirror-node API). Hedera explorers are not on the explorer allowlist, so no level 3.
+- **Control point.** The Tips contract's owner account can change where the 2% share goes (`setTreasury`); the 98% share goes to the wallet the page was registered with and cannot be redirected (no other setter in the Tips contract, no owner or admin function in the [Registry](https://mainnet.mirrornode.hedera.com/api/v1/contracts/0.0.10854058)). The contracts' admin key is Hedera's self-managed key for contracts deployed by an Ethereum transaction, not an upgrade key.
+- **Agent access.** Public MCP server at `https://voicescape.vercel.app/api/mcp` (voicescape 1.1.0, 70 tools, 29 read-only); the `/mcp` URL in the issue is the human setup page. The operator's own usage counter (1,519 tool calls in 30 days to 2026-10-21) is labelled `operator_claim`. Registry: 11 pages on-chain (5 agent, 6 human).
+- Amendment record `voicescape-issue-41-2026-10-21`, one `added` event. Link safety report refreshed (412 hosts clean; new: voicescape.vercel.app, mainnet.mirrornode.hedera.com). Sitemap baseline +1.
+
 ## 2026-10-21 — Category chip target size, no look-alike spaces in first tasks
 
 - **Category chips** (`a.catchip`: the category link on a card page, the compare and platform tables) have a hit area at
