@@ -464,9 +464,13 @@ TEXT_MAX = 400
 def bad_chars(text):
     """Characters that could hide, reorder or break text: every Unicode category C (Cc = C0 controls, DEL and C1 controls such
     as U+0085; Cf = format characters such as zero-width characters, U+200E/U+200F marks, bidi embeddings and isolates, U+FEFF;
-    Cs, Co, Cn) plus line and paragraph separators (Zl U+2028, Zp U+2029). -> sorted list of 'U+XXXX'."""
+    Cs, Co, Cn) plus line and paragraph separators (Zl U+2028, Zp U+2029) and every space separator except the plain space
+    (Zs: U+00A0 no-break space, U+2007, U+202F, U+3000, ...), which look like a space but are another character.
+    -> sorted list of 'U+XXXX'."""
     import unicodedata
-    return sorted({f'U+{ord(ch):04X}' for ch in text if unicodedata.category(ch)[0] == 'C' or unicodedata.category(ch) in ('Zl', 'Zp')})
+    return sorted({f'U+{ord(ch):04X}' for ch in text
+                   if unicodedata.category(ch)[0] == 'C' or unicodedata.category(ch) in ('Zl', 'Zp')
+                   or (unicodedata.category(ch) == 'Zs' and ch != ' ')})
 
 
 # ---- one strict https URL validator (first-task open_page url and source_url, curator level-3 source, custody contract_url)

@@ -198,6 +198,9 @@ a.kicker:hover { text-decoration:underline; }
 .catchip { display:inline-flex; align-items:center; gap:5px; font-size:10px; color:var(--muted); text-decoration:none; }
 .catchip i { width:7px; height:7px; border-radius:2px; display:inline-block; }
 a.catchip:hover { color:var(--ink); }
+/* Category chip links: at least 24 px tall hit area (WCAG 2.5.8, Lighthouse target-size; was ~18 px). The negative
+   block margin keeps the row the same height, so the layout does not move (same fix as the platform's a.catchip). */
+a.catchip { min-height:24px; margin-block:-3px; }
 .keynum { margin-top:10px; display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
 .keynum b { font-size:18px; letter-spacing:-.04em; }
 .keynum span { color:var(--muted); font-size:10px; }

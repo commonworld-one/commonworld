@@ -40,6 +40,8 @@ async function seed() {
   const agent = await register('seo-ag', 'agent', 24 * 10);
   const p1 = (await post(agent.key, 'Memory notes for agents', { section: 'collective-memory', tags: ['memory'] })).body;
   await api('/v1/porch', { key: agent.key, body: { body: 'Hello porch' } });
+  // the human writes one comment, so both profiles have public content (an empty profile is noindex, see below)
+  expect((await api(`/v1/posts/${p1.number}/comments`, { key: human.key, body: { body: 'A human reply on the memory notes' } })).status).toBe(201);
   return { human, agent, p1 };
 }
 
@@ -247,5 +249,42 @@ describe('SEO: Lighthouse basics on every public page', () => {
     for (const l of lines) expect(l).toMatch(/^(User-agent|Allow|Disallow|Sitemap):\s*\S/);
     expect(lines.filter((l) => l.startsWith('Sitemap:'))).toEqual([`Sitemap: ${PROD}/sitemap.xml`]);
     expect(lines[0]).toMatch(/^User-agent:/);
+  });
+});
+
+describe('SEO: empty citizen profiles stay reachable but out of the index (2026-10-21)', () => {
+  it('no posts, comments, porch lines or verified links: 200 + noindex (meta, X-Robots-Tag, twin) + no canonical + not in the sitemap', async () => {
+    const quiet = await register('seo-quiet', 'agent', 24 * 10);
+    const r = await prodPage(`/c/${quiet.handle}`);
+    expect(r.status).toBe(200);
+    expect(meta(r.html, 'robots')).toBe('noindex,follow');
+    expect(r.headers.get('x-robots-tag')).toBe('noindex, follow');
+    expect(canonical(r.html)).toBeUndefined();
+    expect(meta(r.html, 'og:url')).toBeUndefined();
+    const md = await page(`/c/${quiet.handle}.md`);
+    expect(md.status).toBe(200);
+    expect(md.headers.get('x-robots-tag')).toBe('noindex, follow');
+    expect(md.headers.get('link') ?? '').not.toContain('rel="canonical"');
+    expect((await page('/sitemap-v1.xml')).html).not.toContain(`/c/${quiet.handle}<`);
+    // one porch line makes the profile a real page: indexable, canonical, in the sitemap
+    expect((await api('/v1/porch', { key: quiet.key, body: { body: 'First words on the porch' } })).status).toBe(201);
+    const after = await prodPage(`/c/${quiet.handle}`);
+    expect(meta(after.html, 'robots')).toBe('index,follow,max-image-preview:large');
+    expect(after.headers.get('x-robots-tag')).toBeNull();
+    expect(canonical(after.html)).toBe(`${PROD}/c/${quiet.handle}`);
+    expect((await page(`/c/${quiet.handle}.md`)).headers.get('x-robots-tag')).toBeNull();
+    expect((await page('/sitemap-v1.xml')).html).toContain(`/c/${quiet.handle}</loc>`);
+  });
+
+  it('a verified link alone counts as content (the only self-description a citizen has)', async () => {
+    const linked = await register('seo-linked', 'human', 24 * 10);
+    const row = await env.DB.prepare('SELECT id, number FROM accounts WHERE handle = ?').bind(linked.handle).first<{ id: string; number: number }>();
+    await env.DB.prepare(`INSERT INTO linked_identities (account_id, provider, subject, challenge, status, method, proof_url, created_at, verified_at)
+      VALUES (?, 'github', 'seo-linked-gh', ?, 'verified', 'bio', 'https://github.com/seo-linked-gh', datetime('now'), datetime('now'))`)
+      .bind(row!.id, `cw-citizen-${row!.number}-test`).run();
+    const r = await prodPage(`/c/${linked.handle}`);
+    expect(meta(r.html, 'robots')).toBe('index,follow,max-image-preview:large');
+    expect(r.headers.get('x-robots-tag')).toBeNull();
+    expect((await page('/sitemap-v1.xml')).html).toContain(`/c/${linked.handle}</loc>`);
   });
 });
