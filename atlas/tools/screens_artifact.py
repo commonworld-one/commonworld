@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the screens-publish artifact before the publish job of .github/workflows/screens.yml opens a PR (stdlib only).
+"""Check the screens-publish artifact before the publish job of .github/workflows/screens.yml opens a PR.
 
 The capture job (atlas/tools/screens.py, a browser on third-party sites, read-only token) uploads:
 
@@ -17,22 +17,29 @@ copied or pushed; every problem is reported (not only the first):
              optional), each of the right type: file == "<slug>.webp", sha256 64-hex, dhash 16-hex, website / source_url
              / shot_url https URLs, http_status an int 100..599 (not a bool), title a string, captured_at
              YYYY-MM-DDTHH:MM:SSZ, width 1200, height 750, bytes a positive int.
-  images     every <slug>.webp in the artifact is at most MAX_BYTES, is a structurally valid WebP (webp_problem below:
-             RIFF size, chunk walk, VP8 / VP8L / VP8X headers, no trailing bytes), is referenced by the manifest, and its
-             sha256, size and decoded width x height equal the manifest record.
+  images     every <slug>.webp in the artifact is at most MAX_BYTES (stat before opening, bounded read), is a
+             structurally valid WebP (webp_problem below, stdlib: RIFF size, chunk walk, VP8 / VP8L / VP8X headers,
+             ALPH placement and the VP8X alpha flag, no trailing bytes), then really decodes (decode_problem below:
+             Pillow / libwebp, every frame, pixel count bounded) to the manifest's 1200x750, is referenced by the
+             manifest, and its sha256 and size equal the manifest record.
+  decoder    the structural parser is the first gate and needs only the stdlib; the decode needs Pillow. Without Pillow
+             the decode is skipped with a warning, unless CW_WEBP_DECODE_REQUIRED=1 (set in CI and in the publish job):
+             then a missing Pillow is a problem, never a silent skip.
   cards      (--data) every slug whose image is in the artifact is a live Atlas card of the newest
              snapshot-verified-*.json, and its `website` equals the card's canonical_url (what the capture shot).
   base       (--base, the atlas/screens directory of the atlas-screens checkout the PR goes to) no slug of the stored
              manifest disappears; every entry whose image is NOT in the artifact is unchanged from the stored entry, and
-             its stored <slug>.webp exists with that sha256. Without --base every manifest entry needs its image in
-             the artifact.
+             its stored <slug>.webp exists with that sha256 (stat size check against MAX_BYTES first, then a streamed,
+             bounded sha256). Without --base every manifest entry needs its image in the artifact.
+  reads      every file this reads (manifests, images, stored images) is size-checked by stat before it is opened and
+             read with a hard cap of MAX_BYTES; anything larger fails closed.
 
 atlas/site/screens.py (the build-side reader) skips bad records one by one; this check stops a bad artifact before it
 reaches atlas-screens at all, e.g. {"screens": {"dealwork-ai": null}}, which would crash the reader.
 
 Usage: screens_artifact.py --artifact DIR [--base DIR] [--data DIR]     exit 0 ok, 1 problems found, 2 usage
 """
-import argparse, glob, hashlib, json, os, re, stat, struct, sys
+import argparse, glob, hashlib, io, json, os, re, stat, struct, sys, warnings
 
 SLUG = re.compile(r'[a-z0-9][a-z0-9-]{0,80}')          # same as atlas/site/screens.py
 WEBP_NAME = re.compile(r'([a-z0-9][a-z0-9-]{0,80})\.webp')
@@ -46,6 +53,11 @@ REQUIRED = {'file', 'sha256', 'dhash', 'website', 'source_url', 'http_status', '
 OPTIONAL = {'shot_url'}
 MAX_BYTES = 8 * 1024 * 1024        # real screens are 5..210 KB
 MAX_DIM = 4096                     # per side; real screens are 1200x750 (the WebP format allows up to 16383 / 2^24)
+MAX_PIXELS = MAX_DIM * MAX_DIM     # Pillow's Image.MAX_IMAGE_PIXELS while decoding (DecompressionBombWarning = error)
+MAX_FRAMES = 100                   # animated WebP frames decoded at most (real screens are stills)
+CHUNK = 1 << 16                    # streamed sha256 read size
+DECODE_ENV = 'CW_WEBP_DECODE_REQUIRED'
+ALPHA_FLAG, ANIM_FLAG = 0x10, 0x02  # VP8X flags byte: Rsv Rsv I L E X A R (RFC 9649 2.7)
 FOURCC = re.compile(rb'[A-Z0-9 ]{4}')
 VP8X_CHUNKS = {b'ICCP', b'ANIM', b'ANMF', b'ALPH', b'VP8 ', b'VP8L', b'EXIF', b'XMP '}
 
@@ -104,6 +116,41 @@ def _vp8l(b, o, n):
     return ((v & 0x3fff) + 1, ((v >> 14) & 0x3fff) + 1), None
 
 
+def _vp8l_alpha(b, o):
+    """alpha_is_used bit of a VP8L header (bit 28 of the 32 bits after the 0x2f signature, RFC 9649 3.2)."""
+    return bool(struct.unpack_from('<I', b, o + 1)[0] >> 28 & 1)
+
+
+def _alpha_problem(b, chunks, where):
+    """ALPH rules for one still image or one ANMF frame, chunks = [(fourcc, off, size)] holding exactly one VP8 / VP8L
+    -> (has_alpha, problem or None). ALPH may appear only once, only with a lossy 'VP8 ' bitstream (never with VP8L) and
+    immediately before the 'VP8 ' chunk (RFC 9649 2.7.1.2 / 2.7.3: VP8X, ALPH, VP8). The image has alpha when it has an
+    ALPH chunk or is a VP8L with alpha_is_used = 1."""
+    ids = [c for c, _, _ in chunks]
+    img = next(c for c in chunks if c[0] in (b'VP8 ', b'VP8L'))
+    if b'ALPH' in ids:
+        if ids.count(b'ALPH') != 1:
+            return True, f'{where}: more than one ALPH chunk'
+        if img[0] != b'VP8 ':
+            return True, f'{where}: ALPH chunk only goes with a lossy VP8 image, not VP8L'
+        i = ids.index(b'ALPH')
+        if i + 1 >= len(ids) or ids[i + 1] != b'VP8 ':
+            return True, f'{where}: ALPH chunk must come immediately before the VP8 chunk'
+        return True, None
+    return img[0] == b'VP8L' and _vp8l_alpha(b, img[1]), None
+
+
+def _alpha_flag_problem(flags, has_alpha):
+    """VP8X alpha flag (L) against the image: set iff some frame has alpha (ALPH, or VP8L alpha_is_used = 1). RFC 9649
+    defines L as 'set if any of the frames contain transparency information' and alpha_is_used as a hint that SHOULD
+    be 1 exactly when some alpha value is not 255; libwebp writes both consistently, so a mismatch either way is refused."""
+    if has_alpha and not flags & ALPHA_FLAG:
+        return 'VP8X alpha flag is not set but the image has alpha (ALPH chunk or VP8L alpha_is_used)'
+    if flags & ALPHA_FLAG and not has_alpha:
+        return 'VP8X alpha flag is set but there is no alpha (no ALPH chunk, no VP8L with alpha_is_used)'
+    return None
+
+
 def _image(b, cc, o, n):
     return _vp8(b, o, n) if cc == b'VP8 ' else _vp8l(b, o, n)
 
@@ -112,8 +159,9 @@ def webp_problem(b):
     """-> ((width, height), None) for a structurally valid WebP, or (None, problem). Stdlib only, no decoding: the
     RIFF size equals the file length - 8 (nothing after it, nothing missing), every chunk fits, and the first chunk is
     VP8 (key frame start code 9d 01 2a, non-zero size) or VP8L (signature 0x2f) alone, or VP8X (canvas size, flags)
-    followed by the image: one VP8/VP8L (ALPH allowed before VP8) whose size equals the canvas, or ANIM + ANMF frames
-    each holding one. Sides are capped at MAX_DIM."""
+    followed by the image: one VP8/VP8L whose size equals the canvas, or ANIM + ANMF frames each holding one. ALPH
+    only once, only with VP8 (never VP8L) and immediately before the 'VP8 ' chunk; the VP8X alpha flag set exactly when
+    the image has alpha. Sides are capped at MAX_DIM. This does not decode: decode_problem does."""
     if len(b) > MAX_BYTES:
         return None, f'{len(b)} bytes, over {MAX_BYTES}'
     if len(b) < 20 or b[:4] != b'RIFF' or b[8:12] != b'WEBP':
@@ -160,9 +208,10 @@ def _vp8x(b, chunks):
     unknown = sorted({c.decode() for c in ids} - {c.decode() for c in VP8X_CHUNKS})
     if unknown:
         return None, f'VP8X file has unexpected chunks {", ".join(unknown)}'
-    if flags & 0x02:                                   # animation
+    if flags & ANIM_FLAG:
         if ids.count(b'ANIM') != 1 or b'ANMF' not in ids or b'VP8 ' in ids or b'VP8L' in ids or b'ALPH' in ids:
             return None, 'animated VP8X needs one ANIM, ANMF frames and no top-level image chunk'
+        any_alpha = False
         for cc, fo, fn in rest:
             if cc == b'ANIM' and fn != 6:
                 return None, f'ANIM chunk is {fn} bytes, not 6'
@@ -181,25 +230,121 @@ def _vp8x(b, chunks):
             imgs = [s for s in sub if s[0] in (b'VP8 ', b'VP8L')]
             if len(imgs) != 1 or any(s[0] not in (b'VP8 ', b'VP8L', b'ALPH') for s in sub):
                 return None, 'ANMF frame needs exactly one VP8 / VP8L image (ALPH optional)'
+            alpha, prob = _alpha_problem(b, sub, 'ANMF')
+            if prob:
+                return None, prob
+            any_alpha = any_alpha or alpha
             dims, prob = _image(b, *imgs[0])
             if prob:
                 return None, prob
             if dims != (fw, fh):
                 return None, f'ANMF image {dims[0]}x{dims[1]} is not the frame size {fw}x{fh}'
-        return (w, h), None
+        prob = _alpha_flag_problem(flags, any_alpha)
+        return (None, prob) if prob else ((w, h), None)
     if b'ANIM' in ids or b'ANMF' in ids:
         return None, 'still VP8X file has ANIM / ANMF chunks'
     imgs = [c for c in rest if c[0] in (b'VP8 ', b'VP8L')]
     if len(imgs) != 1:
         return None, f'VP8X file has {len(imgs)} image chunks, not 1'
-    if b'ALPH' in ids and (imgs[0][0] != b'VP8 ' or ids.count(b'ALPH') != 1 or ids.index(b'ALPH') > ids.index(b'VP8 ')):
-        return None, 'ALPH chunk must come once, right before a VP8 image'
+    alpha, prob = _alpha_problem(b, rest, 'VP8X')
+    if prob:
+        return None, prob
+    prob = _alpha_flag_problem(flags, alpha)
+    if prob:
+        return None, prob
     dims, prob = _image(b, *imgs[0])
     if prob:
         return None, prob
     if dims != (w, h):
         return None, f'image {dims[0]}x{dims[1]} is not the VP8X canvas {w}x{h}'
     return (w, h), None
+
+
+def read_capped(path, cap=MAX_BYTES):
+    """-> the bytes of the regular file at path. Its size is checked by stat before it is opened and the read stops at
+    cap + 1 bytes, so a file over cap (or one that grows after the stat) raises ValueError without being read whole."""
+    st = os.stat(path)
+    if not stat.S_ISREG(st.st_mode):
+        raise ValueError('not a regular file')
+    if st.st_size > cap:
+        raise ValueError(f'{st.st_size} bytes, over {cap}')
+    with open(path, 'rb') as fh:
+        b = fh.read(cap + 1)
+    if len(b) > cap:
+        raise ValueError(f'over {cap} bytes')
+    return b
+
+
+def sha256_capped(path, cap=MAX_BYTES):
+    """-> (sha256 hex, size) of the regular file at path, streamed in CHUNK reads; same stat check and hard cap as
+    read_capped (ValueError over cap)."""
+    st = os.stat(path)
+    if not stat.S_ISREG(st.st_mode):
+        raise ValueError('not a regular file')
+    if st.st_size > cap:
+        raise ValueError(f'{st.st_size} bytes, over {cap}')
+    h, n = hashlib.sha256(), 0
+    with open(path, 'rb') as fh:
+        while True:
+            part = fh.read(min(CHUNK, cap + 1 - n))
+            if not part:
+                break
+            n += len(part)
+            if n > cap:
+                raise ValueError(f'over {cap} bytes')
+            h.update(part)
+    return h.hexdigest(), n
+
+
+def _pillow():
+    """PIL.Image, or None when Pillow is not installed."""
+    try:
+        from PIL import Image
+    except ImportError:
+        return None
+    return Image
+
+
+def decode_required():
+    return os.environ.get(DECODE_ENV, '').strip() not in ('', '0')
+
+
+def decoder_problem():
+    """-> a problem when the decoder is required ($CW_WEBP_DECODE_REQUIRED=1) but Pillow is missing, else None."""
+    if _pillow() is None and decode_required():
+        return f'decoder: Pillow is not installed but {DECODE_ENV}=1 (the WebP decode check cannot be skipped here)'
+    return None
+
+
+def decode_problem(b, want=(SHOT_W, SHOT_H)):
+    """Really decode WebP bytes with Pillow (libwebp): -> None when every frame decodes and the image is want = (w, h),
+    else the problem. Only WEBP is tried (formats=), Image.MAX_IMAGE_PIXELS is MAX_PIXELS while decoding and a
+    DecompressionBombWarning is an error, at most MAX_FRAMES frames. Without Pillow this returns None (skipped); the
+    caller reports decoder_problem() once when the decode is required. Run it after webp_problem, never instead."""
+    Image = _pillow()
+    if Image is None:
+        return None
+    old = Image.MAX_IMAGE_PIXELS
+    try:
+        Image.MAX_IMAGE_PIXELS = MAX_PIXELS
+        with warnings.catch_warnings():
+            warnings.simplefilter('error', Image.DecompressionBombWarning)
+            with Image.open(io.BytesIO(b), formats=['WEBP']) as im:
+                if im.size != tuple(want):
+                    return f'decodes to {im.size[0]}x{im.size[1]}, manifest says {want[0]}x{want[1]}'
+                frames = getattr(im, 'n_frames', 1)
+                if frames > MAX_FRAMES:
+                    return f'{frames} frames, over {MAX_FRAMES}'
+                for i in range(frames):
+                    im.seek(i)
+                    im.load()
+                if im.size != tuple(want):
+                    return f'decodes to {im.size[0]}x{im.size[1]}, manifest says {want[0]}x{want[1]}'
+    except Exception as ex:                 # anything Pillow / libwebp raises means: not a decodable image
+        return f'does not decode: {type(ex).__name__}: {ex}'[:200]
+    finally:
+        Image.MAX_IMAGE_PIXELS = old
+    return None
 
 
 def _https(v):
@@ -255,16 +400,10 @@ def live_cards(data_dir):
 
 def _load_json(path, label, out):
     try:
-        with open(path, encoding='utf-8') as fh:
-            return json.load(fh)
+        return json.loads(read_capped(path).decode('utf-8'))
     except (OSError, UnicodeDecodeError, ValueError) as ex:
         out.append(f'{label}: cannot read ({ex})')
         return None
-
-
-def _sha(path):
-    with open(path, 'rb') as fh:
-        return hashlib.sha256(fh.read()).hexdigest()
 
 
 def check(artifact, base=None, cards=None):
@@ -322,6 +461,9 @@ def check(artifact, base=None, cards=None):
     if not isinstance(screens, dict) or not screens:
         return out + ['manifest: "screens" is not a non-empty object']
     good = {}
+    dprob = decoder_problem()
+    if dprob:
+        out.append(dprob)
     for slug, r in screens.items():
         probs = record_problems(slug, r)
         out += probs
@@ -331,11 +473,19 @@ def check(artifact, base=None, cards=None):
     for slug, p in images.items():
         if os.lstat(p).st_size > MAX_BYTES:
             out.append(f'images: screens/{slug}.webp is over {MAX_BYTES} bytes'); continue
-        with open(p, 'rb') as fh:
-            b = fh.read(MAX_BYTES + 1)
+        try:
+            b = read_capped(p)
+        except (OSError, ValueError) as ex:
+            out.append(f'images: screens/{slug}.webp cannot be read ({ex})'); continue
         dims, prob = webp_problem(b)
         if prob:
             out.append(f'images: screens/{slug}.webp is not a valid WebP image ({prob})'[:300])
+        elif not dprob:
+            r = good.get(slug)
+            want = (r['width'], r['height']) if r else (SHOT_W, SHOT_H)
+            prob = decode_problem(b, want)
+            if prob:
+                out.append(f'images: screens/{slug}.webp is not a decodable WebP image ({prob})'[:300])
         if slug not in screens:
             out.append(f'images: screens/{slug}.webp is not referenced by the manifest'); continue
         r = good.get(slug)
@@ -379,8 +529,56 @@ def check(artifact, base=None, cards=None):
             out.append(f'base: {slug} changed in the manifest but its image is not in the artifact')
             continue
         fp = os.path.join(base, f'{slug}.webp')
-        if slug in good and (not os.path.isfile(fp) or os.path.islink(fp) or _sha(fp) != good[slug]['sha256']):
+        if slug not in good:
+            continue
+        if not os.path.isfile(fp) or os.path.islink(fp):
+            out.append(f'base: stored {slug}.webp missing or its sha256 differs from the manifest'); continue
+        try:
+            digest, _ = sha256_capped(fp)
+        except (OSError, ValueError) as ex:
+            out.append(f'base: stored {slug}.webp cannot be read ({ex})'); continue
+        if digest != good[slug]['sha256']:
             out.append(f'base: stored {slug}.webp missing or its sha256 differs from the manifest')
+    return out
+
+
+def stored_problems(d):
+    """-> [problem] for a stored atlas/screens directory (the atlas-screens commit pinned in atlas/screens.lock): its
+    manifest.json (bounded read) is valid and every entry's <slug>.webp is a regular file within MAX_BYTES, structurally
+    valid, decodes to the manifest's width x height, and has the manifest's sha256 and size. CI runs it on every pinned
+    image (tests.test_screens_artifact.Artifact.test_real_atlas_screens, CW_WEBP_DECODE_REQUIRED=1)."""
+    out = []
+    man = _load_json(os.path.join(d, 'manifest.json'), 'stored manifest', out)
+    if man is None:
+        return out
+    screens = man.get('screens') if isinstance(man, dict) else None
+    if not isinstance(screens, dict) or not screens:
+        return out + ['stored manifest: "screens" is not a non-empty object']
+    dprob = decoder_problem()
+    if dprob:
+        out.append(dprob)
+    for slug, r in screens.items():
+        probs = record_problems(slug, r)
+        if probs:
+            out += probs; continue
+        p = os.path.join(d, f'{slug}.webp')
+        if os.path.islink(p):
+            out.append(f'stored: {slug}.webp is a symlink'); continue
+        try:
+            b = read_capped(p)
+        except (OSError, ValueError) as ex:
+            out.append(f'stored: {slug}.webp cannot be read ({ex})'); continue
+        dims, prob = webp_problem(b)
+        if prob:
+            out.append(f'stored: {slug}.webp is not a valid WebP image ({prob})'[:300]); continue
+        if dims != (r['width'], r['height']):
+            out.append(f'stored: {slug}.webp is {dims[0]}x{dims[1]}, manifest says {r["width"]}x{r["height"]}')
+        if not dprob:
+            prob = decode_problem(b, (r['width'], r['height']))
+            if prob:
+                out.append(f'stored: {slug}.webp is not a decodable WebP image ({prob})'[:300])
+        if hashlib.sha256(b).hexdigest() != r['sha256'] or len(b) != r['bytes']:
+            out.append(f'stored: {slug}.webp sha256 or size differs from the manifest')
     return out
 
 
@@ -398,6 +596,9 @@ def main(argv=None):
             print(f'::error::cannot read the live cards: {ex}'); return 2
     if a.base and not os.path.isdir(a.base):
         print(f'::error::base directory {a.base} not found'); return 2
+    if _pillow() is None and not decode_required():
+        print(f'::warning::Pillow is not installed: WebP images are checked structurally only, not decoded '
+              f'(set {DECODE_ENV}=1 to make this an error)')
     problems = check(a.artifact, a.base, cards)
     for p in problems:
         print(f'::error::screens artifact: {p}')

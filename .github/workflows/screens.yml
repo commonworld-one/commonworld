@@ -12,7 +12,8 @@ name: Atlas weekly screenshots
 #   publish  contents/pull-requests/issues write; never runs a browser or any code from the capture. It downloads the
 #            artifact and checks it with atlas/tools/screens_artifact.py from this workflow's own commit (only
 #            screens.md, manifest.json and <slug>.webp; manifest mandatory, every entry an object with the expected
-#            fields, every image referenced with its sha256, every new image a live card, stored entries unchanged),
+#            fields, every image referenced with its sha256 and really decoded by a hash-pinned Pillow, every new
+#            image a live card, stored entries unchanged, every read capped at 8 MiB),
 #            copies it into an atlas-screens checkout, pushes a screens/<date> branch and opens the PR against
 #            atlas-screens. atlas-screens itself is never pushed to or deleted here.
 on:
@@ -125,13 +126,24 @@ jobs:
           ref: atlas-screens
           path: shots
           persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install the WebP decoder (Pillow, pinned by version and wheel hash; no other packages)
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: --no-deps -r main/atlas/tools/requirements-publish.txt
+          python -c "import PIL, PIL.WebPImagePlugin; assert PIL.__version__ == '13.0.0', PIL.__version__"
       - name: Check the artifact (layout, manifest entries, images, live cards, stored entries)
         # atlas/tools/screens_artifact.py (rules in its docstring, tests in tests/test_screens_artifact.py): only
         # screens.md, screens/manifest.json (mandatory) and screens/<slug>.webp; every manifest entry an object with
         # the expected fields and types; every image a WebP that the manifest references with its sha256 and size;
-        # every new image a live Atlas card; stored entries without a new image unchanged. Fails before anything is copied.
+        # every new image a live Atlas card; stored entries without a new image unchanged. Every image is also really
+        # decoded (Pillow) to 1200x750; CW_WEBP_DECODE_REQUIRED=1 makes a missing Pillow a failure, never a skip.
+        # Every read is bounded (8 MiB). Fails before anything is copied.
+        env:
+          CW_WEBP_DECODE_REQUIRED: '1'
         run: |
-          python3 main/atlas/tools/screens_artifact.py --artifact "$RUNNER_TEMP/publish" \
+          python main/atlas/tools/screens_artifact.py --artifact "$RUNNER_TEMP/publish" \
             --base "$GITHUB_WORKSPACE/shots/atlas/screens" --data "$GITHUB_WORKSPACE/main/atlas/data"
       - name: Open PR against atlas-screens
         env:

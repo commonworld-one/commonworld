@@ -18,7 +18,18 @@ Not deployed yet. Built on branch `platform/ci-hardening` (findings from a Codex
   entry no longer passes), every `<slug>.webp` a structurally valid WebP (stdlib parser: RIFF size = file length − 8
   with nothing after it, every chunk inside the file, first chunk VP8 with key-frame start code and non-zero size, VP8L with signature 0x2f, or VP8X with
   canvas size and one matching image chunk or ANIM + ANMF frames; at most 8 MiB and 4096 px per side) referenced by the
-  manifest with matching sha256, size and width × height (a bare `RIFF\0\0\0\0WEBP` header no longer passes), every
+  manifest with matching sha256, size and width × height (a bare `RIFF\0\0\0\0WEBP` header no longer passes). `ALPH`
+  must come once, only with a lossy `VP8 ` image (never VP8L) and immediately before its `VP8 ` chunk, and the VP8X
+  alpha flag must be set exactly when the image has alpha (`ALPH`, or VP8L `alpha_is_used`). After the structural
+  parser, every image is really decoded with Pillow (libwebp; every frame; pixel count capped, decompression-bomb
+  warning = error) and must decode to the manifest's 1200 × 750, so a valid header with no image data behind it (e.g.
+  VP8L header + 4 zero bytes) no longer passes. `CW_WEBP_DECODE_REQUIRED=1` (CI unit tests, CI pinned-image step,
+  publish job) turns a missing Pillow into a failure instead of a skip; the publish job installs Pillow 13.0.0 pinned
+  by wheel hash (`atlas/tools/requirements-publish.txt`, `--require-hashes --only-binary=:all: --no-deps`). Every read
+  is bounded: each manifest and image (artifact, stored base, pinned) is size-checked by `stat` against 8 MiB before
+  it is opened and read with a hard cap, stored base images are hashed in streamed chunks; over the cap fails closed.
+  CI also runs the same bounded read, structure check, decode, sha256 and size check on every pinned `atlas-screens`
+  image (`stored_problems`). Every
   new image a live Atlas card whose `website` is the card's URL, stored entries without a new image unchanged and never
   removed. Then it opens the PR against `atlas-screens` as before. The branch `atlas-screens` itself is never pushed to
   or deleted. Tests: `tests/test_screens_netguard.py`, `tests/test_screens_artifact.py`.

@@ -1,7 +1,11 @@
 """atlas/tools/screens_artifact.py: the publish job of screens.yml refuses a bad screens-publish artifact before it
 copies or pushes anything (null / malformed manifest entries, unreferenced or missing images, wrong hashes, unknown
-slugs, stored entries changed or removed without an image)."""
-import contextlib, copy, hashlib, importlib.util, io, json, os, shutil, struct, tempfile, unittest
+slugs, stored entries changed or removed without an image, images that do not really decode, unbounded reads).
+
+The images that must pass are real, decodable WebP files: the fixtures (Pillow/libwebp output) and solid-colour
+lossless files built by vp8l_solid below. The decode tests need Pillow; without it they skip locally and fail when
+CW_WEBP_DECODE_REQUIRED=1 (CI)."""
+import contextlib, copy, hashlib, importlib.util, io, json, os, shutil, struct, sys, tempfile, unittest, unittest.mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,8 +32,51 @@ def vp8(w=1200, h=750, filler=b'\x00' * 16):
     return tag.to_bytes(3, 'little') + b'\x9d\x01\x2a' + struct.pack('<HH', w, h) + filler
 
 
+def vp8l_solid(argb=0xff336699, w=1200, h=750, alpha_used=None):
+    """A real, decodable lossless bitstream (stdlib): one colour, no transforms, no colour cache, no meta prefix codes,
+    five simple prefix codes with one symbol each (green, red, blue, alpha, distance), so every pixel takes 0 bits."""
+    a, r, g, b = argb >> 24 & 255, argb >> 16 & 255, argb >> 8 & 255, argb & 255
+    if alpha_used is None:
+        alpha_used = a != 255
+    fields = [(w - 1, 14), (h - 1, 14), (int(alpha_used), 1), (0, 3), (0, 1), (0, 1), (0, 1)]
+    for sym in (g, r, b, a):
+        fields += [(1, 1), (0, 1), (1, 1), (sym, 8)]        # simple code, 1 symbol, 8-bit symbol
+    fields += [(1, 1), (0, 1), (0, 1), (0, 1)]              # distance: simple code, 1 symbol, 1-bit symbol 0
+    acc = n = 0
+    for v, k in fields:
+        acc |= v << n
+        n += k
+    return b'\x2f' + acc.to_bytes((n + 7) // 8, 'little')
+
+
+def chunk(cc, data):
+    return cc + struct.pack('<I', len(data)) + data + b'\0' * (len(data) & 1)
+
+
 def webp(tag):
-    return riff((b'VP8 ', vp8(filler=tag.encode() * 8)))
+    """A real 1200x750 lossless WebP whose colour (and so sha256) depends on tag."""
+    rgb = int.from_bytes(hashlib.sha256(tag.encode()).digest()[:3], 'big')
+    return riff((b'VP8L', vp8l_solid(0xff000000 | rgb)))
+
+
+def x(flags=0, w=1200, h=750):
+    """VP8X chunk."""
+    return b'VP8X', bytes([flags, 0, 0, 0]) + (w - 1).to_bytes(3, 'little') + (h - 1).to_bytes(3, 'little')
+
+
+FRAME = b'\0' * 6 + (1199).to_bytes(3, 'little') + (749).to_bytes(3, 'little') + b'\0' * 4   # ANMF 1200x750 at 0,0
+
+
+def anim(*frames, flags=0x02):
+    return riff(x(flags=flags), (b'ANIM', b'\0' * 6), *((b'ANMF', FRAME + f) for f in frames))
+
+
+def need_decoder(test):
+    """Skip a decode test when Pillow is missing locally; fail it when the decode is required (CI)."""
+    if sa._pillow() is None:
+        if sa.decode_required():
+            test.fail(f'Pillow is not installed but {sa.DECODE_ENV}=1')
+        test.skipTest('Pillow not installed (decode not required here)')
 
 
 def record(slug, b, website=None):
@@ -200,7 +247,7 @@ class Artifact(unittest.TestCase):
         self.assertProblem('gamma.webp is not a valid WebP image')
         bad = good + b'JUNK' + struct.pack('<I', 4) + b'evil'
         self.put(bad[:4] + struct.pack('<I', len(bad) - 8) + bad[8:])
-        self.assertProblem('simple VP8 file has extra chunks')
+        self.assertProblem('simple VP8L file has extra chunks')
 
     def test_truncated_chunk_fails(self):
         good = webp('gamma')
@@ -230,7 +277,7 @@ class Artifact(unittest.TestCase):
     def test_bad_vp8l_fails(self):
         def vp8l(sig=0x2f, w=1200, h=750, version=0):
             return riff((b'VP8L', bytes([sig]) + struct.pack('<I', (w - 1) | (h - 1) << 14 | version << 29) + b'\0' * 4))
-        self.put(vp8l())
+        self.put(riff((b'VP8L', vp8l_solid())))
         self.assertEqual(self.problems(), [])
         for b, needle in ((vp8l(sig=0x2e), 'signature byte'), (vp8l(version=1), 'VP8L bad version'),
                           (riff((b'VP8L', b'\x2f\x00')), 'VP8L chunk too short'),
@@ -238,10 +285,86 @@ class Artifact(unittest.TestCase):
             self.put(b)
             self.assertProblem(needle)
 
+    def test_header_only_images_fail_the_decode(self):
+        # Codex HOLD P2-1: a valid VP8L header + 4 zero bytes (or a VP8 frame header + zero partition) passes the
+        # structural parser with the right size; only a real decode shows there is no image in it
+        need_decoder(self)
+        def vp8l_header(w=1200, h=750):
+            return b'\x2f' + struct.pack('<I', (w - 1) | (h - 1) << 14) + b'\0' * 4
+        for name, b in (('VP8L header + 4 zero bytes', riff((b'VP8L', vp8l_header()))),
+                        ('VP8 header + zero partition', riff((b'VP8 ', vp8()))),
+                        ('VP8 header + text partition', riff((b'VP8 ', vp8(filler=b'gammagam' * 8)))),
+                        ('VP8X + VP8L header only', riff(x(), (b'VP8L', vp8l_header()))),
+                        ('VP8X + VP8 header only', riff(x(), (b'VP8 ', vp8()))),
+                        ('animated, VP8L header only', anim(chunk(b'VP8L', vp8l_header())))):
+            with self.subTest(name):
+                self.assertEqual(sa.webp_problem(b), ((1200, 750), None))       # the structure alone is fine
+                self.assertIsNotNone(sa.decode_problem(b))
+                self.put(b)
+                self.assertProblem('gamma.webp is not a decodable WebP image (does not decode')
+
+    def test_decoded_size_must_be_the_manifest_size(self):
+        need_decoder(self)
+        small = riff((b'VP8L', vp8l_solid(w=600, h=375)))
+        self.assertEqual(sa.decode_problem(small), 'decodes to 600x375, manifest says 1200x750')
+        self.assertIsNone(sa.decode_problem(small, (600, 375)))
+        self.put(small)
+        self.assertProblem('decodes to 600x375, manifest says 1200x750')
+
+    def test_decoder_required(self):
+        real = sa._pillow
+        sa._pillow = lambda: None
+        try:
+            with unittest.mock.patch.dict(os.environ, {sa.DECODE_ENV: '1'}):
+                self.assertProblem('decoder: Pillow is not installed but CW_WEBP_DECODE_REQUIRED=1')
+                self.put(riff((b'VP8L', b'\x2f' + struct.pack('<I', 1199 | 749 << 14) + b'\0' * 4)))
+                self.assertProblem('decoder: Pillow is not installed')
+            with unittest.mock.patch.dict(os.environ, {sa.DECODE_ENV: ''}):
+                self.assertEqual(self.problems(), [])                 # local run without Pillow: structure only...
+                out = io.StringIO()
+                with contextlib.redirect_stdout(out):
+                    self.assertEqual(sa.main(['--artifact', str(self.art), '--base', str(self.base)]), 0)
+                self.assertIn('::warning::Pillow is not installed', out.getvalue())   # ...and it says so
+        finally:
+            sa._pillow = real
+
+    def test_alph_rules(self):
+        alph = b'\0' + b'\0' * 9
+        lossy = (FIXTURES / 'alpha-1200x750.webp')
+        cases = (
+            (riff(x(0x10), (b'ALPH', alph), (b'EXIF', b'exif'), (b'VP8 ', vp8())), 'immediately before the VP8 chunk'),
+            (riff(x(0x10), (b'VP8 ', vp8()), (b'ALPH', alph)), 'immediately before the VP8 chunk'),
+            (riff(x(0x10), (b'ALPH', alph), (b'ALPH', alph), (b'VP8 ', vp8())), 'more than one ALPH chunk'),
+            (riff(x(0x10), (b'ALPH', alph), (b'VP8L', vp8l_solid(0x80336699))), 'only goes with a lossy VP8'),
+            (riff(x(0), (b'ALPH', alph), (b'VP8 ', vp8())), 'alpha flag is not set but the image has alpha'),
+            (riff(x(0x10), (b'VP8 ', vp8())), 'alpha flag is set but there is no alpha'),
+            (riff(x(0x10), (b'VP8L', vp8l_solid())), 'alpha flag is set but there is no alpha'),
+            (riff(x(0), (b'VP8L', vp8l_solid(0x80336699))), 'alpha flag is not set but the image has alpha'),
+            (anim(chunk(b'ALPH', alph) + chunk(b'VP8L', vp8l_solid()), flags=0x12), 'only goes with a lossy VP8'),
+            (anim(chunk(b'VP8 ', vp8()) + chunk(b'ALPH', alph), flags=0x12), 'immediately before the VP8 chunk'),
+            (anim(chunk(b'VP8L', vp8l_solid(0x80336699))), 'alpha flag is not set but the image has alpha'),
+            (anim(chunk(b'VP8L', vp8l_solid()), flags=0x12), 'alpha flag is set but there is no alpha'),
+        )
+        for b, needle in cases:
+            with self.subTest(needle):
+                self.put(b)
+                self.assertProblem(needle)
+        b = lossy.read_bytes()                                 # real lossy + alpha: VP8X(L) ALPH VP8
+        self.assertEqual(sa.webp_problem(b), ((1200, 750), None))
+        i = b.index(b'VP8 ')                                   # same file with an EXIF chunk between ALPH and VP8
+        moved = b[:i] + chunk(b'EXIF', b'exif') + b[i:]
+        moved = moved[:4] + struct.pack('<I', len(moved) - 8) + moved[8:]
+        self.assertIn('immediately before the VP8 chunk', sa.webp_problem(moved)[1])
+        flagless = b[:20] + bytes([b[20] & ~0x10]) + b[21:]   # alpha flag cleared
+        self.assertIn('alpha flag is not set', sa.webp_problem(flagless)[1])
+        need_decoder(self)
+        for b in (riff(x(0x10), (b'VP8L', vp8l_solid(0x80336699))), anim(chunk(b'VP8L', vp8l_solid(0x80336699)), flags=0x12),
+                  riff((b'VP8L', vp8l_solid(0x80336699)))):  # VP8L alpha: VP8X with the flag, animated, simple file
+            self.put(b)
+            self.assertEqual(self.problems(), [])
+
     def test_bad_vp8x_fails(self):
-        def x(flags=0, w=1200, h=750):
-            return b'VP8X', bytes([flags, 0, 0, 0]) + (w - 1).to_bytes(3, 'little') + (h - 1).to_bytes(3, 'little')
-        self.put(riff(x(), (b'VP8 ', vp8())))
+        self.put(riff(x(), (b'VP8L', vp8l_solid())))
         self.assertEqual(self.problems(), [])
         cases = ((riff(x()), 'VP8X file has 0 image chunks'),
                  (riff(x(), (b'VP8 ', vp8()), (b'VP8 ', vp8())), 'VP8X file has 2 image chunks'),
@@ -250,16 +373,16 @@ class Artifact(unittest.TestCase):
                  (riff(x(flags=0x80), (b'VP8 ', vp8())), 'reserved bits'),
                  (riff((b'VP8X', b'\0' * 9), (b'VP8 ', vp8())), 'not 10'),
                  (riff(x(), (b'JUNK', b'x'), (b'VP8 ', vp8())), 'unexpected chunks JUNK'),
-                 (riff(x(), (b'VP8 ', vp8()), (b'ALPH', b'a')), 'ALPH chunk'),
+                 (riff(x(0x10), (b'VP8 ', vp8()), (b'ALPH', b'a')), 'ALPH chunk'),
                  (riff(x(flags=0x02), (b'VP8 ', vp8())), 'animated VP8X needs'),
                  (riff(x(flags=0x02), (b'ANIM', b'\0' * 6)), 'animated VP8X needs'),
                  (riff(x(), (b'ANIM', b'\0' * 6), (b'VP8 ', vp8())), 'still VP8X file has ANIM'))
         for b, needle in cases:
             self.put(b)
             self.assertProblem(needle)
-        frame = b'\0' * 6 + (1199).to_bytes(3, 'little') + (749).to_bytes(3, 'little') + b'\0' * 4
-        sub = b'VP8 ' + struct.pack('<I', len(vp8())) + vp8()
-        self.put(riff(x(flags=0x02), (b'ANIM', b'\0' * 6), (b'ANMF', frame + sub)))
+        frame = FRAME
+        sub = chunk(b'VP8 ', vp8())
+        self.put(anim(chunk(b'VP8L', vp8l_solid()), chunk(b'VP8L', vp8l_solid(0xff112233))))
         self.assertEqual(self.problems(), [])
         self.put(riff(x(flags=0x02), (b'ANIM', b'\0' * 6), (b'ANMF', frame)))
         self.assertProblem('ANMF frame too short')
@@ -281,10 +404,13 @@ class Artifact(unittest.TestCase):
                                                     'lossless-1200x750.webp', 'lossy-1200x750.webp'])
         for f in files:
             with self.subTest(f.name):
-                self.assertEqual(sa.webp_problem(f.read_bytes()), ((1200, 750), None))
-                self.put(f.read_bytes())
+                b = sa.read_capped(f)
+                self.assertEqual(sa.webp_problem(b), ((1200, 750), None))
+                if sa._pillow() is not None:
+                    self.assertIsNone(sa.decode_problem(b))
+                self.put(b)
                 self.assertEqual(self.problems(), [])
-        b = (FIXTURES / 'lossy-1200x750.webp').read_bytes()
+        b = sa.read_capped(FIXTURES / 'lossy-1200x750.webp')
         for n in (12, 20, 30, len(b) // 2, len(b) - 1):   # any truncation of a real file fails
             with self.subTest(cut=n):
                 self.put(b[:n])
@@ -295,11 +421,86 @@ class Artifact(unittest.TestCase):
         d = os.environ.get('CW_ATLAS_SCREENS')
         if not d:
             self.skipTest('CW_ATLAS_SCREENS not set')
-        man = json.loads(Path(d, 'manifest.json').read_text())['screens']
+        need_decoder(self)                                  # CI sets CW_WEBP_DECODE_REQUIRED=1: no Pillow = failure
+        man = json.loads(sa.read_capped(Path(d, 'manifest.json')).decode())['screens']   # bounded, like every read
         self.assertGreater(len(man), 100)
-        for slug, r in man.items():
-            self.assertEqual(sa.webp_problem(Path(d, f'{slug}.webp').read_bytes()), ((r['width'], r['height']), None),
-                             slug)
+        self.assertEqual(sa.stored_problems(d), [])         # each image: bounded read, structure, decode, sha256, size
+        print(f'\npinned screens: {len(man)} images read (bounded), parsed and decoded at '
+              f'{sorted({(r["width"], r["height"]) for r in man.values()})}', file=sys.stderr)
+
+    def stored_dir(self):
+        d = self.root / 'stored'
+        d.mkdir()
+        imgs = {s: webp(s) for s in ('alpha', 'beta')}
+        for s, b in imgs.items():
+            (d / f'{s}.webp').write_bytes(b)
+        self.write_json(d / 'manifest.json', {'screens': {s: record(s, b) for s, b in imgs.items()}})
+        return d
+
+    def test_stored_problems(self):
+        d = self.stored_dir()
+        self.assertEqual(sa.stored_problems(str(d)), [])
+        (d / 'beta.webp').write_bytes(webp('other'))
+        self.assertIn('stored: beta.webp sha256 or size differs from the manifest', sa.stored_problems(str(d)))
+        (d / 'beta.webp').unlink()
+        self.assertTrue(any(p.startswith('stored: beta.webp cannot be read') for p in sa.stored_problems(str(d))))
+
+    def test_stored_header_only_image_fails_the_decode(self):
+        need_decoder(self)
+        d = self.stored_dir()
+        b = riff((b'VP8L', b'\x2f' + struct.pack('<I', 1199 | 749 << 14) + b'\0' * 4))
+        (d / 'beta.webp').write_bytes(b)
+        man = json.loads((d / 'manifest.json').read_text())
+        man['screens']['beta'] = record('beta', b)
+        self.write_json(d / 'manifest.json', man)
+        self.assertTrue(any('stored: beta.webp is not a decodable WebP image (does not decode' in p
+                            for p in sa.stored_problems(str(d))), sa.stored_problems(str(d)))
+
+    def test_oversized_pinned_file_fails_unread(self):
+        # Codex HOLD P2-2: no read_bytes() of a pinned file before the size check; sparse files, nothing is written
+        d = self.stored_dir()
+        with open(d / 'beta.webp', 'r+b') as fh:
+            fh.truncate(sa.MAX_BYTES + 1)
+        with unittest.mock.patch('builtins.open', side_effect=AssertionError('opened an oversized file')) as op:
+            with self.assertRaisesRegex(ValueError, f'over {sa.MAX_BYTES}'):
+                sa.read_capped(d / 'beta.webp')
+            with self.assertRaisesRegex(ValueError, f'over {sa.MAX_BYTES}'):
+                sa.sha256_capped(d / 'beta.webp')
+            op.assert_not_called()
+        self.assertIn(f'stored: beta.webp cannot be read ({sa.MAX_BYTES + 1} bytes, over {sa.MAX_BYTES})',
+                      sa.stored_problems(str(d)))
+        with open(d / 'manifest.json', 'r+b') as fh:
+            fh.truncate(sa.MAX_BYTES + 1)
+        probs = sa.stored_problems(str(d))
+        self.assertEqual(len(probs), 1)
+        self.assertIn('stored manifest: cannot read', probs[0])
+
+    def test_capped_reads(self):
+        p = self.root / 'f'
+        p.write_bytes(b'x' * 100)
+        self.assertEqual(sa.read_capped(p, cap=100), b'x' * 100)
+        self.assertEqual(sa.sha256_capped(p, cap=100), (hashlib.sha256(b'x' * 100).hexdigest(), 100))
+        for fn in (sa.read_capped, sa.sha256_capped):
+            with self.assertRaisesRegex(ValueError, 'over 99'):
+                fn(p, cap=99)
+            with self.assertRaisesRegex(ValueError, 'not a regular file'):
+                fn(self.root, cap=99)
+        big = self.root / 'big'                              # streamed: a file a bit over CHUNK hashes in pieces
+        big.write_bytes(os.urandom(sa.CHUNK * 3 + 7))
+        self.assertEqual(sa.sha256_capped(big), (hashlib.sha256(big.read_bytes()).hexdigest(), sa.CHUNK * 3 + 7))
+
+    def test_oversized_base_file_fails(self):
+        with open(self.base / 'alpha.webp', 'r+b') as fh:   # sparse: stat says MAX_BYTES + 1
+            fh.truncate(sa.MAX_BYTES + 1)
+        self.assertProblem(f'base: stored alpha.webp cannot be read ({sa.MAX_BYTES + 1} bytes, over {sa.MAX_BYTES})')
+        with open(self.base / 'manifest.json', 'r+b') as fh:
+            fh.truncate(sa.MAX_BYTES + 1)
+        self.assertProblem('base manifest: cannot read')
+
+    def test_oversized_artifact_manifest_fails(self):
+        with open(self.art / 'screens' / 'manifest.json', 'r+b') as fh:
+            fh.truncate(sa.MAX_BYTES + 1)
+        self.assertProblem(f'manifest: cannot read ({sa.MAX_BYTES + 1} bytes, over {sa.MAX_BYTES})')
 
     def test_layout(self):
         (self.art / 'screens' / 'notes.txt').write_text('x')
