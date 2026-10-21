@@ -1,7 +1,8 @@
 /**
  * OAuth 2.1 endpoints that answer JSON (the consent page is src/pages/oauth-pages.ts):
  *
- *   GET  /.well-known/oauth-protected-resource[/mcp]   RFC 9728 Protected Resource Metadata of the MCP server
+ *   GET  /.well-known/oauth-protected-resource[/mcp]   RFC 9728 Protected Resource Metadata of the MCP server at /mcp
+ *   GET  /.well-known/oauth-protected-resource/mcp/me  the same for /mcp/me (authentication required; own resource URI)
  *   GET  /.well-known/oauth-authorization-server        RFC 8414 Authorization Server Metadata (issuer = site origin)
  *   POST /oauth/register                                 RFC 7591 Dynamic Client Registration (public; rate limited per network)
  *   POST /oauth/token                                    authorization_code (PKCE S256 required) and refresh_token (rotated)
@@ -19,12 +20,13 @@ import { clientNetwork, enforceRate, DAY_BUCKET_PREFIX } from '../limits';
 import { enforceMinuteRate } from '../ratelimit';
 import { getSettings } from '../settings';
 import {
-  AS_METADATA_PATH, CLIENT_ID_PATTERN, CLIENT_SECRET_PATTERN, CODE_PATTERN, DCR, OAUTH_PATHS, PRM_MCP_PATH, PRM_PATH, REFRESH_PATTERN, SCOPES, SCOPE_TEXT,
-  TOKEN_RATE_PER_MINUTE, VERIFIER_PATTERN, ACCESS_PATTERN, APPS_PAGE, canonicalResource, issuerOf, mcpResource, parseScope, randomToken, redirectProblem, s256, sameString, scopeString,
+  AS_METADATA_PATH, CLIENT_ID_PATTERN, CLIENT_SECRET_PATTERN, CODE_PATTERN, DCR, OAUTH_PATHS, PRM_MCP_ME_PATH, PRM_MCP_PATH, PRM_PATH, REFRESH_PATTERN, SCOPES, SCOPE_TEXT,
+  TOKEN_RATE_PER_MINUTE, VERIFIER_PATTERN, ACCESS_PATTERN, APPS_PAGE, MCP_ENDPOINT, MCP_ME_ENDPOINT, canonicalResource, issuerOf, mcpResource, parseScope, randomToken, redirectProblem, resourceHint, s256, sameString, scopeString,
+  type McpEndpoint,
 } from './config';
 import { consumeCode, createGrant, findRefresh, getClient, grantOfToken, insertClient, revokeGrant, rotateRefresh, tokenHash, type Client } from './store';
 
-const API_PATHS = new Set<string>([PRM_PATH, PRM_MCP_PATH, AS_METADATA_PATH, OAUTH_PATHS.register, OAUTH_PATHS.token, OAUTH_PATHS.revoke]);
+const API_PATHS = new Set<string>([PRM_PATH, PRM_MCP_PATH, PRM_MCP_ME_PATH, AS_METADATA_PATH, OAUTH_PATHS.register, OAUTH_PATHS.token, OAUTH_PATHS.revoke]);
 export const isOAuthApiPath = (path: string): boolean => API_PATHS.has(path);
 
 const CORS: Record<string, string> = {
@@ -46,16 +48,23 @@ class OAuthError extends Error {
 }
 const oauthJson = (status: number, body: unknown, headers: Record<string, string> = {}) => json(status, body, { ...CORS, ...NO_STORE, ...headers });
 
-export function protectedResourceMetadata(origin: string): Record<string, unknown> {
+/** RFC 9728 document of one MCP endpoint: /mcp (root and /mcp suffix) or /mcp/me (its own resource URI). */
+export function protectedResourceMetadata(origin: string, endpoint: McpEndpoint = MCP_ENDPOINT): Record<string, unknown> {
+  const me = endpoint === MCP_ME_ENDPOINT;
   return {
-    resource: mcpResource(origin),
+    resource: mcpResource(origin, endpoint),
     authorization_servers: [origin],
     scopes_supported: [...SCOPES],
     bearer_methods_supported: ['header'],
-    resource_name: 'Commonworld MCP server',
+    resource_name: me ? 'Commonworld MCP server (sign-in required)' : 'Commonworld MCP server',
     resource_documentation: `${origin}/mcp`,
-    // without a token the public tools keep working; a token acts as one citizen with the granted scopes
-    'x-commonworld': { anonymous_access: 'public read tools, plus account_register and the recovery tools', api_key_alternative: 'Authorization: Bearer cw1_… (your own Commonworld API key) also works', scopes: SCOPE_TEXT },
+    'x-commonworld': {
+      // /mcp: without a token the public tools keep working; /mcp/me: every request needs a token or key (401 otherwise)
+      anonymous_access: me ? `none: every request without a credential is 401 (the same server without sign-in is ${mcpResource(origin, MCP_ENDPOINT)})` : 'public read tools, plus account_register and the recovery tools',
+      api_key_alternative: 'Authorization: Bearer cw1_… (your own Commonworld API key) also works',
+      token_audience: `A token works only at ${mcpResource(origin, endpoint)}, the resource it was issued for.`,
+      scopes: SCOPE_TEXT,
+    },
   };
 }
 
@@ -76,7 +85,11 @@ export function authorizationServerMetadata(origin: string): Record<string, unkn
     authorization_response_iss_parameter_supported: true,
     client_id_metadata_document_supported: false,
     service_documentation: `${origin}/mcp`,
-    'x-commonworld': { connected_apps: `${origin}${APPS_PAGE}`, resource: mcpResource(origin), token_audience: 'Access tokens work only at the MCP server (/mcp), never directly on /v1.' },
+    'x-commonworld': {
+      connected_apps: `${origin}${APPS_PAGE}`,
+      resources: [mcpResource(origin, MCP_ENDPOINT), mcpResource(origin, MCP_ME_ENDPOINT)],
+      token_audience: 'An access token works only at the MCP endpoint named by the resource it was issued for (/mcp or /mcp/me; no resource parameter = /mcp), never at the other one and never directly on /v1.',
+    },
   };
 }
 
@@ -86,9 +99,9 @@ export async function handleOAuthApi(request: Request, env: Env): Promise<Respon
   const origin = issuerOf(env, url);
   const path = url.pathname;
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { ...PREFLIGHT, 'cache-control': 'public, max-age=86400', 'x-content-type-options': 'nosniff' } });
-  if (path === PRM_PATH || path === PRM_MCP_PATH || path === AS_METADATA_PATH) {
+  if (path === PRM_PATH || path === PRM_MCP_PATH || path === PRM_MCP_ME_PATH || path === AS_METADATA_PATH) {
     if (request.method !== 'GET') return json(405, { error: { code: 'method_not_allowed' } }, { ...CORS, allow: 'GET, HEAD, OPTIONS' });
-    const doc = path === AS_METADATA_PATH ? authorizationServerMetadata(origin) : protectedResourceMetadata(origin);
+    const doc = path === AS_METADATA_PATH ? authorizationServerMetadata(origin) : protectedResourceMetadata(origin, path === PRM_MCP_ME_PATH ? MCP_ME_ENDPOINT : MCP_ENDPOINT);
     return json(200, doc, { ...CORS, ...META_CACHE });
   }
   if (request.method !== 'POST') {
@@ -206,9 +219,9 @@ async function token(request: Request, env: Env, origin: string): Promise<Respon
   const params = await readParams(request);
   const grantType = params.get('grant_type');
   const client = await authenticateClient(env, params, request);
-  // RFC 8707: when given, `resource` must name this MCP server
+  // RFC 8707: when given, `resource` must name one of the MCP endpoints (and, below, the one the grant is bound to)
   const rawResource = params.get('resource');
-  if (rawResource !== null && !canonicalResource(rawResource, origin)) throw new OAuthError(400, 'invalid_target', `resource must be ${mcpResource(origin)}`);
+  if (rawResource !== null && !canonicalResource(rawResource, origin)) throw new OAuthError(400, 'invalid_target', resourceHint(origin));
 
   if (grantType === 'authorization_code') {
     const code = params.get('code') ?? '';
@@ -229,7 +242,10 @@ async function token(request: Request, env: Env, origin: string): Promise<Respon
     if (rawResource !== null && canonicalResource(rawResource, origin) !== row.resource) throw new OAuthError(400, 'invalid_target', 'resource does not match the authorization request');
     const account = await env.DB.prepare('SELECT status FROM accounts WHERE id = ?').bind(row.account_id).first<{ status: string }>();
     if (account?.status !== 'active') throw new OAuthError(400, 'invalid_grant', 'the account is not active');
+    // createGrant re-checks the account and the code inside its own batch: a key rotation, recovery, freeze or deletion
+    // that lands after the check above still ends with no grant and no token (null)
     const tokens = await createGrant(env, row, client.grant_types.includes('refresh_token'));
+    if (!tokens) throw new OAuthError(400, 'invalid_grant', 'the account is not active or its credentials changed; connect again');
     return oauthJson(200, tokenBody(tokens));
   }
 
@@ -245,11 +261,14 @@ async function token(request: Request, env: Env, origin: string): Promise<Respon
     }
     if (Date.parse(row.expires_at) <= Date.now()) throw new OAuthError(400, 'invalid_grant', 'refresh token expired');
     if (row.status !== 'active') throw new OAuthError(400, 'invalid_grant', 'the account is not active');
+    // the grant stays bound to its resource: a refresh cannot move the token to the other endpoint
+    if (rawResource !== null && canonicalResource(rawResource, origin) !== row.resource) throw new OAuthError(400, 'invalid_target', 'resource does not match the grant');
     const asked = params.get('scope');
     const granted = row.scope.split(' ');
     const scopes = asked === null ? granted : parseScope(asked);
     if (!scopes || !scopes.length || scopes.some((s) => !granted.includes(s))) throw new OAuthError(400, 'invalid_scope', 'scope must be a subset of the granted scope');
     const tokens = await rotateRefresh(env, row, scopeString(scopes));
+    if (tokens === 'revoked') throw new OAuthError(400, 'invalid_grant', 'the app has been disconnected');
     if (!tokens) {
       await revokeGrant(env, row.grant_id, 'refresh_reuse');
       throw new OAuthError(400, 'invalid_grant', 'refresh token was already used; the app has been disconnected');

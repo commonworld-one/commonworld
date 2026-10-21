@@ -67,52 +67,76 @@ export async function consumeCode(env: Env, code: string, now = Date.now()): Pro
 
 export interface IssuedTokens { access_token: string; refresh_token: string | null; expires_in: number; scope: string }
 
-/** Statements that store a new access token (+ refresh token when allowed) for a grant. */
+/**
+ * Statements that store a new access token (+ refresh token when allowed) for a grant. Conditional: a token row is
+ * written only while the grant exists, is not revoked and its account is active, checked inside the same D1 batch
+ * (one transaction), so a revocation (key rotation, recovery, freeze, deletion) that lands before the batch leaves
+ * no usable token behind (Codex review P2-a).
+ */
 async function tokenStatements(env: Env, grantId: string, scope: string, withRefresh: boolean, now: number): Promise<{ statements: D1PreparedStatement[]; tokens: IssuedTokens }> {
   const access = randomToken('cwo1_');
   const refresh = withRefresh ? randomToken('cwo1r_') : null;
   const at = new Date(now).toISOString();
-  const ins = 'INSERT INTO oauth_tokens (token_hash, grant_id, kind, scope, created_at, expires_at) VALUES (?, ?, ?, ?, ?, ?)';
+  const ins = `INSERT INTO oauth_tokens (token_hash, grant_id, kind, scope, created_at, expires_at)
+    SELECT ?1, ?2, ?3, ?4, ?5, ?6 WHERE EXISTS (SELECT 1 FROM oauth_grants g JOIN accounts a ON a.id = g.account_id
+      WHERE g.id = ?2 AND g.revoked_at IS NULL AND a.status = 'active')`;
   const statements = [env.DB.prepare(ins).bind(await tokenHash(env, access), grantId, 'access', scope, at, new Date(now + ACCESS_TTL_MS).toISOString())];
   if (refresh) statements.push(env.DB.prepare(ins).bind(await tokenHash(env, refresh), grantId, 'refresh', scope, at, new Date(now + REFRESH_TTL_MS).toISOString()));
   return { statements, tokens: { access_token: access, refresh_token: refresh, expires_in: Math.floor(ACCESS_TTL_MS / 1000), scope } };
 }
 
-/** New grant (a connected app) from an exchanged code, with its first token pair. */
-export async function createGrant(env: Env, code: CodeRow, withRefresh: boolean, now = Date.now()): Promise<IssuedTokens> {
+/**
+ * New grant (a connected app) from an exchanged code, with its first token pair, in ONE D1 batch (a transaction) whose
+ * grant INSERT is conditional: the account is still active AND the code row is still there, unexchanged. Every
+ * credential change that must stop an app (key rotation, approved recovery, freeze single or bulk, disable, deletion)
+ * deletes the account's codes in its own batch (revokeAccountOAuth / revokeFreezeBatchOAuth), so the code row is the
+ * credential generation: if any of them lands between the status check and this batch, nothing is inserted and the
+ * caller answers invalid_grant. null = refused, no grant and no token exist. (Codex review P2-a.)
+ */
+export async function createGrant(env: Env, code: CodeRow, withRefresh: boolean, now = Date.now()): Promise<IssuedTokens | null> {
   const grantId = `grant_${crypto.randomUUID()}`;
   const at = new Date(now).toISOString();
   const { statements, tokens } = await tokenStatements(env, grantId, code.scope, withRefresh, now);
-  await env.DB.batch([
-    env.DB.prepare('INSERT INTO oauth_grants (id, client_id, account_id, scope, resource, created_at, last_used_at) VALUES (?, ?, ?, ?, ?, ?, ?)')
-      .bind(grantId, code.client_id, code.account_id, code.scope, code.resource, at, at),
+  const [grant] = await env.DB.batch([
+    env.DB.prepare(`INSERT INTO oauth_grants (id, client_id, account_id, scope, resource, created_at, last_used_at)
+      SELECT ?1, ?2, a.id, ?4, ?5, ?6, ?6 FROM accounts a
+      WHERE a.id = ?3 AND a.status = 'active'
+        AND EXISTS (SELECT 1 FROM oauth_codes c WHERE c.code_hash = ?7 AND c.account_id = a.id AND c.grant_id IS NULL)`)
+      .bind(grantId, code.client_id, code.account_id, code.scope, code.resource, at, code.code_hash),
     ...statements,
-    env.DB.prepare('UPDATE oauth_codes SET grant_id = ? WHERE code_hash = ?').bind(grantId, code.code_hash),
+    env.DB.prepare('UPDATE oauth_codes SET grant_id = ?1 WHERE code_hash = ?2 AND EXISTS (SELECT 1 FROM oauth_grants WHERE id = ?1)').bind(grantId, code.code_hash),
     touchClient(env.DB, code.client_id, at),
   ]);
-  return tokens;
+  return (grant.meta.changes ?? 0) === 1 ? tokens : null;
 }
 
-export interface RefreshRow { token_hash: string; grant_id: string; scope: string; expires_at: string; used_at: string | null; client_id: string; account_id: string; revoked_at: string | null; status: AccountRow['status'] }
+export interface RefreshRow { token_hash: string; grant_id: string; scope: string; expires_at: string; used_at: string | null; client_id: string; account_id: string; resource: string; revoked_at: string | null; status: AccountRow['status'] }
 
 export async function findRefresh(env: Env, token: string): Promise<RefreshRow | null> {
-  return env.DB.prepare(`SELECT t.token_hash, t.grant_id, t.scope, t.expires_at, t.used_at, g.client_id, g.account_id, g.revoked_at, a.status
+  return env.DB.prepare(`SELECT t.token_hash, t.grant_id, t.scope, t.expires_at, t.used_at, g.client_id, g.account_id, g.resource, g.revoked_at, a.status
     FROM oauth_tokens t JOIN oauth_grants g ON g.id = t.grant_id JOIN accounts a ON a.id = g.account_id
     WHERE t.token_hash = ? AND t.kind = 'refresh'`).bind(await tokenHash(env, token)).first<RefreshRow>();
 }
 
-/** Rotates a refresh token: marks it used (once, atomically) and issues a new pair. null = lost the race (a reuse). */
-export async function rotateRefresh(env: Env, row: RefreshRow, scope: string, now = Date.now()): Promise<IssuedTokens | null> {
+/**
+ * Rotates a refresh token: marks it used (once, atomically) and issues a new pair. null = lost the race (a reuse);
+ * 'revoked' = the grant was revoked or the account stopped being active in between (no token was written).
+ */
+export async function rotateRefresh(env: Env, row: RefreshRow, scope: string, now = Date.now()): Promise<IssuedTokens | null | 'revoked'> {
   const at = new Date(now).toISOString();
   const used = await env.DB.prepare('UPDATE oauth_tokens SET used_at = ? WHERE token_hash = ? AND used_at IS NULL RETURNING token_hash').bind(at, row.token_hash).first();
-  if (!used) return null;
+  if (!used) {
+    // gone entirely = the grant was revoked in between (revocation deletes its tokens); still there = a second use
+    const still = await env.DB.prepare('SELECT 1 AS x FROM oauth_tokens WHERE token_hash = ?').bind(row.token_hash).first();
+    return still ? null : 'revoked';
+  }
   const { statements, tokens } = await tokenStatements(env, row.grant_id, scope, true, now);
-  await env.DB.batch([
+  const [access] = await env.DB.batch([
     ...statements,
     env.DB.prepare('UPDATE oauth_grants SET last_used_at = ? WHERE id = ?').bind(at, row.grant_id),
     touchClient(env.DB, row.client_id, at),
   ]);
-  return tokens;
+  return (access.meta.changes ?? 0) === 1 ? tokens : 'revoked';
 }
 
 export type RevokeReason = 'user' | 'client' | 'refresh_reuse' | 'code_reuse' | 'account' | 'key_rotation';

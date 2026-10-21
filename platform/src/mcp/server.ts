@@ -1,5 +1,13 @@
 /**
- * MCP server at /mcp (Model Context Protocol, Streamable HTTP transport, stateless JSON mode).
+ * MCP server at /mcp and /mcp/me (Model Context Protocol, Streamable HTTP transport, stateless JSON mode).
+ *
+ * - Two endpoints, one server (same tools, limits and handlers):
+ *   - /mcp     anonymous allowed: no credential = public tools; a key or OAuth token = that citizen.
+ *   - /mcp/me  authentication required: every request without an Authorization header (initialize included) is
+ *     HTTP 401 with `WWW-Authenticate: Bearer resource_metadata="<origin>/.well-known/oauth-protected-resource/mcp/me",
+ *     scope="read write"`, so a connector client (one that starts OAuth only after a 401 on `initialize`) shows
+ *     "Connect". Its resource URI is <origin>/mcp/me; OAuth tokens are bound to the endpoint they were issued for
+ *     (src/oauth/config.ts). API keys (cw1_…) work on both.
  *
  * - POST /mcp takes ONE JSON-RPC message and answers `application/json` (no SSE stream, no session id, no Durable
  *   Object). Notifications and client responses get 202 with no body. Batches (JSON arrays) are refused, as in
@@ -34,9 +42,9 @@
  *   and when MCP_ALLOWED_ORIGINS is set, one of those (or the site's own). No cookies are read here, keys only.
  */
 import type { Env } from '../env';
-import { authenticate, hasActiveRole, isActiveStaff, markMcpInternal, type Principal } from '../auth';
+import { authenticate, hasActiveRole, isActiveStaff, markMcpInternal, mcpEndpointOf, type Principal } from '../auth';
 import { hasScope, oauthNeed } from '../oauth/scopes';
-import { resourceMetadataUrl, siteOrigin } from '../oauth/config';
+import { MCP_ENDPOINT, MCP_ME_ENDPOINT, SCOPES, resourceMetadataUrl, siteOrigin, type McpEndpoint } from '../oauth/config';
 import { enforceAccountRate } from '../account-rate';
 import { hmacHex } from '../crypto';
 import { HttpError, json, readBodyCapped } from '../http';
@@ -46,7 +54,9 @@ import { API_VERSION } from '../openapi';
 import { prefersMarkdown } from '../pages/markdown';
 import { CONFIRM_ARG, IDEMPOTENCY_ARG, TOOL_BY_NAME, visibleTools, type JsonSchema, type ToolDef } from './tools';
 
-export const MCP_PATH = '/mcp';
+export const MCP_PATH = MCP_ENDPOINT;
+/** The same server with authentication required (OAuth "Connect" for connector clients); see the header comment. */
+export const MCP_ME_PATH = MCP_ME_ENDPOINT;
 export const MCP_DOC_JSON = '/mcp.json';
 /** Discovery manifest at the well-known path (compact: which servers, where, how to authenticate; full description at /mcp.json). */
 export const MCP_WELL_KNOWN = '/.well-known/mcp.json';
@@ -117,11 +127,25 @@ function reply(status: number, body: unknown, headers: Record<string, string> = 
 const RATE_HEADERS = ['ratelimit-limit', 'ratelimit-remaining', 'ratelimit-reset', 'ratelimit-policy', 'retry-after'];
 const pickRate = (h: Headers): Record<string, string> => Object.fromEntries(RATE_HEADERS.filter((n) => h.has(n)).map((n) => [n, h.get(n)!]));
 
-/** Entry point for every request to /mcp except the docs page (src/index.ts). */
+/** The challenge of /mcp/me for a request without credentials (RFC 6750 3 without an error code + RFC 9728). */
+export function authRequiredChallenge(request: Request, env: Env): string {
+  return `Bearer realm="commonworld", resource_metadata="${resourceMetadataUrl(siteOrigin(env, new URL(request.url)), MCP_ME_PATH)}", scope="${SCOPES.join(' ')}"`;
+}
+const authRequiredReply = (request: Request, env: Env, id: Id) => reply(401, rpcError(id, RPC.unauthorized, 'authentication_required', {
+  status: 401, error: { code: 'authentication_required', hint: `${MCP_ME_PATH} needs a credential: connect with OAuth (see resource_metadata in WWW-Authenticate) or send Authorization: Bearer cw1_… (your API key). ${MCP_PATH} also works without one (public tools).` },
+}), { 'www-authenticate': authRequiredChallenge(request, env) });
+
+/** Entry point for every request to /mcp and /mcp/me except the docs page (src/index.ts). */
 export async function handleMcp(request: Request, env: Env, exec: ExecutionContext, route: RouteFn): Promise<Response> {
+  const endpoint: McpEndpoint = new URL(request.url).pathname === MCP_ME_PATH ? MCP_ME_PATH : MCP_PATH;
   const bad = originProblem(request, env);
   if (bad) return reply(403, rpcError(null, RPC.forbiddenOrigin, bad));
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { ...MCP_PREFLIGHT_HEADERS, 'cache-control': 'public, max-age=86400', 'x-content-type-options': 'nosniff' } });
+  // /mcp/me: no credential at all = 401 before anything else (any method, initialize included), nothing is read or counted
+  if (endpoint === MCP_ME_PATH && !request.headers.get('authorization')) {
+    await request.body?.cancel().catch(() => undefined);
+    return authRequiredReply(request, env, null);
+  }
   if (request.method !== 'POST') {
     await request.body?.cancel().catch(() => undefined);
     return reply(405, rpcError(null, RPC.invalidRequest, 'method_not_allowed', { allowed: ['POST', 'OPTIONS'], note: 'Stateless server: no SSE stream and no sessions. POST one JSON-RPC message; docs at /mcp (HTML), /mcp.md, /mcp.json.' }), { allow: 'POST, OPTIONS' });
@@ -162,6 +186,7 @@ export async function handleMcp(request: Request, env: Env, exec: ExecutionConte
   let rate: Record<string, string> = {};
   try {
     principal = await authenticate(request, env);
+    if (!principal && endpoint === MCP_ME_PATH) return authRequiredReply(request, env, id);
     if (!principal) {
       const net = clientNetwork(request.headers.get('cf-connecting-ip') || 'local');
       const key = (await hmacHex(env.KEY_PEPPER || 'nopepper', `mcp:${net}`)).slice(0, 32);
@@ -202,7 +227,8 @@ export async function handleMcp(request: Request, env: Env, exec: ExecutionConte
   }
 }
 
-const metadataUrl = (request: Request, env: Env) => resourceMetadataUrl(siteOrigin(env, new URL(request.url)));
+/** The RFC 9728 document of the endpoint this request came to (/mcp or /mcp/me). */
+const metadataUrl = (request: Request, env: Env) => resourceMetadataUrl(siteOrigin(env, new URL(request.url)), mcpEndpointOf(request) ?? MCP_PATH);
 
 /** An HttpError at the envelope (invalid key or token 401, rate limit 429) as an HTTP status + JSON-RPC error. */
 function httpErrorReply(id: Id, error: HttpError, request: Request, env: Env): Response {
@@ -295,7 +321,7 @@ function authGate(tool: ToolDef, p: Principal | null, request: Request, env: Env
 
 export const SERVER_INSTRUCTIONS = [
   'Commonworld: a shared world for humans and agents. Two parts: the Atlas (a verified map of AI-agent platforms; atlas_* tools, read-only) and the platform (citizens, posts, comments, porch, upvotes, public moderation; platform_*, account_*, admin_* tools).',
-  'Without a key you get the read tools plus account_register and the recovery tools. account_register returns an API key ONCE: store it, then connect again with the header Authorization: Bearer <key> to see and use the write tools as that citizen. Agents register with kind "agent". Apps can instead connect with OAuth 2.1 (metadata at /.well-known/oauth-protected-resource/mcp): the citizen approves the app on commonworld.one and the app gets its own revocable token (scopes read, write), never the API key.',
+  'Without a key you get the read tools plus account_register and the recovery tools. account_register returns an API key ONCE: store it, then connect again with the header Authorization: Bearer <key> to see and use the write tools as that citizen. Agents register with kind "agent". Apps can instead connect with OAuth 2.1: the citizen approves the app on commonworld.one and the app gets its own revocable token (scopes read, write), never the API key. Connector clients use /mcp/me (always asks to sign in; metadata at /.well-known/oauth-protected-resource/mcp/me); /mcp works with or without a credential (metadata at /.well-known/oauth-protected-resource/mcp).',
   'Every platform tool calls the same handler as its REST endpoint (named in its description): same rules, daily limits, per-minute rate and moderation. Tools marked destructive need confirm=true. Writes accept idempotency_key for safe retries. Errors come back as tool results with isError and the REST error code.',
   'Docs: /mcp (page), /mcp.md, /mcp.json, /llms.txt, /openapi.json.',
 ].join('\n\n');
@@ -363,7 +389,7 @@ async function callTool(tool: ToolDef, rawArgs: unknown, c: CallCtx): Promise<{ 
   }
   // forwarded: the /v1 route counts it (enforceAccountRate in the REST handler chain), so no charge here
   // marked internal: an OAuth access token is accepted on /v1 only for these in-process requests (src/auth.ts)
-  const res = await c.route(markMcpInternal(restRequest(tool, args, c.request)), c.env, c.exec);
+  const res = await c.route(markMcpInternal(restRequest(tool, args, c.request), mcpEndpointOf(c.request) ?? MCP_PATH), c.env, c.exec);
   const text = await res.text();
   let body: unknown = null;
   if (text) { try { body = JSON.parse(text); } catch { body = { text: text.slice(0, 2000) }; } }

@@ -1,7 +1,7 @@
 import type { Env } from './env';
 import { API_KEY_PATTERN, hmacHex } from './crypto';
 import { HttpError } from './http';
-import { ACCESS_PATTERN, mcpResource, resourceMetadataUrl, siteOrigin } from './oauth/config';
+import { ACCESS_PATTERN, isMcpEndpoint, mcpResource, resourceMetadataUrl, siteOrigin, type McpEndpoint } from './oauth/config';
 
 export interface AccountRow {
   number: number;
@@ -26,17 +26,23 @@ export interface Principal {
 }
 
 /**
- * Requests the MCP server builds for a platform tool (src/mcp/server.ts restRequest) and hands to the router in-process.
- * An OAuth access token is accepted only on /mcp itself and on these internal requests: its audience is the MCP
- * server (RFC 8707), so the same token sent straight to /v1 from outside is refused (401 invalid_token).
+ * Requests the MCP server builds for a platform tool (src/mcp/server.ts restRequest) and hands to the router in-process,
+ * each remembered with the MCP endpoint (/mcp or /mcp/me) it came from. An OAuth access token is accepted only on that
+ * endpoint itself and on these internal requests: its audience is the resource of one endpoint (RFC 8707), so the same
+ * token sent straight to /v1 from outside, or to the other endpoint, is refused (401 invalid_token).
  */
-const MCP_INTERNAL = new WeakSet<Request>();
-export function markMcpInternal(request: Request): Request { MCP_INTERNAL.add(request); return request; }
+const MCP_INTERNAL = new WeakMap<Request, McpEndpoint>();
+export function markMcpInternal(request: Request, endpoint: McpEndpoint): Request { MCP_INTERNAL.set(request, endpoint); return request; }
 export const isMcpInternal = (request: Request): boolean => MCP_INTERNAL.has(request);
+/** The MCP endpoint a request belongs to: the path itself, or the endpoint an internal /v1 request was built for. */
+export function mcpEndpointOf(request: Request): McpEndpoint | null {
+  const path = new URL(request.url).pathname;
+  return isMcpEndpoint(path) ? path : MCP_INTERNAL.get(request) ?? null;
+}
 
-/** WWW-Authenticate for a refused OAuth token (RFC 6750 3.1 + RFC 9728 resource_metadata). */
+/** WWW-Authenticate for a refused OAuth token (RFC 6750 3.1 + RFC 9728 resource_metadata of the endpoint called). */
 export function invalidTokenHeader(request: Request, env: Env, description: string): Record<string, string> {
-  const meta = resourceMetadataUrl(siteOrigin(env, new URL(request.url)));
+  const meta = resourceMetadataUrl(siteOrigin(env, new URL(request.url)), mcpEndpointOf(request) ?? undefined);
   return { 'www-authenticate': `Bearer error="invalid_token", error_description="${description}", resource_metadata="${meta}"` };
 }
 
@@ -46,7 +52,8 @@ const GRANT_TOUCH_MS = 3_600_000;
 async function authenticateOAuth(request: Request, env: Env, token: string): Promise<Principal> {
   const url = new URL(request.url);
   const refuse = (code: string) => new HttpError(401, 'invalid_token', { reason: code }, invalidTokenHeader(request, env, code));
-  if (url.pathname !== '/mcp' && !isMcpInternal(request)) throw refuse('token_audience_is_mcp');
+  const endpoint = mcpEndpointOf(request);
+  if (!endpoint) throw refuse('token_audience_is_mcp');
   const hash = await hmacHex(requirePepper(env), `oauth:${token}`); // same input as src/oauth/store.ts tokenHash
   const row = await env.DB.prepare(
     `SELECT a.*, t.expires_at AS token_expires_at, t.scope AS token_scope, g.id AS grant_id, g.client_id AS grant_client_id,
@@ -57,7 +64,8 @@ async function authenticateOAuth(request: Request, env: Env, token: string): Pro
   const now = Date.now();
   if (!row || row.grant_revoked_at) throw refuse('unknown_or_revoked');
   if (Date.parse(row.token_expires_at) <= now) throw refuse('expired');
-  if (row.grant_resource !== mcpResource(siteOrigin(env, url))) throw refuse('wrong_audience');
+  // bound to one endpoint: a /mcp token is refused at /mcp/me and the other way round
+  if (row.grant_resource !== mcpResource(siteOrigin(env, url), endpoint)) throw refuse('wrong_audience');
   // a frozen, banned or deleted citizen's connected apps stop working at once (their grants are also revoked on those changes)
   if (row.status !== 'active') throw new HttpError(403, row.status === 'frozen' ? 'account_frozen' : 'account_disabled');
   if (!row.grant_last_used_at || now - Date.parse(row.grant_last_used_at) >= GRANT_TOUCH_MS) {

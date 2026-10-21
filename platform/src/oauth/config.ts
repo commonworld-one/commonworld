@@ -1,8 +1,13 @@
 /**
  * OAuth 2.1 for the MCP server: constants, token formats and the few URL rules every OAuth module shares.
  *
- * Commonworld is both the authorization server (issuer = the site origin) and the protected resource (the MCP server at
- * <origin>/mcp). Tokens are opaque random strings; only HMAC-SHA256(KEY_PEPPER, token) is stored (src/oauth/store.ts).
+ * Commonworld is both the authorization server (issuer = the site origin) and the protected resource: the MCP server,
+ * reachable at two endpoints with their own resource URIs (RFC 8707 / RFC 9728):
+ *   <origin>/mcp     anonymous allowed (public tools); a key or token is optional
+ *   <origin>/mcp/me  every request needs a key or token: an unauthenticated request is 401 with the RFC 9728 challenge,
+ *                    so connector clients that only start OAuth after a 401 on `initialize` show "Connect"
+ * A grant (and every token under it) is bound to ONE of them, the `resource` the client asked for; tokens are refused at
+ * the other one (401 invalid_token, wrong_audience). Tokens are opaque random strings; only HMAC-SHA256(KEY_PEPPER, token) is stored (src/oauth/store.ts).
  *
  *   cwcl_<22>   client_id (public)                        cwcs_<43>   client secret (client_secret_post clients only)
  *   cwo1c_<43>  authorization code (single use, 10 min)    cwo1_<43>   access token (1 hour)
@@ -14,8 +19,15 @@
 import type { Env } from '../env';
 
 export const PRM_PATH = '/.well-known/oauth-protected-resource';
-/** RFC 9728 path-suffixed variant for the resource <origin>/mcp. */
-export const PRM_MCP_PATH = `${PRM_PATH}/mcp`;
+/** The two MCP endpoints (src/mcp/server.ts): /mcp (anonymous allowed) and /mcp/me (authentication required). */
+export const MCP_ENDPOINT = '/mcp';
+export const MCP_ME_ENDPOINT = '/mcp/me';
+export const MCP_ENDPOINTS = [MCP_ENDPOINT, MCP_ME_ENDPOINT] as const;
+export type McpEndpoint = typeof MCP_ENDPOINTS[number];
+export const isMcpEndpoint = (path: string): path is McpEndpoint => (MCP_ENDPOINTS as readonly string[]).includes(path);
+/** RFC 9728 path-suffixed variants: one metadata document per resource. */
+export const PRM_MCP_PATH = `${PRM_PATH}${MCP_ENDPOINT}`;
+export const PRM_MCP_ME_PATH = `${PRM_PATH}${MCP_ME_ENDPOINT}`;
 export const AS_METADATA_PATH = '/.well-known/oauth-authorization-server';
 export const OAUTH_PATHS = { authorize: '/oauth/authorize', token: '/oauth/token', register: '/oauth/register', revoke: '/oauth/revoke' } as const;
 /** Signed-in page listing the citizen's connected apps (src/pages/oauth-pages.ts). */
@@ -62,14 +74,14 @@ export function randomToken(prefix: string, bytes = 32): string {
 
 export const siteOrigin = (env: Env, url: URL): string => (env.SITE_ORIGIN || url.origin).replace(/\/+$/, '');
 export const issuerOf = siteOrigin;
-/** The canonical resource URI of the MCP server (RFC 8707 / RFC 9728 `resource`). */
-export const mcpResource = (origin: string): string => `${origin}/mcp`;
-/** resource_metadata URL put in every WWW-Authenticate challenge of /mcp. */
-export const resourceMetadataUrl = (origin: string): string => `${origin}${PRM_MCP_PATH}`;
+/** The canonical resource URI of an MCP endpoint (RFC 8707 / RFC 9728 `resource`); /mcp by default. */
+export const mcpResource = (origin: string, endpoint: McpEndpoint = MCP_ENDPOINT): string => `${origin}${endpoint}`;
+/** resource_metadata URL put in every WWW-Authenticate challenge of that endpoint (its own RFC 9728 document). */
+export const resourceMetadataUrl = (origin: string, endpoint: McpEndpoint = MCP_ENDPOINT): string => `${origin}${PRM_PATH}${endpoint}`;
 
 /**
- * RFC 8707 `resource`: accepted when it names this MCP server: <origin>/mcp, or <origin> itself (what a client derives
- * from the root metadata document). Scheme and host compare case-insensitively, one trailing slash is ignored; a query
+ * RFC 8707 `resource`: accepted when it names one of the MCP endpoints: <origin>/mcp (or <origin> itself, what a client
+ * derives from the root metadata document) or <origin>/mcp/me. The grant is bound to the canonical value returned. Scheme and host compare case-insensitively, one trailing slash is ignored; a query
  * or fragment is refused. Returns the canonical value to store, or null.
  */
 export function canonicalResource(raw: string, origin: string): string | null {
@@ -79,7 +91,16 @@ export function canonicalResource(raw: string, origin: string): string | null {
   const o = new URL(origin);
   if (u.protocol !== o.protocol || u.host !== o.host) return null;
   const path = u.pathname.replace(/\/$/, '');
-  if (path === '' || path === '/mcp') return mcpResource(origin);
+  if (path === '' || path === MCP_ENDPOINT) return mcpResource(origin, MCP_ENDPOINT);
+  if (path === MCP_ME_ENDPOINT) return mcpResource(origin, MCP_ME_ENDPOINT);
+  return null;
+}
+
+/** The text of an invalid_target error: the resource values this server accepts. */
+export const resourceHint = (origin: string): string => `resource must be ${mcpResource(origin, MCP_ENDPOINT)} or ${mcpResource(origin, MCP_ME_ENDPOINT)}`;
+/** The MCP endpoint a canonical resource URI names (the inverse of mcpResource), or null. */
+export function endpointOfResource(resource: string, origin: string): McpEndpoint | null {
+  for (const e of MCP_ENDPOINTS) if (resource === mcpResource(origin, e)) return e;
   return null;
 }
 

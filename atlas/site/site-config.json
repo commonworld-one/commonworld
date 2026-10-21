@@ -24,6 +24,7 @@
     "operator": "Commonworld",
     "location": null,
     "last_updated": "2026-10-19",
+    "privacy_last_updated": "2026-10-21",
     "ga_retention": "14 months"
   },
   "announcement": {
@@ -110,7 +111,7 @@
     "contact": "general = main mailbox for contact, corrections and advertising (About, Terms, Organization JSON-LD); privacy = privacy@ for data/privacy requests only (Privacy page, Terms privacy pointer).",
     "data_licence": "null = no licence chosen yet (pages say so). Set a string such as 'CC BY 4.0' and the About/Terms pages and snapshot.json show it.",
     "legal_draft": "false since 2026-10-16 (owner approved the final text). true would add 'This policy is a draft and may change before launch.' to the Privacy and Terms pages; check.py fails if the note appears while this is false.",
-    "legal": "operator/location shown on the Privacy and Terms pages; last_updated (YYYY-MM-DD) is printed as 'Last updated'; ga_retention must match the Google Analytics property's data-retention setting (2 months or 14 months)."
+    "legal": "operator/location shown on the Privacy and Terms pages; last_updated (YYYY-MM-DD) is printed as 'Last updated' on both pages; privacy_last_updated / terms_last_updated, when set, override it for that page only (a change to one page); ga_retention must match the Google Analytics property's data-retention setting (2 months or 14 months)."
   },
   "indexnow_key": "c4656000fc49f724177be341c53cacb2"
 }

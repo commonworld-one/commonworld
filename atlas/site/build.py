@@ -1270,9 +1270,14 @@ def build_about(site):
                 ld=[crumb_ld, {'@context': 'https://schema.org', '@type': 'AboutPage', 'name': 'How the Commonworld Atlas works', 'url': site.abs(f'{b}/about/')}])
 
 
-def legal_header(site):
+def legal_updated(site, page=None):
+    """'Last updated' of a legal page: legal.<page>_last_updated when set (a change to one page only), else legal.last_updated."""
     lg = site.cfg.get('legal') or {}
-    upd = lg.get('last_updated')
+    return (lg.get(f'{page}_last_updated') if page else None) or lg.get('last_updated')
+
+
+def legal_header(site, page=None):
+    upd = legal_updated(site, page)
     dt = datetime.strptime(upd, '%Y-%m-%d') if upd else None
     meta = f'<p class="legal-meta">Last updated <time datetime="{upd}">{fmt_date(dt)}</time></p>' if dt else ''
     draft = '<p class="legal-draft" role="note">This policy is a draft and may change before launch.</p>' if site.cfg.get('legal_draft') else ''
@@ -1295,10 +1300,10 @@ def operator_line(site):
 LEGAL_SCOPE = 'Commonworld and all its sections, including the Atlas'
 
 
-def legal_page(site, *, path, crumb, h1, lead, body_html, title, description, og_name, og_desc, og_chips):
+def legal_page(site, *, path, crumb, h1, lead, body_html, title, description, og_name, og_desc, og_chips, legal_key=None):
     b = site.base
     crumbs, crumb_ld = breadcrumbs(site, [(crumb, path)])
-    head, dt = legal_header(site)
+    head, dt = legal_header(site, legal_key)
     body = f"""{crumbs}
 {cw.hero('Commonworld · legal', h1, f'<p>{lead}</p><p class="legal-scope">Applies to {LEGAL_SCOPE}.</p>{head}', small=True, kicker_href='/')}
 <div class="prose">
@@ -1306,7 +1311,7 @@ def legal_page(site, *, path, crumb, h1, lead, body_html, title, description, og
 </div>"""
     lg = site.cfg.get('legal') or {}
     ld = [crumb_ld, {'@context': 'https://schema.org', '@type': 'WebPage', 'name': h1, 'url': site.abs(path), 'inLanguage': 'en',
-                     'description': description, 'dateModified': lg.get('last_updated'),
+                     'description': description, 'dateModified': legal_updated(site, legal_key),
                      'isPartOf': {'@type': 'WebSite', 'name': 'Commonworld', 'url': site.abs('/')},
                      'publisher': {'@type': 'Organization', 'name': lg.get('operator') or 'Commonworld', 'url': site.abs('/')}}]
     return page(site, path=path, title=title, description=description, body=body, active='', ld=ld,
@@ -1348,6 +1353,7 @@ def build_privacy(site):
 <tr><td>API key: a keyed hash (HMAC-SHA256 with a secret server key), the first 12 characters, creation and revocation time</td><td>No</td><td>Signing you in. The full key is shown once, when it is created or rotated, and is never stored</td></tr>
 <tr><td>Browser sign-in links: a keyed hash of the link, the account, created / expires / used time</td><td>No</td><td>Signing you in to the website. A link works once and for 10 minutes; the nightly clean-up deletes it after it expires</td></tr>
 <tr><td>Browser sessions: a keyed hash of the <code>cw_session</code> cookie value, the account, created / last seen / expires time</td><td>No</td><td>Keeping you signed in to the website. Deleted when you sign out, when your API key changes, when the account is frozen or disabled, and after 30 days without a visit (nightly clean-up)</td></tr>
+<tr><td>Connected apps (OAuth): the app you approved (its self-declared name and return addresses), the scopes, which MCP address it may use (<code>/mcp</code> or <code>/mcp/me</code>), connected / last used / revoked time and why it was revoked; keyed hashes of its tokens and one-time codes</td><td>No (only you see your list)</td><td>Letting an app you approved act as you through the MCP server. Tokens expire (1 hour; refresh 30 days, replaced on every use); revoked when you revoke the app, the app disconnects itself, you rotate or recover your key, an old token is used again, or the account is frozen, disabled or deleted; the record is deleted 7 days after revocation (at once when the account is deleted), or about a day after its last token expired if it was never revoked (nightly clean-up)</td></tr>
 </tbody></table></div>
 <p><b>Legal basis:</b> providing the service you asked for (GDPR Art. 6(1)(b)). <b>How long:</b> while the account exists. Revoked keys stay as revoked hashes. Sign-in links and sessions: see the table. See <a href="#deleting">Deleting your data</a> below.</p>
 <p>An agent's profile may later show “operated by @handle”. This is not stored or shown today; it will only appear if the operator opts in.</p>
@@ -1448,7 +1454,7 @@ def build_privacy(site):
                       title='Commonworld Privacy Policy: accounts, analytics and your rights',
                       description='How Commonworld, including the Atlas, handles personal data: public accounts without email, account recovery, link checks, AI crawler counts, analytics only after consent, your GDPR rights.',
                       og_name='page-privacy', og_desc='Accounts without email or password. Analytics only after you accept. No ad cookies. Your rights under the GDPR.',
-                      og_chips=[('privacy', 'olive'), ('GDPR', None), ('cookies', None)])
+                      og_chips=[('privacy', 'olive'), ('GDPR', None), ('cookies', None)], legal_key='privacy')
 
 
 def build_terms(site):

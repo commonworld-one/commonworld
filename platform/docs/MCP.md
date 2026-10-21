@@ -1,7 +1,9 @@
-# MCP server (`/mcp`)
+# MCP server (`/mcp`, `/mcp/me`)
 
 Commonworld speaks the [Model Context Protocol](https://modelcontextprotocol.io/) at `https://commonworld.one/mcp`
 (staging: `https://staging.commonworld.one/mcp`). It runs inside the same Worker as the `/v1` API (`src/mcp/`).
+The same server also answers at `https://commonworld.one/mcp/me` with **authentication required** (see
+[Two endpoints](#two-endpoints-mcp-and-mcpme)): use that URL in connector clients that show a "Connect" button.
 
 Public docs served by the Worker, all generated from the live tool list:
 
@@ -10,8 +12,10 @@ Public docs served by the Worker, all generated from the live tool list:
 | `GET /mcp` (browser, `Accept: text/html`) | human page (`src/pages/mcp-page.ts`) |
 | `GET /mcp.md` or `Accept: text/markdown` | Markdown twin (`src/mcp/docs.ts`) |
 | `GET /mcp.json` | machine-readable description: endpoint, transport, auth, limits, every tool with its input schema |
-| `GET /.well-known/mcp.json` | compact discovery manifest: `name`, `description`, `homepage`, `servers[]` (`url`, `transport: "streamable-http"`, `protocol_versions`, `auth: {type: "bearer", optional: true, note, oauth: {protected_resource_metadata, authorization_server, authorization_server_metadata, scopes, pkce, registration}}`) and `links` to the two OAuth metadata documents, `/mcp.json`, `/mcp.md`, `/mcp`, `/openapi.json`, `/llms.txt`. Same headers as `/mcp.json` (JSON, `Access-Control-Allow-Origin: *`, 5-minute cache) |
-| `GET /.well-known/oauth-protected-resource` and `…/oauth-protected-resource/mcp` | RFC 9728 Protected Resource Metadata (see *OAuth 2.1* below) |
+| `GET /.well-known/mcp.json` | compact discovery manifest: `name`, `description`, `homepage`, `servers[]`: `commonworld` (`url` `/mcp`, `auth.optional: true`) and `commonworld-me` (`url` `/mcp/me`, `auth.optional: false`), each with `transport: "streamable-http"`, `protocol_versions`, `auth: {type: "bearer", optional, note, oauth: {protected_resource_metadata, resource, authorization_server, authorization_server_metadata, scopes, pkce, registration}}`; and `links` to the OAuth metadata documents (`oauth_protected_resource`, `oauth_protected_resource_me`, `oauth_authorization_server`), `/mcp.json`, `/mcp.md`, `/mcp`, `/openapi.json`, `/llms.txt`. Same headers as `/mcp.json` (JSON, `Access-Control-Allow-Origin: *`, 5-minute cache) |
+| `GET /.well-known/oauth-protected-resource` and `…/oauth-protected-resource/mcp` | RFC 9728 Protected Resource Metadata of `/mcp` (see *OAuth 2.1* below) |
+| `GET /.well-known/oauth-protected-resource/mcp/me` | RFC 9728 Protected Resource Metadata of `/mcp/me` (`resource` = `<origin>/mcp/me`) |
+| `GET /mcp/me` (browser) | `302` to `/mcp#oauth` (the docs); every MCP request there needs a credential |
 | `GET /.well-known/oauth-authorization-server` | RFC 8414 Authorization Server Metadata |
 | `/openapi.json` `x-mcp` | pointer from the REST description |
 | `/llms.txt`, `/llms-full.txt` | "MCP" sections (the full one lists every tool and its endpoint) |
@@ -60,7 +64,8 @@ Public docs served by the Worker, all generated from the live tool list:
   the REST handler**.
 - **`Authorization: Bearer cwo1_…`** (an OAuth 2.1 access token, see below): the same citizen tools within the granted
   scopes, never staff tools and never the account-credential tools.
-- A tool that needs an account (`key`, `staff`, `admin` access) called **without** any credential: HTTP `401`,
+- On `/mcp/me`, **any** request without an `Authorization` header (see below) is HTTP `401`.
+- On `/mcp`, a tool that needs an account (`key`, `staff`, `admin` access) called **without** any credential: HTTP `401`,
   JSON-RPC `-32001` `authentication_required`, `WWW-Authenticate: Bearer realm="commonworld",
   resource_metadata="<origin>/.well-known/oauth-protected-resource/mcp", scope="read write"` (`scope="read"` for a read
   tool). Public tools keep working without anything, exactly as before.
@@ -72,7 +77,24 @@ Public docs served by the Worker, all generated from the live tool list:
   problems as `invalid_arguments`; a destructive call without `confirm: true` as `confirmation_required` (nothing is
   sent to the handler). Unknown tool: JSON-RPC `-32602`.
 - An invalid key or token at the envelope: HTTP `401` with `WWW-Authenticate: Bearer realm="commonworld", error="invalid_token",
-  error_description="…", resource_metadata="<origin>/.well-known/oauth-protected-resource/mcp"`.
+  error_description="…", resource_metadata="<origin>/.well-known/oauth-protected-resource/mcp"` (`…/mcp/me` on `/mcp/me`).
+
+### Two endpoints: `/mcp` and `/mcp/me`
+
+Connector clients (Claude connectors and others) start OAuth only after a `401` on `initialize`. `/mcp` answers an
+anonymous `initialize` (public tools), so such a client would connect anonymously and never show "Connect". `/mcp/me`
+is the same server for them (decision 2026-10-21):
+
+| | `/mcp` | `/mcp/me` |
+|---|---|---|
+| No credential | public tools (unchanged) | HTTP `401` on every request, `initialize` included, before the body is read: JSON-RPC `-32001` `authentication_required`, `WWW-Authenticate: Bearer realm="commonworld", resource_metadata="<origin>/.well-known/oauth-protected-resource/mcp/me", scope="read write"` |
+| `Bearer cw1_…` (API key) | that citizen | that citizen (staff tools for staff keys, as on `/mcp`) |
+| `Bearer cwo1_…` (OAuth) | tokens issued for `resource=<origin>/mcp` (or no `resource`) | tokens issued for `resource=<origin>/mcp/me` |
+| RFC 9728 document | `/.well-known/oauth-protected-resource/mcp` (and the root one) | `/.well-known/oauth-protected-resource/mcp/me` |
+| Tools, limits, handlers | same | same |
+
+`OPTIONS` (CORS preflight) needs no credential on either. A browser `GET /mcp/me` is redirected to `/mcp#oauth`.
+Unauthenticated `401`s on `/mcp/me` are answered without a D1 read or a rate-limit counter (nothing is done).
 - Keys are never echoed. The only responses that carry a secret are the REST ones that already do, once:
   `account_register` (key + recovery code), `account_rotate_key`, `account_recovery_claim`, `account_new_recovery_code`,
   `account_recovery_start` (claim token) and `account_login_link` (one-time sign-in URL).
@@ -110,7 +132,7 @@ Public docs served by the Worker, all generated from the live tool list:
 `/.well-known/oauth-authorization-server` and `/oauth/*` are answered by the Worker before the Atlas routing
 (`src/index.ts` → `src/oauth/endpoints.ts`; the consent page through `src/pages/router.ts`), so the Atlas never shadows them.
 
-`/mcp`, `/mcp.md` and `/mcp.json` match `run_worker_first = ["/*", …]` and none of the negative Atlas patterns, so
+`/mcp`, `/mcp/me`, `/mcp.md`, `/mcp.json` and `/.well-known/oauth-protected-resource/mcp/me` match `run_worker_first = ["/*", …]` and none of the negative Atlas patterns, so
 they reach the Worker in every environment. `/.well-known/mcp.json` reaches the Worker too: the negative pattern for
 well-known files is only `!/.well-known/security.txt` (the one well-known file the Atlas builds), not `!/.well-known/*`
 (changed 2026-10-21 in `wrangler.toml` and `ATLAS_RUN_WORKER_FIRST`, `src/atlas-assets.ts`; a test keeps them equal).
@@ -120,18 +142,19 @@ Any other unknown `/.well-known/*` path now costs one Worker request and gets th
 
 Apps that offer a "Connect" button (connector platforms, desktop clients) use OAuth 2.1 instead of a pasted key, as the
 MCP authorization spec (2025-06-18 … 2026-07-28) describes. Commonworld is both the authorization server (issuer = the
-site origin) and the protected resource (`<origin>/mcp`). Code: `src/oauth/` (config, store, scopes, endpoints) and
+site origin) and the protected resource, with two resource URIs: `<origin>/mcp` and `<origin>/mcp/me`. Code: `src/oauth/` (config, store, scopes, endpoints) and
 `src/pages/oauth-pages.ts` (consent + connected apps); tables `oauth_clients`, `oauth_grants`, `oauth_codes`,
 `oauth_tokens` (`migrations/0021_oauth.sql`); tests `test/oauth.test.ts`.
 
 | Endpoint | What |
 |---|---|
 | `GET /.well-known/oauth-protected-resource/mcp` (and the root `/.well-known/oauth-protected-resource`) | RFC 9728: `resource` = `<origin>/mcp`, `authorization_servers` = [`<origin>`], `scopes_supported` = `read`, `write`, `bearer_methods_supported` = `header` |
+| `GET /.well-known/oauth-protected-resource/mcp/me` | the same with `resource` = `<origin>/mcp/me` and `x-commonworld.anonymous_access` "none" |
 | `GET /.well-known/oauth-authorization-server` | RFC 8414: authorize, token, registration, revocation endpoints; `code_challenge_methods_supported: ["S256"]`; grants `authorization_code`, `refresh_token`; `token_endpoint_auth_methods_supported: ["none", "client_secret_post"]`; `authorization_response_iss_parameter_supported: true` (RFC 9207); `client_id_metadata_document_supported: false`. No `openid-configuration` (not an OpenID provider) |
 | `POST /oauth/register` | RFC 7591 Dynamic Client Registration (JSON). `redirect_uris` 1-5, each https (no userinfo, no fragment) or http on a loopback host (`localhost`, `127.0.0.1`, `[::1]`; any port matches, RFC 8252); `client_name` 1-80 chars without control or direction-changing characters (default "Unnamed app"); `grant_types` ⊆ {authorization_code, refresh_token} (must include authorization_code); `token_endpoint_auth_method` `none` (default, public client) or `client_secret_post` (a `cwcs_` secret is returned once). Rate limit: `limits.register_per_ip_per_hour` per client network (own bucket, 429 `slow_down`), plus 2000 registrations per UTC day site-wide |
-| `GET /oauth/authorize` | consent page (SSR, `no-store`, `noindex`, `Referrer-Policy: no-referrer`). Shows the app's self-declared name, the host it returns to (loopback hosts get a warning), the exact return address and the scopes; `write` can be unticked. The citizen proves who they are with the signed-in browser session, or by pasting their API key into the form (POST body only, checked against `api_keys`, never stored, logged or shown again). Unknown `client_id` or unregistered `redirect_uri`: an error page, never a redirect. Other problems redirect back with `error` (`unsupported_response_type`, `invalid_request` without PKCE S256, `invalid_scope`, `invalid_target` for a foreign `resource`), `state` and `iss` |
+| `GET /oauth/authorize` | consent page (SSR, `no-store`, `noindex`, `Referrer-Policy: no-referrer`). Shows the app's self-declared name, the host it returns to (loopback hosts get a warning), the exact return address and the scopes; `write` can be unticked. The citizen proves who they are with the signed-in browser session, or by pasting their API key into the form (POST body only, checked against `api_keys`, never stored, logged or shown again). Unknown `client_id` or unregistered `redirect_uri`: an error page, never a redirect. Other problems redirect back with `error` (`unsupported_response_type`, `invalid_request` without PKCE S256, `invalid_scope`, `invalid_target` for a `resource` that is not `<origin>/mcp`, `<origin>` or `<origin>/mcp/me`), `state` and `iss` |
 | `POST /oauth/authorize` | the decision. Same origin (Origin / Sec-Fetch-Site), double-submit cookie `__Host-cw_oauth` (SameSite=Strict, 15 min) whose HMAC must come back as `_csrf`, every parameter checked again. Approve: `303` to the exact `redirect_uri` with `code`, `state`, `iss`; Deny: `error=access_denied`. The page's CSP widens `form-action` to the redirect origin only (browsers apply it to the redirect after the POST) |
-| `POST /oauth/token` | `application/x-www-form-urlencoded` (JSON also read). `authorization_code`: `code` (single use, 10 minutes; a second use revokes what the first issued), `code_verifier` (PKCE S256, required), `client_id`, `redirect_uri` (must equal the authorization request's when sent), `resource` (must name this server when sent). `refresh_token`: rotated on every use; presenting a rotated one revokes the whole grant (reuse detection); optional narrower `scope`. Answer: `{access_token: "cwo1_…", token_type: "Bearer", expires_in: 3600, scope, refresh_token: "cwo1r_…"}`, `Cache-Control: no-store`. 60 requests per minute per client network |
+| `POST /oauth/token` | `application/x-www-form-urlencoded` (JSON also read). `authorization_code`: `code` (single use, 10 minutes; a second use revokes what the first issued), `code_verifier` (PKCE S256, required), `client_id`, `redirect_uri` (must equal the authorization request's when sent), `resource` (when sent: must equal the resource of the authorization request, else `invalid_target`). `refresh_token`: rotated on every use; presenting a rotated one revokes the whole grant (reuse detection); optional narrower `scope`; `resource`, when sent, must equal the grant's (a refresh cannot move a token to the other endpoint). Answer: `{access_token: "cwo1_…", token_type: "Bearer", expires_in: 3600, scope, refresh_token: "cwo1r_…"}`, `Cache-Control: no-store`. 60 requests per minute per client network |
 | `POST /oauth/revoke` | RFC 7009: `token` (access or refresh) + `client_id`: revokes the whole grant; always `200` for unknown tokens |
 | `GET /apps`, `POST /apps/{grant}/revoke` | the signed-in citizen's connected apps with a Revoke button (same-origin + session + per-session CSRF token) |
 | `GET /v1/me/apps`, `POST /v1/me/apps/{id}/revoke` | the same with the API key (tools `account_list_apps`, `account_revoke_app`) |
@@ -141,9 +164,15 @@ Security model:
 - **The app never gets the API key.** It gets its own opaque tokens: access `cwo1_…` (1 hour) and refresh `cwo1r_…`
   (30 days from issue, rotated on every use). Only `HMAC-SHA256(KEY_PEPPER, "oauth:" + token)` is stored, like keys and
   sessions; codes and client secrets the same way.
-- **Audience-bound.** A grant records its `resource` (`<origin>/mcp`). An access token is accepted only by `POST /mcp`
-  and by the in-process `/v1` requests the MCP server builds for a tool (`markMcpInternal` in `src/auth.ts`); sent
-  straight to `/v1` it is `401 invalid_token` (`token_audience_is_mcp`).
+- **Audience-bound, one resource per grant.** A grant records the `resource` the app asked for at `/oauth/authorize`:
+  `<origin>/mcp/me`, or `<origin>/mcp` (also when it sent `<origin>` or no `resource` at all, for older clients). Every
+  token of the grant works only at that endpoint and in the in-process `/v1` requests the MCP server builds for a tool
+  there (`markMcpInternal(request, endpoint)` in `src/auth.ts`). At the other endpoint it is `401 invalid_token`
+  (`wrong_audience`, challenge pointing at that endpoint's metadata); straight to `/v1` it is `401 invalid_token`
+  (`token_audience_is_mcp`). Why one, not both: RFC 8707 / the MCP spec say a server accepts only tokens issued for
+  itself, and each endpoint publishes its own resource URI; a connector that discovered `/mcp/me` asks for that
+  resource and only ever calls `/mcp/me`. The cost: a client that omits `resource` while using `/mcp/me` gets a `/mcp`
+  token and a `401 wrong_audience` there (the MCP spec makes `resource` a MUST for clients).
 - **Same handlers.** A token resolves to the same `Principal` (account row) as the key, so policy, per-account minute
   window, daily quotas, defensive modes, moderation and link checks are identical. It carries **no roles**: staff
   powers never pass through OAuth, even for an admin.
@@ -159,15 +188,22 @@ Security model:
   `account_disabled`); the admin status change, a bulk freeze (every account in the batch), key rotation, an approved
   key recovery and account deletion also revoke
   every grant (and pending codes). Restoring the status does not reconnect apps.
+- **No token after a revocation race** (Codex review P2-a): the code exchange creates the grant and its first tokens in
+  one D1 batch whose `INSERT … SELECT` runs only while the account is active and the code row is still there
+  unexchanged (every revocation path deletes the account's codes in its own batch), and every token row is inserted only
+  while its grant is live and the account active. A key rotation, recovery, freeze or deletion that lands between the
+  checks and the write ends in `invalid_grant` with nothing stored; the same holds for refresh rotation.
+- **Consent bound to the account shown** (Codex review P2-b): the consent form carries `_as` (the signed-in account's
+  id, or `key` for the paste-your-key form) inside the `_csrf` HMAC. If the browser's session changed between GET and
+  POST (signed out of @A and into @B in another tab), Approve grants nothing: `409` and the page again, for the account
+  now signed in. Deny still works from a stale form.
 - **Clean-up**: the nightly cron (`17 3 * * *`) deletes expired codes and tokens, revoked grants after 7 days, grants
   with no token left, and registered clients idle for 90 days without a live grant (`pruneOAuth`).
 - **Never logged or reflected**: no key, token, code, verifier or secret appears in a log line, an error body or a page
   (a refused pasted key re-shows an empty form).
 
 Not included yet: Client ID Metadata Documents (the 2026-07-28 SHOULD; DCR covers today's clients), custom-scheme
-redirect URIs (`cursor://…`), OpenID Connect, an absolute lifetime cap for a grant, and an "auth required" variant of
-the endpoint for clients that only start OAuth after a `401` on `initialize` (anonymous `initialize` succeeds here).
-API keys keep working unchanged.
+redirect URIs (`cursor://…`), OpenID Connect and an absolute lifetime cap for a grant. API keys keep working unchanged.
 
 ## Tool map (68 tools)
 

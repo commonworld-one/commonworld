@@ -12,6 +12,9 @@
  *
  * Consent POSTs are protected by: same-origin (Origin / Sec-Fetch-Site), a double-submit cookie `__Host-cw_oauth`
  * (SameSite=Strict, 15 min) whose HMAC must come back in the `_csrf` field, and a fresh check of every parameter.
+ * The form is also bound to WHO it was shown for (`_as`: the signed-in account's id, or "key" for the paste-your-key
+ * form), inside the same HMAC: if the browser's session changed between GET and POST (signed out of @A and into @B in
+ * another tab), the POST grants nothing and the page is shown again for the current account (Codex review P2-b).
  * Errors before the redirect URI is known to be registered (unknown client, unregistered redirect_uri) are shown on
  * this page and never redirect (OAuth 2.1 4.1.2.1).
  */
@@ -25,7 +28,7 @@ import { type Raw, h } from './html';
 import { type PageCtx, crumbs, document, citizenUrl } from './layout';
 import {
   APPS_PAGE, CHALLENGE_PATTERN, CLIENT_ID_PATTERN, CONSENT_COOKIE, CONSENT_TTL_S, DCR, OAUTH_PATHS, SCOPES, SCOPE_TEXT, type Scope,
-  canonicalResource, isLoopback, issuerOf, mcpResource, parseScope, randomToken, redirectMatches, sameString, scopeString,
+  canonicalResource, isLoopback, resourceHint, issuerOf, mcpResource, parseScope, randomToken, redirectMatches, sameString, scopeString,
 } from '../oauth/config';
 import { createCode, getClient, listApps, revokeOwnApp, type AppView, type Client } from '../oauth/store';
 
@@ -94,7 +97,7 @@ async function parseRequest(env: Env, params: URLSearchParams, origin: string): 
   if (!scopes || !scopes.length || scopes.some((s) => !allowed.includes(s))) return fail('invalid_scope', `scope must be a subset of: ${client.scope}`);
   const rawResource = params.get('resource');
   const resource = rawResource === null ? mcpResource(origin) : canonicalResource(rawResource, origin);
-  if (!resource) return fail('invalid_target', `resource must be ${mcpResource(origin)}`);
+  if (!resource) return fail('invalid_target', resourceHint(origin));
   if (!client.grant_types.includes('authorization_code')) return fail('unauthorized_client', 'client did not register authorization_code');
   return { ok: true, req: { client, redirectUri, state, challenge, scopes: SCOPES.filter((s) => scopes.includes(s)), resource } };
 }
@@ -102,7 +105,10 @@ async function parseRequest(env: Env, params: URLSearchParams, origin: string): 
 // ---------------------------------------------------------------- CSRF (double submit cookie)
 
 const NONCE = /^[A-Za-z0-9_-]{43}$/;
-const consentCsrf = async (env: Env, nonce: string) => hmacHex(requirePepper(env), `oauth-consent:${nonce}`);
+/** Who a consent form was shown for: the signed-in account, or "key" (the form asks for the API key). */
+const whoOf = (viewer: Viewer | null): string => (viewer ? viewer.account.id : 'key');
+const AS_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
+const consentCsrf = async (env: Env, nonce: string, as: string) => hmacHex(requirePepper(env), `oauth-consent:${nonce}:${as}`);
 const consentCookie = (nonce: string) => `${CONSENT_COOKIE}=${nonce}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${CONSENT_TTL_S}`;
 const clearConsentCookie = () => `${CONSENT_COOKIE}=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0`;
 
@@ -117,6 +123,7 @@ function fatalPage(p: PageCtx, status: number, code: string): OAuthPageOut {
 }
 
 function consentPage(p: PageCtx, req: AuthzRequest, csrf: string, viewer: Viewer | null, notice: string | null): string {
+  const as = whoOf(viewer);
   const host = new URL(req.redirectUri).host;
   const loopback = isLoopback(new URL(req.redirectUri));
   const hidden = (name: string, value: string | null) => (value === null ? '' : h`<input type="hidden" name="${name}" value="${value}">`);
@@ -134,7 +141,7 @@ ${loopback ? h`<p><b>Check this:</b> the app returns to an address on your own c
 ${notice ? h`<p role="alert"><b>${notice}</b></p>` : ''}</div></section>
 <section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>What it may do</h2><span class="muted">${scopeString(req.scopes)}</span></div><div class="cw-panel-body">
 <form class="cw-form" method="post" action="${PAGE_PATH}">
-<input type="hidden" name="_csrf" value="${csrf}">${hidden('client_id', req.client.client_id)}${hidden('redirect_uri', req.redirectUri)}${hidden('state', req.state)}
+<input type="hidden" name="_csrf" value="${csrf}"><input type="hidden" name="_as" value="${as}">${hidden('client_id', req.client.client_id)}${hidden('redirect_uri', req.redirectUri)}${hidden('state', req.state)}
 <input type="hidden" name="response_type" value="code"><input type="hidden" name="code_challenge" value="${req.challenge}"><input type="hidden" name="code_challenge_method" value="S256">
 ${hidden('scope', scopeString(req.scopes))}${hidden('resource', req.resource)}
 <ul>${scopeRows}</ul>
@@ -158,7 +165,7 @@ async function authorizeGet(request: Request, env: Env, url: URL, page: (viewer:
   }
   const existing = readCookie(request, CONSENT_COOKIE);
   const nonce = existing && NONCE.test(existing) ? existing : randomToken('', 32);
-  const html = consentPage(await page(viewer), parsed.req, await consentCsrf(env, nonce), viewer, null);
+  const html = consentPage(await page(viewer), parsed.req, await consentCsrf(env, nonce, whoOf(viewer)), viewer, null);
   return { status: 200, html, cookies: cookiesOf(consentCookie(nonce), setCookie), formAction: formActionFor(parsed.req.redirectUri) };
 }
 
@@ -178,7 +185,8 @@ async function authorizePost(request: Request, env: Env, url: URL, page: (viewer
   }
   const nonce = readCookie(request, CONSENT_COOKIE);
   const given = form.get('_csrf') ?? '';
-  if (!nonce || !NONCE.test(nonce) || !/^[0-9a-f]{64}$/.test(given) || !sameString(await consentCsrf(env, nonce), given)) {
+  const shownAs = form.get('_as') ?? '';
+  if (!nonce || !NONCE.test(nonce) || !/^[0-9a-f]{64}$/.test(given) || !AS_PATTERN.test(shownAs) || !sameString(await consentCsrf(env, nonce, shownAs), given)) {
     return fatalPage(await page(viewer), 403, 'csrf');
   }
   const parsed = await parseRequest(env, form, origin);
@@ -187,15 +195,24 @@ async function authorizePost(request: Request, env: Env, url: URL, page: (viewer
     return fatalPage(await page(viewer), 400, parsed.fatal);
   }
   const req = parsed.req;
+  // Deny needs no account (it grants nothing), so a stale form may still say no
   if (form.get('decision') !== 'approve') {
     return { status: 303, location: errorRedirect(req.redirectUri, 'access_denied', 'the citizen denied the request', req.state, origin), cookies: cookiesOf(clearConsentCookie(), setCookie) };
+  }
+  // the session changed since the page was shown (another account, signed in or out): grant nothing, ask again
+  if (shownAs !== whoOf(viewer)) {
+    const notice = viewer
+      ? `This page was opened for a different account. You are now signed in as @${viewer.account.handle}: check and answer again.`
+      : 'You were signed out since this page was opened. Paste your API key or sign in again, then answer again.';
+    const html = consentPage(await page(viewer), req, await consentCsrf(env, nonce, whoOf(viewer)), viewer, notice);
+    return { status: 409, html, formAction: formActionFor(req.redirectUri), cookies: cookiesOf(setCookie) };
   }
   let account: AccountRow | null = viewer?.account ?? null;
   if (!account) {
     account = await accountByKey(env, (form.get('api_key') ?? '').trim());
     if (!account) {
       // the key is never echoed back: the form comes back empty with a notice
-      const html = consentPage(await page(null), req, await consentCsrf(env, nonce), null, 'That API key was not accepted. Check it and try again.');
+      const html = consentPage(await page(null), req, await consentCsrf(env, nonce, whoOf(null)), null, 'That API key was not accepted. Check it and try again.');
       return { status: 401, html, formAction: formActionFor(req.redirectUri), cookies: cookiesOf(setCookie) };
     }
   }

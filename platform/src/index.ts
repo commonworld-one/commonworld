@@ -1,6 +1,6 @@
 import type { Env } from './env';
 import type { Ctx, Handler } from './context';
-import { authenticate } from './auth';
+import { authenticate, mcpEndpointOf } from './auth';
 import { enforceAccountRate } from './account-rate';
 import { HttpError, MAX_BODY_BYTES, errorResponse, json } from './http';
 import { ROUTES, type PublicCache } from './api-routes';
@@ -13,7 +13,7 @@ import { pruneLinkChecks } from './link-check';
 import { recountAll, refreshWindows } from './counters';
 import { logAiBotVisit, pruneAiBotVisits } from './ai-bots';
 import { handleLab } from './lab';
-import { MCP_PATH, handleMcp, wantsMcpPage } from './mcp/server';
+import { MCP_ME_PATH, MCP_PATH, handleMcp, wantsMcpPage } from './mcp/server';
 import { canonicalHostRedirect } from './hosts';
 import { handleOAuthApi, isOAuthApiPath } from './oauth/endpoints';
 import { oauthProblem, oauthRouteError } from './oauth/scopes';
@@ -27,6 +27,12 @@ async function handle(request: Request, env: Env, exec: ExecutionContext): Promi
   // readers in src/http.ts (readBodyCapped / readTextCapped: /lab/beat 1 KB, /login and /logout 4 KB, write forms 128 KB).
   // MCP server (src/mcp/server.ts): POST /mcp; a browser or Markdown GET of /mcp is the docs page (src/pages/router.ts)
   if (url.pathname === MCP_PATH && !wantsMcpPage(request)) return handleMcp(request, env, exec, route);
+  // /mcp/me: the same server, authentication required on every request (401 + RFC 9728 challenge without a credential).
+  // A browser or Markdown GET of it is sent to the docs page.
+  if (url.pathname === MCP_ME_PATH) {
+    if (wantsMcpPage(request)) return new Response(null, { status: 302, headers: { location: `${MCP_PATH}#oauth`, 'cache-control': 'public, max-age=300', 'x-content-type-options': 'nosniff' } });
+    return handleMcp(request, env, exec, route);
+  }
   // OAuth 2.1 for the MCP server (src/oauth/): metadata documents, client registration, token and revocation endpoints.
   // The consent page (/oauth/authorize) and the connected-apps page (/apps) are SSR pages (src/pages/oauth-pages.ts).
   if (isOAuthApiPath(url.pathname)) return handleOAuthApi(request, env);
@@ -57,7 +63,7 @@ async function handle(request: Request, env: Env, exec: ExecutionContext): Promi
   const principal = await authenticate(request, env);
   // An OAuth access token (MCP only) may call only what its scopes allow, never staff or account-credential routes.
   const problem = principal ? oauthProblem(principal, request.method, matched.path) : null;
-  if (problem) throw oauthRouteError(problem.need, resourceMetadataUrl(siteOrigin(env, url)));
+  if (problem) throw oauthRouteError(problem.need, resourceMetadataUrl(siteOrigin(env, url), mcpEndpointOf(request) ?? undefined));
   const rateHeaders: Record<string, string> = principal ? await enforceAccountRate(env, principal) : {};
   try {
     return withHeaders(await dispatch(request, env, exec, url, matched, principal), rateHeaders);

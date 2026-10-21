@@ -34,6 +34,23 @@ Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0021_
 - D1: `migrations/0021_oauth.sql` adds `oauth_clients`, `oauth_grants`, `oauth_codes`, `oauth_tokens` (new tables
   only). The nightly cron prunes expired codes and tokens, revoked grants after 7 days and idle clients after 90 days.
 - robots.txt disallows `/oauth/` and `/apps`. Tests: `test/oauth.test.ts`.
+- `/mcp/me` (owner decision 2026-10-21): the same MCP server with **authentication required**, for connector clients
+  that start OAuth only after a `401` on `initialize`. Any request without `Authorization` (initialize included) is
+  HTTP 401 with `WWW-Authenticate: Bearer realm="commonworld", resource_metadata="<origin>/.well-known/oauth-protected-resource/mcp/me",
+  scope="read write"`; its own RFC 9728 document (`resource` = `<origin>/mcp/me`). API keys and OAuth tokens work
+  with the same tools and limits; a browser GET redirects to `/mcp#oauth`. `/mcp` is unchanged (anonymous allowed).
+  Tokens are bound to one resource: a grant records the `resource` asked for (`/mcp/me`, or `/mcp` when omitted), its
+  tokens are `401 wrong_audience` at the other endpoint, and neither the code exchange nor a refresh can switch it
+  (`invalid_target`). Listed in `/.well-known/mcp.json` (second server `commonworld-me`), `/mcp.json`, `/mcp.md`,
+  the `/mcp` page, `/llms.txt`, `/llms-full.txt`, `openapi.json` (`x-mcp`, `x-oauth`) and `docs/MCP.md`.
+- Codex review (old SHA 654108a) fixes: **P2-a** the code exchange and refresh rotation write the grant and tokens
+  with conditional `INSERT … SELECT` in one D1 batch (account active, code still unexchanged, grant live), so a key
+  rotation, recovery, freeze or deletion racing the exchange leaves no token (`invalid_grant`); **P2-b** the consent
+  form is bound to the account it was shown for (`_as` inside the CSRF HMAC): after a session switch in another tab,
+  Approve grants nothing and the page is shown again (409) for the current account. P1 (bulk freeze) confirmed by
+  tests: reverting a single or bulk freeze never revives old tokens.
+- Privacy Policy (Atlas `build.py`, owner-approved row 2026-10-21): the account data table lists connected apps
+  (OAuth); the Privacy page has its own "Last updated" date (`legal.privacy_last_updated`), so the Terms date stays.
 - Codex HOLD fixes: `GET /v1/me/identities` (MCP `account_list_identities`) is now never available through OAuth, since
   pending links carry their challenge codes (recovery data); the tool is hidden from an OAuth client's `tools/list`.
   A bulk freeze (`POST /v1/admin/freezes`) now revokes every OAuth grant, token and pending code of the frozen accounts,

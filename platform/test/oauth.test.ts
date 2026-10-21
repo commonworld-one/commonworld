@@ -7,7 +7,7 @@ import { env, exports } from 'cloudflare:workers';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { api, makeAdmin, register, resetDb, setSetting } from './helpers';
 import { s256 } from '../src/oauth/config';
-import { pruneOAuth } from '../src/oauth/store';
+import { consumeCode, createGrant, findRefresh, pruneOAuth, rotateRefresh } from '../src/oauth/store';
 import { oauthProblem } from '../src/oauth/scopes';
 import { createLoginLink, consumeLoginLink } from '../src/sessions';
 
@@ -46,7 +46,8 @@ async function consentGet(a: Authz, cookie?: string) {
   const r = await fetchRaw(`/oauth/authorize?${authzQuery(a)}`, { headers: cookie ? { cookie } : {} });
   const csrf = r.text.match(/name="_csrf" value="([0-9a-f]{64})"/)?.[1] ?? '';
   const nonce = (r.headers.get('set-cookie') ?? '').match(/__Host-cw_oauth=([A-Za-z0-9_-]{43})/)?.[1] ?? '';
-  return { ...r, csrf, nonce };
+  const as = r.text.match(/name="_as" value="([A-Za-z0-9_-]{1,64})"/)?.[1] ?? '';
+  return { ...r, csrf, nonce, as };
 }
 
 /** GET the consent page, then POST the decision as the browser would. Returns the POST response. */
@@ -55,7 +56,7 @@ async function consent(a: Authz, opts: { key?: string; decision?: 'approve' | 'd
   expect(page.status, page.text.slice(0, 300)).toBe(200);
   const cookies = [opts.noCookie ? '' : `__Host-cw_oauth=${page.nonce}`, opts.session ? `__Host-cw_session=${opts.session}` : ''].filter(Boolean).join('; ');
   const fields: Record<string, string> = {
-    _csrf: opts.csrf ?? page.csrf, client_id: a.client_id, redirect_uri: a.redirect_uri ?? REDIRECT, state: a.state ?? 'st-123', response_type: 'code',
+    _csrf: opts.csrf ?? page.csrf, _as: page.as, client_id: a.client_id, redirect_uri: a.redirect_uri ?? REDIRECT, state: a.state ?? 'st-123', response_type: 'code',
     code_challenge: a.code_challenge, code_challenge_method: 'S256', scope: a.scope ?? 'read write', resource: a.resource ?? RESOURCE, decision: opts.decision ?? 'approve',
   };
   if (opts.key) fields.api_key = opts.key;
@@ -68,25 +69,31 @@ async function token(fields: Record<string, string>) {
 }
 
 /** Full flow up to tokens for a citizen. */
-async function connect(key: string, opts: { write?: boolean; scope?: string } = {}) {
+async function connect(key: string, opts: { write?: boolean; scope?: string; resource?: string } = {}) {
   const client = (await registerClient()).body;
   const { verifier, challenge } = await pkceAsync();
-  const post = await consent({ client_id: client.client_id, code_challenge: challenge, ...(opts.scope ? { scope: opts.scope } : {}) }, { key, write: opts.write });
+  const resource = opts.resource ?? RESOURCE;
+  const post = await consent({ client_id: client.client_id, code_challenge: challenge, resource, ...(opts.scope ? { scope: opts.scope } : {}) }, { key, write: opts.write });
   expect(post.status, post.text.slice(0, 400)).toBe(303);
   const loc = new URL(post.headers.get('location')!);
   const code = loc.searchParams.get('code')!;
-  const tok = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id, redirect_uri: REDIRECT, resource: RESOURCE });
+  const tok = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id, redirect_uri: REDIRECT, resource });
   expect(tok.status, JSON.stringify(tok.body)).toBe(200);
   return { client, verifier, code, tokens: tok.body as { access_token: string; refresh_token: string; scope: string; expires_in: number; token_type: string } };
 }
 
 async function pkceAsync() { const p = pkce(); return { verifier: p.verifier, challenge: await p.challenge }; }
 
-async function mcp(method: string, params: unknown, bearer?: string) {
+async function mcp(method: string, params: unknown, bearer?: string, path = '/mcp') {
   const headers: Record<string, string> = { 'content-type': 'application/json', accept: 'application/json', 'mcp-protocol-version': '2025-06-18' };
   if (bearer) headers.authorization = `Bearer ${bearer}`;
-  return fetchRaw('/mcp', { method: 'POST', headers, body: JSON.stringify({ jsonrpc: '2.0', id: ++seq, method, params }) });
+  return fetchRaw(path, { method: 'POST', headers, body: JSON.stringify({ jsonrpc: '2.0', id: ++seq, method, params }) });
 }
+const ME = '/mcp/me';
+const ME_RESOURCE = `${ORIGIN}${ME}`;
+const ME_PRM = `${ORIGIN}/.well-known/oauth-protected-resource/mcp/me`;
+const ME_CHALLENGE = `Bearer realm="commonworld", resource_metadata="${ME_PRM}", scope="read write"`;
+const INIT = { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'connector', version: '1' } };
 const toolNames = (r: { body: any }) => (r.body.result.tools as { name: string }[]).map((t) => t.name);
 
 // ---------------------------------------------------------------- discovery
@@ -325,6 +332,48 @@ describe('authorization code + PKCE flow', () => {
     expect(loc.searchParams.get('code')).toBeNull();
   });
 
+  it('P2-b: the consent form is bound to the account it was shown for; a session switch in another tab grants nothing', async () => {
+    const a = await register('oauth-sa');
+    const b = await register('oauth-sb');
+    const sessionOf = async (id: string) => { const l = await createLoginLink(env as any, id); const s = await consumeLoginLink(env as any, l.token); if (!s.ok) throw new Error('no session'); return s.session; };
+    const sa = await sessionOf(a.id);
+    const sb = await sessionOf(b.id);
+    const client = (await registerClient()).body;
+    const { challenge } = await pkceAsync();
+    const req = { client_id: client.client_id, code_challenge: challenge };
+    const page = await consentGet(req, `__Host-cw_session=${sa}`);
+    expect(page.text).toContain(`@${a.handle}`);
+    expect(page.as).toBe(a.id);
+    const fields = (csrf: string, as: string) => form({ _csrf: csrf, _as: as, client_id: client.client_id, redirect_uri: REDIRECT, state: 'st-123', response_type: 'code', code_challenge: challenge, code_challenge_method: 'S256', scope: 'read write', resource: RESOURCE, decision: 'approve', scope_write: 'on' });
+    const postAs = (session: string | null, body: string) => fetchRaw('/oauth/authorize', { method: 'POST', headers: { ...FORM, origin: ORIGIN, cookie: [`__Host-cw_oauth=${page.nonce}`, session ? `__Host-cw_session=${session}` : ''].filter(Boolean).join('; ') }, body });
+    // signed out of A and into B in another tab, then the old "as @A" form is submitted: no code, the page asks again as @B
+    const stale = await postAs(sb, fields(page.csrf, page.as));
+    expect(stale.status).toBe(409);
+    expect(stale.headers.get('location')).toBeNull();
+    expect(stale.text).toContain(`@${b.handle}`);
+    expect(stale.text).toContain('opened for a different account');
+    expect((await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_codes').first<{ n: number }>())!.n).toBe(0);
+    // signed out entirely: the "as @A" form does not fall back to anything; the key form is shown
+    const out = await postAs(null, fields(page.csrf, page.as));
+    expect(out.status).toBe(409);
+    expect(out.text).toContain('name="api_key"');
+    // forging _as for B with A's token is a CSRF failure
+    expect((await postAs(sb, fields(page.csrf, b.id))).status).toBe(403);
+    expect((await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_codes').first<{ n: number }>())!.n).toBe(0);
+    // the re-shown page (bound to B) works for B, and the code belongs to B
+    const csrfB = stale.text.match(/name="_csrf" value="([0-9a-f]{64})"/)![1];
+    const asB = stale.text.match(/name="_as" value="([A-Za-z0-9_-]{1,64})"/)![1];
+    expect(asB).toBe(b.id);
+    const ok = await postAs(sb, fields(csrfB, asB));
+    expect(ok.status).toBe(303);
+    expect((await env.DB.prepare('SELECT account_id FROM oauth_codes').first<{ account_id: string }>())!.account_id).toBe(b.id);
+    // Deny from a stale form needs no account and still just says no
+    const page2 = await consentGet(req, `__Host-cw_session=${sa}`);
+    const deny = await fetchRaw('/oauth/authorize', { method: 'POST', headers: { ...FORM, origin: ORIGIN, cookie: `__Host-cw_oauth=${page2.nonce}; __Host-cw_session=${sb}` }, body: form({ _csrf: page2.csrf, _as: page2.as, client_id: client.client_id, redirect_uri: REDIRECT, state: 'st-123', response_type: 'code', code_challenge: challenge, code_challenge_method: 'S256', scope: 'read', resource: RESOURCE, decision: 'deny' }) });
+    expect(deny.status).toBe(303);
+    expect(new URL(deny.headers.get('location')!).searchParams.get('error')).toBe('access_denied');
+  });
+
   it('a signed-in browser session approves without pasting the key', async () => {
     const citizen = await register('oauth-s');
     const link = await createLoginLink(env as any, citizen.id);
@@ -420,6 +469,68 @@ describe('tokens', () => {
     expect((await api('/v1/me', { key: citizen.key })).status).toBe(200);
   });
 
+  it('P2-a: a key rotation, recovery-style revocation or freeze landing between the code check and the grant issues nothing', async () => {
+    const citizen = await register('oauth-race');
+    const client = (await registerClient()).body;
+    const getCode = async () => {
+      const { challenge } = await pkceAsync();
+      const post = await consent({ client_id: client.client_id, code_challenge: challenge }, { key: citizen.key });
+      return new URL(post.headers.get('location')!).searchParams.get('code')!;
+    };
+    const counts = async () => ({
+      grants: (await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_grants').first<{ n: number }>())!.n,
+      tokens: (await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_tokens').first<{ n: number }>())!.n,
+    });
+    // 1. the token endpoint has consumed the code and checked the account (active) ...
+    const c1 = await consumeCode(env as any, await getCode());
+    expect(c1.row).not.toBeNull();
+    // ... then the key is rotated (revokeAccountOAuth: codes deleted, grants revoked) before createGrant runs
+    const rot = await api('/v1/keys/rotate', { key: citizen.key, method: 'POST' });
+    expect(rot.status).toBe(200);
+    const key2 = rot.body.api_key.value as string;
+    expect(await createGrant(env as any, c1.row!, true)).toBeNull();
+    expect(await counts()).toEqual({ grants: 0, tokens: 0 });
+    // 2. the account is frozen in between (status changes even without the code being deleted)
+    const c2 = await consumeCode(env as any, await (async () => { const { challenge } = await pkceAsync(); const post = await consent({ client_id: client.client_id, code_challenge: challenge }, { key: key2 }); return new URL(post.headers.get('location')!).searchParams.get('code')!; })());
+    await env.DB.prepare("UPDATE accounts SET status = 'frozen' WHERE id = ?").bind(citizen.id).run();
+    expect(await createGrant(env as any, c2.row!, true)).toBeNull();
+    expect(await counts()).toEqual({ grants: 0, tokens: 0 });
+    await env.DB.prepare("UPDATE accounts SET status = 'active' WHERE id = ?").bind(citizen.id).run();
+    // 3. without a race the same path issues the pair, bound to the code
+    const { challenge, verifier } = await pkceAsync();
+    const post = await consent({ client_id: client.client_id, code_challenge: challenge }, { key: key2 });
+    const code = new URL(post.headers.get('location')!).searchParams.get('code')!;
+    const tok = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id });
+    expect(tok.status).toBe(200);
+    expect(await counts()).toEqual({ grants: 1, tokens: 2 });
+    // 4. refresh rotation: the refresh token was found (grant live), then the key is rotated before it is used
+    const row = await findRefresh(env as any, tok.body.refresh_token);
+    expect(row).not.toBeNull();
+    const rot2 = await api('/v1/keys/rotate', { key: key2, method: 'POST' });
+    expect(rot2.status).toBe(200);
+    expect(await rotateRefresh(env as any, row!, 'read write')).toBe('revoked');
+    expect((await counts()).tokens).toBe(0);
+    // 5. the revocation lands after the refresh token was marked used but before the new pair is written: the
+    //    conditional INSERTs (grant live + account active, checked inside the batch) write nothing
+    const again = await connect(rot2.body.api_key.value as string);
+    const row2 = await findRefresh(env as any, again.tokens.refresh_token);
+    await env.DB.prepare("UPDATE oauth_grants SET revoked_at = ?, revoke_reason = 'key_rotation' WHERE id = ?").bind(new Date().toISOString(), row2!.grant_id).run();
+    const before = (await counts()).tokens;
+    expect(await rotateRefresh(env as any, row2!, 'read write')).toBe('revoked');
+    expect((await counts()).tokens).toBe(before);
+  });
+
+  it('P1 (confirmed): reverting a single freeze or a bulk freeze never revives old tokens', async () => {
+    const citizen = await register('oauth-rv');
+    const { client, tokens } = await connect(citizen.key);
+    const admin = await makeAdmin();
+    expect((await api(`/v1/admin/accounts/${citizen.handle}/status`, { key: admin.key, body: { status: 'frozen', reason: 'qa' } })).status).toBe(200);
+    expect((await api(`/v1/admin/accounts/${citizen.handle}/status`, { key: admin.key, body: { status: 'active', reason: 'qa' } })).status).toBe(200);
+    expect((await mcp('tools/list', {}, tokens.access_token)).status).toBe(401);
+    expect((await token({ grant_type: 'refresh_token', refresh_token: tokens.refresh_token, client_id: client.client_id })).body.error).toBe('invalid_grant');
+    expect((await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_tokens').first<{ n: number }>())!.n).toBe(0);
+  });
+
   it('rotating the API key disconnects every app', async () => {
     const citizen = await register('oauth-k');
     const { tokens } = await connect(citizen.key);
@@ -434,6 +545,145 @@ describe('tokens', () => {
     expect(r.status).toBe(401);
     expect(r.body.error).toMatchObject({ code: 'invalid_token', reason: 'token_audience_is_mcp' });
     expect(r.headers.get('www-authenticate')).toContain('resource_metadata=');
+  });
+});
+
+// ---------------------------------------------------------------- /mcp/me: authentication required (connector "Connect")
+
+describe('/mcp/me: the same MCP server with authentication required', () => {
+  it('unauthenticated initialize (and any other request) is 401 with the /mcp/me resource_metadata challenge; /mcp stays anonymous', async () => {
+    const init = await mcp('initialize', INIT, undefined, ME);
+    expect(init.status).toBe(401);
+    expect(init.headers.get('www-authenticate')).toBe(ME_CHALLENGE);
+    expect(init.headers.get('access-control-allow-origin')).toBe('*');
+    expect(init.headers.get('access-control-expose-headers')).toContain('WWW-Authenticate');
+    expect(init.headers.get('cache-control')).toBe('no-store');
+    expect(init.body.error).toMatchObject({ code: -32001, message: 'authentication_required', data: { status: 401, error: { code: 'authentication_required' } } });
+    for (const method of ['tools/list', 'ping', 'tools/call']) {
+      const r = await mcp(method, method === 'tools/call' ? { name: 'atlas_search_platforms', arguments: {} } : {}, undefined, ME);
+      expect(r.status, method).toBe(401);
+      expect(r.headers.get('www-authenticate'), method).toBe(ME_CHALLENGE);
+    }
+    // modern (2026-07-28) request, a body that is not even JSON, and a GET for the event stream: all 401 first
+    const modern = await fetchRaw(ME, { method: 'POST', headers: { 'content-type': 'application/json', 'mcp-protocol-version': '2026-07-28', 'mcp-method': 'server/discover' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'server/discover', params: { _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28', 'io.modelcontextprotocol/clientCapabilities': {} } } }) });
+    expect(modern.status).toBe(401);
+    expect((await fetchRaw(ME, { method: 'POST', headers: { 'content-type': 'application/json' }, body: 'not json' })).status).toBe(401);
+    const sse = await fetchRaw(ME, { headers: { accept: 'text/event-stream' } });
+    expect(sse.status).toBe(401);
+    expect(sse.headers.get('www-authenticate')).toBe(ME_CHALLENGE);
+    // CORS preflight needs no credential
+    const pre = await fetchRaw(ME, { method: 'OPTIONS', headers: { origin: 'https://claude.ai', 'access-control-request-method': 'POST' } });
+    expect(pre.status).toBe(204);
+    expect(pre.headers.get('access-control-allow-headers')).toContain('Authorization');
+    // a browser opening /mcp/me lands on the docs
+    const page = await fetchRaw(ME, { headers: { accept: 'text/html' } });
+    expect(page.status).toBe(302);
+    expect(page.headers.get('location')).toBe('/mcp#oauth');
+    // /mcp is unchanged: anonymous initialize and public tools work
+    const anon = await mcp('initialize', INIT);
+    expect(anon.status).toBe(200);
+    expect(anon.body.result.serverInfo.name).toBe('commonworld');
+  });
+
+  it('a bad or malformed credential on /mcp/me is 401 invalid_token pointing at the /mcp/me metadata', async () => {
+    for (const bearer of ['cw1_' + 'x'.repeat(43), 'cwo1_' + 'y'.repeat(43), 'nonsense']) {
+      const r = await mcp('initialize', INIT, bearer, ME);
+      expect(r.status, bearer).toBe(401);
+      expect(r.headers.get('www-authenticate'), bearer).toContain('error="invalid_token"');
+      expect(r.headers.get('www-authenticate'), bearer).toContain(`resource_metadata="${ME_PRM}"`);
+    }
+  });
+
+  it('protected resource metadata for /mcp/me names its own resource; the challenge URL answers it', async () => {
+    const r = await fetchRaw(new URL(ME_PRM).pathname);
+    expect(r.status).toBe(200);
+    expect(r.headers.get('access-control-allow-origin')).toBe('*');
+    expect(r.body).toMatchObject({ resource: ME_RESOURCE, authorization_servers: [ORIGIN], scopes_supported: ['read', 'write'], bearer_methods_supported: ['header'] });
+    expect(r.body['x-commonworld'].anonymous_access).toMatch(/^none/);
+    // the root and /mcp documents still describe /mcp
+    expect((await fetchRaw('/.well-known/oauth-protected-resource')).body.resource).toBe(RESOURCE);
+    expect((await fetchRaw('/.well-known/oauth-protected-resource/mcp')).body.resource).toBe(RESOURCE);
+    const as = await fetchRaw('/.well-known/oauth-authorization-server');
+    expect(as.body['x-commonworld'].resources).toEqual([RESOURCE, ME_RESOURCE]);
+  });
+
+  it('works with an OAuth token issued for /mcp/me: same tools, same handlers, writes as the citizen', async () => {
+    const citizen = await register('oauth-me', 'agent', 100);
+    const { tokens } = await connect(citizen.key, { resource: ME_RESOURCE });
+    const grant = await env.DB.prepare('SELECT resource FROM oauth_grants').first<{ resource: string }>();
+    expect(grant!.resource).toBe(ME_RESOURCE);
+    const init = await mcp('initialize', INIT, tokens.access_token, ME);
+    expect(init.status).toBe(200);
+    expect(init.body.result.instructions).toContain(`Connected as @${citizen.handle}`);
+    const meList = toolNames(await mcp('tools/list', {}, tokens.access_token, ME));
+    // the same tool list as a /mcp token with the same scopes
+    const other = await connect(citizen.key);
+    expect(meList).toEqual(toolNames(await mcp('tools/list', {}, other.tokens.access_token)));
+    expect(meList).toContain('platform_create_post');
+    const me = await mcp('tools/call', { name: 'account_me', arguments: {} }, tokens.access_token, ME);
+    expect(me.body.result.structuredContent.account.handle).toBe(citizen.handle);
+    const created = await mcp('tools/call', { name: 'platform_create_post', arguments: { title: 'Via /mcp/me', body: 'Posted through a connector.', section: 'general' } }, tokens.access_token, ME);
+    expect(created.body.result.isError, JSON.stringify(created.body)).toBeUndefined();
+    expect(created.body.result.structuredContent.author.handle).toBe(citizen.handle);
+    // never-tools and staff limits are the same as on /mcp
+    const rot = await mcp('tools/call', { name: 'account_rotate_key', arguments: { confirm: true } }, tokens.access_token, ME);
+    expect(rot.body.result.isError).toBe(true);
+    expect(rot.body.result.structuredContent.error.code).toBe('not_available_via_oauth');
+    // a refresh keeps the binding
+    const ref = await token({ grant_type: 'refresh_token', refresh_token: tokens.refresh_token, client_id: (await env.DB.prepare('SELECT client_id FROM oauth_grants WHERE resource = ?').bind(ME_RESOURCE).first<{ client_id: string }>())!.client_id, resource: ME_RESOURCE });
+    expect(ref.status, JSON.stringify(ref.body)).toBe(200);
+    expect((await mcp('tools/list', {}, ref.body.access_token, ME)).status).toBe(200);
+  });
+
+  it('works with the citizen\'s own API key (cw1_…), staff tools included for staff keys', async () => {
+    const citizen = await register('oauth-mekey');
+    const r = await mcp('initialize', INIT, citizen.key, ME);
+    expect(r.status).toBe(200);
+    const names = toolNames(await mcp('tools/list', {}, citizen.key, ME));
+    expect(names).toContain('account_rotate_key');
+    const me = await mcp('tools/call', { name: 'account_me', arguments: {} }, citizen.key, ME);
+    expect(me.body.result.structuredContent.account.handle).toBe(citizen.handle);
+    const admin = await makeAdmin();
+    expect(toolNames(await mcp('tools/list', {}, admin.key, ME)).some((n) => n.startsWith('admin_'))).toBe(true);
+  });
+
+  it('tokens are bound to one resource: a /mcp/me token is refused at /mcp and on /v1, a /mcp token at /mcp/me', async () => {
+    const citizen = await register('oauth-aud');
+    const meTok = (await connect(citizen.key, { resource: ME_RESOURCE })).tokens.access_token;
+    const mcpTok = (await connect(citizen.key)).tokens.access_token;
+    const a = await mcp('tools/list', {}, meTok);
+    expect(a.status).toBe(401);
+    expect(a.body.error.data.error).toMatchObject({ code: 'invalid_token', reason: 'wrong_audience' });
+    expect(a.headers.get('www-authenticate')).toContain(`resource_metadata="${ORIGIN}/.well-known/oauth-protected-resource/mcp"`);
+    const b = await mcp('tools/list', {}, mcpTok, ME);
+    expect(b.status).toBe(401);
+    expect(b.body.error.data.error).toMatchObject({ code: 'invalid_token', reason: 'wrong_audience' });
+    expect(b.headers.get('www-authenticate')).toContain(`resource_metadata="${ME_PRM}"`);
+    const v1 = await api('/v1/me', { key: meTok });
+    expect(v1.status).toBe(401);
+    expect(v1.body.error).toMatchObject({ code: 'invalid_token', reason: 'token_audience_is_mcp' });
+    // each still works where it belongs
+    expect((await mcp('tools/list', {}, meTok, ME)).status).toBe(200);
+    expect((await mcp('tools/list', {}, mcpTok)).status).toBe(200);
+  });
+
+  it('resource mismatch at the token endpoint is refused (code for /mcp/me exchanged for /mcp, refresh moved, unknown path)', async () => {
+    const citizen = await register('oauth-mis');
+    const client = (await registerClient()).body;
+    const { verifier, challenge } = await pkceAsync();
+    const post = await consent({ client_id: client.client_id, code_challenge: challenge, resource: ME_RESOURCE }, { key: citizen.key });
+    const code = new URL(post.headers.get('location')!).searchParams.get('code')!;
+    const wrong = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id, resource: RESOURCE });
+    expect(wrong.status).toBe(400);
+    expect(wrong.body.error).toBe('invalid_target');
+    // an unknown path on this origin is not a resource of this server
+    const other = await consentGet({ client_id: client.client_id, code_challenge: challenge, resource: `${ORIGIN}/mcp/other` });
+    expect(new URL(other.headers.get('location')!).searchParams.get('error')).toBe('invalid_target');
+    // a refresh cannot move a /mcp/me grant to /mcp
+    const { client: c2, tokens } = await connect(citizen.key, { resource: ME_RESOURCE });
+    const moved = await token({ grant_type: 'refresh_token', refresh_token: tokens.refresh_token, client_id: c2.client_id, resource: RESOURCE });
+    expect(moved.status).toBe(400);
+    expect(moved.body.error).toBe('invalid_target');
   });
 });
 

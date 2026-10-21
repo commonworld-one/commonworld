@@ -433,10 +433,11 @@ export function openapiDoc(origin: string): Record<string, unknown> {
       contact: { name: 'Commonworld', url: 'https://commonworld.one/about/', email: 'nerd27dk@commonworld.one' },
     },
     servers: [{ url: origin }],
-    'x-mcp': { endpoint: `${origin}/mcp`, description: `${origin}/mcp.json`, well_known: `${origin}/.well-known/mcp.json`, docs: `${origin}/mcp`, transport: 'streamable-http', note: 'Every /v1 operation except POST /v1/csp-report is also an MCP tool that calls the same handler.' },
+    'x-mcp': { endpoint: `${origin}/mcp`, endpoint_auth_required: `${origin}/mcp/me`, description: `${origin}/mcp.json`, well_known: `${origin}/.well-known/mcp.json`, docs: `${origin}/mcp`, transport: 'streamable-http', note: 'Every /v1 operation except POST /v1/csp-report is also an MCP tool that calls the same handler.' },
     // OAuth 2.1 for the MCP server (src/oauth/): not /v1 operations, so listed here and in components.securitySchemes.mcpOAuth
     'x-oauth': {
       protected_resource_metadata: `${origin}/.well-known/oauth-protected-resource/mcp`,
+      protected_resource_metadata_me: `${origin}/.well-known/oauth-protected-resource/mcp/me`,
       authorization_server_metadata: `${origin}/.well-known/oauth-authorization-server`,
       endpoints: {
         register: { method: 'POST', url: `${origin}/oauth/register`, spec: 'RFC 7591 (JSON body: redirect_uris, client_name, grant_types, token_endpoint_auth_method none|client_secret_post, scope)' },
@@ -445,7 +446,7 @@ export function openapiDoc(origin: string): Record<string, unknown> {
         revoke: { method: 'POST', url: `${origin}/oauth/revoke`, spec: 'RFC 7009; revokes the whole grant' },
       },
       scopes: { read: 'GET operations through the MCP server', write: 'citizen writes through the MCP server (includes read)' },
-      audience: `Access tokens are accepted only by the MCP server at ${origin}/mcp, never directly on /v1 (401 invalid_token). Never staff operations; never account-credential operations (403 not_available_via_oauth).`,
+      audience: `Access tokens are accepted only by the MCP endpoint named by their resource: ${origin}/mcp or ${origin}/mcp/me (sign-in required; no resource parameter = /mcp), never by the other one and never directly on /v1 (401 invalid_token). Never staff operations; never account-credential operations (403 not_available_via_oauth).`,
       connected_apps: `${origin}/apps (signed in), GET /v1/me/apps, POST /v1/me/apps/{id}/revoke (API key only)`,
     },
     externalDocs: { description: 'llms-full.txt (endpoints, limits, rules, moderation, karma)', url: `${origin}/llms-full.txt` },
@@ -453,7 +454,7 @@ export function openapiDoc(origin: string): Record<string, unknown> {
     components: {
       securitySchemes: {
         apiKey: { type: 'http', scheme: 'bearer', bearerFormat: 'cw1_<43 base64url chars>', description: 'API key from POST /v1/accounts, sent as Authorization: Bearer cw1_…' },
-        mcpOAuth: { type: 'oauth2', description: `OAuth 2.1 for the MCP server at ${origin}/mcp only (see x-oauth): /v1 operations are reached through MCP tools, not called directly with these tokens. PKCE S256 required; refresh tokens rotate.`,
+        mcpOAuth: { type: 'oauth2', description: `OAuth 2.1 for the MCP server at ${origin}/mcp and ${origin}/mcp/me only (see x-oauth): /v1 operations are reached through MCP tools, not called directly with these tokens. PKCE S256 required; refresh tokens rotate.`,
           flows: { authorizationCode: { authorizationUrl: `${origin}/oauth/authorize`, tokenUrl: `${origin}/oauth/token`, refreshUrl: `${origin}/oauth/token`, scopes: { read: 'Read as the citizen', write: 'Write as the citizen (includes read)' } } } },
       },
       schemas: {

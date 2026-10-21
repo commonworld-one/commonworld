@@ -216,10 +216,16 @@ describe('transport and routing', () => {
         name: 'commonworld', url: `${ORIGIN}/mcp`, transport: 'streamable-http', protocol_versions: [...MCP_PROTOCOL_VERSIONS],
         auth: {
           type: 'bearer', optional: true, note: expect.stringMatching(/account_register.*no key.*OAuth 2\.1.*Authorization: Bearer cw1_/s),
-          oauth: { protected_resource_metadata: `${ORIGIN}/.well-known/oauth-protected-resource/mcp`, authorization_server: ORIGIN, authorization_server_metadata: `${ORIGIN}/.well-known/oauth-authorization-server`, scopes: ['read', 'write'], pkce: 'S256', registration: `${ORIGIN}/oauth/register` },
+          oauth: { protected_resource_metadata: `${ORIGIN}/.well-known/oauth-protected-resource/mcp`, resource: `${ORIGIN}/mcp`, authorization_server: ORIGIN, authorization_server_metadata: `${ORIGIN}/.well-known/oauth-authorization-server`, scopes: ['read', 'write'], pkce: 'S256', registration: `${ORIGIN}/oauth/register` },
+        },
+      }, {
+        name: 'commonworld-me', url: `${ORIGIN}/mcp/me`, transport: 'streamable-http', protocol_versions: [...MCP_PROTOCOL_VERSIONS],
+        auth: {
+          type: 'bearer', optional: false, note: expect.stringMatching(/sign-in required.*HTTP 401.*resource_metadata.*OAuth 2\.1.*Bearer cw1_/s),
+          oauth: { protected_resource_metadata: `${ORIGIN}/.well-known/oauth-protected-resource/mcp/me`, resource: `${ORIGIN}/mcp/me`, authorization_server: ORIGIN, authorization_server_metadata: `${ORIGIN}/.well-known/oauth-authorization-server`, scopes: ['read', 'write'], pkce: 'S256', registration: `${ORIGIN}/oauth/register` },
         },
       }],
-      links: { oauth_protected_resource: `${ORIGIN}/.well-known/oauth-protected-resource/mcp`, oauth_authorization_server: `${ORIGIN}/.well-known/oauth-authorization-server`, self: `${ORIGIN}/.well-known/mcp.json`, mcp_json: `${ORIGIN}/mcp.json`, mcp_md: `${ORIGIN}/mcp.md`, docs: `${ORIGIN}/mcp`, openapi: `${ORIGIN}/openapi.json`, llms_txt: `${ORIGIN}/llms.txt` },
+      links: { oauth_protected_resource: `${ORIGIN}/.well-known/oauth-protected-resource/mcp`, oauth_protected_resource_me: `${ORIGIN}/.well-known/oauth-protected-resource/mcp/me`, oauth_authorization_server: `${ORIGIN}/.well-known/oauth-authorization-server`, self: `${ORIGIN}/.well-known/mcp.json`, mcp_json: `${ORIGIN}/mcp.json`, mcp_md: `${ORIGIN}/mcp.md`, docs: `${ORIGIN}/mcp`, openapi: `${ORIGIN}/openapi.json`, llms_txt: `${ORIGIN}/llms.txt` },
     });
     expect(full.body.docs.well_known).toBe(`${ORIGIN}/.well-known/mcp.json`);
     // every linked document answers
