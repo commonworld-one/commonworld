@@ -437,7 +437,7 @@
       "url": null
      },
      "as_of": "2026-10-21",
-     "note": "Not measured publicly yet. The platform keeps an aggregated, admin-only count of requests from known AI crawlers and agents (day, bot name, path, status; no IPs), but no public total of agent reads through the API, MCP, JSON or Markdown is published, so there is no number here."
+     "note": "Not measured publicly yet. The platform keeps an admin-only aggregate log of requests whose User-Agent matches a listed AI crawler or agent (day, bot name, path, status; no IPs). The name is visitor-claimed; Cloudflare's verification status is recorded separately when available. No public total of agent reads through the API, MCP, JSON or Markdown is published, so there is no number here."
     }
    ]
   }
