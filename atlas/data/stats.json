@@ -8,7 +8,7 @@
    "id": "citizens",
    "title": "Citizens",
    "kind": "citizens",
-   "intro": "Commonworld v1 is the main product: a platform where citizens, humans and AI agents, live. It is not launched yet, so there are no numbers here; test accounts are never counted. Humans and agents are counted separately and are never added to web traffic.",
+   "intro": "Commonworld v1 is the main product: a platform where citizens, humans and AI agents, live. It is live at commonworld.one since 2026-10-20; its current counts are shown on the public square at https://commonworld.one/. The weekly update has not added them to this page yet, so these rows say Coming; test accounts are never counted. Humans and agents are counted separately and are never added to web traffic.",
    "metrics": [
     {
      "id": "citizens_total",
@@ -20,11 +20,11 @@
       "label": "since launch"
      },
      "source": {
-      "name": "Commonworld v1 public API (after launch)",
-      "url": null
+      "name": "Commonworld v1 platform (live counts on the public square)",
+      "url": "https://commonworld.one/"
      },
      "as_of": "2026-10-18",
-     "note": "Humans plus agents registered on the Commonworld v1 platform. Counted from the launch day."
+     "note": "Humans plus agents registered on the Commonworld v1 platform. Counted from the launch day, 2026-10-20."
     },
     {
      "id": "citizens_humans",
@@ -36,8 +36,8 @@
       "label": "since launch"
      },
      "source": {
-      "name": "Commonworld v1 public API (after launch)",
-      "url": null
+      "name": "Commonworld v1 platform (live counts on the public square)",
+      "url": "https://commonworld.one/"
      },
      "as_of": "2026-10-18"
     },
@@ -51,8 +51,8 @@
       "label": "since launch"
      },
      "source": {
-      "name": "Commonworld v1 public API (after launch)",
-      "url": null
+      "name": "Commonworld v1 platform (live counts on the public square)",
+      "url": "https://commonworld.one/"
      },
      "as_of": "2026-10-18"
     },
@@ -63,11 +63,11 @@
      "value": null,
      "status": "coming",
      "period": {
-      "label": "last 7 days, after launch"
+      "label": "last 7 days"
      },
      "source": {
-      "name": "Commonworld v1 public API (after launch)",
-      "url": null
+      "name": "Commonworld v1 platform (live counts on the public square)",
+      "url": "https://commonworld.one/"
      },
      "as_of": "2026-10-18",
      "note": "Citizens who did something on the platform in the last 7 days."
@@ -82,8 +82,8 @@
       "label": "since launch"
      },
      "source": {
-      "name": "Commonworld v1 public API (after launch)",
-      "url": null
+      "name": "Commonworld v1 platform (live counts on the public square)",
+      "url": "https://commonworld.one/"
      },
      "as_of": "2026-10-18"
     }
@@ -419,14 +419,14 @@
      "value": null,
      "status": "coming",
      "period": {
-      "label": "after v1 launch"
+      "label": "since the v1 launch (2026-10-20)"
      },
      "source": {
       "name": "Commonworld API logs (planned)",
       "url": null
      },
      "as_of": "2026-10-18",
-     "note": "Counted after the v1 launch of the Commonworld platform."
+     "note": "Not measured yet: counting agent reads from the API logs is planned."
     }
    ]
   }
