@@ -27292,18 +27292,53 @@
     },
     {
      "kind": "metric",
-     "statement": "Count of agent-eligible listings",
+     "statement": "Open agent-eligible listings (agentAccess AGENT_ALLOWED or AGENT_ONLY) on the agent feed: 0, as read by Pico on 2026-10-21 with its own agent key. The feed is readable with a free agent key from one unauthenticated POST /api/agents (skill.md step 1); registering creates a real agent account, so the Atlas has not re-read the value.",
      "value": null,
      "unit": null,
      "window": null,
-     "basis": "direct_observation",
-     "source_url": "https://superteam.fun/api/agents/listings/live",
-     "quote": "{\"error\":\"Unauthorized\"}",
-     "observed_at": "2026-10-15T18:17:40Z",
+     "basis": "independent_source",
+     "source_url": "https://github.com/commonworld-one/commonworld/issues/49",
+     "quote": "returns HTTP 200 and `[]`. Adding `&deadline=2026-10-21T20:24:45.000Z` (full ISO) or `&deadline=2026-10-21` gives the same result. **Open agent-eligible listings right now: 0.**",
+     "observed_at": "2026-10-21T20:25:00Z",
      "methods": [
-      "curl /api/agents/listings/live (401)"
+      "Pico (piiiico; agent pico-amdal, registered 2026-07-31, operated by Håkon Åmdal): GET https://superteam.fun/api/agents/listings/live?take=50 with Authorization: Bearer <agent key> at about 2026-10-21 20:25 UTC -> HTTP 200, [] (GitHub issue #49, https://github.com/commonworld-one/commonworld/issues/49)",
+      "Curator (hark) on 2026-10-21 20:49 UTC: curl -s https://superteam.fun/skill.md (HTTP 200, version 0.5.1): step 1 is POST /api/agents with {\"name\": ...}, the response includes apiKey; GET /api/agents/listings/live?take=50 without a key -> HTTP 401 {\"error\":\"Unauthorized\"}. No agent account registered, so the keyed value is not re-read"
      ],
-     "outcome": "inaccessible"
+     "outcome": "unchecked",
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "Count of agent-eligible listings",
+       "quote": "{\"error\":\"Unauthorized\"}",
+       "source_url": "https://superteam.fun/api/agents/listings/live",
+       "observed_at": "2026-10-15T18:17:40Z",
+       "basis": "direct_observation",
+       "outcome": "inaccessible",
+       "superseded_at": "2026-10-21T20:52:00Z",
+       "reason": "Finding by Pico (piiiico) — GitHub issue #49. The 401 was not a closed endpoint: the agent feed needs an agent key, and skill.md step 1 issues one from a single unauthenticated POST /api/agents (no captcha, KYC or OAuth). Registration creates a real agent account, so the curator did not register; Pico's count with its own key is in the statement only, not re-read by the Atlas."
+      }
+     ],
+     "credit": "Finding by Pico (piiiico, an agent operated by Håkon Åmdal) — GitHub issue #49"
+    },
+    {
+     "kind": "metric",
+     "statement": "Public listings feed (no key): 12 open listings, all 12 with agentAccess HUMAN_ONLY. Listings marked AGENT_ONLY are hidden from normal listing feeds (skill.md), so this feed cannot show them; it shows the AGENT_ALLOWED ones.",
+     "value": 12,
+     "unit": "open listings",
+     "window": "open listings on 2026-10-21",
+     "basis": "direct_observation",
+     "source_url": "https://superteam.fun/api/listings?take=100",
+     "quote": "\"agentAccess\":\"HUMAN_ONLY\",\"status\":\"OPEN\"",
+     "observed_at": "2026-10-21T20:49:00Z",
+     "methods": [
+      "curl -s \"https://superteam.fun/api/listings?take=100\" (HTTP 200) at 2026-10-21 20:49 UTC; 12 items, all status OPEN, agentAccess HUMAN_ONLY on all 12",
+      "Control count suggested by Pico in GitHub issue #49 (same result: 12 open, all HUMAN_ONLY); re-read by the curator",
+      "curl -s https://superteam.fun/skill.md (HTTP 200): \"Listings marked `AGENT_ONLY` are hidden from normal listing feeds; use the agent endpoints above.\""
+     ],
+     "outcome": "supported",
+     "credit": "Finding by Pico (piiiico, an agent operated by Håkon Åmdal) — GitHub issue #49"
     },
     {
      "kind": "recent_activity",

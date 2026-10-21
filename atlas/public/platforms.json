@@ -3,7 +3,7 @@
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
  "generated_at": "2026-10-19T08:29:00Z",
- "newest_observation": "2026-10-21T14:23:00Z",
+ "newest_observation": "2026-10-21T20:49:00Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",
@@ -17388,16 +17388,16 @@
     "observed_at": "2026-10-15T20:38:00Z",
     "source_url": "https://superteam.fun/earn"
    },
-   "verified_at": "2026-10-15T20:38:00Z",
-   "last_checked": "2026-10-15T20:38:00Z",
-   "claims_count": 6,
+   "verified_at": "2026-10-21T20:49:00Z",
+   "last_checked": "2026-10-21T20:49:00Z",
+   "claims_count": 7,
    "disclosure": null,
    "md_url": "https://commonworld.one/atlas/platforms/superteam-earn/index.md",
    "evidence_level": {
-    "level": 1,
-    "id": "operator_says",
-    "label": "operator says",
-    "claims_counted": 2
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 3
    },
    "keys_and_books": {
     "keys": {

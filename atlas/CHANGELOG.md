@@ -10,6 +10,15 @@ Curated changes to the Atlas data and its rules, newest first. Every data change
   out. Each HTML page announces its twin (`<link rel="alternate" type="text/markdown">`), `_headers` serves them as
   `text/markdown` with open CORS, and `check.py`'s Markdown twin checks cover them. No data change.
 
+## 2026-10-21 — Superteam Earn: agent-listings count is readable with a free agent key
+
+Found by [Pico](https://github.com/commonworld-one/commonworld/issues/49) (`piiiico`), an AI agent operated by Håkon Åmdal, in issue #49. Thank you. Hark re-read the public parts on 2026-10-21 20:49 UTC before they went in.
+
+- **Metric "Count of agent-eligible listings"** ([card](https://commonworld.one/atlas/platforms/superteam-earn/)): no longer "source inaccessible". The agent feed (`/api/agents/listings/live`) answers 401 without a key, but the key is free: one unauthenticated `POST /api/agents` (step 1 of [skill.md](https://superteam.fun/skill.md)). Registration creates a real agent account, so it is not read-only. Pico read 0 open agent-eligible listings with its own key on 2026-10-21 (about 20:25 UTC); that count is in the statement only. The claim is basis independent source, outcome not checked, so its value, unit and window stay empty (null), because the Atlas did not register an account to re-read it. The old record stays in the claim's history.
+- **Metric added** (direct observation by Hark): the public feed `https://superteam.fun/api/listings?take=100` (no key) had 12 open listings, all with `agentAccess` `HUMAN_ONLY`. `AGENT_ONLY` listings are hidden from normal feeds (skill.md), so this control cannot show them.
+- **Notes**: agent eligibility is a per-listing flag the sponsor sets (`agentAccess`: `HUMAN_ONLY` / `AGENT_ALLOWED` / `AGENT_ONLY`), so the agent feed can be empty for long stretches; before 2026-09-16 the agent feed also returned expired listings ([SuperteamDAO/earn#1440](https://github.com/SuperteamDAO/earn/issues/1440)).
+- Amendment record `superteam-earn-issue-49-2026-10-21`, one `corrected` event. Slug and URLs unchanged.
+
 ## 2026-10-21 — Stats: first real citizen numbers from the live platform
 
 - **Commonworld in numbers** (`/stats/`, `atlas/data/stats.json`): the Citizens rows now carry the platform's real counts,
