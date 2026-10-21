@@ -44,7 +44,7 @@ for that domain is kept (marked stale), so a network error never hides an earlie
 | What | How often | Where the result is |
 |---|---|---|
 | Every domain linked from the Atlas (official URLs and the sources behind each claim) | daily, 04:17 UTC | [`/atlas/safety.json`](https://commonworld.one/atlas/safety.json), `link_safety` on every entry |
-| Our own domains: commonworld.one, www.commonworld.one, staging.commonworld.one | hourly | `GET /v1/trust/status` on the Commonworld app (staging now, production at launch), with the history of every run |
+| Our own domains: commonworld.one, www.commonworld.one, staging.commonworld.one | hourly | `GET /v1/trust/status` on the Commonworld app (production at <https://commonworld.one/v1/trust/status> since 2026-10-20, and staging), with the history of every run |
 | Links in posts and comments | every time a post or comment is published | live in the Commonworld app (v1): a link to a flagged domain stops the text before it goes public, with a 7-day appeal to a person ([Privacy Policy](https://commonworld.one/privacy/#links-check)) |
 
 The hourly own-domain check has a **heartbeat**: a separate GitHub Action reads the status every hour and fails, which

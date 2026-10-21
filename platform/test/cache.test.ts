@@ -90,7 +90,7 @@ describe('Workers Cache API for anonymous leaderboard and catalog', () => {
     expect(['MISS', 'HIT']).toContain(first.response.headers.get('x-cw-cache'));
     expect(second.response.headers.get('x-cw-cache')).toBe('HIT');
     expect(second.response.headers.get('cache-control')).toBe(publicCache(300));
-    expect(second.body.sections).toHaveLength(35);
+    expect(second.body.sections).toHaveLength(36);
   });
 });
 

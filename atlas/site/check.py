@@ -29,7 +29,8 @@ Landing: / exists (dist/index.html), canonical origin + '/', indexable, H1/motto
 cookie banner, own og:image page-home.png, share bar, Atlas count; site.product_url/home_url point to it.
 About Commonworld: /about/ exists (canonical origin + '/about/', indexable, H1 "About Commonworld", motto, AboutPage + Organization
 JSON-LD named Commonworld with url and no address, own og:image page-cw-about.png, in the root /sitemap.xml, share bar, live Atlas count,
-links to /atlas/, /atlas/about/, /privacy/, /terms/, the GitHub issues and privacy@; future features marked planned/coming, no "sign up"
+links to /atlas/, /atlas/about/, /privacy/, /terms/, the GitHub issues and privacy@; says the platform is live (no "coming soon"),
+parts not built yet marked planned, no "sign up"
 style wording); every page's sidebar has an "About" link to /about/ right under the Commonworld item (above Directions) and the footer
 links "About Commonworld" + "How the Atlas works"; /atlas/about/ opens with a line linking /about/.
 Growth guard: the sitemap URL set may only grow against atlas/data/sitemap-urls.txt (a removed URL fails unless atlas/data/redirects.json
@@ -856,7 +857,7 @@ def markdown_twin_checks(pages):
 STATS_SRC = os.path.join(DATA_DIR, 'stats.json')
 STATS_STATUSES = {'ok', 'coming', 'none_yet'}
 CITIZEN_METRICS = ('citizens_total', 'citizens_humans', 'citizens_agents', 'citizens_active_7d', 'citizens_posts')
-V1_LAUNCHED = False  # flip when Commonworld v1 is live in production; until then citizen rows stay 'coming' (staging test citizens never shown)
+V1_LAUNCHED = True  # Commonworld v1 is live in production since 2026-10-20; citizen rows may carry real numbers (staging test citizens are never shown)
 DATE_RE = re.compile(r'\d{4}-\d{2}-\d{2}')
 
 
@@ -1486,13 +1487,15 @@ def main():
         if (ap_.meta.get('og:image') or '').split('?')[0] != ORIGIN + '/atlas/og/page-cw-about.png': fails.append('/about/: og:image is not page-cw-about.png')
         n_snap = len(json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms'])
         for need in ('<h1>About Commonworld</h1>', 'A shared world for humans and agents', 'live side by side as citizens', 'work you can verify speaks louder than a CV',
-                     'coming soon', 'Citizen profiles', 'Posts and discussion', 'Topics and tags', 'An API for agents', '(planned)',
+                     'The Commonworld platform is live at', 'citizen accounts', 'MCP server', 'commonworld.one/mcp', '(planned)',
                      '<i>Sponsored</i>', 'sources and dates', 'Corrections welcome', 'Privacy-light by default',
                      'href="/atlas/"', 'href="/atlas/about/"', f'href="{PRIV_URL}"', f'href="{TERMS_URL}"', 'href="https://github.com/commonworld-one/commonworld/issues"',
                      f"mailto:{CFG0['contact']['general']}", f'{n_snap:,}', 'aria-current="page">About</a>'):
             if need not in ah: fails.append(f'/about/: lacks {need!r}')
         for bad in re.findall(r'sign up|signup|join now|log in|register now|available now|download the app', main_, re.I):
             fails.append(f'/about/: claims a feature that does not exist yet ({bad!r})')
+        if re.search(r'coming soon|not launched|not yet live', main_, re.I):
+            fails.append('/about/: still says the platform is not live (it is live since 2026-10-20)')
     # accounts exist since v1: the pre-launch "no accounts" wording must not come back on any About page or in TRUST.md
     for pg_ in ('/about/', '/atlas/about/'):
         if pg_ in pages and re.search(r'\bno accounts\b', open(pages[pg_], encoding='utf-8').read(), re.I):

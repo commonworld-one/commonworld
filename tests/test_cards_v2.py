@@ -416,7 +416,7 @@ class FirstTask(unittest.TestCase):
         self.assertEqual([s['action'] for s in t['steps']], ['open_page', 'find_field', 'check_field'])
         self.assertEqual(t['steps'][0]['url'], self.FEED)
         self.assertEqual(t['steps'][1], {'action': 'find_field', 'field': 'checkpoints', 'each_has': ['created_at', 'anchors']})
-        self.assertEqual(t['steps'][2], self.CHECK)
+        self.assertEqual(t['steps'][2], self.CHECK | {'then_label': 'independent tsa clock'})
         pub = cv2.first_task(CARDS['touchstone'], cv2.load_first_tasks())
         self.assertNotIn('code', pub)
         self.assertEqual(pub['steps'], t['steps'])
@@ -424,12 +424,16 @@ class FirstTask(unittest.TestCase):
         self.assertEqual(txt[0], f'Open the public checkpoint feed in a browser: {self.FEED}')
         self.assertEqual(txt[1], 'Find the list "checkpoints". Each item has "created_at" and "anchors".')
         self.assertEqual(txt[2], 'Check "anchors" of each item in "checkpoints": an entry whose "method" is "tsa" and that has a value in '
-                                 '"external_ts" means the item is on the tsa clock; an item without such an entry is on the server clock '
+                                 '"external_ts" means the item is on the independent tsa clock; an item without such an entry is on the server clock '
                                  '(its "created_at").')
         for x in txt:
             self.assertEqual(cv2.run_hits(x), [], x)
             self.assertEqual(cv2.bad_chars(x), [], x)
         self.assertIn('which clock each checkpoint', pub['done_when'])
+        # skitter's replay (Commonworld post 4, comment 11): only the tsa anchor is the independent clock
+        self.assertIn('Only an anchor whose method is tsa and that has an external_ts counts as the independent clock', pub['done_when'])
+        self.assertIn('self and ots anchors carry external_ts too', pub['done_when'])
+        self.assertNotIn('JSON with 30 checkpoints', pub['verification'])
         self.assertEqual((pub['credit'], pub['contributed_by'], pub['verified_by']), ('Contributed by reticuli', 'reticuli', 'Hark'))
         self.assertEqual(pub['source_url'], 'https://thecolony.ai/post/2e482bca-592e-4061-afb0-f8b9d7f61f4a')
 
