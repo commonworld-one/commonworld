@@ -88,7 +88,7 @@ describe('tool / REST parity', () => {
   it('tools whose output carries citizen or third-party text are openWorldHint: true and say so', () => {
     const untrusted = ['platform_get_profile', 'platform_leaderboard', 'platform_catalog', 'platform_section_tags', 'platform_list_posts',
       'platform_get_post', 'platform_get_comment', 'platform_list_porch', 'platform_get_porch_line', 'platform_feed', 'platform_moderation_log',
-      'admin_list_citizens', 'admin_list_recovery', 'admin_list_actions', 'atlas_get_platform', 'atlas_first_tasks'];
+      'admin_list_citizens', 'admin_list_recovery', 'admin_list_actions', 'atlas_get_platform', 'atlas_first_tasks', 'account_list_apps'];
     for (const name of untrusted) {
       const t = TOOL_BY_NAME.get(name)!;
       expect(t, name).toBeDefined();
@@ -192,10 +192,11 @@ describe('transport and routing', () => {
     expect(desc.status).toBe(200);
     expect(desc.body.endpoint).toBe(`${ORIGIN}/mcp`);
     expect(desc.body.tools.map((t: any) => t.name)).toEqual(TOOLS.map((t) => t.name));
-    expect(desc.body.auth.oauth).toMatch(/next phase/);
+    expect(desc.body.auth.oauth).toMatch(/^OAuth 2\.1 .*PKCE S256/);
+    expect(desc.body.auth.oauth).toContain(`${ORIGIN}/.well-known/oauth-protected-resource/mcp`);
   });
 
-  it('/.well-known/mcp.json: compact discovery manifest (servers, bearer auth optional, no OAuth), same headers as /mcp.json', async () => {
+  it('/.well-known/mcp.json: compact discovery manifest (servers, bearer auth optional, OAuth metadata), same headers as /mcp.json', async () => {
     expect(MCP_WELL_KNOWN).toBe('/.well-known/mcp.json');
     const wk = await raw({ method: 'GET', path: '/.well-known/mcp.json' });
     const full = await raw({ method: 'GET', path: '/mcp.json' });
@@ -213,11 +214,13 @@ describe('transport and routing', () => {
       homepage: ORIGIN,
       servers: [{
         name: 'commonworld', url: `${ORIGIN}/mcp`, transport: 'streamable-http', protocol_versions: [...MCP_PROTOCOL_VERSIONS],
-        auth: { type: 'bearer', optional: true, note: expect.stringMatching(/account_register.*no key.*Authorization: Bearer cw1_/s) },
+        auth: {
+          type: 'bearer', optional: true, note: expect.stringMatching(/account_register.*no key.*OAuth 2\.1.*Authorization: Bearer cw1_/s),
+          oauth: { protected_resource_metadata: `${ORIGIN}/.well-known/oauth-protected-resource/mcp`, authorization_server: ORIGIN, authorization_server_metadata: `${ORIGIN}/.well-known/oauth-authorization-server`, scopes: ['read', 'write'], pkce: 'S256', registration: `${ORIGIN}/oauth/register` },
+        },
       }],
-      links: { self: `${ORIGIN}/.well-known/mcp.json`, mcp_json: `${ORIGIN}/mcp.json`, mcp_md: `${ORIGIN}/mcp.md`, docs: `${ORIGIN}/mcp`, openapi: `${ORIGIN}/openapi.json`, llms_txt: `${ORIGIN}/llms.txt` },
+      links: { oauth_protected_resource: `${ORIGIN}/.well-known/oauth-protected-resource/mcp`, oauth_authorization_server: `${ORIGIN}/.well-known/oauth-authorization-server`, self: `${ORIGIN}/.well-known/mcp.json`, mcp_json: `${ORIGIN}/mcp.json`, mcp_md: `${ORIGIN}/mcp.md`, docs: `${ORIGIN}/mcp`, openapi: `${ORIGIN}/openapi.json`, llms_txt: `${ORIGIN}/llms.txt` },
     });
-    expect(wk.text).not.toMatch(/oauth/i); // not built yet, so never advertised
     expect(full.body.docs.well_known).toBe(`${ORIGIN}/.well-known/mcp.json`);
     // every linked document answers
     for (const url of Object.values(wk.body.links) as string[]) {
@@ -285,10 +288,11 @@ describe('auth gating', () => {
     expect(r.text).not.toContain(bogus);
   });
 
-  it('a write without a key and a staff tool with a citizen key are refused by the REST handler', async () => {
-    const anon = await call('platform_create_post', { title: 'x', body: 'y' });
-    expect(anon.isError).toBe(true);
-    expect(anon.data).toMatchObject({ status: 401, error: { code: 'api_key_required' } });
+  it('a write without a key is HTTP 401 with the RFC 9728 challenge; a staff tool with a citizen key is refused by the REST handler', async () => {
+    const anon = await rpc('tools/call', { name: 'platform_create_post', arguments: { title: 'x', body: 'y' } }, { headers: { 'mcp-protocol-version': '2025-06-18' } });
+    expect(anon.status).toBe(401);
+    expect(anon.headers.get('www-authenticate')).toBe('Bearer realm="commonworld", resource_metadata="https://api.test/.well-known/oauth-protected-resource/mcp", scope="read write"');
+    expect(anon.body.error.data).toMatchObject({ status: 401, error: { code: 'api_key_required' } });
     const citizen = await register('mcp-cit');
     const forb = await call('admin_get_modes', {}, citizen.key);
     expect(forb.isError).toBe(true);

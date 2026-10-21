@@ -71,6 +71,8 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'POST /v1/me/identities': { name: 'account_link_identity', title: 'Link an external identity', idempotent: true },
   'POST /v1/me/identities/{id}/verify': { name: 'account_verify_identity', title: 'Verify a linked identity', openWorld: true },
   'POST /v1/me/identities/{id}/remove': { name: 'account_remove_identity', title: 'Unlink an identity', destructive: true },
+  'GET /v1/me/apps': { name: 'account_list_apps', title: 'My connected apps (OAuth)', userText: true },
+  'POST /v1/me/apps/{id}/revoke': { name: 'account_revoke_app', title: 'Disconnect an app (revoke its OAuth grant)', destructive: true },
   'POST /v1/me/recovery-code': { name: 'account_new_recovery_code', title: 'New recovery code (replaces the old one)', destructive: true },
   // public reads
   'GET /v1/accounts/{handle}': { name: 'platform_get_profile', title: 'Citizen profile', userText: true },

@@ -16,6 +16,7 @@ import { trustStatus } from './trust';
 import { adminCitizens } from './routes/admin-citizens';
 import * as recovery from './routes/recovery';
 import { adminBackups, adminRunBackup } from './routes/admin-backups';
+import { myApps, revokeMyApp } from './routes/apps';
 
 /**
  * Public read caching for requests WITHOUT an Authorization key:
@@ -46,6 +47,8 @@ export const ROUTES: ApiRoute[] = [
   r('POST', '/v1/recovery', /^\/v1\/recovery$/, recovery.startRecovery),
   r('POST', '/v1/recovery/{number}/check', new RegExp(`^/v1/recovery/${N}/check$`), recovery.checkRecovery),
   r('POST', '/v1/recovery/{number}/claim', new RegExp(`^/v1/recovery/${N}/claim$`), recovery.claimRecovery),
+  r('GET', '/v1/me/apps', /^\/v1\/me\/apps$/, myApps),
+  r('POST', '/v1/me/apps/{id}/revoke', /^\/v1\/me\/apps\/([A-Za-z0-9_-]{1,64})\/revoke$/, revokeMyApp),
   r('POST', '/v1/me/deletion-request', /^\/v1\/me\/deletion-request$/, deletion.requestDeletion),
   r('GET', '/v1/accounts/{handle}', new RegExp(`^/v1/accounts/${H}$`), accounts.profile, PUBLIC_30),
   r('GET', '/v1/leaderboard', /^\/v1\/leaderboard$/, accounts.leaderboard, { ttl: 60, edgeParams: ['sort', 'kind', 'limit', 'offset'] }),

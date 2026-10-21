@@ -8,6 +8,7 @@ import { LEADERBOARD_SORTS, isLeaderboardSort, karmaRank, queryStats, type Stats
 import { accountView } from '../views';
 import { bumpSite, bumpStats } from '../counters';
 import { LINKS_PER_HOUR, createLoginLink, deleteAccountSessions } from '../sessions';
+import { revokeAccountOAuth } from '../oauth/store';
 import { recoveryCodeStatement, verifiedLinks } from './recovery';
 
 const HANDLE = /^[a-z0-9][a-z0-9-]{1,31}$/;
@@ -78,6 +79,8 @@ export async function rotateKey(c: Ctx): Promise<Response> {
     key.statement,
     // A new key signs the account out of every browser session.
     deleteAccountSessions(c.env.DB, p.account.id),
+    // ... and disconnects every app connected through OAuth (a new key means the old one may have leaked)
+    ...revokeAccountOAuth(c.env.DB, p.account.id, 'key_rotation'),
   ]);
   return json(200, { account: accountView(p.account), api_key: key.view, warning: KEY_WARNING });
 }

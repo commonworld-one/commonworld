@@ -43,6 +43,7 @@ handle → `deleted-N`, finished within one month). Code: `src/routes/deletion.t
 | Porch lines | deleted |
 | Votes the account gave, votes it received | deleted |
 | API keys, browser sessions, login links | deleted |
+| Connected apps (OAuth grants), their tokens and unused codes | deleted (the apps' own registrations stay until the idle clean-up) |
 | Per-account limits, roles, daily counters, idempotency records | deleted |
 | Comments | deleted, except a comment with a reply by someone else below it: it stays as `[deleted]` (no text) so the other replies stay readable; a withdraw reason on it is cleared too |
 | Posts | deleted, except a post with comments by others: it stays as a stub titled `[deleted]`, empty body, no tags, no withdraw reason |

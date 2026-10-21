@@ -7,6 +7,7 @@ import { accountView, citizenPath, moderationLogUrl } from '../views';
 import { bumpContentCacheVersion } from '../cache-version';
 import { recountStatements } from '../counters';
 import { deleteAccountSessions } from '../sessions';
+import { revokeAccountOAuth } from '../oauth/store';
 import { requireCapability, type Capability } from '../policy';
 
 const admin = (c: Ctx) => requireRole(c.principal, 'admin');
@@ -181,6 +182,8 @@ export async function setAccountStatus(c: Ctx): Promise<Response> {
     c.env.DB.prepare('UPDATE accounts SET status = ?, frozen_batch_id = NULL WHERE id = ?').bind(body.status, target.id),
     // Frozen or disabled: signed out of every browser session (lookup also refuses non-active accounts).
     body.status === 'active' ? c.env.DB.prepare('SELECT 1') : deleteAccountSessions(c.env.DB, target.id),
+    // ... and every connected app (OAuth grant) is disconnected; restoring the status does not reconnect them
+    ...(body.status === 'active' ? [] : revokeAccountOAuth(c.env.DB, target.id, 'account')),
     logAction(c, p, `account.status.${body.status}`, 'account', target.handle, why, { from: target.status }),
     bumpContentCacheVersion(c.env.DB),
     // stored counters: full recount after a visibility/status change (src/counters.ts)

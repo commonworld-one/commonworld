@@ -27,6 +27,7 @@ import { atlasAssetText, atlasAssetsOn, serveAtlasAsset } from '../atlas-assets'
 import { queryStats } from '../stats';
 import { assertSameOrigin, clearSessionCookie, consumeLoginLink, csrfToken, hasSessionCookie, peekLoginLink, readForm, resolveSession, revokeSession, sessionCookie, type Viewer } from '../sessions';
 import { composePage, handleWrite, isWritePath } from './writes';
+import { handleOAuthPage, isOAuthPagePath } from './oauth-pages';
 
 /** Validated analytics config from env: an invalid value is ignored (no tag, no CSP host), never echoed. */
 export function analyticsConfig(env: Env): { ga4: string | null; beacon: string | null } {
@@ -97,7 +98,10 @@ export async function withFreshNonce(res: Response, env: Env): Promise<Response>
   if (!(res.headers.get('content-type') ?? '').startsWith('text/html') || !res.headers.has('content-security-policy')) return res;
   const nonce = newNonce();
   const headers = new Headers(res.headers);
-  headers.set('content-security-policy', contentSecurityPolicy(env, nonce));
+  // a page may widen form-action (the OAuth consent page: its POST answers 303 to the app's redirect URI); keep that
+  const formAction = res.headers.get('content-security-policy')?.match(/form-action [^;]+/)?.[0];
+  const csp = contentSecurityPolicy(env, nonce);
+  headers.set('content-security-policy', formAction ? csp.replace(/form-action [^;]+/, formAction) : csp);
   const body = res.body ? stampNonce(await res.text(), nonce) : null;
   return new Response(body, { status: res.status, statusText: res.statusText, headers });
 }
@@ -309,12 +313,16 @@ Allow: /
 Disallow: /inbox
 Disallow: /login
 Disallow: /admin
+Disallow: /oauth/
+Disallow: /apps
 
 ${agents.map((a) => `User-agent: ${a}`).join('\n')}
 Allow: /
 Disallow: /inbox
 Disallow: /login
 Disallow: /admin
+Disallow: /oauth/
+Disallow: /apps
 
 Sitemap: ${origin}/sitemap.xml
 `;
@@ -386,6 +394,26 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
     try { return await authPage(request, env, url); } catch (error) {
       const status = error instanceof HttpError ? error.status : 500;
       if (status === 500) console.error('auth page error', path, error);
+      return respond(method, status, `${status} ${error instanceof HttpError ? error.code : 'internal_error'}`, { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' });
+    }
+  }
+  // OAuth consent page and connected apps (src/pages/oauth-pages.ts): private, never cached, never indexed.
+  if (isOAuthPagePath(path)) {
+    if (method !== 'GET' && method !== 'HEAD' && method !== 'POST') return respond(method, 405, 'method not allowed', { 'content-type': 'text/plain; charset=utf-8', allow: 'GET, HEAD, POST', 'cache-control': 'no-store' });
+    try {
+      const out = await handleOAuthPage(request, env, url, (viewer) => pageCtx(env, url, viewer));
+      const headers: Record<string, string> = { 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow', 'referrer-policy': 'no-referrer' };
+      const res = 'location' in out
+        ? respond(method, 303, '', { ...headers, location: out.location })
+        : respond(method, out.status, out.html, {
+          ...htmlHeaders(env, url, 'no-store'), ...headers,
+          ...(out.formAction ? { 'content-security-policy': contentSecurityPolicy(env).replace("form-action 'self'", `form-action 'self' ${out.formAction}`) } : {}),
+        });
+      for (const c of out.cookies ?? []) res.headers.append('set-cookie', c);
+      return res;
+    } catch (error) {
+      const status = error instanceof HttpError ? error.status : 500;
+      if (status === 500) console.error('oauth page error', path, error instanceof Error ? error.name : 'unknown');
       return respond(method, status, `${status} ${error instanceof HttpError ? error.code : 'internal_error'}`, { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' });
     }
   }

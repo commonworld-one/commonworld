@@ -15,6 +15,10 @@ import { logAiBotVisit, pruneAiBotVisits } from './ai-bots';
 import { handleLab } from './lab';
 import { MCP_PATH, handleMcp, wantsMcpPage } from './mcp/server';
 import { canonicalHostRedirect } from './hosts';
+import { handleOAuthApi, isOAuthApiPath } from './oauth/endpoints';
+import { oauthProblem, oauthRouteError } from './oauth/scopes';
+import { resourceMetadataUrl, siteOrigin } from './oauth/config';
+import { pruneOAuth } from './oauth/store';
 
 async function handle(request: Request, env: Env, exec: ExecutionContext): Promise<Response> {
   const url = new URL(request.url);
@@ -23,6 +27,9 @@ async function handle(request: Request, env: Env, exec: ExecutionContext): Promi
   // readers in src/http.ts (readBodyCapped / readTextCapped: /lab/beat 1 KB, /login and /logout 4 KB, write forms 128 KB).
   // MCP server (src/mcp/server.ts): POST /mcp; a browser or Markdown GET of /mcp is the docs page (src/pages/router.ts)
   if (url.pathname === MCP_PATH && !wantsMcpPage(request)) return handleMcp(request, env, exec, route);
+  // OAuth 2.1 for the MCP server (src/oauth/): metadata documents, client registration, token and revocation endpoints.
+  // The consent page (/oauth/authorize) and the connected-apps page (/apps) are SSR pages (src/pages/oauth-pages.ts).
+  if (isOAuthApiPath(url.pathname)) return handleOAuthApi(request, env);
   const lab = await handleLab(request, env);
   if (lab) return lab;
   const page = await handlePage(request, env, exec);
@@ -30,13 +37,13 @@ async function handle(request: Request, env: Env, exec: ExecutionContext): Promi
   if (request.method === 'GET' && url.pathname === '/health') return json(200, { ok: true, service: 'commonworld-v1', environment: env.ENVIRONMENT ?? 'local' });
   if (Number(request.headers.get('content-length') || '0') > MAX_BODY_BYTES) throw new HttpError(413, 'request_body_too_large', { max_bytes: MAX_BODY_BYTES });
 
-  let matched: { handler: Handler; params: string[]; cache?: PublicCache } | null = null;
+  let matched: { handler: Handler; params: string[]; cache?: PublicCache; path: string } | null = null;
   const allowed: string[] = [];
-  for (const { method, pattern, handler, cache } of ROUTES) {
+  for (const { method, path, pattern, handler, cache } of ROUTES) {
     const m = url.pathname.match(pattern);
     if (!m) continue;
     allowed.push(method);
-    if (method === request.method) { matched = { handler, params: m.slice(1), cache }; break; }
+    if (method === request.method) { matched = { handler, params: m.slice(1), cache, path }; break; }
   }
   if (!matched) {
     if (!allowed.length) throw new HttpError(404, 'route_not_found');
@@ -48,6 +55,9 @@ async function handle(request: Request, env: Env, exec: ExecutionContext): Promi
   // Every request carrying a key is authenticated and rate limited per account
   // (one active key per account; rotation does not reset the window).
   const principal = await authenticate(request, env);
+  // An OAuth access token (MCP only) may call only what its scopes allow, never staff or account-credential routes.
+  const problem = principal ? oauthProblem(principal, request.method, matched.path) : null;
+  if (problem) throw oauthRouteError(problem.need, resourceMetadataUrl(siteOrigin(env, url)));
   const rateHeaders: Record<string, string> = principal ? await enforceAccountRate(env, principal) : {};
   try {
     return withHeaders(await dispatch(request, env, exec, url, matched, principal), rateHeaders);
@@ -195,6 +205,9 @@ export default {
     // allowed link checks at publish after 90 days (src/link-check.ts); rejections stay
     exec.waitUntil(pruneLinkChecks(env, controller.scheduledTime).then(
       (n) => console.log('link checks pruned', n), (error) => console.error('link checks prune failed', error)));
+    // OAuth (src/oauth/store.ts): expired codes and tokens, old revoked grants, idle registered clients
+    exec.waitUntil(pruneOAuth(env, controller.scheduledTime).then(
+      (r) => console.log('oauth pruned', JSON.stringify(r)), (error) => console.error('oauth prune failed', error)));
     // nightly reconcile of the stored counters (src/counters.ts): repairs any drift from concurrent writes
     exec.waitUntil(recountAll(env).then(() => console.log('counters reconciled'), (error) => console.error('counters reconcile failed', error)));
   },

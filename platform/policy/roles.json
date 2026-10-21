@@ -89,6 +89,18 @@
       "note": "own identity only"
     },
     {
+      "method": "GET",
+      "path": "/v1/me/apps",
+      "level": "citizen",
+      "note": "own connected apps (OAuth grants); API key only, never an OAuth token"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/me/apps/{id}/revoke",
+      "level": "citizen",
+      "note": "own app only; API key only, never an OAuth token"
+    },
+    {
       "method": "POST",
       "path": "/v1/me/recovery-code",
       "level": "citizen",

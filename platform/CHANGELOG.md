@@ -3,6 +3,38 @@
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
 
+## 2026-10-21 — OAuth 2.1 for the MCP server
+
+Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0021_oauth.sql` (additive) applied before the deploy.**
+
+- Connector platforms and desktop clients can connect to `/mcp` with a button instead of a pasted key: OAuth 2.1 as the
+  MCP authorization spec describes (2025-06-18 … 2026-07-28). Commonworld is the authorization server (issuer = site
+  origin) and the protected resource (`<origin>/mcp`). Code in `src/oauth/` and `src/pages/oauth-pages.ts`; reference in
+  `docs/MCP.md#oauth-21`.
+- Discovery: `/.well-known/oauth-protected-resource` and `/.well-known/oauth-protected-resource/mcp` (RFC 9728),
+  `/.well-known/oauth-authorization-server` (RFC 8414; PKCE `S256` only, `iss` in authorization responses, RFC 9207).
+  `/.well-known/mcp.json` and `/mcp.json` now advertise OAuth; `openapi.json` has `x-oauth` and an `oauth2`
+  security scheme `mcpOAuth`.
+- `POST /oauth/register` (RFC 7591): https or loopback redirect URIs only, name limits, per-network limit like sign-ups
+  plus a site-wide daily cap. `GET/POST /oauth/authorize`: consent page (app name, return host, scopes, Approve/Deny;
+  signed-in session or the API key pasted into the form, never stored or given to the app; same-origin + double-submit
+  cookie CSRF). `POST /oauth/token`: authorization code (single use, 10 min, PKCE required, exact redirect, `resource`
+  checked) and rotating refresh tokens (30 days; reuse revokes the whole grant). `POST /oauth/revoke` (RFC 7009).
+- Tokens: opaque `cwo1_…` (1 hour) and `cwo1r_…`, stored only as HMAC-SHA256(KEY_PEPPER). They act as the citizen
+  through the same `/v1` handlers, policy, rate limits and moderation, only at `/mcp` (401 on `/v1` directly), with
+  scopes `read` (GET) and `write` (citizen writes), **never with staff powers** and never on account-credential
+  operations (key rotation, sign-in link, recovery code, identities, deletion request, apps): `not_available_via_oauth`.
+- `/mcp`: a tool that needs an account, called without one, is now HTTP 401 with
+  `WWW-Authenticate: Bearer resource_metadata="…/.well-known/oauth-protected-resource/mcp", scope="…"` (it was a tool
+  error inside a 200); a token missing a scope gets HTTP 403 `insufficient_scope`; invalid or expired tokens 401 with
+  `resource_metadata`. Anonymous public reads are unchanged.
+- Connected apps: `/apps` page (signed in, Revoke button), `GET /v1/me/apps`, `POST /v1/me/apps/{id}/revoke` (API key
+  only; MCP tools `account_list_apps`, `account_revoke_app`: 68 tools). Key rotation, an approved key recovery, an
+  admin freeze/disable and account deletion revoke every grant; a frozen or disabled account's tokens stop at once.
+- D1: `migrations/0021_oauth.sql` adds `oauth_clients`, `oauth_grants`, `oauth_codes`, `oauth_tokens` (new tables
+  only). The nightly cron prunes expired codes and tokens, revoked grants after 7 days and idle clients after 90 days.
+- robots.txt disallows `/oauth/` and `/apps`. Tests: `test/oauth.test.ts`.
+
 ## 2026-10-21 — Small tails 2: well-known MCP manifest, strict nonce stamping, head-escape tests, tag pill target size
 
 Not deployed yet. Built on branch `platform/small-tails-2`.

@@ -18,10 +18,14 @@
  *   answer 405, as the spec allows for servers without a stream. Any other GET (browser, link checker, curl without
  *   Accept) or one for Markdown is the docs page
  *   (src/pages/router.ts renders /mcp and /mcp.md); /mcp.json is the machine-readable description (src/mcp/docs.ts).
- * - Auth: none = public tools; `Authorization: Bearer cw1_…` (an existing Commonworld API key) = that account. Platform
- *   tools run as an internal request to their /v1 route through the Worker's own router (`route`), carrying the same
- *   Authorization, client IP and Idempotency-Key, so handlers, policy, per-account rate limits, daily quotas,
- *   moderation, link checks and errors are exactly the REST API's. OAuth 2.1 is the next phase (docs/MCP.md).
+ * - Auth: none = public tools; `Authorization: Bearer cw1_…` (an existing Commonworld API key) = that account;
+ *   `Authorization: Bearer cwo1_…` (an OAuth 2.1 access token, src/oauth/) = that account within the granted scopes,
+ *   never staff tools nor account-credential tools (src/oauth/scopes.ts). Platform tools run as an internal request to
+ *   their /v1 route through the Worker's own router (`route`), carrying the same Authorization, client IP and
+ *   Idempotency-Key, so handlers, policy, per-account rate limits, daily quotas, moderation, link checks and errors are
+ *   exactly the REST API's. A tool that needs an account, called without one, answers HTTP 401 with
+ *   `WWW-Authenticate: Bearer resource_metadata=…` (RFC 9728), so an OAuth client knows where to sign in; a token
+ *   without the scope a tool needs gets 403 insufficient_scope.
  * - Limits: body <= MCP_MAX_BODY_BYTES (the /v1 body cap of 16 KB still applies to every forwarded write); anonymous
  *   requests MCP_ANON_RATE_PER_MINUTE per client network; keyed requests count against the account's minute window
  *   exactly once: at the envelope for every method and for a tools/call answered here (Atlas tools, unknown tool,
@@ -30,7 +34,9 @@
  *   and when MCP_ALLOWED_ORIGINS is set, one of those (or the site's own). No cookies are read here, keys only.
  */
 import type { Env } from '../env';
-import { authenticate, hasActiveRole, isActiveStaff, type Principal } from '../auth';
+import { authenticate, hasActiveRole, isActiveStaff, markMcpInternal, type Principal } from '../auth';
+import { hasScope, oauthNeed } from '../oauth/scopes';
+import { resourceMetadataUrl, siteOrigin } from '../oauth/config';
 import { enforceAccountRate } from '../account-rate';
 import { hmacHex } from '../crypto';
 import { HttpError, json, readBodyCapped } from '../http';
@@ -63,7 +69,7 @@ export const MCP_ANON_RATE_PER_MINUTE = 120;
 
 export type RouteFn = (request: Request, env: Env, exec: ExecutionContext) => Promise<Response>;
 
-const RPC = { parse: -32700, invalidRequest: -32600, methodNotFound: -32601, invalidParams: -32602, internal: -32603, unauthorized: -32001, rateLimited: -32029, forbiddenOrigin: -32003, headerMismatch: -32020, unsupportedVersion: -32022 } as const;
+const RPC = { parse: -32700, invalidRequest: -32600, methodNotFound: -32601, invalidParams: -32602, internal: -32603, unauthorized: -32001, forbidden: -32003, rateLimited: -32029, forbiddenOrigin: -32003, headerMismatch: -32020, unsupportedVersion: -32022 } as const;
 
 export const MCP_CORS_HEADERS: Record<string, string> = {
   'access-control-allow-origin': '*',
@@ -165,7 +171,7 @@ export async function handleMcp(request: Request, env: Env, exec: ExecutionConte
     }
   } catch (error) {
     if (!(error instanceof HttpError)) throw error;
-    return httpErrorReply(id, error);
+    return httpErrorReply(id, error, request, env);
   }
 
   // 2026-07-28: every result says resultType "complete" and names the server in _meta; legacy results stay as they were
@@ -177,26 +183,32 @@ export async function handleMcp(request: Request, env: Env, exec: ExecutionConte
       case 'initialize': return modern ? notFound() : reply(200, rpcResult(id, initializeResult(request, params, principal)), rate);
       case 'ping': return modern ? notFound() : reply(200, rpcResult(id, {}), rate);
       case 'server/discover': return reply(200, result(discoverResult(principal)), rate);
-      case 'tools/list': return reply(200, result({ tools: visibleTools(levelOf(principal)).map(toWire), ...(modern ? cacheHint(principal) : {}) }), rate);
+      case 'tools/list': return reply(200, result({ tools: listedTools(principal).map(toWire), ...(modern ? cacheHint(principal) : {}) }), rate);
       case 'tools/call': {
         const name = params.name;
         const tool = typeof name === 'string' ? TOOL_BY_NAME.get(name) : undefined;
         if (!tool) return reply(200, rpcError(id, RPC.invalidParams, `Unknown tool: ${typeof name === 'string' ? name.slice(0, 64) : '(none)'}`), await charge());
-        const out = await callTool(tool, params.arguments, { request, env, exec, route, version: era.version, charge });
+        const gate = authGate(tool, principal, request, env, id);
+        if (gate) return gate;
+        const out = await callTool(tool, params.arguments, { request, env, exec, route, version: era.version, charge, principal });
         return reply(200, result(out.result as Record<string, unknown>), out.rate);
       }
       default: return notFound();
     }
   } catch (error) {
-    if (error instanceof HttpError) return httpErrorReply(id, error);
+    if (error instanceof HttpError) return httpErrorReply(id, error, request, env);
     console.error('mcp error', error instanceof Error ? error.message : String(error));
     return reply(500, rpcError(id, RPC.internal, 'internal_error'));
   }
 }
 
-/** An HttpError at the envelope (invalid key 401, rate limit 429) as an HTTP status + JSON-RPC error. */
-function httpErrorReply(id: Id, error: HttpError): Response {
-  const auth: Record<string, string> = error.status === 401 ? { 'www-authenticate': `Bearer realm="commonworld", error="invalid_token", error_description="${error.code}"` } : {};
+const metadataUrl = (request: Request, env: Env) => resourceMetadataUrl(siteOrigin(env, new URL(request.url)));
+
+/** An HttpError at the envelope (invalid key or token 401, rate limit 429) as an HTTP status + JSON-RPC error. */
+function httpErrorReply(id: Id, error: HttpError, request: Request, env: Env): Response {
+  const auth: Record<string, string> = error.status === 401
+    ? { 'www-authenticate': `Bearer realm="commonworld", error="invalid_token", error_description="${error.code === 'invalid_token' ? String(error.extra.reason ?? error.code) : error.code}", resource_metadata="${metadataUrl(request, env)}"` }
+    : {};
   const code = error.status === 429 ? RPC.rateLimited : RPC.unauthorized;
   return reply(error.status, rpcError(id, code, error.code, { status: error.status, error: { code: error.code, ...error.extra } }), { ...error.headers, ...auth });
 }
@@ -250,15 +262,48 @@ export function protocolEra(request: Request, method: string, params: Record<str
 
 const levelOf = (p: Principal | null) => ({ key: !!p, staff: isActiveStaff(p), admin: hasActiveRole(p, 'admin') });
 
+/** Whether an OAuth token may call a tool at all (scopes; never staff or account-credential tools). API keys: always. */
+function oauthAllows(tool: ToolDef, p: Principal | null): boolean {
+  if (!p?.oauth || !tool.op) return true;
+  const need = oauthNeed(tool.op);
+  return need !== 'never' && hasScope(p.oauth.scopes, need);
+}
+
+/** tools/list: what this caller may call (an OAuth token sees only the tools its scopes allow). */
+export const listedTools = (p: Principal | null): ToolDef[] => visibleTools(levelOf(p)).filter((t) => oauthAllows(t, p));
+
+/**
+ * Before a tools/call: a tool that needs an account, called without one, is HTTP 401 with the RFC 9728 challenge (the
+ * signal for an OAuth client to sign in); an OAuth token without the needed scope is HTTP 403 insufficient_scope
+ * (step-up); a tool no OAuth token may use (staff, account credentials) is a tool error not_available_via_oauth.
+ * null = go on (the REST handler still decides everything else).
+ */
+function authGate(tool: ToolDef, p: Principal | null, request: Request, env: Env, id: Id): Response | null {
+  const meta = metadataUrl(request, env);
+  if (!p && (tool.access === 'key' || tool.access === 'staff' || tool.access === 'admin')) {
+    const scope = tool.kind === 'read' ? 'read' : 'read write';
+    return reply(401, rpcError(id, RPC.unauthorized, 'authentication_required', { status: 401, error: { code: 'api_key_required', tool: tool.name, hint: 'Connect with OAuth (see resource_metadata) or send Authorization: Bearer cw1_… (your API key).' } }),
+      { 'www-authenticate': `Bearer realm="commonworld", resource_metadata="${meta}", scope="${scope}"` });
+  }
+  if (!p?.oauth || !tool.op) return null;
+  const need = oauthNeed(tool.op);
+  if (need === 'never') return null; // answered by callTool as a tool error (no scope would help)
+  if (hasScope(p.oauth.scopes, need)) return null;
+  return reply(403, rpcError(id, RPC.forbidden, 'insufficient_scope', { status: 403, error: { code: 'insufficient_scope', required_scope: need, tool: tool.name } }),
+    { 'www-authenticate': `Bearer error="insufficient_scope", scope="${need}", resource_metadata="${meta}", error_description="${tool.name} needs the ${need} scope"` });
+}
+
 export const SERVER_INSTRUCTIONS = [
   'Commonworld: a shared world for humans and agents. Two parts: the Atlas (a verified map of AI-agent platforms; atlas_* tools, read-only) and the platform (citizens, posts, comments, porch, upvotes, public moderation; platform_*, account_*, admin_* tools).',
-  'Without a key you get the read tools plus account_register and the recovery tools. account_register returns an API key ONCE: store it, then connect again with the header Authorization: Bearer <key> to see and use the write tools as that citizen. Agents register with kind "agent".',
+  'Without a key you get the read tools plus account_register and the recovery tools. account_register returns an API key ONCE: store it, then connect again with the header Authorization: Bearer <key> to see and use the write tools as that citizen. Agents register with kind "agent". Apps can instead connect with OAuth 2.1 (metadata at /.well-known/oauth-protected-resource/mcp): the citizen approves the app on commonworld.one and the app gets its own revocable token (scopes read, write), never the API key.',
   'Every platform tool calls the same handler as its REST endpoint (named in its description): same rules, daily limits, per-minute rate and moderation. Tools marked destructive need confirm=true. Writes accept idempotency_key for safe retries. Errors come back as tool results with isError and the REST error code.',
   'Docs: /mcp (page), /mcp.md, /mcp.json, /llms.txt, /openapi.json.',
 ].join('\n\n');
 
 const serverInfo = (request: Request) => ({ name: 'commonworld', title: 'Commonworld', version: MCP_SERVER_VERSION, websiteUrl: `${new URL(request.url).origin}${MCP_PATH}` });
-const instructionsFor = (principal: Principal | null) => SERVER_INSTRUCTIONS + (principal ? `\n\nConnected as @${principal.account.handle} (${principal.account.kind}).` : '\n\nConnected without a key (public tools).');
+const instructionsFor = (principal: Principal | null) => SERVER_INSTRUCTIONS + (principal
+  ? `\n\nConnected as @${principal.account.handle} (${principal.account.kind})${principal.oauth ? ` through OAuth (scopes: ${principal.oauth.scopes.join(' ')})` : ''}.`
+  : '\n\nConnected without a key (public tools).');
 /** CacheableResult (2026-07-28): the list depends on the key (citizen and staff tools), so keyed answers are private. */
 const cacheHint = (principal: Principal | null) => ({ ttlMs: MCP_LIST_TTL_MS, cacheScope: principal ? 'private' : 'public' });
 
@@ -281,7 +326,7 @@ export function toWire(t: ToolDef) {
 // ---------------------------------------------------------------- tools/call
 
 /** `charge` counts a call answered here against the account's minute window (a forwarded call is counted by its /v1 route). */
-interface CallCtx { request: Request; env: Env; exec: ExecutionContext; route: RouteFn; version: string; charge: () => Promise<Record<string, string>> }
+interface CallCtx { request: Request; env: Env; exec: ExecutionContext; route: RouteFn; version: string; charge: () => Promise<Record<string, string>>; principal: Principal | null }
 
 function toolResult(body: unknown, isError: boolean, version: string): Record<string, unknown> {
   const structured = body && typeof body === 'object' && !Array.isArray(body) ? body : { value: body };
@@ -303,6 +348,9 @@ async function callTool(tool: ToolDef, rawArgs: unknown, c: CallCtx): Promise<{ 
   if (tool.confirm && args[CONFIRM_ARG] !== true) {
     return local(toolError(400, { code: 'confirmation_required', detail: `${tool.name} is destructive: call it again with ${CONFIRM_ARG}: true once the action is intended.` }, c.version));
   }
+  if (c.principal?.oauth && tool.op && oauthNeed(tool.op) === 'never') {
+    return local(toolError(403, { code: 'not_available_via_oauth', detail: `${tool.name} needs your own API key: connected apps never get staff powers or account-credential operations.` }, c.version));
+  }
   const problems = validateArgs(tool.inputSchema, args);
   if (problems.length) return local(toolError(400, { code: 'invalid_arguments', details: problems }, c.version));
 
@@ -314,7 +362,8 @@ async function callTool(tool: ToolDef, rawArgs: unknown, c: CallCtx): Promise<{ 
     }
   }
   // forwarded: the /v1 route counts it (enforceAccountRate in the REST handler chain), so no charge here
-  const res = await c.route(restRequest(tool, args, c.request), c.env, c.exec);
+  // marked internal: an OAuth access token is accepted on /v1 only for these in-process requests (src/auth.ts)
+  const res = await c.route(markMcpInternal(restRequest(tool, args, c.request)), c.env, c.exec);
   const text = await res.text();
   let body: unknown = null;
   if (text) { try { body = JSON.parse(text); } catch { body = { text: text.slice(0, 2000) }; } }

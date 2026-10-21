@@ -1,0 +1,535 @@
+/**
+ * OAuth 2.1 for the MCP server (src/oauth/*, src/pages/oauth-pages.ts): discovery metadata, Dynamic Client
+ * Registration, consent with PKCE, token exchange, refresh rotation with reuse detection, revocation, scopes, no staff
+ * powers, audience binding (MCP only), account status, CSRF on consent, and that no secret is ever logged or reflected.
+ */
+import { env, exports } from 'cloudflare:workers';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { api, makeAdmin, register, resetDb, setSetting } from './helpers';
+import { s256 } from '../src/oauth/config';
+import { pruneOAuth } from '../src/oauth/store';
+import { createLoginLink, consumeLoginLink } from '../src/sessions';
+
+const ORIGIN = 'https://api.test';
+const REDIRECT = 'https://client.example/callback';
+const RESOURCE = `${ORIGIN}/mcp`;
+let seq = 0;
+
+beforeEach(async () => { await resetDb(); });
+
+async function fetchRaw(path: string, init: RequestInit = {}) {
+  const res = await (exports as any).default.fetch(new Request(`${ORIGIN}${path}`, { redirect: 'manual', ...init }));
+  const text = await res.text();
+  let body: any = null;
+  try { body = text ? JSON.parse(text) : null; } catch { body = text; }
+  return { status: res.status, headers: res.headers as Headers, body, text };
+}
+
+const form = (o: Record<string, string>) => new URLSearchParams(o).toString();
+const FORM = { 'content-type': 'application/x-www-form-urlencoded' };
+
+async function registerClient(meta: Record<string, unknown> = {}, ip = '203.0.113.7') {
+  return fetchRaw('/oauth/register', { method: 'POST', headers: { 'content-type': 'application/json', 'cf-connecting-ip': ip }, body: JSON.stringify({ client_name: 'Test MCP client', redirect_uris: [REDIRECT], ...meta }) });
+}
+
+function pkce() {
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  const verifier = btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  return { verifier, challenge: s256(verifier) };
+}
+
+interface Authz { client_id: string; redirect_uri?: string; state?: string; scope?: string; resource?: string; code_challenge: string; code_challenge_method?: string; response_type?: string }
+const authzQuery = (a: Authz) => new URLSearchParams({ response_type: 'code', code_challenge_method: 'S256', redirect_uri: REDIRECT, resource: RESOURCE, state: 'st-123', ...a } as Record<string, string>).toString();
+
+async function consentGet(a: Authz, cookie?: string) {
+  const r = await fetchRaw(`/oauth/authorize?${authzQuery(a)}`, { headers: cookie ? { cookie } : {} });
+  const csrf = r.text.match(/name="_csrf" value="([0-9a-f]{64})"/)?.[1] ?? '';
+  const nonce = (r.headers.get('set-cookie') ?? '').match(/__Host-cw_oauth=([A-Za-z0-9_-]{43})/)?.[1] ?? '';
+  return { ...r, csrf, nonce };
+}
+
+/** GET the consent page, then POST the decision as the browser would. Returns the POST response. */
+async function consent(a: Authz, opts: { key?: string; decision?: 'approve' | 'deny'; write?: boolean; session?: string; origin?: string; csrf?: string; noCookie?: boolean } = {}) {
+  const page = await consentGet(a, opts.session ? `__Host-cw_session=${opts.session}` : undefined);
+  expect(page.status, page.text.slice(0, 300)).toBe(200);
+  const cookies = [opts.noCookie ? '' : `__Host-cw_oauth=${page.nonce}`, opts.session ? `__Host-cw_session=${opts.session}` : ''].filter(Boolean).join('; ');
+  const fields: Record<string, string> = {
+    _csrf: opts.csrf ?? page.csrf, client_id: a.client_id, redirect_uri: a.redirect_uri ?? REDIRECT, state: a.state ?? 'st-123', response_type: 'code',
+    code_challenge: a.code_challenge, code_challenge_method: 'S256', scope: a.scope ?? 'read write', resource: a.resource ?? RESOURCE, decision: opts.decision ?? 'approve',
+  };
+  if (opts.key) fields.api_key = opts.key;
+  if (opts.write !== false) fields.scope_write = 'on';
+  return fetchRaw('/oauth/authorize', { method: 'POST', headers: { ...FORM, origin: opts.origin ?? ORIGIN, ...(cookies ? { cookie: cookies } : {}) }, body: form(fields) });
+}
+
+async function token(fields: Record<string, string>) {
+  return fetchRaw('/oauth/token', { method: 'POST', headers: FORM, body: form(fields) });
+}
+
+/** Full flow up to tokens for a citizen. */
+async function connect(key: string, opts: { write?: boolean; scope?: string } = {}) {
+  const client = (await registerClient()).body;
+  const { verifier, challenge } = await pkceAsync();
+  const post = await consent({ client_id: client.client_id, code_challenge: challenge, ...(opts.scope ? { scope: opts.scope } : {}) }, { key, write: opts.write });
+  expect(post.status, post.text.slice(0, 400)).toBe(303);
+  const loc = new URL(post.headers.get('location')!);
+  const code = loc.searchParams.get('code')!;
+  const tok = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id, redirect_uri: REDIRECT, resource: RESOURCE });
+  expect(tok.status, JSON.stringify(tok.body)).toBe(200);
+  return { client, verifier, code, tokens: tok.body as { access_token: string; refresh_token: string; scope: string; expires_in: number; token_type: string } };
+}
+
+async function pkceAsync() { const p = pkce(); return { verifier: p.verifier, challenge: await p.challenge }; }
+
+async function mcp(method: string, params: unknown, bearer?: string) {
+  const headers: Record<string, string> = { 'content-type': 'application/json', accept: 'application/json', 'mcp-protocol-version': '2025-06-18' };
+  if (bearer) headers.authorization = `Bearer ${bearer}`;
+  return fetchRaw('/mcp', { method: 'POST', headers, body: JSON.stringify({ jsonrpc: '2.0', id: ++seq, method, params }) });
+}
+const toolNames = (r: { body: any }) => (r.body.result.tools as { name: string }[]).map((t) => t.name);
+
+// ---------------------------------------------------------------- discovery
+
+describe('discovery metadata', () => {
+  it('protected resource metadata (root and /mcp) names the MCP resource and this site as its authorization server', async () => {
+    for (const path of ['/.well-known/oauth-protected-resource', '/.well-known/oauth-protected-resource/mcp']) {
+      const r = await fetchRaw(path);
+      expect(r.status, path).toBe(200);
+      expect(r.headers.get('access-control-allow-origin')).toBe('*');
+      expect(r.body.resource).toBe(RESOURCE);
+      expect(r.body.authorization_servers).toEqual([ORIGIN]);
+      expect(r.body.scopes_supported).toEqual(['read', 'write']);
+      expect(r.body.bearer_methods_supported).toEqual(['header']);
+    }
+  });
+
+  it('authorization server metadata (RFC 8414): endpoints, PKCE S256 only, public clients, iss in responses', async () => {
+    const r = await fetchRaw('/.well-known/oauth-authorization-server');
+    expect(r.status).toBe(200);
+    expect(r.body).toMatchObject({
+      issuer: ORIGIN, authorization_endpoint: `${ORIGIN}/oauth/authorize`, token_endpoint: `${ORIGIN}/oauth/token`,
+      registration_endpoint: `${ORIGIN}/oauth/register`, revocation_endpoint: `${ORIGIN}/oauth/revoke`,
+      code_challenge_methods_supported: ['S256'], grant_types_supported: ['authorization_code', 'refresh_token'],
+      response_types_supported: ['code'], token_endpoint_auth_methods_supported: ['none', 'client_secret_post'],
+      authorization_response_iss_parameter_supported: true,
+    });
+    const pre = await fetchRaw('/oauth/token', { method: 'OPTIONS' });
+    expect(pre.status).toBe(204);
+    expect(pre.headers.get('access-control-allow-origin')).toBe('*');
+  });
+
+  it('/.well-known/mcp.json and /mcp.json advertise OAuth', async () => {
+    const wk = await fetchRaw('/.well-known/mcp.json');
+    expect(wk.body.servers[0].auth.oauth).toMatchObject({ protected_resource_metadata: `${ORIGIN}/.well-known/oauth-protected-resource/mcp`, authorization_server: ORIGIN });
+    const doc = await fetchRaw('/mcp.json');
+    expect(doc.body.auth.oauth).toContain('/.well-known/oauth-protected-resource');
+  });
+});
+
+// ---------------------------------------------------------------- registration
+
+describe('dynamic client registration', () => {
+  it('registers a public client with defaults', async () => {
+    const r = await registerClient();
+    expect(r.status).toBe(201);
+    expect(r.body.client_id).toMatch(/^cwcl_[A-Za-z0-9_-]{22}$/);
+    expect(r.body).toMatchObject({ token_endpoint_auth_method: 'none', grant_types: ['authorization_code', 'refresh_token'], response_types: ['code'], scope: 'read write', redirect_uris: [REDIRECT] });
+    expect(r.body.client_secret).toBeUndefined();
+    expect(r.headers.get('cache-control')).toBe('no-store');
+  });
+
+  it('accepts https and loopback redirect URIs only, rejects bad names', async () => {
+    for (const u of ['http://client.example/cb', 'javascript:alert(1)', 'https://client.example/cb#frag', 'https://user:pw@client.example/cb', 'cursor://cb', 'ftp://client.example/cb']) {
+      const r = await registerClient({ redirect_uris: [u] });
+      expect(r.status, u).toBe(400);
+      expect(r.body.error, u).toBe('invalid_redirect_uri');
+    }
+    for (const u of ['http://localhost:3000/cb', 'http://127.0.0.1:9999/callback', 'http://[::1]/cb']) expect((await registerClient({ redirect_uris: [u] })).status, u).toBe(201);
+    expect((await registerClient({ client_name: 'x'.repeat(81) })).body.error).toBe('invalid_client_metadata');
+    expect((await registerClient({ client_name: 'Evil\u202eppa' })).body.error).toBe('invalid_client_metadata');
+    expect((await registerClient({ redirect_uris: [] })).status).toBe(400);
+    expect((await registerClient({ grant_types: ['client_credentials'] })).status).toBe(400);
+    expect((await registerClient({ scope: 'admin' })).status).toBe(400);
+  });
+
+  it('is rate limited per client network like sign-ups', async () => {
+    await setSetting('limits.register_per_ip_per_hour', 2);
+    expect((await registerClient({}, '198.51.100.9')).status).toBe(201);
+    expect((await registerClient({}, '198.51.100.9')).status).toBe(201);
+    const third = await registerClient({}, '198.51.100.9');
+    expect(third.status).toBe(429);
+    expect(third.body.error).toBe('slow_down');
+    expect((await registerClient({}, '198.51.100.10')).status).toBe(201);
+  });
+
+  it('client_secret_post clients get a secret once and must send it', async () => {
+    const r = await registerClient({ token_endpoint_auth_method: 'client_secret_post' });
+    expect(r.body.client_secret).toMatch(/^cwcs_/);
+    const bad = await token({ grant_type: 'refresh_token', refresh_token: 'cwo1r_' + 'A'.repeat(43), client_id: r.body.client_id, client_secret: 'cwcs_' + 'B'.repeat(43) });
+    expect(bad.status).toBe(401);
+    expect(bad.body.error).toBe('invalid_client');
+    expect(bad.text).not.toContain('B'.repeat(43));
+  });
+});
+
+// ---------------------------------------------------------------- the flow
+
+describe('authorization code + PKCE flow', () => {
+  it('happy path: register -> consent -> token -> citizen tools via MCP -> refresh rotation -> revoke', async () => {
+    const citizen = await register('oauth-cit', 'agent', 100);
+    const client = (await registerClient()).body;
+    const { verifier, challenge } = await pkceAsync();
+
+    const page = await consentGet({ client_id: client.client_id, code_challenge: challenge });
+    expect(page.status).toBe(200);
+    expect(page.text).toContain('Test MCP client');
+    expect(page.text).toContain('client.example');
+    expect(page.headers.get('cache-control')).toBe('no-store');
+    expect(page.headers.get('x-robots-tag')).toContain('noindex');
+    expect(page.headers.get('content-security-policy')).toContain("form-action 'self' https://client.example");
+    expect(page.headers.get('content-security-policy')).toContain("frame-ancestors 'none'");
+
+    const post = await consent({ client_id: client.client_id, code_challenge: challenge }, { key: citizen.key });
+    expect(post.status).toBe(303);
+    const back = new URL(post.headers.get('location')!);
+    expect(back.origin + back.pathname).toBe(REDIRECT);
+    expect(back.searchParams.get('state')).toBe('st-123');
+    expect(back.searchParams.get('iss')).toBe(ORIGIN);
+    const code = back.searchParams.get('code')!;
+    expect(code).toMatch(/^cwo1c_/);
+
+    const tok = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id, redirect_uri: REDIRECT, resource: RESOURCE });
+    expect(tok.status).toBe(200);
+    expect(tok.headers.get('cache-control')).toBe('no-store');
+    expect(tok.body).toMatchObject({ token_type: 'Bearer', expires_in: 3600, scope: 'read write' });
+    expect(tok.body.access_token).toMatch(/^cwo1_[A-Za-z0-9_-]{43}$/);
+    expect(tok.body.refresh_token).toMatch(/^cwo1r_/);
+    expect(JSON.stringify(tok.body)).not.toContain(citizen.key);
+
+    // only hashes are stored
+    const stored = await env.DB.prepare('SELECT token_hash FROM oauth_tokens').all<{ token_hash: string }>();
+    for (const r of stored.results) { expect(r.token_hash).toMatch(/^[0-9a-f]{64}$/); expect(r.token_hash).not.toContain(tok.body.access_token); }
+
+    const list = await mcp('tools/list', {}, tok.body.access_token);
+    expect(list.status).toBe(200);
+    const names = toolNames(list);
+    expect(names).toContain('account_me');
+    expect(names).toContain('platform_create_post');
+    expect(names.some((n) => n.startsWith('admin_'))).toBe(false);
+    for (const never of ['account_rotate_key', 'account_login_link', 'account_new_recovery_code', 'account_link_identity', 'account_confirm_deletion', 'account_list_apps', 'account_revoke_app', 'account_register']) expect(names, never).not.toContain(never);
+
+    const me = await mcp('tools/call', { name: 'account_me', arguments: {} }, tok.body.access_token);
+    expect(me.body.result.structuredContent.account.handle).toBe(citizen.handle);
+    const created = await mcp('tools/call', { name: 'platform_create_post', arguments: { title: 'Via OAuth', body: 'Posted through a connected app.', section: 'general' } }, tok.body.access_token);
+    expect(created.body.result.isError, JSON.stringify(created.body)).toBeUndefined();
+    expect(created.body.result.structuredContent.author.handle).toBe(citizen.handle);
+
+    // refresh: a new pair, the old refresh token is spent
+    const ref = await token({ grant_type: 'refresh_token', refresh_token: tok.body.refresh_token, client_id: client.client_id });
+    expect(ref.status).toBe(200);
+    expect(ref.body.refresh_token).not.toBe(tok.body.refresh_token);
+    expect((await mcp('tools/list', {}, ref.body.access_token)).status).toBe(200);
+
+    // the citizen sees the app, then the app revokes itself
+    const apps = await api('/v1/me/apps', { key: citizen.key });
+    expect(apps.status).toBe(200);
+    expect(apps.body.items).toHaveLength(1);
+    expect(apps.body.items[0]).toMatchObject({ client_id: client.client_id, client_name: 'Test MCP client', redirect_hosts: ['client.example'], scope: ['read', 'write'] });
+    const rev = await fetchRaw('/oauth/revoke', { method: 'POST', headers: FORM, body: form({ token: ref.body.refresh_token, client_id: client.client_id }) });
+    expect(rev.status).toBe(200);
+    expect((await mcp('tools/list', {}, ref.body.access_token)).status).toBe(401);
+    expect((await api('/v1/me/apps', { key: citizen.key })).body.items).toHaveLength(0);
+  });
+
+  it('a wrong code_verifier is refused and burns the code', async () => {
+    const citizen = await register('oauth-v');
+    const client = (await registerClient()).body;
+    const { verifier, challenge } = await pkceAsync();
+    const post = await consent({ client_id: client.client_id, code_challenge: challenge }, { key: citizen.key });
+    const code = new URL(post.headers.get('location')!).searchParams.get('code')!;
+    const wrong = await token({ grant_type: 'authorization_code', code, code_verifier: 'x'.repeat(43), client_id: client.client_id });
+    expect(wrong.status).toBe(400);
+    expect(wrong.body.error).toBe('invalid_grant');
+    const right = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id });
+    expect(right.body.error).toBe('invalid_grant');
+  });
+
+  it('a reused code is refused and revokes what the first exchange issued', async () => {
+    const citizen = await register('oauth-r');
+    const client = (await registerClient()).body;
+    const { verifier, challenge } = await pkceAsync();
+    const code = new URL((await consent({ client_id: client.client_id, code_challenge: challenge }, { key: citizen.key })).headers.get('location')!).searchParams.get('code')!;
+    const first = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id });
+    expect(first.status).toBe(200);
+    const again = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id });
+    expect(again.body.error).toBe('invalid_grant');
+    expect((await mcp('tools/list', {}, first.body.access_token)).status).toBe(401);
+  });
+
+  it('redirect_uri must match exactly: an unregistered one gets an error page (no redirect); a different one at the token endpoint is refused', async () => {
+    const citizen = await register('oauth-m');
+    const client = (await registerClient()).body;
+    const { verifier, challenge } = await pkceAsync();
+    for (const u of ['https://evil.example/callback', `${REDIRECT}/extra`, `${REDIRECT}?x=1`]) {
+      const r = await consentGet({ client_id: client.client_id, code_challenge: challenge, redirect_uri: u });
+      expect(r.status, u).toBe(400);
+      expect(r.headers.get('location'), u).toBeNull();
+      expect(r.text).toContain('invalid_redirect_uri');
+    }
+    const unknown = await consentGet({ client_id: 'cwcl_' + 'Z'.repeat(22), code_challenge: challenge });
+    expect(unknown.status).toBe(400);
+    expect(unknown.text).toContain('invalid_client');
+    const code = new URL((await consent({ client_id: client.client_id, code_challenge: challenge }, { key: citizen.key })).headers.get('location')!).searchParams.get('code')!;
+    const r = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id, redirect_uri: 'https://client.example/other' });
+    expect(r.body.error).toBe('invalid_grant');
+  });
+
+  it('loopback redirect URIs match with any port (RFC 8252)', async () => {
+    const client = (await registerClient({ redirect_uris: ['http://127.0.0.1/callback'] })).body;
+    const { challenge } = await pkceAsync();
+    const r = await consentGet({ client_id: client.client_id, code_challenge: challenge, redirect_uri: 'http://127.0.0.1:53111/callback' });
+    expect(r.status).toBe(200);
+    expect(r.text).toContain('on your own computer');
+  });
+
+  it('PKCE S256 is mandatory and the resource must be this MCP server', async () => {
+    const citizen = await register('oauth-p');
+    const client = (await registerClient()).body;
+    const { verifier, challenge } = await pkceAsync();
+    const plain = await consentGet({ client_id: client.client_id, code_challenge: challenge, code_challenge_method: 'plain' });
+    expect(plain.status).toBe(303);
+    expect(new URL(plain.headers.get('location')!).searchParams.get('error')).toBe('invalid_request');
+    const evil = await consentGet({ client_id: client.client_id, code_challenge: challenge, resource: 'https://evil.example/mcp' });
+    const loc = new URL(evil.headers.get('location')!);
+    expect(loc.searchParams.get('error')).toBe('invalid_target');
+    expect(loc.searchParams.get('state')).toBe('st-123');
+    expect(loc.searchParams.get('iss')).toBe(ORIGIN);
+    const badScope = await consentGet({ client_id: client.client_id, code_challenge: challenge, scope: 'read admin' });
+    expect(new URL(badScope.headers.get('location')!).searchParams.get('error')).toBe('invalid_scope');
+    // resource = the origin itself (root metadata) is the same server
+    expect((await consentGet({ client_id: client.client_id, code_challenge: challenge, resource: ORIGIN })).status).toBe(200);
+    const code = new URL((await consent({ client_id: client.client_id, code_challenge: challenge }, { key: citizen.key })).headers.get('location')!).searchParams.get('code')!;
+    const r = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id, resource: 'https://other.example/mcp' });
+    expect(r.body.error).toBe('invalid_target');
+  });
+
+  it('deny sends access_denied back with state and iss', async () => {
+    const client = (await registerClient()).body;
+    const { challenge } = await pkceAsync();
+    const r = await consent({ client_id: client.client_id, code_challenge: challenge }, { decision: 'deny' });
+    expect(r.status).toBe(303);
+    const loc = new URL(r.headers.get('location')!);
+    expect(loc.searchParams.get('error')).toBe('access_denied');
+    expect(loc.searchParams.get('state')).toBe('st-123');
+    expect(loc.searchParams.get('code')).toBeNull();
+  });
+
+  it('a signed-in browser session approves without pasting the key', async () => {
+    const citizen = await register('oauth-s');
+    const link = await createLoginLink(env as any, citizen.id);
+    const s = await consumeLoginLink(env as any, link.token);
+    if (!s.ok) throw new Error('no session');
+    const client = (await registerClient()).body;
+    const { verifier, challenge } = await pkceAsync();
+    const page = await consentGet({ client_id: client.client_id, code_challenge: challenge }, `__Host-cw_session=${s.session}`);
+    expect(page.text).toContain(`@${citizen.handle}`);
+    expect(page.text).not.toContain('name="api_key"');
+    const post = await consent({ client_id: client.client_id, code_challenge: challenge }, { session: s.session });
+    expect(post.status).toBe(303);
+    const code = new URL(post.headers.get('location')!).searchParams.get('code')!;
+    expect((await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id })).status).toBe(200);
+  });
+});
+
+// ---------------------------------------------------------------- refresh, expiry, status
+
+describe('tokens', () => {
+  it('reusing a rotated refresh token revokes the whole family', async () => {
+    const citizen = await register('oauth-f');
+    const { client, tokens } = await connect(citizen.key);
+    const next = await token({ grant_type: 'refresh_token', refresh_token: tokens.refresh_token, client_id: client.client_id });
+    expect(next.status).toBe(200);
+    const reuse = await token({ grant_type: 'refresh_token', refresh_token: tokens.refresh_token, client_id: client.client_id });
+    expect(reuse.status).toBe(400);
+    expect(reuse.body.error).toBe('invalid_grant');
+    expect((await mcp('tools/list', {}, next.body.access_token)).status).toBe(401);
+    expect((await token({ grant_type: 'refresh_token', refresh_token: next.body.refresh_token, client_id: client.client_id })).body.error).toBe('invalid_grant');
+    const grant = await env.DB.prepare('SELECT revoke_reason FROM oauth_grants').first<{ revoke_reason: string }>();
+    expect(grant?.revoke_reason).toBe('refresh_reuse');
+  });
+
+  it('an expired access token is 401 invalid_token with the resource_metadata challenge', async () => {
+    const citizen = await register('oauth-e');
+    const { tokens } = await connect(citizen.key);
+    await env.DB.prepare("UPDATE oauth_tokens SET expires_at = '2000-01-01T00:00:00.000Z' WHERE kind = 'access'").run();
+    const r = await mcp('tools/list', {}, tokens.access_token);
+    expect(r.status).toBe(401);
+    expect(r.headers.get('www-authenticate')).toContain('error="invalid_token"');
+    expect(r.headers.get('www-authenticate')).toContain(`resource_metadata="${ORIGIN}/.well-known/oauth-protected-resource/mcp"`);
+    expect(r.text).not.toContain(tokens.access_token);
+  });
+
+  it('frozen or disabled accounts: tokens stop working, freezing disconnects the apps', async () => {
+    const citizen = await register('oauth-z');
+    const { client, tokens } = await connect(citizen.key);
+    // status changed without the admin route (e.g. a bulk freeze): the lookup refuses it
+    await env.DB.prepare("UPDATE accounts SET status = 'frozen' WHERE id = ?").bind(citizen.id).run();
+    const r = await mcp('tools/list', {}, tokens.access_token);
+    expect(r.status).toBe(403);
+    expect(r.body.error.message).toBe('account_frozen');
+    expect((await token({ grant_type: 'refresh_token', refresh_token: tokens.refresh_token, client_id: client.client_id })).body.error).toBe('invalid_grant');
+    await env.DB.prepare("UPDATE accounts SET status = 'active' WHERE id = ?").bind(citizen.id).run();
+    // the admin route revokes every grant
+    const admin = await makeAdmin();
+    expect((await api(`/v1/admin/accounts/${citizen.handle}/status`, { key: admin.key, body: { status: 'disabled', reason: 'test' } })).status).toBe(200);
+    await env.DB.prepare("UPDATE accounts SET status = 'active' WHERE id = ?").bind(citizen.id).run();
+    expect((await mcp('tools/list', {}, tokens.access_token)).status).toBe(401);
+  });
+
+  it('rotating the API key disconnects every app', async () => {
+    const citizen = await register('oauth-k');
+    const { tokens } = await connect(citizen.key);
+    expect((await api('/v1/keys/rotate', { key: citizen.key, method: 'POST' })).status).toBe(200);
+    expect((await mcp('tools/list', {}, tokens.access_token)).status).toBe(401);
+  });
+
+  it('an access token is for the MCP server only: straight to /v1 it is 401', async () => {
+    const citizen = await register('oauth-a');
+    const { tokens } = await connect(citizen.key);
+    const r = await api('/v1/me', { key: tokens.access_token });
+    expect(r.status).toBe(401);
+    expect(r.body.error).toMatchObject({ code: 'invalid_token', reason: 'token_audience_is_mcp' });
+    expect(r.headers.get('www-authenticate')).toContain('resource_metadata=');
+  });
+});
+
+// ---------------------------------------------------------------- scopes and powers
+
+describe('scopes and powers', () => {
+  it('a read-only grant lists no write tools; calling one is 403 insufficient_scope (step-up)', async () => {
+    const citizen = await register('oauth-ro');
+    const { tokens } = await connect(citizen.key, { write: false });
+    expect(tokens.scope).toBe('read');
+    const names = toolNames(await mcp('tools/list', {}, tokens.access_token));
+    expect(names).toContain('account_me');
+    expect(names).not.toContain('platform_create_post');
+    const r = await mcp('tools/call', { name: 'platform_create_post', arguments: { title: 't', body: 'b', section: 'general' } }, tokens.access_token);
+    expect(r.status).toBe(403);
+    expect(r.headers.get('www-authenticate')).toMatch(/error="insufficient_scope", scope="write", resource_metadata="https:\/\/api\.test\/\.well-known\/oauth-protected-resource\/mcp"/);
+    expect((await env.DB.prepare('SELECT COUNT(*) AS n FROM posts').first<{ n: number }>())!.n).toBe(0);
+  });
+
+  it('staff powers never pass through OAuth, even for an admin', async () => {
+    const admin = await makeAdmin();
+    const { tokens } = await connect(admin.key);
+    const names = toolNames(await mcp('tools/list', {}, tokens.access_token));
+    expect(names.some((n) => n.startsWith('admin_'))).toBe(false);
+    const r = await mcp('tools/call', { name: 'admin_get_modes', arguments: {} }, tokens.access_token);
+    expect(r.status).toBe(200);
+    expect(r.body.result.isError).toBe(true);
+    expect(r.body.result.structuredContent.error.code).toBe('not_available_via_oauth');
+    const set = await mcp('tools/call', { name: 'admin_set_mode', arguments: { mode: 'lock', enabled: true, confirm: true } }, tokens.access_token);
+    expect(set.body.result.isError).toBe(true);
+    const modes = await api('/v1/admin/modes', { key: admin.key });
+    expect(modes.body.lock?.enabled ?? modes.body.modes?.lock?.enabled ?? false).toBe(false);
+  });
+
+  it('account-credential tools are refused for OAuth tokens (no key, no sign-in link, no recovery code)', async () => {
+    const citizen = await register('oauth-n');
+    const { tokens } = await connect(citizen.key);
+    for (const [name, args] of [['account_rotate_key', { confirm: true }], ['account_login_link', {}], ['account_new_recovery_code', { confirm: true }]] as const) {
+      const r = await mcp('tools/call', { name, arguments: args }, tokens.access_token);
+      expect(r.body.result.isError, name).toBe(true);
+      expect(r.body.result.structuredContent.error.code, name).toBe('not_available_via_oauth');
+    }
+    expect((await api('/v1/me', { key: citizen.key })).status).toBe(200); // key still valid: nothing rotated
+  });
+
+  it('public reads without a token are unchanged', async () => {
+    const anon = await mcp('tools/list', {});
+    expect(anon.status).toBe(200);
+    const names = toolNames(anon);
+    expect(names).toContain('platform_list_posts');
+    expect(names).not.toContain('account_me');
+    const r = await mcp('tools/call', { name: 'platform_list_posts', arguments: {} });
+    expect(r.status).toBe(200);
+    expect(r.body.result.isError).toBeUndefined();
+    expect((await api('/v1/posts')).status).toBe(200);
+  });
+});
+
+// ---------------------------------------------------------------- CSRF, secrecy, apps page, clean-up
+
+describe('consent CSRF and secrecy', () => {
+  it('consent POST needs same origin, the consent cookie and its matching token', async () => {
+    const citizen = await register('oauth-c');
+    const client = (await registerClient()).body;
+    const { challenge } = await pkceAsync();
+    const a = { client_id: client.client_id, code_challenge: challenge };
+    expect((await consent(a, { key: citizen.key, origin: 'https://evil.example' })).status).toBe(403);
+    expect((await consent(a, { key: citizen.key, noCookie: true })).status).toBe(403);
+    expect((await consent(a, { key: citizen.key, csrf: 'a'.repeat(64) })).status).toBe(403);
+    expect((await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_codes').first<{ n: number }>())!.n).toBe(0);
+  });
+
+  it('a wrong key re-shows the form without echoing it; no key or token is ever logged', async () => {
+    const spies = (['log', 'error', 'warn', 'info'] as const).map((m) => vi.spyOn(console, m));
+    try {
+      const client = (await registerClient()).body;
+      const { challenge } = await pkceAsync();
+      const wrongKey = 'cw1_' + 'Q'.repeat(43);
+      const r = await consent({ client_id: client.client_id, code_challenge: challenge }, { key: wrongKey });
+      expect(r.status).toBe(401);
+      expect(r.text).toContain('was not accepted');
+      expect(r.text).not.toContain(wrongKey);
+      const citizen = await register('oauth-l');
+      const { tokens, code, verifier } = await connect(citizen.key);
+      await token({ grant_type: 'refresh_token', refresh_token: tokens.refresh_token, client_id: 'cwcl_' + 'Y'.repeat(22) });
+      await mcp('tools/list', {}, tokens.access_token);
+      const logged = spies.flatMap((s) => s.mock.calls.map((c) => c.map(String).join(' '))).join('\n');
+      for (const secret of [citizen.key, wrongKey, tokens.access_token, tokens.refresh_token, code, verifier]) expect(logged).not.toContain(secret);
+    } finally { for (const s of spies) s.mockRestore(); }
+  });
+});
+
+describe('connected apps page and clean-up', () => {
+  it('/apps lists apps for a signed-in citizen and revokes with the session CSRF token', async () => {
+    const citizen = await register('oauth-g');
+    const { tokens } = await connect(citizen.key);
+    const out = await fetchRaw('/apps');
+    expect(out.status).toBe(200);
+    expect(out.text).toContain('Sign in');
+    const link = await createLoginLink(env as any, citizen.id);
+    const s = await consumeLoginLink(env as any, link.token);
+    if (!s.ok) throw new Error('no session');
+    const page = await fetchRaw('/apps', { headers: { cookie: `__Host-cw_session=${s.session}` } });
+    expect(page.text).toContain('Test MCP client');
+    const action = page.text.match(/action="(\/apps\/grant_[0-9a-f-]{36}\/revoke)"/)![1];
+    const csrf = page.text.match(/name="_csrf" value="([0-9a-f]{64})"/)![1];
+    const bad = await fetchRaw(action, { method: 'POST', headers: { ...FORM, origin: ORIGIN, cookie: `__Host-cw_session=${s.session}` }, body: form({ _csrf: 'b'.repeat(64) }) });
+    expect(bad.status).toBe(403);
+    const ok = await fetchRaw(action, { method: 'POST', headers: { ...FORM, origin: ORIGIN, cookie: `__Host-cw_session=${s.session}` }, body: form({ _csrf: csrf }) });
+    expect(ok.status).toBe(303);
+    expect((await mcp('tools/list', {}, tokens.access_token)).status).toBe(401);
+  });
+
+  it('POST /v1/me/apps/{id}/revoke with the key disconnects the app; an OAuth token may not use it', async () => {
+    const citizen = await register('oauth-h');
+    const { tokens } = await connect(citizen.key);
+    const id = (await api('/v1/me/apps', { key: citizen.key })).body.items[0].id;
+    expect((await api(`/v1/me/apps/${id}/revoke`, { key: citizen.key, method: 'POST' })).status).toBe(200);
+    expect((await api(`/v1/me/apps/${id}/revoke`, { key: citizen.key, method: 'POST' })).status).toBe(404);
+    expect((await mcp('tools/list', {}, tokens.access_token)).status).toBe(401);
+  });
+
+  it('nightly clean-up deletes expired codes and tokens and old revoked grants', async () => {
+    const citizen = await register('oauth-p2');
+    await connect(citizen.key);
+    const later = Date.now() + 40 * 86_400_000;
+    const r = await pruneOAuth(env as any, later);
+    expect(r.codes).toBe(1);
+    expect(r.tokens).toBe(2);
+    expect((await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_tokens').first<{ n: number }>())!.n).toBe(0);
+    expect((await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_grants').first<{ n: number }>())!.n).toBe(0);
+  });
+});

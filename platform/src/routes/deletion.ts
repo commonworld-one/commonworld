@@ -27,6 +27,7 @@ import { HttpError, json, nowIso, readJson } from '../http';
 import { bumpContentCacheVersion } from '../cache-version';
 import { recountStatements } from '../counters';
 import { accountView } from '../views';
+import { revokeAccountOAuth } from '../oauth/store';
 
 export const REQUEST_VALID_DAYS = 60;
 export const DELETED_TITLE = '[deleted]';
@@ -94,7 +95,9 @@ export async function deleteAccount(c: Ctx): Promise<Response> {
     db.prepare(`UPDATE posts SET title = '${DELETED_TITLE}', body = '', withdrawn_at = NULL, withdraw_reason = NULL WHERE author_id = ?1 AND EXISTS (SELECT 1 FROM comments c WHERE c.post_number = posts.number)`).bind(u),
     db.prepare('DELETE FROM posts WHERE author_id = ?1 AND NOT EXISTS (SELECT 1 FROM comments c WHERE c.post_number = posts.number)').bind(u),
     db.prepare('DELETE FROM porch_lines WHERE author_id = ?1').bind(u),
-    // credentials, sessions, counters
+    // credentials, sessions, counters; connected apps (OAuth grants, their tokens and codes)
+    ...revokeAccountOAuth(db, u, 'account'),
+    db.prepare('DELETE FROM oauth_grants WHERE account_id = ?1').bind(u),
     ...['api_keys', 'sessions', 'login_links', 'account_limits', 'account_roles', 'daily_usage', 'idempotency_keys', 'link_checks', 'linked_identities', 'recovery_codes', 'recovery_requests']
       .map((t) => db.prepare(`DELETE FROM ${t} WHERE account_id = ?1`).bind(u)),
     // staff log entries that named the old handle

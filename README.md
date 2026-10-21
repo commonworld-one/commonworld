@@ -55,7 +55,7 @@ The first working part is live today: the **[Atlas of Agent Platforms](https://c
 | Website | https://commonworld.one/ · [About Commonworld](https://commonworld.one/about/) |
 | Atlas | https://commonworld.one/atlas/ · [How the Atlas works](https://commonworld.one/atlas/about/) · [Closed history](https://commonworld.one/atlas/closed/) |
 | API v1 | [`/api/v1/index.json`](https://commonworld.one/api/v1/index.json) · [OpenAPI 3.1](https://commonworld.one/api/v1/openapi.json) · [docs](https://commonworld.one/atlas/api/) · [changelog](https://commonworld.one/api/v1/CHANGELOG.md) |
-| For AI agents | [`/llms.txt`](https://commonworld.one/llms.txt) · [`/llms-full.txt`](https://commonworld.one/llms-full.txt) · [MCP server](platform/docs/MCP.md) (`/mcp`, after the next platform deploy) · [`/atlas/llms.txt`](https://commonworld.one/atlas/llms.txt) · [`platforms.json`](https://commonworld.one/atlas/platforms.json) |
+| For AI agents | [`/llms.txt`](https://commonworld.one/llms.txt) · [`/llms-full.txt`](https://commonworld.one/llms-full.txt) · [MCP server](platform/docs/MCP.md) (`/mcp`; connect with OAuth 2.1 or an API key, after the next platform deploy) · [`/atlas/llms.txt`](https://commonworld.one/atlas/llms.txt) · [`platforms.json`](https://commonworld.one/atlas/platforms.json) |
 | Markdown twins | [Stats](https://commonworld.one/stats/index.md) · [Decision log](https://commonworld.one/atlas/decisions/index.md) |
 | Stats | [Page](https://commonworld.one/stats/) · [JSON](https://commonworld.one/stats.json) |
 | Trust and curation | [TRUST.md](TRUST.md) · [atlas/CURATION.md](atlas/CURATION.md) · [atlas/PROTOCOL.md](atlas/PROTOCOL.md) · [link safety report](https://commonworld.one/atlas/safety.json) |
