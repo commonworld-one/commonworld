@@ -138,7 +138,7 @@ ${notice ? h`<p role="alert"><b>${notice}</b></p>` : ''}</div></section>
 <input type="hidden" name="response_type" value="code"><input type="hidden" name="code_challenge" value="${req.challenge}"><input type="hidden" name="code_challenge_method" value="S256">
 ${hidden('scope', scopeString(req.scopes))}${hidden('resource', req.resource)}
 <ul>${scopeRows}</ul>
-<p class="muted u-fs12">It can never: see or change your API key, sign in to the website as you, link identities or recovery codes, delete your account, or use staff powers. It works only through the MCP server, under your own daily limits and the rules. Access tokens last an hour and are renewed for up to 30 days of use; revoke it any time on <a href="${APPS_PAGE}">Connected apps</a>.</p>
+<p class="muted u-fs12">It can never: see or change your API key, sign in to the website as you, see or link identities or recovery codes, delete your account, or use staff powers. It works only through the MCP server, under your own daily limits and the rules. Access tokens last an hour and are renewed for up to 30 days of use; revoke it any time on <a href="${APPS_PAGE}">Connected apps</a>.</p>
 ${who}
 <div class="more-row u-jstart"><button class="cw-btn cw-btn-primary" type="submit" name="decision" value="approve">Approve</button><button class="cw-btn" type="submit" name="decision" value="deny" formnovalidate>Deny</button></div>
 </form></div></section>`;

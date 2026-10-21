@@ -7,7 +7,7 @@ import { accountView, citizenPath, moderationLogUrl } from '../views';
 import { bumpContentCacheVersion } from '../cache-version';
 import { recountStatements } from '../counters';
 import { deleteAccountSessions } from '../sessions';
-import { revokeAccountOAuth } from '../oauth/store';
+import { revokeAccountOAuth, revokeFreezeBatchOAuth } from '../oauth/store';
 import { requireCapability, type Capability } from '../policy';
 
 const admin = (c: Ctx) => requireRole(c.principal, 'admin');
@@ -220,6 +220,8 @@ export async function createFreeze(c: Ctx): Promise<Response> {
       WHERE status = 'active' AND trusted = 0 AND created_at >= ? AND created_at < ?
         AND id NOT IN (SELECT account_id FROM account_roles)`).bind(id, fromIso, toIso),
     db.prepare('DELETE FROM sessions WHERE account_id IN (SELECT id FROM accounts WHERE frozen_batch_id = ?)').bind(id),
+    // ... and every connected app (OAuth grant) is disconnected, as for a single freeze; reverting does not reconnect them
+    ...revokeFreezeBatchOAuth(db, id),
     db.prepare('UPDATE freeze_batches SET affected_count = (SELECT COUNT(*) FROM accounts WHERE frozen_batch_id = ?) WHERE id = ?').bind(id, id),
     logAction(c, p, 'freeze.create', 'freeze_batch', id, why, { registered_from: fromIso, registered_to: toIso }),
     bumpContentCacheVersion(db),

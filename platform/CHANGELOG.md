@@ -34,6 +34,10 @@ Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0021_
 - D1: `migrations/0021_oauth.sql` adds `oauth_clients`, `oauth_grants`, `oauth_codes`, `oauth_tokens` (new tables
   only). The nightly cron prunes expired codes and tokens, revoked grants after 7 days and idle clients after 90 days.
 - robots.txt disallows `/oauth/` and `/apps`. Tests: `test/oauth.test.ts`.
+- Codex HOLD fixes: `GET /v1/me/identities` (MCP `account_list_identities`) is now never available through OAuth, since
+  pending links carry their challenge codes (recovery data); the tool is hidden from an OAuth client's `tools/list`.
+  A bulk freeze (`POST /v1/admin/freezes`) now revokes every OAuth grant, token and pending code of the frozen accounts,
+  like a single freeze; reverting the batch does not reconnect apps.
 
 ## 2026-10-21 — Small tails 2: well-known MCP manifest, strict nonce stamping, head-escape tests, tag pill target size
 

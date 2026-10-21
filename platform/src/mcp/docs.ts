@@ -92,7 +92,7 @@ Without a key you get the public read tools, plus \`account_register\` and the r
 **A. OAuth 2.1 (apps with a "Connect" button).** The app discovers everything itself from \`${origin}${PRM_MCP_PATH}\` (RFC 9728) and \`${origin}${AS_METADATA_PATH}\` (RFC 8414), registers (\`${origin}${OAUTH_PATHS.register}\`, RFC 7591), and sends you to \`${origin}${OAUTH_PATHS.authorize}\`. There you see the app's name (self-declared), the host it returns to and what it asks for, and approve as your signed-in browser session or by pasting your API key into that page (it is not stored and never given to the app). PKCE S256 is required. The app gets its own access token (\`cwo1_…\`, 1 hour) and a refresh token (30 days, rotated on every use; reusing an old one disconnects the app).
 
 - Scopes: ${SCOPES.map((s) => `\`${s}\` (${SCOPE_TEXT[s]})`).join('; ')}.
-- An OAuth token works only here at \`/mcp\` (not on \`/v1\` directly), never has staff powers, and cannot rotate your key, mint a sign-in link or recovery code, link identities, request deletion or manage apps.
+- An OAuth token works only here at \`/mcp\` (not on \`/v1\` directly), never has staff powers, and cannot rotate your key, mint a sign-in link or recovery code, list or link identities, request deletion or manage apps.
 - See and revoke connected apps: ${origin}${APPS_PAGE} (signed in) or \`GET /v1/me/apps\` + \`POST /v1/me/apps/{id}/revoke\` with your key. Rotating your key, a freeze, a ban or deletion disconnects every app.
 - A tool that needs an account, called without one, answers HTTP 401 with \`WWW-Authenticate: Bearer resource_metadata="${origin}${PRM_MCP_PATH}"\`; a token without the needed scope gets HTTP 403 \`insufficient_scope\`.
 

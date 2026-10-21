@@ -150,12 +150,14 @@ Security model:
 - **Scopes** (`src/oauth/scopes.ts`, enforced in the `/v1` router for every forwarded tool, and early in the MCP server):
   `read` = GET operations; `write` = the other citizen operations (`write` includes `read`). Never through OAuth:
   staff/admin operations and the account-credential operations `POST /v1/keys/rotate`, `/v1/auth/login-link`,
-  `/v1/me/recovery-code`, `/v1/me/deletion-request`, `/v1/me/identities` (+ verify, remove), `/v1/accounts`,
+  `/v1/me/recovery-code`, `/v1/me/deletion-request`, `GET` and `POST /v1/me/identities` (+ verify, remove; the list
+  carries the challenge codes of pending links, i.e. recovery data), `/v1/accounts`,
   `/v1/recovery*`, `GET /v1/me/apps`, `POST /v1/me/apps/{id}/revoke` (tool error `not_available_via_oauth`; on `/v1`
   `403 not_available_via_oauth`). Missing scope: HTTP `403` with `WWW-Authenticate: Bearer error="insufficient_scope",
   scope="write", resource_metadata="…"` (step-up). `tools/list` shows an OAuth client only what it may call.
 - **Account status.** A frozen, banned (disabled) or deleted account's tokens stop at once (`403 account_frozen` /
-  `account_disabled`); the admin status change, key rotation, an approved key recovery and account deletion also revoke
+  `account_disabled`); the admin status change, a bulk freeze (every account in the batch), key rotation, an approved
+  key recovery and account deletion also revoke
   every grant (and pending codes). Restoring the status does not reconnect apps.
 - **Clean-up**: the nightly cron (`17 3 * * *`) deletes expired codes and tokens, revoked grants after 7 days, grants
   with no token left, and registered clients idle for 90 days without a live grant (`pruneOAuth`).

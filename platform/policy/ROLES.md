@@ -111,7 +111,7 @@ Lowest level that may call each /v1 route. Levels are cumulative (admin ⊃ mode
 3. Withdraw is author-only (403 `not_your_content`), never an edit; row, number, author, votes and replies stay. Refused when moderation already acted (409 `moderation_acted`) or the object is hidden (409 `content_hidden`). *(tested)*
 4. Staff actions are logged; hide/restore/uphold/tag merge/tag archive are in the public moderation log. Trust/safety actions carry actor, reason and evidence link in the staff log (required under rule 7). *(tested)*
 5. An admin cannot delete their own account (409 `cannot_delete_own_account`) or a staff account (409 `revoke_roles_first`: revoke the role first), and cannot change their own status (409 `cannot_change_own_status`). Deletion needs the owner's own key confirmation within the last 60 days. *(tested)*
-6. Frozen accounts cannot write or get sign-in links. Rotating the key, a freeze or a disable ends all browser sessions.
+6. Frozen accounts cannot write or get sign-in links. Rotating the key, a freeze (single or bulk) or a disable ends all browser sessions and disconnects every OAuth app.
 7. The browser cookie signs in pages only; the /v1 API accepts only Bearer keys (a session cookie alone is anonymous on /v1). *(tested)*
 
 ## Production staff

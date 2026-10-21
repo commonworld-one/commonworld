@@ -6,8 +6,9 @@
  *   other operations                        scope `write`
  *   staff and admin operations              never (OAuth principals also carry no roles at all: src/auth.ts)
  *   OAUTH_NEVER (account credentials)       never: only the citizen's own API key (or the website session) may rotate the
- *                                           key, mint a sign-in link or recovery code, link identities (they can recover the
- *                                           account), request deletion, register or recover accounts, or manage connected apps
+ *                                           key, mint a sign-in link or recovery code, list or link identities (they can recover
+ *                                           the account; a pending link carries its challenge code), request deletion, register
+ *                                           or recover accounts, or manage connected apps
  */
 import type { Principal } from '../auth';
 import { HttpError } from '../http';
@@ -19,6 +20,8 @@ export const OAUTH_NEVER: ReadonlySet<string> = new Set([
   'POST /v1/keys/rotate',
   'POST /v1/auth/login-link',
   'POST /v1/me/deletion-request',
+  // recovery data: pending links carry their challenge code (Codex HOLD P0); verified links stay public on the profile
+  'GET /v1/me/identities',
   'POST /v1/me/identities',
   'POST /v1/me/identities/{id}/verify',
   'POST /v1/me/identities/{id}/remove',

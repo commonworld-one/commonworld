@@ -8,6 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { api, makeAdmin, register, resetDb, setSetting } from './helpers';
 import { s256 } from '../src/oauth/config';
 import { pruneOAuth } from '../src/oauth/store';
+import { oauthProblem } from '../src/oauth/scopes';
 import { createLoginLink, consumeLoginLink } from '../src/sessions';
 
 const ORIGIN = 'https://api.test';
@@ -386,6 +387,39 @@ describe('tokens', () => {
     expect((await mcp('tools/list', {}, tokens.access_token)).status).toBe(401);
   });
 
+  it('a bulk freeze disconnects every app of the frozen accounts; reverting it does not bring the old tokens back (Codex HOLD P1)', async () => {
+    const citizen = await register('oauth-bf');
+    const bystander = await register('oauth-bf2');
+    const { client, tokens } = await connect(citizen.key);
+    const other = await connect(bystander.key);
+    // a pending authorization code of the frozen account dies too
+    await env.DB.prepare(`INSERT INTO oauth_codes (code_hash, client_id, account_id, redirect_uri, code_challenge, scope, resource, created_at, expires_at)
+      SELECT 'pending-code', client_id, ?, ?, 'x', 'read', ?, '2026-01-01T00:00:00.000Z', '2999-01-01T00:00:00.000Z' FROM oauth_clients LIMIT 1`).bind(citizen.id, REDIRECT, RESOURCE).run();
+    const admin = await makeAdmin();
+    // window = the citizen's registration second only, so the bystander stays active
+    const at = (await env.DB.prepare('SELECT created_at FROM accounts WHERE id = ?').bind(citizen.id).first<{ created_at: string }>())!.created_at;
+    const from = new Date(Date.parse(at)).toISOString();
+    const to = new Date(Date.parse(at) + 1).toISOString();
+    await env.DB.prepare('UPDATE accounts SET created_at = ? WHERE id = ?').bind(new Date(Date.parse(at) - 3_600_000).toISOString(), bystander.id).run();
+    const freeze = await api('/v1/admin/freezes', { key: admin.key, body: { registered_from: from, registered_to: to, reason: 'qa' } });
+    expect(freeze.status, JSON.stringify(freeze.body)).toBe(201);
+    expect(freeze.body.affected_count).toBe(1);
+    expect((await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_codes WHERE account_id = ?').bind(citizen.id).first<{ n: number }>())!.n).toBe(0);
+    expect((await env.DB.prepare('SELECT revoke_reason FROM oauth_grants WHERE account_id = ?').bind(citizen.id).first<{ revoke_reason: string }>())!.revoke_reason).toBe('account');
+    expect((await api(`/v1/admin/freezes/${freeze.body.id}/revert`, { key: admin.key, body: { reason: 'qa' } })).status).toBe(200);
+    expect((await env.DB.prepare('SELECT status FROM accounts WHERE id = ?').bind(citizen.id).first<{ status: string }>())!.status).toBe('active');
+    // the account is active again, but its old access and refresh tokens stay dead
+    const access = await mcp('tools/list', {}, tokens.access_token);
+    expect(access.status).toBe(401);
+    expect(access.headers.get('www-authenticate')).toContain('error="invalid_token"');
+    expect((await token({ grant_type: 'refresh_token', refresh_token: tokens.refresh_token, client_id: client.client_id })).body.error).toBe('invalid_grant');
+    // an account outside the window keeps its app
+    expect((await mcp('tools/list', {}, other.tokens.access_token)).status).toBe(200);
+    expect((await token({ grant_type: 'refresh_token', refresh_token: other.tokens.refresh_token, client_id: other.client.client_id })).status).toBe(200);
+    // the API key itself is untouched by the freeze
+    expect((await api('/v1/me', { key: citizen.key })).status).toBe(200);
+  });
+
   it('rotating the API key disconnects every app', async () => {
     const citizen = await register('oauth-k');
     const { tokens } = await connect(citizen.key);
@@ -443,6 +477,38 @@ describe('scopes and powers', () => {
       expect(r.body.result.structuredContent.error.code, name).toBe('not_available_via_oauth');
     }
     expect((await api('/v1/me', { key: citizen.key })).status).toBe(200); // key still valid: nothing rotated
+  });
+
+  it('the identity list (pending challenge codes = recovery data) is never available through OAuth, read or write (Codex HOLD P0)', async () => {
+    const citizen = await register('oauth-id');
+    const link = await api('/v1/me/identities', { key: citizen.key, body: { provider: 'github', subject: 'oauth-id-login' } });
+    expect(link.status, JSON.stringify(link.body)).toBe(201);
+    const challenge = link.body.challenge ?? link.body.identity?.challenge ?? link.body.item?.challenge;
+    expect(typeof challenge).toBe('string');
+    for (const write of [false, true]) {
+      const { tokens } = await connect(citizen.key, { write });
+      expect(toolNames(await mcp('tools/list', {}, tokens.access_token)), `write=${write}`).not.toContain('account_list_identities');
+      const r = await mcp('tools/call', { name: 'account_list_identities', arguments: {} }, tokens.access_token);
+      expect(r.body.result.isError, `write=${write}`).toBe(true);
+      expect(r.body.result.structuredContent.error.code).toBe('not_available_via_oauth');
+      expect(r.text).not.toContain(challenge);
+      // REST: straight to /v1 the token is refused (audience), and the router rule for forwarded calls says never
+      const rest = await api('/v1/me/identities', { key: tokens.access_token });
+      expect(rest.status).toBe(401);
+      expect(JSON.stringify(rest.body)).not.toContain(challenge);
+    }
+    const principal = { account: {} as any, roles: new Set<string>(), keyId: 'oauth:g', oauth: { grantId: 'g', clientId: 'c', scopes: ['read', 'write'] } };
+    expect(oauthProblem(principal as any, 'GET', '/v1/me/identities')).toEqual({ need: 'never' });
+    expect(oauthProblem(principal as any, 'GET', '/v1/me')).toBeNull();
+    expect(oauthProblem({ ...principal, oauth: undefined } as any, 'GET', '/v1/me/identities')).toBeNull();
+    // the citizen's own API key still lists them, over REST and over MCP
+    const own = await api('/v1/me/identities', { key: citizen.key });
+    expect(own.status).toBe(200);
+    expect(JSON.stringify(own.body)).toContain(challenge);
+    const byKey = await mcp('tools/call', { name: 'account_list_identities', arguments: {} }, citizen.key);
+    expect(byKey.body.result.isError).toBeUndefined();
+    expect(byKey.text).toContain(challenge);
+    expect(toolNames(await mcp('tools/list', {}, citizen.key))).toContain('account_list_identities');
   });
 
   it('public reads without a token are unchanged', async () => {

@@ -140,6 +140,20 @@ export const revokeAccountOAuth = (db: D1Database, accountId: string, reason: Re
   ];
 };
 
+/**
+ * The same for every account of one bulk-freeze batch (accounts.frozen_batch_id, src/routes/admin.ts createFreeze):
+ * reverting the freeze does not reconnect the apps, as with a single freeze.
+ */
+export const revokeFreezeBatchOAuth = (db: D1Database, batchId: string): D1PreparedStatement[] => {
+  const at = new Date().toISOString();
+  const accounts = 'SELECT id FROM accounts WHERE frozen_batch_id = ?';
+  return [
+    db.prepare(`DELETE FROM oauth_tokens WHERE grant_id IN (SELECT id FROM oauth_grants WHERE account_id IN (${accounts}))`).bind(batchId),
+    db.prepare(`UPDATE oauth_grants SET revoked_at = ?, revoke_reason = 'account' WHERE revoked_at IS NULL AND account_id IN (${accounts})`).bind(at, batchId),
+    db.prepare(`DELETE FROM oauth_codes WHERE account_id IN (${accounts})`).bind(batchId),
+  ];
+};
+
 /** Finds the grant of an access or refresh token (revocation endpoint). */
 export async function grantOfToken(env: Env, token: string): Promise<{ grant_id: string; client_id: string } | null> {
   return env.DB.prepare('SELECT t.grant_id, g.client_id FROM oauth_tokens t JOIN oauth_grants g ON g.id = t.grant_id WHERE t.token_hash = ?')
