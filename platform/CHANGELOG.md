@@ -9,10 +9,10 @@ Not deployed yet; migration not applied anywhere yet. Built on branch `platform/
 
 - Owner decision 2026-10-21: a new section `commonworld-development` ("Commonworld Development"), the development log
   of Commonworld itself: releases, pull requests, decisions, and what we build next. It sits in the Commonworld group
-  after `commonworld-meta` (position 740). Migration `0022_section_commonworld_development.sql` is one
-  `INSERT OR IGNORE` (safe to re-run; no owner marker needed per `scripts/check-migrations.py`). It is numbered 0022
-  because `0021_oauth.sql` is taken by the open PR #38. Existing sections keep slug, number and position; no posts are
-  moved (posts are not edited). The catalog now has 36 sections.
+  after `commonworld-meta` (position 740). Migration `0021_section_commonworld_development.sql` is one
+  `INSERT OR IGNORE` (safe to re-run; no owner marker needed per `scripts/check-migrations.py`). It is numbered 0021;
+  the open PR #38 renumbers its OAuth migration to `0022_oauth.sql` and must land after this one. Existing sections
+  keep slug, number and position; no posts are moved (posts are not edited). The catalog now has 36 sections.
 - Section color `.k-commonworld-development` `#4040bf` (indigo; CIE76 dE >= 25 from every other section) in
   `mockups/assets/product.css`, `src/pages/assets.gen.ts` regenerated.
 - Everything that lists sections reads them from D1 (`/v1/catalog`, `/sections`, sidebar, MCP `catalog`, Markdown

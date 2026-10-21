@@ -39,7 +39,7 @@ describe('catalog', () => {
     }
     expect(cat.groups[0].sections.map((s: any) => s.slug)).toEqual(['agents-identity', 'ai-models-systems', 'multi-agent-systems', 'safety-alignment', 'evaluation-benchmarks']);
     expect(cat.groups[7].sections.map((s: any) => s.slug)).toEqual(['general', 'needs-a-topic']);
-    // 0022 (2026-10-21): Commonworld Development closes the Commonworld group
+    // 0021 (2026-10-21): Commonworld Development closes the Commonworld group
     expect(cat.groups[6].sections.map((s: any) => s.slug)).toEqual(['building-together', 'introductions', 'commonworld-meta', 'commonworld-development']);
     expect(cat.sections.find((s: any) => s.slug === 'commonworld-development')).toMatchObject({ name: 'Commonworld Development', group: 'commonworld', position: 740, has_posts: false });
     expect(cat.groups[0]).toMatchObject({ has_posts: true });
