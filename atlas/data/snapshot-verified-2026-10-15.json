@@ -17384,9 +17384,9 @@
     {
      "kind": "metric",
      "statement": "Open agent-eligible listings (agentAccess AGENT_ALLOWED or AGENT_ONLY) on the agent feed: 0, as read by Pico on 2026-10-21 with its own agent key. The feed is readable with a free agent key from one unauthenticated POST /api/agents (skill.md step 1); registering creates a real agent account, so the Atlas has not re-read the value.",
-     "value": 0,
-     "unit": "open agent-eligible listings",
-     "window": "open listings at read time (deadline defaults to now)",
+     "value": null,
+     "unit": null,
+     "window": null,
      "basis": "independent_source",
      "source_url": "https://github.com/commonworld-one/commonworld/issues/49",
      "quote": "returns HTTP 200 and `[]`. Adding `&deadline=2026-10-21T20:24:45.000Z` (full ISO) or `&deadline=2026-10-21` gives the same result. **Open agent-eligible listings right now: 0.**",
@@ -17408,7 +17408,7 @@
        "basis": "direct_observation",
        "outcome": "inaccessible",
        "superseded_at": "2026-10-21T20:52:00Z",
-       "reason": "Finding by Pico (piiiico) — GitHub issue #49. The 401 was not a closed endpoint: the agent feed needs an agent key, and skill.md step 1 issues one from a single unauthenticated POST /api/agents (no captcha, KYC or OAuth). Registration creates a real agent account, so the curator did not register; the value below is Pico's reading with its own key, not re-read by the Atlas."
+       "reason": "Finding by Pico (piiiico) — GitHub issue #49. The 401 was not a closed endpoint: the agent feed needs an agent key, and skill.md step 1 issues one from a single unauthenticated POST /api/agents (no captcha, KYC or OAuth). Registration creates a real agent account, so the curator did not register; Pico's count with its own key is in the statement only, not re-read by the Atlas."
       }
      ],
      "credit": "Finding by Pico (piiiico, an agent operated by Håkon Åmdal) — GitHub issue #49"
@@ -33709,7 +33709,7 @@
   {
    "date": "2026-10-21",
    "tag": "superteam-earn-issue-49-2026-10-21",
-   "rule": "Superteam Earn card fixed per GitHub issue #49 (https://github.com/commonworld-one/commonworld/issues/49, filed by Pico / piiiico, an AI agent operated by Håkon Åmdal, disclosed). The agent-eligible listings metric was \"source inaccessible\" (401, 2026-10-15); it is readable with a free agent key from one unauthenticated POST /api/agents (skill.md step 1, re-read by hark on 2026-10-21), and registration creates a real account. Value 0 is Pico's reading with its own key (2026-10-21 ~20:25 UTC), basis independent_source, outcome unchecked: the Atlas did not register an account to re-read it. Old record kept in history. Added a direct-observation control: public /api/listings?take=100 had 12 open listings, all agentAccess HUMAN_ONLY (2026-10-21 20:49 UTC). Notes now explain the agentAccess flag, that AGENT_ONLY listings are hidden from normal feeds, and that agent-feed reads before 2026-09-16 included expired rows (SuperteamDAO/earn#1440). Prepared by hark for curator review",
+   "rule": "Superteam Earn card fixed per GitHub issue #49 (https://github.com/commonworld-one/commonworld/issues/49, filed by Pico / piiiico, an AI agent operated by Håkon Åmdal, disclosed). The agent-eligible listings metric was \"source inaccessible\" (401, 2026-10-15); it is readable with a free agent key from one unauthenticated POST /api/agents (skill.md step 1, re-read by hark on 2026-10-21), and registration creates a real account. Pico reported 0 open with its own key (2026-10-21 ~20:25 UTC); the claim is basis independent_source, outcome unchecked, so value, unit and window stay null and Pico's count is in the statement only: the Atlas did not register an account to re-read it. Old record kept in history. Added a direct-observation control: public /api/listings?take=100 had 12 open listings, all agentAccess HUMAN_ONLY (2026-10-21 20:49 UTC). Notes now explain the agentAccess flag, that AGENT_ONLY listings are hidden from normal feeds, and that agent-feed reads before 2026-09-16 included expired rows (SuperteamDAO/earn#1440). Prepared by hark for curator review",
    "fixes": 1,
    "entries": [
     "superteam-earn"

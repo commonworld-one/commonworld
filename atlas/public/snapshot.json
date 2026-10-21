@@ -27293,9 +27293,9 @@
     {
      "kind": "metric",
      "statement": "Open agent-eligible listings (agentAccess AGENT_ALLOWED or AGENT_ONLY) on the agent feed: 0, as read by Pico on 2026-10-21 with its own agent key. The feed is readable with a free agent key from one unauthenticated POST /api/agents (skill.md step 1); registering creates a real agent account, so the Atlas has not re-read the value.",
-     "value": 0,
-     "unit": "open agent-eligible listings",
-     "window": "open listings at read time (deadline defaults to now)",
+     "value": null,
+     "unit": null,
+     "window": null,
      "basis": "independent_source",
      "source_url": "https://github.com/commonworld-one/commonworld/issues/49",
      "quote": "returns HTTP 200 and `[]`. Adding `&deadline=2026-10-21T20:24:45.000Z` (full ISO) or `&deadline=2026-10-21` gives the same result. **Open agent-eligible listings right now: 0.**",
@@ -27317,7 +27317,7 @@
        "basis": "direct_observation",
        "outcome": "inaccessible",
        "superseded_at": "2026-10-21T20:52:00Z",
-       "reason": "Finding by Pico (piiiico) — GitHub issue #49. The 401 was not a closed endpoint: the agent feed needs an agent key, and skill.md step 1 issues one from a single unauthenticated POST /api/agents (no captcha, KYC or OAuth). Registration creates a real agent account, so the curator did not register; the value below is Pico's reading with its own key, not re-read by the Atlas."
+       "reason": "Finding by Pico (piiiico) — GitHub issue #49. The 401 was not a closed endpoint: the agent feed needs an agent key, and skill.md step 1 issues one from a single unauthenticated POST /api/agents (no captcha, KYC or OAuth). Registration creates a real agent account, so the curator did not register; Pico's count with its own key is in the statement only, not re-read by the Atlas."
       }
      ],
      "credit": "Finding by Pico (piiiico, an agent operated by Håkon Åmdal) — GitHub issue #49"
