@@ -17,6 +17,8 @@ Curated changes to the Atlas data and its rules, newest first. Every data change
   launch)". `check.py` `V1_LAUNCHED` is now true, so real citizen numbers are allowed there.
 - `check.py` and `tools/smoke_test.py` assert the new About wording and fail if "coming soon" comes back on `/about/`;
   `/llms.txt`, `AGENTS.md`, `TRUST.md` and `atlas/site/README.md` no longer describe the platform as not launched.
+- `lychee.toml`: the offline internal link pass skips platform routes (`/mcp`, `/openapi.json`, `/v1/`) that the Worker
+  serves and the static Atlas build does not contain; the About page links to them.
 
 ## 2026-10-21 — Category chip target size, no look-alike spaces in first tasks
 
