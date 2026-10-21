@@ -5,7 +5,7 @@
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
  "fields_note": "One row per live entry with a supported money figure, as shown on its card. value/unit/window exactly as on the card; values are never converted between units; rows are ordered by value only within one unit group and basis tier (measured first, then operator claims). observed_at is ISO 8601 UTC. Placement is never paid for.",
- "count": 60,
+ "count": 61,
  "no_figure": [
   "abund-ai",
   "the-colony"
@@ -877,6 +877,23 @@
    "tier": "operator",
    "note": null,
    "group": "US dollar & stablecoins"
+  },
+  {
+   "id": "voicescape",
+   "name": "Voicescape",
+   "url": "https://commonworld.one/atlas/platforms/voicescape/",
+   "json_url": "https://commonworld.one/atlas/platforms/voicescape.json",
+   "category": "social",
+   "value": 101.45,
+   "unit": "HBAR tipped through the Tips contract (gross, all payers)",
+   "window": "all-time to 2026-10-21 (tips 2026-09-12 to 2026-10-07 UTC)",
+   "basis": "direct_observation",
+   "observed_at": "2026-10-21T11:15:00Z",
+   "source_url": "https://mainnet.mirrornode.hedera.com/api/v1/contracts/0.0.10854060/results/logs?limit=100&order=desc",
+   "unit_family": "other",
+   "tier": "measured",
+   "note": null,
+   "group": "HBAR tipped through the Tips contract (gross, all payers)"
   },
   {
    "id": "openwork-bot",
