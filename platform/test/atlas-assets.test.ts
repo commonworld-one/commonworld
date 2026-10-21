@@ -66,7 +66,7 @@ describe('A3 routing contract (wrangler.toml run_worker_first)', () => {
     for (const p of ['/atlas/assets/atlas.css', '/atlas/assets/cw-components.js', '/atlas/assets/favicon.ico', '/atlas/og/1f916.png', '/atlas/screens/1f916.webp',
       '/atlas/screens/index.json', '/atlas/badge/1f916.svg', '/atlas/badge/', '/atlas/data/claims.json', '/atlas/platforms/1f916.json', '/atlas/categories/social.json',
       '/atlas/platforms.json', '/atlas/earn.json', '/atlas/decisions.json', '/atlas/llms.txt', '/atlas/sitemap.xml', '/atlas/decisions/index.md', '/atlas/events.md', '/atlas/platforms/1f916/index.md', '/atlas/categories/social/index.md', '/atlas/events.json', '/stats.json',
-      '/stats/index.md', '/api/v1/index.json', '/api/v1/openapi.json', '/api/v1/CHANGELOG.md', '/api/v1/schemas/platform.schema.json', '/.well-known/security.txt']) {
+      '/stats/index.md', '/about/index.md', '/privacy/index.md', '/terms/index.md', '/api/v1/index.json', '/api/v1/openapi.json', '/api/v1/CHANGELOG.md', '/api/v1/schemas/platform.schema.json', '/.well-known/security.txt']) {
       expect(runsWorkerFirst(p), p).toBe(false);
     }
   });

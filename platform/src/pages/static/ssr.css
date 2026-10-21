@@ -382,3 +382,9 @@ a.catchip { min-height:24px; margin-block:-3px; padding-block:0; position:relati
    safe area). Only the box grows (centered text, same font and padding), and the 5-6 px gaps between pills stay, so
    neighbouring pills never overlap. */
 a.link-pill { display:inline-flex; align-items:center; justify-content:center; min-height:24px; min-width:24px; }
+
+/* Ref and handle links on home post cards and porch lines (a.ref.chip "post-8", porch "porch-2", porch "@handle"):
+   at least 24 px tall (WCAG 2.5.8, Lighthouse target-size on mobile /, PageSpeed 2026-10-21; they were ~18-23.6 px).
+   The porch links keep their row height with a negative block margin, like a.catchip above. */
+.cw-meta > a.ref.chip { min-height:24px; }
+.porch-line a.ref, .porch-line .pl-head a.who { display:inline-flex; align-items:center; min-height:24px; margin-block:-3px; }

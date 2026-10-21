@@ -1,10 +1,14 @@
 name: IndexNow ping
-# After a push to main changes the Atlas, tell IndexNow search engines (Bing etc.) which URLs are new or changed.
-# Compares sitemaps built from this commit and the previous one; waits for Cloudflare Pages to serve the new build.
+# After a successful production deploy of the platform Worker (which also serves the Atlas build), tell IndexNow search
+# engines (Bing etc.) which URLs are new or changed. Compares the sitemaps built from the deployed commit and from the
+# commit of the previous successful deploy (both read from the release-manifest-<sha> artifact of those runs), then
+# waits until the live site serves the new sitemap. Cloudflare Pages is only a legacy fallback (automatic deployments
+# off), so a push to main alone no longer changes the live site and does not trigger this.
 on:
-  push:
+  workflow_run:
+    workflows: ['Deploy platform (production)']
+    types: [completed]
     branches: [main]
-    paths: ['atlas/**']
   workflow_dispatch:
     inputs:
       all:
@@ -13,28 +17,60 @@ on:
         default: false
 permissions:
   contents: read
+  actions: read   # list the release-manifest artifacts of Deploy platform runs
 concurrency:
   group: indexnow
   cancel-in-progress: false
 jobs:
   ping:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
-      - name: Build this commit and the previous one
+      - name: Pick the deployed commit and the previously deployed one
+        id: shas
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_CREATED: ${{ github.event.workflow_run.created_at }}
+        run: |
+          # The deployed sha is the workflow input of Deploy platform; its run uploads release-manifest-<sha>.
+          sha_of() { gh api "repos/$REPO/actions/runs/$1/artifacts" --jq '.artifacts[].name' | sed -n 's/^release-manifest-\([0-9a-f]\{40\}\)$/\1/p' | head -n1; }
+          if [ "$EVENT" = workflow_run ]; then
+            new=$(sha_of "$RUN_ID")
+            if [ -z "$new" ]; then echo "::notice::Deploy run $RUN_ID has no release manifest (nothing deployed); skipping"; echo "skip=1" >> "$GITHUB_OUTPUT"; exit 0; fi
+            prev_run=$(gh api "repos/$REPO/actions/workflows/deploy-platform.yml/runs?branch=main&status=success&per_page=20" \
+              --jq "[.workflow_runs[] | select(.id != $RUN_ID and .created_at < \"$RUN_CREATED\")][0].id // empty")
+            old=""
+            [ -n "$prev_run" ] && old=$(sha_of "$prev_run")
+          else
+            new=$GITHUB_SHA; old=""
+          fi
+          # No earlier deploy found (or its artifact expired): fall back to the parent commit.
+          [ -n "$old" ] || old=$(git rev-parse -q --verify "$new^" || true)
+          echo "new=$new" >> "$GITHUB_OUTPUT"; echo "old=$old" >> "$GITHUB_OUTPUT"
+          echo "IndexNow: deployed $new, previous ${old:-none}"
+      - name: Build the deployed commit and the previous one
+        if: steps.shas.outputs.skip != '1'
         env:
           CW_SCREENS: 'off'   # only the sitemaps are compared; skip fetching the screenshot branch
+          NEW: ${{ steps.shas.outputs.new }}
+          OLD: ${{ steps.shas.outputs.old }}
         run: |
-          python atlas/site/build.py --out "$RUNNER_TEMP/new" >/dev/null
-          if git rev-parse -q --verify HEAD^ >/dev/null; then
-            git worktree add -q "$RUNNER_TEMP/prev" HEAD^
+          git worktree add -q "$RUNNER_TEMP/cur" "$NEW"
+          (cd "$RUNNER_TEMP/cur" && python atlas/site/build.py --out "$RUNNER_TEMP/new" >/dev/null)
+          if [ -n "$OLD" ]; then
+            git worktree add -q "$RUNNER_TEMP/prev" "$OLD"
             (cd "$RUNNER_TEMP/prev" && python atlas/site/build.py --out "$RUNNER_TEMP/old" >/dev/null) || mkdir -p "$RUNNER_TEMP/old"
           else mkdir -p "$RUNNER_TEMP/old"; fi
       - name: Ping IndexNow
-        run: python atlas/tools/indexnow.py "$RUNNER_TEMP/new" "$RUNNER_TEMP/old" ${{ inputs.all && '--all' || '' }}
+        if: steps.shas.outputs.skip != '1'
+        run: python "$RUNNER_TEMP/cur/atlas/tools/indexnow.py" "$RUNNER_TEMP/new" "$RUNNER_TEMP/old" ${{ inputs.all && '--all' || '' }}

@@ -8,12 +8,14 @@ Output (default atlas/site/dist/) is a plain static tree with clean URLs as dire
   /atlas/index.html, /atlas/platforms/, /atlas/platforms/<slug>/, /atlas/categories/, /atlas/categories/<cat>/,
   /atlas/closed/, /atlas/earn/ (+ /atlas/earn.json), /atlas/about/, /atlas/decisions/ (+ index.md, /atlas/decisions.json), /atlas/badge/ (+ /atlas/badge/<slug>.svg, <slug>-dark.svg), /atlas/data/snapshot.json, /atlas/platforms.json (+ /atlas/platforms/<slug>.json), /atlas/llms.txt, /atlas/sitemap.xml, /atlas/assets/*,
   /privacy/, /terms/ (site-wide Commonworld legal pages; /atlas/privacy|terms/ are noindex redirect stubs + _redirects 301s),
+  /about/, /privacy/, /terms/ each with a Markdown twin index.md (the page's <main>, word for word: page_markdown_twin),
   / (Commonworld landing), /404.html, /robots.txt, /llms.txt, /llms-full.txt, /sitemap.xml, /_headers, /_redirects
   /api/v1/ (static API: index.json, openapi.json, changelog, schemas/, atlas/{index,platforms,earn}.json, atlas/platforms|categories/<id>.json; docs /atlas/api/)
 It deploys unchanged to Cloudflare Pages / Workers static assets.
 """
 import argparse, base64, hashlib, html, json, os, re, shutil, sys
 from collections import Counter, defaultdict
+from html.parser import HTMLParser
 from datetime import datetime, timedelta, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -1315,7 +1317,7 @@ def legal_page(site, *, path, crumb, h1, lead, body_html, title, description, og
                      'isPartOf': {'@type': 'WebSite', 'name': 'Commonworld', 'url': site.abs('/')},
                      'publisher': {'@type': 'Organization', 'name': lg.get('operator') or 'Commonworld', 'url': site.abs('/')}}]
     return page(site, path=path, title=title, description=description, body=body, active='', ld=ld,
-                lastmod=dt.replace(tzinfo=timezone.utc) if dt else None,
+                lastmod=dt.replace(tzinfo=timezone.utc) if dt else None, alt_md=path + 'index.md',
                 og=og_generic(site, og_name, h1, og_desc, og_chips, kicker='COMMONWORLD'))
 
 
@@ -1642,6 +1644,126 @@ def og_home(site, motto, n):
     return name, spec, alt
 
 
+# ---------------------------------------------------------------- Markdown twins of hand-written pages (/about/, /privacy/, /terms/)
+class _PageToMarkdown(HTMLParser):
+    """The <main> of a built page as Markdown, word for word: headings, paragraphs, lists, tables, bold/italic/code and links
+    (made absolute). Page chrome that is not content is left out: breadcrumbs, the kicker link, share buttons, screen-reader-only text."""
+    SKIP_CLASSES = {'cw-crumbs', 'cw-share', 'kicker', 'sr', 'sr-only'}
+    SKIP_TAGS = {'button', 'svg', 'script', 'style', 'template'}
+    VOID = {'br', 'img', 'input', 'meta', 'link', 'hr', 'wbr', 'source'}
+    BLOCKS = {'p', 'h1', 'h2', 'h3', 'h4', 'li', 'div', 'section', 'table', 'tr', 'ul', 'ol', 'nav', 'blockquote', 'aside', 'header', 'footer'}
+    MARKS = {'b': '**', 'strong': '**', 'i': '*', 'em': '*', 'code': '`'}
+
+    def __init__(self, absu):
+        super().__init__(convert_charrefs=True)
+        self.absu, self.blocks, self.buf, self.prefix = absu, [], [], ''
+        self.skip = 0          # depth inside a skipped element
+        self.lists = []        # stack of [kind, counter]
+        self.links = []        # stack of (href, start index in buf)
+        self.table = None      # list of rows (list of cells) while inside a <table>
+        self.cell = None       # buffer of the current table cell
+        self.tight = False     # current block is a list item (no blank line before the next item)
+
+    def _out(self):
+        return self.cell if self.cell is not None else self.buf
+
+    def _flush(self):
+        text = re.sub(r'[ \t]+', ' ', ''.join(self.buf)).strip()
+        text = re.sub(r' *\n *', '  \n', text)
+        if text:
+            self.blocks.append((self.prefix + text, self.tight))
+        self.buf, self.prefix, self.tight = [], '', False
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if tag in self.VOID:
+            if not self.skip and tag == 'br': self._out().append('\n')
+            return
+        if self.skip:
+            self.skip += 1; return
+        if tag in self.SKIP_TAGS or self.SKIP_CLASSES & set((a.get('class') or '').split()) or a.get('hidden') is not None:
+            self.skip = 1; return
+        if tag == 'table':
+            self._flush(); self.table = []; return
+        if self.table is not None:
+            if tag == 'tr': self.table.append([])
+            elif tag in ('td', 'th'): self.cell = []
+            elif tag in self.MARKS: self._out().append(self.MARKS[tag])
+            elif tag == 'a': self.links.append((a.get('href') or '', len(self._out())))
+            return
+        if tag in self.BLOCKS or 'cw-stat' in (a.get('class') or '').split():
+            self._flush()
+            if tag in ('ul', 'ol'): self.lists.append([tag, 0])
+            elif tag in ('h1', 'h2', 'h3', 'h4'): self.prefix = '#' * int(tag[1]) + ' '
+            elif tag == 'li' or 'cw-stat' in (a.get('class') or '').split():
+                lst = self.lists[-1] if self.lists else ['ul', 0]
+                lst[1] += 1
+                self.prefix = '  ' * max(len(self.lists) - 1, 0) + (f'{lst[1]}. ' if lst[0] == 'ol' else '- ')
+                self.tight = True
+            return
+        if tag in self.MARKS: self.buf.append(self.MARKS[tag])
+        elif tag == 'a': self.links.append((a.get('href') or '', len(self.buf)))
+        elif tag == 'span' and self.buf and not ''.join(self.buf).endswith((' ', '\n')): self.buf.append(' ')
+
+    def handle_endtag(self, tag):
+        if tag in self.VOID: return
+        if self.skip:
+            self.skip -= 1; return
+        out = self._out()
+        if tag in self.MARKS:
+            if out and out[-1] == self.MARKS[tag]: out.pop()  # empty element (an icon such as <i class="dot">): no marks
+            else: out.append(self.MARKS[tag])
+            return
+        if tag == 'a' and self.links:
+            href, i = self.links.pop()
+            text = ''.join(out[i:]).strip()
+            del out[i:]
+            if href and not href.startswith('#'):
+                out.append(f'[{text}]({self.absu(href) if href.startswith("/") else href})')
+            else:
+                out.append(text)
+            return
+        if self.table is not None:
+            if tag in ('td', 'th') and self.cell is not None:
+                cell = re.sub(r'\s+', ' ', ''.join(self.cell)).strip().replace('|', '\\|')
+                if self.table: self.table[-1].append(cell)
+                self.cell = None
+            elif tag == 'table':
+                rows = [r for r in self.table if r]
+                if rows:
+                    w = max(len(r) for r in rows)
+                    rows = [r + [''] * (w - len(r)) for r in rows]
+                    md = ['| ' + ' | '.join(rows[0]) + ' |', '|' + '---|' * w] + ['| ' + ' | '.join(r) + ' |' for r in rows[1:]]
+                    self.blocks.append(('\n'.join(md), False))
+                self.table = None
+            return
+        if tag in self.BLOCKS:
+            self._flush()
+            if tag in ('ul', 'ol') and self.lists: self.lists.pop()
+
+    def handle_data(self, data):
+        if not self.skip:
+            self._out().append(data.replace('\n', ' '))
+
+    def markdown(self):
+        self._flush()
+        lines = []
+        for i, (text, tight) in enumerate(self.blocks):
+            if i and not (tight and self.blocks[i - 1][1]): lines.append('')
+            lines.append(text)
+        return '\n'.join(lines) + '\n'
+
+
+def page_markdown_twin(site, page_html, path):
+    """Markdown twin of a built page (<path>index.md): the page's <main> converted word for word, plus its canonical URL under the H1."""
+    m = re.search(r'<main[^>]*>(.*)</main>', page_html, re.S)
+    conv = _PageToMarkdown(site.abs)
+    conv.feed(m.group(1) if m else '')
+    md = conv.markdown()
+    head, sep, rest = md.partition('\n')
+    return f'{head}\n\nCanonical page: {site.abs(path)}\n{rest}' if head.startswith('# ') else f'Canonical page: {site.abs(path)}\n\n{md}'
+
+
 def build_cw_about(site):
     """About Commonworld at /about/ (the Atlas methodology stays at /atlas/about/). Describes intent; future features are marked planned."""
     b, cards, cfg = site.base, site.cards, site.cfg
@@ -1708,7 +1830,7 @@ def build_cw_about(site):
     spec.update({'brand': motto, 'foot_left': 'commonworld.one/about'})
     return page(site, path=CW_ABOUT, title='About Commonworld — a shared world for humans and agents',
                 description=f'{motto}. {subtitle} What it is: the live platform and the Atlas.',
-                body=body, active='cw-about', ld=ld, lastmod=site.latest, og=(name, spec, alt))
+                body=body, active='cw-about', ld=ld, lastmod=site.latest, og=(name, spec, alt), alt_md=CW_ABOUT + 'index.md')
 
 
 # ---------------------------------------------------------------- public stats (/stats/, /stats/index.md, /stats.json)
@@ -2658,7 +2780,8 @@ def build_csp(script_hashes, style_hashes=()):
 ROUTES = {'version': 1, 'include': ['/*'],
           'exclude': ['/atlas/assets/*', '/atlas/og/*', '/atlas/screens/*', '/atlas/badge/*', '/atlas/data/*',
                       '/atlas/platforms/*.json', '/atlas/categories/*.json', '/atlas/*.json', '/atlas/*.txt', '/atlas/*.xml',
-                      '/atlas/decisions/index.md', '/atlas/platforms/*/index.md', '/atlas/events.md', '/stats.json', '/stats/index.md', '/api/*', '/cdn-cgi/*', '/favicon.ico', '/robots.txt', '/sitemap.xml',
+                      '/atlas/decisions/index.md', '/atlas/platforms/*/index.md', '/atlas/events.md', '/stats.json', '/stats/index.md',
+                      '/about/index.md', '/privacy/index.md', '/terms/index.md', '/api/*', '/cdn-cgi/*', '/favicon.ico', '/robots.txt', '/sitemap.xml',
                       '/llms.txt', '/llms-full.txt', '/404.html']}
 
 
@@ -2763,14 +2886,17 @@ def main():
     write(f'{b}/badge/', build_badge_page(site))
     write(API_DOCS, build_api_docs(site))
     n_badges = write_badges(site, write)
-    write(CW_ABOUT, build_cw_about(site))  # About Commonworld
+    cw_about_html = build_cw_about(site)  # About Commonworld
+    write(CW_ABOUT, cw_about_html)
+    write(CW_ABOUT + 'index.md', page_markdown_twin(site, cw_about_html, CW_ABOUT))  # Markdown twin, same words as the page
     stats_doc = load_stats(site)  # public stats: atlas/data/stats.json (+ Atlas counts derived from the data)
     write(STATS_PATH, build_stats(site, stats_doc))
     write(STATS_MD, build_stats_md(site, stats_doc))
     write(STATS_JSON, json.dumps(stats_doc, ensure_ascii=False, indent=1) + '\n')
     priv_url, terms_url = legal_urls(site)
-    write(priv_url, build_privacy(site))
-    write(terms_url, build_terms(site))
+    for legal_path, legal_html in ((priv_url, build_privacy(site)), (terms_url, build_terms(site))):
+        write(legal_path, legal_html)
+        write(legal_path + 'index.md', page_markdown_twin(site, legal_html, legal_path))  # Markdown twin, same words as the page
     old_legal = [(f'{b}/privacy/', priv_url, 'Commonworld Privacy Policy'), (f'{b}/terms/', terms_url, 'Commonworld Terms of Use')]
     for old, new, name in old_legal:
         if old != new:
@@ -2891,6 +3017,15 @@ def main():
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
 /stats/index.md
+  Access-Control-Allow-Origin: *
+  Content-Type: text/markdown; charset=utf-8
+{CW_ABOUT}index.md
+  Access-Control-Allow-Origin: *
+  Content-Type: text/markdown; charset=utf-8
+{priv_url}index.md
+  Access-Control-Allow-Origin: *
+  Content-Type: text/markdown; charset=utf-8
+{terms_url}index.md
   Access-Control-Allow-Origin: *
   Content-Type: text/markdown; charset=utf-8
 {b}/categories/*.json

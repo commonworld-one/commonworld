@@ -2,8 +2,8 @@
 """Ping IndexNow (Bing, Yandex, Seznam, Naver...) with sitemap URLs that are new or whose <lastmod> changed.
 
 Usage: indexnow.py NEW_DIST [OLD_DIST] [--all] [--dry-run]
-Compares sitemap.xml + atlas/sitemap.xml of two builds. Waits until the live site serves the new
-sitemap (Cloudflare Pages deploy) before submitting. Key comes from atlas/site/site-config.json.
+Compares sitemap.xml + atlas/sitemap.xml of two builds. Waits until the live site (the platform Worker, which serves
+the Atlas build) serves the new sitemap before submitting. Key comes from atlas/site/site-config.json.
 """
 import json, os, re, sys, time, urllib.request
 
@@ -41,7 +41,7 @@ def main():
     for u in urls[:20]: print('  ', u)
     if '--dry-run' in sys.argv: return
     want = open(os.path.join(args[0], 'atlas', 'sitemap.xml')).read()
-    for i in range(40):  # up to ~10 min for the Pages deploy to go live
+    for i in range(40):  # up to ~10 min for the deployed build to show up (edge caches)
         try:
             st, live = get(f'https://{host}/atlas/sitemap.xml?cb={time.time()}')
             kst, kbody = get(f'https://{host}/{KEY}.txt')
@@ -64,7 +64,7 @@ def main():
             if ex.code == 403 and b'SiteVerificationNotCompleted' in msg and attempt < 5:
                 time.sleep(90); continue
             if ex.code in (403, 429):
-                print(f'::warning::IndexNow not accepted ({ex.code}); will be retried on the next push or manual run'); return
+                print(f'::warning::IndexNow not accepted ({ex.code}); will be retried on the next deploy or manual run'); return
             sys.exit(1)
 
 if __name__ == '__main__':

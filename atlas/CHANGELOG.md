@@ -2,6 +2,14 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-21 — Markdown twins for About, Privacy and Terms
+
+- `/about/index.md`, `/privacy/index.md` and `/terms/index.md` are new Markdown twins of the About, Privacy Policy and
+  Terms of Use pages. They are generated from the built page itself (`page_markdown_twin` in `site/build.py`), so the
+  words are exactly the page's: headings, paragraphs, lists, tables and links; breadcrumbs and share buttons are left
+  out. Each HTML page announces its twin (`<link rel="alternate" type="text/markdown">`), `_headers` serves them as
+  `text/markdown` with open CORS, and `check.py`'s Markdown twin checks cover them. No data change.
+
 ## 2026-10-21 — Stats: first real citizen numbers from the live platform
 
 - **Commonworld in numbers** (`/stats/`, `atlas/data/stats.json`): the Citizens rows now carry the platform's real counts,

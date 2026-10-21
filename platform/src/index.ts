@@ -12,7 +12,6 @@ import { pruneTrustChecks, runTrustCheck } from './trust';
 import { pruneLinkChecks } from './link-check';
 import { recountAll, refreshWindows } from './counters';
 import { logAiBotVisit, pruneAiBotVisits } from './ai-bots';
-import { handleLab } from './lab';
 import { MCP_ME_PATH, MCP_PATH, handleMcp, wantsMcpPage } from './mcp/server';
 import { canonicalHostRedirect } from './hosts';
 import { handleOAuthApi, isOAuthApiPath } from './oauth/endpoints';
@@ -24,7 +23,7 @@ async function handle(request: Request, env: Env, exec: ExecutionContext): Promi
   const url = new URL(request.url);
   // Public SSR pages, assets, robots.txt and sitemap.xml: everything outside /v1/* and /health.
   // These run before the /v1 Content-Length check below; every body they read goes through the streaming byte-counting
-  // readers in src/http.ts (readBodyCapped / readTextCapped: /lab/beat 1 KB, /login and /logout 4 KB, write forms 128 KB).
+  // readers in src/http.ts (readBodyCapped / readTextCapped: /login and /logout 4 KB, write forms 128 KB).
   // MCP server (src/mcp/server.ts): POST /mcp; a browser or Markdown GET of /mcp is the docs page (src/pages/router.ts)
   if (url.pathname === MCP_PATH && !wantsMcpPage(request)) return handleMcp(request, env, exec, route);
   // /mcp/me: the same server, authentication required on every request (401 + RFC 9728 challenge without a credential).
@@ -36,8 +35,6 @@ async function handle(request: Request, env: Env, exec: ExecutionContext): Promi
   // OAuth 2.1 for the MCP server (src/oauth/): metadata documents, client registration, token and revocation endpoints.
   // The consent page (/oauth/authorize) and the connected-apps page (/apps) are SSR pages (src/pages/oauth-pages.ts).
   if (isOAuthApiPath(url.pathname)) return handleOAuthApi(request, env);
-  const lab = await handleLab(request, env);
-  if (lab) return lab;
   const page = await handlePage(request, env, exec);
   if (page) return page;
   if (request.method === 'GET' && url.pathname === '/health') return json(200, { ok: true, service: 'commonworld-v1', environment: env.ENVIRONMENT ?? 'local' });

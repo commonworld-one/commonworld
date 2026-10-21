@@ -176,7 +176,13 @@ is pending; the gate passes without the override because the only historical fin
 
 If the gate fails on an empty database, do not use the override to get past it: read which file it names.
 
-## First production deploy (cutover from Cloudflare Pages)
+## First production deploy (cutover from Cloudflare Pages) — DONE 2026-10-20
+
+**Status: done.** The cutover ran on 2026-10-20; `commonworld.one` and `www` are now served by the Worker
+`commonworld-api`. The steps below are kept as the record of what was done and as the way back. Since 2026-10-21 the
+Pages project `commonworld` has **automatic deployments off**: it is kept only as a fallback and no longer builds on
+push, so a rollback to Pages (step 5) serves whatever build it last made, a stale one, unless it is redeployed by hand
+first.
 
 Until the first deploy `commonworld.one` and `www` are Custom Domains of the Pages project `commonworld`, served
 through two proxied DNS records `CNAME commonworld.one → commonworld.pages.dev` and `CNAME www → commonworld.pages.dev`.

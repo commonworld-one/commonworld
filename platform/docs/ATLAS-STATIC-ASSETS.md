@@ -7,7 +7,7 @@ for staging and production. Cost background: product note `COSTS-LOADS-2026-10-1
 
 | Request | Who answers | Billed Worker requests |
 |---|---|---|
-| Atlas static file: `/atlas/assets/*`, `/atlas/og/*`, `/atlas/screens/*`, `/atlas/badge/*`, `/atlas/data/*`, `/atlas/**.json`, `/atlas/**.txt`, `/atlas/**.xml`, `/atlas/**.md` (every Markdown twin: platform and category cards, decisions, events), `/stats.json`, `/stats/index.md`, `/api/*`, `/.well-known/security.txt` | Cloudflare Static Assets directly (headers from the Atlas `_headers`, redirects from `_redirects`, a miss = Atlas `404.html` with 404) | **0** |
+| Atlas static file: `/atlas/assets/*`, `/atlas/og/*`, `/atlas/screens/*`, `/atlas/badge/*`, `/atlas/data/*`, `/atlas/**.json`, `/atlas/**.txt`, `/atlas/**.xml`, `/atlas/**.md` (every Markdown twin: platform and category cards, decisions, events), `/stats.json`, `/stats/index.md`, `/about/index.md`, `/privacy/index.md`, `/terms/index.md`, `/api/*`, `/.well-known/security.txt` | Cloudflare Static Assets directly (headers from the Atlas `_headers`, redirects from `_redirects`, a miss = Atlas `404.html` with 404) | **0** |
 | Atlas HTML: `/atlas/…/`, `/privacy/`, `/terms/`, `/about/`, `/stats/`, Atlas 404s under those | Worker → `env.ASSETS.fetch` → + CSP nonce (`src/atlas-assets.ts`) | 1 |
 | Slashless / `.html` Atlas URL (`/atlas/platforms/x`) | Worker, 308 to the slash form (as Pages) | 1 |
 | Bare `/atlas`, `/privacy`, `/terms`, `/about`, `/stats` | Worker, 301 to the slash form | 1 |

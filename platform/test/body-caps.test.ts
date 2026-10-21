@@ -1,13 +1,12 @@
 /**
  * Streaming body caps (Codex audit 2026-10-19, P3 + P4): request bodies on routes that run before the /v1
- * Content-Length check (/lab/beat, /login, website write forms) and the recovery domain-check response are read
+ * Content-Length check (/login, website write forms) and the recovery domain-check response are read
  * through the byte-counting readers in src/http.ts. A body without Content-Length (chunked) that passes the cap gets
  * 413 and the rest of the stream is cancelled; normal sizes still work.
  */
 import { exports } from 'cloudflare:workers';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { readBodyCapped, readUpTo } from '../src/http';
-import { LAB_BEAT_MAX_BYTES } from '../src/lab';
 import { resetRateLimitDouble } from '../src/ratelimit';
 import { findProof, MAX_TEXT } from '../src/recovery';
 import { FORM_MAX_BYTES } from '../src/pages/writes';
@@ -54,38 +53,6 @@ describe('shared streaming reader (src/http.ts)', () => {
   it('counts bytes, not characters (multi-byte text over the cap is refused)', async () => {
     const text = 'ж'.repeat(3000); // 3000 chars, 6000 bytes
     await expect(readBodyCapped(new Request(`${ORIGIN}/x`, { method: 'POST', body: text }), 4096)).rejects.toMatchObject({ status: 413 });
-  });
-});
-
-const VALID_BEAT = '{"sid":"a1b2c3d4","n":1,"ev":"tick","vis":"visible","focus":true,"t":1760870400000}';
-
-describe('POST /lab/beat (local/staging only)', () => {
-  it('normal beat -> 204', async () => {
-    const r = await fetchWorker(new Request(`${ORIGIN}/lab/beat`, { method: 'POST', body: '{"sid":"a","n":1,"ev":"load"}', headers: { 'content-type': 'application/json' } }));
-    expect(r.status).toBe(204);
-  });
-  it('chunked body over 1 KB (no Content-Length) -> 413, stream cancelled', async () => {
-    const s = endless(256);
-    const r = await fetchWorker(chunkedPost('/lab/beat', s.stream, { 'content-type': 'application/json' }));
-    expect(r.status).toBe(413);
-    expect(((await r.json()) as any).error).toEqual({ code: 'request_body_too_large', max_bytes: LAB_BEAT_MAX_BYTES });
-    expect(s.pulled()).toBeLessThan(64 * 1024);
-  });
-  it('declared Content-Length over 1 KB -> 413 before reading', async () => {
-    const r = await fetchWorker(new Request(`${ORIGIN}/lab/beat`, { method: 'POST', body: 'x'.repeat(LAB_BEAT_MAX_BYTES + 1) }));
-    expect(r.status).toBe(413);
-  });
-  it('per-network rate limit: 60 beats per minute, the 61st -> 429 with Retry-After', async () => {
-    vi.spyOn(Date, 'now').mockReturnValue(Date.UTC(2026, 9, 19, 12, 0, 5));
-    const beat = () => fetchWorker(new Request(`${ORIGIN}/lab/beat`, { method: 'POST', body: VALID_BEAT, headers: { 'cf-connecting-ip': '203.0.113.7' } }));
-    for (let i = 0; i < 60; i++) expect((await beat()).status).toBe(204);
-    const r = await beat();
-    expect(r.status).toBe(429);
-    expect(r.headers.get('retry-after')).toBeTruthy();
-    expect(((await r.json()) as any).error.scope).toBe('lab_beat_ip');
-    // another network is not affected
-    const other = await fetchWorker(new Request(`${ORIGIN}/lab/beat`, { method: 'POST', body: VALID_BEAT, headers: { 'cf-connecting-ip': '198.51.100.9' } }));
-    expect(other.status).toBe(204);
   });
 });
 

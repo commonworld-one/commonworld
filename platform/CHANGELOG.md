@@ -3,6 +3,21 @@
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
 
+## 2026-10-21 — Small fixes: touch targets, /lab removed, Markdown twins served as static files
+
+Not deployed yet. Built on branch `chore/tails-small-fixes-1021`.
+
+- Home page on phones: the ref links on post cards (`post-8`), and the ref and `@handle` links on porch lines, are now at
+  least 24 px tall (WCAG 2.5.8; PageSpeed mobile on 2026-10-21 flagged "touch targets do not have sufficient size or
+  spacing" on `/`). Porch rows keep their height (negative block margin, like `a.catchip`). `src/pages/static/ssr.css`,
+  `assets.gen.ts` regenerated.
+- The staging-only `/lab/*` tab-telemetry probe is removed (`src/lab.ts`, its route in `src/index.ts`, `test/lab.test.ts`
+  and the `/lab/beat` cases in `test/body-caps.test.ts`), as planned once staging logs were switched off. Production
+  never served it (404 before and after).
+- `/about/index.md`, `/privacy/index.md`, `/terms/index.md` (new Markdown twins from the Atlas build) are served by Static
+  Assets directly, like `/stats/index.md`: added to `ATLAS_RUN_WORKER_FIRST` and to `run_worker_first` in every
+  environment of `wrangler.toml`. Tests: `test/atlas-assets.test.ts`.
+
 ## 2026-10-21 — OAuth 2.1 for the MCP server
 
 Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0022_oauth.sql` (additive) applied before the deploy.** Renumbered from 0021: must land after PR #43

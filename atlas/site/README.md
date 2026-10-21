@@ -33,7 +33,7 @@ Then open <http://localhost:8080/atlas/> (or run `open http://localhost:8080/atl
 Another port: `python3 atlas/site/serve.py 9000`.
 
 `python3` ships with the Xcode Command Line Tools; if macOS asks to install them, accept and re-run the command.
-`serve.py` behaves like Cloudflare Pages: clean directory URLs, `/atlas/about` → 301 → `/atlas/about/`, real 404 status with `404.html`. Locally only, `/` redirects to `/atlas/` (the Commonworld home is a placeholder for now).
+`serve.py` behaves like the live static serving (the platform Worker, and the legacy Cloudflare Pages fallback): clean directory URLs, `/atlas/about` → 301 → `/atlas/about/`, real 404 status with `404.html`. Locally only, `/` redirects to `/atlas/` (the Commonworld home is a placeholder for now).
 
 ## What gets built
 
@@ -55,7 +55,7 @@ Another port: `python3 atlas/site/serve.py 9000`.
 | `/privacy/` | **Commonworld Privacy Policy**, one for the whole product (scope: Commonworld and all its sections, including the Atlas). GDPR Art. 13 items: controller, purposes + legal bases, Google Analytics after consent, Cloudflare, browser storage table, recipients, transfers, retention, rights, complaint to the data protection authority in the visitor's country of residence; sections for accounts, account recovery and linked accounts, what you publish, link checks, limits and moderation, AI-bot visits and security reports; a "Not available yet" list of known gaps, updated before each ships |
 | `/terms/` | **Commonworld Terms of Use** (same scope): accounts and API keys, recovery, everything public, the rules, link checks, moderation, limits, your content; the Atlas as an informational catalog, no endorsement/advice, accuracy, corrections, sponsored content, links, data reuse, planned features note, liability, applicable law (no country named) |
 | `/atlas/privacy/`, `/atlas/terms/` | Old URLs: tiny noindex stubs (meta refresh + canonical to the new URL); on Cloudflare `dist/_redirects` answers them with a 301 first |
-| `/sitemap.xml`, `/_redirects` | Site-level sitemap (the legal pages; `/atlas/sitemap.xml` keeps the Atlas pages, robots.txt names both) and Cloudflare Pages redirects |
+| `/sitemap.xml`, `/_redirects` | Site-level sitemap (the legal pages; `/atlas/sitemap.xml` keeps the Atlas pages, robots.txt names both) and redirects for the legacy Cloudflare Pages fallback |
 | `/atlas/data/snapshot.json` | Open data copy (published fields only) |
 | `/atlas/safety.json` | Link safety report (see "Link safety" below): for every domain linked from published entries, its combined status (`clean` / `flagged` / `no_data`) and the answer of each of the four trust sources (verdict, `checked_at`, evidence link), summary counts, `run_at`; listed in the `/atlas/` Dataset JSON-LD and `/atlas/llms.txt`. Every record in the JSON exports carries `link_safety` {status, checked_at} for its official URL |
 | `/atlas/platforms/<slug>/` of a removed entry | Neutral noindex stub "This entry was removed from the Atlas after a safety check." (no name, no outbound link, not in the sitemap); slugs listed in `atlas/data/removed.json` |
@@ -179,7 +179,7 @@ date. Pages set `og:image` (with `?v=<hash>` so social caches refresh when a car
   (~30 s), later builds copy unchanged ones (<1 s). Same input gives byte-identical files. Change `RENDER_VERSION` to force a re-render.
 - Fonts: Inter if installed, else Liberation Sans / Arial / DejaVu Sans.
 - Without Pillow the build still works and every page falls back to `static/og-atlas.png` (with a warning); `check.py` then fails
-  on purpose, because images are no longer unique per page. The repo-root `requirements.txt` (`Pillow>=10`) covers Cloudflare Pages.
+  on purpose, because images are no longer unique per page. The repo-root `requirements.txt` (`Pillow==13.0.0`) is what CI, the platform deploy and the legacy Pages fallback install.
 
 ## Homepage screenshots (`screens.py`)
 
@@ -192,7 +192,7 @@ branch; it never merges into `main`.
   `<slug>.webp`); otherwise the `atlas-screens` commit pinned in `atlas/screens.lock` (one line, full 40-hex sha; `CW_SCREENS_SHA=<sha>`
   overrides it, `CW_SCREENS_SHA=head` follows the branch head for local work) is fetched by sha (`--depth=1` in shallow clones) and
   `git archive`d into `atlas/site/.screens-cache/branch/` (gitignored), with the public tarball of that commit from codeload.github.com
-  as fallback (Cloudflare Pages only clones the branch it builds). Files with a wrong sha256, size or non-https source are skipped
+  as fallback (a shallow clone such as the legacy Cloudflare Pages build only has the branch it builds). Files with a wrong sha256, size or non-https source are skipped
   with a warning. After a weekly screenshots PR is merged into `atlas-screens`, a PR on `main` bumps `atlas/screens.lock`.
 - Nothing found → the build still succeeds and every card shows a placeholder. CI sets `CW_SCREENS_REQUIRED=1`, which makes that an error.
 - Output: `dist/atlas/screens/<slug>.webp`, `dist/atlas/screens/t/<slug>.webp` (600×250 top band, Pillow, cached by sha256 in
@@ -280,9 +280,14 @@ components. Operator is just "Commonworld"; the pages name no country or locatio
   `snapshot.json` show it.
 - Every page's footer links Privacy and Terms; the cookie banner links `site.privacy_url` (`/privacy/`).
 
-## Deploy to Cloudflare (later)
+## Deploy
 
-Build command `python3 atlas/site/build.py`, output directory `atlas/site/dist`. The build fetches the screenshots itself (the `atlas-screens` commit pinned in `atlas/screens.lock`, via git, else the public tarball of that commit); Pages builds of the `atlas-screens` branch itself fail harmlessly (no build.py there) and can be excluded in the Pages branch settings. The repo-root `requirements.txt` (`Pillow>=10`) makes Cloudflare Pages install Pillow for the OG images. Pages serves `dist/atlas/...` at `/atlas/...`, uses `dist/404.html` for missing pages and applies `dist/_headers`. If `/atlas` is mounted inside a bigger Commonworld site, copy `dist/atlas/` into that site's output and merge `robots.txt` (it only has to contain the `Sitemap:` line for `https://commonworld.one/atlas/sitemap.xml`).
+Since 2026-10-20 the live site is served by the platform Worker: `platform/scripts/build-atlas-assets.mjs --build` runs this
+build and ships `dist/` as the Worker's Static Assets in the same `wrangler deploy` as the platform (Actions → *Deploy
+platform (production)*, see `docs/DEPLOY.md`). The Cloudflare Pages project `commonworld` is kept only as a legacy fallback
+with automatic deployments **off**; the settings below are what it uses if it is ever redeployed by hand.
+
+Pages build command `python3 atlas/site/build.py`, output directory `atlas/site/dist`. The build fetches the screenshots itself (the `atlas-screens` commit pinned in `atlas/screens.lock`, via git, else the public tarball of that commit); Pages builds of the `atlas-screens` branch itself fail harmlessly (no build.py there) and can be excluded in the Pages branch settings. The repo-root `requirements.txt` (`Pillow==13.0.0`) makes Cloudflare Pages install Pillow for the OG images. Pages serves `dist/atlas/...` at `/atlas/...`, uses `dist/404.html` for missing pages and applies `dist/_headers`. If `/atlas` is mounted inside a bigger Commonworld site, copy `dist/atlas/` into that site's output and merge `robots.txt` (it only has to contain the `Sitemap:` line for `https://commonworld.one/atlas/sitemap.xml`).
 
 ### Security headers and CSP
 
