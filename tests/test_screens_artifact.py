@@ -565,5 +565,167 @@ class Artifact(unittest.TestCase):
             self.assertEqual(sa.main(['--artifact', str(self.art), '--base', str(self.root / 'nope')]), 2)
 
 
+    # http_status: None is what screens.py stores when page.goto() timed out but the page rendered (review finding)
+    def test_http_status_none_passes(self):
+        self.manifest['screens']['gamma']['http_status'] = None
+        self.save()
+        self.assertEqual(self.problems(), [])
+        for bad in (True, False, 99, 600, '200', 200.0, [], {}):
+            self.manifest['screens']['gamma']['http_status'] = bad
+            self.save()
+            self.assertProblem('gamma: bad http_status')
+
+    def test_goto_timeout_capture_passes_the_check(self):
+        """The real capture path: shoot() with page.goto() raising a Playwright timeout, the page rendering anyway, the
+        manifest entry built by screens.manifest_record() (http_status None), then the publish check accepts it."""
+        need_decoder(self)
+        import asyncio
+        from PIL import Image
+        spec = importlib.util.spec_from_file_location('atlas_tools_screens', ROOT / 'atlas' / 'tools' / 'screens.py')
+        screens = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(screens)
+        im = Image.new('RGB', (screens.VIEW_W, screens.VIEW_H))
+        im.putdata([((x * 7) % 256, (y * 5) % 256, (x + y) % 256) for y in range(screens.VIEW_H) for x in range(screens.VIEW_W)])
+        buf = io.BytesIO()
+        im.save(buf, 'PNG')
+        png = buf.getvalue()
+
+        class Loc:
+            async def count(self):
+                return 0
+
+        class Keyboard:
+            async def press(self, key):
+                pass
+
+        class Page:
+            url = 'https://gamma.example/'
+            main_frame = None
+            frames = []
+            keyboard = Keyboard()
+
+            def __init__(self):
+                self.main_frame = self
+
+            async def goto(self, url, **kw):
+                raise Exception(f'Timeout {screens.NAV_MS}ms exceeded.')   # what Playwright's TimeoutError says
+
+            async def wait_for_load_state(self, *a, **kw):
+                pass
+
+            async def wait_for_timeout(self, ms):
+                pass
+
+            def get_by_role(self, *a, **kw):
+                return Loc()
+
+            def get_by_text(self, *a, **kw):
+                return Loc()
+
+            def locator(self, *a, **kw):
+                return Loc()
+
+            async def add_style_tag(self, **kw):
+                pass
+
+            async def evaluate(self, js):
+                if js == screens.PLACEHOLDER_JS:
+                    return {'share': 0.0, 'loading_only': False}
+                if 'innerText' in js:
+                    return 'Gamma is a platform for agents. ' * 20
+                return None
+
+            async def title(self):
+                return 'Gamma'
+
+            async def screenshot(self, **kw):
+                return png
+
+        class Ctx:
+            async def route(self, *a):
+                pass
+
+            async def new_page(self):
+                return Page()
+
+            async def close(self):
+                pass
+
+        class Browser:
+            async def new_context(self, **kw):
+                return Ctx()
+
+        rec, data, img = asyncio.run(screens.shoot(Browser(), 'https://gamma.example', {}))
+        self.assertTrue(rec.get('ok'), rec)
+        self.assertIsNone(rec['http_status'])
+        self.assertIn('load event timed out', rec['note'])
+        rec.update(dhash=screens.dhash(img), sha256=hashlib.sha256(data).hexdigest(), bytes=len(data))
+        entry = screens.manifest_record('gamma', rec, 'https://gamma.example')
+        self.assertIsNone(entry['http_status'])
+        self.manifest['screens']['gamma'] = entry
+        self.save()
+        (self.art / 'screens' / 'gamma.webp').write_bytes(data)
+        self.assertEqual(self.problems(), [])
+
+    # screens.md: bounded (stat + capped read), UTF-8, and only a bounded excerpt reaches the PR body (review finding)
+    def test_oversized_summary_fails(self):
+        with open(self.art / 'screens.md', 'r+b') as fh:   # sparse: stat says MAX_SUMMARY_BYTES + 1
+            fh.truncate(sa.MAX_SUMMARY_BYTES + 1)
+        self.assertProblem(f'summary: screens.md cannot be read ({sa.MAX_SUMMARY_BYTES + 1} bytes, over {sa.MAX_SUMMARY_BYTES})')
+        (self.art / 'screens.md').write_bytes(b'x' * sa.MAX_SUMMARY_BYTES)
+        self.assertEqual(self.problems(), [])
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(sa.main(['--artifact', str(self.art), '--base', str(self.base),
+                                      '--summary-out', str(self.root / 'body.md')]), 0)
+        self.assertLess(len((self.root / 'body.md').read_text(encoding='utf-8')), 65_536)
+
+    def test_summary_not_utf8_fails(self):
+        (self.art / 'screens.md').write_bytes(b'## ok\n\xff\xfe')
+        self.assertProblem('summary: screens.md cannot be read')
+
+    def test_summary_excerpt(self):
+        p = self.root / 'screens.md'
+        p.write_text('short ü\n', encoding='utf-8')
+        self.assertEqual(sa.summary_excerpt(p), 'short ü\n')
+        p.write_bytes(b'a' * 9 + 'ü'.encode() + b'tail')       # the cut at 10 bytes falls inside the two-byte ü
+        out = sa.summary_excerpt(p, cap=10)
+        self.assertTrue(out.startswith('a' * 9 + '\n\n_(summary cut at 10 bytes'), out)
+        p.write_bytes(b'b' * sa.PR_SUMMARY_BYTES)
+        self.assertEqual(sa.summary_excerpt(p), 'b' * sa.PR_SUMMARY_BYTES)
+        real_open = open
+        reads = []
+
+        class Spy:                                            # never reads more than cap + 1 bytes
+            def __init__(self, fh):
+                self.fh = fh
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                self.fh.close()
+
+            def read(self, n=-1):
+                reads.append(n)
+                return self.fh.read(n)
+        p.write_bytes(b'c' * (sa.PR_SUMMARY_BYTES * 3))
+        with unittest.mock.patch('builtins.open', lambda *a, **k: Spy(real_open(*a, **k))):
+            out = sa.summary_excerpt(p)
+        self.assertEqual(reads, [sa.PR_SUMMARY_BYTES + 1])
+        self.assertTrue(out.startswith('c' * sa.PR_SUMMARY_BYTES + '\n\n_(summary cut'))
+        self.assertLess(len(out), 65_536)
+
+    def test_summary_out_only_when_ok(self):
+        out = self.root / 'body.md'
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(sa.main(['--artifact', str(self.art), '--base', str(self.base), '--summary-out', str(out)]), 0)
+        self.assertEqual(out.read_text(encoding='utf-8'), 'summary\n')
+        out.unlink()
+        self.manifest['screens']['dealwork-ai'] = None
+        self.save()
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(sa.main(['--artifact', str(self.art), '--base', str(self.base), '--summary-out', str(out)]), 1)
+        self.assertFalse(out.exists())
+
 if __name__ == '__main__':
     unittest.main()

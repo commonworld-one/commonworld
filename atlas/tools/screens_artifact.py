@@ -15,8 +15,9 @@ copied or pushed; every problem is reported (not only the first):
   manifest   a JSON object; top-level keys only screens / note / format / updated_at; `screens` a non-empty object.
              Each entry: slug matches SLUG; the value is an object with exactly the record fields of screens.py (shot_url
              optional), each of the right type: file == "<slug>.webp", sha256 64-hex, dhash 16-hex, website / source_url
-             / shot_url https URLs, http_status an int 100..599 (not a bool), title a string, captured_at
-             YYYY-MM-DDTHH:MM:SSZ, width 1200, height 750, bytes a positive int.
+             / shot_url https URLs, http_status an int 100..599 (not a bool) or null (screens.py stores None when
+             page.goto() timed out but the page still rendered and passed its checks: no response, no status),
+             title a string, captured_at YYYY-MM-DDTHH:MM:SSZ, width 1200, height 750, bytes a positive int.
   images     every <slug>.webp in the artifact is at most MAX_BYTES (stat before opening, bounded read), is a
              structurally valid WebP (webp_problem below, stdlib: RIFF size, chunk walk, VP8 / VP8L / VP8X headers,
              ALPH placement and the VP8X alpha flag, no trailing bytes), then really decodes (decode_problem below:
@@ -31,13 +32,17 @@ copied or pushed; every problem is reported (not only the first):
              manifest disappears; every entry whose image is NOT in the artifact is unchanged from the stored entry, and
              its stored <slug>.webp exists with that sha256 (stat size check against MAX_BYTES first, then a streamed,
              bounded sha256). Without --base every manifest entry needs its image in the artifact.
-  reads      every file this reads (manifests, images, stored images) is size-checked by stat before it is opened and
-             read with a hard cap of MAX_BYTES; anything larger fails closed.
+  summary    screens.md is at most MAX_SUMMARY_BYTES (1 MiB; real summaries are a few KB) and valid UTF-8. The PR body
+             gets only summary_excerpt(): the first PR_SUMMARY_BYTES (60 000) bytes, cut on a character boundary with a
+             note when cut, so it stays under GitHub's 65 536-character PR body limit (--summary-out writes it).
+  reads      every file this reads (manifests, images, stored images, screens.md) is size-checked by stat before it is
+             opened and read with a hard cap (MAX_BYTES, MAX_SUMMARY_BYTES for screens.md); anything larger fails closed.
 
 atlas/site/screens.py (the build-side reader) skips bad records one by one; this check stops a bad artifact before it
 reaches atlas-screens at all, e.g. {"screens": {"dealwork-ai": null}}, which would crash the reader.
 
-Usage: screens_artifact.py --artifact DIR [--base DIR] [--data DIR]     exit 0 ok, 1 problems found, 2 usage
+Usage: screens_artifact.py --artifact DIR [--base DIR] [--data DIR] [--summary-out FILE]
+       exit 0 ok, 1 problems found, 2 usage; FILE (the bounded PR body excerpt of screens.md) is written only when ok
 """
 import argparse, glob, hashlib, io, json, os, re, stat, struct, sys, warnings
 
@@ -52,6 +57,8 @@ REQUIRED = {'file', 'sha256', 'dhash', 'website', 'source_url', 'http_status', '
             'height', 'bytes'}
 OPTIONAL = {'shot_url'}
 MAX_BYTES = 8 * 1024 * 1024        # real screens are 5..210 KB
+MAX_SUMMARY_BYTES = 1024 * 1024    # screens.md; real summaries are a few KB (GitHub's step summary limit is 1 MiB too)
+PR_SUMMARY_BYTES = 60_000          # of screens.md in the PR body (GitHub caps a PR body at 65 536 characters)
 MAX_DIM = 4096                     # per side; real screens are 1200x750 (the WebP format allows up to 16383 / 2^24)
 MAX_PIXELS = MAX_DIM * MAX_DIM     # Pillow's Image.MAX_IMAGE_PIXELS while decoding (DecompressionBombWarning = error)
 MAX_FRAMES = 100                   # animated WebP frames decoded at most (real screens are stills)
@@ -374,7 +381,7 @@ def record_problems(slug, r):
         'website': _https,
         'source_url': _https,
         'shot_url': _https,
-        'http_status': lambda v: _int(v) and 100 <= v <= 599,
+        'http_status': lambda v: v is None or (_int(v) and 100 <= v <= 599),   # None: goto() timed out (screens.py)
         'title': lambda v: isinstance(v, str),
         'captured_at': lambda v: isinstance(v, str) and ISO_UTC.fullmatch(v),
         'width': lambda v: _int(v) and v == SHOT_W,
@@ -406,6 +413,29 @@ def _load_json(path, label, out):
         return None
 
 
+def summary_problems(path):
+    """-> [problem] for screens.md: a regular file of at most MAX_SUMMARY_BYTES (stat before opening, bounded read)
+    holding valid UTF-8."""
+    try:
+        if not stat.S_ISREG(os.lstat(path).st_mode):
+            return []                       # reported by the layout check
+        read_capped(path, MAX_SUMMARY_BYTES).decode('utf-8')
+    except (OSError, ValueError) as ex:    # UnicodeDecodeError is a ValueError
+        return [f'summary: screens.md cannot be read ({ex})'[:300]]
+    return []
+
+
+def summary_excerpt(path, cap=PR_SUMMARY_BYTES):
+    """-> the text of screens.md for the PR body: at most `cap` bytes of it (bounded read, never the whole file), cut on
+    a UTF-8 character boundary, plus a one-line note when it was cut. Call it after check() passed."""
+    with open(path, 'rb') as fh:
+        b = fh.read(cap + 1)
+    if len(b) <= cap:
+        return b.decode('utf-8')
+    return (b[:cap].decode('utf-8', errors='ignore') +
+            f'\n\n_(summary cut at {cap} bytes; the full summary is in the capture job summary of this run)_\n')
+
+
 def check(artifact, base=None, cards=None):
     """-> [problem] for the artifact directory; empty = ok. `base`: stored atlas/screens directory or None;
     `cards`: {slug: canonical_url} of live cards or None."""
@@ -424,6 +454,8 @@ def check(artifact, base=None, cards=None):
         out.append(f'layout: unexpected {name!r} at the top of the artifact')
     if 'screens.md' not in top:
         out.append('layout: screens.md missing')
+    else:
+        out += summary_problems(os.path.join(artifact, 'screens.md'))
     sdir = os.path.join(artifact, 'screens')
     if not os.path.isdir(sdir) or os.path.islink(sdir):
         out.append('layout: screens/ missing')
@@ -587,6 +619,7 @@ def main(argv=None):
     ap.add_argument('--artifact', required=True, help='downloaded screens-publish artifact (holds screens.md, screens/)')
     ap.add_argument('--base', help='atlas/screens directory of the atlas-screens checkout the PR targets')
     ap.add_argument('--data', help='atlas/data directory of main (live cards from the newest snapshot-verified-*.json)')
+    ap.add_argument('--summary-out', help='write the bounded PR body excerpt of screens.md here (only when the check passes)')
     a = ap.parse_args(argv)
     cards = None
     if a.data:
@@ -605,6 +638,9 @@ def main(argv=None):
     if problems:
         print(f'{len(problems)} problem(s): nothing is published')
         return 1
+    if a.summary_out:
+        with open(a.summary_out, 'w', encoding='utf-8') as fh:
+            fh.write(summary_excerpt(os.path.join(a.artifact, 'screens.md')))
     print('screens artifact ok')
     return 0
 

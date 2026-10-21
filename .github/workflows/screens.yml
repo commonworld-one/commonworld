@@ -13,8 +13,8 @@ name: Atlas weekly screenshots
 #            artifact and checks it with atlas/tools/screens_artifact.py from this workflow's own commit (only
 #            screens.md, manifest.json and <slug>.webp; manifest mandatory, every entry an object with the expected
 #            fields, every image referenced with its sha256 and really decoded by a hash-pinned Pillow, every new
-#            image a live card, stored entries unchanged, every read capped at 8 MiB),
-#            copies it into an atlas-screens checkout, pushes a screens/<date> branch and opens the PR against
+#            image a live card, stored entries unchanged, every read capped at 8 MiB, screens.md at 1 MiB and only
+#            its first 60 000 bytes go into the PR body), copies it into an atlas-screens checkout, pushes a screens/<date> branch and opens the PR against
 #            atlas-screens. atlas-screens itself is never pushed to or deleted here.
 on:
   schedule:
@@ -139,12 +139,14 @@ jobs:
         # the expected fields and types; every image a WebP that the manifest references with its sha256 and size;
         # every new image a live Atlas card; stored entries without a new image unchanged. Every image is also really
         # decoded (Pillow) to 1200x750; CW_WEBP_DECODE_REQUIRED=1 makes a missing Pillow a failure, never a skip.
-        # Every read is bounded (8 MiB). Fails before anything is copied.
+        # Every read is bounded (8 MiB; screens.md 1 MiB and valid UTF-8). Fails before anything is copied. The PR body
+        # gets only the bounded excerpt it writes (--summary-out: first 60 000 bytes of screens.md, never the whole file).
         env:
           CW_WEBP_DECODE_REQUIRED: '1'
         run: |
           python main/atlas/tools/screens_artifact.py --artifact "$RUNNER_TEMP/publish" \
-            --base "$GITHUB_WORKSPACE/shots/atlas/screens" --data "$GITHUB_WORKSPACE/main/atlas/data"
+            --base "$GITHUB_WORKSPACE/shots/atlas/screens" --data "$GITHUB_WORKSPACE/main/atlas/data" \
+            --summary-out "$RUNNER_TEMP/summary.md"
       - name: Open PR against atlas-screens
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -163,7 +165,7 @@ jobs:
           git add atlas/screens
           git commit -q -m "Atlas screenshots $(date -u +%F)" -m "Automated by .github/workflows/screens.yml (atlas/tools/screens.py). Compare every new image with the stored one before merging."
           git push origin "HEAD:refs/heads/$branch"
-          { cat "$RUNNER_TEMP/publish/screens.md"; echo; echo "Old|new previews: artifact **screens-review** of run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          { cat "$RUNNER_TEMP/summary.md"; echo; echo "Old|new previews: artifact **screens-review** of run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
             echo; echo "After merging: open a PR on main that sets \`atlas/screens.lock\` to the new atlas-screens commit, or the site keeps the old images."; } > "$RUNNER_TEMP/body.md"
           url=$(gh pr create --repo "$GITHUB_REPOSITORY" --base atlas-screens --head "$branch" --title "Atlas screenshots $(date -u +%F)" \
                 --body-file "$RUNNER_TEMP/body.md" --label atlas-screens)

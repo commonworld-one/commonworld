@@ -33,6 +33,14 @@ Not deployed yet. Built on branch `platform/ci-hardening` (findings from a Codex
   new image a live Atlas card whose `website` is the card's URL, stored entries without a new image unchanged and never
   removed. Then it opens the PR against `atlas-screens` as before. The branch `atlas-screens` itself is never pushed to
   or deleted. Tests: `tests/test_screens_netguard.py`, `tests/test_screens_artifact.py`.
+- Screens artifact check, two review fixes. A manifest entry may carry `http_status: null`: `screens.py` stores `None`
+  when `page.goto()` timed out but the page still rendered and passed its checks, and the strict check used to reject
+  that record and stop the whole publish (an int must still be 100..599, never a bool); the entry is now built by
+  `screens.manifest_record()` and a test drives `shoot()` through the timeout path into the check. `screens.md` is now
+  bounded too: size-checked by `stat` and read with a hard cap of 1 MiB, valid UTF-8, else the publish fails closed;
+  the publish job no longer `cat`s the untrusted file into the PR body but only the excerpt that
+  `screens_artifact.py --summary-out` writes after a passing check (first 60 000 bytes, cut on a character boundary
+  with a note, under GitHub's 65 536-character PR body limit).
 - Migration gate (`scripts/check-migrations.py`): `BASELINE` grandfathers the three historical migrations that cannot
   pass the gate (`0008` backfill `UPDATE`, `0009` and `0018` table rebuilds), each pinned by sha256, so a database
   rebuilt from empty (first production deploy) passes with `allow_destructive_migration` empty. Each entry also writes

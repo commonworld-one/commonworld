@@ -466,6 +466,18 @@ async def shoot(browser, url, o):
         await ctx.close()
 
 
+def manifest_record(slug, rec, website, shot_url=None):
+    """-> the manifest.json entry stored for an accepted capture `rec` (checked again by atlas/tools/screens_artifact.py
+    in the publish job). http_status is None when page.goto() timed out but the page still rendered and passed
+    classify(): there was no navigation response to read a status from."""
+    new = {'file': f'{slug}.webp', 'sha256': rec['sha256'], 'dhash': rec['dhash'], 'website': website,
+           'source_url': rec['final_url'], 'http_status': rec['http_status'], 'title': rec['title'],
+           'captured_at': rec['captured_at'], 'width': SHOT_W, 'height': SHOT_H, 'bytes': rec['bytes']}
+    if shot_url:
+        new['shot_url'] = shot_url
+    return new
+
+
 def side_by_side(old_path, new_img, out_path):
     from PIL import Image, ImageDraw
     old = Image.open(old_path).convert('RGB') if old_path and os.path.exists(old_path) else Image.new('RGB', (SHOT_W, SHOT_H), 'white')
@@ -551,12 +563,7 @@ async def run(a):
                     side_by_side(os.path.join(a.screens_dir, old['file']), img, os.path.join(a.review_dir, f'{slug}.png'))
                 with open(os.path.join(a.screens_dir, f'{slug}.webp'), 'wb') as f:
                     f.write(webp)
-                new = {'file': f'{slug}.webp', 'sha256': rec['sha256'], 'dhash': rec['dhash'], 'website': cards[slug],
-                       'source_url': rec['final_url'], 'http_status': rec['http_status'], 'title': rec['title'],
-                       'captured_at': rec['captured_at'], 'width': SHOT_W, 'height': SHOT_H, 'bytes': rec['bytes']}
-                if o.get('shot_url'):
-                    new['shot_url'] = o['shot_url']
-                screens[slug] = new
+                screens[slug] = manifest_record(slug, rec, cards[slug], o.get('shot_url'))
             elif a.review_dir and img is not None and not rec.get('ok'):
                 img.convert('RGB').resize((600, 375)).save(os.path.join(a.review_dir, f'{slug}.rejected.webp'), 'WEBP', quality=40)
             results[slug] = rec
