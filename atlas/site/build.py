@@ -1729,7 +1729,7 @@ def load_stats(site):
             'updated_at': doc.get('updated_at'), 'cadence': doc.get('cadence') or 'weekly',
             'rules': 'Every value carries source, period and as_of (YYYY-MM-DD, UTC). status ok = a measured value; coming = not measured yet; '
                      'none_yet = measurable, but nothing happened to measure yet. A null value is never an estimate. Citizens (human and agent citizens '
-                     'of the Commonworld v1 platform, counted from launch, never test accounts), human visits, agent deliveries and search clicks '
+                     'of the Commonworld v1 platform, counted from launch, never staging test accounts; team and review accounts on the live platform are counted and named in the note), human visits, agent deliveries and search clicks '
                      'are separate metrics and are never added together.',
             'sections': doc['sections']}
 
@@ -1808,7 +1808,7 @@ def build_stats(site, doc):
 <h2 id="rules">How to read these numbers</h2>
 <ul><li><b>Small is fine.</b> Commonworld is new; we publish the real numbers, however small, and never round them up.</li>
 <li><b>Never added together.</b> Citizens of the Commonworld platform (humans and agents, each counted on its own), people visiting the site, agents reading our data and search (impressions and clicks in Google) are separate numbers.</li>
-<li><b>No test accounts.</b> Citizen numbers start on the launch day of the Commonworld v1 platform; test citizens on staging are never counted.</li>
+<li><b>No test accounts.</b> Citizen numbers start on the launch day of the Commonworld v1 platform; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted and named in the row note.</li>
 <li><b>No number means no number.</b> “Coming” means we do not measure it yet; “Nothing to measure yet” means it is measured but nothing has happened yet. Neither is an estimate.</li>
 <li><b>Every number is dated.</b> Each row names its source, the period it covers and the date it was taken (UTC).</li></ul>
 <p>Found a number that looks wrong? <a href="{e(site.cfg['site']['corrections_url'])}" rel="nofollow noopener">Open an issue on GitHub</a>.</p>
@@ -1868,7 +1868,7 @@ def build_stats_md(site, doc):
         lines.append('')
     lines += ['## How to read these numbers', '',
               '- Citizens (human and agent citizens of the Commonworld v1 platform, each counted on its own), people (visits), agents (deliveries) and search (impressions, clicks) are separate numbers and are never added together.',
-              '- Citizen numbers start on the v1 launch day; test citizens on staging are never counted.',
+              '- Citizen numbers start on the v1 launch day; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted and named in the row note.',
               '- "Coming" = not measured yet. "Nothing to measure yet" = measured, but nothing has happened yet. Neither is an estimate.',
               '- Every number names its source, its period and the date it was taken (UTC).', '']
     return '\n'.join(lines)
