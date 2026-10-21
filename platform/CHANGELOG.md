@@ -3,6 +3,24 @@
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
 
+## 2026-10-21 — CI hardening: screens capture isolation, migration baseline, Pillow 13
+
+Not deployed yet. Built on branch `platform/ci-hardening` (findings from a Codex audit).
+
+- `screens.yml` split into two jobs. `capture` runs the browser with a read-only token that is not kept in the git
+  config (`persist-credentials: false`), no secrets, and the new network guard in `atlas/tools/screens.py` (capture
+  rule 7): a local forward proxy that resolves every host and refuses private, loopback, link-local, CGNAT
+  (100.64/10), cloud metadata and other non-global addresses (IPv4 and IPv6, IPv4-mapped forms too), redirects,
+  iframes and subresources included, and connects to the address it checked. `publish` (contents / pull-requests /
+  issues write) runs no browser and no repository code: it downloads the changed images, checks the artifact holds only
+  `<slug>.webp` files and `manifest.json`, and opens the PR against `atlas-screens` as before. The branch
+  `atlas-screens` itself is never pushed to or deleted. Tests: `tests/test_screens_netguard.py`.
+- Migration gate (`scripts/check-migrations.py`): `BASELINE` grandfathers the three historical migrations that cannot
+  pass the gate (`0008` backfill `UPDATE`, `0009` and `0018` table rebuilds), each pinned by sha256, so a database
+  rebuilt from empty (first production deploy) passes with `allow_destructive_migration` empty. New migrations and any
+  edited baseline file keep the full rule. Runbook: `docs/DEPLOY.md` "Rebuild from an empty database".
+- Pillow 12.3.0 → 13.0.0 (`requirements.txt`).
+
 ## 2026-10-21 — Small tails 2: well-known MCP manifest, strict nonce stamping, head-escape tests, tag pill target size
 
 Not deployed yet. Built on branch `platform/small-tails-2`.
