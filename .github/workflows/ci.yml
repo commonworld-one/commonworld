@@ -48,11 +48,17 @@ jobs:
       - name: Install CI-only tools (standard JSON Schema validator)
         run: |
           python -m pip install --only-binary=:all: -r requirements-ci.txt
-      - name: Unit tests (refresh security, link safety, migration gate, screens lock, screenshot capture)
+      - name: Fetch the migration baseline anchor commit
+        # tests/test_check_migrations.py compares the historical migrations 0008, 0009, 0018 with their content at the
+        # commit that added them (BASELINE_ANCHOR_COMMIT there); the checkout is shallow, so fetch just that commit
+        run: git fetch --depth=1 --no-tags origin 6803510fad7d186c59d7e922259876f1892edca0
+      - name: Unit tests (refresh security, link safety, migration gate, screens lock, screenshot capture, screens artifact)
         # after Install: the screenshot-capture image tests need Pillow (requirements.txt); CW_REQUIRE_PIL=1 makes
-        # them fail instead of skip if it is ever missing
+        # them fail instead of skip if it is ever missing; CW_REQUIRE_MIGRATION_ANCHOR=1 does the same for the
+        # migration baseline anchor commit
         env:
           CW_REQUIRE_PIL: '1'
+          CW_REQUIRE_MIGRATION_ANCHOR: '1'
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Fetch homepage screenshots (atlas-screens commit pinned in atlas/screens.lock)
         # images live only on the orphan branch atlas-screens; the build uses exactly the commit in the lock

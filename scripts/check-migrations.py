@@ -42,9 +42,12 @@ Baseline (grandfathered history): BASELINE below names historical migrations tha
 and production before this gate existed and that cannot pass it (0008 backfills rows without an owner marker, 0009 and
 0018 rebuild a table). Each entry is pinned by the sha256 of the file (CRLF read as LF). A pending baseline file whose
 content still matches is reported as a notice and does not block, so rebuilding a database from empty (every
-migration pending, docs/DEPLOY.md "Rebuild from an empty database") passes with the override left empty. A baseline
-file whose content changed is checked like any other file, and every file not in BASELINE (every new migration) gets
-the full rule. The list is closed: tests/test_check_migrations.py fails if an entry is added, removed or re-pinned.
+migration pending, docs/DEPLOY.md "Rebuild from an empty database") passes with the override left empty. Each entry
+also lists every finding of the file written out in full; a file is grandfathered only when its sha256 AND its findings
+match, so an edited file with a re-pinned sha256 that adds a statement (DROP TABLE posts) still gets the full rule. A
+baseline file whose content changed is checked like any other file, and every file not in BASELINE (every new
+migration) gets the full rule. The list is closed: tests/test_check_migrations.py pins names, sha256 and findings again
+as independent literals and compares each file with its content at the commit that added it.
 
 Usage:
     check-migrations.py --dir platform/migrations --pending-from wrangler-list.txt [--sha SHA --allow SHA]
@@ -64,10 +67,50 @@ OWNER_MARKER = re.compile(r'--[ \t]*reviewed-by-owner:[ \t]*#?([1-9][0-9]*)[ \t]
 
 # Historical migrations, applied before the gate existed (see "Baseline" above). Never add a new migration here: a new
 # migration that needs a finding passes with the owner marker and the one-release override instead.
+# Each entry pins the file twice: 'sha256' of its content, and 'findings', every finding of the file written out in
+# full ('<class>: <rule> | <statement>', in file order). A file is grandfathered only when both match, so editing a
+# historical file and re-pinning its sha256 is not enough: any new statement with a finding (DROP TABLE posts, a wider
+# UPDATE) is not in 'findings' and keeps the full rule. tests/test_check_migrations.py pins both again as independent
+# literals, plus the content of each file at the commit that added it.
 BASELINE = {
-    '0008_section_groups.sql': 'adad2dd1470cf6927049005b292204240f5697b819a87f97aef91b2552859589',   # row-write: UPDATE sections
-    '0009_free_tags.sql': '34c3339da21b904ef65d7e571a9bfe1e87c9ef52c0817c044b7d06ff071d0aae',        # rebuild of tags
-    '0018_ai_bot_verified.sql': 'f75d1fa9febecfb099bd1733b6e8882746b93e7749b28da5de8c292167d10c68',  # rebuild of ai_bot_visits
+    '0008_section_groups.sql': {   # row-write: backfill of sections.group_slug / position
+        'sha256': 'adad2dd1470cf6927049005b292204240f5697b819a87f97aef91b2552859589',
+        'findings': (
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'agents-ai' , position = 110 WHERE slug = 'agents-identity'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'agents-ai' , position = 120 WHERE slug = 'ai-models-systems'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'building' , position = 210 WHERE slug = 'protocol'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'building' , position = 220 WHERE slug = 'infrastructure-tools'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'building' , position = 230 WHERE slug = 'products-applications'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'building' , position = 240 WHERE slug = 'design-experience'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'knowledge' , position = 310 WHERE slug = 'research-experiments'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'knowledge' , position = 320 WHERE slug = 'science-discovery'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'knowledge' , position = 330 WHERE slug = 'education-learning'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'knowledge' , position = 340 WHERE slug = 'collective-memory'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'work-economy' , position = 410 WHERE slug = 'work-organizations'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'work-economy' , position = 420 WHERE slug = 'payments-digital-economy'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'work-economy' , position = 430 WHERE slug = 'funding-grants'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'world' , position = 510 WHERE slug = 'society-governance'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'world' , position = 520 WHERE slug = 'robotics-embodied-ai'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'culture-life' , position = 610 WHERE slug = 'creative-work-media'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'commonworld' , position = 710 WHERE slug = 'building-together'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'service' , position = 810 WHERE slug = 'general'",
+            "row-write: UPDATE | UPDATE sections SET group_slug = 'service' , position = 820 WHERE slug = 'needs-a-topic'",
+        ),
+    },
+    '0009_free_tags.sql': {   # rebuild of tags
+        'sha256': '34c3339da21b904ef65d7e571a9bfe1e87c9ef52c0817c044b7d06ff071d0aae',
+        'findings': (
+            'destructive: DROP TABLE | DROP TABLE tags',
+            'destructive: ALTER TABLE ... RENAME | ALTER TABLE tags_new RENAME TO tags',
+        ),
+    },
+    '0018_ai_bot_verified.sql': {   # rebuild of ai_bot_visits
+        'sha256': 'f75d1fa9febecfb099bd1733b6e8882746b93e7749b28da5de8c292167d10c68',
+        'findings': (
+            'destructive: DROP TABLE | DROP TABLE ai_bot_visits',
+            'destructive: ALTER TABLE ... RENAME | ALTER TABLE ai_bot_visits_v2 RENAME TO ai_bot_visits',
+        ),
+    },
 }
 
 
@@ -75,9 +118,28 @@ def content_sha(text):
     return hashlib.sha256(text.replace('\r\n', '\n').encode('utf-8')).hexdigest()
 
 
+def baseline_findings(text):
+    """Every finding of a file in the BASELINE 'findings' form: '<class>: <rule> | <full statement>', in file order."""
+    return tuple(f'{rule} | {st}' for rule, st in findings(text, limit=None))
+
+
+def baseline_status(name, text):
+    """-> None (not a BASELINE file), 'ok' (grandfathered), 'sha256' (content differs from the pin) or 'findings'
+    (content matches the sha256 pin but the findings are not exactly the written-out list)."""
+    entry = BASELINE.get(name)
+    if entry is None:
+        return None
+    if content_sha(text) != entry['sha256']:
+        return 'sha256'
+    if baseline_findings(text) != tuple(entry['findings']):
+        return 'findings'
+    return 'ok'
+
+
 def baselined(name, text):
-    """True when `name` is a BASELINE file and its content is exactly the pinned one."""
-    return BASELINE.get(name) == content_sha(text)
+    """True when `name` is a BASELINE file, its content is exactly the pinned one and its findings are exactly the
+    written-out list."""
+    return baseline_status(name, text) == 'ok'
 
 
 class SqlError(Exception):
@@ -379,16 +441,17 @@ def _trigger_body(st):
     return res
 
 
-def findings(text):
-    """-> [(rule, statement)] for one migration file's SQL; rule is '<class>: <what>'."""
+def findings(text, limit=200):
+    """-> [(rule, statement)] for one migration file's SQL; rule is '<class>: <what>'; statement cut to `limit` chars
+    (None = whole statement)."""
     try:
         sts = split_statements(tokenize(text))
     except SqlError as ex:
-        return [(f'{UNKNOWN}: cannot read the SQL ({ex})', text.strip()[:200])]
+        return [(f'{UNKNOWN}: cannot read the SQL ({ex})', text.strip()[:limit] if limit else text.strip())]
     res = []
     for st in sts:
         for cls, rule in classify(st):
-            res.append((f'{cls}: {rule}', show(st)))
+            res.append((f'{cls}: {rule}', show(st, limit)))
     return res
 
 
@@ -517,13 +580,17 @@ def main(argv=None):
         except (OSError, UnicodeDecodeError) as ex:
             print(f'::error::cannot read {a.dir}/{f}: {ex}'); return 2
         found = findings(text)
-        if found and baselined(f, text):
-            print(f'::notice file={a.dir}/{f}::baseline: historical migration (pinned by sha256 in BASELINE), '
+        status = baseline_status(f, text)
+        if found and status == 'ok':
+            print(f'::notice file={a.dir}/{f}::baseline: historical migration (sha256 and findings pinned in BASELINE), '
                   f'{len(found)} finding(s) not blocking: ' + '; '.join(sorted({r for r, _ in found})))
             continue
-        if f in BASELINE:
+        if status == 'sha256':
             print(f'::warning file={a.dir}/{f}::baseline file changed (sha256 differs from BASELINE): checked like a '
                   'new migration. Historical migrations must not be edited; add a new migration instead.')
+        elif status == 'findings':
+            print(f'::warning file={a.dir}/{f}::baseline findings differ (the file has findings that are not written out '
+                  'in BASELINE): checked like a new migration. Historical migrations must not be edited.')
         for rule, st in found:
             hits.append((f, rule, st))
         if any(rule.startswith(ROW_WRITE + ':') for rule, _ in found) and owner_marker(text) is None:

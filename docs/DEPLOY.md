@@ -145,10 +145,12 @@ database is used by the code that is running now. Rules:
 - **Baseline (historical migrations).** `0008_section_groups.sql` (backfills `sections` with `UPDATE`, written before
   the owner marker existed), `0009_free_tags.sql` and `0018_ai_bot_verified.sql` (table rebuilds: `DROP TABLE` +
   `RENAME`) were applied to staging before the gate existed. They are listed in `BASELINE` in
-  `scripts/check-migrations.py`, each pinned by the sha256 of the file: while pending they are reported as a notice and
-  do not block, so a database rebuilt from empty passes with the override left empty. If one of these files is edited
-  it loses the baseline and is checked like a new migration. Every other file, and every new migration, gets the full
-  rule above. Never add a new migration to `BASELINE` (the unit tests pin the list); never edit the historical files.
+  `scripts/check-migrations.py`, each pinned by the sha256 of the file and by the full list of its findings: while
+  pending they are reported as a notice and do not block, so a database rebuilt from empty passes with the override
+  left empty. If one of these files is edited it loses the baseline and is checked like a new migration, even when its
+  sha256 is re-pinned (a new statement is not in the written-out findings). Every other file, and every new migration,
+  gets the full rule above. Never add a new migration to `BASELINE`; never edit the historical files. The unit tests pin
+  the list, the hashes and the findings independently and compare each file with its content at commit `6803510`.
 
 The scanner runs in CI too (report only), and its unit tests are `tests/test_check_migrations.py`.
 
