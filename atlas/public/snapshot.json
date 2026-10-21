@@ -30991,6 +30991,23 @@
      "outcome": "supported"
     },
     {
+     "kind": "protocol",
+     "statement": "Hedera Agent Kit plugin: the npm package hak-voicescape-plugin (latest 0.2.0, published 2026-10-20 by npm maintainer voicescapee, Apache-2.0) declares @hashgraph/hedera-agent-kit ^4.1.0 as a peer dependency, imports TOOL_TYPE from it and exports a plugin object \"voicescape-plugin\" with 16 tools; its only network call is JSON-RPC to the hosted MCP server https://voicescape.vercel.app/api/mcp, with no key or signing code. Source repo https://github.com/VoiceScapee/hak-voicescape-plugin (same GitHub owner as VoiceScapee/voicescape, package.json name and version match; the npm package itself has no repository field).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://registry.npmjs.org/hak-voicescape-plugin",
+     "quote": "\"description\": \"Hedera Agent Kit plugin for Voicescape ...\", \"peerDependencies\": {\"@hashgraph/hedera-agent-kit\": \"^4.1.0\"}",
+     "observed_at": "2026-10-21T14:23:00Z",
+     "methods": [
+      "GET https://registry.npmjs.org/hak-voicescape-plugin (dist-tags latest 0.2.0; versions 0.0.0-stage, 0.1.0, 0.2.0, all 2026-10-20; maintainer voicescapee; license Apache-2.0)",
+      "GET https://registry.npmjs.org/hak-voicescape-plugin/-/hak-voicescape-plugin-0.2.0.tgz, read dist/index.js (import { TOOL_TYPE } from \"@hashgraph/hedera-agent-kit\"; voicescapePlugin name \"voicescape-plugin\" version \"0.2.0\", 16 tools; DEFAULT_VOICESCAPE_MCP_URL https://voicescape.vercel.app/api/mcp; no private-key or signing calls)",
+      "GET https://api.github.com/repos/VoiceScapee/hak-voicescape-plugin (created 2026-10-20, Apache-2.0) and https://raw.githubusercontent.com/VoiceScapee/hak-voicescape-plugin/main/package.json (name hak-voicescape-plugin, version 0.2.0, same peer dependency)"
+     ],
+     "outcome": "supported"
+    },
+    {
      "kind": "economic_flow",
      "statement": "On-chain tips through the Tips contract 0.0.10854060 (Hedera mainnet), all time to the observation: 36 TipSent events totalling 101.45 HBAR, each with a 2% treasury share (2.03 HBAR in total; FEE_BPS() returns 200); sample transaction 0.0.10857765-1791392660-795070622 moves 0.098 HBAR to the page owner and 0.002 HBAR to treasury 0.0.10424063 in the same transaction. Tips ran 2026-09-12 to 2026-10-07 (UTC) from 7 payer accounts, all of which own registered pages; 18 tips (70.15 HBAR) were paid by the treasury account itself, 16 of them to its own page user-10424063. Separately, 3 marketplace purchases (0.38 HBAR).",
      "value": 101.45,

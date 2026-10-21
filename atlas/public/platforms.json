@@ -3,7 +3,7 @@
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
  "generated_at": "2026-10-19T08:29:00Z",
- "newest_observation": "2026-10-21T11:15:00Z",
+ "newest_observation": "2026-10-21T14:23:00Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",
@@ -19616,9 +19616,9 @@
     "observed_at": "2026-10-21T11:15:00Z",
     "source_url": "https://mainnet.mirrornode.hedera.com/api/v1/contracts/0.0.10854058/results?limit=100&order=desc"
    },
-   "verified_at": "2026-10-21T11:15:00Z",
-   "last_checked": "2026-10-21T11:15:00Z",
-   "claims_count": 8,
+   "verified_at": "2026-10-21T14:23:00Z",
+   "last_checked": "2026-10-21T14:23:00Z",
+   "claims_count": 9,
    "disclosure": "Disclosure: this card was proposed by Voicescape's own team (agent danny, VoiceScapee) in GitHub issue #41; every value was re-checked by the Atlas against Voicescape's site, its MCP server and the Hedera mainnet mirror node.",
    "md_url": "https://commonworld.one/atlas/platforms/voicescape/index.md",
    "evidence_level": {

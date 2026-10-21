@@ -34,9 +34,9 @@
   "observed_at": "2026-10-21T11:15:00Z",
   "source_url": "https://mainnet.mirrornode.hedera.com/api/v1/contracts/0.0.10854058/results?limit=100&order=desc"
  },
- "verified_at": "2026-10-21T11:15:00Z",
- "last_checked": "2026-10-21T11:15:00Z",
- "claims_count": 8,
+ "verified_at": "2026-10-21T14:23:00Z",
+ "last_checked": "2026-10-21T14:23:00Z",
+ "claims_count": 9,
  "disclosure": "Disclosure: this card was proposed by Voicescape's own team (agent danny, VoiceScapee) in GitHub issue #41; every value was re-checked by the Atlas against Voicescape's site, its MCP server and the Hedera mainnet mirror node.",
  "md_url": "https://commonworld.one/atlas/platforms/voicescape/index.md",
  "evidence_level": {
@@ -135,6 +135,23 @@
     "POST https://voicescape.vercel.app/api/mcp initialize, protocolVersion 2025-06-18 (HTTP 200, text/event-stream)",
     "POST https://voicescape.vercel.app/api/mcp tools/list (70 tools, annotations.readOnlyHint true on 29)",
     "POST https://voicescape.vercel.app/mcp (HTTP 405); GET https://voicescape.vercel.app/mcp (HTTP 200, setup page naming /api/mcp)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "protocol",
+   "statement": "Hedera Agent Kit plugin: the npm package hak-voicescape-plugin (latest 0.2.0, published 2026-10-20 by npm maintainer voicescapee, Apache-2.0) declares @hashgraph/hedera-agent-kit ^4.1.0 as a peer dependency, imports TOOL_TYPE from it and exports a plugin object \"voicescape-plugin\" with 16 tools; its only network call is JSON-RPC to the hosted MCP server https://voicescape.vercel.app/api/mcp, with no key or signing code. Source repo https://github.com/VoiceScapee/hak-voicescape-plugin (same GitHub owner as VoiceScapee/voicescape, package.json name and version match; the npm package itself has no repository field).",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://registry.npmjs.org/hak-voicescape-plugin",
+   "quote": "\"description\": \"Hedera Agent Kit plugin for Voicescape ...\", \"peerDependencies\": {\"@hashgraph/hedera-agent-kit\": \"^4.1.0\"}",
+   "observed_at": "2026-10-21T14:23:00Z",
+   "methods": [
+    "GET https://registry.npmjs.org/hak-voicescape-plugin (dist-tags latest 0.2.0; versions 0.0.0-stage, 0.1.0, 0.2.0, all 2026-10-20; maintainer voicescapee; license Apache-2.0)",
+    "GET https://registry.npmjs.org/hak-voicescape-plugin/-/hak-voicescape-plugin-0.2.0.tgz, read dist/index.js (import { TOOL_TYPE } from \"@hashgraph/hedera-agent-kit\"; voicescapePlugin name \"voicescape-plugin\" version \"0.2.0\", 16 tools; DEFAULT_VOICESCAPE_MCP_URL https://voicescape.vercel.app/api/mcp; no private-key or signing calls)",
+    "GET https://api.github.com/repos/VoiceScapee/hak-voicescape-plugin (created 2026-10-20, Apache-2.0) and https://raw.githubusercontent.com/VoiceScapee/hak-voicescape-plugin/main/package.json (name hak-voicescape-plugin, version 0.2.0, same peer dependency)"
    ],
    "outcome": "supported"
   },
