@@ -10,9 +10,11 @@ name: Atlas weekly screenshots
 #            refuses private, loopback, link-local, CGNAT and metadata addresses, redirects included. Its output is
 #            the changed files of atlas/screens/ plus the summary, uploaded as an artifact.
 #   publish  contents/pull-requests/issues write; never runs a browser or any code from the capture. It downloads the
-#            artifact, checks it holds only <slug>.webp files and manifest.json, copies them into a fresh atlas-screens
-#            checkout, pushes a screens/<date> branch and opens the PR against atlas-screens. atlas-screens itself is
-#            never pushed to or deleted here.
+#            artifact and checks it with atlas/tools/screens_artifact.py from this workflow's own commit (only
+#            screens.md, manifest.json and <slug>.webp; manifest mandatory, every entry an object with the expected
+#            fields, every image referenced with its sha256, every new image a live card, stored entries unchanged),
+#            copies it into an atlas-screens checkout, pushes a screens/<date> branch and opens the PR against
+#            atlas-screens. atlas-screens itself is never pushed to or deleted here.
 on:
   schedule:
     - cron: '0 4 * * 0'   # Sundays 04:00 UTC, after the weekly data refresh
@@ -102,39 +104,45 @@ jobs:
       contents: write
       pull-requests: write
       issues: write            # create the atlas-screens label
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      # no checkout of main and no code from the capture runs here: only git, gh and the checks below
+      # no code from the capture runs here: the artifact is only read as data by atlas/tools/screens_artifact.py from
+      # this workflow's own commit (sparse checkout of main, no credentials kept) and copied by git
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: screens-publish
           path: ${{ runner.temp }}/publish
-      - name: Check the artifact (only <slug>.webp and manifest.json)
+      - name: Check out the artifact checker and card data (this commit, read only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: main
+          persist-credentials: false
+          sparse-checkout: |
+            atlas/tools
+            atlas/data
+      - name: Check out atlas-screens (the PR base)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: atlas-screens
+          path: shots
+          persist-credentials: false
+      - name: Check the artifact (layout, manifest entries, images, live cards, stored entries)
+        # atlas/tools/screens_artifact.py (rules in its docstring, tests in tests/test_screens_artifact.py): only
+        # screens.md, screens/manifest.json (mandatory) and screens/<slug>.webp; every manifest entry an object with
+        # the expected fields and types; every image a WebP that the manifest references with its sha256 and size;
+        # every new image a live Atlas card; stored entries without a new image unchanged. Fails before anything is copied.
         run: |
-          set -euo pipefail
-          cd "$RUNNER_TEMP/publish"
-          [ -f screens.md ] || { echo "::error::screens.md missing"; exit 1; }
-          bad=$(find . -mindepth 1 ! -path ./screens.md ! -path ./screens ! -path './screens/*' -print; \
-                find screens -mindepth 1 \( ! -type f -o -name '.*' \) -print; \
-                find screens -type f ! -name manifest.json ! -regex 'screens/[a-z0-9-]+\.webp' -print)
-          if [ -n "$bad" ]; then echo "::error::unexpected files in the artifact:"; echo "$bad"; exit 1; fi
-          for f in screens/*.webp; do
-            [ -e "$f" ] || continue
-            [ "$(head -c 4 "$f")" = RIFF ] && [ "$(dd if="$f" bs=1 skip=8 count=4 status=none)" = WEBP ] \
-              || { echo "::error::$f is not a WebP image"; exit 1; }
-          done
-          if [ -f screens/manifest.json ]; then python3 -c 'import json,sys; m=json.load(open(sys.argv[1])); assert isinstance(m.get("screens"), dict)' screens/manifest.json; fi
+          python3 main/atlas/tools/screens_artifact.py --artifact "$RUNNER_TEMP/publish" \
+            --base "$GITHUB_WORKSPACE/shots/atlas/screens" --data "$GITHUB_WORKSPACE/main/atlas/data"
       - name: Open PR against atlas-screens
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          git init -q "$RUNNER_TEMP/shots" && cd "$RUNNER_TEMP/shots"
-          git remote add origin "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git"
+          cd "$GITHUB_WORKSPACE/shots"
           git config "http.${GITHUB_SERVER_URL}/.extraheader" "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
-          git fetch -q --no-tags --depth=1 origin +refs/heads/atlas-screens:refs/remotes/origin/atlas-screens
           branch="screens/$(date -u +%F)"
           if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then branch="$branch-$(date -u +%H%M)"; fi
-          git switch -q -c "$branch" origin/atlas-screens
+          git switch -q -c "$branch"
           cp "$RUNNER_TEMP"/publish/screens/* atlas/screens/
           if [ -z "$(git status --porcelain -- atlas/screens)" ]; then echo "No image added or replaced: no PR." | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
           gh label create atlas-screens --repo "$GITHUB_REPOSITORY" --color 5b6670 --description "Automated weekly Atlas screenshots" --force || true

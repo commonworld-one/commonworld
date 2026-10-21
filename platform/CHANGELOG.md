@@ -12,13 +12,21 @@ Not deployed yet. Built on branch `platform/ci-hardening` (findings from a Codex
   rule 7): a local forward proxy that resolves every host and refuses private, loopback, link-local, CGNAT
   (100.64/10), cloud metadata and other non-global addresses (IPv4 and IPv6, IPv4-mapped forms too), redirects,
   iframes and subresources included, and connects to the address it checked. `publish` (contents / pull-requests /
-  issues write) runs no browser and no repository code: it downloads the changed images, checks the artifact holds only
-  `<slug>.webp` files and `manifest.json`, and opens the PR against `atlas-screens` as before. The branch
-  `atlas-screens` itself is never pushed to or deleted. Tests: `tests/test_screens_netguard.py`.
+  issues write) runs no browser and no code from the capture: it downloads the changed images and checks the artifact
+  with `atlas/tools/screens_artifact.py` (sparse checkout of the workflow's own commit, no credentials kept) before
+  anything is copied: `manifest.json` mandatory, every entry an object with the expected fields and types (a `null`
+  entry no longer passes), every `<slug>.webp` a WebP referenced by the manifest with matching sha256 and size, every
+  new image a live Atlas card whose `website` is the card's URL, stored entries without a new image unchanged and never
+  removed. Then it opens the PR against `atlas-screens` as before. The branch `atlas-screens` itself is never pushed to
+  or deleted. Tests: `tests/test_screens_netguard.py`, `tests/test_screens_artifact.py`.
 - Migration gate (`scripts/check-migrations.py`): `BASELINE` grandfathers the three historical migrations that cannot
   pass the gate (`0008` backfill `UPDATE`, `0009` and `0018` table rebuilds), each pinned by sha256, so a database
-  rebuilt from empty (first production deploy) passes with `allow_destructive_migration` empty. New migrations and any
-  edited baseline file keep the full rule. Runbook: `docs/DEPLOY.md` "Rebuild from an empty database".
+  rebuilt from empty (first production deploy) passes with `allow_destructive_migration` empty. Each entry also writes
+  out every finding of its file; a file is grandfathered only when sha256 and findings both match, so editing a
+  historical file and re-pinning its sha256 (e.g. appending `DROP TABLE posts;`) still blocks. The tests pin names,
+  sha256 and findings again as independent literals and compare the files with their content at the commit that added
+  them (`6803510`, fetched by CI; `CW_REQUIRE_MIGRATION_ANCHOR=1` there turns a skip into a failure). New migrations and
+  any edited baseline file keep the full rule. Runbook: `docs/DEPLOY.md` "Rebuild from an empty database".
 - Pillow 12.3.0 → 13.0.0 (`requirements.txt`).
 
 ## 2026-10-21 — Small tails 2: well-known MCP manifest, strict nonce stamping, head-escape tests, tag pill target size
