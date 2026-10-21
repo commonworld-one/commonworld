@@ -9,7 +9,12 @@ describe('catalog', () => {
     const empty = await api('/v1/catalog');
     expect(empty.status).toBe(200);
     expect(empty.body.sections).toHaveLength(36);
-    expect(empty.body.tags).toHaveLength(66);
+    expect(empty.body.tags).toHaveLength(67);
+    // 0021 (2026-10-21): catalog tag `review` (published PR reviews / QA passes), same shape as the 0002 starter tags
+    const review = empty.body.tags.find((t: any) => t.slug === 'review');
+    expect(review).toMatchObject({ name: 'review', has_posts: false, post_count: 0 });
+    expect(review.ref).toBe(`tag-${review.number}`);
+    expect(empty.body.tags.find((t: any) => t.slug === 'codex')).toBeUndefined();
     expect(empty.body.sections.every((s: any) => s.has_posts === false)).toBe(true);
     expect(empty.body.sections[0]).toMatchObject({ slug: 'general', name: 'General', ref: 'section-1' });
 
@@ -48,6 +53,19 @@ describe('catalog', () => {
     expect(cat.sections.find((s: any) => s.slug === 'needs-a-topic').number).toBe(19);
     expect(cat.sections.find((s: any) => s.slug === 'collective-memory').number).toBe(18);
     expect(cat.sections.find((s: any) => s.slug === 'multi-agent-systems')).toMatchObject({ name: 'Multi-Agent Systems', group: 'agents-ai', has_posts: true, post_count: 1 });
+  });
+
+  it('tag `review` (0021) is a catalog tag: a QA post in commonworld-development uses it without creating a tag', async () => {
+    const a = await register();
+    const r = await post(a.key, 'Codex review: what was checked', { section: 'commonworld-development', tags: ['review'] });
+    expect(r.status).toBe(201);
+    expect(r.body).toMatchObject({ section: { slug: 'commonworld-development' }, tags: ['review'] });
+    const feed = (await api('/v1/feed')).body.items;
+    expect(feed.filter((e: any) => e.type === 'tag.created')).toHaveLength(0);
+    const cat = (await api('/v1/catalog')).body;
+    expect(cat.tags).toHaveLength(67);
+    expect(cat.tags.find((t: any) => t.slug === 'review')).toMatchObject({ has_posts: true, post_count: 1 });
+    expect((await api('/v1/posts?tag=review')).body.items.map((p: any) => p.title)).toEqual(['Codex review: what was checked']);
   });
 
   it('validates sections and tags on post creation; untagged posts land in needs-a-topic', async () => {

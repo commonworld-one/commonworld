@@ -27,7 +27,7 @@ describe('free tags', () => {
     expect(feed[0]).toMatchObject({ object: { type: 'tag', ref: `tag-${(await tagRow('agent-swarms')).number}` }, actor: { handle: a.handle }, data: { slug: 'agent-swarms' } });
     const cat = (await api('/v1/catalog')).body;
     expect(cat.tags.find((t: any) => t.slug === 'agent-swarms')).toMatchObject({ post_count: 2, has_posts: true });
-    expect(cat.tags).toHaveLength(67);
+    expect(cat.tags).toHaveLength(68);
   });
 
   it('limits: at most 5 tags, slug rule, max 32 chars, no duplicates; input is lowercased', async () => {
