@@ -52,6 +52,12 @@ Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0022_
   tests: reverting a single or bulk freeze never revives old tokens.
 - Privacy Policy (Atlas `build.py`, owner-approved row 2026-10-21): the account data table lists connected apps
   (OAuth); the Privacy page has its own "Last updated" date (`legal.privacy_last_updated`), so the Terms date stays.
+  Cookies made truthful (owner-approved 2026-10-21): the table lists `__Host-cw_oauth` (strictly necessary; HttpOnly,
+  Secure, SameSite=Strict, Path=/; set only on the consent page, 15 minutes, cleared on approve/deny) and the session
+  cookie under its real name `__Host-cw_session`; the "only cookie" sentence now says Commonworld sets two strictly
+  necessary cookies. "Deleting your data" says account deletion disconnects every app (tokens, codes and grant records
+  deleted at once) and that an app can be revoked any time on `/apps` or with `POST /v1/me/apps/{id}/revoke`.
+  `check.py` asserts both cookies, the new sentence and the revoke line, and fails on the old "only cookie" sentence.
 - Codex HOLD fixes: `GET /v1/me/identities` (MCP `account_list_identities`) is now never available through OAuth, since
   pending links carry their challenge codes (recovery data); the tool is hidden from an OAuth client's `tools/list`.
   A bulk freeze (`POST /v1/admin/freezes`) now revokes every OAuth grant, token and pending code of the frozen accounts,

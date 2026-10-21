@@ -1416,9 +1416,10 @@ def main():
         if lp == PRIV_URL:
             for need in (CFG['contact']['privacy'], 'data protection authority in your country of residence', 'Data Privacy Framework', 'cw-consent', 'cw-theme', 'cw-ann-dismissed', '_ga',
                          'Cloudflare, Inc.', 'Zoho', 'Standard Contractual Clauses', 'Art. 6(1)(a)', 'Art. 6(1)(f)', 'withdraw it at any time', 'Share buttons',
-                         'cw_session', 'Google Safe Browsing', 'MetaMask eth-phishing-detect', 'ScamSniffer scam-database', 'CERT Polska Warning List',
+                         '__Host-cw_session', '<code>__Host-cw_oauth</code></td>', 'Commonworld sets only two cookies itself', 'POST /v1/me/apps/{id}/revoke', 'Google Safe Browsing', 'MetaMask eth-phishing-detect', 'ScamSniffer scam-database', 'CERT Polska Warning List',
                          'FxTwitter', 'recovery code', 'id="ai-bots"', '400 days', '90 days', '30 days'):
                 if need not in txt: fails.append(f'privacy page lacks {need!r}')
+            if 'is the only cookie Commonworld sets itself' in txt: fails.append('privacy page still says cw_session is the only cookie (there are two: __Host-cw_session and __Host-cw_oauth)')
     for u, p in parsed.items():
         for tag, href, rel in p.links:
             if tag in ('script', 'img') and re.match(r'(https?:)?//', href or ''):
