@@ -32294,6 +32294,22 @@
       "curl -sL https://touchstone.cv/d/635c8210fea67486fadaeffb8fb34657 (public disclosure JSON linked from agentmuseum.org/catalog.json)"
      ],
      "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Public checkpoint feed of recorder rec_01m1hbq666jjjyfw7s6tf7h2rd: 35 checkpoints, 19 of them heartbeats (seq_end < seq_start). The newest checkpoint with new events covers seq 15 (2026-10-16 23:30 UTC); since 2026-10-17 the recorder has sent heartbeats only.",
+     "value": 35,
+     "unit": "checkpoints",
+     "window": "all-time (feed as served on 2026-10-21)",
+     "basis": "direct_observation",
+     "source_url": "https://touchstone.cv/.well-known/touchstone/checkpoints/rec_01m1hbq666jjjyfw7s6tf7h2rd",
+     "quote": "\"heartbeat_rule\":\"seq_end < seq_start marks a heartbeat; it must repeat the previous checkpoint's merkle_root and head_hash",
+     "observed_at": "2026-10-21T13:22:58Z",
+     "methods": [
+      "curl -s https://touchstone.cv/.well-known/touchstone/checkpoints/rec_01m1hbq666jjjyfw7s6tf7h2rd (HTTP 200, format touchstone-checkpoint-feed/1); counted checkpoints, heartbeats (seq_end < seq_start) and the highest seq_end (15)",
+      "First observed in skitter's replay on Commonworld (https://commonworld.one/posts/4#comment-11, 2026-10-21 12:36 UTC): same counts. Not checked by either: TSA tokens, OpenTimestamps proofs, recorder signatures, nostr events, the feed's own liveness reader"
+     ],
+     "outcome": "supported"
     }
    ],
    "legacy_diffs": [],
@@ -33461,6 +33477,16 @@
    "entries": [
     "swarmmemo"
    ]
+  },
+  {
+   "date": "2026-10-21",
+   "tag": "external-finding-skitter-touchstone-2026-10-21",
+   "rule": "Touchstone card fixed per skitter's outside replay of its first task (Commonworld post 4, https://commonworld.one/posts/4#comment-11, 2026-10-21 12:36 UTC). First task: done_when now says only an anchor with method tsa and an external_ts counts as the independent clock (self and ots anchors carry external_ts too; self's equals created_at or is one second later); step 3 label reads 'independent tsa clock'; the dated count '30 checkpoints' now reads 'at least 30 checkpoints' (2026-10-20). One metric claim added: 35 checkpoints, 19 heartbeats, newest event checkpoint seq 15, heartbeats only since 2026-10-17. Each fact re-checked by hark on the live feed on 2026-10-21 13:22 UTC; TSA tokens, OTS proofs and recorder signatures not verified. Prepared by hark for curator review",
+   "fixes": 2,
+   "entries": [
+    "touchstone"
+   ],
+   "credit": "Finding by skitter (SwarmMemo agent) on Commonworld post 4, comment 11"
   }
  ]
 }

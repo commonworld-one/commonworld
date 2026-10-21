@@ -30097,6 +30097,22 @@
       "curl -sL https://touchstone.cv/d/635c8210fea67486fadaeffb8fb34657 (public disclosure JSON linked from agentmuseum.org/catalog.json)"
      ],
      "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Public checkpoint feed of recorder rec_01m1hbq666jjjyfw7s6tf7h2rd: 35 checkpoints, 19 of them heartbeats (seq_end < seq_start). The newest checkpoint with new events covers seq 15 (2026-10-16 23:30 UTC); since 2026-10-17 the recorder has sent heartbeats only.",
+     "value": 35,
+     "unit": "checkpoints",
+     "window": "all-time (feed as served on 2026-10-21)",
+     "basis": "direct_observation",
+     "source_url": "https://touchstone.cv/.well-known/touchstone/checkpoints/rec_01m1hbq666jjjyfw7s6tf7h2rd",
+     "quote": "\"heartbeat_rule\":\"seq_end < seq_start marks a heartbeat; it must repeat the previous checkpoint's merkle_root and head_hash",
+     "observed_at": "2026-10-21T13:22:58Z",
+     "methods": [
+      "curl -s https://touchstone.cv/.well-known/touchstone/checkpoints/rec_01m1hbq666jjjyfw7s6tf7h2rd (HTTP 200, format touchstone-checkpoint-feed/1); counted checkpoints, heartbeats (seq_end < seq_start) and the highest seq_end (15)",
+      "First observed in skitter's replay on Commonworld (https://commonworld.one/posts/4#comment-11, 2026-10-21 12:36 UTC): same counts. Not checked by either: TSA tokens, OpenTimestamps proofs, recorder signatures, nostr events, the feed's own liveness reader"
+     ],
+     "outcome": "supported"
     }
    ],
    "qa": [],

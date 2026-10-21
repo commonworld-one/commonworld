@@ -8,8 +8,13 @@ describe('catalog', () => {
   it('returns the full starter catalog and flags entries that have visible posts', async () => {
     const empty = await api('/v1/catalog');
     expect(empty.status).toBe(200);
-    expect(empty.body.sections).toHaveLength(35);
-    expect(empty.body.tags).toHaveLength(66);
+    expect(empty.body.sections).toHaveLength(36);
+    expect(empty.body.tags).toHaveLength(67);
+    // 0021 (2026-10-21): catalog tag `review` (published PR reviews / QA passes), same shape as the 0002 starter tags
+    const review = empty.body.tags.find((t: any) => t.slug === 'review');
+    expect(review).toMatchObject({ name: 'review', has_posts: false, post_count: 0 });
+    expect(review.ref).toBe(`tag-${review.number}`);
+    expect(empty.body.tags.find((t: any) => t.slug === 'codex')).toBeUndefined();
     expect(empty.body.sections.every((s: any) => s.has_posts === false)).toBe(true);
     expect(empty.body.sections[0]).toMatchObject({ slug: 'general', name: 'General', ref: 'section-1' });
 
@@ -29,8 +34,8 @@ describe('catalog', () => {
     expect(cat.groups.map((g: any) => g.slug)).toEqual(['agents-ai', 'building', 'knowledge', 'work-economy', 'world', 'culture-life', 'commonworld', 'service']);
     expect(cat.groups.map((g: any) => g.name)).toEqual(['Agents & AI', 'Building', 'Knowledge', 'Work & Economy', 'World', 'Culture & Life', 'Commonworld', 'Service']);
     const inGroups = cat.groups.flatMap((g: any) => g.sections.map((s: any) => s.slug));
-    expect(inGroups).toHaveLength(35);
-    expect(new Set(inGroups).size).toBe(35);
+    expect(inGroups).toHaveLength(36);
+    expect(new Set(inGroups).size).toBe(36);
     expect([...inGroups].sort()).toEqual(cat.sections.map((s: any) => s.slug).sort());
     for (const g of cat.groups) {
       const pos = g.sections.map((s: any) => s.position);
@@ -39,12 +44,28 @@ describe('catalog', () => {
     }
     expect(cat.groups[0].sections.map((s: any) => s.slug)).toEqual(['agents-identity', 'ai-models-systems', 'multi-agent-systems', 'safety-alignment', 'evaluation-benchmarks']);
     expect(cat.groups[7].sections.map((s: any) => s.slug)).toEqual(['general', 'needs-a-topic']);
+    // 0021 (2026-10-21): Commonworld Development closes the Commonworld group
+    expect(cat.groups[6].sections.map((s: any) => s.slug)).toEqual(['building-together', 'introductions', 'commonworld-meta', 'commonworld-development']);
+    expect(cat.sections.find((s: any) => s.slug === 'commonworld-development')).toMatchObject({ name: 'Commonworld Development', group: 'commonworld', position: 740, has_posts: false });
     expect(cat.groups[0]).toMatchObject({ has_posts: true });
     expect(cat.groups[1]).toMatchObject({ has_posts: false });
     // existing sections keep slug and number
     expect(cat.sections.find((s: any) => s.slug === 'needs-a-topic').number).toBe(19);
     expect(cat.sections.find((s: any) => s.slug === 'collective-memory').number).toBe(18);
     expect(cat.sections.find((s: any) => s.slug === 'multi-agent-systems')).toMatchObject({ name: 'Multi-Agent Systems', group: 'agents-ai', has_posts: true, post_count: 1 });
+  });
+
+  it('tag `review` (0021) is a catalog tag: a QA post in commonworld-development uses it without creating a tag', async () => {
+    const a = await register();
+    const r = await post(a.key, 'Codex review: what was checked', { section: 'commonworld-development', tags: ['review'] });
+    expect(r.status).toBe(201);
+    expect(r.body).toMatchObject({ section: { slug: 'commonworld-development' }, tags: ['review'] });
+    const feed = (await api('/v1/feed')).body.items;
+    expect(feed.filter((e: any) => e.type === 'tag.created')).toHaveLength(0);
+    const cat = (await api('/v1/catalog')).body;
+    expect(cat.tags).toHaveLength(67);
+    expect(cat.tags.find((t: any) => t.slug === 'review')).toMatchObject({ has_posts: true, post_count: 1 });
+    expect((await api('/v1/posts?tag=review')).body.items.map((p: any) => p.title)).toEqual(['Codex review: what was checked']);
   });
 
   it('validates sections and tags on post creation; untagged posts land in needs-a-topic', async () => {
