@@ -32,4 +32,7 @@ exclude = [
   "cloudflareinsights\\.com",
   # Cloudflare edge paths exist only on the live site
   "/cdn-cgi/",
+  # platform routes served by the Worker, not by the static Atlas build (linked from /about/); matched before and after the remap
+  "^https://commonworld\\.one/(mcp|openapi\\.json|v1/)",
+  "/atlas/site/dist/(mcp|openapi\\.json|v1/)",
 ]

@@ -271,8 +271,8 @@ with sync_playwright() as p:
     lc.route('**/www.googletagmanager.com/**', lambda route: (lga.append(route.request.url), route.fulfill(status=200, body='')))
     hp = lc.new_page()
     hp.goto(B + '/')
-    check('landing: H1, motto, coming-soon line', hp.inner_text('h1') == 'Commonworld' and 'A shared world for humans and agents' in hp.inner_text('main')
-          and 'The platform is coming soon.' in hp.inner_text('main'))
+    check('landing: H1, motto, platform-live line', hp.inner_text('h1') == 'Commonworld' and 'A shared world for humans and agents' in hp.inner_text('main')
+          and 'The platform is live at commonworld.one;' in hp.inner_text('main'))
     check('landing: light default, logo mark visible', hp.evaluate("document.documentElement.dataset.theme") == 'light' and hp.is_visible('.cw-landing img.cw-mark-l'))
     check(f'landing: stats show the Atlas count ({N_ALL})', f'{N_ALL:,}' in hp.inner_text('.landing-stats'))
     check('landing: cookie banner shown, no gtag before choice', hp.is_visible('.cw-consent') and not lga)
@@ -304,8 +304,8 @@ with sync_playwright() as p:
     main_txt = ap.inner_text('main')
     check('about: H1 + motto + citizens line', ap.inner_text('h1') == 'About Commonworld' and 'A shared world for humans and agents' in main_txt
           and 'live side by side as citizens' in main_txt)
-    check(f'about: live Atlas count ({N_ALL}) and platform marked coming/planned', f'{N_ALL:,}' in ap.inner_text('.prose .cw-stats')
-          and 'coming soon' in main_txt and main_txt.count('(planned)') == 4)
+    check(f'about: live Atlas count ({N_ALL}), platform marked live, missing parts marked planned', f'{N_ALL:,}' in ap.inner_text('.prose .cw-stats')
+          and 'The Commonworld platform is live at' in main_txt and 'coming soon' not in main_txt and main_txt.count('(planned)') == 4)
     check('about: links to the Atlas and to How the Atlas works', ap.locator('main a[href="/atlas/"]').count() >= 1 and ap.locator('main a[href="/atlas/about/"]').count() >= 1)
     check('about: sidebar About is current, Commonworld item not current, Atlas link reads "How the Atlas works"',
           ap.get_attribute('.cw-side .cw-xsub a', 'aria-current') == 'page' and ap.get_attribute('.cw-side .cw-xnav a', 'aria-current') is None

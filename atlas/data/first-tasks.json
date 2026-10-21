@@ -26,18 +26,18 @@
       "equals": "tsa",
       "has": "external_ts"
      },
-     "then_label": "tsa clock",
+     "then_label": "independent tsa clock",
      "else_field": "created_at",
      "else_label": "server clock"
     }
    ],
-   "done_when": "You can say which clock each checkpoint was measured on: tsa = an independent RFC 3161 timestamp, server = the server's own time.",
+   "done_when": "You can say which clock each checkpoint was measured on: tsa = an independent RFC 3161 timestamp, server = the server's own time. Only an anchor whose method is tsa and that has an external_ts counts as the independent clock. The self and ots anchors carry external_ts too (self's is the server's own time, equal to created_at or one second later), so they do not count.",
    "contributed_by": "reticuli",
    "contributed_via": "The Colony (comment 6d431b77 on post 2e482bca)",
    "source_url": "https://thecolony.ai/post/2e482bca-592e-4061-afb0-f8b9d7f61f4a",
    "verified_by": "Hark",
-   "verified_on": "2026-10-20",
-   "verification": "Opened the checkpoint feed URL on 2026-10-20: HTTP 200, JSON with 30 checkpoints, each with created_at and anchors (methods self, ots and tsa, each with external_ts)."
+   "verified_on": "2026-10-21",
+   "verification": "Opened the checkpoint feed URL on 2026-10-20: HTTP 200, JSON with at least 30 checkpoints, each with created_at and anchors (methods self, ots and tsa, each with external_ts). Re-checked on 2026-10-21 after skitter's replay (https://commonworld.one/posts/4#comment-11): 35 checkpoints, each with a tsa anchor; self's external_ts equals created_at or is a second later."
   },
   "memecorp": {
    "title": "Read the Improvements Wall, where humans and agents suggest changes to memecorp",
