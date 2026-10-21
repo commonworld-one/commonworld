@@ -142,7 +142,39 @@ database is used by the code that is running now. Rules:
   the bookmark, restore it with the same commands (`commonworld-staging`, `--env staging`) and check the data and
   the staging Worker. Only then rely on it for production.
 
+- **Baseline (historical migrations).** `0008_section_groups.sql` (backfills `sections` with `UPDATE`, written before
+  the owner marker existed), `0009_free_tags.sql` and `0018_ai_bot_verified.sql` (table rebuilds: `DROP TABLE` +
+  `RENAME`) were applied to staging before the gate existed. They are listed in `BASELINE` in
+  `scripts/check-migrations.py`, each pinned by the sha256 of the file and by the full list of its findings: while
+  pending they are reported as a notice and do not block, so a database rebuilt from empty passes with the override
+  left empty. If one of these files is edited it loses the baseline and is checked like a new migration, even when its
+  sha256 is re-pinned (a new statement is not in the written-out findings). Every other file, and every new migration,
+  gets the full rule above. Never add a new migration to `BASELINE`; never edit the historical files. The unit tests pin
+  the list, the hashes and the findings independently and compare each file with its content at commit `6803510`.
+
 The scanner runs in CI too (report only), and its unit tests are `tests/test_check_migrations.py`.
+
+### Rebuild from an empty database
+
+For the first production deploy (empty `commonworld-prod`), a new staging database, or a local check. Every migration
+is pending; the gate passes without the override because the only historical findings are in the baseline.
+
+1. Check locally first, in the repo root (no Cloudflare access needed):
+
+   ```sh
+   python3 scripts/check-migrations.py --dir platform/migrations --all
+   ```
+
+   Expected: three `::notice` lines (`0008`, `0009`, `0018`, "baseline"), no `::error`, exit code 0. An `::error`
+   here means a new or edited migration needs review: stop and fix that first.
+2. Optional dry run of the SQL itself on an empty local D1 (in `platform/`):
+   `npx wrangler d1 migrations apply commonworld-prod --local --env production` (writes only to `.wrangler/state/`).
+3. Production: Actions → *Deploy platform (production)* → the `main` sha, **`allow_destructive_migration` empty** →
+   approve. The step *Migration gate* lists all migrations as pending and prints the same three notices.
+4. A new staging database: `npx wrangler d1 migrations apply commonworld-staging --remote --env staging` (staging has
+   no gate; run step 1 first anyway).
+
+If the gate fails on an empty database, do not use the override to get past it: read which file it names.
 
 ## First production deploy (cutover from Cloudflare Pages)
 
@@ -172,7 +204,8 @@ on a hostname that still has a CNAME, so the DNS records go first. All steps by 
    1. DNS → delete the `CNAME commonworld.one` and `CNAME www` records.
    2. Workers & Pages → `commonworld` (Pages) → Custom domains → remove `commonworld.one` and `www.commonworld.one`.
 4. **Deploy.** Actions → *Deploy platform (production)* → the `main` sha, `allow_destructive_migration` empty →
-   approve. `wrangler deploy` creates both Custom Domains with their DNS records and certificates. The smoke test
+   approve. The database is empty, so every migration is pending; the gate passes without the override (see
+   *Rebuild from an empty database*: run its step 1 locally before the cutover). `wrangler deploy` creates both Custom Domains with their DNS records and certificates. The smoke test
    checks `/`, `/health` (`"environment":"production"`), `/api/v1/index.json`, `/robots.txt`, `/sitemap.xml` (a sitemap index),
    `/sitemap-v1.xml`, `/atlas/sitemap.xml`, the IndexNow key file and `www` → `301` apex.
 5. **If the deploy or the smoke test fails** (whether or not the Worker went live), go back to Pages:

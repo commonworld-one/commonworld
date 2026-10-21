@@ -48,11 +48,19 @@ jobs:
       - name: Install CI-only tools (standard JSON Schema validator)
         run: |
           python -m pip install --only-binary=:all: -r requirements-ci.txt
-      - name: Unit tests (refresh security, link safety, migration gate, screens lock, screenshot capture)
-        # after Install: the screenshot-capture image tests need Pillow (requirements.txt); CW_REQUIRE_PIL=1 makes
-        # them fail instead of skip if it is ever missing
+      - name: Fetch the migration baseline anchor commit
+        # tests/test_check_migrations.py compares the historical migrations 0008, 0009, 0018 with their content at the
+        # commit that added them (BASELINE_ANCHOR_COMMIT there); the checkout is shallow, so fetch just that commit
+        run: git fetch --depth=1 --no-tags origin 6803510fad7d186c59d7e922259876f1892edca0
+      - name: Unit tests (refresh security, link safety, migration gate, screens lock, screenshot capture, screens artifact)
+        # after Install: the screenshot-capture image tests need Pillow (requirements.txt, pinned Pillow==13.0.0);
+        # CW_REQUIRE_PIL=1 makes them fail instead of skip if it is ever missing; CW_WEBP_DECODE_REQUIRED=1 does the
+        # same for the WebP decode check of the screens artifact (tests/test_screens_artifact.py);
+        # CW_REQUIRE_MIGRATION_ANCHOR=1 does the same for the migration baseline anchor commit
         env:
           CW_REQUIRE_PIL: '1'
+          CW_WEBP_DECODE_REQUIRED: '1'
+          CW_REQUIRE_MIGRATION_ANCHOR: '1'
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Fetch homepage screenshots (atlas-screens commit pinned in atlas/screens.lock)
         # images live only on the orphan branch atlas-screens; the build uses exactly the commit in the lock
@@ -70,6 +78,19 @@ jobs:
           case "$status" in identical) echo "screens lock = atlas-screens head" ;;
             ahead) echo "::notice::atlas-screens has newer commits than atlas/screens.lock; bump the lock in a PR to publish them" ;;
             *) echo "::error::$screens_sha is not on atlas-screens ($status)"; exit 1 ;; esac
+      - name: Pinned screenshots pass the publish-side WebP check
+        # the same checks screens.yml's publish job runs (atlas/tools/screens_artifact.py) on every stored image:
+        # bounded read, stdlib structure, a real Pillow decode to the manifest size (required: no Pillow = failure),
+        # sha256 and size against the manifest
+        env:
+          CW_WEBP_DECODE_REQUIRED: '1'
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/pinned"
+          git archive "$(tr -d ' \t\r' < atlas/screens.lock)" atlas/screens | tar -x -C "$RUNNER_TEMP/pinned"
+          CW_ATLAS_SCREENS="$RUNNER_TEMP/pinned/atlas/screens" \
+            python -m unittest -v tests.test_screens_artifact.Artifact.test_real_atlas_screens 2>&1 | tee "$RUNNER_TEMP/pinned.log"
+          grep -q '^OK$' "$RUNNER_TEMP/pinned.log" && ! grep -q 'skipped' "$RUNNER_TEMP/pinned.log"
       - name: Build
         env:
           CW_SCREENS_REQUIRED: '1'   # CI must publish the previews; a local build without the branch shows placeholders

@@ -5,6 +5,17 @@ name: Atlas weekly screenshots
 # Builds use the atlas-screens commit pinned in atlas/screens.lock on main, not the branch head: after this PR is merged,
 # a PR on main must bump atlas/screens.lock to the new atlas-screens commit (the PR body says so). This workflow cannot
 # bump the lock itself: its PR targets atlas-screens, and the merge commit's sha is only known after the merge.
+# Two jobs, so the browser that opens third-party sites never holds a write token:
+#   capture  read-only token, not persisted in git config, no secrets; the network guard in screens.py (capture rule 7)
+#            refuses private, loopback, link-local, CGNAT and metadata addresses, redirects included. Its output is
+#            the changed files of atlas/screens/ plus the summary, uploaded as an artifact.
+#   publish  contents/pull-requests/issues write; never runs a browser or any code from the capture. It downloads the
+#            artifact and checks it with atlas/tools/screens_artifact.py from this workflow's own commit (only
+#            screens.md, manifest.json and <slug>.webp; manifest mandatory, every entry an object with the expected
+#            fields, every image referenced with its sha256 and really decoded by a hash-pinned Pillow, every new
+#            image a live card, stored entries unchanged, every read capped at 8 MiB, screens.md at 1 MiB and only
+#            its first 60 000 bytes go into the PR body), copies it into an atlas-screens checkout, pushes a screens/<date> branch and opens the PR against
+#            atlas-screens. atlas-screens itself is never pushed to or deleted here.
 on:
   schedule:
     - cron: '0 4 * * 0'   # Sundays 04:00 UTC, after the weekly data refresh
@@ -14,21 +25,22 @@ on:
         description: 'comma-separated slugs (empty = every live card)'
         required: false
         default: ''
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write            # create the atlas-screens label
+permissions: {}
 concurrency:
   group: atlas-screens
   cancel-in-progress: false
 jobs:
-  screens:
+  capture:
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: read
+    outputs:
+      changed: ${{ steps.collect.outputs.changed }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
@@ -38,19 +50,36 @@ jobs:
           python -m pip install -r requirements.txt playwright
           python -m playwright install --with-deps chromium
           sudo apt-get install -y -qq fonts-noto-color-emoji >/dev/null || true
-      - name: Check out atlas-screens
+      - name: Check out atlas-screens (read only, public branch)
         run: |
           git fetch --no-tags origin +refs/heads/atlas-screens:refs/remotes/origin/atlas-screens
           git worktree add "$RUNNER_TEMP/shots" origin/atlas-screens
-      - name: Capture (live cards only)
+      - name: Capture (live cards only, network guard on)
         timeout-minutes: 35
         env:
           ONLY: ${{ github.event.inputs.only }}
         run: |
           if ! [[ "$ONLY" =~ ^[a-z0-9,-]*$ ]]; then echo "::error::only: slugs and commas only"; exit 1; fi
-          python atlas/tools/screens.py --screens-dir "$RUNNER_TEMP/shots/atlas/screens" --only "$ONLY" \
+          python atlas/tools/screens.py --net-guard --screens-dir "$RUNNER_TEMP/shots/atlas/screens" --only "$ONLY" \
             --summary "$RUNNER_TEMP/screens.md" --report "$RUNNER_TEMP/screens.json" --review-dir "$RUNNER_TEMP/review"
           cat "$RUNNER_TEMP/screens.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Collect changed images
+        id: collect
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/publish"
+          mkdir -p "$out/screens"
+          cp "$RUNNER_TEMP/screens.md" "$out/screens.md"
+          cd "$RUNNER_TEMP/shots"
+          git status --porcelain -- atlas/screens > "$RUNNER_TEMP/status.txt"
+          if [ ! -s "$RUNNER_TEMP/status.txt" ]; then
+            echo "No image added or replaced: nothing to publish." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          # only added or modified files are published; the capture never deletes, so anything else is a bug
+          if grep -v -E '^( M|\?\?) atlas/screens/' "$RUNNER_TEMP/status.txt"; then echo "::error::unexpected change in atlas/screens"; exit 1; fi
+          git ls-files --modified --others --exclude-standard -- atlas/screens | while read -r f; do cp "$f" "$out/screens/"; done
+          echo "changed=true" >> "$GITHUB_OUTPUT"
       - name: Review previews (artifact)
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -58,21 +87,86 @@ jobs:
           name: screens-review
           path: ${{ runner.temp }}/review/
           if-no-files-found: ignore
-      - name: Open PR against atlas-screens
+      - name: Changed images for the publish job (artifact)
+        if: steps.collect.outputs.changed == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: screens-publish
+          path: ${{ runner.temp }}/publish/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: capture
+    if: needs.capture.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write            # create the atlas-screens label
+    steps:
+      # no code from the capture runs here: the artifact is only read as data by atlas/tools/screens_artifact.py from
+      # this workflow's own commit (sparse checkout of main, no credentials kept) and copied by git
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: screens-publish
+          path: ${{ runner.temp }}/publish
+      - name: Check out the artifact checker and card data (this commit, read only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: main
+          persist-credentials: false
+          sparse-checkout: |
+            atlas/tools
+            atlas/data
+      - name: Check out atlas-screens (the PR base)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: atlas-screens
+          path: shots
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install the WebP decoder (Pillow, pinned by version and wheel hash; no other packages)
         run: |
-          cd "$RUNNER_TEMP/shots"
-          if [ -z "$(git status --porcelain -- atlas/screens)" ]; then echo "No image added or replaced: no PR." | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
-          gh label create atlas-screens --color 5b6670 --description "Automated weekly Atlas screenshots" --force || true
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python -m pip install --require-hashes --only-binary=:all: --no-deps -r main/atlas/tools/requirements-publish.txt
+          python -c "import PIL, PIL.WebPImagePlugin; assert PIL.__version__ == '13.0.0', PIL.__version__"
+      - name: Check the artifact (layout, manifest entries, images, live cards, stored entries)
+        # atlas/tools/screens_artifact.py (rules in its docstring, tests in tests/test_screens_artifact.py): only
+        # screens.md, screens/manifest.json (mandatory) and screens/<slug>.webp; every manifest entry an object with
+        # the expected fields and types; every image a WebP that the manifest references with its sha256 and size;
+        # every new image a live Atlas card; stored entries without a new image unchanged. Every image is also really
+        # decoded (Pillow) to 1200x750; CW_WEBP_DECODE_REQUIRED=1 makes a missing Pillow a failure, never a skip.
+        # Every read is bounded (8 MiB; screens.md 1 MiB and valid UTF-8). Fails before anything is copied. The PR body
+        # gets only the bounded excerpt it writes (--summary-out: first 60 000 bytes of screens.md, never the whole file).
+        env:
+          CW_WEBP_DECODE_REQUIRED: '1'
+        run: |
+          python main/atlas/tools/screens_artifact.py --artifact "$RUNNER_TEMP/publish" \
+            --base "$GITHUB_WORKSPACE/shots/atlas/screens" --data "$GITHUB_WORKSPACE/main/atlas/data" \
+            --summary-out "$RUNNER_TEMP/summary.md"
+      - name: Open PR against atlas-screens
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE/shots"
+          git config "http.${GITHUB_SERVER_URL}/.extraheader" "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
           branch="screens/$(date -u +%F)"
           if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then branch="$branch-$(date -u +%H%M)"; fi
-          git switch -c "$branch"
+          git switch -q -c "$branch"
+          cp "$RUNNER_TEMP"/publish/screens/* atlas/screens/
+          if [ -z "$(git status --porcelain -- atlas/screens)" ]; then echo "No image added or replaced: no PR." | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          gh label create atlas-screens --repo "$GITHUB_REPOSITORY" --color 5b6670 --description "Automated weekly Atlas screenshots" --force || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add atlas/screens
-          git commit -m "Atlas screenshots $(date -u +%F)" -m "Automated by .github/workflows/screens.yml (atlas/tools/screens.py). Compare every new image with the stored one before merging."
-          git push origin "$branch"
-          { cat "$RUNNER_TEMP/screens.md"; echo; echo "Old|new previews: artifact **screens-review** of run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          git commit -q -m "Atlas screenshots $(date -u +%F)" -m "Automated by .github/workflows/screens.yml (atlas/tools/screens.py). Compare every new image with the stored one before merging."
+          git push origin "HEAD:refs/heads/$branch"
+          { cat "$RUNNER_TEMP/summary.md"; echo; echo "Old|new previews: artifact **screens-review** of run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
             echo; echo "After merging: open a PR on main that sets \`atlas/screens.lock\` to the new atlas-screens commit, or the site keeps the old images."; } > "$RUNNER_TEMP/body.md"
-          url=$(gh pr create --base atlas-screens --head "$branch" --title "Atlas screenshots $(date -u +%F)" \
+          url=$(gh pr create --repo "$GITHUB_REPOSITORY" --base atlas-screens --head "$branch" --title "Atlas screenshots $(date -u +%F)" \
                 --body-file "$RUNNER_TEMP/body.md" --label atlas-screens)
           echo "Opened $url (never merged automatically)" | tee -a "$GITHUB_STEP_SUMMARY"

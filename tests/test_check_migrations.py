@@ -1,5 +1,5 @@
 """scripts/check-migrations.py: the expand -> deploy -> contract gate run before production D1 migrations."""
-import contextlib, importlib.util, io, os, tempfile, unittest
+import contextlib, hashlib, importlib.util, io, os, subprocess, tempfile, unittest
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 FIX = os.path.join(ROOT, 'tests', 'fixtures', 'migrations')
@@ -12,6 +12,27 @@ REAL_PENDING_3 = os.path.join(FIX, 'wrangler-4.151.1-pending-3.txt')   # 0001..0
 REAL_PENDING_2 = os.path.join(FIX, 'wrangler-4.151.1-pending-2.txt')   # 0004, 0005 pending
 REAL_NONE = os.path.join(FIX, 'wrangler-4.151.1-none.txt')
 GARBAGE = os.path.join(FIX, 'wrangler-garbage.txt')                     # synthetic auth error line
+# Independent pins of the grandfathered historical migrations (scripts/check-migrations.py BASELINE). Written out here
+# on purpose and never imported from the scanner: changing a historical file needs a change of the SQL, the scanner's
+# sha256 AND findings, these literals and the history anchor below, all in one reviewed PR.
+EXPECTED_BASELINE_SHA256 = {
+    '0008_section_groups.sql': 'adad2dd1470cf6927049005b292204240f5697b819a87f97aef91b2552859589',
+    '0009_free_tags.sql': '34c3339da21b904ef65d7e571a9bfe1e87c9ef52c0817c044b7d06ff071d0aae',
+    '0018_ai_bot_verified.sql': 'f75d1fa9febecfb099bd1733b6e8882746b93e7749b28da5de8c292167d10c68',
+}
+EXPECTED_BASELINE_FINDINGS = {   # count of each finding the scanner must list for each file, and the shape of the rest
+    '0008_section_groups.sql': {'row-write: UPDATE': 19},
+    '0009_free_tags.sql': {'destructive: DROP TABLE': 1, 'destructive: ALTER TABLE ... RENAME': 1},
+    '0018_ai_bot_verified.sql': {'destructive: DROP TABLE': 1, 'destructive: ALTER TABLE ... RENAME': 1},
+}
+EXPECTED_BASELINE_DESTRUCTIVE = {   # every destructive statement allowed in a baseline file, in full
+    '0009_free_tags.sql': ['DROP TABLE tags', 'ALTER TABLE tags_new RENAME TO tags'],
+    '0018_ai_bot_verified.sql': ['DROP TABLE ai_bot_visits', 'ALTER TABLE ai_bot_visits_v2 RENAME TO ai_bot_visits'],
+}
+# History anchor: the commit that added the three files (platform/ import). When it is in the clone, each file must
+# equal its content there byte for byte. A shallow clone without it skips, unless CW_REQUIRE_MIGRATION_ANCHOR=1 (CI
+# fetches the commit and sets it), which turns the skip into a failure.
+BASELINE_ANCHOR_COMMIT = '6803510fad7d186c59d7e922259876f1892edca0'
 SEQ_FILES = ['0001_init.sql', '0002_expand.sql', '0003_index.sql', '0004_more.sql', '0005_more.sql']
 
 
@@ -323,6 +344,207 @@ class Cli(unittest.TestCase):
         d = os.path.join(FIX, 'destructive')
         self.assertEqual(run('--dir', d, '--all')[0], 1)
         self.assertEqual(run('--dir', d, '--all', '--warn-only')[0], 0)
+
+
+REPO_MIGRATIONS = os.path.join(ROOT, 'platform', 'migrations')
+
+
+def box_listing(names):
+    """Same layout as the captured wrangler 4.151.1 output (fixtures), for any list of pending names."""
+    w = max(len(n) for n in names + ['Name']) + 2
+    rule = lambda a, b: a + '─' * w + b
+    rows = [rule('┌', '┐'), '│ ' + 'Name'.ljust(w - 1) + '│']
+    for n in names:
+        rows += [rule('├', '┤'), '│ ' + n.ljust(w - 1) + '│']
+    rows.append(rule('└', '┘'))
+    return '\n'.join([' ⛅️ wrangler 4.151.1', 'Resource location: remote', '', 'Migrations to be applied:'] + rows) + '\n'
+
+
+class Baseline(unittest.TestCase):
+    """Historical migrations applied before the gate existed (BASELINE, pinned by sha256) do not block a rebuild from an
+    empty database; everything else, every new migration and any edited baseline file, keeps the full rule."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.d = self.tmp.name
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def copy_repo(self):
+        for f in sorted(os.listdir(REPO_MIGRATIONS)):
+            if f.endswith('.sql'):
+                with open(os.path.join(REPO_MIGRATIONS, f), 'rb') as a, open(os.path.join(self.d, f), 'wb') as b:
+                    b.write(a.read())
+        return sorted(f for f in os.listdir(self.d) if f.endswith('.sql'))
+
+    def listing_file(self, names):
+        p = os.path.join(self.d, 'pending.txt')
+        with open(p, 'w', encoding='utf-8') as fh:
+            fh.write(box_listing(names))
+        return p
+
+    def repo_text(self, name):
+        with open(os.path.join(REPO_MIGRATIONS, name), encoding='utf-8', newline='') as fh:
+            return fh.read()
+
+    def test_baseline_is_closed(self):
+        # adding, removing or re-pinning an entry is a reviewed decision: change the literals above with it
+        self.assertEqual(sorted(cm.BASELINE), sorted(EXPECTED_BASELINE_SHA256))
+        self.assertEqual({n: e['sha256'] for n, e in cm.BASELINE.items()}, EXPECTED_BASELINE_SHA256)
+        for name, entry in cm.BASELINE.items():
+            self.assertEqual(sorted(entry), ['findings', 'sha256'], name)
+
+    def test_baseline_findings_match_the_test_literals(self):
+        for name, entry in cm.BASELINE.items():
+            counts = {}
+            for f in entry['findings']:
+                rule = f.split(' | ', 1)[0]
+                counts[rule] = counts.get(rule, 0) + 1
+            self.assertEqual(counts, EXPECTED_BASELINE_FINDINGS[name], name)
+            destructive = [f.split(' | ', 1)[1] for f in entry['findings'] if f.startswith(cm.DESTRUCTIVE + ':')]
+            self.assertEqual(destructive, EXPECTED_BASELINE_DESTRUCTIVE.get(name, []), name)
+        for f in cm.BASELINE['0008_section_groups.sql']['findings']:   # only single-row backfills of sections
+            self.assertRegex(f, r"^row-write: UPDATE \| UPDATE sections SET group_slug = '[a-z-]+' , position = [0-9]+ "
+                                r"WHERE slug = '[a-z-]+'$")
+
+    def test_baseline_pins_match_the_repo_files(self):
+        for name, sha in EXPECTED_BASELINE_SHA256.items():
+            text = self.repo_text(name)
+            # independent of cm.content_sha: plain sha256 of the file bytes (the files are stored with LF)
+            with open(os.path.join(REPO_MIGRATIONS, name), 'rb') as fh:
+                raw = fh.read()
+            self.assertNotIn(b'\r', raw, name)
+            self.assertEqual(hashlib.sha256(raw).hexdigest(), sha, f'{name} changed: historical migrations must not be edited')
+            self.assertEqual(cm.baseline_status(name, text), 'ok', name)
+            self.assertTrue(cm.findings(text), f'{name} has no findings any more: drop it from BASELINE')
+
+    def test_baseline_files_equal_the_anchor_commit(self):
+        have = subprocess.run(['git', 'cat-file', '-e', BASELINE_ANCHOR_COMMIT + '^{commit}'], cwd=ROOT,
+                              capture_output=True).returncode == 0
+        if not have:
+            if os.environ.get('CW_REQUIRE_MIGRATION_ANCHOR') == '1':
+                self.fail(f'anchor commit {BASELINE_ANCHOR_COMMIT} not in the clone (CW_REQUIRE_MIGRATION_ANCHOR=1)')
+            self.skipTest(f'anchor commit {BASELINE_ANCHOR_COMMIT} not in this clone (shallow); '
+                          f'git fetch --depth=1 origin {BASELINE_ANCHOR_COMMIT} to run it')
+        for name, sha in EXPECTED_BASELINE_SHA256.items():
+            blob = subprocess.run(['git', 'show', f'{BASELINE_ANCHOR_COMMIT}:platform/migrations/{name}'], cwd=ROOT,
+                                  capture_output=True, check=True).stdout
+            self.assertEqual(hashlib.sha256(blob).hexdigest(), sha, f'{name} at the anchor commit')
+            with open(os.path.join(REPO_MIGRATIONS, name), 'rb') as fh:
+                self.assertEqual(fh.read(), blob, f'{name} differs from its content at {BASELINE_ANCHOR_COMMIT}')
+
+    def test_repinned_baseline_with_new_destructive_statement_still_blocks(self):
+        # the attack from review: append DROP TABLE posts to 0008 and re-pin its sha256 in BASELINE -> must not pass
+        files = self.copy_repo()
+        p = os.path.join(self.d, '0008_section_groups.sql')
+        with open(p, 'a', encoding='utf-8', newline='') as fh:
+            fh.write('DROP TABLE posts;\n')
+        with open(p, encoding='utf-8', newline='') as fh:
+            edited = fh.read()
+        entry = cm.BASELINE['0008_section_groups.sql']
+        saved = dict(entry)
+        try:
+            entry['sha256'] = cm.content_sha(edited)          # re-pinned in the scanner
+            self.assertEqual(cm.baseline_status('0008_section_groups.sql', edited), 'findings')
+            code, out = run('--dir', self.d, '--pending-from', self.listing_file(files), '--sha', SHA)
+            self.assertEqual(code, 1, out)
+            self.assertIn('baseline findings differ', out)
+            self.assertIn('0008_section_groups.sql::destructive: DROP TABLE: DROP TABLE posts', out)
+            self.assertIn('0008_section_groups.sql::row-write: UPDATE', out)
+            # even the release override cannot pass it: the row-write UPDATEs have no owner marker
+            self.assertEqual(run('--dir', self.d, '--pending-from', self.listing_file(files), '--sha', SHA,
+                                 '--allow', SHA)[0], 1)
+            # and the test-side pins catch the re-pin itself
+            self.assertNotEqual({n: e['sha256'] for n, e in cm.BASELINE.items()}, EXPECTED_BASELINE_SHA256)
+        finally:
+            entry.clear(); entry.update(saved)
+
+    def test_repinned_baseline_with_widened_update_still_blocks(self):
+        # same statement kind, different statement: an UPDATE without WHERE replacing a pinned one
+        files = self.copy_repo()
+        p = os.path.join(self.d, '0008_section_groups.sql')
+        text = self.repo_text('0008_section_groups.sql')
+        target = "WHERE slug = 'needs-a-topic'"
+        self.assertIn(target, text)
+        edited = text.replace(target, '', 1)
+        with open(p, 'w', encoding='utf-8', newline='') as fh:
+            fh.write(edited)
+        entry = cm.BASELINE['0008_section_groups.sql']
+        saved = dict(entry)
+        try:
+            entry['sha256'] = cm.content_sha(edited)
+            self.assertEqual(cm.baseline_status('0008_section_groups.sql', edited), 'findings')
+            self.assertEqual(run('--dir', self.d, '--pending-from', self.listing_file(files), '--sha', SHA)[0], 1)
+        finally:
+            entry.clear(); entry.update(saved)
+
+    def test_findings_list_must_match_exactly(self):
+        text = self.repo_text('0009_free_tags.sql')
+        entry = cm.BASELINE['0009_free_tags.sql']
+        saved = dict(entry)
+        try:
+            entry['findings'] = tuple(entry['findings'])[:1]   # a finding dropped from the list
+            self.assertEqual(cm.baseline_status('0009_free_tags.sql', text), 'findings')
+            entry['findings'] = tuple(saved['findings']) + ('destructive: DROP TABLE | DROP TABLE posts',)
+            self.assertEqual(cm.baseline_status('0009_free_tags.sql', text), 'findings')
+        finally:
+            entry.clear(); entry.update(saved)
+        self.assertEqual(cm.baseline_status('0009_free_tags.sql', text), 'ok')
+        self.assertIsNone(cm.baseline_status('0001_init.sql', text))
+
+    def test_every_other_repo_migration_passes_without_baseline(self):
+        for f in sorted(os.listdir(REPO_MIGRATIONS)):
+            if f.endswith('.sql') and f not in cm.BASELINE:
+                with open(os.path.join(REPO_MIGRATIONS, f), encoding='utf-8') as fh:
+                    self.assertEqual(cm.findings(fh.read()), [], f)
+
+    def test_rebuild_from_empty_db_passes_without_override(self):
+        files = self.copy_repo()
+        code, out = run('--dir', self.d, '--pending-from', self.listing_file(files), '--sha', SHA)
+        self.assertEqual(code, 0, out)
+        self.assertNotIn('::error', out)
+        self.assertEqual(out.count('::notice file='), 3)
+        self.assertEqual(run('--dir', REPO_MIGRATIONS, '--all')[0], 0)
+
+    def test_new_row_write_migration_still_blocks_on_empty_db(self):
+        files = self.copy_repo()
+        new = '0099_backfill.sql'
+        with open(os.path.join(self.d, new), 'w', encoding='utf-8') as fh:
+            fh.write("UPDATE sections SET position = 1 WHERE slug = 'general';\n")
+        listing = self.listing_file(files + [new])
+        code, out = run('--dir', self.d, '--pending-from', listing, '--sha', SHA)
+        self.assertEqual(code, 1)
+        self.assertIn(new + '::row-write: UPDATE', out)
+        self.assertEqual(run('--dir', self.d, '--pending-from', listing, '--sha', SHA, '--allow', SHA)[0], 1)  # no marker
+
+    def test_new_destructive_migration_still_needs_the_override(self):
+        files = self.copy_repo()
+        new = '0099_contract.sql'
+        with open(os.path.join(self.d, new), 'w', encoding='utf-8') as fh:
+            fh.write('DROP TABLE tags;\n')
+        listing = self.listing_file(files + [new])
+        self.assertEqual(run('--dir', self.d, '--pending-from', listing, '--sha', SHA)[0], 1)
+        self.assertEqual(run('--dir', self.d, '--pending-from', listing, '--sha', SHA, '--allow', SHA)[0], 0)
+
+    def test_edited_baseline_file_loses_the_baseline(self):
+        files = self.copy_repo()
+        p = os.path.join(self.d, '0009_free_tags.sql')
+        with open(p, 'a', encoding='utf-8') as fh:
+            fh.write('-- edited\n')
+        code, out = run('--dir', self.d, '--pending-from', self.listing_file(files), '--sha', SHA)
+        self.assertEqual(code, 1)
+        self.assertIn('baseline file changed', out)
+        self.assertIn('0009_free_tags.sql::destructive: DROP TABLE', out)
+
+    def test_same_name_other_content_is_not_baselined(self):
+        self.assertFalse(cm.baselined('0008_section_groups.sql', 'UPDATE sections SET position = 1;\n'))
+        self.assertFalse(cm.baselined('0021_new.sql', ''))
+
+    def test_crlf_checkout_keeps_the_baseline(self):
+        with open(os.path.join(REPO_MIGRATIONS, '0018_ai_bot_verified.sql'), encoding='utf-8', newline='') as fh:
+            text = fh.read()
+        self.assertTrue(cm.baselined('0018_ai_bot_verified.sql', text.replace('\n', '\r\n')))
 
 
 if __name__ == '__main__':

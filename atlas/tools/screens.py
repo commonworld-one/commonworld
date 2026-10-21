@@ -22,9 +22,18 @@ Capture rules (owner decision 2026-10-17; atlas screens PLAN "Standing capture r
     without its data gets `hold` in the overrides file: it is still captured (for the summary) but never stored until a
     reviewer passes --force. The placeholder check only sees class-based skeletons/spinners and loading-only text, so
     empty boxes drawn without such classes still need the human/agent review of the PR.
+ 7. Network guard (on by default, --no-net-guard turns it off for a local run): the browser reaches the web only
+    through a small forward proxy in this process (NetGuard). It resolves every host itself and refuses (HTTP 403) any
+    connection when one of the host's addresses is private, loopback, link-local, carrier-grade NAT, cloud metadata or
+    otherwise not globally routable (DENY_NETS + ipaddress.is_global), then connects to the address it checked, so a
+    DNS answer cannot change between check and connect. Redirects, iframes, subresources and WebSockets all pass the
+    same proxy, so a public page cannot bounce the browser to 127.0.0.1, 10.x, 169.254.169.254 and so on. Chromium is
+    told to proxy loopback too (<-loopback>) and to send no WebRTC UDP outside the proxy. With HTTPS_PROXY set the guard
+    still checks every host first and then hands the connection to that proxy (which resolves the name again: only the
+    direct mode, the one CI uses, also pins the checked address); a host it cannot resolve is refused (fail closed).
 Only live cards are captured; closed cards keep their last capture and no slug is ever removed from the manifest.
 """
-import argparse, asyncio, glob, hashlib, io, json, os, sys, time, urllib.parse
+import argparse, asyncio, base64, glob, hashlib, io, ipaddress, json, os, socket, sys, time, urllib.parse
 from datetime import datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -37,6 +46,13 @@ VIEW_W, VIEW_H, SHOT_W, SHOT_H, TARGET = 1280, 800, 1200, 750, 64_000
 SETTLE_MS, IDLE_MS, NAV_MS, HARD_S = 4000, 10_000, 35_000, 110
 DHASH_MIN, MIN_AGE_DAYS = 6, 28
 BLOCKED_HOSTS = ('muse.ai',)
+# Network guard: no capture may reach these, whatever the redirect chain. Anything else that is not globally routable
+# (ipaddress.is_global False: documentation, benchmarking, reserved, multicast ...) is refused as well.
+DENY_NETS = tuple(ipaddress.ip_network(n) for n in (
+    '0.0.0.0/8', '10.0.0.0/8', '100.64.0.0/10', '127.0.0.0/8', '169.254.0.0/16', '172.16.0.0/12', '192.168.0.0/16',
+    '168.63.129.16/32',   # Azure host endpoint (wireserver / DNS), reachable from GitHub-hosted runners
+    '::/128', '::1/128', 'fc00::/7', 'fe80::/10'))
+ALLOWED_SCHEMES = ('http', 'https', 'data', 'blob')
 
 CHALLENGE = ('just a moment', 'attention required', 'access denied', 'verify you are human', 'checking your browser',
              'security checkpoint', 'performing security verification', 'ddos-guard', 'one moment, please')
@@ -118,6 +134,190 @@ def proxy_cfg():
 def blocked(url):
     h = (urllib.parse.urlsplit(url).hostname or '').lower()
     return any(h == b or h.endswith('.' + b) for b in BLOCKED_HOSTS)
+
+
+def ip_denied(ip):
+    """True when a capture must never connect to this address (DENY_NETS, or not globally routable).
+    IPv4-mapped / NAT64 / 6to4 IPv6 forms are checked by the IPv4 address inside them."""
+    try:
+        ip = ipaddress.ip_address(str(ip).split('%', 1)[0])
+    except ValueError:
+        return True
+    if ip.version == 6:
+        inner = ip.ipv4_mapped or ip.sixtofour
+        if inner is None and ip in ipaddress.ip_network('64:ff9b::/96'):
+            inner = ipaddress.ip_address(int(ip) & 0xffffffff)
+        if inner is not None and ip_denied(inner):
+            return True
+    return any(ip in n for n in DENY_NETS if n.version == ip.version) or not ip.is_global or ip.is_multicast
+
+
+class Denied(Exception):
+    pass
+
+
+class NetGuard:
+    """Local forward proxy for the capture browser (capture rule 7). Accepts CONNECT host:port (HTTPS, WSS) and
+    absolute-form plain-HTTP requests (one request per connection, forwarded with Connection: close). Every target
+    host is resolved here and refused with 403 when any of its addresses is denied; the connection then goes to the
+    checked address (direct) or through `upstream` (an HTTP proxy dict from proxy_cfg()). `resolver` is for tests."""
+    HEAD_MAX = 64 * 1024
+
+    def __init__(self, upstream=None, resolver=None):
+        self.upstream, self.resolver = upstream, resolver
+        self.denied, self.server, self.port = [], None, None
+
+    async def start(self):
+        self.server = await asyncio.start_server(self._handle, '127.0.0.1', 0)
+        self.port = self.server.sockets[0].getsockname()[1]
+        return self
+
+    async def close(self):
+        if self.server:
+            self.server.close()
+            try:
+                await asyncio.wait_for(self.server.wait_closed(), 5)
+            except asyncio.TimeoutError:
+                pass
+
+    def browser_proxy(self):
+        """Playwright launch(proxy=...): every request through the guard, loopback included."""
+        return {'server': f'http://127.0.0.1:{self.port}', 'bypass': '<-loopback>'}
+
+    async def resolve(self, host, port):
+        """-> checked addresses for host:port; raises Denied (fail closed: also when the host does not resolve)."""
+        h = (host or '').strip('[]').rstrip('.').lower()
+        if not h:
+            raise Denied('empty host')
+        try:
+            ipaddress.ip_address(h.split('%', 1)[0])
+            literal = True
+        except ValueError:
+            literal = False
+        try:
+            if literal:
+                addrs = [h]
+            elif self.resolver:
+                addrs = list(self.resolver(h, port))
+            else:
+                infos = await asyncio.get_running_loop().getaddrinfo(h, port, type=socket.SOCK_STREAM)
+                addrs = [i[4][0] for i in infos]
+        except (OSError, UnicodeError) as ex:
+            raise Denied(f'cannot resolve {h}: {ex}') from None
+        if not addrs:
+            raise Denied(f'no address for {h}')
+        bad = [x for x in addrs if ip_denied(x)]
+        if bad:
+            raise Denied(f'{h} resolves to a blocked address ({bad[0]})')
+        return addrs
+
+    def _deny(self, host, port, why):
+        self.denied.append({'host': host, 'port': port, 'reason': why})
+        print(f'net-guard: refused {host}:{port}: {why}', file=sys.stderr, flush=True)
+
+    def _upstream_auth(self):
+        if not (self.upstream and self.upstream.get('username')):
+            return ''
+        cred = f"{self.upstream['username']}:{self.upstream.get('password', '')}".encode()
+        return 'Proxy-Authorization: Basic ' + base64.b64encode(cred).decode() + '\r\n'
+
+    async def _open(self, host, port, addrs, tunnel=True):
+        if not self.upstream:
+            last = None
+            for ip in addrs:
+                try:
+                    return await asyncio.wait_for(asyncio.open_connection(ip, port), 15)
+                except (OSError, asyncio.TimeoutError) as ex:
+                    last = ex
+            raise OSError(f'cannot connect to {host}:{port}: {last}')
+        u = urllib.parse.urlsplit(self.upstream['server'])
+        r, w = await asyncio.wait_for(asyncio.open_connection(u.hostname, u.port or 80), 15)
+        if not tunnel:   # plain HTTP: the caller sends the absolute-form request to the upstream proxy itself
+            return r, w
+        hp = f'[{host}]:{port}' if ':' in host else f'{host}:{port}'
+        w.write((f'CONNECT {hp} HTTP/1.1\r\nHost: {hp}\r\n' + self._upstream_auth() + '\r\n').encode())
+        await w.drain()
+        resp = await asyncio.wait_for(r.readuntil(b'\r\n\r\n'), 20)
+        if resp.split(b' ', 2)[1:2] != [b'200']:
+            w.close()
+            raise OSError(f'upstream proxy refused {hp}: {resp.splitlines()[0][:80]!r}')
+        return r, w
+
+    @staticmethod
+    async def _pipe(r, w):
+        try:
+            while True:
+                b = await r.read(65536)
+                if not b:
+                    break
+                w.write(b)
+                await w.drain()
+        except (OSError, asyncio.IncompleteReadError):
+            pass
+        finally:
+            try:
+                w.close()
+            except Exception:
+                pass
+
+    async def _handle(self, cr, cw):
+        try:
+            head = await asyncio.wait_for(cr.readuntil(b'\r\n\r\n'), 30)
+        except (asyncio.IncompleteReadError, asyncio.LimitOverrunError, asyncio.TimeoutError, OSError):
+            cw.close()
+            return
+        lines = head.decode('latin-1').split('\r\n')
+        try:
+            method, target, version = lines[0].split(' ')
+            if method == 'CONNECT':
+                hp = urllib.parse.urlsplit('//' + target)
+                host, port, rest = hp.hostname, hp.port, None
+            else:
+                u = urllib.parse.urlsplit(target)
+                if u.scheme != 'http':
+                    raise ValueError('only http:// in absolute form')
+                host, port = u.hostname, u.port or 80
+                path = (u.path or '/') + ('?' + u.query if u.query else '')
+                keep = [ln for ln in lines[1:] if ln and ln.split(':', 1)[0].strip().lower() not in
+                        ('proxy-connection', 'proxy-authorization', 'connection', 'keep-alive')]
+                line = f'{method} {target if self.upstream else path} {version}'
+                extra = [self._upstream_auth().strip()] if self._upstream_auth() else []
+                rest = '\r\n'.join([line] + keep + extra + ['Connection: close', '', '']).encode('latin-1')
+            if not host or not port:
+                raise ValueError('no host or port')
+        except ValueError as ex:
+            cw.write(b'HTTP/1.1 400 Bad Request\r\nConnection: close\r\n\r\n')
+            cw.close()
+            self._deny(lines[0][:120], 0, f'unreadable proxy request ({ex})')
+            return
+        try:
+            addrs = await self.resolve(host, port)
+            ur, uw = await self._open(host, port, addrs, tunnel=rest is None)
+        except Denied as ex:
+            self._deny(host, port, str(ex))
+            cw.write(b'HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\n'
+                     b'blocked by the capture network guard\n')
+            cw.close()
+            return
+        except Exception as ex:   # unreachable, upstream refused, or anything unexpected: never leave the browser hanging
+            cw.write(b'HTTP/1.1 502 Bad Gateway\r\nConnection: close\r\n\r\n')
+            cw.close()
+            print(f'net-guard: {host}:{port} unreachable: {ex}', file=sys.stderr, flush=True)
+            return
+        if rest is None:
+            cw.write(b'HTTP/1.1 200 Connection established\r\n\r\n')
+        else:
+            uw.write(rest)
+        await asyncio.gather(self._pipe(cr, uw), self._pipe(ur, cw))
+
+
+async def _route(route):
+    """Context-level request filter (before the network guard): muse.ai and non-web schemes are never requested."""
+    url = route.request.url
+    if blocked(url) or urllib.parse.urlsplit(url).scheme.lower() not in ALLOWED_SCHEMES:
+        await route.abort()
+    else:
+        await route.continue_()
 
 
 def live_cards(data_dir=DATA):
@@ -207,7 +407,7 @@ async def shoot(browser, url, o):
     """-> (record, webp bytes or None, PIL image or None)."""
     ctx = await browser.new_context(viewport={'width': VIEW_W, 'height': VIEW_H}, user_agent=UA, locale='en-US',
                                     reduced_motion='reduce', bypass_csp=True)
-    await ctx.route('**/*', lambda r: r.abort() if blocked(r.request.url) else r.continue_())
+    await ctx.route('**/*', _route)
     page = await ctx.new_page()
     rec = {'website': url}
     try:
@@ -266,6 +466,18 @@ async def shoot(browser, url, o):
         await ctx.close()
 
 
+def manifest_record(slug, rec, website, shot_url=None):
+    """-> the manifest.json entry stored for an accepted capture `rec` (checked again by atlas/tools/screens_artifact.py
+    in the publish job). http_status is None when page.goto() timed out but the page still rendered and passed
+    classify(): there was no navigation response to read a status from."""
+    new = {'file': f'{slug}.webp', 'sha256': rec['sha256'], 'dhash': rec['dhash'], 'website': website,
+           'source_url': rec['final_url'], 'http_status': rec['http_status'], 'title': rec['title'],
+           'captured_at': rec['captured_at'], 'width': SHOT_W, 'height': SHOT_H, 'bytes': rec['bytes']}
+    if shot_url:
+        new['shot_url'] = shot_url
+    return new
+
+
 def side_by_side(old_path, new_img, out_path):
     from PIL import Image, ImageDraw
     old = Image.open(old_path).convert('RGB') if old_path and os.path.exists(old_path) else Image.new('RGB', (SHOT_W, SHOT_H), 'white')
@@ -313,9 +525,12 @@ async def run(a):
     if a.review_dir:
         os.makedirs(a.review_dir, exist_ok=True)
     sem = asyncio.Semaphore(a.conc)
+    guard = await NetGuard(upstream=proxy_cfg()).start() if a.net_guard else None
+    net = guard.browser_proxy() if guard else proxy_cfg()
     async with async_playwright() as p:
-        args = ['--no-sandbox', '--disable-dev-shm-usage', '--hide-scrollbars', '--mute-audio']
-        browser = await p.chromium.launch(executable_path=a.chromium or None, proxy=proxy_cfg(), args=args)
+        args = ['--no-sandbox', '--disable-dev-shm-usage', '--hide-scrollbars', '--mute-audio',
+                '--force-webrtc-ip-handling-policy=disable_non_proxied_udp']
+        browser = await p.chromium.launch(executable_path=a.chromium or None, proxy=net, args=args)
         gl_browser = None
 
         async def one(slug):
@@ -326,7 +541,7 @@ async def run(a):
                 b = browser
                 if o.get('gl'):
                     if gl_browser is None:
-                        gl_browser = await p.chromium.launch(executable_path=a.chromium or None, proxy=proxy_cfg(),
+                        gl_browser = await p.chromium.launch(executable_path=a.chromium or None, proxy=net,
                                                              args=args + ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'])
                     b = gl_browser
                 rec = webp = img = None
@@ -348,12 +563,7 @@ async def run(a):
                     side_by_side(os.path.join(a.screens_dir, old['file']), img, os.path.join(a.review_dir, f'{slug}.png'))
                 with open(os.path.join(a.screens_dir, f'{slug}.webp'), 'wb') as f:
                     f.write(webp)
-                new = {'file': f'{slug}.webp', 'sha256': rec['sha256'], 'dhash': rec['dhash'], 'website': cards[slug],
-                       'source_url': rec['final_url'], 'http_status': rec['http_status'], 'title': rec['title'],
-                       'captured_at': rec['captured_at'], 'width': SHOT_W, 'height': SHOT_H, 'bytes': rec['bytes']}
-                if o.get('shot_url'):
-                    new['shot_url'] = o['shot_url']
-                screens[slug] = new
+                screens[slug] = manifest_record(slug, rec, cards[slug], o.get('shot_url'))
             elif a.review_dir and img is not None and not rec.get('ok'):
                 img.convert('RGB').resize((600, 375)).save(os.path.join(a.review_dir, f'{slug}.rejected.webp'), 'WEBP', quality=40)
             results[slug] = rec
@@ -363,6 +573,9 @@ async def run(a):
         await browser.close()
         if gl_browser:
             await gl_browser.close()
+    if guard:
+        await guard.close()
+        a.net_denied = guard.denied
     if not a.dry_run and any(r['action'] in ('add', 'replace') for r in results.values()):
         manifest['screens'] = dict(sorted(screens.items()))
         manifest['updated_at'] = utc_iso()
@@ -371,7 +584,7 @@ async def run(a):
     return results, unknown
 
 
-def summary_md(results, unknown):
+def summary_md(results, unknown, denied=()):
     by = lambda pred: sorted(s for s, r in results.items() if pred(r['action']))
     added, replaced = by(lambda x: x == 'add'), by(lambda x: x == 'replace')
     failed = sorted(s for s, r in results.items() if not r.get('ok'))
@@ -387,6 +600,11 @@ def summary_md(results, unknown):
         L += ['### Not captured (possible card or site issue, stored image kept)', '', '| entry | reason | page |', '|---|---|---|']
         L += [f"| `{s}` | {results[s].get('reason')} {results[s].get('error', '')} | {results[s].get('website')} |" for s in failed]
         L.append('')
+    if denied:
+        hosts = sorted({f"{d['host']}:{d['port']}" for d in denied})
+        L += [f'Network guard refused {len(denied)} connection(s) to private, loopback, link-local or metadata '
+              'addresses (or hosts that did not resolve): ' + ', '.join(f'`{h}`' for h in hosts[:20])
+              + (' ...' if len(hosts) > 20 else ''), '']
     if unknown:
         L += ['Not a live card (skipped): ' + ', '.join(f'`{s}`' for s in unknown), '']
     return '\n'.join(L)
@@ -405,9 +623,13 @@ def main(argv=None):
     ap.add_argument('--report', default='', help='JSON with every capture record')
     ap.add_argument('--review-dir', default='', help='write old|new previews and rejected shots here')
     ap.add_argument('--dry-run', action='store_true', help='capture and decide, write nothing to --screens-dir')
+    ap.add_argument('--net-guard', action=argparse.BooleanOptionalAction, default=True,
+                    help='refuse private/loopback/link-local/metadata addresses, redirects included (capture rule 7; '
+                         'default on, always on in CI)')
     a = ap.parse_args(argv)
+    a.net_denied = []
     results, unknown = asyncio.run(run(a))
-    md = summary_md(results, unknown)
+    md = summary_md(results, unknown, a.net_denied)
     if a.summary:
         open(a.summary, 'w', encoding='utf-8').write(md)
     if a.report:

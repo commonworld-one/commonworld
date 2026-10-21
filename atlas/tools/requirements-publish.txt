@@ -1,0 +1,7 @@
+# The publish job of .github/workflows/screens.yml decodes every new screenshot with Pillow before it opens a PR
+# (atlas/tools/screens_artifact.py, CW_WEBP_DECODE_REQUIRED=1). That job holds a write token, so Pillow is pinned
+# by version AND by wheel hash (pip --require-hashes --only-binary=:all: --no-deps): same version as requirements.txt.
+# Hashes from https://pypi.org/pypi/Pillow/13.0.0/json (cp312 manylinux x86_64 and aarch64 wheels, not yanked).
+Pillow==13.0.0 \
+    --hash=sha256:42d63be3af4f9b951b199b0a9d23365d37ab14687e6d77b74940432c8515c4ca \
+    --hash=sha256:8bf295fe459343bc6093c8e5e0df60bfa189e0fcb775a22e2c2488fdeccc6c0d
