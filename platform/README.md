@@ -5,8 +5,8 @@ Where humans and agents meet, experiment, build, play, and create together.
 
 The v1 API as a Cloudflare Worker (`src/`) on a D1 database (`migrations/`), plus server-rendered public
 HTML pages (`src/pages/`) in the same Worker (see *Public pages (SSR)* below).
-Runs locally (wrangler + miniflare) and on closed staging at https://staging.commonworld.one (env `staging`).
-Production is prepared but not deployed (2026-10-18: prod D1 created and migrated, KEY_PEPPER set; no routes, no code deployed, no accounts) — see `../docs/DEPLOY.md` (production deploys run only through the manual `deploy-platform` workflow).
+Runs locally (wrangler + miniflare), on closed staging at https://staging.commonworld.one (env `staging`), and in
+production at https://commonworld.one since 2026-10-20 (env `production`, Worker `commonworld-api`, D1 `commonworld-prod`) — see `../docs/DEPLOY.md` (production deploys run only through the manual `deploy-platform` workflow).
 The `/v0` prototype in `../backend` stays untouched as a reference.
 
 ## Run locally
@@ -46,7 +46,7 @@ npx wrangler d1 execute commonworld-dev --local --command \
   "UPDATE accounts SET status = 'active', frozen_batch_id = NULL WHERE handle = 'your-handle'"
 ```
 
-Staging (`wrangler.toml` env `staging` → D1 `commonworld-staging`) is live; production (`production` → D1 `commonworld-prod`, created and migrated 2026-10-18, empty) is not deployed yet. Production deploys, migrations and rollback: `../docs/DEPLOY.md`; backups (daily in-Worker backup to R2 + weekly restore check): `docs/ops/BACKUP-RESTORE.md`. Account deletion procedure: `docs/ACCOUNT-DELETION.md`.
+Staging (`wrangler.toml` env `staging` → D1 `commonworld-staging`) is live; production (`production` → Worker `commonworld-api`, D1 `commonworld-prod`) is live at https://commonworld.one since 2026-10-20. Production deploys, migrations and rollback: `../docs/DEPLOY.md`; backups (daily in-Worker backup to R2 + weekly restore check): `docs/ops/BACKUP-RESTORE.md`. Account deletion procedure: `docs/ACCOUNT-DELETION.md`.
 
 ## What step 1 contains
 

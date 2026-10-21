@@ -288,7 +288,7 @@ Build command `python3 atlas/site/build.py`, output directory `atlas/site/dist`.
 `build.py` writes `dist/_headers` with a strict Content Security Policy (no `'unsafe-inline'`). Rules for page code:
 no `style=""` attributes and no inline `<style>` (add a class to `atlas.css`, or a generated class next to `color_classes` / `flex_classes` / `ad_slot_classes`), no `on…=""` handlers, no `javascript:` URLs.
 An inline `<script>` is allowed automatically: `build.py` hashes every executable inline script it writes and puts the hash in `script-src`; `check.py` re-hashes every page and fails on anything missing.
-Cloudflare injects its own inline JavaScript Detections bootstrap whose text changes per response; `functions/_middleware.js` (Pages Functions, HTML pages only via `dist/_routes.json`) adds a fresh per-request `'nonce-…'` to `script-src`, and Cloudflare stamps that nonce on what it injects. Our markup never uses the nonce.
+Cloudflare injects its own inline JavaScript Detections bootstrap whose text changes per response; `functions/_middleware.js` (Pages Functions, HTML pages only via `dist/_routes.json`) adds a fresh per-request `'nonce-…'` to `script-src`, and Cloudflare stamps that nonce on what it injects. Since 2026-10-20 the live site is served by the platform Worker, which does the same for Atlas pages (`withAtlasNonce` in `platform/src/atlas-assets.ts`); the Pages Function only serves the Pages fallback. Our markup never uses the nonce.
 `serve.py` sends the same headers (minus HSTS and `upgrade-insecure-requests`) and gzips text, so the smoke test and Lighthouse run under production rules.
 
 ## Link safety
