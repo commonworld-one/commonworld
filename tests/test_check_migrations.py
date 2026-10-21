@@ -325,5 +325,108 @@ class Cli(unittest.TestCase):
         self.assertEqual(run('--dir', d, '--all', '--warn-only')[0], 0)
 
 
+REPO_MIGRATIONS = os.path.join(ROOT, 'platform', 'migrations')
+
+
+def box_listing(names):
+    """Same layout as the captured wrangler 4.151.1 output (fixtures), for any list of pending names."""
+    w = max(len(n) for n in names + ['Name']) + 2
+    rule = lambda a, b: a + '─' * w + b
+    rows = [rule('┌', '┐'), '│ ' + 'Name'.ljust(w - 1) + '│']
+    for n in names:
+        rows += [rule('├', '┤'), '│ ' + n.ljust(w - 1) + '│']
+    rows.append(rule('└', '┘'))
+    return '\n'.join([' ⛅️ wrangler 4.151.1', 'Resource location: remote', '', 'Migrations to be applied:'] + rows) + '\n'
+
+
+class Baseline(unittest.TestCase):
+    """Historical migrations applied before the gate existed (BASELINE, pinned by sha256) do not block a rebuild from an
+    empty database; everything else, every new migration and any edited baseline file, keeps the full rule."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.d = self.tmp.name
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def copy_repo(self):
+        for f in sorted(os.listdir(REPO_MIGRATIONS)):
+            if f.endswith('.sql'):
+                with open(os.path.join(REPO_MIGRATIONS, f), 'rb') as a, open(os.path.join(self.d, f), 'wb') as b:
+                    b.write(a.read())
+        return sorted(f for f in os.listdir(self.d) if f.endswith('.sql'))
+
+    def listing_file(self, names):
+        p = os.path.join(self.d, 'pending.txt')
+        with open(p, 'w', encoding='utf-8') as fh:
+            fh.write(box_listing(names))
+        return p
+
+    def test_baseline_is_closed(self):
+        # adding, removing or re-pinning an entry is a reviewed decision: change this test with it
+        self.assertEqual(sorted(cm.BASELINE), ['0008_section_groups.sql', '0009_free_tags.sql', '0018_ai_bot_verified.sql'])
+
+    def test_baseline_pins_match_the_repo_files(self):
+        for name, sha in cm.BASELINE.items():
+            with open(os.path.join(REPO_MIGRATIONS, name), encoding='utf-8', newline='') as fh:
+                text = fh.read()
+            self.assertEqual(cm.content_sha(text), sha, f'{name} changed: historical migrations must not be edited')
+            self.assertTrue(cm.findings(text), f'{name} has no findings any more: drop it from BASELINE')
+
+    def test_every_other_repo_migration_passes_without_baseline(self):
+        for f in sorted(os.listdir(REPO_MIGRATIONS)):
+            if f.endswith('.sql') and f not in cm.BASELINE:
+                with open(os.path.join(REPO_MIGRATIONS, f), encoding='utf-8') as fh:
+                    self.assertEqual(cm.findings(fh.read()), [], f)
+
+    def test_rebuild_from_empty_db_passes_without_override(self):
+        files = self.copy_repo()
+        code, out = run('--dir', self.d, '--pending-from', self.listing_file(files), '--sha', SHA)
+        self.assertEqual(code, 0, out)
+        self.assertNotIn('::error', out)
+        self.assertEqual(out.count('::notice file='), 3)
+        self.assertEqual(run('--dir', REPO_MIGRATIONS, '--all')[0], 0)
+
+    def test_new_row_write_migration_still_blocks_on_empty_db(self):
+        files = self.copy_repo()
+        new = '0099_backfill.sql'
+        with open(os.path.join(self.d, new), 'w', encoding='utf-8') as fh:
+            fh.write("UPDATE sections SET position = 1 WHERE slug = 'general';\n")
+        listing = self.listing_file(files + [new])
+        code, out = run('--dir', self.d, '--pending-from', listing, '--sha', SHA)
+        self.assertEqual(code, 1)
+        self.assertIn(new + '::row-write: UPDATE', out)
+        self.assertEqual(run('--dir', self.d, '--pending-from', listing, '--sha', SHA, '--allow', SHA)[0], 1)  # no marker
+
+    def test_new_destructive_migration_still_needs_the_override(self):
+        files = self.copy_repo()
+        new = '0099_contract.sql'
+        with open(os.path.join(self.d, new), 'w', encoding='utf-8') as fh:
+            fh.write('DROP TABLE tags;\n')
+        listing = self.listing_file(files + [new])
+        self.assertEqual(run('--dir', self.d, '--pending-from', listing, '--sha', SHA)[0], 1)
+        self.assertEqual(run('--dir', self.d, '--pending-from', listing, '--sha', SHA, '--allow', SHA)[0], 0)
+
+    def test_edited_baseline_file_loses_the_baseline(self):
+        files = self.copy_repo()
+        p = os.path.join(self.d, '0009_free_tags.sql')
+        with open(p, 'a', encoding='utf-8') as fh:
+            fh.write('-- edited\n')
+        code, out = run('--dir', self.d, '--pending-from', self.listing_file(files), '--sha', SHA)
+        self.assertEqual(code, 1)
+        self.assertIn('baseline file changed', out)
+        self.assertIn('0009_free_tags.sql::destructive: DROP TABLE', out)
+
+    def test_same_name_other_content_is_not_baselined(self):
+        self.assertFalse(cm.baselined('0008_section_groups.sql', 'UPDATE sections SET position = 1;\n'))
+        self.assertFalse(cm.baselined('0021_new.sql', ''))
+
+    def test_crlf_checkout_keeps_the_baseline(self):
+        with open(os.path.join(REPO_MIGRATIONS, '0018_ai_bot_verified.sql'), encoding='utf-8', newline='') as fh:
+            text = fh.read()
+        self.assertTrue(cm.baselined('0018_ai_bot_verified.sql', text.replace('\n', '\r\n')))
+
+
 if __name__ == '__main__':
     unittest.main()

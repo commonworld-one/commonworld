@@ -38,12 +38,20 @@ then findings are printed as warnings and the gate passes. A row-write migration
 the reviewed PR (CODEOWNERS). Without that line the gate fails even with the override; the line alone (no override)
 fails too. The deploy itself also waits for the production environment approval.
 
+Baseline (grandfathered history): BASELINE below names historical migrations that were already applied to staging
+and production before this gate existed and that cannot pass it (0008 backfills rows without an owner marker, 0009 and
+0018 rebuild a table). Each entry is pinned by the sha256 of the file (CRLF read as LF). A pending baseline file whose
+content still matches is reported as a notice and does not block, so rebuilding a database from empty (every
+migration pending, docs/DEPLOY.md "Rebuild from an empty database") passes with the override left empty. A baseline
+file whose content changed is checked like any other file, and every file not in BASELINE (every new migration) gets
+the full rule. The list is closed: tests/test_check_migrations.py fails if an entry is added, removed or re-pinned.
+
 Usage:
     check-migrations.py --dir platform/migrations --pending-from wrangler-list.txt [--sha SHA --allow SHA]
     check-migrations.py --dir platform/migrations --all          # scan every file (CI, report only with --warn-only)
 Exit codes: 0 ok, 1 findings without override (or a row-write file without the owner marker), 2 usage / unreadable input / pending list not understood.
 """
-import argparse, os, re, sqlite3, sys
+import argparse, hashlib, os, re, sqlite3, sys
 
 SHA40 = re.compile(r'[0-9a-f]{40}')
 
@@ -52,6 +60,24 @@ DESTRUCTIVE, REVIEW, UNKNOWN, ROW_WRITE = 'destructive', 'review-required', 'unk
 # Owner-review marker for a migration that changes existing rows: a whole comment line in the file's header (the
 # comments before the first SQL statement), e.g. `-- reviewed-by-owner: #42` (number of the PR the owner reviewed).
 OWNER_MARKER = re.compile(r'--[ \t]*reviewed-by-owner:[ \t]*#?([1-9][0-9]*)[ \t]*')
+
+
+# Historical migrations, applied before the gate existed (see "Baseline" above). Never add a new migration here: a new
+# migration that needs a finding passes with the owner marker and the one-release override instead.
+BASELINE = {
+    '0008_section_groups.sql': 'adad2dd1470cf6927049005b292204240f5697b819a87f97aef91b2552859589',   # row-write: UPDATE sections
+    '0009_free_tags.sql': '34c3339da21b904ef65d7e571a9bfe1e87c9ef52c0817c044b7d06ff071d0aae',        # rebuild of tags
+    '0018_ai_bot_verified.sql': 'f75d1fa9febecfb099bd1733b6e8882746b93e7749b28da5de8c292167d10c68',  # rebuild of ai_bot_visits
+}
+
+
+def content_sha(text):
+    return hashlib.sha256(text.replace('\r\n', '\n').encode('utf-8')).hexdigest()
+
+
+def baselined(name, text):
+    """True when `name` is a BASELINE file and its content is exactly the pinned one."""
+    return BASELINE.get(name) == content_sha(text)
 
 
 class SqlError(Exception):
@@ -486,17 +512,24 @@ def main(argv=None):
     hits, unmarked = [], []
     for f in pending:
         try:
-            with open(os.path.join(a.dir, f), encoding='utf-8') as fh:
+            with open(os.path.join(a.dir, f), encoding='utf-8', newline='') as fh:
                 text = fh.read()
         except (OSError, UnicodeDecodeError) as ex:
             print(f'::error::cannot read {a.dir}/{f}: {ex}'); return 2
         found = findings(text)
+        if found and baselined(f, text):
+            print(f'::notice file={a.dir}/{f}::baseline: historical migration (pinned by sha256 in BASELINE), '
+                  f'{len(found)} finding(s) not blocking: ' + '; '.join(sorted({r for r, _ in found})))
+            continue
+        if f in BASELINE:
+            print(f'::warning file={a.dir}/{f}::baseline file changed (sha256 differs from BASELINE): checked like a '
+                  'new migration. Historical migrations must not be edited; add a new migration instead.')
         for rule, st in found:
             hits.append((f, rule, st))
         if any(rule.startswith(ROW_WRITE + ':') for rule, _ in found) and owner_marker(text) is None:
             unmarked.append(f)
     if not hits:
-        print('no destructive or review-required SQL in pending migrations'); return 0
+        print('no destructive or review-required SQL in pending migrations' + (' (outside the baseline)' if any(f in BASELINE for f in pending) else '')); return 0
 
     override = bool(a.allow) and SHA40.fullmatch(a.sha or '') is not None and a.allow == a.sha
     level = 'warning' if ((override and not unmarked) or a.warn_only) else 'error'
