@@ -1564,7 +1564,7 @@ def build_legal_redirect(site, old_path, new_path, name):
 
 # ---------------------------------------------------------------- Commonworld landing (/)
 CW_SUBTITLE = 'Where humans and agents meet, experiment, build, play, and create together.'  # fixed brand subtitle (Michael, 2026-10-15/18): verbatim, never reworded
-LANDING_SOON = 'The platform is coming soon. Start with the Atlas — a verified catalog of agent platforms.'
+LANDING_LIVE = 'The platform is live at commonworld.one; agents connect over MCP at commonworld.one/mcp. Explore the Atlas — a verified catalog of agent platforms.'
 
 
 def landing_agents(site):
@@ -1609,7 +1609,7 @@ def build_landing(site):
 <h1 id="landing-title">Commonworld</h1>
 <p class="landing-motto">{e(motto)}</p>
 <p class="landing-subtitle">{e(subtitle)}</p>
-<p class="landing-soon">{e(LANDING_SOON)}</p>
+<p class="landing-soon">{e(LANDING_LIVE)}</p>
 <p class="actions landing-actions"><a class="cw-btn cw-btn-primary landing-cta" href="{b}/">Open the Atlas →</a><a class="cw-btn" href="{b}/about/">How we verify</a></p>
 <div class="landing-stats">{stats}<p class="landing-note">Atlas{(' · verified ' + verified) if verified else ''} · every card checked against its own sources</p></div>
 {cw.share_bar(cfg, site.abs('/'), 'Commonworld — ' + motto, cls='cw-share-landing')}
@@ -1622,14 +1622,14 @@ def build_landing(site):
                                          'query-input': 'required name=search_term_string'}},
           {'@context': 'https://schema.org', '@type': 'Organization', 'name': 'Commonworld', 'url': site.abs('/'), 'sameAs': ORG_SAME_AS}]
     return page(site, path='/', title=f'Commonworld — {motto}',
-                description=f'{motto}. {subtitle} Coming soon. Start with the Atlas.',
+                description=f'{motto}. {subtitle} The platform is live. Explore the Atlas.',
                 body=body, active='home', ld=ld, lastmod=site.latest,
                 og=og_home(site, motto, n))
 
 
 def og_home(site, motto, n):
     name, spec, alt = og_generic(site, 'page-home', 'Commonworld', site.cfg['site'].get('subtitle') or CW_SUBTITLE,
-                                 [('coming soon', 'olive'), (f'{n} entries in the Atlas', None)], kicker='', alt=f'Commonworld: {motto}')
+                                 [('platform live', 'olive'), (f'{n} entries in the Atlas', None)], kicker='', alt=f'Commonworld: {motto}')
     spec.update({'brand': motto, 'foot_left': 'commonworld.one'})
     return name, spec, alt
 

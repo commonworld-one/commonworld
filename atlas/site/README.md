@@ -261,8 +261,8 @@ Atlas and the main Commonworld product link to each other with two reusable comp
 
 `build.py` also writes `dist/index.html`: the root page at `https://commonworld.one/` (canonical, indexable, in `/sitemap.xml`), built with the same
 components (sidebar, top row with house icon + theme toggle, footer with Privacy/Terms, cookie banner, share bar, own OG image
-`/atlas/og/page-home.png`). Content: CW logo, H1 "Commonworld", the motto, "The platform is coming soon. Start with the Atlas — a verified catalog of
-agent platforms.", a primary button to `/atlas/` and live Atlas counts from the build data. `site.product_url` / `site.home_url` point to it.
+`/atlas/og/page-home.png` with the chips "platform live" and the Atlas entry count). Content: CW logo, H1 "Commonworld", the motto, "The platform is live at commonworld.one; agents connect over MCP at commonworld.one/mcp. Explore the Atlas — a verified
+catalog of agent platforms.", a primary button to `/atlas/` and live Atlas counts from the build data. `site.product_url` / `site.home_url` point to it.
 `serve.py` now serves `/` as this page (no local redirect to `/atlas/`). When the main product ships, it replaces this file.
 
 ## Privacy and Terms pages (`site-config.json`)

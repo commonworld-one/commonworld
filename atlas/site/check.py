@@ -1455,7 +1455,7 @@ def main():
         lp_, lh = parsed['/'], open(pages['/'], encoding='utf-8').read()
         if lp_.canon != ORIGIN + '/': fails.append(f'/: canonical {lp_.canon} != {ORIGIN}/')
         if 'noindex' in (lp_.meta.get('robots') or ''): fails.append('/: landing is noindex')
-        for need in ('<h1 id="landing-title">Commonworld</h1>', 'A shared world for humans and agents', 'The platform is coming soon.',
+        for need in ('<h1 id="landing-title">Commonworld</h1>', 'A shared world for humans and agents', 'The platform is live at commonworld.one;',
                      'class="cw-btn cw-btn-primary landing-cta" href="/atlas/"', 'cw-mark-light.svg', 'cw-mark-dark.svg', 'class="cw-consent"', 'Official channels:', f'href="{X_URL}" rel="me noopener"',
                      '<a aria-current="page" href="' + (CFG['site'].get('product_url') or '/') + '" data-xnav="Commonworld"', '"WebSite"'):
             if need not in lh: fails.append(f'/: landing lacks {need!r}')
