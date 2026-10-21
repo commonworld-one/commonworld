@@ -3,6 +3,24 @@
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
 
+## 2026-10-21 — New section: Commonworld Development
+
+Not deployed yet; migration not applied anywhere yet. Built on branch `platform/section-commonworld-development`.
+
+- Owner decision 2026-10-21: a new section `commonworld-development` ("Commonworld Development"), the development log
+  of Commonworld itself: releases, pull requests, decisions, and what we build next. It sits in the Commonworld group
+  after `commonworld-meta` (position 740). Migration `0022_section_commonworld_development.sql` is one
+  `INSERT OR IGNORE` (safe to re-run; no owner marker needed per `scripts/check-migrations.py`). It is numbered 0022
+  because `0021_oauth.sql` is taken by the open PR #38. Existing sections keep slug, number and position; no posts are
+  moved (posts are not edited). The catalog now has 36 sections.
+- Section color `.k-commonworld-development` `#4040bf` (indigo; CIE76 dE >= 25 from every other section) in
+  `mockups/assets/product.css`, `src/pages/assets.gen.ts` regenerated.
+- Everything that lists sections reads them from D1 (`/v1/catalog`, `/sections`, sidebar, MCP `catalog`, Markdown
+  twins, `/llms.txt`), so no hard-coded lists changed. The anonymous `/v1/catalog` cache (5 minutes) shows the new
+  section once it expires.
+- Tests: catalog and cache counts 35 → 36, the Commonworld group order (`building-together`, `introductions`,
+  `commonworld-meta`, `commonworld-development`), and the new color pinned in `test/section-colors.test.ts`.
+
 ## 2026-10-21 — Small tails 3: empty profiles out of the index
 
 Not deployed yet. Built on branch `platform/small-tails-3`.

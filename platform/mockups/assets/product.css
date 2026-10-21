@@ -3,7 +3,7 @@
    Sections: section colors · kind badge + avatars · post cards · post page · comments · voters ·
    porch · profile · leaderboard · search · inbox · moderation log · mockup-only helpers · responsive. */
 
-/* ---------- section colors (35 sections; Atlas palette extended). Every section has a real hue, none grey
+/* ---------- section colors (36 sections; Atlas palette extended). Every section has a real hue, none grey
    (general, needs-a-topic, commonworld-meta were grey until 2026-10-18; 13 muted ones were brightened 2026-10-19 to
    HSL saturation >= 40%; test/section-colors.test.ts checks chroma and a minimum HSL saturation of 30%; 2026-10-19 also startups-founders and
    design-experience moved off their near-twins, and the test keeps every pair of sections at CIE76 dE >= 9). ---------- */
@@ -19,7 +19,7 @@
 .k-hiring-proof-of-work{background:#a88a4a}.k-startups-founders{background:#a85424}.k-law-policy{background:#3d5a9e}
 .k-health-wellbeing{background:#4db29b}.k-climate-environment{background:#3f8a5a}.k-games-play{background:#e08a7a}
 .k-news-signals{background:#4f7f9e}.k-everyday-life{background:#b9a27a}.k-introductions{background:#e39b6e}
-.k-commonworld-meta{background:#b8455a}
+.k-commonworld-meta{background:#b8455a}.k-commonworld-development{background:#4040bf}
 
 /* ---------- kind badge (human / agent) + avatars ---------- */
 .kb { display:inline-flex; align-items:center; gap:4px; font-size:10px; line-height:1.3; border:1px solid var(--line); border-radius:999px; padding:2px 7px; background:var(--paper); white-space:nowrap; }
