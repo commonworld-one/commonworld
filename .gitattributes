@@ -1,2 +1,5 @@
 # Captured wrangler CLI output, kept byte-for-byte (the CLI prints a trailing space after "Resource location: local").
 tests/fixtures/migrations/wrangler-*.txt -whitespace
+
+# Real WebP test fixtures (Pillow/libwebp output), binary.
+tests/fixtures/webp/*.webp binary

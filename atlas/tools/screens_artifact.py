@@ -17,8 +17,9 @@ copied or pushed; every problem is reported (not only the first):
              optional), each of the right type: file == "<slug>.webp", sha256 64-hex, dhash 16-hex, website / source_url
              / shot_url https URLs, http_status an int 100..599 (not a bool), title a string, captured_at
              YYYY-MM-DDTHH:MM:SSZ, width 1200, height 750, bytes a positive int.
-  images     every <slug>.webp in the artifact is a WebP (RIFF....WEBP), is referenced by the manifest, and its sha256 and
-             size equal the manifest record.
+  images     every <slug>.webp in the artifact is at most MAX_BYTES, is a structurally valid WebP (webp_problem below:
+             RIFF size, chunk walk, VP8 / VP8L / VP8X headers, no trailing bytes), is referenced by the manifest, and its
+             sha256, size and decoded width x height equal the manifest record.
   cards      (--data) every slug whose image is in the artifact is a live Atlas card of the newest
              snapshot-verified-*.json, and its `website` equals the card's canonical_url (what the capture shot).
   base       (--base, the atlas/screens directory of the atlas-screens checkout the PR goes to) no slug of the stored
@@ -31,7 +32,7 @@ reaches atlas-screens at all, e.g. {"screens": {"dealwork-ai": null}}, which wou
 
 Usage: screens_artifact.py --artifact DIR [--base DIR] [--data DIR]     exit 0 ok, 1 problems found, 2 usage
 """
-import argparse, glob, hashlib, json, os, re, stat, sys
+import argparse, glob, hashlib, json, os, re, stat, struct, sys
 
 SLUG = re.compile(r'[a-z0-9][a-z0-9-]{0,80}')          # same as atlas/site/screens.py
 WEBP_NAME = re.compile(r'([a-z0-9][a-z0-9-]{0,80})\.webp')
@@ -43,6 +44,162 @@ TOP_KEYS = {'screens', 'note', 'format', 'updated_at'}
 REQUIRED = {'file', 'sha256', 'dhash', 'website', 'source_url', 'http_status', 'title', 'captured_at', 'width',
             'height', 'bytes'}
 OPTIONAL = {'shot_url'}
+MAX_BYTES = 8 * 1024 * 1024        # real screens are 5..210 KB
+MAX_DIM = 4096                     # per side; real screens are 1200x750 (the WebP format allows up to 16383 / 2^24)
+FOURCC = re.compile(rb'[A-Z0-9 ]{4}')
+VP8X_CHUNKS = {b'ICCP', b'ANIM', b'ANMF', b'ALPH', b'VP8 ', b'VP8L', b'EXIF', b'XMP '}
+
+
+def _chunks(b, start, end, where):
+    """Walk RIFF chunks in b[start:end] -> ([(fourcc, payload_start, size)], problem or None). Every chunk must fit,
+    odd sizes carry one zero pad byte, and the chunks must end exactly at `end`."""
+    out, off = [], start
+    while off < end:
+        if end - off < 8:
+            return out, f'{where}: {end - off} stray bytes after the last chunk'
+        cc, size = b[off:off + 4], struct.unpack_from('<I', b, off + 4)[0]
+        if not FOURCC.fullmatch(cc):
+            return out, f'{where}: bad chunk id {cc!r} at offset {off}'
+        stop = off + 8 + size
+        if stop + (size & 1) > end:
+            return out, f'{where}: chunk {cc.decode()} at offset {off} ({size} bytes) runs past the end'
+        if size & 1 and b[stop] != 0:
+            return out, f'{where}: chunk {cc.decode()} pad byte is not zero'
+        out.append((cc, off + 8, size))
+        off = stop + (size & 1)
+    return out, None
+
+
+def _vp8(b, o, n):
+    """Lossy bitstream header (RFC 6386 9.1) -> ((w, h), None) or (None, problem)."""
+    if n < 10:
+        return None, f'VP8 chunk too short ({n} bytes)'
+    tag = b[o] | b[o + 1] << 8 | b[o + 2] << 16
+    if tag & 1:
+        return None, 'VP8 frame is not a key frame'
+    if (tag >> 1) & 7 > 3:
+        return None, 'VP8 bad version'
+    if not (tag >> 4) & 1:
+        return None, 'VP8 frame is not shown'
+    if (tag >> 5) > n - 10:
+        return None, 'VP8 first partition runs past the chunk'
+    if b[o + 3:o + 6] != b'\x9d\x01\x2a':
+        return None, 'VP8 key frame start code missing'
+    w, h = struct.unpack_from('<HH', b, o + 6)
+    w, h = w & 0x3fff, h & 0x3fff
+    if not w or not h:
+        return None, f'VP8 zero dimension {w}x{h}'
+    return (w, h), None
+
+
+def _vp8l(b, o, n):
+    """Lossless bitstream header -> ((w, h), None) or (None, problem)."""
+    if n < 5:
+        return None, f'VP8L chunk too short ({n} bytes)'
+    if b[o] != 0x2f:
+        return None, 'VP8L signature byte is not 0x2f'
+    v = struct.unpack_from('<I', b, o + 1)[0]
+    if v >> 29:
+        return None, 'VP8L bad version'
+    return ((v & 0x3fff) + 1, ((v >> 14) & 0x3fff) + 1), None
+
+
+def _image(b, cc, o, n):
+    return _vp8(b, o, n) if cc == b'VP8 ' else _vp8l(b, o, n)
+
+
+def webp_problem(b):
+    """-> ((width, height), None) for a structurally valid WebP, or (None, problem). Stdlib only, no decoding: the
+    RIFF size equals the file length - 8 (nothing after it, nothing missing), every chunk fits, and the first chunk is
+    VP8 (key frame start code 9d 01 2a, non-zero size) or VP8L (signature 0x2f) alone, or VP8X (canvas size, flags)
+    followed by the image: one VP8/VP8L (ALPH allowed before VP8) whose size equals the canvas, or ANIM + ANMF frames
+    each holding one. Sides are capped at MAX_DIM."""
+    if len(b) > MAX_BYTES:
+        return None, f'{len(b)} bytes, over {MAX_BYTES}'
+    if len(b) < 20 or b[:4] != b'RIFF' or b[8:12] != b'WEBP':
+        return None, 'no RIFF....WEBP header'
+    riff = struct.unpack_from('<I', b, 4)[0]
+    if riff != len(b) - 8:
+        return None, f'RIFF size {riff} is not file length - 8 ({len(b) - 8})'
+    if riff & 1:
+        return None, f'RIFF size {riff} is odd'
+    chunks, prob = _chunks(b, 12, len(b), 'RIFF')
+    if prob:
+        return None, prob
+    if not chunks:
+        return None, 'no chunks'
+    cc, o, n = chunks[0]
+    if cc in (b'VP8 ', b'VP8L'):
+        if len(chunks) != 1:
+            return None, f'simple {cc.decode().strip()} file has extra chunks'
+        dims, prob = _image(b, cc, o, n)
+    elif cc == b'VP8X':
+        dims, prob = _vp8x(b, chunks)
+    else:
+        return None, f'first chunk is {cc.decode()}, not VP8 / VP8L / VP8X'
+    if prob:
+        return None, prob
+    if dims[0] > MAX_DIM or dims[1] > MAX_DIM:
+        return None, f'{dims[0]}x{dims[1]} is over {MAX_DIM} per side'
+    return dims, None
+
+
+def _vp8x(b, chunks):
+    _, o, n = chunks[0]
+    if n != 10:
+        return None, f'VP8X chunk is {n} bytes, not 10'
+    flags = b[o]
+    if flags & 0xc1 or b[o + 1:o + 4] != b'\0\0\0':
+        return None, 'VP8X reserved bits set'
+    w = (b[o + 4] | b[o + 5] << 8 | b[o + 6] << 16) + 1
+    h = (b[o + 7] | b[o + 8] << 8 | b[o + 9] << 16) + 1
+    if w > MAX_DIM or h > MAX_DIM:
+        return None, f'VP8X canvas {w}x{h} is over {MAX_DIM} per side'
+    rest = chunks[1:]
+    ids = [c for c, _, _ in rest]
+    unknown = sorted({c.decode() for c in ids} - {c.decode() for c in VP8X_CHUNKS})
+    if unknown:
+        return None, f'VP8X file has unexpected chunks {", ".join(unknown)}'
+    if flags & 0x02:                                   # animation
+        if ids.count(b'ANIM') != 1 or b'ANMF' not in ids or b'VP8 ' in ids or b'VP8L' in ids or b'ALPH' in ids:
+            return None, 'animated VP8X needs one ANIM, ANMF frames and no top-level image chunk'
+        for cc, fo, fn in rest:
+            if cc == b'ANIM' and fn != 6:
+                return None, f'ANIM chunk is {fn} bytes, not 6'
+            if cc != b'ANMF':
+                continue
+            if fn < 16 + 8:
+                return None, 'ANMF frame too short'
+            fx, fy = (b[fo] | b[fo + 1] << 8 | b[fo + 2] << 16) * 2, (b[fo + 3] | b[fo + 4] << 8 | b[fo + 5] << 16) * 2
+            fw = (b[fo + 6] | b[fo + 7] << 8 | b[fo + 8] << 16) + 1
+            fh = (b[fo + 9] | b[fo + 10] << 8 | b[fo + 11] << 16) + 1
+            if fx + fw > w or fy + fh > h:
+                return None, 'ANMF frame lies outside the canvas'
+            sub, prob = _chunks(b, fo + 16, fo + fn, 'ANMF')
+            if prob:
+                return None, prob
+            imgs = [s for s in sub if s[0] in (b'VP8 ', b'VP8L')]
+            if len(imgs) != 1 or any(s[0] not in (b'VP8 ', b'VP8L', b'ALPH') for s in sub):
+                return None, 'ANMF frame needs exactly one VP8 / VP8L image (ALPH optional)'
+            dims, prob = _image(b, *imgs[0])
+            if prob:
+                return None, prob
+            if dims != (fw, fh):
+                return None, f'ANMF image {dims[0]}x{dims[1]} is not the frame size {fw}x{fh}'
+        return (w, h), None
+    if b'ANIM' in ids or b'ANMF' in ids:
+        return None, 'still VP8X file has ANIM / ANMF chunks'
+    imgs = [c for c in rest if c[0] in (b'VP8 ', b'VP8L')]
+    if len(imgs) != 1:
+        return None, f'VP8X file has {len(imgs)} image chunks, not 1'
+    if b'ALPH' in ids and (imgs[0][0] != b'VP8 ' or ids.count(b'ALPH') != 1 or ids.index(b'ALPH') > ids.index(b'VP8 ')):
+        return None, 'ALPH chunk must come once, right before a VP8 image'
+    dims, prob = _image(b, *imgs[0])
+    if prob:
+        return None, prob
+    if dims != (w, h):
+        return None, f'image {dims[0]}x{dims[1]} is not the VP8X canvas {w}x{h}'
+    return (w, h), None
 
 
 def _https(v):
@@ -172,10 +329,13 @@ def check(artifact, base=None, cards=None):
             good[slug] = r
     # images in the artifact
     for slug, p in images.items():
+        if os.lstat(p).st_size > MAX_BYTES:
+            out.append(f'images: screens/{slug}.webp is over {MAX_BYTES} bytes'); continue
         with open(p, 'rb') as fh:
-            b = fh.read()
-        if b[:4] != b'RIFF' or b[8:12] != b'WEBP':
-            out.append(f'images: screens/{slug}.webp is not a WebP image')
+            b = fh.read(MAX_BYTES + 1)
+        dims, prob = webp_problem(b)
+        if prob:
+            out.append(f'images: screens/{slug}.webp is not a valid WebP image ({prob})'[:300])
         if slug not in screens:
             out.append(f'images: screens/{slug}.webp is not referenced by the manifest'); continue
         r = good.get(slug)
@@ -185,6 +345,8 @@ def check(artifact, base=None, cards=None):
             out.append(f'images: screens/{slug}.webp sha256 differs from the manifest')
         if len(b) != r['bytes']:
             out.append(f'images: screens/{slug}.webp is {len(b)} bytes, manifest says {r["bytes"]}')
+        if dims and dims != (r['width'], r['height']):
+            out.append(f'images: screens/{slug}.webp is {dims[0]}x{dims[1]}, manifest says {r["width"]}x{r["height"]}')
         if cards is not None:
             if slug not in cards:
                 out.append(f'cards: {slug} is not a live Atlas card')

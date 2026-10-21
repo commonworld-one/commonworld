@@ -76,6 +76,15 @@ jobs:
           case "$status" in identical) echo "screens lock = atlas-screens head" ;;
             ahead) echo "::notice::atlas-screens has newer commits than atlas/screens.lock; bump the lock in a PR to publish them" ;;
             *) echo "::error::$screens_sha is not on atlas-screens ($status)"; exit 1 ;; esac
+      - name: Pinned screenshots pass the publish-side WebP check
+        # the same stdlib parser screens.yml's publish job runs (atlas/tools/screens_artifact.py), on every stored image
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/pinned"
+          git archive "$(tr -d ' \t\r' < atlas/screens.lock)" atlas/screens | tar -x -C "$RUNNER_TEMP/pinned"
+          CW_ATLAS_SCREENS="$RUNNER_TEMP/pinned/atlas/screens" \
+            python -m unittest -v tests.test_screens_artifact.Artifact.test_real_atlas_screens 2>&1 | tee "$RUNNER_TEMP/pinned.log"
+          grep -q '^OK$' "$RUNNER_TEMP/pinned.log" && ! grep -q 'skipped' "$RUNNER_TEMP/pinned.log"
       - name: Build
         env:
           CW_SCREENS_REQUIRED: '1'   # CI must publish the previews; a local build without the branch shows placeholders

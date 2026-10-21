@@ -15,7 +15,10 @@ Not deployed yet. Built on branch `platform/ci-hardening` (findings from a Codex
   issues write) runs no browser and no code from the capture: it downloads the changed images and checks the artifact
   with `atlas/tools/screens_artifact.py` (sparse checkout of the workflow's own commit, no credentials kept) before
   anything is copied: `manifest.json` mandatory, every entry an object with the expected fields and types (a `null`
-  entry no longer passes), every `<slug>.webp` a WebP referenced by the manifest with matching sha256 and size, every
+  entry no longer passes), every `<slug>.webp` a structurally valid WebP (stdlib parser: RIFF size = file length − 8
+  with nothing after it, every chunk inside the file, first chunk VP8 with key-frame start code and non-zero size, VP8L with signature 0x2f, or VP8X with
+  canvas size and one matching image chunk or ANIM + ANMF frames; at most 8 MiB and 4096 px per side) referenced by the
+  manifest with matching sha256, size and width × height (a bare `RIFF\0\0\0\0WEBP` header no longer passes), every
   new image a live Atlas card whose `website` is the card's URL, stored entries without a new image unchanged and never
   removed. Then it opens the PR against `atlas-screens` as before. The branch `atlas-screens` itself is never pushed to
   or deleted. Tests: `tests/test_screens_netguard.py`, `tests/test_screens_artifact.py`.
