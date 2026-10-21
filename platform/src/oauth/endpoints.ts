@@ -24,7 +24,7 @@ import {
   TOKEN_RATE_PER_MINUTE, VERIFIER_PATTERN, ACCESS_PATTERN, APPS_PAGE, MCP_ENDPOINT, MCP_ME_ENDPOINT, canonicalResource, issuerOf, mcpResource, parseScope, randomToken, redirectProblem, resourceHint, s256, sameString, scopeString,
   type McpEndpoint,
 } from './config';
-import { consumeCode, createGrant, findRefresh, getClient, grantOfToken, insertClient, revokeGrant, rotateRefresh, tokenHash, type Client } from './store';
+import { consumeCode, createGrant, findRefresh, getClient, grantOfToken, insertClient, recordCodeReplay, revokeGrant, rotateRefresh, tokenHash, type Client } from './store';
 
 const API_PATHS = new Set<string>([PRM_PATH, PRM_MCP_PATH, PRM_MCP_ME_PATH, AS_METADATA_PATH, OAUTH_PATHS.register, OAUTH_PATHS.token, OAUTH_PATHS.revoke]);
 export const isOAuthApiPath = (path: string): boolean => API_PATHS.has(path);
@@ -230,8 +230,9 @@ async function token(request: Request, env: Env, origin: string): Promise<Respon
     if (!VERIFIER_PATTERN.test(verifier)) throw new OAuthError(400, 'invalid_request', 'code_verifier is required (PKCE S256, 43-128 characters)');
     const { row, reused } = await consumeCode(env, code);
     if (!row) {
-      // a second use: whatever the first one issued is revoked (OAuth 2.1 4.1.3)
-      if (reused?.grant_id && reused.client_id === client.client_id) await revokeGrant(env, reused.grant_id, 'code_reuse');
+      // a second use (OAuth 2.1 4.1.3): recorded atomically, so whatever the first one issued is revoked, and a first
+      // exchange still between consumeCode and createGrant (grant_id not attached yet) gets no grant at all
+      if (reused && reused.client_id === client.client_id) await recordCodeReplay(env, reused.code_hash, client.client_id);
       throw new OAuthError(400, 'invalid_grant', 'invalid authorization code');
     }
     if (row.client_id !== client.client_id) throw new OAuthError(400, 'invalid_grant', 'invalid authorization code');
@@ -245,7 +246,7 @@ async function token(request: Request, env: Env, origin: string): Promise<Respon
     // createGrant re-checks the account and the code inside its own batch: a key rotation, recovery, freeze or deletion
     // that lands after the check above still ends with no grant and no token (null)
     const tokens = await createGrant(env, row, client.grant_types.includes('refresh_token'));
-    if (!tokens) throw new OAuthError(400, 'invalid_grant', 'the account is not active or its credentials changed; connect again');
+    if (!tokens) throw new OAuthError(400, 'invalid_grant', 'the authorization code was used more than once, or the account is not active or its credentials changed; connect again');
     return oauthJson(200, tokenBody(tokens));
   }
 

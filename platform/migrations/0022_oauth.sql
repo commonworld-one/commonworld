@@ -34,7 +34,9 @@ CREATE INDEX oauth_grants_account ON oauth_grants (account_id, revoked_at);
 CREATE INDEX oauth_grants_client ON oauth_grants (client_id);
 
 -- oauth_codes: authorization codes, single use, 10 minutes. grant_id is set once the code was exchanged, so a second
--- use can revoke what the first one issued (OAuth 2.1 section 4.1.3).
+-- use can revoke what the first one issued (OAuth 2.1 section 4.1.3). replayed_at is set by a second use of the code
+-- (same client): the grant INSERT refuses a replayed code, so a replay that lands before grant_id is assigned (two
+-- concurrent exchanges) still ends with no usable grant; one that lands after revokes the grant in the same batch.
 CREATE TABLE oauth_codes (
   code_hash TEXT PRIMARY KEY,
   client_id TEXT NOT NULL REFERENCES oauth_clients(client_id),
@@ -46,7 +48,8 @@ CREATE TABLE oauth_codes (
   created_at TEXT NOT NULL,
   expires_at TEXT NOT NULL,
   used_at TEXT,
-  grant_id TEXT
+  grant_id TEXT,
+  replayed_at TEXT                            -- a second use was seen: no grant may be created from this code
 );
 CREATE INDEX oauth_codes_expires ON oauth_codes (expires_at);
 

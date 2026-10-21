@@ -47,12 +47,12 @@ export async function createCode(env: Env, input: CodeInput, now = Date.now()): 
   return code;
 }
 
-export interface CodeRow { code_hash: string; client_id: string; account_id: string; redirect_uri: string; code_challenge: string; scope: string; resource: string; expires_at: string; used_at: string | null; grant_id: string | null }
+export interface CodeRow { code_hash: string; client_id: string; account_id: string; redirect_uri: string; code_challenge: string; scope: string; resource: string; expires_at: string; used_at: string | null; grant_id: string | null; replayed_at: string | null }
 
 /**
  * Uses a code once: the UPDATE … WHERE used_at IS NULL wins exactly once (whatever the outcome of the checks that
- * follow, so a code never gets a second try). `reused` = the code exists but was already used: the caller revokes the
- * grant that first use created (OAuth 2.1 4.1.3).
+ * follow, so a code never gets a second try). `reused` = the code exists but was already used: the caller records the
+ * replay with recordCodeReplay, which revokes the grant that first use created (OAuth 2.1 4.1.3).
  */
 export async function consumeCode(env: Env, code: string, now = Date.now()): Promise<{ row: CodeRow | null; reused: CodeRow | null }> {
   const hash = await tokenHash(env, code);
@@ -61,6 +61,25 @@ export async function consumeCode(env: Env, code: string, now = Date.now()): Pro
   if (row) return { row, reused: null };
   const old = await env.DB.prepare('SELECT * FROM oauth_codes WHERE code_hash = ?').bind(hash).first<CodeRow>();
   return { row: null, reused: old };
+}
+
+/**
+ * A second use of a code by the client it was issued to (OAuth 2.1 4.1.3), in ONE D1 batch (a transaction): marks the
+ * code replayed (createGrant refuses a replayed code) and revokes whatever grant the first use already attached. The
+ * first exchange marks the code used, then runs several awaited checks before createGrant attaches grant_id, so a
+ * concurrent replay can land in between: D1 serializes the two batches, and either this one comes first (the grant
+ * INSERT sees replayed_at and writes nothing, so no token is issued) or createGrant comes first (grant_id is set and
+ * this batch revokes that grant and deletes its tokens). Either way the stolen-code race leaves no usable token.
+ * (Codex review P1, PR #38.)
+ */
+export async function recordCodeReplay(env: Env, codeHash: string, clientId: string, now = Date.now()): Promise<void> {
+  const at = new Date(now).toISOString();
+  const grantOf = 'SELECT grant_id FROM oauth_codes WHERE code_hash = ?2 AND client_id = ?3';
+  await env.DB.batch([
+    env.DB.prepare('UPDATE oauth_codes SET replayed_at = COALESCE(replayed_at, ?1) WHERE code_hash = ?2 AND client_id = ?3').bind(at, codeHash, clientId),
+    env.DB.prepare(`UPDATE oauth_grants SET revoked_at = ?1, revoke_reason = 'code_reuse' WHERE revoked_at IS NULL AND id = (${grantOf})`).bind(at, codeHash, clientId),
+    env.DB.prepare(`DELETE FROM oauth_tokens WHERE grant_id = (${grantOf})`).bind(at, codeHash, clientId),
+  ]);
 }
 
 // ---------------------------------------------------------------- grants and tokens
@@ -87,7 +106,8 @@ async function tokenStatements(env: Env, grantId: string, scope: string, withRef
 
 /**
  * New grant (a connected app) from an exchanged code, with its first token pair, in ONE D1 batch (a transaction) whose
- * grant INSERT is conditional: the account is still active AND the code row is still there, unexchanged. Every
+ * grant INSERT is conditional: the account is still active AND the code row is still there, unexchanged and not
+ * replayed (recordCodeReplay: a concurrent second use of the code refuses the grant, Codex review P1). Every
  * credential change that must stop an app (key rotation, approved recovery, freeze single or bulk, disable, deletion)
  * deletes the account's codes in its own batch (revokeAccountOAuth / revokeFreezeBatchOAuth), so the code row is the
  * credential generation: if any of them lands between the status check and this batch, nothing is inserted and the
@@ -101,7 +121,7 @@ export async function createGrant(env: Env, code: CodeRow, withRefresh: boolean,
     env.DB.prepare(`INSERT INTO oauth_grants (id, client_id, account_id, scope, resource, created_at, last_used_at)
       SELECT ?1, ?2, a.id, ?4, ?5, ?6, ?6 FROM accounts a
       WHERE a.id = ?3 AND a.status = 'active'
-        AND EXISTS (SELECT 1 FROM oauth_codes c WHERE c.code_hash = ?7 AND c.account_id = a.id AND c.grant_id IS NULL)`)
+        AND EXISTS (SELECT 1 FROM oauth_codes c WHERE c.code_hash = ?7 AND c.account_id = a.id AND c.grant_id IS NULL AND c.replayed_at IS NULL)`)
       .bind(grantId, code.client_id, code.account_id, code.scope, code.resource, at, code.code_hash),
     ...statements,
     env.DB.prepare('UPDATE oauth_codes SET grant_id = ?1 WHERE code_hash = ?2 AND EXISTS (SELECT 1 FROM oauth_grants WHERE id = ?1)').bind(grantId, code.code_hash),

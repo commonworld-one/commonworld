@@ -62,6 +62,13 @@ Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0022_
   pending links carry their challenge codes (recovery data); the tool is hidden from an OAuth client's `tools/list`.
   A bulk freeze (`POST /v1/admin/freezes`) now revokes every OAuth grant, token and pending code of the frozen accounts,
   like a single freeze; reverting the batch does not reconnect apps.
+- Codex review P1 (code replay race, SHA 406a094): two exchanges presenting the same code concurrently could leave the
+  winner with usable tokens, because the loser saw no `grant_id` yet and skipped revocation. A second use by the same
+  client now runs `recordCodeReplay` (`src/oauth/store.ts`), one D1 batch that sets `oauth_codes.replayed_at` (new
+  column in `0022_oauth.sql`) and revokes the grant attached to the code, if any (`code_reuse`, tokens deleted).
+  `createGrant` refuses a replayed code inside its own batch, so whichever batch D1 runs first, no usable token remains.
+  Tests: replay before the grant (no grant, no token), replay after it (revoked, access and refresh dead), normal
+  exchange unchanged, a foreign client's replay marks nothing.
 
 ## 2026-10-21 — CI hardening: screens capture isolation, migration baseline, Pillow 13
 

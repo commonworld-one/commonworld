@@ -274,6 +274,68 @@ describe('authorization code + PKCE flow', () => {
     expect((await mcp('tools/list', {}, first.body.access_token)).status).toBe(401);
   });
 
+  it('P1 (code replay race): a replay seen before the first exchange attached its grant leaves no grant and no token', async () => {
+    const citizen = await register('oauth-replay1');
+    const client = (await registerClient()).body;
+    const { verifier, challenge } = await pkceAsync();
+    const code = new URL((await consent({ client_id: client.client_id, code_challenge: challenge }, { key: citizen.key })).headers.get('location')!).searchParams.get('code')!;
+    const counts = async () => ({
+      grants: (await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_grants').first<{ n: number }>())!.n,
+      tokens: (await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_tokens').first<{ n: number }>())!.n,
+    });
+    // the first exchange has consumed the code (used_at set, grant_id still null) and is running its checks ...
+    const first = await consumeCode(env as any, code);
+    expect(first.row).not.toBeNull();
+    expect(first.row!.grant_id).toBeNull();
+    // ... when a second exchange presents the same code: refused, and the replay is recorded on the code
+    const replay = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id });
+    expect(replay.status).toBe(400);
+    expect(replay.body.error).toBe('invalid_grant');
+    const marked = await env.DB.prepare('SELECT replayed_at, grant_id FROM oauth_codes WHERE code_hash = ?').bind(first.row!.code_hash).first<{ replayed_at: string | null; grant_id: string | null }>();
+    expect(marked?.replayed_at).toBeTruthy();
+    expect(marked?.grant_id).toBeNull();
+    // the first exchange now reaches createGrant: refused, nothing usable exists
+    expect(await createGrant(env as any, first.row!, true)).toBeNull();
+    expect(await counts()).toEqual({ grants: 0, tokens: 0 });
+  });
+
+  it('P1 (code replay race): a replay seen after the grant was attached revokes it and deletes its tokens', async () => {
+    const citizen = await register('oauth-replay2');
+    const client = (await registerClient()).body;
+    const { verifier, challenge } = await pkceAsync();
+    const code = new URL((await consent({ client_id: client.client_id, code_challenge: challenge }, { key: citizen.key })).headers.get('location')!).searchParams.get('code')!;
+    const first = await consumeCode(env as any, code);
+    const issued = await createGrant(env as any, first.row!, true);
+    expect(issued).not.toBeNull();
+    expect((await mcp('tools/list', {}, issued!.access_token)).status).toBe(200);
+    const replay = await token({ grant_type: 'authorization_code', code, code_verifier: verifier, client_id: client.client_id });
+    expect(replay.body.error).toBe('invalid_grant');
+    const grant = await env.DB.prepare('SELECT g.revoked_at, g.revoke_reason FROM oauth_grants g JOIN oauth_codes c ON c.grant_id = g.id WHERE c.code_hash = ?').bind(first.row!.code_hash).first<{ revoked_at: string | null; revoke_reason: string | null }>();
+    expect(grant?.revoked_at).toBeTruthy();
+    expect(grant?.revoke_reason).toBe('code_reuse');
+    expect((await env.DB.prepare('SELECT COUNT(*) AS n FROM oauth_tokens').first<{ n: number }>())!.n).toBe(0);
+    expect((await mcp('tools/list', {}, issued!.access_token)).status).toBe(401);
+    const refresh = await token({ grant_type: 'refresh_token', refresh_token: issued!.refresh_token!, client_id: client.client_id });
+    expect(refresh.body.error).toBe('invalid_grant');
+  });
+
+  it('P1 (code replay race): a single exchange still issues a working pair; a replay by another client marks nothing', async () => {
+    const citizen = await register('oauth-replay3');
+    const { client, code, tokens } = await connect(citizen.key);
+    expect((await mcp('tools/list', {}, tokens.access_token)).status).toBe(200);
+    const row = await env.DB.prepare('SELECT replayed_at, grant_id FROM oauth_codes WHERE grant_id IS NOT NULL').first<{ replayed_at: string | null; grant_id: string | null }>();
+    expect(row?.replayed_at).toBeNull();
+    expect(row?.grant_id).toBeTruthy();
+    // a different client presenting the code is refused but cannot revoke this client's grant
+    const other = (await registerClient({}, '203.0.113.8')).body;
+    const foreign = await token({ grant_type: 'authorization_code', code, code_verifier: 'x'.repeat(43), client_id: other.client_id });
+    expect(foreign.body.error).toBe('invalid_grant');
+    expect((await env.DB.prepare('SELECT replayed_at FROM oauth_codes WHERE grant_id IS NOT NULL').first<{ replayed_at: string | null }>())?.replayed_at).toBeNull();
+    expect((await mcp('tools/list', {}, tokens.access_token)).status).toBe(200);
+    const refreshed = await token({ grant_type: 'refresh_token', refresh_token: tokens.refresh_token, client_id: client.client_id });
+    expect(refreshed.status).toBe(200);
+  });
+
   it('redirect_uri must match exactly: an unregistered one gets an error page (no redirect); a different one at the token endpoint is refused', async () => {
     const citizen = await register('oauth-m');
     const client = (await registerClient()).body;
