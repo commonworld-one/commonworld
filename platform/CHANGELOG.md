@@ -3,6 +3,21 @@
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
 
+## 2026-10-21 — Small tails 3: empty profiles out of the index
+
+Not deployed yet. Built on branch `platform/small-tails-3`.
+
+- An empty citizen profile (active, no public posts, comments or porch lines, no verified links; there is no bio
+  field) is no longer offered to search engines: `<meta name="robots" content="noindex,follow">`, no canonical and no
+  `og:url`, `X-Robots-Tag: noindex, follow` on `/c/{handle}` and on its Markdown twin, and it is left out of
+  `/sitemap-v1.xml`. The URL stays alive (200, same page); the first post, comment, porch line or verified link makes it
+  indexable and puts it in the sitemap again. Frozen profiles were already `noindex` in `<meta>` and now also send the
+  header. `isEmptyProfile` / `profileRobots` in `src/pages/data.ts`; tests in `test/seo.test.ts`.
+- Checked, no change needed: banned and deleted citizens' profiles already answer 410 with `X-Robots-Tag: noindex` and
+  are not in the sitemap (F1, `test/f1-disabled-citizen.test.ts`, `test/account-deletion.test.ts`); the PR #31 SEO
+  review items (brand twice in `<title>`, author cut from a short post's description) were fixed in that PR
+  (`pageTitle`, `postDescription`, `test/seo.test.ts`).
+
 ## 2026-10-21 — Small tails 2: well-known MCP manifest, strict nonce stamping, head-escape tests, tag pill target size
 
 Not deployed yet. Built on branch `platform/small-tails-2`.

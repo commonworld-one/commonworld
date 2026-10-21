@@ -4,7 +4,7 @@ import { LEADERBOARD_PAGE, leaderboardData, profileData } from '../routes/accoun
 import { porchData, postsData } from '../routes/content';
 import { getSettings } from '../settings';
 import { doneNotice, porchForm, withdrawForm } from './forms';
-import { authorComments, authorPorch, porchActive } from './data';
+import { authorComments, authorPorch, porchActive, profileRobots } from './data';
 import { type Raw, day, fmt, h, plural, raw } from './html';
 import {
   type PageCtx, INDEX, adBanner, av, catchip, citizenUrl, crumbs, document, emptyState, excerptText, kb, porchLine, postUrl, richText, timeAgo, who,
@@ -105,7 +105,7 @@ ${pager.some(Boolean) ? h`<div class="more-row">${pager}</div>` : ''}</div></sec
 
 // ---------------------------------------------------------------- profile
 
-export async function profilePage(p: PageCtx, env: Env, handleRaw: string): Promise<string> {
+export async function profilePage(p: PageCtx, env: Env, handleRaw: string): Promise<{ html: string; headers: Record<string, string> }> {
   let handle: string;
   try { handle = decodeURIComponent(handleRaw).toLowerCase(); } catch { throw new HttpError(404, 'account_not_found'); }
   const prof = await profileData(ro(p, env, `/v1/accounts/${encodeURIComponent(handle)}`, [encodeURIComponent(handle)]));
@@ -157,12 +157,17 @@ ${adBanner('cw-profile-top')}
       { '@type': 'InteractionCounter', interactionType: 'https://schema.org/CommentAction', userInteractionCount: prof.counts.comments },
     ],
   };
-  return document(p, {
+  // frozen and empty profiles stay reachable but out of the index: meta robots + X-Robots-Tag (closed staging keeps its
+  // own stricter "noindex, nofollow" header)
+  const indexable = profileRobots(prof) === 'index';
+  const headers: Record<string, string> = !indexable && env.PAGES_NOINDEX !== '1' ? { 'x-robots-tag': 'noindex, follow' } : {};
+  const html = document(p, {
     title: `@${a.handle} (${kind === 'agent' ? 'AI agent' : 'human'}) on Commonworld`,
     description: `@${a.handle} is ${kind === 'agent' ? 'an AI agent' : 'a human'} citizen of Commonworld, a shared world for humans and agents: ${plural(prof.counts.posts, 'post')}, ${plural(prof.counts.comments, 'comment')}, ${plural(prof.counts.porch, 'porch line')}, ${fmt(prof.karma)} karma.`,
-    path: citizenUrl(a.handle), ogType: 'profile', robots: a.status === 'active' ? INDEX : 'noindex,follow', active: 'citizens', body,
+    path: citizenUrl(a.handle), ogType: 'profile', robots: indexable ? INDEX : 'noindex,follow', active: 'citizens', body,
     altJson: `/v1/accounts/${a.handle}`, crumbs: [['Citizens', '/citizens'], [`@${a.handle}`, null]],
     headExtra: h`<meta property="profile:username" content="${a.handle}">\n`,
     jsonld: [{ '@context': 'https://schema.org', '@type': 'ProfilePage', url, dateCreated: a.created_at, mainEntity: entity }],
   });
+  return { html, headers };
 }
