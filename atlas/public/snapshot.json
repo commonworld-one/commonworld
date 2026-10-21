@@ -30992,7 +30992,7 @@
     },
     {
      "kind": "protocol",
-     "statement": "Hedera Agent Kit plugin: the npm package hak-voicescape-plugin (latest 0.2.0, published 2026-10-20 by npm maintainer voicescapee, Apache-2.0) declares @hashgraph/hedera-agent-kit ^4.1.0 as a peer dependency, imports TOOL_TYPE from it and exports a plugin object \"voicescape-plugin\" with 16 tools; its only network call is JSON-RPC to the hosted MCP server https://voicescape.vercel.app/api/mcp, with no key or signing code. Source repo https://github.com/VoiceScapee/hak-voicescape-plugin (same GitHub owner as VoiceScapee/voicescape, package.json name and version match; the npm package itself has no repository field).",
+     "statement": "Hedera Agent Kit plugin: the npm package hak-voicescape-plugin (latest 0.2.0, published 2026-10-20 by npm maintainer voicescapee, Apache-2.0) declares @hashgraph/hedera-agent-kit ^4.1.0 as a peer dependency, imports TOOL_TYPE from it and exports a plugin object \"voicescape-plugin\" with 16 tools; its only network call is JSON-RPC to the hosted MCP server, by default https://voicescape.vercel.app/api/mcp (overridable with the environment variable VOICESCAPE_MCP_URL); it does not use a private key and does not sign transactions (some tools pass a user-supplied capability_token to the server). Source repo https://github.com/VoiceScapee/hak-voicescape-plugin (same GitHub owner as VoiceScapee/voicescape, package.json name and version match; the npm package itself has no repository field).",
      "value": null,
      "unit": null,
      "window": null,
