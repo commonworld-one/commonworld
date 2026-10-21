@@ -3,6 +3,18 @@
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
 
+## 2026-10-22 — Follow-ups from the #50 review: IndexNow fallback, local-server README
+
+Not deployed yet (CI workflow and docs only; no Worker change). Built on branch `chore/p3-followups-50`. Both findings from
+the Codex review of #50.
+
+- `.github/workflows/indexnow.yml`: after a production deploy, when the previous deploy's `release-manifest-<sha>`
+  artifact is missing or expired (artifacts are kept 90 days), the ping no longer diffs against the parent commit (which
+  could miss changes from earlier undeployed commits); it submits every URL of the deployed sitemap (`indexnow.py --all`,
+  still only once the live site serves that sitemap). Manual runs are unchanged.
+- `atlas/site/README.md`: no longer calls the Commonworld home a placeholder. The live home is served by the platform
+  Worker; the local `atlas/site/serve.py` shows only the Atlas build, so it redirects `/` to `/atlas/`.
+
 ## 2026-10-21 — Small fixes: touch targets, /lab removed, Markdown twins served as static files
 
 Not deployed yet. Built on branch `chore/tails-small-fixes-1021`.

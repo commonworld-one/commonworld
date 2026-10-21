@@ -1,8 +1,8 @@
 name: IndexNow ping
 # After a successful production deploy of the platform Worker (which also serves the Atlas build), tell IndexNow search
 # engines (Bing etc.) which URLs are new or changed. Compares the sitemaps built from the deployed commit and from the
-# commit of the previous successful deploy (both read from the release-manifest-<sha> artifact of those runs), then
-# waits until the live site serves the new sitemap. Cloudflare Pages is only a legacy fallback (automatic deployments
+# commit of the previous successful deploy (both read from the release-manifest-<sha> artifact of those runs); when the
+# previous manifest is missing or expired it submits every sitemap URL. Waits until the live site serves the new sitemap. Cloudflare Pages is only a legacy fallback (automatic deployments
 # off), so a push to main alone no longer changes the live site and does not trigger this.
 on:
   workflow_run:
@@ -54,10 +54,19 @@ jobs:
           else
             new=$GITHUB_SHA; old=""
           fi
-          # No earlier deploy found (or its artifact expired): fall back to the parent commit.
-          [ -n "$old" ] || old=$(git rev-parse -q --verify "$new^" || true)
-          echo "new=$new" >> "$GITHUB_OUTPUT"; echo "old=$old" >> "$GITHUB_OUTPUT"
-          echo "IndexNow: deployed $new, previous ${old:-none}"
+          # After a deploy with no earlier deploy found, or whose release manifest expired (artifacts are kept 90 days),
+          # a diff against the parent commit could miss changes, so submit every URL of the deployed sitemap instead.
+          # A manual run without "all" still compares against the parent commit.
+          all=""
+          if [ -z "$old" ]; then
+            if [ "$EVENT" = workflow_run ]; then
+              all=1; echo "::notice::No release manifest of a previous deploy; submitting all sitemap URLs"
+            else
+              old=$(git rev-parse -q --verify "$new^" || true)
+            fi
+          fi
+          echo "new=$new" >> "$GITHUB_OUTPUT"; echo "old=$old" >> "$GITHUB_OUTPUT"; echo "all=$all" >> "$GITHUB_OUTPUT"
+          echo "IndexNow: deployed $new, previous ${old:-none}${all:+ (submitting all URLs)}"
       - name: Build the deployed commit and the previous one
         if: steps.shas.outputs.skip != '1'
         env:
@@ -73,4 +82,4 @@ jobs:
           else mkdir -p "$RUNNER_TEMP/old"; fi
       - name: Ping IndexNow
         if: steps.shas.outputs.skip != '1'
-        run: python "$RUNNER_TEMP/cur/atlas/tools/indexnow.py" "$RUNNER_TEMP/new" "$RUNNER_TEMP/old" ${{ inputs.all && '--all' || '' }}
+        run: python "$RUNNER_TEMP/cur/atlas/tools/indexnow.py" "$RUNNER_TEMP/new" "$RUNNER_TEMP/old" ${{ (inputs.all || steps.shas.outputs.all == '1') && '--all' || '' }}

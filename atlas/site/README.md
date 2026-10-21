@@ -33,7 +33,7 @@ Then open <http://localhost:8080/atlas/> (or run `open http://localhost:8080/atl
 Another port: `python3 atlas/site/serve.py 9000`.
 
 `python3` ships with the Xcode Command Line Tools; if macOS asks to install them, accept and re-run the command.
-`serve.py` behaves like the live static serving (the platform Worker, and the legacy Cloudflare Pages fallback): clean directory URLs, `/atlas/about` → 301 → `/atlas/about/`, real 404 status with `404.html`. Locally only, `/` redirects to `/atlas/` (the Commonworld home is a placeholder for now).
+`serve.py` behaves like the live static serving (the platform Worker, and the legacy Cloudflare Pages fallback): clean directory URLs, `/atlas/about` → 301 → `/atlas/about/`, real 404 status with `404.html`. Locally only, `/` redirects to `/atlas/`: the live Commonworld home is served by the platform Worker, and `serve.py` shows only the Atlas build.
 
 ## What gets built
 
