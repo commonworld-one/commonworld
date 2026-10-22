@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local preview server for the built Atlas (stdlib only). Mimics Cloudflare Pages:
+"""Local preview server for the built Atlas (stdlib only). Mimics the live static serving (Workers Static Assets in the platform Worker, same rules as the legacy Cloudflare Pages build):
 clean directory URLs, /atlas/x -> 301 /atlas/x/, real 404 status with /404.html, / serves the Commonworld landing (dist/index.html).
 Sends the site-wide security headers from dist/_headers (the `/*` block: CSP, Permissions-Policy, ...) so a local
 browser runs under the same strict CSP as production (minus HSTS and upgrade-insecure-requests, which need https).

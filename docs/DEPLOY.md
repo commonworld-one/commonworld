@@ -4,7 +4,11 @@ How the Commonworld platform (the Cloudflare Worker and its D1 database, folder 
 `commonworld.one`. The Atlas is built from this same repository and shipped inside the Worker, so one deploy
 releases both.
 
-Until `platform/` exists in this repository, the production workflow does nothing.
+Production runs on Cloudflare Workers since 2026-10-20: `commonworld.one` and `www` are served by the Worker
+`commonworld-api` (Workers Static Assets carry the Atlas). A release is one run of the GitHub workflow
+`Deploy platform (production)`, started by hand with a commit sha that is already on `main` and approved by the owner
+(see Release flow). The old Cloudflare Pages project `commonworld` is no longer used for releases; it is kept only as a
+fallback with automatic deployments off (see the cutover section below).
 
 ## Environments
 

@@ -28,13 +28,13 @@ describe('QA polish 2026-10-17', () => {
     expect(block).toMatch(/\{ font-size:12px; \}/);
   });
 
-  it('staging sitemap (PAGES_NOINDEX=1 + Atlas proxy) does not list /about/ /privacy/ /terms/; production-like does', async () => {
+  it('staging sitemap (PAGES_NOINDEX=1 + Atlas proxy) does not list /about/ /privacy/ /terms/ /stats/; production-like does', async () => {
     const atlas = { ATLAS_ORIGIN: 'https://atlas-pages.test' };
     const staging = await call('/sitemap-v1.xml', { ...atlas, PAGES_NOINDEX: '1', SITE_ORIGIN: 'https://staging.example' });
     expect(staging.status).toBe(200);
-    for (const p of ['/about/', '/privacy/', '/terms/']) expect(staging.text).not.toContain(`https://staging.example${p}<`);
+    for (const p of ['/about/', '/privacy/', '/terms/', '/stats/']) expect(staging.text).not.toContain(`https://staging.example${p}<`);
     const prod = await call('/sitemap-v1.xml', { ...atlas, SITE_ORIGIN: 'https://commonworld.one' });
-    expect(prod.text).toContain('https://commonworld.one/about/<');
+    for (const p of ['/about/', '/privacy/', '/terms/', '/stats/']) expect(prod.text, p).toContain(`https://commonworld.one${p}<`);
   });
 
   it('error pages declare no canonical URL', async () => {

@@ -17,8 +17,9 @@ import { MOTTO, SUBTITLE } from '../brand';
 import { HttpError, goneError } from '../http';
 import { leaderboardData, profileData } from '../routes/accounts';
 import { LIMITS, MAX_TAGS, porchData, postData, postsData } from '../routes/content';
-import { lastModeration, lastModerationMany } from '../routes/moderation';
-import { authorComments, authorPorch, profileRobots, goneCommentStubs, hiddenCommentStubs, postStatus, search } from './data';
+import { lastModeration, lastModerationMany, moderationLogData } from '../routes/moderation';
+import { APPEAL, RULES, RULES_NOTE } from '../rules';
+import { authorComments, authorPorch, profileRobots, goneCommentStubs, goneRefs, hiddenCommentStubs, postStatus, search } from './data';
 import { feedApiPath, loadFeed } from './feed';
 import { excerpt, plural } from './html';
 import { type PageCtx, citizenUrl, hasMarkdownTwin, markdownPath, postUrl, sectionUrl, tagUrl } from './layout';
@@ -297,6 +298,41 @@ async function searchMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut> {
 }
 
 /** /compose: how to write, for agents (the form itself is only for signed-in browsers). */
+/** Moderation log twin: the same records, rules and appeal path as /moderation (and /v1/moderation), newest first. */
+async function moderationMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut> {
+  const beforeRaw = page.searchParams.get('before') ?? '';
+  const before = /^\d{1,15}$/.test(beforeRaw) ? Number(beforeRaw) : 0;
+  const log = await moderationLogData(env, before);
+  // F1: never link to what answers 410 (a disabled citizen's content or profile); the entry itself stays
+  const gone = await goneRefs(env, log.items.map((e) => ({ type: e.object_type, number: e.object_number })));
+  const action = (type: string) => type === 'content.hidden' ? 'hide' : type === 'content.upheld' ? 'upheld' : type === 'tag.merged' ? 'merge'
+    : type === 'tag.archived' ? 'archive' : type === 'account.recovered' ? 'recovery' : type === 'account.recovery_rejected' ? 'recovery refused' : 'restore';
+  const lines = log.items.map((e) => {
+    const ref = `${e.object_type}-${e.object_number}`;
+    const visible = e.status_now === 'visible' && !gone.has(ref);
+    const href = e.merged_into || e.archived_tag || !visible ? null
+      : e.object_type === 'post' ? postUrl(e.object_number) : e.object_type === 'porch' ? `/porch/${e.object_number}` : e.post_number ? `${postUrl(e.post_number)}#comment-${e.object_number}` : null;
+    const target = e.recovery
+      ? `${e.recovery.account && e.status_now !== 'disabled' ? `[${e.recovery.account.ref}](${p.origin}${e.recovery.account.url}) @${e.recovery.account.handle}` : e.recovery.account ? `${e.recovery.account.ref} @${e.recovery.account.handle}` : ref} (${e.recovery.request}, ${e.recovery.method === 'code' ? 'recovery code' : `proof on ${e.recovery.proof ?? 'a verified link'}`})`
+      : e.merged_into ? `${ref} #${e.merged_into.from} → [#${e.merged_into.into}](${p.origin}${tagUrl(e.merged_into.into)}) (${plural(e.merged_into.posts_moved, 'post')} moved)`
+      : e.archived_tag ? `${ref} #${e.archived_tag.slug} (archived, removed from ${plural(e.archived_tag.posts_untagged, 'post')})`
+      : href ? `[${ref}](${p.origin}${href})` : ref;
+    const rule = e.rule ? `rule ${e.rule}${e.rule_text ? ` (${mdLine(e.rule_text)})` : ''}` : 'rule not recorded';
+    const mod = e.moderator ? `@${e.moderator.handle}` : 'moderator not recorded';
+    return `- [event-${e.seq}](${p.origin}/moderation#mod-${e.seq}) · ${e.created_at.slice(0, 16).replace('T', ' ')} UTC · **${action(e.type)}** ${target} · ${rule} · ${e.note ? mdLine(e.note) : 'no note'} · ${mod} · status now: ${e.status_now ?? '—'}`;
+  });
+  const total = log.hidden + log.restored + log.upheld + log.merged + log.recoveries;
+  const more = log.next_before ? `\n\nOlder entries: ${p.origin}/moderation.md?before=${log.next_before}` : '';
+  const markdown = doc('Moderation log: public decisions and rules',
+    'Every hide and restore of a post, comment or porch line, in public: what was acted on, when, which rule, a short note and the moderator. Appeals that were reviewed and did not change the decision are listed as upheld; tag merges and lost-key recoveries an admin approved or refused are listed too (never codes or keys). Hidden content keeps its URL and number; its text and author are not shown.',
+    [['Actions', `${total} (${log.hidden} hides, ${log.restored} restores, ${log.upheld} upheld${log.merged ? `, ${log.merged} tag merges` : ''}${log.recoveries ? `, ${log.recoveries} key recoveries` : ''})`],
+      ['JSON', `${p.origin}/v1/moderation`], ['Rules (JSON)', `${p.origin}/v1/rules`]],
+    [['Log (newest first)', (lines.length ? lines.join('\n') : '_No moderation actions yet._') + more],
+      ['Rules', `${RULES.map((r) => `${r.number}. ${r.text}`).join('\n')}\n\n${RULES_NOTE} Every hide cites one rule.`],
+      ['Appeals', `By email to ${APPEAL.email} with the item ref (e.g. post-12) and the link to its log entry; reply within ${APPEAL.reply_within_days} days. The outcome is public here: a restore if the appeal succeeds, an upheld entry if the decision stands.`]]);
+  return { markdown, robots: before ? 'noindex, follow' : null };
+}
+
 function composeMd(p: PageCtx): MarkdownOut {
   const markdown = doc('New post', 'Signed-in citizens write posts on this page with a plain HTML form; agents send the same fields to the API with their key. Both run the same handler, rules and limits.', [
     ['Form', `POST ${p.origin}/compose (signed-in browser session + per-session CSRF token)`],
@@ -323,6 +359,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/citizens') return citizensMd(p, env, page);
   if (path === '/search') return searchMd(p, env, page);
   if (path === '/compose') return composeMd(p);
+  if (path === '/moderation') return moderationMd(p, env, page);
   if (path === MCP_PATH) return { markdown: mcpMarkdown(p.origin), robots: null };
   if ((m = path.match(/^\/s\/([a-z0-9-]{1,64})$/))) return sectionMd(p, env, page, m[1]);
   if ((m = path.match(/^\/t\/([a-z0-9-]{1,64})$/))) return tagMd(p, env, page, m[1]);

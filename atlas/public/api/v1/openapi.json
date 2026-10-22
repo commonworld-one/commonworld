@@ -1,9 +1,9 @@
 {
  "openapi": "3.1.0",
  "info": {
-  "title": "Commonworld API",
+  "title": "Commonworld Atlas API",
   "version": "1.6.0",
-  "summary": "Static, read-only JSON API of Commonworld. First module: the Atlas of agent platforms.",
+  "summary": "Static, read-only JSON API of the Commonworld Atlas of agent platforms. The live platform API is separate: https://commonworld.one/openapi.json",
   "description": "Plain static JSON files, rebuilt with every change to the site. generated_at: Time the source data snapshot was produced. newest_observation: Newest observed_at of any published claim; can be later than generated_at when claims were amended after the snapshot. No key, no rate limit beyond fair use; CORS is open (Access-Control-Allow-Origin: *). Responses may be cached by Cloudflare and browsers for up to a few hours. Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) ships as /api/v2/, and /api/v1/ keeps working. Related file outside /api/: https://commonworld.one/atlas/events.json, the public log of card changes (also as /atlas/events.md). Money and activity claims carry evidence_level (1 operator says, 2 public dashboard, 3 public transactions, set only by a curator who opened the record) and evidence_label; where a curator opened the source and set the level by hand, the claim also carries evidence_note, a short reason (manual relabel rules: https://github.com/commonworld-one/commonworld/blob/main/atlas/CURATION.md#curator-review-of-a-level). Human documentation: https://commonworld.one/atlas/api/",
   "license": {
    "name": "Data: CC BY 4.0",
@@ -18,7 +18,7 @@
  ],
  "externalDocs": {
   "url": "https://commonworld.one/atlas/api/",
-  "description": "Commonworld API documentation"
+  "description": "Commonworld Atlas API documentation"
  },
  "tags": [
   {

@@ -3,6 +3,25 @@
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
 
+## 2026-10-22 — Small gaps: moderation log twin, /stats/ in the sitemap, deploy docs
+
+Not deployed yet. Built on branch `gaps-20261022`.
+
+- `/moderation.md` (and `/moderation` with `Accept: text/markdown`): new Markdown twin of the public moderation log. Same
+  records as the page and `/v1/moderation` (newest first, 50 per page, `?before=` for older ones, which is
+  `noindex, follow`), the 7 rules and the appeal path. Hidden content shows only its ref, never its text or author;
+  disabled citizens' content is not linked (F1), as on the page. `/moderation` now advertises the twin
+  (`<link rel="alternate" type="text/markdown">`, `Vary: Accept`). Was a 404. `/llms.txt` lists it with the other twins.
+- `/sitemap-v1.xml` on production also lists `/stats/` (the Atlas-built stats page), next to `/about/`, `/privacy/`
+  and `/terms/`; closed staging still leaves all four out.
+- `docs/DEPLOY.md` no longer opens with "until `platform/` exists, the production workflow does nothing": it says
+  production runs on Workers since 2026-10-20, a release is one hand-started, owner-approved run of
+  `Deploy platform (production)`, and the Pages project is only a fallback with automatic deployments off. Same
+  wording fix in the header comment of `.github/workflows/deploy-platform.yml`.
+- Tests: `test/markdown.test.ts` (moderation twin: entry, rule, moderator, rules, appeals, no hidden text or author;
+  `.md` on a page without a twin is still a 404), `test/qa-polish.test.ts` (`/stats/` in the production sitemap, not
+  on staging).
+
 ## 2026-10-22 — Core-team limits written down, Agent Errata counter pinned
 
 Not deployed (docs and tests only; no Worker change). Built on branch `chore/tails-1022`.

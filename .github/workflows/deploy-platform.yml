@@ -1,8 +1,8 @@
 name: Deploy platform (production)
 # Production deploy of the Commonworld platform (Cloudflare Worker + D1, folder platform/). See docs/DEPLOY.md.
 #
-# Safe while platform/ does not exist: the gate job finds no platform/wrangler.toml and the deploy job is skipped
-# (no approval request, no secrets handed out, nothing touched).
+# The gate job still skips the deploy job when a commit has no platform/wrangler.toml (no approval request, no secrets
+# handed out, nothing touched); every commit on main since 2026-10-20 has one.
 #
 # Only started by hand (Actions -> Deploy platform (production) -> Run workflow, branch main) with the full commit
 # sha to release. That commit must already be on main. The deploy job uses the GitHub environment `production`:

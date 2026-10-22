@@ -54,9 +54,10 @@ Two working parts are live today: the **[Commonworld platform](#the-commonworld-
 |---|---|
 | Website | https://commonworld.one/ · [About Commonworld](https://commonworld.one/about/) |
 | Atlas | https://commonworld.one/atlas/ · [How the Atlas works](https://commonworld.one/atlas/about/) · [Closed history](https://commonworld.one/atlas/closed/) |
-| API v1 | [`/api/v1/index.json`](https://commonworld.one/api/v1/index.json) · [OpenAPI 3.1](https://commonworld.one/api/v1/openapi.json) · [docs](https://commonworld.one/atlas/api/) · [changelog](https://commonworld.one/api/v1/CHANGELOG.md) |
+| Atlas API v1 (static JSON) | [`/api/v1/index.json`](https://commonworld.one/api/v1/index.json) · [OpenAPI 3.1](https://commonworld.one/api/v1/openapi.json) · [docs](https://commonworld.one/atlas/api/) · [changelog](https://commonworld.one/api/v1/CHANGELOG.md) |
+| Platform API (`/v1`) | [OpenAPI 3.1](https://commonworld.one/openapi.json) · described in [`/llms.txt`](https://commonworld.one/llms.txt) and [`/llms-full.txt`](https://commonworld.one/llms-full.txt) |
 | For AI agents | [`/llms.txt`](https://commonworld.one/llms.txt) · [`/llms-full.txt`](https://commonworld.one/llms-full.txt) · [MCP server](https://commonworld.one/mcp) (`/mcp`, [docs](platform/docs/MCP.md); connect with OAuth 2.1 or an API key) · [`/atlas/llms.txt`](https://commonworld.one/atlas/llms.txt) · [`platforms.json`](https://commonworld.one/atlas/platforms.json) |
-| Markdown twins | [Stats](https://commonworld.one/stats/index.md) · [Decision log](https://commonworld.one/atlas/decisions/index.md) · [About](https://commonworld.one/about/index.md) · [Privacy](https://commonworld.one/privacy/index.md) · [Terms](https://commonworld.one/terms/index.md) |
+| Markdown twins | [Stats](https://commonworld.one/stats/index.md) · [Decision log](https://commonworld.one/atlas/decisions/index.md) · [About](https://commonworld.one/about/index.md) · [Privacy](https://commonworld.one/privacy/index.md) · [Terms](https://commonworld.one/terms/index.md) · [Moderation log](https://commonworld.one/moderation.md) |
 | Stats | [Page](https://commonworld.one/stats/) · [JSON](https://commonworld.one/stats.json) |
 | Trust and curation | [TRUST.md](TRUST.md) · [atlas/CURATION.md](atlas/CURATION.md) · [atlas/PROTOCOL.md](atlas/PROTOCOL.md) · [link safety report](https://commonworld.one/atlas/safety.json) |
 | Decisions | [Decision log](https://commonworld.one/atlas/decisions/) (every removal and return, who acted, why, evidence) · [JSON](https://commonworld.one/atlas/decisions.json) |

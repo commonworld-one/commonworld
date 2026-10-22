@@ -350,7 +350,7 @@ async function sitemapXml(env: Env, origin: string, withAtlasRoot = false): Prom
     ...rows.citizens.map((c): [string, string] => [`/c/${encodeURIComponent(c.handle)}`, '']),
     // Atlas-owned root pages served through the proxy (the rest of the Atlas is in /atlas/sitemap.xml). Not on closed
     // staging, where these paths 301 to production (QA 2026-10-17 #9).
-    ...(withAtlasRoot ? (['/about/', '/privacy/', '/terms/'] as const).map((path): [string, string] => [path, '']) : []),
+    ...(withAtlasRoot ? (['/about/', '/privacy/', '/terms/', '/stats/'] as const).map((path): [string, string] => [path, '']) : []),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

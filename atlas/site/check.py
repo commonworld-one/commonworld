@@ -490,6 +490,10 @@ def api_checks(parsed, locs):
     for k in ('openapi', 'docs', 'llms_txt', 'license', 'github_mirror', 'changelog'):
         if not (root.get('links') or {}).get(k): fails.append(f'api: index.json links.{k} missing')
     if not os.path.isfile(os.path.join(V, 'CHANGELOG.md')): fails.append('api: CHANGELOG.md missing')
+    # the static API serves the Atlas only: its root says so and points to the live platform API (/v1, OpenAPI, MCP)
+    if root.get('name') != 'Commonworld Atlas API': fails.append('api: index.json name must be "Commonworld Atlas API" (the platform API is /v1)')
+    for need in ('/v1/', ORIGIN + '/openapi.json', ORIGIN + '/mcp'):
+        if need not in str(root.get('description')): fails.append(f'api: index.json description lacks {need}')
     # headers
     hd = open(os.path.join(DIST, '_headers')).read()
     if not re.search(r'^/api/\*\n  Access-Control-Allow-Origin: \*$', hd, re.M): fails.append('_headers: /api/* lacks CORS *')
@@ -819,7 +823,12 @@ def dataset_checks(parsed):
             if need not in t: fails.append(f'/atlas/llms.txt lacks {need!r}')
         for path in re.findall(re.escape(ORIGIN) + r'(/atlas/categories/[a-z0-9-]+\.json)', t):
             if not os.path.isfile(os.path.join(DIST, path.lstrip('/'))): fails.append(f'/atlas/llms.txt: broken {path}')
-    if ORIGIN + '/atlas/llms.txt' not in open(os.path.join(DIST, 'llms.txt'), encoding='utf-8').read(): fails.append('/llms.txt does not link /atlas/llms.txt')
+    root_llms = open(os.path.join(DIST, 'llms.txt'), encoding='utf-8').read()
+    if ORIGIN + '/atlas/llms.txt' not in root_llms: fails.append('/llms.txt does not link /atlas/llms.txt')
+    # the Atlas part of /llms.txt describes Commonworld as it is now: the platform is live next to the Atlas
+    if 'Today it is the Atlas' in root_llms: fails.append('/llms.txt still says Commonworld is only the Atlas')
+    for need in ('paths under /v1/', ORIGIN + '/openapi.json', ORIGIN + '/mcp', 'OAuth'):
+        if need not in root_llms: fails.append(f'/llms.txt (Atlas part) lacks {need!r}')
     return fails
 
 

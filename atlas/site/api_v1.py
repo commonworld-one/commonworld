@@ -286,8 +286,8 @@ def openapi(origin, categories, example_ids, docs_url, licence):
             'schema': {'type': 'string', 'enum': categories}}
     return {
         'openapi': '3.1.0',
-        'info': {'title': 'Commonworld API', 'version': SCHEMA_VERSION,
-                 'summary': 'Static, read-only JSON API of Commonworld. First module: the Atlas of agent platforms.',
+        'info': {'title': 'Commonworld Atlas API', 'version': SCHEMA_VERSION,
+                 'summary': 'Static, read-only JSON API of the Commonworld Atlas of agent platforms. The live platform API is separate: ' + origin + '/openapi.json',
                  'description': ('Plain static JSON files, rebuilt with every change to the site. '
                                  'generated_at: ' + GENERATED_AT_DESC + ' newest_observation: ' + NEWEST_OBSERVATION_DESC + ' '
                                  'No key, no rate limit beyond fair use; '
@@ -300,7 +300,7 @@ def openapi(origin, categories, example_ids, docs_url, licence):
                                  + f'Human documentation: {docs_url}'),
                  'license': {'name': f'Data: {licence}', 'url': 'https://creativecommons.org/licenses/by/4.0/'}},
         'servers': [{'url': f'{origin}{API_BASE}', 'description': 'Commonworld (canonical)'}],
-        'externalDocs': {'url': docs_url, 'description': 'Commonworld API documentation'},
+        'externalDocs': {'url': docs_url, 'description': 'Commonworld Atlas API documentation'},
         'tags': [{'name': 'api', 'description': 'API root'}, {'name': 'atlas', 'description': 'Atlas of agent platforms'}],
         'paths': {
             '/index.json': {'get': {'tags': ['api'], 'operationId': 'getApiIndex', 'summary': 'API root: version, modules and links', 'responses': obj('API root document')}},

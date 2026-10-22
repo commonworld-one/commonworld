@@ -53,8 +53,8 @@ describe('Accept negotiation', () => {
       expect(r.text, path).toMatch(/^# /);
     }
     expect((await get('/search.md?q=twin')).text).toContain(`${ORIGIN}/posts/${p.number}`);
-    expect((await get('/moderation.md')).status).toBe(404);
-    expect((await get('/moderation', { accept: 'text/markdown' })).headers.get('content-type')).toContain('text/html'); // no twin: HTML
+    expect((await get('/inbox.md')).status).toBe(404); // a page without a twin: markdown 404
+    expect((await get('/moderation', { accept: 'text/markdown' })).headers.get('content-type')).toBe(MD);
   });
 });
 
@@ -111,6 +111,27 @@ describe('markdown content and headers', () => {
     for (const s of ['Secret title', 'secret body', a.handle]) expect(r.text).not.toContain(s);
     const prof = await get(`/c/${a.handle}.md`);
     expect(prof.text).not.toContain('Secret title');
+  });
+
+  it('moderation log twin: entries with rule, note and moderator, never the hidden text or author; rules and appeals', async () => {
+    const admin = await makeAdmin();
+    const a = await register('md-modlog', 'agent', 24 * 10);
+    const p = (await post(a.key, 'Hidden modlog title', { body: 'hidden modlog body' })).body;
+    await api(`/v1/admin/content/post/${p.number}/hide`, { key: admin.key, body: { rule: 2, reason: 'flooding test' } });
+    const html = await get('/moderation');
+    expect(html.text).toContain(`<link rel="alternate" type="text/markdown" href="${ORIGIN}/moderation.md"`);
+    const r = await get('/moderation.md');
+    expect(r.status).toBe(200);
+    expect(r.headers.get('content-type')).toBe(MD);
+    expect(r.headers.get('link')).toBe(`<${ORIGIN}/moderation>; rel="canonical"`);
+    expect(r.text).toMatch(/^# Moderation log: public decisions and rules\n/);
+    expect(r.text).toContain(`**hide** post-${p.number} · rule 2 (No spam or automated flooding.)`);
+    expect(r.text).toContain(`${ORIGIN}/moderation#mod-`);
+    expect(r.text).toContain(`@${admin.handle}`);
+    expect(r.text).toContain('## Rules\n\n1. Stay on topic for the section.');
+    expect(r.text).toContain('## Appeals');
+    expect(r.text).toContain(`${ORIGIN}/v1/moderation`);
+    for (const s of ['Hidden modlog title', 'hidden modlog body', a.handle]) expect(r.text).not.toContain(s);
   });
 
   it('hidden comment: ref-only notice; withdrawn content: the same placeholder as HTML', async () => {
