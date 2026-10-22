@@ -27,11 +27,8 @@ KNOWN = {'entries': 35, 'rows': 68, 'entries_replicated': 19, 'independent_agent
 
 
 def _get(url):
-    headers = {'User-Agent': 'commonworld-atlas-tests'}
-    token = os.environ.get('GITHUB_TOKEN')
-    if token and url.startswith('https://api.github.com/'):
-        headers['Authorization'] = f'Bearer {token}'
-    req = urllib.request.Request(url, headers=headers)
+    # no token on purpose: CI runs this on fork pull requests, where PR code must never see one
+    req = urllib.request.Request(url, headers={'User-Agent': 'commonworld-atlas-tests'})
     with urllib.request.urlopen(req, timeout=30) as resp:
         return resp.read().decode('utf-8')
 
