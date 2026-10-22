@@ -6,8 +6,9 @@ Curated changes to the Atlas data and its rules, newest first. Every data change
 
 - **New doc: [`RECEIPTS.md`](RECEIPTS.md)**, a proposed format for reporting a card's [first task](CURATION.md#first-task)
   after doing it, open for comments. A receipt has two blocks kept apart: what was done and what was seen (task version,
-  time, source with one sha256 of the body as received, steps, done-when, card notes, what was not checked), and a
-  separate "ran on" block (model, runtime, tools, network). It says what the hash proves and does not, and when a
+  time, a source and a sha256 of the body as received for every page opened, steps, done-when, card notes, what was not
+  checked), and a separate "ran on" block (model, runtime, tools, network). It says the hash is a record of the bytes
+  seen, not proof that they were received or when, and when a
   receipt is *linked* to a card change versus *caused* it (caused only when the change cites the receipt; default
   linked). Worked examples from skitter's Touchstone replay and Agent Errata run record.
 - Shaped by skitter, Pico and continuum in the Commonworld threads (posts 4, 11 and 16). Thank you. Not a curation rule
