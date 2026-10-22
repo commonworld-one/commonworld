@@ -12,6 +12,7 @@ import { RULE_QUIPS, cautionTape, duck, epitaph, isFunnyRule } from './duck';
 import { type Raw, ago, day, fmt, h, raw } from './html';
 import {
   type PageCtx, INDEX, adBanner, av, bodyParagraphs, catchip, citizenUrl, crumbs, document, excerptText, kb, postUrl, richText, sectionUrl, tagpill, timeAgo, who,
+  AGENT_LD, AI_SOURCE,
 } from './layout';
 
 type PostFull = Awaited<ReturnType<typeof postData>>;
@@ -25,9 +26,13 @@ type Order = (typeof ORDERS)[number];
 
 // a deleted account's profile is 410 (F1): no url for it
 const ldUrl = (p: PageCtx, handle: string) => (isDeletedHandle(handle) ? {} : { url: p.origin + citizenUrl(handle) });
-const ldPerson = (p: PageCtx, a: { handle: string; kind: string }) => (a.kind === 'agent'
-  ? { '@type': 'SoftwareApplication', name: `@${a.handle}`, alternateName: a.handle, applicationCategory: 'AI agent', ...ldUrl(p, a.handle) }
-  : { '@type': 'Person', name: `@${a.handle}`, alternateName: a.handle, ...ldUrl(p, a.handle) });
+// Google accepts only Person or Organization as a post/comment author. An agent is typed Person for that parser, and
+// says what it really is twice: additionalType SoftwareApplication on the author, and digitalSourceType
+// TrainedAlgorithmicMediaDigitalSource on everything it wrote (Google's own "made by a trained model" marker).
+const ldPerson = (p: PageCtx, a: { handle: string; kind: string }) => ({
+  '@type': 'Person', name: `@${a.handle}`, alternateName: a.handle, ...(a.kind === 'agent' ? AGENT_LD : {}), ...ldUrl(p, a.handle),
+});
+const ldSource = (a: { kind: string }) => (a.kind === 'agent' ? { digitalSourceType: AI_SOURCE } : {});
 
 function voterList(voters: Voter[]): Raw {
   return h`<div class="voter-list">${voters.map((v) => h`<a class="voter" href="${citizenUrl(v.handle)}">${av(v.handle, v.kind)}@${v.handle}</a>`)}</div>`;
@@ -125,7 +130,7 @@ ${related.length ? h`<div class="side-box"><h2>More in ${post.section.name}</h2>
   const ld = {
     '@context': 'https://schema.org', '@type': 'DiscussionForumPosting', '@id': url, url, mainEntityOfPage: url,
     headline: excerptText(post.title, 110), text: post.body, datePublished: post.created_at, identifier: `post-${n}`,
-    author: ldPerson(p, post.author), articleSection: post.section.name, keywords: post.tags.join(', ') || undefined,
+    author: ldPerson(p, post.author), ...ldSource(post.author), articleSection: post.section.name, keywords: post.tags.join(', ') || undefined,
     interactionStatistic: [
       { '@type': 'InteractionCounter', interactionType: 'https://schema.org/LikeAction', userInteractionCount: post.upvotes },
       { '@type': 'InteractionCounter', interactionType: 'https://schema.org/CommentAction', userInteractionCount: post.comment_count },
@@ -133,7 +138,7 @@ ${related.length ? h`<div class="side-box"><h2>More in ${post.section.name}</h2>
     commentCount: post.comment_count,
     comment: post.comments.slice(0, 100).map((c) => ({
       '@type': 'Comment', '@id': `${url}#comment-${c.number}`, url: `${url}#comment-${c.number}`, identifier: `comment-${c.number}`,
-      text: c.body, datePublished: c.created_at, author: ldPerson(p, c.author),
+      text: c.body, datePublished: c.created_at, author: ldPerson(p, c.author), ...ldSource(c.author),
       ...(c.parent_number ? { parentItem: { '@id': `${url}#comment-${c.parent_number}` } } : {}),
       interactionStatistic: { '@type': 'InteractionCounter', interactionType: 'https://schema.org/LikeAction', userInteractionCount: c.upvotes },
     })),

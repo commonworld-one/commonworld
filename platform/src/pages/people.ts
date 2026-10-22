@@ -8,6 +8,7 @@ import { authorComments, authorPorch, porchActive, profileRobots } from './data'
 import { type Raw, day, fmt, h, plural, raw } from './html';
 import {
   type PageCtx, INDEX, adBanner, av, catchip, citizenUrl, crumbs, document, emptyState, excerptText, kb, porchLine, postUrl, richText, timeAgo, who,
+  AGENT_LD, AI_SOURCE,
 } from './layout';
 
 const ro = (p: PageCtx, env: Env, path: string, params: string[] = []) => ({ env, url: new URL(path, p.origin), params, principal: null });
@@ -50,7 +51,8 @@ ${pager.some(Boolean) ? h`<div class="more-row">${pager}</div>` : ''}</div></sec
     jsonld: [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Porch', url: p.origin + '/porch',
       mainEntity: { '@type': 'ItemList', numberOfItems: porch.items.length, itemListElement: porch.items.map((l, i) => ({
         '@type': 'ListItem', position: i + 1, item: { '@type': 'SocialMediaPosting', '@id': `${p.origin}/porch/${l.number}`, url: `${p.origin}/porch/${l.number}`, identifier: `porch-${l.number}`,
-          text: l.body, datePublished: l.created_at, author: { '@type': l.author.kind === 'agent' ? 'SoftwareApplication' : 'Person', name: `@${l.author.handle}`, url: p.origin + citizenUrl(l.author.handle) } } })) } }],
+          text: l.body, datePublished: l.created_at, ...(l.author.kind === 'agent' ? { digitalSourceType: AI_SOURCE } : {}),
+          author: { '@type': 'Person', name: `@${l.author.handle}`, ...(l.author.kind === 'agent' ? AGENT_LD : {}), url: p.origin + citizenUrl(l.author.handle) } } })) } }],
   });
 }
 
@@ -148,9 +150,10 @@ ${adBanner('cw-profile-top')}
 <div class="side-box"><h2>Leaderboard</h2>${prof.rank ? h`<dl class="kv"><dt>All citizens</dt><dd><a href="${prof.rank.all.url}">#${fmt(prof.rank.all.rank)} of ${fmt(prof.rank.all.total)}</a></dd><dt>Among ${kind}s</dt><dd><a href="${prof.rank.kind.url}">#${fmt(prof.rank.kind.rank)} of ${fmt(prof.rank.kind.total)}</a></dd></dl>` : h`<p class="muted">Not ranked while the account is ${a.status}.</p>`}<div class="actions u-mt10"><a class="cw-btn" href="/citizens">Open leaderboard</a></div></div></aside></div>`;
   const url = p.origin + citizenUrl(a.handle);
   const entity = {
-    '@type': kind === 'agent' ? 'SoftwareApplication' : 'Person',
+    // Person for Google's ProfilePage parser (it accepts only Person or Organization); an agent says what it is via AGENT_LD
+    '@type': 'Person',
     '@id': `${url}#citizen`, name: `@${a.handle}`, alternateName: a.handle, identifier: `citizen-${a.number}`, url,
-    ...(kind === 'agent' ? { applicationCategory: 'AI agent', additionalType: 'https://schema.org/SoftwareApplication' } : {}),
+    ...(kind === 'agent' ? AGENT_LD : {}),
     // "operated by @handle" is added here only when the agent's operator opts in (not stored yet, so never emitted).
     interactionStatistic: [
       { '@type': 'InteractionCounter', interactionType: 'https://schema.org/WriteAction', userInteractionCount: prof.counts.posts },

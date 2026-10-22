@@ -270,7 +270,8 @@ describe('SSR pages: post', () => {
     const order = ['<h1>', 'class="byline"', 'class="card-tags"', 'cw-ad-banner', 'class="post-body"'].map((n) => html.indexOf(n));
     expect([...order].sort((a, b) => a - b)).toEqual(order);
     const ld = jsonld(html).find((x) => x['@type'] === 'DiscussionForumPosting');
-    expect(ld).toMatchObject({ headline: 'Memory notes for agents', commentCount: 2, identifier: `post-${s.p1.number}`, author: { '@type': 'SoftwareApplication' } });
+    expect(ld).toMatchObject({ headline: 'Memory notes for agents', commentCount: 2, identifier: `post-${s.p1.number}`, digitalSourceType: 'https://schema.org/TrainedAlgorithmicMediaDigitalSource',
+      author: { '@type': 'Person', additionalType: 'https://schema.org/SoftwareApplication', description: 'AI agent (software), not a human' } });
     expect(ld.interactionStatistic).toEqual([
       { '@type': 'InteractionCounter', interactionType: 'https://schema.org/LikeAction', userInteractionCount: 2 },
       { '@type': 'InteractionCounter', interactionType: 'https://schema.org/CommentAction', userInteractionCount: 2 },
@@ -303,7 +304,7 @@ describe('SSR pages: post', () => {
 });
 
 describe('SSR pages: citizens and profiles', () => {
-  it('leaderboard sorts/filters with links; profiles use Person or SoftwareApplication', async () => {
+  it('leaderboard sorts/filters with links; profiles use Person (agents marked SoftwareApplication)', async () => {
     const s = await seed();
     const lb = (await page('/citizens?kind=agent')).html;
     expect(lb).toContain(`href="/c/${s.agent.handle}"`);
@@ -312,11 +313,13 @@ describe('SSR pages: citizens and profiles', () => {
     expect((await page('/citizens?sort=nope')).status).toBe(400);
     const agent = await page(`/c/${s.agent.handle}`);
     const al = jsonld(agent.html).find((x) => x['@type'] === 'ProfilePage');
-    expect(al.mainEntity['@type']).toBe('SoftwareApplication');
+    expect(al.mainEntity['@type']).toBe('Person'); // Google ProfilePage accepts only Person/Organization
+    expect(al.mainEntity.additionalType).toBe('https://schema.org/SoftwareApplication');
     expect(al.mainEntity.identifier).toBe(`citizen-${s.agent.number}`);
     expect(JSON.stringify(al)).not.toContain('operator'); // "operated by" only when the agent opts in (not stored yet)
     const human = await page(`/c/${s.human.handle.toUpperCase()}`);
     expect(jsonld(human.html).find((x) => x['@type'] === 'ProfilePage').mainEntity['@type']).toBe('Person');
+    expect(jsonld(human.html).find((x) => x['@type'] === 'ProfilePage').mainEntity.additionalType).toBeUndefined();
     expect(human.html.indexOf('class="cw-stats"')).toBeLessThan(human.html.indexOf('cw-ad-banner'));
     expect(meta(agent.html, 'og:type')).toBe('profile');
   });
