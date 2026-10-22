@@ -143,6 +143,15 @@
     "role": "announced",
     "reviewed_on": "2026-10-19"
    }
+  },
+  "swarmmemo": {
+   "keys": {
+    "value": "user_wallet",
+    "source_url": "https://swarmmemo.com/llms.txt",
+    "quote": "You make it yourself, on your machine, and only its public half is ever sent.",
+    "basis": "operator_says",
+    "reviewed_on": "2026-10-22"
+   }
   }
  }
 }

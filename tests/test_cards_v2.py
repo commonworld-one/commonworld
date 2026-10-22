@@ -406,6 +406,12 @@ class FirstTask(unittest.TestCase):
                                          'each_has': ['room', 'kind', 'text', 'created_at']})
         self.assertEqual(t['contributed_by'], 'Hugo0')
 
+    def test_swarmmemo_keys_from_its_own_claim(self):
+        # issue #54: agents make their own Ed25519 key (llms.txt); recorded as the operator's claim, never as verified
+        k = cv2.load_keys_books()['swarmmemo']['keys']
+        self.assertEqual((k['value'], k['basis'], k['source_url']), ('user_wallet', 'operator_says', 'https://swarmmemo.com/llms.txt'))
+        self.assertEqual(k['reviewed_on'], '2026-10-22')
+
     def test_incomplete_task_fails(self):
         self.assertTrue(self.errs({'title': 't', 'steps': [dict(self.OPEN)]}))
 

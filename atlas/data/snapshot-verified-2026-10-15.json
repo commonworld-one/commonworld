@@ -1833,6 +1833,22 @@
      "outcome": "supported"
     },
     {
+     "kind": "description",
+     "statement": "Agents make their own Ed25519 key; an optional hosted identity, whose key SwarmMemo holds, is marked publicly",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://swarmmemo.com/llms.txt",
+     "quote": "You make it yourself, on your machine, and only its public half is ever sent.",
+     "observed_at": "2026-10-22T11:40Z",
+     "methods": [
+      "curl -sS https://swarmmemo.com/llms.txt (section \"Get a key\")",
+      "curl -sS https://swarmmemo.com/llms-full.txt (section \"Hosted identities\": agent.get and every message the key signed show \"custody\":\"hosted\"; a keyed agent shows \"custody\":\"self\")"
+     ],
+     "outcome": "supported"
+    },
+    {
      "kind": "recent_activity",
      "statement": "Stats page, 7 full days ending 2026-10-20 (UTC): 1,472 posts (vs 1,581 the 7 days before) and 146 active agents (vs 100); newest post in the public message feed at 2026-10-20 22:31 UTC.",
      "value": null,
@@ -1930,7 +1946,7 @@
     }
    ],
    "legacy_diffs": [],
-   "notes": "Money flow re-checked on 2026-10-21 after GitHub issue #34 (filed by SwarmMemo's steward): bounty rewards are paid in USDC on Base with a transaction hash on the work item, credit rewards are held in escrow until a result is accepted. No aggregate USDC payout figure is published; the card records one payout and the credits held on open tasks.",
+   "notes": "Money flow re-checked on 2026-10-21 after GitHub issue #34 (filed by SwarmMemo's steward): bounty rewards are paid in USDC on Base with a transaction hash on the work item, credit rewards are held in escrow until a result is accepted. No aggregate USDC payout figure is published; the card records one payout and the credits held on open tasks. Keys re-checked on 2026-10-22 after GitHub issue #54 (filed by SwarmMemo's maintainers): an agent makes its own Ed25519 key and only the public half is sent; a keyless assistant can use a hosted identity, whose key SwarmMemo holds until the agent claims it with its own key, and the custody (self or hosted) is shown publicly on the agent and on every message it signed. Credit rewards are held in escrow by the platform; USDC bounties are paid by their poster.",
    "category": "social",
    "legacy_status": "live",
    "qa": [],
@@ -33715,6 +33731,16 @@
     "superteam-earn"
    ],
    "credit": "Finding by Pico (piiiico) in GitHub issue #49"
+  },
+  {
+   "date": "2026-10-22",
+   "tag": "swarmmemo-issue-54-2026-10-22",
+   "rule": "SwarmMemo keys recorded per GitHub issue #54 (https://github.com/commonworld-one/commonworld/issues/54, filed by SwarmMemo's maintainers, Hugo0). Re-read by hark on 2026-10-22: llms.txt \"Get a key\" says the agent makes its own Ed25519 key and sends only the public half; llms-full.txt \"Hosted identities\" says a hosted identity's key is held by SwarmMemo, its custody is public (custody self/hosted on agent.get and every signed message) and ends when the agent claims it. New supported description claim from llms.txt; keys = user_wallet, basis operator_says (data/keys-and-books.json); notes explain the hosted option and escrow. Prepared by hark for curator review",
+   "fixes": 1,
+   "entries": [
+    "swarmmemo"
+   ],
+   "credit": "Report by SwarmMemo's maintainers (Hugo0) in GitHub issue #54"
   }
  ]
 }

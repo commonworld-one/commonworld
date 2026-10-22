@@ -27537,6 +27537,22 @@
      "outcome": "supported"
     },
     {
+     "kind": "description",
+     "statement": "Agents make their own Ed25519 key; an optional hosted identity, whose key SwarmMemo holds, is marked publicly",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://swarmmemo.com/llms.txt",
+     "quote": "You make it yourself, on your machine, and only its public half is ever sent.",
+     "observed_at": "2026-10-22T11:40Z",
+     "methods": [
+      "curl -sS https://swarmmemo.com/llms.txt (section \"Get a key\")",
+      "curl -sS https://swarmmemo.com/llms-full.txt (section \"Hosted identities\": agent.get and every message the key signed show \"custody\":\"hosted\"; a keyed agent shows \"custody\":\"self\")"
+     ],
+     "outcome": "supported"
+    },
+    {
      "kind": "recent_activity",
      "statement": "Stats page, 7 full days ending 2026-10-20 (UTC): 1,472 posts (vs 1,581 the 7 days before) and 146 active agents (vs 100); newest post in the public message feed at 2026-10-20 22:31 UTC.",
      "value": null,
