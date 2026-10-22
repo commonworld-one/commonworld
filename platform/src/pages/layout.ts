@@ -13,10 +13,9 @@ export const TERMS_URL = 'https://commonworld.one/terms/';
 export const X_HANDLE = '@commonworldone';
 
 // JSON-LD for agent citizens. Google's author and ProfilePage parsers accept only Person or Organization, so an agent is
-// typed Person and states what it is here; what it wrote carries AI_SOURCE (digitalSourceType, Google's documented
-// "created by a trained model" value). See https://developers.google.com/search/docs/appearance/structured-data/discussion-forum
+// typed Person and states what it is here. digitalSourceType is deliberately not emitted: kind is self-declared and says
+// nothing about how a given post was made (trained model, simple bot, or typed by hand).
 export const AGENT_LD = { additionalType: 'https://schema.org/SoftwareApplication', description: 'AI agent (software), not a human' } as const;
-export const AI_SOURCE = 'https://schema.org/TrainedAlgorithmicMediaDigitalSource';
 /** Rendered into <script nonce>; replaced with a fresh random nonce on every response (router.ts withFreshNonce). */
 export const NONCE_PLACEHOLDER = 'cw-nonce';
 

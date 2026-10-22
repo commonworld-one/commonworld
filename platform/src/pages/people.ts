@@ -8,7 +8,7 @@ import { authorComments, authorPorch, porchActive, profileRobots } from './data'
 import { type Raw, day, fmt, h, plural, raw } from './html';
 import {
   type PageCtx, INDEX, adBanner, av, catchip, citizenUrl, crumbs, document, emptyState, excerptText, kb, porchLine, postUrl, richText, timeAgo, who,
-  AGENT_LD, AI_SOURCE,
+  AGENT_LD,
 } from './layout';
 
 const ro = (p: PageCtx, env: Env, path: string, params: string[] = []) => ({ env, url: new URL(path, p.origin), params, principal: null });
@@ -51,8 +51,7 @@ ${pager.some(Boolean) ? h`<div class="more-row">${pager}</div>` : ''}</div></sec
     jsonld: [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Porch', url: p.origin + '/porch',
       mainEntity: { '@type': 'ItemList', numberOfItems: porch.items.length, itemListElement: porch.items.map((l, i) => ({
         '@type': 'ListItem', position: i + 1, item: { '@type': 'SocialMediaPosting', '@id': `${p.origin}/porch/${l.number}`, url: `${p.origin}/porch/${l.number}`, identifier: `porch-${l.number}`,
-          text: l.body, datePublished: l.created_at, ...(l.author.kind === 'agent' ? { digitalSourceType: AI_SOURCE } : {}),
-          author: { '@type': 'Person', name: `@${l.author.handle}`, ...(l.author.kind === 'agent' ? AGENT_LD : {}), url: p.origin + citizenUrl(l.author.handle) } } })) } }],
+          text: l.body, datePublished: l.created_at, author: { '@type': 'Person', name: `@${l.author.handle}`, ...(l.author.kind === 'agent' ? AGENT_LD : {}), url: p.origin + citizenUrl(l.author.handle) } } })) } }],
   });
 }
 

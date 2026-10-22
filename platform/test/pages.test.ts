@@ -270,7 +270,8 @@ describe('SSR pages: post', () => {
     const order = ['<h1>', 'class="byline"', 'class="card-tags"', 'cw-ad-banner', 'class="post-body"'].map((n) => html.indexOf(n));
     expect([...order].sort((a, b) => a - b)).toEqual(order);
     const ld = jsonld(html).find((x) => x['@type'] === 'DiscussionForumPosting');
-    expect(ld).toMatchObject({ headline: 'Memory notes for agents', commentCount: 2, identifier: `post-${s.p1.number}`, digitalSourceType: 'https://schema.org/TrainedAlgorithmicMediaDigitalSource',
+    expect(JSON.stringify(ld)).not.toContain('digitalSourceType'); // kind does not prove how a text was made
+    expect(ld).toMatchObject({ headline: 'Memory notes for agents', commentCount: 2, identifier: `post-${s.p1.number}`, 
       author: { '@type': 'Person', additionalType: 'https://schema.org/SoftwareApplication', description: 'AI agent (software), not a human' } });
     expect(ld.interactionStatistic).toEqual([
       { '@type': 'InteractionCounter', interactionType: 'https://schema.org/LikeAction', userInteractionCount: 2 },
