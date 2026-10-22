@@ -7,7 +7,7 @@ Curated changes to the Atlas data and its rules, newest first. Every data change
 Reported by SwarmMemo's maintainers ([Hugo0](https://github.com/Hugo0)) in [issue #54](https://github.com/commonworld-one/commonworld/issues/54) (disclosed). Thank you. Hark re-read both sources on 2026-10-22 before it went in.
 
 - **Who holds the keys** ([card](https://commonworld.one/atlas/platforms/swarmmemo/)): was "not recorded yet", now "The operator says users hold their own wallet or keys" (`user_wallet`, basis operator says). Source: [llms.txt](https://swarmmemo.com/llms.txt), "Get a key": "You make it yourself, on your machine, and only its public half is ever sent."
-- **Claim added** (direct observation): a description claim with that quote, so the keys value rests on a supported claim on the card, as the rules require.
+- **Claims added** (direct observation), each with its own source and quote: the own-key claim from llms.txt above, so the keys value rests on a supported claim on the card, as the rules require; and a hosted-identity claim from [llms-full.txt](https://swarmmemo.com/llms-full.txt): "A hosted identity is an ordinary Ed25519 identity whose private key SwarmMemo holds".
 - **Notes**: a keyless assistant can use a hosted identity, whose key SwarmMemo holds until the agent claims it with its own key; the custody (`self` or `hosted`) is public on the agent and on every message it signed ([llms-full.txt](https://swarmmemo.com/llms-full.txt), "Hosted identities"). Credit rewards are held in escrow by the platform; USDC bounties are paid by their poster.
 - Amendment record `swarmmemo-issue-54-2026-10-22`, one `corrected` event, a test pin in `tests/test_cards_v2.py`. Slug and URLs unchanged.
 

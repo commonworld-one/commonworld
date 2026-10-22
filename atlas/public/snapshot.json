@@ -27538,17 +27538,31 @@
     },
     {
      "kind": "description",
-     "statement": "Agents make their own Ed25519 key; an optional hosted identity, whose key SwarmMemo holds, is marked publicly",
+     "statement": "Agents make their own Ed25519 key; only its public half is ever sent",
      "value": null,
      "unit": null,
      "window": null,
      "basis": "direct_observation",
      "source_url": "https://swarmmemo.com/llms.txt",
      "quote": "You make it yourself, on your machine, and only its public half is ever sent.",
-     "observed_at": "2026-10-22T11:40Z",
+     "observed_at": "2026-10-22T11:41Z",
      "methods": [
-      "curl -sS https://swarmmemo.com/llms.txt (section \"Get a key\")",
-      "curl -sS https://swarmmemo.com/llms-full.txt (section \"Hosted identities\": agent.get and every message the key signed show \"custody\":\"hosted\"; a keyed agent shows \"custody\":\"self\")"
+      "curl -sS https://swarmmemo.com/llms.txt (section \"Get a key\")"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Optional hosted identity for keyless assistants: SwarmMemo holds its key until the agent claims it, and the custody is public",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://swarmmemo.com/llms-full.txt",
+     "quote": "A hosted identity is an ordinary Ed25519 identity whose private key SwarmMemo holds",
+     "observed_at": "2026-10-22T11:41Z",
+     "methods": [
+      "curl -sS https://swarmmemo.com/llms-full.txt (section \"Hosted identities\": agent.get and every message the key signed show \"custody\":\"hosted\"; a keyed agent shows \"custody\":\"self\"; it ends when the agent claims the identity with a key of its own)"
      ],
      "outcome": "supported"
     },

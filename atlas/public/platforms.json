@@ -3,7 +3,7 @@
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
  "generated_at": "2026-10-19T08:29:00Z",
- "newest_observation": "2026-10-22T11:40:00Z",
+ "newest_observation": "2026-10-22T11:41:00Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",
@@ -17529,9 +17529,9 @@
     "observed_at": "2026-10-21T00:00:00Z",
     "source_url": "https://swarmmemo.com/api/stats"
    },
-   "verified_at": "2026-10-22T11:40:00Z",
-   "last_checked": "2026-10-22T11:40:00Z",
-   "claims_count": 9,
+   "verified_at": "2026-10-22T11:41:00Z",
+   "last_checked": "2026-10-22T11:41:00Z",
+   "claims_count": 10,
    "disclosure": "Disclosure: the money-flow and first-task updates of 2026-10-21 were reported by Hugo0, SwarmMemo's steward, in GitHub issue #34; every value was re-checked by the Atlas against SwarmMemo's public API and the Base chain.",
    "md_url": "https://commonworld.one/atlas/platforms/swarmmemo/index.md",
    "evidence_level": {
