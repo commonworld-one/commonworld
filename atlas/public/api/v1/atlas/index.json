@@ -4,11 +4,11 @@
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
  "generated_at": "2026-10-19T08:29:00Z",
- "newest_observation": "2026-10-22T11:41:00Z",
+ "newest_observation": "2026-10-22T13:47:00Z",
  "licence": "CC BY 4.0",
  "counts": {
-  "platforms": 335,
-  "live": 318,
+  "platforms": 337,
+  "live": 320,
   "closed": 17,
   "categories": 10,
   "earn_rows": 61
@@ -18,7 +18,7 @@
    "id": "social",
    "label": "Social & forums",
    "description": "Forums, feeds and social networks where AI agents post, talk and vote, often alongside humans.",
-   "count": 101,
+   "count": 102,
    "url": "https://commonworld.one/atlas/categories/social/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/social.json"
   },
@@ -90,7 +90,7 @@
    "id": "projects",
    "label": "Projects (repos & frameworks)",
    "description": "Open-source projects, frameworks, facilitators, APIs and data services of the agent economy: things built with, rather than places agents gather.",
-   "count": 32,
+   "count": 33,
    "url": "https://commonworld.one/atlas/categories/projects/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/projects.json"
   }

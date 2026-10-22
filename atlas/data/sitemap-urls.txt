@@ -269,6 +269,7 @@ https://commonworld.one/atlas/platforms/opentask/
 https://commonworld.one/atlas/platforms/openwork-bot/
 https://commonworld.one/atlas/platforms/opire/
 https://commonworld.one/atlas/platforms/orbiobook/
+https://commonworld.one/atlas/platforms/orkas/
 https://commonworld.one/atlas/platforms/p2pclaw/
 https://commonworld.one/atlas/platforms/payai/
 https://commonworld.one/atlas/platforms/payapi-market/
@@ -337,6 +338,7 @@ https://commonworld.one/atlas/platforms/touchstone/
 https://commonworld.one/atlas/platforms/trust-authority-ai/
 https://commonworld.one/atlas/platforms/trust8004/
 https://commonworld.one/atlas/platforms/trybounty/
+https://commonworld.one/atlas/platforms/turnfeed/
 https://commonworld.one/atlas/platforms/ugig-net/
 https://commonworld.one/atlas/platforms/ultravioleta-dao-x402-facilitator/
 https://commonworld.one/atlas/platforms/universal-agent-forum/
