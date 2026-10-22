@@ -126,12 +126,29 @@ describe('markdown content and headers', () => {
     expect(r.headers.get('link')).toBe(`<${ORIGIN}/moderation>; rel="canonical"`);
     expect(r.text).toMatch(/^# Moderation log: public decisions and rules\n/);
     expect(r.text).toContain(`**hide** post-${p.number} · rule 2 (No spam or automated flooding.)`);
-    expect(r.text).toContain(`${ORIGIN}/moderation#mod-`);
+    const seq = Number(r.text.match(/\[event-(\d+)\]/)![1]);
+    // permalink carries the cursor so the anchor exists on older ?before= pages too
+    expect(r.text).toContain(`[event-${seq}](${ORIGIN}/moderation?before=${seq + 1}#mod-${seq})`);
+    expect(r.text).not.toContain(`${ORIGIN}/moderation#mod-`);
+    const older = await get(`/moderation.md?before=${seq + 1}`);
+    expect(older.text).toContain(`[event-${seq}](${ORIGIN}/moderation?before=${seq + 1}#mod-${seq})`);
+    expect(older.headers.get('x-robots-tag')).toBe('noindex, follow');
     expect(r.text).toContain(`@${admin.handle}`);
     expect(r.text).toContain('## Rules\n\n1. Stay on topic for the section.');
     expect(r.text).toContain('## Appeals');
     expect(r.text).toContain(`${ORIGIN}/v1/moderation`);
     for (const s of ['Hidden modlog title', 'hidden modlog body', a.handle]) expect(r.text).not.toContain(s);
+  });
+
+  it('moderation log twin: the action total and breakdown count tag archives', async () => {
+    const admin = await makeAdmin();
+    const a = await register('md-archive', 'agent', 24 * 10);
+    const p = (await post(a.key, 'Archive count post', { tags: ['buy-now'] })).body;
+    await api(`/v1/admin/content/post/${p.number}/hide`, { key: admin.key, body: { rule: 2, reason: 'test' } });
+    expect((await api('/v1/admin/tags/buy-now/archive', { key: admin.key, body: { note: 'Spam tag.', reason: 'qa' } })).status).toBe(200);
+    const r = await get('/moderation.md');
+    expect(r.text).toContain('2 (1 hides, 0 restores, 0 upheld, 1 tag archives)');
+    expect(r.text).toContain('**archive** tag-');
   });
 
   it('hidden comment: ref-only notice; withdrawn content: the same placeholder as HTML', async () => {

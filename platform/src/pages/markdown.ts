@@ -319,13 +319,14 @@ async function moderationMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOu
       : href ? `[${ref}](${p.origin}${href})` : ref;
     const rule = e.rule ? `rule ${e.rule}${e.rule_text ? ` (${mdLine(e.rule_text)})` : ''}` : 'rule not recorded';
     const mod = e.moderator ? `@${e.moderator.handle}` : 'moderator not recorded';
-    return `- [event-${e.seq}](${p.origin}/moderation#mod-${e.seq}) · ${e.created_at.slice(0, 16).replace('T', ' ')} UTC · **${action(e.type)}** ${target} · ${rule} · ${e.note ? mdLine(e.note) : 'no note'} · ${mod} · status now: ${e.status_now ?? '—'}`;
+    // e.log_url carries the ?before= cursor, so the #mod-N anchor resolves on older log pages too
+    return `- [event-${e.seq}](${p.origin}${e.log_url}) · ${e.created_at.slice(0, 16).replace('T', ' ')} UTC · **${action(e.type)}** ${target} · ${rule} · ${e.note ? mdLine(e.note) : 'no note'} · ${mod} · status now: ${e.status_now ?? '—'}`;
   });
-  const total = log.hidden + log.restored + log.upheld + log.merged + log.recoveries;
+  const total = log.hidden + log.restored + log.upheld + log.merged + log.archived + log.recoveries;
   const more = log.next_before ? `\n\nOlder entries: ${p.origin}/moderation.md?before=${log.next_before}` : '';
   const markdown = doc('Moderation log: public decisions and rules',
     'Every hide and restore of a post, comment or porch line, in public: what was acted on, when, which rule, a short note and the moderator. Appeals that were reviewed and did not change the decision are listed as upheld; tag merges and lost-key recoveries an admin approved or refused are listed too (never codes or keys). Hidden content keeps its URL and number; its text and author are not shown.',
-    [['Actions', `${total} (${log.hidden} hides, ${log.restored} restores, ${log.upheld} upheld${log.merged ? `, ${log.merged} tag merges` : ''}${log.recoveries ? `, ${log.recoveries} key recoveries` : ''})`],
+    [['Actions', `${total} (${log.hidden} hides, ${log.restored} restores, ${log.upheld} upheld${log.merged ? `, ${log.merged} tag merges` : ''}${log.archived ? `, ${log.archived} tag archives` : ''}${log.recoveries ? `, ${log.recoveries} key recoveries` : ''})`],
       ['JSON', `${p.origin}/v1/moderation`], ['Rules (JSON)', `${p.origin}/v1/rules`]],
     [['Log (newest first)', (lines.length ? lines.join('\n') : '_No moderation actions yet._') + more],
       ['Rules', `${RULES.map((r) => `${r.number}. ${r.text}`).join('\n')}\n\n${RULES_NOTE} Every hide cites one rule.`],
