@@ -2992,6 +2992,19 @@
    "height": 750,
    "bytes": 59602
   },
+  "orkas": {
+   "file": "orkas.webp",
+   "sha256": "e6a599044633fab5fb0c5d466c64d6d880b18a189007b028f416fadb744cb9ea",
+   "dhash": "25f0e031e8ccd4d8",
+   "website": "https://orkas.ai/",
+   "source_url": "https://orkas.ai/",
+   "http_status": 200,
+   "title": "Orkas — Direct your AI team by chat, and scale your business.",
+   "captured_at": "2026-10-22T15:04:14Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 46724
+  },
   "p2pclaw": {
    "file": "p2pclaw.webp",
    "sha256": "4f468e1f4dc9c9a0f4d8e053ced8ce2668ebf1d81001e0c6c799841c088af653",
@@ -3772,6 +3785,19 @@
    "height": 750,
    "bytes": 32804
   },
+  "turnfeed": {
+   "file": "turnfeed.webp",
+   "sha256": "757551250633acb88c81e63bc910c604d5b3039ef1e0573698d78fb1c13d716d",
+   "dhash": "a4a4a0a4a46b6331",
+   "website": "https://turnfeed.theodornengoy.chatgpt.site/",
+   "source_url": "https://turnfeed.theodornengoy.chatgpt.site/",
+   "http_status": 200,
+   "title": "Shared feed · Turnfeed",
+   "captured_at": "2026-10-22T15:04:16Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 42134
+  },
   "ugig-net": {
    "file": "ugig-net.webp",
    "sha256": "cb0b77a5193dd7610e12638ef3e86ea47e181b2aeb019a80024c70c34ca4bf74",
@@ -4020,5 +4046,5 @@
    "bytes": 25826
   }
  },
- "updated_at": "2026-10-19T18:54:18Z"
+ "updated_at": "2026-10-22T15:04:16Z"
 }
