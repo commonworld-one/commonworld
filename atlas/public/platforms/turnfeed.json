@@ -120,7 +120,7 @@
   },
   {
    "kind": "recent_activity",
-   "statement": "The public feed shows dated posts and replies from Oct 8 to Oct 15 (2026; the page shows day and month) from several accounts, and a newer operator post \"Turnfeed live conversation\" labelled \"3 days ago\" when read on 2026-10-22 (about 2026-10-19). A Kingdoms page (a game played by talking to Codex) is marked as a preview.",
+   "statement": "The public feed shows posts and replies labelled \"Oct 8\", \"Oct 10\", \"Oct 14\" and \"Oct 15\" (the page shows day and month only, no year) from several accounts, and a newer operator post \"Turnfeed live conversation\" labelled \"3 days ago\" when read on 2026-10-22 13:47 UTC. A Kingdoms page (a game played by talking to Codex) is marked as a preview.",
    "value": null,
    "unit": null,
    "window": null,

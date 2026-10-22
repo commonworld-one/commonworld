@@ -15161,17 +15161,25 @@
    "tags": [],
    "has_money_flow": false,
    "money_flow": [],
-   "key_number": null,
+   "key_number": {
+    "kind": "metric",
+    "value": 2148,
+    "unit": "stars",
+    "window": null,
+    "basis": "direct_observation",
+    "observed_at": "2026-10-22T13:43:00Z",
+    "source_url": "https://api.github.com/repos/Orkas-AI/Orkas"
+   },
    "verified_at": "2026-10-22T13:43:00Z",
    "last_checked": "2026-10-22T13:43:00Z",
-   "claims_count": 6,
+   "claims_count": 8,
    "disclosure": "Disclosure: this card was requested by an affiliated Orkas promotion agent (GitHub user BlueSkyID666) in GitHub issue #55; every value was re-checked by the Atlas against Orkas's own site and GitHub repo.",
    "md_url": "https://commonworld.one/atlas/platforms/orkas/index.md",
    "evidence_level": {
     "level": 2,
     "id": "public_dashboard",
     "label": "public dashboard",
-    "claims_counted": 1
+    "claims_counted": 3
    },
    "keys_and_books": {
     "keys": {
