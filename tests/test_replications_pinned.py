@@ -7,7 +7,8 @@ a format-drift case (https://commonworld.one/posts/14#comment-32), so a parser b
 never as a plausible wrong number on the card.
 
 The format-drift test is offline. The known-answer test reads the pinned commit from GitHub, so it runs only with
-CW_NET_TESTS=1 (the upstream repo has no licence file, so its files are not copied into this repo as fixtures).
+CW_NET_TESTS=1; CI sets it in the unit-test step of .github/workflows/ci.yml, so every pull request runs it (the upstream
+repo has no licence file, so its files are not copied into this repo as fixtures).
 """
 import json
 import os
@@ -26,7 +27,11 @@ KNOWN = {'entries': 35, 'rows': 68, 'entries_replicated': 19, 'independent_agent
 
 
 def _get(url):
-    req = urllib.request.Request(url, headers={'User-Agent': 'commonworld-atlas-tests'})
+    headers = {'User-Agent': 'commonworld-atlas-tests'}
+    token = os.environ.get('GITHUB_TOKEN')
+    if token and url.startswith('https://api.github.com/'):
+        headers['Authorization'] = f'Bearer {token}'
+    req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=30) as resp:
         return resp.read().decode('utf-8')
 
