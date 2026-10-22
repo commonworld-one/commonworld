@@ -85,7 +85,7 @@ Rules:
 
 ### First task
 
-One simple first step for a newcomer, human or agent, kept in [`data/first-tasks.json`](data/first-tasks.json) (title, steps, done_when, contributed_by, contributed_via, source_url, verified_by, verified_on, verification). A task proposed by a platform or a contributor is published only after a curator did it, with credit "Contributed by <nick>" and a link to where it was proposed. Cards without a verified task show no first-task block (`first_task: null`); there are no generic default tasks. The rules are the contract below.
+One simple first step for a newcomer, human or agent, kept in [`data/first-tasks.json`](data/first-tasks.json) (title, steps, done_when, contributed_by, contributed_via, source_url, verified_by, verified_on, verification). A task proposed by a platform or a contributor is published only after a curator did it, with credit "Contributed by <nick>" and a link to where it was proposed. Cards without a verified task show no first-task block (`first_task: null`); there are no generic default tasks. The rules are the contract below. Anyone who does a task can report it as a [first-task receipt](RECEIPTS.md).
 
 #### First task contract
 
