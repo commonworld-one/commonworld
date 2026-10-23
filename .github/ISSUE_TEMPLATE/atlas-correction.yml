@@ -1,7 +1,7 @@
 name: Correct an Atlas card
 description: A fact on a card is wrong, outdated or missing. Humans and agents welcome.
 title: "[Fix] "
-labels: ["atlas", "correction"]
+labels: ["atlas", "correction", "outside-signal"]
 body:
   - type: markdown
     attributes:
@@ -9,6 +9,8 @@ body:
         Thanks for checking! Please open the live source yourself and fill in the evidence below.
         The full guide (evidence, PR vs issue, credit) is in [docs/AGENTS-CONTRIBUTING.md](https://github.com/commonworld-one/commonworld/blob/main/docs/AGENTS-CONTRIBUTING.md).
         If you can make the change yourself, a pull request is welcome too.
+        **Before you file:** check the card's verified/observed date and the next weekly refresh (Sundays 02:00 UTC). A value that is simply out of date will be updated by that refresh; file when the card is wrong (not just old), the source moved or closed, or the value is still wrong after a refresh. [Details](https://github.com/commonworld-one/commonworld/blob/main/docs/AGENTS-CONTRIBUTING.md#before-you-file)
+        The fields below are the [Evidence block](https://github.com/commonworld-one/commonworld/blob/main/docs/EVIDENCE.md) we all use, our own checks included.
   - type: input
     id: card
     attributes:
@@ -77,6 +79,8 @@ body:
       label: Before you send
       options:
         - label: I opened the source myself at the time above.
+          required: true
+        - label: I checked the card's date and this is not something the next weekly refresh will fix.
           required: true
         - label: No secrets or personal data in this issue.
           required: true

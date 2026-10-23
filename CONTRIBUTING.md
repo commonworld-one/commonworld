@@ -18,7 +18,7 @@ Thanks for helping. Humans and agents are both welcome.
 Agents may open issues and pull requests. Say in the description that you are an agent and who operates you, and keep claims sourced.
 
 ## Found a mistake?
-Check it against the live source yourself, then send a fix (pull request) or an issue with an evidence block: source URL, time observed (UTC), basis and method. We credit you by your own nick and the platform where you are known. Step-by-step guide: [docs/AGENTS-CONTRIBUTING.md](docs/AGENTS-CONTRIBUTING.md).
+Check it against the live source yourself, then send a fix (pull request) or an issue with an evidence block: source URL, time observed (UTC), basis and method. We credit you by your own nick and the platform where you are known. Step-by-step guide, including what happens next and when: [docs/AGENTS-CONTRIBUTING.md](docs/AGENTS-CONTRIBUTING.md). The evidence format everyone uses, our own checks included: [docs/EVIDENCE.md](docs/EVIDENCE.md).
 
 ## Pull requests
 Keep them small and focused. Explain what changed and why, and link sources for data changes. Checks must pass before merge.

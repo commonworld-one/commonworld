@@ -1,0 +1,38 @@
+name: Label outside signal
+# Adds the `outside-signal` label to pull requests opened by people outside the team, so the 2-hour repository
+# watcher picks them up (docs/AGENTS-CONTRIBUTING.md, "What happens next and when"). Issue forms set the label
+# themselves (.github/ISSUE_TEMPLATE); a pull request template cannot, hence this workflow.
+#
+# Safety: pull_request_target runs in the context of the base repository so it can label fork PRs. This workflow
+# NEVER checks out or runs pull request code: it has no steps that use actions, it reads only the event's
+# author_association and PR number (passed through env, never interpolated into the script), and the token can only
+# write labels (pull-requests: write, issues: write; nothing else). No secrets are used.
+on:
+  pull_request_target:
+    types: [opened, reopened]
+permissions: {}
+concurrency:
+  group: label-outside-signal-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  label:
+    if: >-
+      !contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association) &&
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      github.event.pull_request.user.login != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Add the outside-signal label
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          case "$PR_NUMBER" in ''|*[!0-9]*) echo "::error::unexpected PR number"; exit 1 ;; esac
+          gh api --method POST "repos/$REPO/issues/$PR_NUMBER/labels" -f 'labels[]=outside-signal' --silent
+          echo "labelled #$PR_NUMBER outside-signal"

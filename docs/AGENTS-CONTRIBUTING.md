@@ -32,6 +32,21 @@ Security problems are not public corrections: report them privately (see [SECURI
 5. Copy a **short quote** (200 characters or less) from the source.
 6. If you could not check something, say so. "Unknown" is a fine answer; a guessed number is not.
 
+## Before you file
+
+Check the card's verified/observed date and the next weekly refresh (Sundays 02:00 UTC,
+[refresh.yml](../.github/workflows/refresh.yml), see section 6). If a value is simply out of date and the weekly
+refresh will pick it up, you don't need to file: it will be updated.
+
+File when:
+
+- the card is **wrong**, not just old;
+- the **source moved or closed**;
+- the **refresh missed it** (the value is still wrong after a refresh);
+- it is a **platform bug**.
+
+The issue forms ask you to confirm this with a checkbox.
+
 ## 3. PR or issue?
 
 | Send a **pull request** when | Open an **issue** when |
@@ -46,32 +61,20 @@ and [Site or platform bug](https://github.com/commonworld-one/commonworld/issues
 
 ## 4. Evidence block (required)
 
-Put this in your PR description or issue, one block per change:
+Put one Evidence block per change in your PR description or issue. The format, every field and a worked example are
+in [EVIDENCE.md](EVIDENCE.md); it is the one format everyone uses, our own checks included:
 
 ```
 Evidence
-- What: <card ID / page / endpoint> - <field>: <current value> -> <correct value>
+- What: <card ID / page / endpoint> - <field or claim>
+- Was -> Now: <value shown now> -> <correct value>
 - Source: <https URL you opened>
 - Observed: <YYYY-MM-DD HH:MM UTC>
 - Basis: direct_observation | operator_claim | independent_source | inference
 - Method: <command or steps, and the field you read>
 - Quote: "<200 characters or less from the source>"
-- Credit: <your nick> (<platform where you are known>) | none
-- I am: human | agent (operator: <who runs you>)
-```
-
-Example, shaped on the 1F916 fix (abridged):
-
-```
-Evidence
-- What: 1f916 - metric citizens: 3,213 -> about 3,440
-- Source: https://1f916.ai/api/stats
-- Observed: 2026-10-23 14:13 UTC
-- Basis: operator_claim
-- Method: GET https://1f916.ai/api/stats, field society.citizens
-- Quote: (for an API, the field name and the value you read are enough)
-- Credit: jingming-audit (The Colony)
-- I am: agent
+- Credit: <nick> (<platform where you are known>) | none
+- By: human | agent (operator: <who runs you>)
 ```
 
 ## 5. Credit
@@ -90,15 +93,35 @@ Evidence
   restore Atlas entries are only those listed in [atlas/data/trust-roles.json](../atlas/data/trust-roles.json)
   (see [TRUST.md](../TRUST.md#who-can-act)).
 
-## 6. What happens next
+## 6. What happens next and when
 
-1. **Review.** A maintainer reads your evidence. For Atlas data we re-open your source ourselves and record when
-   we re-read it, before anything changes. Agent reviewers may comment; they do not approve or merge.
-2. **Merge.** Only the owner merges (see `.github/CODEOWNERS`). If we need more, we ask in the thread.
+1. **We see it.** We look at new issues and pull requests about every 2 hours. Findings about Commonworld that
+   people post on other platforms (The Colony, 1F916) are checked once a day. Issues opened with the forms above and
+   pull requests from outside the team get the `outside-signal` label; if you open a pull request yourself, please
+   say in it that you are not on the team.
+2. **We log it.** Each outside signal becomes a card on our public board and is logged with a link to where you
+   raised it.
+3. **We re-check it.** For Atlas data and other facts, a maintainer re-opens your Source and repeats your Method
+   against the live source ourselves, and records when we re-read it, before anything is merged. Our own checks use
+   the same Evidence block, so outside and inside findings look the same. Agent reviewers may comment; they do not
+   approve or merge.
+4. **Merge.** Only the owner merges (see `.github/CODEOWNERS`). If we need more, we ask in the thread.
    If the source does not support the change, we explain why and keep the issue open or close it with the reason.
-3. **Deploy.** Merged changes go live with the next production deploy of commonworld.one.
-4. **Thanks.** We reply in your issue or PR (or where you first reported it) with a link to the merged change and
-   the changelog entry, and your credit stays in the public history.
+5. **Deploy.** Merged changes go live with the next production deploy of commonworld.one.
+6. **Credit and thanks.** We credit you as in section 5 and thank you publicly where you raised it (your issue, PR,
+   post or comment), with links to the merged change, the live page and the changelog entry.
+
+**Our own scheduled checks** (times in UTC):
+
+- **Every Atlas card, weekly:** [Atlas weekly refresh](../.github/workflows/refresh.yml) runs on Sundays at 02:00 UTC,
+  re-checks every entry ([atlas/refresh.py](../atlas/refresh.py)) and opens a pull request when data changed.
+  It never merges by itself; a human reviews it.
+- **Outbound links, weekly:** a full outbound link sweep in [quality.yml](../.github/workflows/quality.yml) runs on
+  Mondays at 05:23 UTC.
+- **Link safety, daily:** [link-safety.yml](../.github/workflows/link-safety.yml) runs every day at 04:17 UTC.
+
+So if your Evidence contradicts a card, we re-check it against the live source ourselves before merging, and after
+that the weekly refresh keeps the card fresh.
 
 Please keep it kind and sourced: no secrets, no personal data, no promotion. See the
 [Code of Conduct](../CODE_OF_CONDUCT.md).

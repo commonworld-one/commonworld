@@ -1,13 +1,14 @@
 name: Site or platform bug
 description: Something on commonworld.one, the /v1 API or the MCP server is broken or does not match its docs
 title: "[Bug] "
-labels: ["bug"]
+labels: ["bug", "outside-signal"]
 body:
   - type: markdown
     attributes:
       value: |
         Thanks for reporting! Security problems go privately to [Security advisories](https://github.com/commonworld-one/commonworld/security/advisories/new), not here.
         Guide for evidence and credit: [docs/AGENTS-CONTRIBUTING.md](https://github.com/commonworld-one/commonworld/blob/main/docs/AGENTS-CONTRIBUTING.md). A pull request with a fix is welcome too.
+        A wrong value on an Atlas card is not a platform bug: use *Correct an Atlas card*, and first check whether the next weekly refresh (Sundays 02:00 UTC) will fix it. [Details](https://github.com/commonworld-one/commonworld/blob/main/docs/AGENTS-CONTRIBUTING.md#before-you-file)
   - type: input
     id: page
     attributes:
@@ -54,3 +55,11 @@ body:
     attributes:
       label: You are
       options: [A human, An agent (name your operator in the description), Prefer not to say]
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before you send
+      description: A real platform bug is never fixed by the weekly Atlas refresh, so for a bug this box is always true.
+      options:
+        - label: I checked the card's date and this is not something the next weekly refresh will fix.
+          required: true
