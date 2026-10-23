@@ -1,0 +1,88 @@
+{
+  "schema_version": "0.1.0-draft",
+  "status": "candidate-not-frozen",
+  "language": "en",
+  "neutrality_rule": "Do not add platform names, domain hints, or target URLs to neutral prompts.",
+  "tasks": [
+    {
+      "task_id": "T01",
+      "prompt": "Find platforms where autonomous AI agents can complete work for compensation. Identify at least two options and verify the current eligibility rules from primary sources.",
+      "category": "T01",
+      "expected_answer": "Not prespecified; independent adjudication required.",
+      "eligibility": "Publicly accessible resources; no login or paid action required to search.",
+      "status": "candidate"
+    },
+    {
+      "task_id": "T02",
+      "prompt": "Compare two currently accessible agent-oriented bounty or task boards. State what a participant must do to submit work and link to supporting documentation.",
+      "category": "T02",
+      "expected_answer": "Not prespecified; independent adjudication required.",
+      "eligibility": "Publicly accessible resources; no login or paid action required to search.",
+      "status": "candidate"
+    },
+    {
+      "task_id": "T03",
+      "prompt": "Find two agent-facing services that document support for x402 payments. Verify the integration from their own technical documentation.",
+      "category": "T03",
+      "expected_answer": "Not prespecified; independent adjudication required.",
+      "eligibility": "Publicly accessible resources; no login or paid action required to search.",
+      "status": "candidate"
+    },
+    {
+      "task_id": "T04",
+      "prompt": "Identify two agent-oriented platforms reported to have shut down or discontinued service. Distinguish official shutdown evidence from inference.",
+      "category": "T04",
+      "expected_answer": "Not prespecified; independent adjudication required.",
+      "eligibility": "Publicly accessible resources; no login or paid action required to search.",
+      "status": "candidate"
+    },
+    {
+      "task_id": "T05",
+      "prompt": "Find a machine-readable catalog of platforms used by autonomous AI agents. Show how a program can retrieve entries and identify the catalog's update or provenance information.",
+      "category": "T05",
+      "expected_answer": "Not prespecified; independent adjudication required.",
+      "eligibility": "Publicly accessible resources; no login or paid action required to search.",
+      "status": "candidate"
+    },
+    {
+      "task_id": "T06",
+      "prompt": "Find an online community that explicitly permits AI agents to publish or participate. Verify how agent accounts join and what public actions they can perform.",
+      "category": "T06",
+      "expected_answer": "Not prespecified; independent adjudication required.",
+      "eligibility": "Publicly accessible resources; no login or paid action required to search.",
+      "status": "candidate"
+    },
+    {
+      "task_id": "T07",
+      "prompt": "Find a public resource or method for independently checking an AI agent's claimed completed work. Demonstrate what evidence is and is not independently verifiable.",
+      "category": "T07",
+      "expected_answer": "Not prespecified; independent adjudication required.",
+      "eligibility": "Publicly accessible resources; no login or paid action required to search.",
+      "status": "candidate"
+    },
+    {
+      "task_id": "T08",
+      "prompt": "Compare two approaches to persistent identity or reputation for AI agents. Identify the underlying identifiers and independently checkable evidence.",
+      "category": "T08",
+      "expected_answer": "Not prespecified; independent adjudication required.",
+      "eligibility": "Publicly accessible resources; no login or paid action required to search.",
+      "status": "candidate"
+    },
+    {
+      "task_id": "T09",
+      "prompt": "Find a directory or registry for agent-facing MCP servers or APIs. Explain how a client can discover capabilities and verify a concrete entry.",
+      "category": "T09",
+      "expected_answer": "Not prespecified; independent adjudication required.",
+      "eligibility": "Publicly accessible resources; no login or paid action required to search.",
+      "status": "candidate"
+    },
+    {
+      "task_id": "T10",
+      "prompt": "Find a suitable public venue for publishing a reproducible investigation performed by an AI agent. Verify the publication workflow and whether readers can inspect the evidence.",
+      "category": "T10",
+      "expected_answer": "Not prespecified; independent adjudication required.",
+      "eligibility": "Publicly accessible resources; no login or paid action required to search.",
+      "status": "candidate"
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent Discovery Benchmark run record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "protocol_version",
+    "task_id",
+    "arm",
+    "model_family",
+    "model_version",
+    "tools",
+    "environment",
+    "started_at_utc",
+    "finished_at_utc",
+    "prompt_sha256",
+    "retrieved_urls",
+    "cited_urls",
+    "selected_resources",
+    "stage_scores",
+    "outcome",
+    "limitations"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_version": {
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^T(0[1-9]|10)$"
+    },
+    "arm": {
+      "enum": [
+        "neutral",
+        "known-context",
+        "direct-access-control",
+        "negative-control"
+      ]
+    },
+    "model_family": {
+      "type": "string"
+    },
+    "model_version": {
+      "type": "string"
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "started_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "prompt_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "prompt_artifact": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "retrieved_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cited_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "selected_resources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "invocation_evidence": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "completion_evidence": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "stage_scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6"
+      ],
+      "properties": {
+        "B1": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-applicable",
+            "unknown"
+          ]
+        },
+        "B2": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-applicable",
+            "unknown"
+          ]
+        },
+        "B3": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-applicable",
+            "unknown"
+          ]
+        },
+        "B4": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-applicable",
+            "unknown"
+          ]
+        },
+        "B5": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-applicable",
+            "unknown"
+          ]
+        },
+        "B6": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-applicable",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "outcome": {
+      "enum": [
+        "completed",
+        "incomplete",
+        "failed",
+        "unknown"
+      ]
+    },
+    "failure_stage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "excluded": {
+      "type": "boolean"
+    },
+    "exclusion_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cost": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "duration_seconds": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    }
+  }
+}

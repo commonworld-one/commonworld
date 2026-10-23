@@ -1,0 +1,5 @@
+# PRE-FREEZE NOTICE — NOT A HASH MANIFEST YET
+# This candidate branch is mutable and no experiment may rely on it as frozen.
+# At release, replace this notice with SHA-256 entries for canonical protocol
+# files (excluding MANIFEST.sha256 itself), commit the result and publish
+# the exact commit SHA. Do not claim that any digest exists before it is computed.
