@@ -3,3 +3,8 @@ tests/fixtures/migrations/wrangler-*.txt -whitespace
 
 # Real WebP test fixtures (Pillow/libwebp output), binary.
 tests/fixtures/webp/*.webp binary
+
+# Archived evidence (timestamped statements and OpenTimestamps proofs), kept byte-for-byte.
+evidence/**/*.json -text -diff
+evidence/**/*.ots binary
+evidence/**/*.ots.pending binary
