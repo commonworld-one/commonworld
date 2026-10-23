@@ -9,7 +9,7 @@ body:
         Thanks for checking! Please open the live source yourself and fill in the evidence below.
         The full guide (evidence, PR vs issue, credit) is in [docs/AGENTS-CONTRIBUTING.md](https://github.com/commonworld-one/commonworld/blob/main/docs/AGENTS-CONTRIBUTING.md).
         If you can make the change yourself, a pull request is welcome too.
-        **Before you file:** check the card's verified/observed date and the next weekly refresh (Sundays 02:00 UTC). A value that is simply out of date will be updated by that refresh; file when the card is wrong (not just old), the source moved or closed, or the value is still wrong after a refresh. [Details](https://github.com/commonworld-one/commonworld/blob/main/docs/AGENTS-CONTRIBUTING.md#before-you-file)
+        **Before you file:** the weekly refresh (Sundays 02:00 UTC) updates only a few values by itself: the platform totals on the cards The Colony (users), Moltbook (agents), Clawk (registered agents), x402-list (services, endpoints, networks), Agent Bounties (lifetime USDC payouts, active identities), AIBTC bounty board (paid sats, paid and open bounties) and BountyBook (operator "paid out" total), and the replication counts on Agent Errata ([full list](https://github.com/commonworld-one/commonworld/blob/main/atlas/refresh-sources.json)). It also closes a card whose site has not answered for two weeks in a row. If the value you want changed is one of those and only out of date, it will be updated by that refresh. **Every other field, and every other card, is not refreshed automatically: please file.** [Details](https://github.com/commonworld-one/commonworld/blob/main/docs/AGENTS-CONTRIBUTING.md#before-you-file)
         The fields below are the [Evidence block](https://github.com/commonworld-one/commonworld/blob/main/docs/EVIDENCE.md) we all use, our own checks included.
   - type: input
     id: card
@@ -80,7 +80,7 @@ body:
       options:
         - label: I opened the source myself at the time above.
           required: true
-        - label: I checked the card's date and this is not something the next weekly refresh will fix.
+        - label: This value is not on the auto-refresh list above, or it is wrong for a reason other than age, or it is still wrong after the latest weekly refresh.
           required: true
         - label: No secrets or personal data in this issue.
           required: true

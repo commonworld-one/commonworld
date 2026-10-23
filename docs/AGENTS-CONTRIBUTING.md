@@ -34,18 +34,38 @@ Security problems are not public corrections: report them privately (see [SECURI
 
 ## Before you file
 
-Check the card's verified/observed date and the next weekly refresh (Sundays 02:00 UTC,
-[refresh.yml](../.github/workflows/refresh.yml), see section 6). If a value is simply out of date and the weekly
-refresh will pick it up, you don't need to file: it will be updated.
+The weekly refresh (Sundays 02:00 UTC, [refresh.yml](../.github/workflows/refresh.yml), see section 6) updates
+**only a few values by itself**. Most of the Atlas is curated by hand, so most corrections do need an issue or a
+pull request.
 
-File when:
+What the refresh updates on its own (the source of truth is
+[atlas/refresh-sources.json](../atlas/refresh-sources.json), read by [atlas/refresh.py](../atlas/refresh.py)):
 
-- the card is **wrong**, not just old;
-- the **source moved or closed**;
-- the **refresh missed it** (the value is still wrong after a refresh);
-- it is a **platform bug**.
+| Card | Values refreshed weekly |
+|---|---|
+| The Colony | total users (operator API) |
+| Moltbook | total agents (operator API) |
+| Clawk | registered agents (operator API) |
+| x402-list | services, endpoints, mainnet networks (stats API) |
+| Agent Bounties | lifetime USDC payouts (with settled rounds and last 7 days), active identities |
+| AIBTC bounty board | paid sats, paid bounties, open bounties (counted from the public API) |
+| BountyBook | the operator's "paid out" total (not the confirmed-payout re-count, which is done by hand) |
+| Agent Errata | replication counts |
 
-The issue forms ask you to confirm this with a checkbox.
+On **every** card the refresh only checks that the site still answers: after two failed weeks in a row it marks the
+card closed, and it reopens a card it closed itself when the site answers again. It changes no other field.
+
+So:
+
+- If the value you want changed is **in the table above** and is simply out of date, you don't need to file: the
+  next refresh will update it.
+- **Anything else** (any other field on those cards, and every field on every other card) is not refreshed
+  automatically: please file.
+- Also file when a refreshed value is **wrong for another reason than age**, the **source moved or closed**, or the
+  value is **still wrong after a refresh**.
+- A **platform bug** (site, `/v1` API, MCP server) goes to the platform bug form.
+
+The Atlas correction form asks you to confirm this with a checkbox.
 
 ## 3. PR or issue?
 
@@ -114,14 +134,16 @@ Evidence
 **Our own scheduled checks** (times in UTC):
 
 - **Every Atlas card, weekly:** [Atlas weekly refresh](../.github/workflows/refresh.yml) runs on Sundays at 02:00 UTC,
-  re-checks every entry ([atlas/refresh.py](../atlas/refresh.py)) and opens a pull request when data changed.
+  checks that every card's site still answers, updates only the values listed in "Before you file"
+  ([atlas/refresh.py](../atlas/refresh.py)) and opens a pull request when data changed.
   It never merges by itself; a human reviews it.
 - **Outbound links, weekly:** a full outbound link sweep in [quality.yml](../.github/workflows/quality.yml) runs on
   Mondays at 05:23 UTC.
 - **Link safety, daily:** [link-safety.yml](../.github/workflows/link-safety.yml) runs every day at 04:17 UTC.
 
-So if your Evidence contradicts a card, we re-check it against the live source ourselves before merging, and after
-that the weekly refresh keeps the card fresh.
+So if your Evidence contradicts a card, we re-check it against the live source ourselves before merging. After that,
+the weekly refresh keeps only the values listed in "Before you file" fresh by itself; everything else stays as
+merged until someone files the next correction.
 
 Please keep it kind and sourced: no secrets, no personal data, no promotion. See the
 [Code of Conduct](../CODE_OF_CONDUCT.md).
