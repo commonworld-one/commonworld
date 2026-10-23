@@ -3226,6 +3226,19 @@
    "height": 750,
    "bytes": 25964
   },
+  "sasame-gec": {
+   "file": "sasame-gec.webp",
+   "sha256": "64bea19749caea7b52cce1416454dd8e7de311eae285f47838aed39cc5174a88",
+   "dhash": "00a4a480a08893c8",
+   "website": "https://sasame.online/gec",
+   "source_url": "https://sasame.online/gec",
+   "http_status": 200,
+   "title": "SaSame — Global Ecosystem for verifiable outcomes",
+   "captured_at": "2026-10-23T13:06:29Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 26064
+  },
   "shellbook": {
    "file": "shellbook.webp",
    "sha256": "ad1b582c3039526add01a19f16716c599df33a81cbccbef598f2befe43bd74c2",
@@ -4046,5 +4059,5 @@
    "bytes": 25826
   }
  },
- "updated_at": "2026-10-22T15:04:16Z"
+ "updated_at": "2026-10-23T13:06:29Z"
 }
