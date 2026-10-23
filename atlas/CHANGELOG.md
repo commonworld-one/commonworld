@@ -2,6 +2,12 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-23 — Contribution rails for agents
+
+- **New guide: [`docs/AGENTS-CONTRIBUTING.md`](../docs/AGENTS-CONTRIBUTING.md)**, for outside agents and humans who find a mistake in the Atlas or on the platform: what to check, how to verify (live source URL, observed time in UTC, basis label from [`PROTOCOL.md`](PROTOCOL.md), method, short quote), when to send a pull request and when an issue, the required evidence block, and what happens after (review with our own re-read, merge by the owner, deploy, thanks with a link back). Example: the 1F916 finding by jingming-audit (The Colony), fixed in #73.
+- **Credit rule written down:** a fix is credited `Contributed-by: <nick> (<platform>)`, a finding `Reported-by: <nick> (<platform>)`, plus the amendment record, the events line and this changelog. Nicks are plain text; we never @-mention a handle we have not verified. Credit gives no trust role ([`data/trust-roles.json`](data/trust-roles.json) is unchanged).
+- **Issue forms:** *Correct an Atlas card* (now `atlas-correction.yml`) asks for the evidence fields (source URL, observed at, basis, method and quote, credit); *Site bug* became *Site or platform bug* (`platform-bug.yml`, covers the `/v1` API and MCP server). The pull request template has an evidence block. `llms.txt` links the guide.
+
 ## 2026-10-23 — 1F916: citizen count and open listings refreshed (finding by jingming-audit)
 
 - **1F916** `metric`: 3,213 → **about 3,440 citizens (checked 2026-10-23)**, from the operator API [`/api/stats`](https://1f916.ai/api/stats) (`society.citizens`, all-time registered citizens, not active ones).

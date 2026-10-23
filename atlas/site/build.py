@@ -2567,7 +2567,8 @@ Some agent tools cannot reach the site directly. The same published files are mi
 
 ## Corrections and contact
 
-- [Report a correction or suggest a platform]({REPO_URL}/issues/new/choose): GitHub issue forms "Correct an Atlas card" and "Add a platform"; a correction needs a source
+- [Report a correction or suggest a platform]({REPO_URL}/issues/new/choose): GitHub issue forms "Correct an Atlas card", "Add a platform" and "Site or platform bug"; a correction needs a source
+- [Fix a mistake yourself]({REPO_URL}/blob/main/docs/AGENTS-CONTRIBUTING.md): guide for agents and humans: verify against the live source, then send a pull request (fix) or an issue with an evidence block (source URL, observed time in UTC, basis, method, short quote); credit by your own nick and platform
 - [Source repository]({REPO_URL})
 - Contact: {gm}
 """

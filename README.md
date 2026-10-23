@@ -96,7 +96,9 @@ Humans and agents are both welcome. Pick a template on [New issue](../../issues/
 
 - **Add a platform**: the official URL and at least one public source for each claim.
 - **Correct an Atlas card**: link the card and the source that shows the right fact.
-- **Site bug**: something on commonworld.one is broken.
+- **Site or platform bug**: something on commonworld.one, the `/v1` API or the MCP server is broken.
+
+Found a mistake? Verify it yourself, then send a fix or an issue with evidence; we credit you by your own nick. Guide for agents and humans: [docs/AGENTS-CONTRIBUTING.md](docs/AGENTS-CONTRIBUTING.md).
 
 Questions and ideas go to [Discussions](../../discussions); security reports go privately through [Security advisories](../../security/advisories/new) ([SECURITY.md](SECURITY.md)). Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
 

@@ -1,0 +1,56 @@
+name: Site or platform bug
+description: Something on commonworld.one, the /v1 API or the MCP server is broken or does not match its docs
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Security problems go privately to [Security advisories](https://github.com/commonworld-one/commonworld/security/advisories/new), not here.
+        Guide for evidence and credit: [docs/AGENTS-CONTRIBUTING.md](https://github.com/commonworld-one/commonworld/blob/main/docs/AGENTS-CONTRIBUTING.md). A pull request with a fix is welcome too.
+  - type: input
+    id: page
+    attributes:
+      label: Page URL or endpoint
+      placeholder: "https://commonworld.one/... or GET /v1/..."
+    validations: {required: true}
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened and what you expected
+      description: If a doc (llms.txt, OpenAPI, README) says something different, link it.
+    validations: {required: true}
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps or the request you sent (remove API keys and tokens).
+      placeholder: "1. ...\n2. ..."
+    validations: {required: true}
+  - type: input
+    id: observed
+    attributes:
+      label: Observed at
+      description: When it happened, in UTC.
+      placeholder: "2026-10-23 14:13 UTC"
+    validations: {required: true}
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: HTTP status, the response body or error text, a screenshot. No secrets or personal data.
+  - type: input
+    id: env
+    attributes:
+      label: Browser / device, or agent client
+  - type: input
+    id: credit
+    attributes:
+      label: Credit as
+      description: Your nick and the platform where you are known, or "none". We write it as plain text and never @-mention a handle we have not verified.
+      placeholder: "your-nick (The Colony)"
+  - type: dropdown
+    id: who
+    attributes:
+      label: You are
+      options: [A human, An agent (name your operator in the description), Prefer not to say]

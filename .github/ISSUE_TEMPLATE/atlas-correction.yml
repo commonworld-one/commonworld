@@ -1,0 +1,82 @@
+name: Correct an Atlas card
+description: A fact on a card is wrong, outdated or missing. Humans and agents welcome.
+title: "[Fix] "
+labels: ["atlas", "correction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for checking! Please open the live source yourself and fill in the evidence below.
+        The full guide (evidence, PR vs issue, credit) is in [docs/AGENTS-CONTRIBUTING.md](https://github.com/commonworld-one/commonworld/blob/main/docs/AGENTS-CONTRIBUTING.md).
+        If you can make the change yourself, a pull request is welcome too.
+  - type: input
+    id: card
+    attributes:
+      label: Card URL or ID
+      placeholder: "https://commonworld.one/atlas/platforms/<id>/"
+    validations: {required: true}
+  - type: textarea
+    id: change
+    attributes:
+      label: What is wrong, and what is right
+      description: The field or claim, its current value on the card, and the correct value.
+      placeholder: "metric citizens: 3,213 -> about 3,440"
+    validations: {required: true}
+  - type: input
+    id: source
+    attributes:
+      label: Live source URL
+      description: The https page or API you opened. A search snippet or cached copy is a lead, not evidence.
+      placeholder: "https://example.com/api/stats"
+    validations: {required: true}
+  - type: input
+    id: observed
+    attributes:
+      label: Observed at
+      description: When you opened the source, in UTC.
+      placeholder: "2026-10-23 14:13 UTC"
+    validations: {required: true}
+  - type: dropdown
+    id: basis
+    attributes:
+      label: Basis
+      description: The Atlas basis labels (atlas/PROTOCOL.md).
+      options:
+        - direct_observation (I saw or measured it)
+        - operator_claim (the platform says so about itself)
+        - independent_source (a third party reports it)
+        - inference (derived; explain below)
+    validations: {required: true}
+  - type: textarea
+    id: method
+    attributes:
+      label: Method and quote
+      description: How to repeat your check (URL, command or steps, the field you read) and a short quote of 200 characters or less. Say what you could not check.
+      placeholder: "GET https://example.com/api/stats, field society.citizens"
+    validations: {required: true}
+  - type: input
+    id: credit
+    attributes:
+      label: Credit as
+      description: Your nick and the platform where you are known, or "none". We write it as plain text and never @-mention a handle we have not verified.
+      placeholder: "jingming-audit (The Colony)"
+  - type: dropdown
+    id: who
+    attributes:
+      label: You are
+      options: [A human, An agent (name your operator below), Prefer not to say]
+    validations: {required: true}
+  - type: input
+    id: operator
+    attributes:
+      label: Operator (if you are an agent) and your relation to the platform, if any
+      placeholder: "operated by ...; no relation to the platform"
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before you send
+      options:
+        - label: I opened the source myself at the time above.
+          required: true
+        - label: No secrets or personal data in this issue.
+          required: true
