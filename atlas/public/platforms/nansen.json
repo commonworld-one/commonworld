@@ -1,0 +1,194 @@
+{
+ "licence": "CC BY 4.0",
+ "source": "https://github.com/commonworld-one/commonworld",
+ "generated_at": "2026-10-19T08:29:00Z",
+ "id": "nansen",
+ "name": "Nansen",
+ "url": "https://commonworld.one/atlas/platforms/nansen/",
+ "json_url": "https://commonworld.one/atlas/platforms/nansen.json",
+ "website": "https://nansen.ai",
+ "category": "projects",
+ "category_label": "Projects (repos & frameworks)",
+ "type": "project",
+ "status": "live",
+ "summary": "Onchain analytics and trading product built on hundreds of millions of labeled wallet addresses (Smart Money tracking, token research); its API also answers per call over x402.",
+ "tags": [],
+ "has_money_flow": false,
+ "money_flow": [],
+ "key_number": {
+  "kind": "metric",
+  "value": 4104,
+  "unit": "calls in 30 days (CDP Bazaar quality data)",
+  "window": "30 days to 2026-10-23",
+  "basis": "independent_source",
+  "observed_at": "2026-10-23T20:35:00Z",
+  "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x93053f1e7A5eFEDa532Fe69CbbE43cBEc3A0F13f"
+ },
+ "verified_at": "2026-10-23T20:50:00Z",
+ "last_checked": "2026-10-23T20:50:00Z",
+ "claims_count": 8,
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Nansen or YourAITools is involved.",
+ "md_url": "https://commonworld.one/atlas/platforms/nansen/index.md",
+ "evidence_level": {
+  "level": 2,
+  "id": "public_dashboard",
+  "label": "public dashboard",
+  "claims_counted": 2
+ },
+ "keys_and_books": {
+  "keys": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "books": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "people": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  }
+ },
+ "first_task": null,
+ "replications": null,
+ "badge_status": "Verified · 2026-10-23",
+ "badge_svg": "https://commonworld.one/atlas/badge/nansen.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/nansen-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "claims": [
+  {
+   "kind": "canonical_url",
+   "statement": "https://nansen.ai is the official site: it is the address YourAITools lists for Nansen and the site answers there (page title \"Nansen AI - Trade Everything Onchain with AI\").",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://nansen.ai",
+   "quote": "Nansen AI - Trade Everything Onchain with AI",
+   "observed_at": "2026-10-23T20:50:41Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://nansen.ai/ (HTTP 200, final https://nansen.ai/)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "site_reachable",
+   "statement": "The site serves real content without sign-in (HTTP 200).",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://nansen.ai",
+   "quote": "Trade everything onchain with AI, powered by 500M+ labeled addresses. Track Smart Money, analyze any token, and execute instantly - all in one place.",
+   "observed_at": "2026-10-23T20:24:17Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://nansen.ai/ (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "description",
+   "statement": "Operator's own description: Trade everything onchain with AI, powered by 500M+ labeled addresses.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "operator_claim",
+   "source_url": "https://nansen.ai/",
+   "quote": "Trade everything onchain with AI, powered by 500M+ labeled addresses.",
+   "observed_at": "2026-10-23T20:50:41Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://nansen.ai/ (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "operator",
+   "statement": "Operated by The Nansen group, per the legal page.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "operator_claim",
+   "source_url": "https://nansen.ai/legal",
+   "quote": "operated by the Nansen group",
+   "observed_at": "2026-10-23T20:50:41Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://nansen.ai/legal (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "protocol",
+   "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.nansen.ai/api/v1/profiler/address/current-balance answered HTTP 402 with x402 v2 payment terms (scheme exact; network BNB Chain, Base, Monad, Solana, X Layer; asset USDC, other token; price 0.01 USDC; payTo Base 0x93053f1e7A5eFEDa532Fe69CbbE43cBEc3A0F13f; Solana J7ZvJEspvwP1oRxQZ7mYmNmT22NTm3GWq3t7HEbvPZYx; plus 3 other network option(s)). YourAITools gives no price. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+   "value": 0.01,
+   "unit": "USDC per call (probed route)",
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://api.nansen.ai/api/v1/profiler/address/current-balance",
+   "quote": "HTTP 402, x402Version 2, amount 10000, network eip155:8453",
+   "observed_at": "2026-10-23T20:24:18Z",
+   "methods": [
+    "unpaid GET https://api.nansen.ai/api/v1/profiler/address/current-balance (HTTP 402, header:payment-required; no payment header sent)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "metric",
+   "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 59 resource(s) on this vendor's domain for the payTo address(es) we observed, with 4,104 calls in the last 30 days as reported by CDP (largest single resource: 46 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+   "value": 4104,
+   "unit": "calls in 30 days (CDP Bazaar quality data)",
+   "window": "30 days to 2026-10-23",
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x93053f1e7A5eFEDa532Fe69CbbE43cBEc3A0F13f",
+   "quote": "l30DaysTotalCalls (sum) 4104; l30DaysUniquePayers (max) 46",
+   "observed_at": "2026-10-23T20:35:09Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x93053f1e7A5eFEDa532Fe69CbbE43cBEc3A0F13f (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "recent_activity",
+   "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 18:02 UTC.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x93053f1e7A5eFEDa532Fe69CbbE43cBEc3A0F13f",
+   "quote": "lastCalledAt 2026-10-23T18:02:00Z",
+   "observed_at": "2026-10-23T20:35:09Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x93053f1e7A5eFEDa532Fe69CbbE43cBEc3A0F13f"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "listing",
+   "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category crypto-data, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://youraitools.co/tool/nansen",
+   "quote": "Unpaid GET /api/v1/profiler/address/current-balance returned HTTP 402 on 2026-10-22 with x402 payment terms on Base, Solana, X Layer, BNB Chain, Monad. No price per call is shown; check the provider. ",
+   "observed_at": "2026-10-23T19:53:54Z",
+   "methods": [
+    "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23 19:53 UTC"
+   ],
+   "outcome": "supported"
+  }
+ ],
+ "qa_status": "not_sampled"
+}

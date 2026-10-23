@@ -1,0 +1,210 @@
+{
+ "licence": "CC BY 4.0",
+ "source": "https://github.com/commonworld-one/commonworld",
+ "generated_at": "2026-10-19T08:29:00Z",
+ "id": "agents-trust",
+ "name": "Agents Trust",
+ "url": "https://commonworld.one/atlas/platforms/agents-trust/",
+ "json_url": "https://commonworld.one/atlas/platforms/agents-trust.json",
+ "website": "https://agents-trust.com",
+ "category": "payments",
+ "category_label": "Payments & x402",
+ "type": "tool_catalog",
+ "status": "live",
+ "summary": "Index that helps an agent choose a paid API for a task and check it before paying: it returns candidate endpoint URLs with price, reliability, delivery evidence and risk flags, through two paid x402 GET calls.",
+ "tags": [],
+ "has_money_flow": false,
+ "money_flow": [],
+ "key_number": {
+  "kind": "metric",
+  "value": 8662,
+  "unit": "calls in 30 days (CDP Bazaar quality data)",
+  "window": "30 days to 2026-10-23",
+  "basis": "independent_source",
+  "observed_at": "2026-10-23T20:35:00Z",
+  "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x96368628b679a459FE69815bacCa5CB0232AC397"
+ },
+ "verified_at": "2026-10-23T21:00:00Z",
+ "last_checked": "2026-10-23T21:00:00Z",
+ "claims_count": 9,
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Agents Trust or YourAITools is involved.",
+ "md_url": "https://commonworld.one/atlas/platforms/agents-trust/index.md",
+ "evidence_level": {
+  "level": 2,
+  "id": "public_dashboard",
+  "label": "public dashboard",
+  "claims_counted": 2
+ },
+ "keys_and_books": {
+  "keys": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "books": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "people": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  }
+ },
+ "first_task": null,
+ "replications": null,
+ "badge_status": "Verified · 2026-10-23",
+ "badge_svg": "https://commonworld.one/atlas/badge/agents-trust.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/agents-trust-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "claims": [
+  {
+   "kind": "canonical_url",
+   "statement": "https://agents-trust.com is the official site: it is the address YourAITools lists for Agents Trust and the site answers there (page title \"Agents Trust | find an endpoint an agent can trust\").",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://agents-trust.com",
+   "quote": "Agents Trust | find an endpoint an agent can trust",
+   "observed_at": "2026-10-23T20:50:37Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://agents-trust.com/ (HTTP 200, final https://agents-trust.com/)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "site_reachable",
+   "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://agents-trust.com",
+   "quote": "Find paid APIs for a task and check an endpoint before paying. Agents Trust returns API URLs, pricing, reliability, delivery evidence and risk flags.",
+   "observed_at": "2026-10-23T20:24:20Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://agents-trust.com/ (HTTP 200)",
+    "GET https://agents-trust.com/llms.txt (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "description",
+   "statement": "Operator's own description: Find paid APIs for a task and check an endpoint before paying. Agents Trust returns API URLs, pricing, reliability, delivery evidence and risk flags.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "operator_claim",
+   "source_url": "https://agents-trust.com/",
+   "quote": "Find paid APIs for a task and check an endpoint before paying. Agents Trust returns API URLs, pricing, reliability, delivery evidence and risk flags.",
+   "observed_at": "2026-10-23T20:50:37Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://agents-trust.com/ (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "operator",
+   "statement": "Operated by Intentra Labs, Zug, Switzerland, per the terms of service.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "operator_claim",
+   "source_url": "https://agents-trust.com/terms/",
+   "quote": "Operator: Intentra Labs, Zug, Switzerland",
+   "observed_at": "2026-10-23T20:50:37Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://agents-trust.com/terms/ (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "docs",
+   "statement": "Public documentation for agents and developers.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://agents-trust.com/docs/",
+   "quote": null,
+   "observed_at": "2026-10-23T21:00:12Z",
+   "methods": [
+    "GET https://agents-trust.com/docs/ (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "protocol",
+   "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.agents-trust.com/recommend answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base, Solana; asset USDC; price 0.01 USDC; payTo Base 0x96368628b679a459FE69815bacCa5CB0232AC397; Solana 4syngecZXG1XeiVffWC1vLxpwxHyZnZj8gtBZyJt5DRX). YourAITools lists the price as $0.01. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+   "value": 0.01,
+   "unit": "USDC per call (probed route)",
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://api.agents-trust.com/recommend",
+   "quote": "HTTP 402, x402Version 2, amount 10000, network eip155:8453",
+   "observed_at": "2026-10-23T20:24:21Z",
+   "methods": [
+    "unpaid GET https://api.agents-trust.com/recommend (HTTP 402, header:payment-required; no payment header sent)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "metric",
+   "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 1 resource(s) on this vendor's domain for the payTo address(es) we observed, with 8,662 calls in the last 30 days as reported by CDP (largest single resource: 29 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+   "value": 8662,
+   "unit": "calls in 30 days (CDP Bazaar quality data)",
+   "window": "30 days to 2026-10-23",
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x96368628b679a459FE69815bacCa5CB0232AC397",
+   "quote": "l30DaysTotalCalls (sum) 8662; l30DaysUniquePayers (max) 29",
+   "observed_at": "2026-10-23T20:35:12Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x96368628b679a459FE69815bacCa5CB0232AC397 (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "recent_activity",
+   "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 18:09 UTC.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x96368628b679a459FE69815bacCa5CB0232AC397",
+   "quote": "lastCalledAt 2026-10-23T18:09:00Z",
+   "observed_at": "2026-10-23T20:35:12Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x96368628b679a459FE69815bacCa5CB0232AC397"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "listing",
+   "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category trust-security, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://youraitools.co/tool/agents-trust",
+   "quote": "Unpaid GET /recommend returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.01 USDC on Base or Solana. Price checked via our 402 probe on 2026-10-22 (1 route probed; other routes ",
+   "observed_at": "2026-10-23T19:53:54Z",
+   "methods": [
+    "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23 19:53 UTC"
+   ],
+   "outcome": "supported"
+  }
+ ],
+ "qa_status": "not_sampled"
+}

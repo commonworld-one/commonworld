@@ -1,0 +1,195 @@
+{
+ "licence": "CC BY 4.0",
+ "source": "https://github.com/commonworld-one/commonworld",
+ "generated_at": "2026-10-19T08:29:00Z",
+ "id": "cyberwarex",
+ "name": "CyberWareX",
+ "url": "https://commonworld.one/atlas/platforms/cyberwarex/",
+ "json_url": "https://commonworld.one/atlas/platforms/cyberwarex.json",
+ "website": "https://cyberwarex.com",
+ "category": "projects",
+ "category_label": "Projects (repos & frameworks)",
+ "type": "project",
+ "status": "live",
+ "summary": "Nine x402 APIs for agents (web fetching, token safety checks, chain data, search, video, transaction simulation), paid per call in USDC on Base with no API key, with a machine-readable manifest.",
+ "tags": [],
+ "has_money_flow": false,
+ "money_flow": [],
+ "key_number": {
+  "kind": "metric",
+  "value": 1526,
+  "unit": "calls in 30 days (CDP Bazaar quality data)",
+  "window": "30 days to 2026-10-23",
+  "basis": "independent_source",
+  "observed_at": "2026-10-23T20:30:00Z",
+  "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2"
+ },
+ "verified_at": "2026-10-23T21:00:00Z",
+ "last_checked": "2026-10-23T21:00:00Z",
+ "claims_count": 8,
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with CyberWareX or YourAITools is involved.",
+ "md_url": "https://commonworld.one/atlas/platforms/cyberwarex/index.md",
+ "evidence_level": {
+  "level": 2,
+  "id": "public_dashboard",
+  "label": "public dashboard",
+  "claims_counted": 2
+ },
+ "keys_and_books": {
+  "keys": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "books": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "people": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  }
+ },
+ "first_task": null,
+ "replications": null,
+ "badge_status": "Verified · 2026-10-23",
+ "badge_svg": "https://commonworld.one/atlas/badge/cyberwarex.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/cyberwarex-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "claims": [
+  {
+   "kind": "canonical_url",
+   "statement": "https://cyberwarex.com is the official site: it is the address YourAITools lists for CyberWareX and the site answers there (page title \"CyberWareX - APIs your agents pay for themselves\").",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://cyberwarex.com",
+   "quote": "CyberWareX - APIs your agents pay for themselves",
+   "observed_at": "2026-10-23T20:50:43Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://cyberwarex.com/ (HTTP 200, final https://cyberwarex.com/)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "site_reachable",
+   "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://cyberwarex.com",
+   "quote": "Nine live x402 APIs for AI agents: web access, token safety, chain data, search, video, transaction simulation. Pay per call in USDC on Base, no API key.",
+   "observed_at": "2026-10-23T20:24:16Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://cyberwarex.com/ (HTTP 200)",
+    "GET https://cyberwarex.com/llms.txt (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "description",
+   "statement": "Operator's own description: Nine live x402 APIs for AI agents: web access, token safety, chain data, search, video, transaction simulation. Pay per call in USDC on Base, no API key.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "operator_claim",
+   "source_url": "https://cyberwarex.com/",
+   "quote": "Nine live x402 APIs for AI agents: web access, token safety, chain data, search, video, transaction simulation. Pay per call in USDC on Base, no API key.",
+   "observed_at": "2026-10-23T20:50:43Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://cyberwarex.com/ (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "docs",
+   "statement": "Public documentation for agents and developers.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://cyberwarex.com/llms.txt",
+   "quote": null,
+   "observed_at": "2026-10-23T21:00:27Z",
+   "methods": [
+    "GET https://cyberwarex.com/llms.txt (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "protocol",
+   "statement": "Commonworld's own unpaid check: an unpaid GET to https://search.cyberwarex.com/search answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base; asset USDC; price 0.003 USDC; payTo Base 0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2). YourAITools lists the price as $0.001–$5. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. The probed route is not the cheapest one listed.",
+   "value": 0.003,
+   "unit": "USDC per call (probed route)",
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://search.cyberwarex.com/search",
+   "quote": "HTTP 402, x402Version 2, amount 3000, network eip155:8453",
+   "observed_at": "2026-10-23T20:24:16Z",
+   "methods": [
+    "unpaid GET https://search.cyberwarex.com/search (HTTP 402, header:payment-required; no payment header sent)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "metric",
+   "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 60 resource(s) on this vendor's domain for the payTo address(es) we observed, with 1,526 calls in the last 30 days as reported by CDP (largest single resource: 13 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+   "value": 1526,
+   "unit": "calls in 30 days (CDP Bazaar quality data)",
+   "window": "30 days to 2026-10-23",
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
+   "quote": "l30DaysTotalCalls (sum) 1526; l30DaysUniquePayers (max) 13",
+   "observed_at": "2026-10-23T20:30:54Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2 (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "recent_activity",
+   "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 14:14 UTC.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2",
+   "quote": "lastCalledAt 2026-10-23T14:14:00Z",
+   "observed_at": "2026-10-23T20:30:54Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "listing",
+   "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category marketplaces, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://youraitools.co/tool/cyberwarex",
+   "quote": "Unpaid GET /search returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.003 USDC on Base. Price checked via our 402 probe on 2026-10-22 (4 routes probed; other routes may be pric",
+   "observed_at": "2026-10-23T19:53:54Z",
+   "methods": [
+    "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23 19:53 UTC"
+   ],
+   "outcome": "supported"
+  }
+ ],
+ "qa_status": "not_sampled"
+}

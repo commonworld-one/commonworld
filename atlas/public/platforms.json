@@ -3,14 +3,14 @@
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
  "generated_at": "2026-10-19T08:29:00Z",
- "newest_observation": "2026-10-23T19:18:00Z",
+ "newest_observation": "2026-10-23T21:00:00Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",
  "corrections": "https://github.com/commonworld-one/commonworld/issues/new/choose",
  "protocol": "https://github.com/commonworld-one/commonworld/blob/main/atlas/PROTOCOL.md",
  "full_data": "https://commonworld.one/atlas/data/snapshot.json",
- "count": 339,
+ "count": 363,
  "fields_note": "id = permanent slug; verified_at/last_checked = newest observation on the card (UTC); money_flow = supported money-flow claims shown on the card; full claims with sources are in each json_url and in full_data.",
  "platforms": [
   {
@@ -3310,6 +3310,66 @@
    "replications": null
   },
   {
+   "id": "agents-trust",
+   "name": "Agents Trust",
+   "url": "https://commonworld.one/atlas/platforms/agents-trust/",
+   "json_url": "https://commonworld.one/atlas/platforms/agents-trust.json",
+   "website": "https://agents-trust.com",
+   "category": "payments",
+   "category_label": "Payments & x402",
+   "type": "tool_catalog",
+   "status": "live",
+   "summary": "Index that helps an agent choose a paid API for a task and check it before paying: it returns candidate endpoint URLs with price, reliability, delivery evidence and risk flags, through two paid x402 GET calls.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 8662,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:35:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x96368628b679a459FE69815bacCa5CB0232AC397"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 9,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Agents Trust or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/agents-trust/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
    "id": "agents-json",
    "name": "agents.json",
    "url": "https://commonworld.one/atlas/platforms/agents-json/",
@@ -3558,6 +3618,66 @@
     "id": null,
     "label": "not recorded yet",
     "claims_counted": 0
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "agentsvc-io",
+   "name": "agentsvc.io",
+   "url": "https://commonworld.one/atlas/platforms/agentsvc-io/",
+   "json_url": "https://commonworld.one/atlas/platforms/agentsvc-io.json",
+   "website": "https://agentsvc.io",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "About 127 per-call web services for agents (crawling to Markdown, AI summaries and extraction, package and source checks, screenshots, PDF and OCR), paid with USDC over x402 on Base, Solana, Polygon or Arbitrum, with a free sample per service.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 1387,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:33:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x622efA6Ceb83a5b6EdBC931332f4db68B7f74F27"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with agentsvc.io or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/agentsvc-io/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
    },
    "keys_and_books": {
     "keys": {
@@ -7415,6 +7535,66 @@
    "replications": null
   },
   {
+   "id": "clawfetch-ai",
+   "name": "ClawFetch.ai",
+   "url": "https://commonworld.one/atlas/platforms/clawfetch-ai/",
+   "json_url": "https://commonworld.one/atlas/platforms/clawfetch-ai.json",
+   "website": "https://clawfetch.ai",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Web rendering, structured extraction, domain search and multi-source research for agents, paid per request in USDC on Base over x402 with no API key.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 1177,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:37:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xc2afB91833f4dE19542A025872C6085cC29185eB"
+   },
+   "verified_at": "2026-10-23T20:50:00Z",
+   "last_checked": "2026-10-23T20:50:00Z",
+   "claims_count": 7,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with ClawFetch.ai or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/clawfetch-ai/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
    "id": "clawhunt",
    "name": "ClawHunt",
    "url": "https://commonworld.one/atlas/platforms/clawhunt/",
@@ -8872,6 +9052,66 @@
    "replications": null
   },
   {
+   "id": "cyberwarex",
+   "name": "CyberWareX",
+   "url": "https://commonworld.one/atlas/platforms/cyberwarex/",
+   "json_url": "https://commonworld.one/atlas/platforms/cyberwarex.json",
+   "website": "https://cyberwarex.com",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Nine x402 APIs for agents (web fetching, token safety checks, chain data, search, video, transaction simulation), paid per call in USDC on Base with no API key, with a machine-readable manifest.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 1526,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:30:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x058D0Cc5CC97e61e8A9f38D6d6365bce525921B2"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with CyberWareX or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/cyberwarex/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
    "id": "dail-agent-world",
    "name": "DAiL",
    "url": "https://commonworld.one/atlas/platforms/dail-agent-world/",
@@ -9429,6 +9669,66 @@
     "id": "operator_says",
     "label": "operator says",
     "claims_counted": 1
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "exa",
+   "name": "Exa",
+   "url": "https://commonworld.one/atlas/platforms/exa/",
+   "json_url": "https://commonworld.one/atlas/platforms/exa.json",
+   "website": "https://exa.ai",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Web search and content retrieval API built for AI agents, running its own index and search models; besides API keys, its search and contents endpoints accept per-call x402 payment in USDC.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 7422,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:33:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x6d6E695b09861467c7d462f5AAF31cF3540B9192"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 9,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Exa or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/exa/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
    },
    "keys_and_books": {
     "keys": {
@@ -10229,6 +10529,66 @@
    "replications": null
   },
   {
+   "id": "glim-sh",
+   "name": "glim.sh",
+   "url": "https://commonworld.one/atlas/platforms/glim-sh/",
+   "json_url": "https://commonworld.one/atlas/platforms/glim-sh.json",
+   "website": "https://glim.sh",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "One remote endpoint that gives agents live data from X, Reddit, GitHub and the open web without API keys, paid in USDC on Base, Solana or Tempo over x402.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 1416,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:36:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=9MkM5Ra48KFcSv9HDQ8sb3C3r5HjouEwGQ6sp1cx1vde"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with glim.sh or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/glim-sh/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
    "id": "global-chat",
    "name": "Global Chat",
    "url": "https://commonworld.one/atlas/platforms/global-chat/",
@@ -10388,6 +10748,66 @@
     "id": "operator_says",
     "label": "operator says",
     "claims_counted": 1
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "gondola-ai",
+   "name": "Gondola",
+   "url": "https://commonworld.one/atlas/platforms/gondola-ai/",
+   "json_url": "https://commonworld.one/atlas/platforms/gondola-ai.json",
+   "website": "https://gondola-ai.com",
+   "category": "payments",
+   "category_label": "Payments & x402",
+   "type": "platform",
+   "status": "live",
+   "summary": "Marketplace for Venice AI inference: holders of Venice DIEM deposit an inference key and set a price, and buyers call frontier models through one OpenAI- and Anthropic-compatible endpoint paid in USDC (also per call over x402); in beta.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 4676,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:35:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x98886846918c7deBe86E1D74E249DCDd64a9D367"
+   },
+   "verified_at": "2026-10-23T20:50:00Z",
+   "last_checked": "2026-10-23T20:50:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Gondola or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/gondola-ai/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
    },
    "keys_and_books": {
     "keys": {
@@ -10664,6 +11084,66 @@
    "claims_count": 4,
    "disclosure": null,
    "md_url": "https://commonworld.one/atlas/platforms/hal-holistic-agent-leaderboard/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "halowerk",
+   "name": "HALOWERK",
+   "url": "https://commonworld.one/atlas/platforms/halowerk/",
+   "json_url": "https://commonworld.one/atlas/platforms/halowerk.json",
+   "website": "https://halowerk.com",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Paid endpoints that agents call and pay for per request over x402 in USDC on Base, with no account, signup or API key.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 1367,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:31:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x2880EdfFF13100677Bf97A3CBdF3Bc34771C4E5E"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with HALOWERK or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/halowerk/index.md",
    "evidence_level": {
     "level": 2,
     "id": "public_dashboard",
@@ -12001,6 +12481,66 @@
    "claims_count": 5,
    "disclosure": null,
    "md_url": "https://commonworld.one/atlas/platforms/lockzone-qevrulan/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "losbeto",
+   "name": "Losbeto",
+   "url": "https://commonworld.one/atlas/platforms/losbeto/",
+   "json_url": "https://commonworld.one/atlas/platforms/losbeto.json",
+   "website": "https://api.losbeto.xyz",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "OpenAI-compatible LLM gateway plus about 120 market-data endpoints (forex, equities, commodities, Brazilian macro), paid per call over x402 on Solana, Base or TON, with prepaid credit packs; the site is a JSON API, not a human web page.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 7305,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:37:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xd5Ba9711a3D052846a3695C70e7fcb8b3168FE7d"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 10,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Losbeto or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/losbeto/index.md",
    "evidence_level": {
     "level": 2,
     "id": "public_dashboard",
@@ -13960,6 +14500,126 @@
    "replications": null
   },
   {
+   "id": "mycelia-signal",
+   "name": "Mycelia Signal",
+   "url": "https://commonworld.one/atlas/platforms/mycelia-signal/",
+   "json_url": "https://commonworld.one/atlas/platforms/mycelia-signal.json",
+   "website": "https://myceliasignal.com",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Cryptographically signed real-time market and oracle data for agents over HTTP, from raw price feeds up to derived market-state signals, paid per call over x402 (USDC on Base) or L402 (Lightning).",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 1264,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:36:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xD593832Ce9C2B13B192ba50B55dd9AF44e96700d"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 10,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Mycelia Signal or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/mycelia-signal/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "nansen",
+   "name": "Nansen",
+   "url": "https://commonworld.one/atlas/platforms/nansen/",
+   "json_url": "https://commonworld.one/atlas/platforms/nansen.json",
+   "website": "https://nansen.ai",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Onchain analytics and trading product built on hundreds of millions of labeled wallet addresses (Smart Money tracking, token research); its API also answers per call over x402.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 4104,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:35:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x93053f1e7A5eFEDa532Fe69CbbE43cBEc3A0F13f"
+   },
+   "verified_at": "2026-10-23T20:50:00Z",
+   "last_checked": "2026-10-23T20:50:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Nansen or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/nansen/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
    "id": "natural-agentic-payments",
    "name": "Natural",
    "url": "https://commonworld.one/atlas/platforms/natural-agentic-payments/",
@@ -14151,6 +14811,66 @@
     "id": "operator_says",
     "label": "operator says",
     "claims_counted": 1
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "netintel",
+   "name": "NetIntel",
+   "url": "https://commonworld.one/atlas/platforms/netintel/",
+   "json_url": "https://commonworld.one/atlas/platforms/netintel.json",
+   "website": "https://netintel.dev",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Network and web intelligence API for agents (DNS, WHOIS/RDAP, SSL/TLS, email security, IP data, web fingerprinting, OSINT) with about 144 endpoints paid per call over x402.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 1280,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:38:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xdaDc335482AD545296Fd7b28518A251fFCbEb9Df"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with NetIntel or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/netintel/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
    },
    "keys_and_books": {
     "keys": {
@@ -14633,6 +15353,126 @@
     "id": "operator_says",
     "label": "operator says",
     "claims_counted": 4
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "oneshot-agent",
+   "name": "OneShot",
+   "url": "https://commonworld.one/atlas/platforms/oneshot-agent/",
+   "json_url": "https://commonworld.one/atlas/platforms/oneshot-agent.json",
+   "website": "https://oneshotagent.com",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Agent service that takes a goal and a budget and keeps working on it over weeks or months with its own set of real-world tools (calls, mail, research); its tools can also be called one by one and paid per call over x402.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 15663,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:35:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x9fb365E4E9385E2a39FeBAd70368267e6f571d9A"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 10,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with OneShot or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/oneshot-agent/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "onesource",
+   "name": "OneSource",
+   "url": "https://commonworld.one/atlas/platforms/onesource/",
+   "json_url": "https://commonworld.one/atlas/platforms/onesource.json",
+   "website": "https://onesource.io",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Blockchain data API and MCP server for agents: read onchain state across chains in plain language or over REST, paid per call over x402 or MPP, or with an API key.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 8368,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:33:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x52E29e0d2Aa49bfBfC548C0A9F2196F4aa51f3ea"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with OneSource or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/onesource/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
    },
    "keys_and_books": {
     "keys": {
@@ -15208,6 +16048,66 @@
    "replications": null
   },
   {
+   "id": "otto-ai",
+   "name": "Otto AI",
+   "url": "https://commonworld.one/atlas/platforms/otto-ai/",
+   "json_url": "https://commonworld.one/atlas/platforms/otto-ai.json",
+   "website": "https://useotto.xyz",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Workspace for people and agents with crypto market intelligence, onchain execution and agent tools; its HTTP API lets an agent discover an endpoint, pay with x402 and check the result and receipt. The project has its own token ($OTTO).",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 2432,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:31:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x0E84dDEdAaE6A779c462C22a59F301EC31B6b808"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Otto AI or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/otto-ai/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
    "id": "p2pclaw",
    "name": "P2PCLAW",
    "url": "https://commonworld.one/atlas/platforms/p2pclaw/",
@@ -15706,6 +16606,66 @@
     "level": 1,
     "id": "operator_says",
     "label": "operator says",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "pocket-network",
+   "name": "Pocket Network",
+   "url": "https://commonworld.one/atlas/platforms/pocket-network/",
+   "json_url": "https://commonworld.one/atlas/platforms/pocket-network.json",
+   "website": "https://pocket.network",
+   "category": "payments",
+   "category_label": "Payments & x402",
+   "type": "platform",
+   "status": "live",
+   "summary": "Decentralized network where developers publish HTTP data services and get paid onchain per request by AI agents and MCP clients; its Agentic Portal lists the services agents can call, and paid calls go over x402.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 55387,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:36:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xF732ea490c5766071785a2310523f7fA2CEbB829"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 10,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Pocket Network or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/pocket-network/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
     "claims_counted": 2
    },
    "keys_and_books": {
@@ -17001,6 +17961,66 @@
    "replications": null
   },
   {
+   "id": "solenrich",
+   "name": "SolEnrich",
+   "url": "https://commonworld.one/atlas/platforms/solenrich/",
+   "json_url": "https://commonworld.one/atlas/platforms/solenrich.json",
+   "website": "https://www.solenrich.com",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Onchain intelligence API for Solana agents: wallet profiling and risk scores, token due diligence, whale and smart-money tracking and perps market structure across 50 endpoints, paid per call in USDC over x402 (Solana or Base) or by card.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 5961,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:35:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=66Qvhr1xnwqbCT36KfHfZF1JpoWdmCQ3uFYTN335CGXe"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 10,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with SolEnrich or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/solenrich/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
    "id": "paysponge",
    "name": "Sponge",
    "url": "https://commonworld.one/atlas/platforms/paysponge/",
@@ -17192,6 +18212,66 @@
    "replications": null
   },
   {
+   "id": "stabletravel",
+   "name": "StableTravel",
+   "url": "https://commonworld.one/atlas/platforms/stabletravel/",
+   "json_url": "https://commonworld.one/atlas/platforms/stabletravel.json",
+   "website": "https://stabletravel.dev",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Pay-per-request travel data for agents (flight prices and booking links, award seat availability, live flight tracking, hotels, activities and transfers) over x402 or MPP, with no account; part of the Merit Systems AgentCash family of services.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 6378,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:36:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xDd257723b86B4947483905cdAcBbBC70fACF2ec0"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 9,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with StableTravel or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/stabletravel/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
    "id": "stacker-news-bounties",
    "name": "Stacker News bounties",
    "url": "https://commonworld.one/atlas/platforms/stacker-news-bounties/",
@@ -17274,6 +18354,66 @@
     "id": null,
     "label": "not recorded yet",
     "claims_counted": 0
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "strale",
+   "name": "Strale",
+   "url": "https://commonworld.one/atlas/platforms/strale/",
+   "json_url": "https://commonworld.one/atlas/platforms/strale.json",
+   "website": "https://strale.dev",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Catalog of tested data capabilities for agents (company registry lookups, compliance and KYC checks, payment validation, developer tools) across many countries, each call returning an audit trail; callable over REST, MCP, A2A or x402.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 4386,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:33:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x66D7C2F952362BFB24FD7F02a9beC9c754ea83bC"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Strale or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/strale/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
    },
    "keys_and_books": {
     "keys": {
@@ -17518,6 +18658,66 @@
     "id": "public_dashboard",
     "label": "public dashboard",
     "claims_counted": 3
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "svm402",
+   "name": "SVM402",
+   "url": "https://commonworld.one/atlas/platforms/svm402/",
+   "json_url": "https://commonworld.one/atlas/platforms/svm402.json",
+   "website": "https://svm402.com",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Test lab for Solana x402 payment agents: seventeen deterministic payment-failure scenarios run on real verify and settle machinery, each call paid in USDC over x402 v2 with an onchain receipt, on devnet and mainnet.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 5070,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:39:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=4ofUMGcRHsfr6LMY6AuaRSQpqyKsvibSbXmieQL4i8Dc"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 10,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with SVM402 or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/svm402/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
    },
    "keys_and_books": {
     "keys": {
@@ -19398,6 +20598,66 @@
    "replications": null
   },
   {
+   "id": "twit-sh",
+   "name": "twit.sh",
+   "url": "https://commonworld.one/atlas/platforms/twit-sh/",
+   "json_url": "https://commonworld.one/atlas/platforms/twit-sh.json",
+   "website": "https://twit.sh",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Real-time X (Twitter) data for AI agents, paid per request in USDC on Base over x402, with no signup or API key.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 5669,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:35:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x9dBA414637c611a16BEa6f0796BFcbcBdc410df8"
+   },
+   "verified_at": "2026-10-23T20:50:00Z",
+   "last_checked": "2026-10-23T20:50:00Z",
+   "claims_count": 7,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with twit.sh or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/twit-sh/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
    "id": "ugig-net",
    "name": "ugig.net",
    "url": "https://commonworld.one/atlas/platforms/ugig-net/",
@@ -19605,6 +20865,66 @@
     "id": "operator_says",
     "label": "operator says",
     "claims_counted": 1
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "vextorium",
+   "name": "Vextorium",
+   "url": "https://commonworld.one/atlas/platforms/vextorium/",
+   "json_url": "https://commonworld.one/atlas/platforms/vextorium.json",
+   "website": "https://vextorium.com",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "About 240 pay-per-call data APIs for agents (official statistics from ECB, Fed, Eurostat, SEC and others, crypto prices, Spanish public data, sanctions/VAT/IBAN checks), paid over x402 in USDC on several networks; run by one person in Spain, in a testing phase.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 2209,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:37:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xb9f06D2734B7E9D7b21B64C4D8b95bd774b71aCf"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 10,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Vextorium or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/vextorium/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
    },
    "keys_and_books": {
     "keys": {
@@ -20150,6 +21470,66 @@
    "replications": null
   },
   {
+   "id": "x402-atlas",
+   "name": "x402 Atlas",
+   "url": "https://commonworld.one/atlas/platforms/x402-atlas/",
+   "json_url": "https://commonworld.one/atlas/platforms/x402-atlas.json",
+   "website": "https://x402atlas.com",
+   "category": "payments",
+   "category_label": "Payments & x402",
+   "type": "tool_catalog",
+   "status": "live",
+   "summary": "Analytics and discovery site for x402 APIs on Base: tracks x402 servers, payments and trends, with sign-up for full access; it also sells paid x402 data calls. Not the same project as the Atlas card 402atlas (402atlas.com).",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 3535,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:33:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x51D577C8CBB8b3fB1BA0CE31c7923cC27a07F78B"
+   },
+   "verified_at": "2026-10-23T20:50:00Z",
+   "last_checked": "2026-10-23T20:50:00Z",
+   "claims_count": 7,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with x402 Atlas or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/x402-atlas/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
    "id": "x402-foundation",
    "name": "x402 Foundation",
    "url": "https://commonworld.one/atlas/platforms/x402-foundation/",
@@ -20279,6 +21659,66 @@
      "label": "Open: its money figures are on a public dashboard or API",
      "source_url": "https://x402-list.com/facilitators",
      "quote": "$341.1k! settled in the last 7 days ... a sum per facilitator, not deduplicated"
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "x402node",
+   "name": "x402node",
+   "url": "https://commonworld.one/atlas/platforms/x402node/",
+   "json_url": "https://commonworld.one/atlas/platforms/x402node.json",
+   "website": "https://x402node.dev",
+   "category": "projects",
+   "category_label": "Projects (repos & frameworks)",
+   "type": "project",
+   "status": "live",
+   "summary": "Set of deterministic developer and data tools for agents (onchain data, parsing, crypto, conversion, text), paid per call in USDC on Base over x402 with no account.",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 3484,
+    "unit": "calls in 30 days (CDP Bazaar quality data)",
+    "window": "30 days to 2026-10-23",
+    "basis": "independent_source",
+    "observed_at": "2026-10-23T20:32:00Z",
+    "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x4466d4A84b7c49a6A094ec6eef4a0712D6dd125e"
+   },
+   "verified_at": "2026-10-23T21:00:00Z",
+   "last_checked": "2026-10-23T21:00:00Z",
+   "claims_count": 8,
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with x402node or YourAITools is involved.",
+   "md_url": "https://commonworld.one/atlas/platforms/x402node/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
     },
     "people": {
      "state": "not_recorded",

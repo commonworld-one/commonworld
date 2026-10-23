@@ -1,0 +1,195 @@
+{
+ "licence": "CC BY 4.0",
+ "source": "https://github.com/commonworld-one/commonworld",
+ "generated_at": "2026-10-19T08:29:00Z",
+ "id": "otto-ai",
+ "name": "Otto AI",
+ "url": "https://commonworld.one/atlas/platforms/otto-ai/",
+ "json_url": "https://commonworld.one/atlas/platforms/otto-ai.json",
+ "website": "https://useotto.xyz",
+ "category": "projects",
+ "category_label": "Projects (repos & frameworks)",
+ "type": "project",
+ "status": "live",
+ "summary": "Workspace for people and agents with crypto market intelligence, onchain execution and agent tools; its HTTP API lets an agent discover an endpoint, pay with x402 and check the result and receipt. The project has its own token ($OTTO).",
+ "tags": [],
+ "has_money_flow": false,
+ "money_flow": [],
+ "key_number": {
+  "kind": "metric",
+  "value": 2432,
+  "unit": "calls in 30 days (CDP Bazaar quality data)",
+  "window": "30 days to 2026-10-23",
+  "basis": "independent_source",
+  "observed_at": "2026-10-23T20:31:00Z",
+  "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x0E84dDEdAaE6A779c462C22a59F301EC31B6b808"
+ },
+ "verified_at": "2026-10-23T21:00:00Z",
+ "last_checked": "2026-10-23T21:00:00Z",
+ "claims_count": 8,
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Otto AI or YourAITools is involved.",
+ "md_url": "https://commonworld.one/atlas/platforms/otto-ai/index.md",
+ "evidence_level": {
+  "level": 2,
+  "id": "public_dashboard",
+  "label": "public dashboard",
+  "claims_counted": 2
+ },
+ "keys_and_books": {
+  "keys": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "books": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "people": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  }
+ },
+ "first_task": null,
+ "replications": null,
+ "badge_status": "Verified · 2026-10-23",
+ "badge_svg": "https://commonworld.one/atlas/badge/otto-ai.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/otto-ai-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "claims": [
+  {
+   "kind": "canonical_url",
+   "statement": "https://useotto.xyz is the official site: it is the address YourAITools lists for Otto AI and the site answers there (page title \"HTTP API - Otto AI Docs\").",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://useotto.xyz",
+   "quote": "HTTP API - Otto AI Docs",
+   "observed_at": "2026-10-23T20:50:42Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://docs.useotto.xyz/acp-swarm/x402 (HTTP 200, final https://docs.useotto.xyz/acp-swarm/x402)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "site_reachable",
+   "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://useotto.xyz",
+   "quote": "Discover an endpoint, pay with x402 and verify its result and receipt.",
+   "observed_at": "2026-10-23T20:24:13Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://docs.useotto.xyz/acp-swarm/x402 (HTTP 200)",
+    "GET https://docs.useotto.xyz/llms.txt (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "description",
+   "statement": "Operator's own description: Discover an endpoint, pay with x402 and verify its result and receipt.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "operator_claim",
+   "source_url": "https://docs.useotto.xyz/acp-swarm/x402",
+   "quote": "Discover an endpoint, pay with x402 and verify its result and receipt.",
+   "observed_at": "2026-10-23T20:50:42Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://docs.useotto.xyz/acp-swarm/x402 (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "docs",
+   "statement": "Public documentation for agents and developers.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://docs.useotto.xyz/",
+   "quote": null,
+   "observed_at": "2026-10-23T21:00:24Z",
+   "methods": [
+    "GET https://docs.useotto.xyz/ (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "protocol",
+   "statement": "Commonworld's own unpaid check: an unpaid GET to https://x402.ottoai.services/crypto-news answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base, Solana; asset USDC; price 0.001 USDC; payTo Base 0x0E84dDEdAaE6A779c462C22a59F301EC31B6b808; Solana 6XcSfqJHr9vNW2vbiRaMqUYVm7shDgLepca54wUTDPN5). YourAITools lists the price as $0.001–$0.1. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+   "value": 0.001,
+   "unit": "USDC per call (probed route)",
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://x402.ottoai.services/crypto-news",
+   "quote": "HTTP 402, x402Version 2, amount 1000, network eip155:8453",
+   "observed_at": "2026-10-23T20:24:15Z",
+   "methods": [
+    "unpaid GET https://x402.ottoai.services/crypto-news (HTTP 402, header:payment-required; no payment header sent)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "metric",
+   "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 69 resource(s) on this vendor's domain for the payTo address(es) we observed, with 2,432 calls in the last 30 days as reported by CDP (largest single resource: 67 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+   "value": 2432,
+   "unit": "calls in 30 days (CDP Bazaar quality data)",
+   "window": "30 days to 2026-10-23",
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x0E84dDEdAaE6A779c462C22a59F301EC31B6b808",
+   "quote": "l30DaysTotalCalls (sum) 2432; l30DaysUniquePayers (max) 67",
+   "observed_at": "2026-10-23T20:31:04Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x0E84dDEdAaE6A779c462C22a59F301EC31B6b808 (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "recent_activity",
+   "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-22 02:05 UTC.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x0E84dDEdAaE6A779c462C22a59F301EC31B6b808",
+   "quote": "lastCalledAt 2026-10-22T02:05:00Z",
+   "observed_at": "2026-10-23T20:31:04Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x0E84dDEdAaE6A779c462C22a59F301EC31B6b808"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "listing",
+   "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category crypto-data, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on .",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://youraitools.co/tool/otto-ai",
+   "quote": "Unpaid GET /crypto-news returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.001 USDC on Base or Solana. Price checked via our 402 probe on 2026-10-22 (4 routes probed; other rou",
+   "observed_at": "2026-10-23T19:53:54Z",
+   "methods": [
+    "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23 19:53 UTC"
+   ],
+   "outcome": "supported"
+  }
+ ],
+ "qa_status": "not_sampled"
+}

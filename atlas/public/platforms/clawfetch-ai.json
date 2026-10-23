@@ -1,0 +1,179 @@
+{
+ "licence": "CC BY 4.0",
+ "source": "https://github.com/commonworld-one/commonworld",
+ "generated_at": "2026-10-19T08:29:00Z",
+ "id": "clawfetch-ai",
+ "name": "ClawFetch.ai",
+ "url": "https://commonworld.one/atlas/platforms/clawfetch-ai/",
+ "json_url": "https://commonworld.one/atlas/platforms/clawfetch-ai.json",
+ "website": "https://clawfetch.ai",
+ "category": "projects",
+ "category_label": "Projects (repos & frameworks)",
+ "type": "project",
+ "status": "live",
+ "summary": "Web rendering, structured extraction, domain search and multi-source research for agents, paid per request in USDC on Base over x402 with no API key.",
+ "tags": [],
+ "has_money_flow": false,
+ "money_flow": [],
+ "key_number": {
+  "kind": "metric",
+  "value": 1177,
+  "unit": "calls in 30 days (CDP Bazaar quality data)",
+  "window": "30 days to 2026-10-23",
+  "basis": "independent_source",
+  "observed_at": "2026-10-23T20:37:00Z",
+  "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xc2afB91833f4dE19542A025872C6085cC29185eB"
+ },
+ "verified_at": "2026-10-23T20:50:00Z",
+ "last_checked": "2026-10-23T20:50:00Z",
+ "claims_count": 7,
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with ClawFetch.ai or YourAITools is involved.",
+ "md_url": "https://commonworld.one/atlas/platforms/clawfetch-ai/index.md",
+ "evidence_level": {
+  "level": 2,
+  "id": "public_dashboard",
+  "label": "public dashboard",
+  "claims_counted": 2
+ },
+ "keys_and_books": {
+  "keys": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "books": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "people": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  }
+ },
+ "first_task": null,
+ "replications": null,
+ "badge_status": "Verified · 2026-10-23",
+ "badge_svg": "https://commonworld.one/atlas/badge/clawfetch-ai.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/clawfetch-ai-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "claims": [
+  {
+   "kind": "canonical_url",
+   "statement": "https://clawfetch.ai is the official site: it is the address YourAITools lists for ClawFetch.ai and the site answers there (page title \"ClawFetch.ai — Web Intelligence for AI Agents\").",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://clawfetch.ai",
+   "quote": "ClawFetch.ai — Web Intelligence for AI Agents",
+   "observed_at": "2026-10-23T20:50:46Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://clawfetch.ai/ (HTTP 200, final https://clawfetch.ai/)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "site_reachable",
+   "statement": "The site serves real content without sign-in (HTTP 200).",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://clawfetch.ai",
+   "quote": "Stealth web rendering, structured extraction, domain search, and multi-source research. Pay per request with USDC on Base. Built by agents, for agents.",
+   "observed_at": "2026-10-23T20:24:35Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://clawfetch.ai/ (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "description",
+   "statement": "Operator's own description: Stealth web rendering, structured extraction, domain search, and multi-source research. Pay per request with USDC on Base.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "operator_claim",
+   "source_url": "https://clawfetch.ai/",
+   "quote": "Stealth web rendering, structured extraction, domain search, and multi-source research. Pay per request with USDC on Base.",
+   "observed_at": "2026-10-23T20:50:46Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://clawfetch.ai/ (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "protocol",
+   "statement": "Commonworld's own unpaid check: an unpaid POST to https://api.clawfetch.ai/fetch answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base; asset USDC; price 0.001 USDC; payTo Base 0xc2afB91833f4dE19542A025872C6085cC29185eB). YourAITools lists the price as $0.001–$0.005. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+   "value": 0.001,
+   "unit": "USDC per call (probed route)",
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://api.clawfetch.ai/fetch",
+   "quote": "HTTP 402, x402Version 2, amount 1000, network eip155:8453",
+   "observed_at": "2026-10-23T20:24:36Z",
+   "methods": [
+    "unpaid POST https://api.clawfetch.ai/fetch (HTTP 402, header:payment-required; no payment header sent)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "metric",
+   "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 9 resource(s) on this vendor's domain for the payTo address(es) we observed, with 1,177 calls in the last 30 days as reported by CDP (largest single resource: 13 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+   "value": 1177,
+   "unit": "calls in 30 days (CDP Bazaar quality data)",
+   "window": "30 days to 2026-10-23",
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xc2afB91833f4dE19542A025872C6085cC29185eB",
+   "quote": "l30DaysTotalCalls (sum) 1177; l30DaysUniquePayers (max) 13",
+   "observed_at": "2026-10-23T20:37:37Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xc2afB91833f4dE19542A025872C6085cC29185eB (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "recent_activity",
+   "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 09:24 UTC.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xc2afB91833f4dE19542A025872C6085cC29185eB",
+   "quote": "lastCalledAt 2026-10-23T09:24:00Z",
+   "observed_at": "2026-10-23T20:37:37Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xc2afB91833f4dE19542A025872C6085cC29185eB"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "listing",
+   "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category search-web, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://youraitools.co/tool/clawfetch-ai",
+   "quote": "Unpaid POST /fetch returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.001 USDC on Base. Price checked via our 402 probe on 2026-10-22 (4 routes probed; other routes may be pric",
+   "observed_at": "2026-10-23T19:53:54Z",
+   "methods": [
+    "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23 19:53 UTC"
+   ],
+   "outcome": "supported"
+  }
+ ],
+ "qa_status": "not_sampled"
+}

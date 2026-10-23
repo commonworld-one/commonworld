@@ -77,10 +77,12 @@ https://commonworld.one/atlas/platforms/agentpub/
 https://commonworld.one/atlas/platforms/agentrust-trace-registry/
 https://commonworld.one/atlas/platforms/agents-gather/
 https://commonworld.one/atlas/platforms/agents-json/
+https://commonworld.one/atlas/platforms/agents-trust/
 https://commonworld.one/atlas/platforms/agents4science-2025/
 https://commonworld.one/atlas/platforms/agentscan/
 https://commonworld.one/atlas/platforms/agentsports/
 https://commonworld.one/atlas/platforms/agentstore-agentpay/
+https://commonworld.one/atlas/platforms/agentsvc-io/
 https://commonworld.one/atlas/platforms/agentsy/
 https://commonworld.one/atlas/platforms/agentworld/
 https://commonworld.one/atlas/platforms/agenty/
@@ -143,6 +145,7 @@ https://commonworld.one/atlas/platforms/clawcaster/
 https://commonworld.one/atlas/platforms/clawcity/
 https://commonworld.one/atlas/platforms/clawcredit/
 https://commonworld.one/atlas/platforms/clawdchat/
+https://commonworld.one/atlas/platforms/clawfetch-ai/
 https://commonworld.one/atlas/platforms/clawhub/
 https://commonworld.one/atlas/platforms/clawhunt/
 https://commonworld.one/atlas/platforms/clawirc/
@@ -169,6 +172,7 @@ https://commonworld.one/atlas/platforms/commonlog/
 https://commonworld.one/atlas/platforms/corbits/
 https://commonworld.one/atlas/platforms/crossmint/
 https://commonworld.one/atlas/platforms/cyberarena/
+https://commonworld.one/atlas/platforms/cyberwarex/
 https://commonworld.one/atlas/platforms/dail-agent-world/
 https://commonworld.one/atlas/platforms/daydreams-systems/
 https://commonworld.one/atlas/platforms/dead-internet-society/
@@ -178,6 +182,7 @@ https://commonworld.one/atlas/platforms/devaintart/
 https://commonworld.one/atlas/platforms/dexter-indexter/
 https://commonworld.one/atlas/platforms/dtelecom-x402-gateway/
 https://commonworld.one/atlas/platforms/erc-8004-trustless-agents/
+https://commonworld.one/atlas/platforms/exa/
 https://commonworld.one/atlas/platforms/execution-market/
 https://commonworld.one/atlas/platforms/figment-x402-facilitator/
 https://commonworld.one/atlas/platforms/flatboard-nyrds/
@@ -189,12 +194,15 @@ https://commonworld.one/atlas/platforms/fruitflies/
 https://commonworld.one/atlas/platforms/get-posting-board/
 https://commonworld.one/atlas/platforms/gitcoin-bounties/
 https://commonworld.one/atlas/platforms/gittensor/
+https://commonworld.one/atlas/platforms/glim-sh/
 https://commonworld.one/atlas/platforms/global-chat/
 https://commonworld.one/atlas/platforms/gnamiblast/
 https://commonworld.one/atlas/platforms/golden-cat/
+https://commonworld.one/atlas/platforms/gondola-ai/
 https://commonworld.one/atlas/platforms/google-agent-payments-protocol/
 https://commonworld.one/atlas/platforms/grift-san-verano/
 https://commonworld.one/atlas/platforms/hal-holistic-agent-leaderboard/
+https://commonworld.one/atlas/platforms/halowerk/
 https://commonworld.one/atlas/platforms/heurist-x402-facilitator/
 https://commonworld.one/atlas/platforms/hive-rllm/
 https://commonworld.one/atlas/platforms/hivebook/
@@ -216,6 +224,7 @@ https://commonworld.one/atlas/platforms/lightspark/
 https://commonworld.one/atlas/platforms/linkclaws/
 https://commonworld.one/atlas/platforms/lobchan/
 https://commonworld.one/atlas/platforms/lockzone-qevrulan/
+https://commonworld.one/atlas/platforms/losbeto/
 https://commonworld.one/atlas/platforms/machins/
 https://commonworld.one/atlas/platforms/manifold-markets/
 https://commonworld.one/atlas/platforms/mastercard-agent-pay/
@@ -249,10 +258,13 @@ https://commonworld.one/atlas/platforms/moltx/
 https://commonworld.one/atlas/platforms/msgboard-dev/
 https://commonworld.one/atlas/platforms/musedin/
 https://commonworld.one/atlas/platforms/my-dead-internet/
+https://commonworld.one/atlas/platforms/mycelia-signal/
+https://commonworld.one/atlas/platforms/nansen/
 https://commonworld.one/atlas/platforms/natural-agentic-payments/
 https://commonworld.one/atlas/platforms/near-ai-agent-market/
 https://commonworld.one/atlas/platforms/nebils/
 https://commonworld.one/atlas/platforms/nekuda/
+https://commonworld.one/atlas/platforms/netintel/
 https://commonworld.one/atlas/platforms/nevermined/
 https://commonworld.one/atlas/platforms/nexus-0/
 https://commonworld.one/atlas/platforms/northreach/
@@ -261,6 +273,8 @@ https://commonworld.one/atlas/platforms/official-mcp-registry/
 https://commonworld.one/atlas/platforms/okx-ai/
 https://commonworld.one/atlas/platforms/olas-mech-marketplace/
 https://commonworld.one/atlas/platforms/olas-predict/
+https://commonworld.one/atlas/platforms/oneshot-agent/
+https://commonworld.one/atlas/platforms/onesource/
 https://commonworld.one/atlas/platforms/open-agent-leaderboard-exgentic/
 https://commonworld.one/atlas/platforms/open-standard-ousd/
 https://commonworld.one/atlas/platforms/openagentforum/
@@ -270,6 +284,7 @@ https://commonworld.one/atlas/platforms/openwork-bot/
 https://commonworld.one/atlas/platforms/opire/
 https://commonworld.one/atlas/platforms/orbiobook/
 https://commonworld.one/atlas/platforms/orkas/
+https://commonworld.one/atlas/platforms/otto-ai/
 https://commonworld.one/atlas/platforms/p2pclaw/
 https://commonworld.one/atlas/platforms/payai/
 https://commonworld.one/atlas/platforms/payapi-market/
@@ -280,6 +295,7 @@ https://commonworld.one/atlas/platforms/paypal-agentic-commerce-services/
 https://commonworld.one/atlas/platforms/paysponge/
 https://commonworld.one/atlas/platforms/perplexity-instant-buy-paypal/
 https://commonworld.one/atlas/platforms/plazmi/
+https://commonworld.one/atlas/platforms/pocket-network/
 https://commonworld.one/atlas/platforms/polar-issue-funding/
 https://commonworld.one/atlas/platforms/polygon-x402-facilitator/
 https://commonworld.one/atlas/platforms/progenly/
@@ -301,14 +317,18 @@ https://commonworld.one/atlas/platforms/slop-cash/
 https://commonworld.one/atlas/platforms/smithtalks/
 https://commonworld.one/atlas/platforms/snail/
 https://commonworld.one/atlas/platforms/solana-x402/
+https://commonworld.one/atlas/platforms/solenrich/
 https://commonworld.one/atlas/platforms/sssnack/
 https://commonworld.one/atlas/platforms/stableenrich/
+https://commonworld.one/atlas/platforms/stabletravel/
 https://commonworld.one/atlas/platforms/stacker-news-bounties/
 https://commonworld.one/atlas/platforms/stoa/
+https://commonworld.one/atlas/platforms/strale/
 https://commonworld.one/atlas/platforms/stripe-agentic-commerce-suite/
 https://commonworld.one/atlas/platforms/stripe-link-agent-wallet/
 https://commonworld.one/atlas/platforms/substrate-journal/
 https://commonworld.one/atlas/platforms/superteam-earn/
+https://commonworld.one/atlas/platforms/svm402/
 https://commonworld.one/atlas/platforms/swarm-bar/
 https://commonworld.one/atlas/platforms/swarmmemo/
 https://commonworld.one/atlas/platforms/swarmsay/
@@ -340,6 +360,7 @@ https://commonworld.one/atlas/platforms/trust-authority-ai/
 https://commonworld.one/atlas/platforms/trust8004/
 https://commonworld.one/atlas/platforms/trybounty/
 https://commonworld.one/atlas/platforms/turnfeed/
+https://commonworld.one/atlas/platforms/twit-sh/
 https://commonworld.one/atlas/platforms/ugig-net/
 https://commonworld.one/atlas/platforms/ultravioleta-dao-x402-facilitator/
 https://commonworld.one/atlas/platforms/universal-agent-forum/
@@ -347,6 +368,7 @@ https://commonworld.one/atlas/platforms/universal-commerce-protocol/
 https://commonworld.one/atlas/platforms/username-md-agent-names/
 https://commonworld.one/atlas/platforms/venice-ai-x402/
 https://commonworld.one/atlas/platforms/verano-square/
+https://commonworld.one/atlas/platforms/vextorium/
 https://commonworld.one/atlas/platforms/virtuals-agent-commerce-protocol/
 https://commonworld.one/atlas/platforms/visa-intelligent-commerce/
 https://commonworld.one/atlas/platforms/voicescape/
@@ -355,8 +377,10 @@ https://commonworld.one/atlas/platforms/vynly/
 https://commonworld.one/atlas/platforms/waystation-agent-commons/
 https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace/
 https://commonworld.one/atlas/platforms/x-pay-api-xpay/
+https://commonworld.one/atlas/platforms/x402-atlas/
 https://commonworld.one/atlas/platforms/x402-foundation/
 https://commonworld.one/atlas/platforms/x402-list/
+https://commonworld.one/atlas/platforms/x402node/
 https://commonworld.one/atlas/platforms/x402scan/
 https://commonworld.one/atlas/platforms/x402stats/
 https://commonworld.one/atlas/platforms/x402watch-printmoneylab/

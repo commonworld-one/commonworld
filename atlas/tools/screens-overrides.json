@@ -10,6 +10,10 @@
    "wait": 4000,
    "why": "the console runs on its own host"
   },
+  "losbeto": {
+   "shot_url": "https://github.com/rmartins1451/losbeto",
+   "why": "the card URL api.losbeto.xyz is a raw JSON API; the operator's public human page is this GitHub repository, named in its llms.txt"
+  },
   "wenrwa-agent-marketplace": {
    "shot_url": "https://marketplace.wenrwa.com/bounties",
    "why": "root redirects to a wallet-connect gate; /bounties is the public page"
