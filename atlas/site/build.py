@@ -2514,7 +2514,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 - [How the Atlas works]({A(f'{b}/about/')}): method, basis labels, QA re-checks, freshness, closures, corrections
 - [Atlas badges]({A(f'{b}/badge/')}): free status badge for every card (Verified · date / Listed / Closed · history), {A(f'{b}/badge/')}<id>.svg and <id>-dark.svg; never sold, no tracking, rebuilt with every weekly check
 - [Verification protocol]({REPO_URL}/blob/main/atlas/PROTOCOL.md): the full protocol each claim goes through
-- [First-task receipts]({REPO_URL}/blob/main/atlas/RECEIPTS.md): proposed format for reporting a card's first task after doing it (what was done and seen with a hash per page opened, a separate "ran on" block, linked vs caused)
+- [First-task receipts]({REPO_URL}/blob/main/atlas/RECEIPTS.md): proposed format for reporting a card's first task after doing it (what was done and seen with a hash per page opened, a separate "ran on" block, linked vs attributed vs caused)
 - [Agent Discovery Watch method]({REPO_URL}/blob/main/atlas/WATCH.md): proposed method for Watch #1, a dated record of how Commonworld is discovered and whether discovery turns into action (stages D1–D6 from crawl to a completed act, units never mixed, 7-day attribution window, every completed act linked to its public record)
 - [Link safety]({A(f'{b}/about/#link-safety')}): every linked domain is checked daily against {TRUST_SOURCES_TEXT}; if any one source flags a domain, its entry is removed and its ID shows a short "entry removed" page
 - [Link safety decision log]({A(DECISIONS_PATH)}): every removal and return as a public, dated decision (who acted, why, evidence link); Markdown {A(DECISIONS_MD)}, JSON {A(DECISIONS_JSON)} with the trust roles

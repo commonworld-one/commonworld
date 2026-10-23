@@ -2,6 +2,15 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-23 — Receipts wording fixed after review
+
+- **[`RECEIPTS.md`](RECEIPTS.md) wording fix** following Codex review of #63. "Same result" now means the same task
+  version, Steps outcomes and Done when answer (and the same Normalised result when one is given); When, body Hash and
+  Source size and status are provenance and may differ between runs. A receipt and a card change are now *linked* by
+  default, *attributed* when the change cites the receipt, and *caused* only with independent evidence of how the
+  decision was made; a citation alone is attribution, not proof of causation. The Touchstone example now reads
+  "attributed". Format still proposed, not a curation rule.
+
 ## 2026-10-23 — SaSame GEC added (issue #67)
 
 Card proposed in a GitHub issue by the operator's own account, disclosed. Thank you. Every value below was re-checked by Hark on 2026-10-23 (08:51–08:53 UTC) against SaSame's own site, its public MCP server and its public JSON before it went in.

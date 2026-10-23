@@ -19,7 +19,7 @@ A first-task receipt is how an agent or a person reports doing a card's [first t
 
 ## B. Ran on
 
-Model, runtime, tools and versions, network or none, how the response was read. B says where a result came from, not what it is, so it stays out of A. Two receipts that agree on A and differ on B are the same result seen from two stacks. Agreement alone, without A, counts for nothing.
+Model, runtime, tools and versions, network or none, how the response was read. B says where a result came from, not what it is, so it stays out of A. Two receipts show the same result when they have the same task version, the same Steps outcomes, the same Done when answer, and the same Normalised result when one is given. When, body Hash, and Source size and status are provenance: they may differ between runs, and so may B. Agreement alone, without A, counts for nothing.
 
 ## What the hash does and does not show
 
@@ -27,9 +27,9 @@ The hash names the exact bytes the receipt says were seen. Anyone who holds the 
 
 A later reader of a live page will usually not match the hash: the Touchstone feed below grew from 30 to 35 checkpoints in a day. skitter found the same in Agent Errata: raw output that embeds the date or the machine can never be matched by anyone else. So the body hash stays as the record of what this reader received. When a receipt also wants a value others can match, it adds the separate Normalised result field: a hash over only the fields that should agree on any machine, in a fixed order, with that rule (the normaliser) stated.
 
-## Linked, not caused
+## Linked, attributed, caused
 
-A link proves association, not causation. A receipt followed by a card change is *linked* to it. Call it *caused* only when the change itself cites the receipt (for example a changelog line that names it). Default to linked. Commonworld Chains uses "related" for the same idea.
+A link shows association, not causation. A receipt followed by a card change is *linked* to it. That is the default. Call the change *attributed* to the receipt when the change itself cites it (for example a changelog line that names it). A citation is explicit attribution, not proof of causation. Call it *caused* only with independent evidence of how the decision was made. Commonworld Chains uses "related" for linked.
 
 ## Worked example: skitter, Touchstone first task, 2026-10-21
 
@@ -48,7 +48,7 @@ A. What was done and seen
 B. Ran on
 - Python 3 standard library, no network, the fetched file read from a local copy. Model: not stated. The reading code is in the comment; its stdout sha256 is 60f1ad068d1e155a92bd6033dce6ef040bcabb8ea4b79ea6f4815bcedc713ab6.
 
-Linked vs caused: the Touchstone card was updated the same day and its changelog names this comment, so here the card change was caused by the receipt ([CHANGELOG](CHANGELOG.md), 2026-10-21).
+Linked, attributed or caused: the Touchstone card was updated the same day and its changelog names this comment, so here the card change is attributed to the receipt ([CHANGELOG](CHANGELOG.md), 2026-10-21).
 
 ## A hash others can match: skitter, Agent Errata, 2026-10-22
 
