@@ -730,6 +730,19 @@
    "height": 750,
    "bytes": 45930
   },
+  "agents-trust": {
+   "file": "agents-trust.webp",
+   "sha256": "e8eec82d9644112a2fe87bf3d634bd83c9d6ce6e38351f29eb2ee2e9a1d7c043",
+   "dhash": "d0c28e5a869ee2a7",
+   "website": "https://agents-trust.com",
+   "source_url": "https://agents-trust.com/",
+   "http_status": 200,
+   "title": "Agents Trust | find an endpoint an agent can trust",
+   "captured_at": "2026-10-23T22:19:10Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 30648
+  },
   "agents4science-2025": {
    "file": "agents4science-2025.webp",
    "sha256": "b11e8055d09c008f6f69f4d16e5fe855c8b0bc237249c881e4d40a38635b8fdd",
@@ -781,6 +794,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 46156
+  },
+  "agentsvc-io": {
+   "file": "agentsvc-io.webp",
+   "sha256": "f4855ec19b6897510c2d2f447903299c6a50e7b98f3bd773b046a1bffc681af5",
+   "dhash": "c42a595353117371",
+   "website": "https://agentsvc.io",
+   "source_url": "https://agentsvc.io/",
+   "http_status": 200,
+   "title": "agentsvc.io: 127 web services your AI agent can buy per call",
+   "captured_at": "2026-10-23T22:19:49Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 63050
   },
   "agentsy": {
    "file": "agentsy.webp",
@@ -1549,6 +1575,19 @@
    "height": 750,
    "bytes": 35100
   },
+  "clawfetch-ai": {
+   "file": "clawfetch-ai.webp",
+   "sha256": "6e4ac63e6fe98b34654216419234b13465a8ed3f25140e25601f306148326c3d",
+   "dhash": "63688e8e9e9e6c06",
+   "website": "https://clawfetch.ai",
+   "source_url": "https://clawfetch.ai/",
+   "http_status": 200,
+   "title": "ClawFetch.ai — Web Intelligence for AI Agents",
+   "captured_at": "2026-10-23T22:19:57Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 24878
+  },
   "clawhub": {
    "file": "clawhub.webp",
    "sha256": "5a87bebf334dd7a298614f1e0033c1c7550ca609d47932419916700ee5ef24b9",
@@ -1861,6 +1900,19 @@
    "height": 750,
    "bytes": 63464
   },
+  "cyberwarex": {
+   "file": "cyberwarex.webp",
+   "sha256": "55c17ef6acfc0ab7938b310f552f17f214ca67a53521ca7f135ec19f0600dceb",
+   "dhash": "61791e416c296964",
+   "website": "https://cyberwarex.com",
+   "source_url": "https://cyberwarex.com/",
+   "http_status": 200,
+   "title": "CyberWareX - APIs your agents pay for themselves",
+   "captured_at": "2026-10-23T22:19:46Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 41360
+  },
   "dail-agent-world": {
    "file": "dail-agent-world.webp",
    "sha256": "a2c6ac931ef2e19c4dd60adc6dcc83bf4b4fb6d445799ab96a68b307db50acc4",
@@ -1977,6 +2029,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 45498
+  },
+  "exa": {
+   "file": "exa.webp",
+   "sha256": "2214b1f450f8fb824004818df4435caee27a15130583469fcc131fce9801f0c0",
+   "dhash": "33ecf0d4ccc85000",
+   "website": "https://exa.ai",
+   "source_url": "https://exa.ai/",
+   "http_status": 200,
+   "title": "Exa | Search API for AI Agents — Real-Time Web Data",
+   "captured_at": "2026-10-23T22:19:31Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 24214
   },
   "execution-market": {
    "file": "execution-market.webp",
@@ -2095,6 +2160,19 @@
    "height": 750,
    "bytes": 61278
   },
+  "glim-sh": {
+   "file": "glim-sh.webp",
+   "sha256": "dbc89dfcfc0c4cac018408cfcfe949b96ad6968407b1c21a4f5904e1eaf29025",
+   "dhash": "4d07170e4a0c4d12",
+   "website": "https://glim.sh",
+   "source_url": "https://glim.sh/",
+   "http_status": 200,
+   "title": "glim.sh - live data for any agent",
+   "captured_at": "2026-10-23T22:19:50Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 31116
+  },
   "global-chat": {
    "file": "global-chat.webp",
    "sha256": "506e0f823617dc67661628568ef7c6041fd3957a10d9ae61bc253a4048988f10",
@@ -2134,6 +2212,19 @@
    "height": 750,
    "bytes": 47696
   },
+  "gondola-ai": {
+   "file": "gondola-ai.webp",
+   "sha256": "db1a174df854567693e5a33c6c6c265ebe24d8e23519f62f0367995936a2198d",
+   "dhash": "2f872131a1210184",
+   "website": "https://gondola-ai.com",
+   "source_url": "https://gondola-ai.com/",
+   "http_status": 200,
+   "title": "Gondola | Frontier models at market price. Idle DIEM, earning USDC.",
+   "captured_at": "2026-10-23T22:19:35Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 61864
+  },
   "google-agent-payments-protocol": {
    "file": "google-agent-payments-protocol.webp",
    "sha256": "bd6c343e556822a2227a3c047b7d5fa88d9af52f1fe09d4a420a8acb661b1c4e",
@@ -2159,6 +2250,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 53102
+  },
+  "halowerk": {
+   "file": "halowerk.webp",
+   "sha256": "dbc1f32bd5ca86dac79b48cd98b2d9e16c68cab51d7efb1043c518761bd58dc2",
+   "dhash": "8000303c485c3c7c",
+   "website": "https://halowerk.com",
+   "source_url": "https://halowerk.com/",
+   "http_status": 200,
+   "title": "HALOWERK — Services for Agents",
+   "captured_at": "2026-10-23T22:19:55Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 33272
   },
   "heurist-x402-facilitator": {
    "file": "heurist-x402-facilitator.webp",
@@ -2393,6 +2497,20 @@
    "width": 1200,
    "height": 750,
    "bytes": 33680
+  },
+  "losbeto": {
+   "file": "losbeto.webp",
+   "sha256": "38cd9fcea7b45016199561717e164fb0e4a80f754523b1fdda46a14b520f47df",
+   "dhash": "98221c2e2e2c2426",
+   "website": "https://api.losbeto.xyz",
+   "source_url": "https://github.com/rmartins1451/losbeto",
+   "http_status": 200,
+   "title": "GitHub - rmartins1451/losbeto: x402-paid LLM gateway (OpenAI-compatible) + market data for AI agents — USDC on Base/Solana/Algorand. Public receipts, plans from $0.99 · GitHub",
+   "captured_at": "2026-10-23T22:19:21Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 52748,
+   "shot_url": "https://github.com/rmartins1451/losbeto"
   },
   "machins": {
    "file": "machins.webp",
@@ -2732,6 +2850,32 @@
    "height": 750,
    "bytes": 28892
   },
+  "mycelia-signal": {
+   "file": "mycelia-signal.webp",
+   "sha256": "54d68845b0d5597f07ce530ca4c4751afd0fb1816edda464c9b303ed406d25dc",
+   "dhash": "59a05838344c5000",
+   "website": "https://myceliasignal.com",
+   "source_url": "https://myceliasignal.com/",
+   "http_status": 200,
+   "title": "Mycelia Signal — Real-time, paid, verifiable data for AI agents",
+   "captured_at": "2026-10-23T22:19:56Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 27794
+  },
+  "nansen": {
+   "file": "nansen.webp",
+   "sha256": "b9d712531fc33ca6eb16bf34e907a87db898d13637b3bf471948f962f5d0427d",
+   "dhash": "c1060c215b5b7371",
+   "website": "https://nansen.ai",
+   "source_url": "https://nansen.ai/",
+   "http_status": 200,
+   "title": "Nansen AI - Trade Everything Onchain with AI",
+   "captured_at": "2026-10-23T22:19:46Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 39116
+  },
   "natural-agentic-payments": {
    "file": "natural-agentic-payments.webp",
    "sha256": "e25297b3b6598682830ef8086bc8618f221c2518ac83a457eb7984a8e6713636",
@@ -2783,6 +2927,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 58618
+  },
+  "netintel": {
+   "file": "netintel.webp",
+   "sha256": "80deebc038db6995ea97167ad0cade7bd45c4931e9371af37a690bf0bda8b442",
+   "dhash": "232e2e8c0c35c723",
+   "website": "https://netintel.dev",
+   "source_url": "https://netintel.dev/",
+   "http_status": 200,
+   "title": "NetIntel — network intelligence, built for agents",
+   "captured_at": "2026-10-23T22:19:56Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 47660
   },
   "nevermined": {
    "file": "nevermined.webp",
@@ -2887,6 +3044,32 @@
    "width": 1200,
    "height": 750,
    "bytes": 54206
+  },
+  "oneshot-agent": {
+   "file": "oneshot-agent.webp",
+   "sha256": "c2fbda94506b1e20e9eef18eb8a8c47e80d0b0970d3b43f49a8df7334899ef51",
+   "dhash": "9c03633331e1d725",
+   "website": "https://oneshotagent.com",
+   "source_url": "https://oneshotagent.com/",
+   "http_status": 200,
+   "title": "OneShot | The AI Agent That Runs Your Longest Business Goals",
+   "captured_at": "2026-10-23T22:19:12Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 40854
+  },
+  "onesource": {
+   "file": "onesource.webp",
+   "sha256": "5a4ed6b12eb45b96ce4f89facf7c2c99ea1396695f3b73ab7626b0a857367634",
+   "dhash": "6949343939796098",
+   "website": "https://onesource.io",
+   "source_url": "https://onesource.io/",
+   "http_status": 200,
+   "title": "OneSource - Blockchain data for AI agents",
+   "captured_at": "2026-10-23T22:19:11Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 58442
   },
   "open-agent-leaderboard-exgentic": {
    "file": "open-agent-leaderboard-exgentic.webp",
@@ -3005,6 +3188,19 @@
    "height": 750,
    "bytes": 46724
   },
+  "otto-ai": {
+   "file": "otto-ai.webp",
+   "sha256": "bb5aa5606cdf7a161681c4573e1ee0d4993a73a8d160e2db53faf56f9e9ad109",
+   "dhash": "d9869edc1d373723",
+   "website": "https://useotto.xyz",
+   "source_url": "https://useotto.xyz/",
+   "http_status": 200,
+   "title": "Otto AI · A workspace for people and agents",
+   "captured_at": "2026-10-23T22:19:45Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 48478
+  },
   "p2pclaw": {
    "file": "p2pclaw.webp",
    "sha256": "4f468e1f4dc9c9a0f4d8e053ced8ce2668ebf1d81001e0c6c799841c088af653",
@@ -3108,6 +3304,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 61384
+  },
+  "pocket-network": {
+   "file": "pocket-network.webp",
+   "sha256": "39dae7b420f6e766b79252da6d9f2b9e1e8c22f2f155bb8092301f3580e9731d",
+   "dhash": "c21d9d9997879d40",
+   "website": "https://pocket.network",
+   "source_url": "https://pocket.network/",
+   "http_status": 200,
+   "title": "Pocket Network — Publish Data Services, Get Paid by AI Agents",
+   "captured_at": "2026-10-23T22:19:10Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 30772
   },
   "polygon-x402-facilitator": {
    "file": "polygon-x402-facilitator.webp",
@@ -3317,6 +3526,19 @@
    "height": 750,
    "bytes": 18842
   },
+  "solenrich": {
+   "file": "solenrich.webp",
+   "sha256": "1b61aba63f88d2493ece82fe95cc1c60a7be075c9e805d1cf343f93e12fc6edd",
+   "dhash": "c0612dc973735379",
+   "website": "https://www.solenrich.com",
+   "source_url": "https://www.solenrich.com/",
+   "http_status": 200,
+   "title": "SolEnrich — Onchain Intelligence for Solana Agents",
+   "captured_at": "2026-10-23T22:19:21Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 51678
+  },
   "sssnack": {
    "file": "sssnack.webp",
    "sha256": "d81bfccd7b2306d7a7caedb85ac634937b810a4eb56571c4cfc23e03cfacd43f",
@@ -3343,6 +3565,19 @@
    "height": 750,
    "bytes": 37920
   },
+  "stabletravel": {
+   "file": "stabletravel.webp",
+   "sha256": "14e20f2a9195b67034593c82ed101872b2f554705e40781efcfa1ee9f44fda0b",
+   "dhash": "9689829084828894",
+   "website": "https://stabletravel.dev",
+   "source_url": "https://stabletravel.dev/",
+   "http_status": 200,
+   "title": "StableTravel",
+   "captured_at": "2026-10-23T22:19:21Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 41496
+  },
   "stacker-news-bounties": {
    "file": "stacker-news-bounties.webp",
    "sha256": "c8a412cea7377da528f9465d73fb241e00438719cfe73b4dd25f0e8c2e694f1e",
@@ -3368,6 +3603,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 13402
+  },
+  "strale": {
+   "file": "strale.webp",
+   "sha256": "5f002ab65ca6bfee5c2cb84c664b61a39fb66bbf39fd650e63ecdcfa9d246a25",
+   "dhash": "4583657777176765",
+   "website": "https://strale.dev",
+   "source_url": "https://strale.dev/",
+   "http_status": 200,
+   "title": "Strale — Trust and Quality Infrastructure for AI Agents",
+   "captured_at": "2026-10-23T22:19:35Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 50402
   },
   "stripe-agentic-commerce-suite": {
    "file": "stripe-agentic-commerce-suite.webp",
@@ -3420,6 +3668,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 60494
+  },
+  "svm402": {
+   "file": "svm402.webp",
+   "sha256": "9f43ba17248f941c3478ea44aaec8f9f0433a3f5716f937ca759213c38c9b135",
+   "dhash": "cc0e96964c0c0000",
+   "website": "https://svm402.com",
+   "source_url": "https://svm402.com/",
+   "http_status": 200,
+   "title": "SVM402 — the Solana x402 conformance and resilience lab for agents",
+   "captured_at": "2026-10-23T22:19:21Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 34776
   },
   "swarm-bar": {
    "file": "swarm-bar.webp",
@@ -3811,6 +4072,19 @@
    "height": 750,
    "bytes": 42134
   },
+  "twit-sh": {
+   "file": "twit-sh.webp",
+   "sha256": "a4fed1a6ca3f77d6d0b65b5c4fa0864e1d916ece1a299cb5e7c99a647affb500",
+   "dhash": "cd6a8e960a0c5173",
+   "website": "https://twit.sh",
+   "source_url": "https://twit.sh/",
+   "http_status": 200,
+   "title": "twit.sh — Plug AI agents into X",
+   "captured_at": "2026-10-23T22:19:22Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 26884
+  },
   "ugig-net": {
    "file": "ugig-net.webp",
    "sha256": "cb0b77a5193dd7610e12638ef3e86ea47e181b2aeb019a80024c70c34ca4bf74",
@@ -3901,6 +4175,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 49468
+  },
+  "vextorium": {
+   "file": "vextorium.webp",
+   "sha256": "76aaee773afff04af0339ad3e501e25e41d5a12ed9f0b1dc0097786670b7645a",
+   "dhash": "41787f17735b0767",
+   "website": "https://vextorium.com",
+   "source_url": "https://vextorium.com/",
+   "http_status": 200,
+   "title": "Vextorium — The x402 Payment Engine",
+   "captured_at": "2026-10-23T22:19:47Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 56758
   },
   "virtuals-agent-commerce-protocol": {
    "file": "virtuals-agent-commerce-protocol.webp",
@@ -3993,6 +4280,19 @@
    "height": 750,
    "bytes": 6552
   },
+  "x402-atlas": {
+   "file": "x402-atlas.webp",
+   "sha256": "898296afcd0de651e5c6e7d532ffdff3bfd844a06056ca220cb828975ea4adfe",
+   "dhash": "21d72b1f960c4824",
+   "website": "https://x402atlas.com",
+   "source_url": "https://x402atlas.com/",
+   "http_status": 200,
+   "title": "x402 Atlas | Real-time x402 Analytics & API Discovery",
+   "captured_at": "2026-10-23T22:19:37Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 51530
+  },
   "x402-foundation": {
    "file": "x402-foundation.webp",
    "sha256": "5bd93c7d268c54758dfc635b656fab343dcba9fe1e06d38954416e797004cc7b",
@@ -4018,6 +4318,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 48024
+  },
+  "x402node": {
+   "file": "x402node.webp",
+   "sha256": "f981cdc7f6e350e6a685a2c4f36fb90f45e049eead0c1dec8daee5959a4a4822",
+   "dhash": "4c4f334c67677858",
+   "website": "https://x402node.dev",
+   "source_url": "https://x402node.dev/",
+   "http_status": 200,
+   "title": "x402node — Developer & Data Tools for AI Agents",
+   "captured_at": "2026-10-23T22:19:36Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 55076
   },
   "x402scan": {
    "file": "x402scan.webp",
@@ -4057,7 +4370,20 @@
    "width": 1200,
    "height": 750,
    "bytes": 25826
+  },
+  "youraitools": {
+   "file": "youraitools.webp",
+   "sha256": "db137af247edc8fff1f37e0395376bd7c316fd28ff638873d775726eb0135ace",
+   "dhash": "2ab182808ab4b44b",
+   "website": "https://youraitools.co",
+   "source_url": "https://youraitools.co/",
+   "http_status": 200,
+   "title": "YourAITools: AI Tools & Agents That Accept Crypto (x402)",
+   "captured_at": "2026-10-23T22:19:11Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 44740
   }
  },
- "updated_at": "2026-10-23T13:06:29Z"
+ "updated_at": "2026-10-23T22:19:57Z"
 }
