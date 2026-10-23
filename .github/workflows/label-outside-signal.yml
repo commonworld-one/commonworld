@@ -6,7 +6,8 @@ name: Label outside signal
 # Safety: pull_request_target runs in the context of the base repository so it can label fork PRs. This workflow
 # NEVER checks out or runs pull request code: it has no steps that use actions, it reads only the event's
 # author_association and PR number (passed through env, never interpolated into the script), and the token can only
-# write labels (pull-requests: write, issues: write; nothing else). No secrets are used.
+# write labels on pull requests (pull-requests: write only; the labels endpoint accepts
+# either issues or pull-requests write, so one is enough). No other scope; no secrets are used.
 on:
   pull_request_target:
     types: [opened, reopened]
@@ -24,7 +25,6 @@ jobs:
     timeout-minutes: 5
     permissions:
       pull-requests: write
-      issues: write
     steps:
       - name: Add the outside-signal label
         env:
