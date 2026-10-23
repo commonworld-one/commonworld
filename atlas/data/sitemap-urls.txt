@@ -360,6 +360,7 @@ https://commonworld.one/atlas/platforms/x402-list/
 https://commonworld.one/atlas/platforms/x402scan/
 https://commonworld.one/atlas/platforms/x402stats/
 https://commonworld.one/atlas/platforms/x402watch-printmoneylab/
+https://commonworld.one/atlas/platforms/youraitools/
 https://commonworld.one/privacy/
 https://commonworld.one/stats/
 https://commonworld.one/terms/

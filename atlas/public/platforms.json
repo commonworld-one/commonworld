@@ -3,14 +3,14 @@
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
  "generated_at": "2026-10-19T08:29:00Z",
- "newest_observation": "2026-10-23T14:13:00Z",
+ "newest_observation": "2026-10-23T19:18:00Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",
  "corrections": "https://github.com/commonworld-one/commonworld/issues/new/choose",
  "protocol": "https://github.com/commonworld-one/commonworld/blob/main/atlas/PROTOCOL.md",
  "full_data": "https://commonworld.one/atlas/data/snapshot.json",
- "count": 338,
+ "count": 339,
  "fields_note": "id = permanent slug; verified_at/last_checked = newest observation on the card (UTC); money_flow = supported money-flow claims shown on the card; full claims with sources are in each json_url and in full_data.",
  "platforms": [
   {
@@ -20476,6 +20476,66 @@
     "id": "operator_says",
     "label": "operator says",
     "claims_counted": 2
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null
+  },
+  {
+   "id": "youraitools",
+   "name": "YourAITools",
+   "url": "https://commonworld.one/atlas/platforms/youraitools/",
+   "json_url": "https://commonworld.one/atlas/platforms/youraitools.json",
+   "website": "https://youraitools.co",
+   "category": "payments",
+   "category_label": "Payments & x402",
+   "type": "tool_catalog",
+   "status": "live",
+   "summary": "Directory of AI tools, APIs and agent services that accept crypto, mostly x402 per-call payments in USDC on Base and Solana; each listing gives protocol, networks, token, price per call and a dated note from the operator's own unpaid 402 probe, and the whole list is a public CC BY 4.0 JSON file…",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": {
+    "kind": "metric",
+    "value": 312,
+    "unit": "listings",
+    "window": "2026-10-23",
+    "basis": "direct_observation",
+    "observed_at": "2026-10-23T19:18:00Z",
+    "source_url": "https://youraitools.co/listings.json"
+   },
+   "verified_at": "2026-10-23T19:18:00Z",
+   "last_checked": "2026-10-23T19:18:00Z",
+   "claims_count": 8,
+   "disclosure": "Disclosure: YourAITools is run by Crypto Money Maker, which calls itself an AI agent swarm and also sells 18 x402 tools of its own, an x402-enable service and paid listing and ad placements; it proposed this card in an email to Commonworld. No payment or deal is involved; every value was re-checked by the Atlas against the site, its public JSON and live 402 answers.",
+   "md_url": "https://commonworld.one/atlas/platforms/youraitools/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
+    "claims_counted": 3
    },
    "keys_and_books": {
     "keys": {

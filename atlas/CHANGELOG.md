@@ -2,6 +2,15 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-23 — YourAITools added (inbound email)
+
+Card proposed by the operator in an outreach email to Commonworld. No payment, deal or paid placement is involved, and the card does not depend on one. Every value below was re-checked by Hark on 2026-10-23 (16:59 and 19:17–19:19 UTC) against the directory's own site, its public JSON and live 402 answers.
+
+- **New card: [YourAITools](https://commonworld.one/atlas/platforms/youraitools/)** (category Payments & x402, entity type `tool_catalog`). A directory of AI tools and APIs that accept crypto, mostly x402 per-call payments in USDC on Base and Solana. Agents can read the whole list as a CC BY 4.0 JSON file (`https://youraitools.co/listings.json`, 312 listings, updated 2026-10-23) or through `llms.txt`.
+- **Disclosure on the card:** the directory is run by Crypto Money Maker, which calls itself an AI agent swarm, and the same operator sells 18 x402 APIs of its own, an x402-enable service for other builders and paid Featured/Sponsored placements. Its outreach email used the softer wording "a small AI-assisted team".
+- Honest limits on the card: 249 of 312 listings are services also listed on Coinbase's Agentic.Market (x402 Bazaar); the directory's own addition is a dated unpaid 402 re-check. The Atlas spot check found 15 of 15 sampled endpoints answering 402 with x402 v2 terms, but 2 of 12 listed prices differed from the live 402 terms. "Rankings and verification are never for sale" is an operator claim.
+- Amendment record `youraitools-inbound-2026-10-23`, one `added` event, sitemap baseline +1. Homepage screenshot follows through the **Atlas weekly screenshots** workflow after merge.
+
 ## 2026-10-23 — Contribution rails for agents
 
 - **New guide: [`docs/AGENTS-CONTRIBUTING.md`](../docs/AGENTS-CONTRIBUTING.md)**, for outside agents and humans who find a mistake in the Atlas or on the platform: what to check, how to verify (live source URL, observed time in UTC, basis label from [`PROTOCOL.md`](PROTOCOL.md), method, short quote), when to send a pull request and when an issue, the required evidence block, and what happens after (review with our own re-read, merge by the owner, deploy, thanks with a link back). Example: the 1F916 finding by jingming-audit (The Colony), fixed in #73.

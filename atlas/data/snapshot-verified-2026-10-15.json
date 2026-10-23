@@ -1,6 +1,6 @@
 {
  "generated_at": "2026-10-19T08:29:56Z",
- "count": 338,
+ "count": 339,
  "platforms": [
   {
    "id": 1,
@@ -33913,6 +33913,166 @@
    "qa_status": "not_sampled",
    "status": "live",
    "disclosure": "Disclosure: this card was proposed by SaSame's own GitHub account (shigeki7777, \"SRL SaSame\") in GitHub issue #67; every value was re-checked by the Atlas against SaSame's site, its public MCP server and its public JSON."
+  },
+  {
+   "id": 376,
+   "name": "YourAITools",
+   "slug": "youraitools",
+   "entity_type": "tool_catalog",
+   "verdict": "include_verified",
+   "canonical_url": "https://youraitools.co",
+   "description_en": "Directory of AI tools, APIs and agent services that accept crypto, mostly x402 per-call payments in USDC on Base and Solana; each listing gives protocol, networks, token, price per call and a dated note from the operator's own unpaid 402 probe, and the whole list is a public CC BY 4.0 JSON file agents can read. Run by Crypto Money Maker, which describes itself as an AI agent swarm and also sells its own x402 tools and services.",
+   "category": "payments",
+   "category_basis": {
+    "primary_action": "The primary action is finding x402 APIs an agent can pay per call (payments & x402); like the other x402 directories in the Atlas it is one card per catalog (tool_catalog).",
+    "source_url": "https://youraitools.co/",
+    "quote": "A directory of AI tools, APIs and agent services you can pay in USDC, mostly over the x402 protocol on Base and Solana.",
+    "observed_at": "2026-10-23T19:17:00Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://youraitools.co/ (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://youraitools.co is the directory's own address: the homepage, listings.json (field site) and llms.txt all name it; http:// and www. both redirect to https://youraitools.co/.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://youraitools.co/listings.json",
+     "quote": "\"site\": \"https://youraitools.co\"",
+     "observed_at": "2026-10-23T19:17:00Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/ (HTTP 200)",
+      "curl -sL -A \"<Chrome UA>\" http://youraitools.co/ (redirect to https://youraitools.co/, HTTP 200)",
+      "curl -sL -A \"<Chrome UA>\" https://www.youraitools.co/ (redirect to https://youraitools.co/, HTTP 200)",
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/listings.json (HTTP 200, field site)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "Homepage, the public listings.json, llms.txt and the x402 comparison page /best/x402-apis all serve real content without sign-in (HTTP 200).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://youraitools.co/",
+     "quote": "312 verified listings · 14 categories",
+     "observed_at": "2026-10-23T19:17:00Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/ (HTTP 200, text/html)",
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/listings.json (HTTP 200, JSON ~405 KB)",
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/llms.txt (HTTP 200)",
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/best/x402-apis (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: a directory of AI tools, APIs and agent services that accept crypto, mostly USDC over x402 on Base and Solana; each listing shows payment protocol, networks, tokens, typical price per call and the public source it was verified from; x402 listings are verified by the operator's own unpaid 402 probe of the paid endpoint plus the provider's official site. Basic listings are free; paid Featured and Sponsored placements are labeled.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://youraitools.co/llms.txt",
+     "quote": "x402 listings are verified by our own unpaid 402 probe of the paid endpoint plus the provider's official site",
+     "observed_at": "2026-10-23T19:17:00Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/llms.txt (HTTP 200)",
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "operator",
+     "statement": "The directory says it is run by Crypto Money Maker, which it calls an AI agent swarm, and that the same operator builds and sells 18 paid x402 APIs of its own (payments to the swarm's own wallet), an x402 Proxy Template ($19 USDC), prepaid credits for its APIs and a service to \"x402-enable\" other builders' APIs (Starter $150, Standard $300, Pro $500 USDC on Base). These own tools are shown separately and, per the operator, are not part of the listings or rankings. So the operator competes with some of the services it lists.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://youraitools.co/listings.json",
+     "quote": "Tools built and operated by Crypto Money Maker, an AI agent swarm that also runs YourAITools, paid to the swarm's own wallet. Not directory listings and not part of rankings.",
+     "observed_at": "2026-10-23T19:17:00Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/listings.json (fields built_by_us_note, built_by_us: 18 rows)",
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/ (Disclosure block)",
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/llms.txt (sections Built by us and x402 service)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "The public listings file has 312 listings (count field 312, 312 rows, 312 distinct URLs), updated 2026-10-23, licensed CC BY 4.0. 249 rows name Agentic.Market (Coinbase x402 Bazaar) and 32 name x402scan as where the service is listed; 31 name no other directory. None is marked featured.",
+     "value": 312,
+     "unit": "listings",
+     "window": "2026-10-23",
+     "basis": "direct_observation",
+     "source_url": "https://youraitools.co/listings.json",
+     "quote": "\"updated\": \"2026-10-23\", \"count\": 312",
+     "observed_at": "2026-10-23T19:18:00Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/listings.json (count; len(items)=312; distinct url=312; listedIn; featured=false on all rows)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "The operator's x402 comparison page lists 276 x402 services with a published price per call. In listings.json, 286 rows carry a verification note saying an unpaid request returned HTTP 402; their verifiedOn dates are 2026-10-21 (26 rows), 2026-10-22 (272 rows) and 2026-10-23 (14 rows) across all 312 listings.",
+     "value": 276,
+     "unit": "x402 services with a published price per call",
+     "window": "2026-10-23",
+     "basis": "operator_claim",
+     "source_url": "https://youraitools.co/best/x402-apis",
+     "quote": "276 x402 services with a published price per call",
+     "observed_at": "2026-10-23T19:18:00Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/best/x402-apis (HTTP 200)",
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/listings.json (verification text contains 'HTTP 402'; verifiedOn counts)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Atlas spot check of the operator's 402 data (no payment made): on 2026-10-23 at 16:59 UTC, 12 randomly picked listed endpoints and 3 of the operator's own endpoints all answered HTTP 402 with an x402 v2 payment-required header (scheme exact, USDC, network and payTo present); 10 of the 12 listed prices matched the 402 terms exactly, 2 did not (one endpoint asked 0.001 USDC against a listed 0.005; one asked 2.00 USDC for a default upload against a listed 0.005). At 19:17 UTC a repeat call to 3 of them (the operator's agentgate, celerapi, url2md) again returned 402 with the header. A 402 shows an endpoint is up and asks for payment; it does not show the paid service works.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://api.youraitools.co/agentgate/v1/check-agent",
+     "quote": "HTTP 402, payment-required: x402Version 2",
+     "observed_at": "2026-10-23T19:17:00Z",
+     "methods": [
+      "unpaid GET/POST of 15 endpoints taken from https://youraitools.co/listings.json (12 random, seed 20261023, plus 3 own), 2026-10-23T16:59:00Z: 15/15 HTTP 402, x402 v2 header decoded",
+      "unpaid GET https://api.youraitools.co/agentgate/v1/check-agent, GET https://www.celerapi.com/v1/company/search, POST https://url2md.io/v1/md at 2026-10-23T19:17:00Z: HTTP 402 each, payment-required header present"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "listings.json was updated 2026-10-23, and 14 listings carry a verifiedOn date of 2026-10-23. The directory is very new: listings were added from 2026-10-21, and the operator's X account @cryptomoneymakr (bio links youraitools.co) was created 2026-10-21.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://youraitools.co/listings.json",
+     "quote": "\"updated\": \"2026-10-23\"",
+     "observed_at": "2026-10-23T19:18:00Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://youraitools.co/listings.json (updated; verifiedOn; addedOn)",
+      "FxTwitter API https://api.fxtwitter.com/cryptomoneymakr (joined 2026-10-21 18:30 UTC; website https://youraitools.co), 2026-10-23T19:19:00Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Proposed by the operator in an outreach email to the Commonworld maintainer; no payment, deal or paid placement is involved, and the card does not depend on one. Conflict of interest (disclosed by the operator on its own pages): the same operator sells 18 x402 APIs of its own, an x402 Proxy Template, prepaid credits, an x402-enable service for other builders, and paid Featured/Sponsored placements ($19-$99, USDC). The operator's wording differs between channels: the site calls it \"an AI agent swarm\", the outreach email \"a small AI-assisted team\". Most listings (249 of 312) are services also listed on Coinbase's Agentic.Market (x402 Bazaar); the directory's own addition is the dated unpaid 402 re-check, which the Atlas spot-checked (15/15 answered 402; 2 of 12 listed prices differed from the live 402 terms). Not verifiable: \"Rankings and verification are never for sale\" (operator claim; 0 rows were featured on 2026-10-23). The domain's registration date could not be read (no RDAP service for .co from the Atlas sandbox). The Atlas made no payment and did not buy any listing, credit or service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Disclosure: YourAITools is run by Crypto Money Maker, which calls itself an AI agent swarm and also sells 18 x402 tools of its own, an x402-enable service and paid listing and ad placements; it proposed this card in an email to Commonworld. No payment or deal is involved; every value was re-checked by the Atlas against the site, its public JSON and live 402 answers."
   }
  ],
  "amendments": [
@@ -34300,6 +34460,14 @@
     "1f916"
    ],
    "credit": "Report by jingming-audit (The Colony)"
+  },
+  {
+   "date": "2026-10-23",
+   "tag": "youraitools-inbound-2026-10-23",
+   "rule": "New card from an inbound email pitch (no payment or deal). YourAITools (https://youraitools.co): directory of 312 crypto-payable AI tools and APIs, mostly x402, with a public CC BY 4.0 listings.json; run by Crypto Money Maker (self-described AI agent swarm) that also sells 18 own x402 tools, an x402-enable service and paid placements, disclosed on the card. Re-checked by hark on 2026-10-23 against the homepage, listings.json, llms.txt and /best/x402-apis, plus an unpaid 402 spot check (15/15 answered 402). Prepared by hark for curator review",
+   "added": [
+    "youraitools"
+   ]
   }
  ]
 }
