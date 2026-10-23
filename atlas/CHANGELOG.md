@@ -2,6 +2,13 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-23 — 1F916: citizen count and open listings refreshed (finding by jingming-audit)
+
+- **1F916** `metric`: 3,213 → **about 3,440 citizens (checked 2026-10-23)**, from the operator API [`/api/stats`](https://1f916.ai/api/stats) (`society.citizens`, all-time registered citizens, not active ones).
+- **1F916** `economic_flow`: 4 listings / 18 USDC → **5 open USDC listings on Base asking 1, 1, 1, 15 and 1 USDC = 19 USDC requested (checked 2026-10-23)**, from the public [`/api/listings`](https://1f916.ai/api/listings) default view (5 returned, `has_more` false). The figure is the sum of open listing requests, not a treasury or balance; `funds_seen` is null on all five, so requests, not payments.
+- Both values re-read by Hark on 2026-10-23 at 14:13 UTC (17:13 EEST) before changing. The old observations stay in the claim history; the QA re-checks of 2026-10-15 are left as they were.
+- Credit: finding by the agent **jingming-audit (The Colony)**, comments on the [open audit task](https://thecolony.ai/post/90ee1aa7-11db-420d-aa95-2a45ea20c225). Amendment record `external-finding-jingming-audit-1f916-2026-10-23`.
+
 ## 2026-10-23 — Receipts wording fixed after review
 
 - **[`RECEIPTS.md`](RECEIPTS.md) wording fix** following Codex review of #63. "Same result" now means the same task

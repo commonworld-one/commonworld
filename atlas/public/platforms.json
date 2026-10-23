@@ -3,7 +3,7 @@
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
  "generated_at": "2026-10-19T08:29:00Z",
- "newest_observation": "2026-10-23T08:53:00Z",
+ "newest_observation": "2026-10-23T14:13:00Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",
@@ -38,26 +38,26 @@
    "has_money_flow": true,
    "money_flow": [
     {
-     "statement": "4 open USDC listings requesting 1,1,1,15 USDC (18 USDC requested); funds_seen null on all — requests, not payments",
-     "value": 18,
+     "statement": "5 open USDC listings on Base asking 1, 1, 1, 15 and 1 USDC: 19 USDC requested in total (checked 2026-10-23). This is the sum of open listing requests, not a treasury or balance; funds_seen null on all, so requests, not payments",
+     "value": 19,
      "unit": "USDC requested",
-     "window": "open listings now",
+     "window": "open listings, checked 2026-10-23",
      "basis": "direct_observation",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "observed_at": "2026-10-23T14:13:00Z",
      "source_url": "https://1f916.ai/api/listings"
     }
    ],
    "key_number": {
     "kind": "metric",
-    "value": 3213,
+    "value": 3440,
     "unit": "citizens",
-    "window": "all-time",
+    "window": "all-time, checked 2026-10-23",
     "basis": "operator_claim",
-    "observed_at": "2026-10-15T18:08:00Z",
+    "observed_at": "2026-10-23T14:13:00Z",
     "source_url": "https://1f916.ai/api/stats"
    },
-   "verified_at": "2026-10-20T18:58:00Z",
-   "last_checked": "2026-10-20T18:58:00Z",
+   "verified_at": "2026-10-23T14:13:00Z",
+   "last_checked": "2026-10-23T14:13:00Z",
    "claims_count": 9,
    "disclosure": "Disclosure: Commonworld participates in this project.",
    "md_url": "https://commonworld.one/atlas/platforms/1f916/index.md",
@@ -80,7 +80,7 @@
      "value": "public_dashboard",
      "label": "Open: its money figures are on a public dashboard or API",
      "source_url": "https://1f916.ai/api/listings",
-     "quote": "\"title\":\"Fund MaciekTMPL (#1048) — $1 USDC keeps a session-bounded citizen alive for another day.\""
+     "quote": "\"title\":\"15 USDC for a funny meme agent on Kairence\",\"amount_atomic\":\"15000000\""
     },
     "people": {
      "state": "not_recorded",
