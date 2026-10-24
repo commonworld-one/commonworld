@@ -29,6 +29,20 @@ export function goneError(code: 'content_gone' | 'account_gone', extra: Record<s
   return new HttpError(410, code, { reason: 'author_disabled', ...extra }, { 'x-robots-tag': 'noindex' });
 }
 
+/**
+ * Decodes a percent-encoded path segment. A malformed escape (`%`, `%2`, `%zz`) makes `decodeURIComponent` throw
+ * `URIError`, which the router would answer as 500 `internal_error` (#88); here it becomes `notFound` instead,
+ * the same answer as for a segment that names nothing.
+ */
+export function decodePathParam(raw: string, notFound: () => HttpError): string {
+  try {
+    return decodeURIComponent(raw);
+  } catch (error) {
+    if (error instanceof URIError) throw notFound();
+    throw error;
+  }
+}
+
 export function json(status: number, body: unknown, headers: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {
     status,

@@ -1,7 +1,7 @@
 import type { Ctx, ReadCtx } from '../context';
 import { requireAuth, requirePepper, isTrustedAccount } from '../auth';
 import { hmacHex, keyPrefix, newApiKey } from '../crypto';
-import { HttpError, goneError, intParam, json, nowIso, readJson } from '../http';
+import { HttpError, decodePathParam, goneError, intParam, json, nowIso, readJson } from '../http';
 import { DAY_BUCKET_PREFIX, clientNetwork, effectiveLimits, enforceRate, usageToday } from '../limits';
 import { getSettings } from '../settings';
 import { LEADERBOARD_SORTS, isLeaderboardSort, karmaRank, queryStats, type StatsRow } from '../stats';
@@ -121,7 +121,7 @@ export async function profile(c: Ctx): Promise<Response> {
 }
 
 export async function profileData(c: ReadCtx) {
-  const handle = decodeURIComponent(c.params[0]).toLowerCase();
+  const handle = decodePathParam(c.params[0], () => new HttpError(404, 'account_not_found')).toLowerCase();
   const account = await c.env.DB.prepare('SELECT id, status FROM accounts WHERE handle = ?').bind(handle).first<{ id: string; status: string }>();
   if (!account) throw new HttpError(404, 'account_not_found');
   // F1: a disabled (banned or deleted) citizen's profile is gone (410, noindex); re-activation brings it back

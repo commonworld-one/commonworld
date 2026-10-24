@@ -133,18 +133,28 @@ export async function search(env: Env, q: string, limit = 20) {
   // ASCII-only lowercasing to match SQLite lower() (same case rules LIKE had)
   const like = q.replace(/[A-Z]/g, (ch) => ch.toLowerCase());
   const ref = /^(post|comment|porch|citizen)-(\d{1,15})$/i.exec(q.trim());
+  // Citizens only (#78): "@handle" matches the handle without its "@", and a citizen-N ref also finds that account by
+  // number (same visibility: active accounts only). Posts, comments and porch lines keep matching the text as typed.
+  const handleTerm = like.trim().replace(/^@/, '') || like;
+  const citizenNumber = ref && ref[1].toLowerCase() === 'citizen' ? Number(ref[2]) : null;
   const [posts, comments, porch, citizens] = await env.DB.batch([
     env.DB.prepare(`${POST_SELECT} WHERE ${shownPostSql('p')} AND (instr(lower(p.title), ?1) > 0 OR instr(lower(p.body), ?1) > 0) ORDER BY p.number DESC LIMIT ?2`).bind(like, limit),
     env.DB.prepare(`SELECT * FROM (${COMMENT_SELECT}) c WHERE ${VISIBLE_COMMENT('c')} AND instr(lower(c.body), ?1) > 0 ORDER BY c.number DESC LIMIT ?2`).bind(like, limit),
     env.DB.prepare(`${PORCH_SELECT} WHERE ${shownPorchSql('l')} AND instr(lower(l.body), ?1) > 0 ORDER BY l.number DESC LIMIT ?2`).bind(like, limit),
-    env.DB.prepare(`SELECT number, handle, kind, created_at FROM accounts WHERE status = 'active' AND instr(lower(handle), ?1) > 0 ORDER BY number LIMIT ?2`).bind(like, limit),
+    env.DB.prepare(`SELECT number, handle, kind, created_at FROM accounts WHERE status = 'active' AND (instr(lower(handle), ?1) > 0 OR number = ?3)
+      ORDER BY (number = ?3) DESC, number LIMIT ?2`).bind(handleTerm, limit, citizenNumber),
   ]);
+  const citizenRows = citizens.results as { number: number; handle: string; kind: string; created_at: string }[];
+  // a citizen ref resolves only to a visible (active) account; a missing or inactive one gets no jump link
+  const citizenHit = citizenNumber !== null ? citizenRows.find((c) => c.number === citizenNumber) : undefined;
   return {
-    ref: ref ? { type: ref[1].toLowerCase(), number: Number(ref[2]) } : null,
+    ref: !ref ? null
+      : citizenNumber !== null ? (citizenHit ? { type: 'citizen', number: citizenNumber, handle: citizenHit.handle } : null)
+      : { type: ref[1].toLowerCase(), number: Number(ref[2]) } as { type: string; number: number; handle?: string },
     posts: (posts.results as any[]).map(postView),
     comments: (comments.results as any[]).map(commentView),
     porch: (porch.results as any[]).map(porchView),
-    citizens: citizens.results as { number: number; handle: string; kind: string; created_at: string }[],
+    citizens: citizenRows,
   };
 }
 

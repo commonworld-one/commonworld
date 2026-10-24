@@ -1,6 +1,6 @@
 {
  "generated_at": "2026-10-19T08:29:56Z",
- "count": 363,
+ "count": 374,
  "platforms": [
   {
    "id": 1,
@@ -37855,6 +37855,1734 @@
    "qa_status": "not_sampled",
    "status": "live",
    "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with ClawFetch.ai or YourAITools is involved."
+  },
+  {
+   "id": 401,
+   "name": "ForgeMesh Labs",
+   "slug": "forgemesh-labs",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https://forgemesh.io",
+   "description_en": "Live paid services for AI agents (notarization, anomaly detection, disruption intel, travel, voice, market signals, image generation), paid per call from $0.001 over x402 or MPP, with no accounts and no API keys.",
+   "category": "projects",
+   "category_basis": {
+    "primary_action": "The primary action is paying per call for this service over x402; like other single x402 services in the Atlas (StableEnrich, BlockRun) it is a project card.",
+    "source_url": "https://forgemesh.io/",
+    "quote": "Live paid services for AI agents: notarization, anomaly detection, disruption intel, travel, voice, market signals, image generation. Pay per call from $0.001 over x402 or MPP.",
+    "observed_at": "2026-10-23T23:09:41Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://forgemesh.io/ (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://forgemesh.io is the official site: it is the address YourAITools lists for ForgeMesh Labs and the site answers there (page title \"ForgeMesh Labs — Paid APIs for AI Agents · x402 & MPP\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://forgemesh.io",
+     "quote": "ForgeMesh Labs — Paid APIs for AI Agents · x402 & MPP",
+     "observed_at": "2026-10-23T23:09:41Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://forgemesh.io/ (HTTP 200, final https://forgemesh.io/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://forgemesh.io",
+     "quote": "Live paid services for AI agents: notarization, anomaly detection, disruption intel, travel, voice, market signals, image generation. Pay per call from $0.001 over x402 or MPP. No accounts, no API key",
+     "observed_at": "2026-10-23T23:09:41Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://forgemesh.io/ (HTTP 200)",
+      "GET https://forgemesh.io/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: Live paid services for AI agents: notarization, anomaly detection, disruption intel, travel, voice, market signals, image generation. Pay per call from $0.001 over x402 or MPP.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://forgemesh.io/",
+     "quote": "Live paid services for AI agents: notarization, anomaly detection, disruption intel, travel, voice, market signals, image generation. Pay per call from $0.001 over x402 or MPP.",
+     "observed_at": "2026-10-23T23:09:41Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://forgemesh.io/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "operator",
+     "statement": "Operated by GSD Contracts LLC, doing business as ForgeMesh Labs, per the site footer.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://forgemesh.io/",
+     "quote": "© 2026 GSD Contracts LLC, d/b/a ForgeMesh Labs",
+     "observed_at": "2026-10-23T23:09:41Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://forgemesh.io/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "source_code",
+     "statement": "Public code repository linked from the official site.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://github.com/forgemeshlabs",
+     "quote": null,
+     "observed_at": "2026-10-23T23:14:06Z",
+     "methods": [
+      "GET https://github.com/forgemeshlabs (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid POST to https://library.forgemesh.io/book-of-the-day answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base; asset USDC; price 0.001 USDC; payTo Base 0x85df5380DEbe236AD6BF49dE788243924B080267). YourAITools lists the price as $0.001–$0.01. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+     "value": 0.001,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://library.forgemesh.io/book-of-the-day",
+     "quote": "HTTP 402, x402Version 2, amount 1000, network eip155:8453",
+     "observed_at": "2026-10-23T23:09:43Z",
+     "methods": [
+      "unpaid POST https://library.forgemesh.io/book-of-the-day (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 317 resource(s) on this vendor's domain for the payTo address(es) we observed, with 40 calls in the last 30 days as reported by CDP (largest single resource: 9 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 40,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x85df5380DEbe236AD6BF49dE788243924B080267",
+     "quote": "l30DaysTotalCalls (sum) 40; l30DaysUniquePayers (max) 9",
+     "observed_at": "2026-10-23T23:10:25Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x85df5380DEbe236AD6BF49dE788243924B080267 (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-21 21:15 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x85df5380DEbe236AD6BF49dE788243924B080267",
+     "quote": "lastCalledAt 2026-10-21T21:15:00Z",
+     "observed_at": "2026-10-23T23:10:25Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x85df5380DEbe236AD6BF49dE788243924B080267"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category data-apis, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/forgemesh-labs",
+     "quote": "Unpaid POST /book-of-the-day returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.001 USDC on Base. Price checked via our 402 probe on 2026-10-22 (4 routes probed; other routes m",
+     "observed_at": "2026-10-23T23:02:30Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:02:30Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch02-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with ForgeMesh Labs or YourAITools is involved."
+  },
+  {
+   "id": 402,
+   "name": "402rates.com",
+   "slug": "402rates-com",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https://402rates.com",
+   "description_en": "Evidence-backed tokenized treasury yields and measured cross-chain USDC settlement costs for autonomous agents, each figure with its observations, sources and method; no account or API key, one payment per request.",
+   "category": "projects",
+   "category_basis": {
+    "primary_action": "The primary action is paying per call for this service over x402; like other single x402 services in the Atlas (StableEnrich, BlockRun) it is a project card.",
+    "source_url": "https://402rates.com/",
+    "quote": "Evidence-backed tokenized treasury yields and measured cross-chain USDC settlement costs. Measured figures include observations, sources and issuer comparisons where available.",
+    "observed_at": "2026-10-23T23:09:43Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://402rates.com/ (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://402rates.com is the official site: it is the address YourAITools lists for 402rates.com and the site answers there (page title \"402rates.com: tokenized treasury yields and USDC settlement costs\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://402rates.com",
+     "quote": "402rates.com: tokenized treasury yields and USDC settlement costs",
+     "observed_at": "2026-10-23T23:09:43Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://402rates.com/ (HTTP 200, final https://402rates.com/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://402rates.com",
+     "quote": "Evidence-backed tokenized treasury yields and measured cross-chain USDC settlement costs. Measured figures include observations, sources and issuer comparisons where available.",
+     "observed_at": "2026-10-23T23:09:43Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://402rates.com/ (HTTP 200)",
+      "GET https://402rates.com/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: Evidence-backed tokenized treasury yields and measured cross-chain USDC settlement costs. Measured figures include observations, sources and issuer comparisons where available.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://402rates.com/",
+     "quote": "Evidence-backed tokenized treasury yields and measured cross-chain USDC settlement costs. Measured figures include observations, sources and issuer comparisons where available.",
+     "observed_at": "2026-10-23T23:09:43Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://402rates.com/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.402rates.com/v1/ping answered HTTP 402 with x402 v2 payment terms (scheme exact; network Arbitrum, Base, Polygon, XDC; asset USDC; price 0.001 USDC; payTo Base 0xf567Cfe0FDb87A1D6Ca330e3f30f0D3DA0F7cb98; plus 3 other network option(s)). YourAITools lists the price as $0.001–$0.03. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+     "value": 0.001,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://api.402rates.com/v1/ping",
+     "quote": "HTTP 402, x402Version 2, amount 1000, network eip155:8453",
+     "observed_at": "2026-10-23T23:09:44Z",
+     "methods": [
+      "unpaid GET https://api.402rates.com/v1/ping (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 6 resource(s) on this vendor's domain for the payTo address(es) we observed, with 84 calls in the last 30 days as reported by CDP (largest single resource: 29 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 84,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xedb1a894761F0a142d80D09F82Ff7CF99158Bb19",
+     "quote": "l30DaysTotalCalls (sum) 84; l30DaysUniquePayers (max) 29",
+     "observed_at": "2026-10-23T23:10:29Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xedb1a894761F0a142d80D09F82Ff7CF99158Bb19 (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 13:20 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xedb1a894761F0a142d80D09F82Ff7CF99158Bb19",
+     "quote": "lastCalledAt 2026-10-23T13:20:00Z",
+     "observed_at": "2026-10-23T23:10:29Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xedb1a894761F0a142d80D09F82Ff7CF99158Bb19"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category finance-data, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/402rates-com",
+     "quote": "Unpaid GET /v1/ping returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.001 USDC on Base, Polygon, Arbitrum or XDC. Price checked via our 402 probe on 2026-10-22 (3 routes probe",
+     "observed_at": "2026-10-23T23:02:30Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:02:30Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch02-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The site does not name a company or person behind it. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with 402rates.com or YourAITools is involved."
+  },
+  {
+   "id": 403,
+   "name": "TenPrint",
+   "slug": "rubric-protocol-tenprint",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https://rubric-protocol.com",
+   "description_en": "Post-quantum AI attestation: tamper-evident, independently verifiable audit trails for AI decisions, agent payments and content-provenance verdicts, anchored on Hedera; some calls are paid per request over x402.",
+   "category": "projects",
+   "category_basis": {
+    "primary_action": "The primary action is paying per call for this service over x402; like other single x402 services in the Atlas (StableEnrich, BlockRun) it is a project card.",
+    "source_url": "https://rubric-protocol.com/",
+    "quote": "TenPrint creates tamper-evident, independently verifiable audit trails for every AI decision.",
+    "observed_at": "2026-10-23T23:09:44Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://rubric-protocol.com/ (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://rubric-protocol.com is the official site: it is the address YourAITools lists for TenPrint and the site answers there (page title \"Post-Quantum AI Attestation — Tamper-Evident AI Audit Trails | TenPrint\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://rubric-protocol.com",
+     "quote": "Post-Quantum AI Attestation — Tamper-Evident AI Audit Trails | TenPrint",
+     "observed_at": "2026-10-23T23:09:44Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://rubric-protocol.com/ (HTTP 200, final https://rubric-protocol.com/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://rubric-protocol.com",
+     "quote": "Prove your AI followed the rules — without exposing your models or data. TenPrint creates tamper-evident, independently verifiable audit trails for every AI decision.",
+     "observed_at": "2026-10-23T23:09:44Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://rubric-protocol.com/ (HTTP 200)",
+      "GET https://rubric-protocol.com/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: TenPrint creates tamper-evident, independently verifiable audit trails for every AI decision.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://rubric-protocol.com/",
+     "quote": "TenPrint creates tamper-evident, independently verifiable audit trails for every AI decision.",
+     "observed_at": "2026-10-23T23:09:44Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://rubric-protocol.com/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "operator",
+     "statement": "Operated by Echelon Intelligence Group LLC, per the site footer.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://rubric-protocol.com/",
+     "quote": "© 2026 Echelon Intelligence Group LLC",
+     "observed_at": "2026-10-23T23:09:44Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://rubric-protocol.com/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "docs",
+     "statement": "Public documentation for agents and developers.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://rubric-protocol.com/docs",
+     "quote": null,
+     "observed_at": "2026-10-23T23:14:07Z",
+     "methods": [
+      "GET https://rubric-protocol.com/docs (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "source_code",
+     "statement": "Public code repository linked from the official site.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://github.com/0xsims/rubric-attest",
+     "quote": null,
+     "observed_at": "2026-10-23T23:14:08Z",
+     "methods": [
+      "GET https://github.com/0xsims/rubric-attest (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid GET to https://rubric-protocol.com/v1/x402/hedera-facts/exchange-rate answered HTTP 402 with x402 v2 payment terms (scheme exact; network Algorand, Base, Solana; asset USDC; price 0.001 USDC; payTo Base 0xaB6731A0BcDf511c2842C768a03448075aB654ca; Solana GBfJMhGiGJeWDcve1G673hEp8DLmMFomvSEHMzRfmcJu; plus 1 other network option(s)). YourAITools lists the price as $0.001–$0.25. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+     "value": 0.001,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://rubric-protocol.com/v1/x402/hedera-facts/exchange-rate",
+     "quote": "HTTP 402, x402Version 2, amount 1000, network eip155:8453",
+     "observed_at": "2026-10-23T23:09:45Z",
+     "methods": [
+      "unpaid GET https://rubric-protocol.com/v1/x402/hedera-facts/exchange-rate (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 91 resource(s) on this vendor's domain for the payTo address(es) we observed, with 1,081 calls in the last 30 days as reported by CDP (largest single resource: 26 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 1081,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xaB6731A0BcDf511c2842C768a03448075aB654ca",
+     "quote": "l30DaysTotalCalls (sum) 1081; l30DaysUniquePayers (max) 26",
+     "observed_at": "2026-10-23T23:10:32Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xaB6731A0BcDf511c2842C768a03448075aB654ca (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 17:51 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xaB6731A0BcDf511c2842C768a03448075aB654ca",
+     "quote": "lastCalledAt 2026-10-23T17:51:00Z",
+     "observed_at": "2026-10-23T23:10:32Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xaB6731A0BcDf511c2842C768a03448075aB654ca"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category trust-security, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/rubric-protocol-tenprint",
+     "quote": "Unpaid GET /v1/x402/hedera-facts/exchange-rate returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.001 USDC on Base or Solana (other networks offered: Algorand, at their own amo",
+     "observed_at": "2026-10-23T23:02:30Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:02:30Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch02-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with TenPrint or YourAITools is involved."
+  },
+  {
+   "id": 404,
+   "name": "Locus",
+   "slug": "locus",
+   "entity_type": "platform",
+   "verdict": "include_verified",
+   "canonical_url": "https://paywithlocus.com",
+   "description_en": "One account for an AI agent to use thousands of paid APIs and data sources, billed per call with no separate subscriptions or keys; Locus also offers USDC wallets with spending controls, and some of its API routes answer over x402.",
+   "category": "payments",
+   "category_basis": {
+    "primary_action": "The primary action is finding or buying x402 services from many providers (payments & x402), one card for the whole service.",
+    "source_url": "https://paywithlocus.com/",
+    "quote": "Give your AI agent one account for thousands of paid APIs and data sources, billed per call with no separate subscriptions or keys.",
+    "observed_at": "2026-10-23T23:09:44Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://paywithlocus.com/ (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://paywithlocus.com is the official site: it is the address YourAITools lists for Locus and the site answers there (page title \"Locus Pro — One Account for Every AI Agent Tool\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://paywithlocus.com",
+     "quote": "Locus Pro — One Account for Every AI Agent Tool",
+     "observed_at": "2026-10-23T23:09:44Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://paywithlocus.com/ (HTTP 200, final https://paywithlocus.com/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://paywithlocus.com",
+     "quote": "Give your AI agent one account for thousands of paid APIs and data sources, billed per call with no separate subscriptions or keys.",
+     "observed_at": "2026-10-23T23:09:44Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://paywithlocus.com/ (HTTP 200)",
+      "GET https://paywithlocus.com/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: Give your AI agent one account for thousands of paid APIs and data sources, billed per call with no separate subscriptions or keys.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://paywithlocus.com/",
+     "quote": "Give your AI agent one account for thousands of paid APIs and data sources, billed per call with no separate subscriptions or keys.",
+     "observed_at": "2026-10-23T23:09:44Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://paywithlocus.com/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "operator",
+     "statement": "Operated by Locus Technologies Inc, per the site footer.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://paywithlocus.com/",
+     "quote": "© 2026 Locus Technologies Inc",
+     "observed_at": "2026-10-23T23:09:44Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://paywithlocus.com/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "docs",
+     "statement": "Public documentation for agents and developers.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://docs.paywithlocus.com",
+     "quote": null,
+     "observed_at": "2026-10-23T23:14:09Z",
+     "methods": [
+      "GET https://docs.paywithlocus.com (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid POST to https://hunter.x402.paywithlocus.com/hunter/email-verifier answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base; asset USDC; price 0.008 USDC; payTo Base 0x3C5CBe28ECA3b96023c45D3f877da834F1C7d5fA). YourAITools lists the price as $0.008–$0.013. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+     "value": 0.008,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://hunter.x402.paywithlocus.com/hunter/email-verifier",
+     "quote": "HTTP 402, x402Version 2, amount 8000, network eip155:8453",
+     "observed_at": "2026-10-23T23:09:47Z",
+     "methods": [
+      "unpaid POST https://hunter.x402.paywithlocus.com/hunter/email-verifier (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 68 resource(s) on this vendor's domain for the payTo address(es) we observed, with 806 calls in the last 30 days as reported by CDP (largest single resource: 8 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 806,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x3C5CBe28ECA3b96023c45D3f877da834F1C7d5fA",
+     "quote": "l30DaysTotalCalls (sum) 806; l30DaysUniquePayers (max) 8",
+     "observed_at": "2026-10-23T23:10:33Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x3C5CBe28ECA3b96023c45D3f877da834F1C7d5fA (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 18:00 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x3C5CBe28ECA3b96023c45D3f877da834F1C7d5fA",
+     "quote": "lastCalledAt 2026-10-23T18:00:00Z",
+     "observed_at": "2026-10-23T23:10:33Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x3C5CBe28ECA3b96023c45D3f877da834F1C7d5fA"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category payments, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/locus",
+     "quote": "Unpaid POST /hunter/email-verifier returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.008 USDC on Base. Price checked via our 402 probe on 2026-10-22 (4 routes probed; other ro",
+     "observed_at": "2026-10-23T23:02:30Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:02:30Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch02-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with Locus or YourAITools is involved."
+  },
+  {
+   "id": 405,
+   "name": "MicroTap",
+   "slug": "microtap",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https://x402tap.com",
+   "description_en": "20 monetized x402 APIs for AI agents (crypto, DeFi, on-chain data, prediction markets, weather and web search), paid per call in USDC with no API keys or signup.",
+   "category": "projects",
+   "category_basis": {
+    "primary_action": "The primary action is paying per call for this service over x402; like other single x402 services in the Atlas (StableEnrich, BlockRun) it is a project card.",
+    "source_url": "https://x402tap.com/",
+    "quote": "20 monetized x402 APIs for AI agents — crypto, DeFi, on-chain data, prediction markets, weather, and web search. No API keys, no signup — pay per call in USDC.",
+    "observed_at": "2026-10-23T23:09:45Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://x402tap.com/ (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://x402tap.com is the official site: it is the address YourAITools lists for MicroTap and the site answers there (page title \"MicroTap — Pay-Per-Call APIs for AI Agents\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://x402tap.com",
+     "quote": "MicroTap — Pay-Per-Call APIs for AI Agents",
+     "observed_at": "2026-10-23T23:09:45Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://x402tap.com/ (HTTP 200, final https://x402tap.com/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://x402tap.com",
+     "quote": "20 monetized x402 APIs for AI agents — crypto, DeFi, on-chain data, prediction markets, weather, and web search. No API keys, no signup — pay per call in USDC.",
+     "observed_at": "2026-10-23T23:09:45Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://x402tap.com/ (HTTP 200)",
+      "GET https://x402tap.com/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: 20 monetized x402 APIs for AI agents — crypto, DeFi, on-chain data, prediction markets, weather, and web search. No API keys, no signup — pay per call in USDC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://x402tap.com/",
+     "quote": "20 monetized x402 APIs for AI agents — crypto, DeFi, on-chain data, prediction markets, weather, and web search. No API keys, no signup — pay per call in USDC.",
+     "observed_at": "2026-10-23T23:09:45Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://x402tap.com/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "source_code",
+     "statement": "Public code repository linked from the official site.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://github.com/swaltersjrtest/microtap-mcp",
+     "quote": null,
+     "observed_at": "2026-10-23T23:14:10Z",
+     "methods": [
+      "GET https://github.com/swaltersjrtest/microtap-mcp (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid GET to https://x402tap.com/api/weather answered HTTP 402 with x402 v2 payment terms (scheme exact; network Arbitrum, Base, Polygon, Solana; asset USDC; price 0.01 USDC; payTo Base 0xB810B599bc730Aa85800BABe7f5d160524322C86; Solana 9fqXniDAn8hNMYC5C9waGv5u126bkwjU6qGgAoQeoWyo; plus 2 other network option(s)). YourAITools lists the price as $0.001–$0.025. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. The probed route is not the cheapest one listed.",
+     "value": 0.01,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://x402tap.com/api/weather",
+     "quote": "HTTP 402, x402Version 2, amount 10000, network eip155:8453",
+     "observed_at": "2026-10-23T23:09:46Z",
+     "methods": [
+      "unpaid GET https://x402tap.com/api/weather (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 38 resource(s) on this vendor's domain for the payTo address(es) we observed, with 344 calls in the last 30 days as reported by CDP (largest single resource: 27 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 344,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xB810B599bc730Aa85800BABe7f5d160524322C86",
+     "quote": "l30DaysTotalCalls (sum) 344; l30DaysUniquePayers (max) 27",
+     "observed_at": "2026-10-23T23:10:34Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xB810B599bc730Aa85800BABe7f5d160524322C86 (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 16:19 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xB810B599bc730Aa85800BABe7f5d160524322C86",
+     "quote": "lastCalledAt 2026-10-23T16:19:00Z",
+     "observed_at": "2026-10-23T23:10:34Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xB810B599bc730Aa85800BABe7f5d160524322C86"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category marketplaces, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/microtap",
+     "quote": "Unpaid GET /api/weather returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.01 USDC on Base, Polygon, Arbitrum or Solana. Price checked via our 402 probe on 2026-10-22 (4 routes",
+     "observed_at": "2026-10-23T23:02:30Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:02:30Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch02-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The site does not name a company or person behind it. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with MicroTap or YourAITools is involved."
+  },
+  {
+   "id": 406,
+   "name": "hyperextend",
+   "slug": "hyperextend",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https://hyperextend.xyz",
+   "description_en": "Per-minute Hyperliquid market history (open interest, candles, trades, liquidations, HIP-3, spot and outcome markets): query any window and pay per request over x402.",
+   "category": "projects",
+   "category_basis": {
+    "primary_action": "The primary action is paying per call for this service over x402; like other single x402 services in the Atlas (StableEnrich, BlockRun) it is a project card.",
+    "source_url": "https://hyperextend.xyz/",
+    "quote": "Per-minute Hyperliquid market history: open interest, candles, trades, liquidations, HIP-3, spot and outcome markets. Query any window, pay per request over x402.",
+    "observed_at": "2026-10-23T23:09:45Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://hyperextend.xyz/ (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://hyperextend.xyz is the official site: it is the address YourAITools lists for hyperextend and the site answers there (page title \"hyperextend\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://hyperextend.xyz",
+     "quote": "hyperextend",
+     "observed_at": "2026-10-23T23:09:45Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://hyperextend.xyz/ (HTTP 200, final https://hyperextend.xyz/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://hyperextend.xyz",
+     "quote": "Per-minute Hyperliquid market history: open interest, candles, trades, liquidations, HIP-3, spot and outcome markets. Query any window, pay per request over x402.",
+     "observed_at": "2026-10-23T23:09:45Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://hyperextend.xyz/ (HTTP 200)",
+      "GET https://hyperextend.xyz/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: Per-minute Hyperliquid market history: open interest, candles, trades, liquidations, HIP-3, spot and outcome markets. Query any window, pay per request over x402.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://hyperextend.xyz/",
+     "quote": "Per-minute Hyperliquid market history: open interest, candles, trades, liquidations, HIP-3, spot and outcome markets. Query any window, pay per request over x402.",
+     "observed_at": "2026-10-23T23:09:45Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://hyperextend.xyz/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "docs",
+     "statement": "Public documentation for agents and developers.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://hyperextend.xyz/docs",
+     "quote": null,
+     "observed_at": "2026-10-23T23:14:10Z",
+     "methods": [
+      "GET https://hyperextend.xyz/docs (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.hyperextend.xyz/v1/candles/BTC/1m/latest answered HTTP 402 with x402 v2 payment terms (scheme batch-settlement, exact; network Base, Hyperliquid; asset USDC; price 0.002 USDC; payTo Base 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4; plus 1 other network option(s)). YourAITools lists the price as $0.001–$0.002. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. The probed route is not the cheapest one listed.",
+     "value": 0.002,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://api.hyperextend.xyz/v1/candles/BTC/1m/latest",
+     "quote": "HTTP 402, x402Version 2, amount 2000, network eip155:8453",
+     "observed_at": "2026-10-23T23:09:47Z",
+     "methods": [
+      "unpaid GET https://api.hyperextend.xyz/v1/candles/BTC/1m/latest (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 11 resource(s) on this vendor's domain for the payTo address(es) we observed, with 86 calls in the last 30 days as reported by CDP (largest single resource: 23 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 86,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x548fC289526ab2F0391D562a723cdA64Bbf1abc4",
+     "quote": "l30DaysTotalCalls (sum) 86; l30DaysUniquePayers (max) 23",
+     "observed_at": "2026-10-23T23:10:35Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x548fC289526ab2F0391D562a723cdA64Bbf1abc4 (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 17:51 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x548fC289526ab2F0391D562a723cdA64Bbf1abc4",
+     "quote": "lastCalledAt 2026-10-23T17:51:00Z",
+     "observed_at": "2026-10-23T23:10:35Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x548fC289526ab2F0391D562a723cdA64Bbf1abc4"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category crypto-data, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/hyperextend",
+     "quote": "Unpaid GET /v1/candles/BTC/1m/latest returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.002 USDC on Base (other networks offered: Hyperliquid, at their own amounts or tokens). ",
+     "observed_at": "2026-10-23T23:02:30Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:02:30Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch02-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The site does not name a company or person behind it. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with hyperextend or YourAITools is involved."
+  },
+  {
+   "id": 407,
+   "name": "AsterPay",
+   "slug": "asterpay",
+   "entity_type": "platform",
+   "verdict": "include_verified",
+   "canonical_url": "https://asterpay.io",
+   "description_en": "EUR-native facilitator for AI agent payments: agents pay over x402 or MPP and the business receives euros in its bank via SEPA Instant; it also sells some data APIs per call over x402.",
+   "category": "payments",
+   "category_basis": {
+    "primary_action": "The primary action is letting AI agents pay a business over x402 or MPP and settling to EUR (payments & x402), one card for the whole service.",
+    "source_url": "https://asterpay.io/",
+    "quote": "EUR-native facilitator for AI agent payments. x402 (Coinbase) and MPP (Stripe/Tempo), USDC to EUR via SEPA Instant.",
+    "observed_at": "2026-10-23T23:09:47Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://asterpay.io/ (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://asterpay.io is the official site: it is the address YourAITools lists for AsterPay and the site answers there (page title \"AsterPay — let AI agents pay you, get EUR in your bank | x402 + MPP · SEPA Instant\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://asterpay.io",
+     "quote": "AsterPay — let AI agents pay you, get EUR in your bank | x402 + MPP · SEPA Instant",
+     "observed_at": "2026-10-23T23:09:47Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://asterpay.io/ (HTTP 200, final https://asterpay.io/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://asterpay.io",
+     "quote": "EUR-native facilitator for AI agent payments. x402 (Coinbase) and MPP (Stripe/Tempo), USDC to EUR via SEPA Instant. KYA trust scoring, MiCA-aligned. Check your site in 60 seconds, then make it agent-p",
+     "observed_at": "2026-10-23T23:09:47Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://asterpay.io/ (HTTP 200)",
+      "GET https://asterpay.io/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: EUR-native facilitator for AI agent payments. x402 (Coinbase) and MPP (Stripe/Tempo), USDC to EUR via SEPA Instant.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://asterpay.io/",
+     "quote": "EUR-native facilitator for AI agent payments. x402 (Coinbase) and MPP (Stripe/Tempo), USDC to EUR via SEPA Instant.",
+     "observed_at": "2026-10-23T23:09:47Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://asterpay.io/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "operator",
+     "statement": "Operated by AELIRA LTD (HE 490977), Nicosia, Cyprus, per the site footer.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://asterpay.io/",
+     "quote": "© 2026 AELIRA LTD (HE 490977) · 9 Karpenisiou, Strovolos, 2021 Nicosia, Cyprus",
+     "observed_at": "2026-10-23T23:09:47Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://asterpay.io/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "docs",
+     "statement": "Public documentation for agents and developers.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://asterpay.io/docs/",
+     "quote": null,
+     "observed_at": "2026-10-23T23:14:11Z",
+     "methods": [
+      "GET https://asterpay.io/docs/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "source_code",
+     "statement": "Public code repository linked from the official site.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://github.com/AsterPay",
+     "quote": null,
+     "observed_at": "2026-10-23T23:14:12Z",
+     "methods": [
+      "GET https://github.com/AsterPay (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid GET to https://x402.asterpay.io/v1/market/price/bitcoin answered HTTP 402 with x402 v2 payment terms (scheme exact; network Arbitrum, Base, Ethereum, Optimism, Polygon, eip155:1187947933; asset USDC; price 0.0075 USDC; payTo Base 0xd5f8481D8F25d3966d2010DBf9B47fFbdf745A9E; plus 5 other network option(s)). YourAITools lists the price as $0.006–$0.03. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. The probed route is not the cheapest one listed.",
+     "value": 0.0075,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://x402.asterpay.io/v1/market/price/bitcoin",
+     "quote": "HTTP 402, x402Version 2, amount 7500, network eip155:8453",
+     "observed_at": "2026-10-23T23:09:48Z",
+     "methods": [
+      "unpaid GET https://x402.asterpay.io/v1/market/price/bitcoin (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 20 resource(s) on this vendor's domain for the payTo address(es) we observed, with 518 calls in the last 30 days as reported by CDP (largest single resource: 26 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 518,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xd5f8481D8F25d3966d2010DBf9B47fFbdf745A9E",
+     "quote": "l30DaysTotalCalls (sum) 518; l30DaysUniquePayers (max) 26",
+     "observed_at": "2026-10-23T23:10:36Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xd5f8481D8F25d3966d2010DBf9B47fFbdf745A9E (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 03:03 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xd5f8481D8F25d3966d2010DBf9B47fFbdf745A9E",
+     "quote": "lastCalledAt 2026-10-23T03:03:00Z",
+     "observed_at": "2026-10-23T23:10:36Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xd5f8481D8F25d3966d2010DBf9B47fFbdf745A9E"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category payments, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/asterpay",
+     "quote": "Unpaid GET /v1/market/price/bitcoin returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.0075 USDC on Base, Polygon, Arbitrum, Optimism or Ethereum. Price checked via our 402 pro",
+     "observed_at": "2026-10-23T23:02:30Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:02:30Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch02-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with AsterPay or YourAITools is involved."
+  },
+  {
+   "id": 408,
+   "name": "CoinGecko",
+   "slug": "coingecko",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https://www.coingecko.com",
+   "description_en": "Crypto price, chart and market data site whose API page offers x402-enabled, instant, pay-per-use crypto price and market data endpoints.",
+   "category": "projects",
+   "category_basis": {
+    "primary_action": "The primary action is paying per call for this service over x402; like other single x402 services in the Atlas (StableEnrich, BlockRun) it is a project card.",
+    "source_url": "https://www.coingecko.com/en/api",
+    "quote": "x402-enabled, instant, pay-per-use crypto price & market data endpoints.",
+    "observed_at": "2026-10-23T23:37:05Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://www.coingecko.com/en/api (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://www.coingecko.com is the official site: it is the address YourAITools lists for CoinGecko and the site answers there (page title \"Cryptocurrency Prices, Charts, and Crypto Market Cap | CoinGecko\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://www.coingecko.com",
+     "quote": "Cryptocurrency Prices, Charts, and Crypto Market Cap | CoinGecko",
+     "observed_at": "2026-10-23T23:37:05Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://www.coingecko.com/ (HTTP 200, final https://www.coingecko.com/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://www.coingecko.com",
+     "quote": "View top cryptocurrency prices live, crypto charts, market cap, and trading volume. Discover today’s new and trending coins, top crypto gainers and losers in the market.",
+     "observed_at": "2026-10-23T23:37:05Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://www.coingecko.com/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: x402-enabled, instant, pay-per-use crypto price & market data endpoints.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://www.coingecko.com/en/api",
+     "quote": "x402-enabled, instant, pay-per-use crypto price & market data endpoints.",
+     "observed_at": "2026-10-23T23:37:05Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://www.coingecko.com/en/api (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "docs",
+     "statement": "Public documentation for agents and developers.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://docs.coingecko.com/docs/x402",
+     "quote": null,
+     "observed_at": "2026-10-23T23:46:32Z",
+     "methods": [
+      "GET https://docs.coingecko.com/docs/x402 (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid GET to https://pro-api.coingecko.com/api/v3/x402/onchain/search/pools answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base, Polygon, Solana; asset USDC; price 0.005 USDC; payTo Base 0x110cdBba7FE6434Ec4CE3464CC523942ad6Fb784; Solana 8XhngTRitTcUJMiaDJ6azw8GRSiFPpwhnmV3HYQLHUpL; plus 1 other network option(s)). YourAITools lists the price as $0.005. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+     "value": 0.005,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://pro-api.coingecko.com/api/v3/x402/onchain/search/pools",
+     "quote": "HTTP 402, x402Version 2, amount 5000, network eip155:8453",
+     "observed_at": "2026-10-23T23:37:07Z",
+     "methods": [
+      "unpaid GET https://pro-api.coingecko.com/api/v3/x402/onchain/search/pools (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 90 resource(s) on this vendor's domain for the payTo address(es) we observed, with 356 calls in the last 30 days as reported by CDP (largest single resource: 23 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 356,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x110cdBba7FE6434Ec4CE3464CC523942ad6Fb784",
+     "quote": "l30DaysTotalCalls (sum) 356; l30DaysUniquePayers (max) 23",
+     "observed_at": "2026-10-23T23:37:43Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x110cdBba7FE6434Ec4CE3464CC523942ad6Fb784 (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 15:35 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x110cdBba7FE6434Ec4CE3464CC523942ad6Fb784",
+     "quote": "lastCalledAt 2026-10-23T15:35:00Z",
+     "observed_at": "2026-10-23T23:37:43Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x110cdBba7FE6434Ec4CE3464CC523942ad6Fb784"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category crypto-data, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/coingecko",
+     "quote": "Unpaid GET /api/v3/x402/onchain/search/pools returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.005 USDC on Base, Solana or Polygon. Price checked via our 402 probe on 2026-10-",
+     "observed_at": "2026-10-23T23:37:04Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:37:04Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch03-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The site does not name a company or person behind it. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:37-23:37 UTC). No payment, deal or contact with CoinGecko or YourAITools is involved."
+  },
+  {
+   "id": 409,
+   "name": "Arkham API",
+   "slug": "arkham",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https://api.arkm.com",
+   "description_en": "Programmatic access to Arkham wallet intelligence and market data, via API keys and x402 pay-per-request.",
+   "category": "projects",
+   "category_basis": {
+    "primary_action": "The primary action is paying per call for this service over x402; like other single x402 services in the Atlas (StableEnrich, BlockRun) it is a project card.",
+    "source_url": "https://api.arkm.com/",
+    "quote": "Programmatic access to Arkham wallet intelligence and market data — via API keys and x402 pay-per-request.",
+    "observed_at": "2026-10-23T23:37:05Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://api.arkm.com/ (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://api.arkm.com is the official site: it is the address YourAITools lists for Arkham API and the site answers there (page title \"Arkham API\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://api.arkm.com",
+     "quote": "Arkham API",
+     "observed_at": "2026-10-23T23:37:05Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://api.arkm.com/ (HTTP 200, final https://api.arkm.com/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://api.arkm.com",
+     "quote": "Programmatic access to Arkham wallet intelligence and market data — via API keys and x402 pay-per-request.",
+     "observed_at": "2026-10-23T23:37:05Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://api.arkm.com/ (HTTP 200)",
+      "GET https://api.arkm.com/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: Programmatic access to Arkham wallet intelligence and market data — via API keys and x402 pay-per-request.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://api.arkm.com/",
+     "quote": "Programmatic access to Arkham wallet intelligence and market data — via API keys and x402 pay-per-request.",
+     "observed_at": "2026-10-23T23:37:05Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://api.arkm.com/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "docs",
+     "statement": "Public documentation for agents and developers.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://api.arkm.com/x402/llms.txt",
+     "quote": null,
+     "observed_at": "2026-10-23T23:46:32Z",
+     "methods": [
+      "GET https://api.arkm.com/x402/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid POST to https://api.arkm.com/x402/intelligence/address answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base, Solana; asset USDC; price 0.2 USDC; payTo Base 0x942bD3E3073543c674Efc0C378D5bcE20f9120C1; Solana 6bfN4hVbypmM1p4mV4qUpNushvm3W8GiAv1CrqEfiUdM). YourAITools lists the price as $0.2–$8. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+     "value": 0.2,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://api.arkm.com/x402/intelligence/address",
+     "quote": "HTTP 402, x402Version 2, amount 200000, network eip155:8453",
+     "observed_at": "2026-10-23T23:37:07Z",
+     "methods": [
+      "unpaid POST https://api.arkm.com/x402/intelligence/address (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 12 resource(s) on this vendor's domain for the payTo address(es) we observed, with 634 calls in the last 30 days as reported by CDP (largest single resource: 17 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 634,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x942bD3E3073543c674Efc0C378D5bcE20f9120C1",
+     "quote": "l30DaysTotalCalls (sum) 634; l30DaysUniquePayers (max) 17",
+     "observed_at": "2026-10-23T23:37:47Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x942bD3E3073543c674Efc0C378D5bcE20f9120C1 (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-21 21:29 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x942bD3E3073543c674Efc0C378D5bcE20f9120C1",
+     "quote": "lastCalledAt 2026-10-21T21:29:00Z",
+     "observed_at": "2026-10-23T23:37:47Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x942bD3E3073543c674Efc0C378D5bcE20f9120C1"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category crypto-data, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/arkham",
+     "quote": "Unpaid POST /x402/intelligence/address returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.2 USDC on Base or Solana. Price checked via our 402 probe on 2026-10-22 (4 routes prob",
+     "observed_at": "2026-10-23T23:37:04Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:37:04Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch03-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The site does not name a company or person behind it. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:37-23:37 UTC). No payment, deal or contact with Arkham API or YourAITools is involved."
+  },
+  {
+   "id": 410,
+   "name": "BAGS",
+   "slug": "bags",
+   "entity_type": "platform",
+   "verdict": "include_verified",
+   "canonical_url": "https://www.getbags.app",
+   "description_en": "Lets developers sell APIs, tools and digital products to agents with USDC payment links and x402 pay-per-use access; agents hit an endpoint, see the price, pay and retry, with no buyer accounts and no API keys.",
+   "category": "payments",
+   "category_basis": {
+    "primary_action": "The primary action is selling APIs, tools and digital products to agents (or paying for them) through one hosted x402 and payment-link service, so the card is payments & x402.",
+    "source_url": "https://www.getbags.app/llms.txt",
+    "quote": "BAGS Agent lets developers sell APIs, tools, and digital products to agents with USDC payment links and x402 pay-per-use access.",
+    "observed_at": "2026-10-23T23:37:08Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://www.getbags.app/llms.txt (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://www.getbags.app is the official site: it is the address YourAITools lists for BAGS and the site answers there (page title \"BAGS | Agentic Commerce for AI Agents\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://www.getbags.app",
+     "quote": "BAGS | Agentic Commerce for AI Agents",
+     "observed_at": "2026-10-23T23:37:08Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://www.getbags.app/ (HTTP 200, final https://www.getbags.app/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://www.getbags.app",
+     "quote": "Turn agent traffic into revenue. Charge AI agents per request for your API — live in minutes, no accounts, no API keys, no paperwork.",
+     "observed_at": "2026-10-23T23:37:08Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://www.getbags.app/ (HTTP 200)",
+      "GET https://www.getbags.app/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: BAGS Agent lets developers sell APIs, tools, and digital products to agents with USDC payment links and x402 pay-per-use access.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://www.getbags.app/llms.txt",
+     "quote": "BAGS Agent lets developers sell APIs, tools, and digital products to agents with USDC payment links and x402 pay-per-use access.",
+     "observed_at": "2026-10-23T23:37:08Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://www.getbags.app/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "operator",
+     "statement": "Operated by BAGS Software Inc",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://www.getbags.app/",
+     "quote": "© 2026 BAGS Software Inc",
+     "observed_at": "2026-10-23T23:37:08Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://www.getbags.app/ (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "docs",
+     "statement": "Public documentation for agents and developers.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://docs.getbags.app/docs",
+     "quote": null,
+     "observed_at": "2026-10-23T23:46:33Z",
+     "methods": [
+      "GET https://docs.getbags.app/docs (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid GET to https://www.getbags.app/api/v1 answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base, Base Sepolia (testnet); asset USDC; price 0.01 USDC; payTo Base 0x374cFb844a5C702d637d72a5387fD9EF6B82108C; plus 1 other network option(s)). YourAITools lists the price as $0.01–$0.35. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+     "value": 0.01,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://www.getbags.app/api/v1",
+     "quote": "HTTP 402, x402Version 2, amount 10000, network eip155:8453",
+     "observed_at": "2026-10-23T23:37:10Z",
+     "methods": [
+      "unpaid GET https://www.getbags.app/api/v1 (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 1 resource(s) on this vendor's domain for the payTo address(es) we observed, with 17 calls in the last 30 days as reported by CDP (largest single resource: 16 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 17,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x374cFb844a5C702d637d72a5387fD9EF6B82108C",
+     "quote": "l30DaysTotalCalls (sum) 17; l30DaysUniquePayers (max) 16",
+     "observed_at": "2026-10-23T23:37:49Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x374cFb844a5C702d637d72a5387fD9EF6B82108C (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-21 21:19 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x374cFb844a5C702d637d72a5387fD9EF6B82108C",
+     "quote": "lastCalledAt 2026-10-21T21:19:00Z",
+     "observed_at": "2026-10-23T23:37:49Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x374cFb844a5C702d637d72a5387fD9EF6B82108C"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category payments, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/bags",
+     "quote": "Unpaid GET /api/v1 returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.01 USDC on Base. Price checked via our 402 probe on 2026-10-22 (4 routes probed; other routes may be price",
+     "observed_at": "2026-10-23T23:37:04Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:37:04Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch03-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:37-23:37 UTC). No payment, deal or contact with BAGS or YourAITools is involved."
+  },
+  {
+   "id": 411,
+   "name": "You.com",
+   "slug": "you-com",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https://you.com",
+   "description_en": "Search and inference APIs for AI; You.com accepts x402 and MPP machine payments for the Web Search and Finance Research APIs, so agents pay per request in USDC inside the same HTTP exchange.",
+   "category": "projects",
+   "category_basis": {
+    "primary_action": "The primary action is paying per call for this service over x402; like other single x402 services in the Atlas (StableEnrich, BlockRun) it is a project card.",
+    "source_url": "https://you.com/llms.txt",
+    "quote": "You.com accepts x402 and MPP machine payments for the Web Search and Finance Research APIs. Agents pay per request in USDC inside the same HTTP exchange.",
+    "observed_at": "2026-10-23T23:37:08Z",
+    "methods": [
+     "curl -sL -A \"<Chrome UA>\" https://you.com/llms.txt (HTTP 200)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://you.com is the official site: it is the address YourAITools lists for You.com and the site answers there (page title \"You.com | Search and inference for AI\").",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://you.com",
+     "quote": "You.com | Search and inference for AI",
+     "observed_at": "2026-10-23T23:37:08Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://you.com/ (HTTP 200, final https://you.com/)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://you.com",
+     "quote": "The core AI infrastructure you need to maximize accuracy while reducing latency and costs.",
+     "observed_at": "2026-10-23T23:37:08Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://you.com/ (HTTP 200)",
+      "GET https://you.com/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: You.com accepts x402 and MPP machine payments for the Web Search and Finance Research APIs. Agents pay per request in USDC inside the same HTTP exchange.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://you.com/llms.txt",
+     "quote": "You.com accepts x402 and MPP machine payments for the Web Search and Finance Research APIs. Agents pay per request in USDC inside the same HTTP exchange.",
+     "observed_at": "2026-10-23T23:37:08Z",
+     "methods": [
+      "curl -sL -A \"<Chrome UA>\" https://you.com/llms.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "docs",
+     "statement": "Public documentation for agents and developers.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://you.com/docs/administration/machine-payments/x402",
+     "quote": null,
+     "observed_at": "2026-10-23T23:46:34Z",
+     "methods": [
+      "GET https://you.com/docs/administration/machine-payments/x402 (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.you.com/v1/search answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base, Solana; asset USDC; price 0.005 USDC; payTo Base 0xc327D0aEb5f65B514b193b5e5A95cC6F4060815f; Solana GBQ2FrH49gvKXu1zg7tguoLwaofn5S4NnuMs5JSYQ5GX). YourAITools lists the price as $0.005–$0.11. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+     "value": 0.005,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://api.you.com/v1/search",
+     "quote": "HTTP 402, x402Version 2, amount 5000, network eip155:8453",
+     "observed_at": "2026-10-23T23:37:11Z",
+     "methods": [
+      "unpaid GET https://api.you.com/v1/search (HTTP 402, header:payment-required; no payment header sent)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 4 resource(s) on this vendor's domain for the payTo address(es) we observed, with 1,286 calls in the last 30 days as reported by CDP (largest single resource: 18 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+     "value": 1286,
+     "unit": "calls in 30 days (CDP Bazaar quality data)",
+     "window": "30 days to 2026-10-23",
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xc327D0aEb5f65B514b193b5e5A95cC6F4060815f",
+     "quote": "l30DaysTotalCalls (sum) 1286; l30DaysUniquePayers (max) 18",
+     "observed_at": "2026-10-23T23:37:50Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xc327D0aEb5f65B514b193b5e5A95cC6F4060815f (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 13:22 UTC.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xc327D0aEb5f65B514b193b5e5A95cC6F4060815f",
+     "quote": "lastCalledAt 2026-10-23T13:22:00Z",
+     "observed_at": "2026-10-23T23:37:50Z",
+     "methods": [
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xc327D0aEb5f65B514b193b5e5A95cC6F4060815f"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "listing",
+     "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category search-web, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https://youraitools.co/tool/you-com",
+     "quote": "Unpaid GET /v1/search returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.005 USDC on Base or Solana. Price checked via our 402 probe on 2026-10-22 (2 routes probed; other route",
+     "observed_at": "2026-10-23T23:37:04Z",
+     "methods": [
+      "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:37:04Z"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Added in the YourAITools intake (youraitools-intake-batch03-2026-10-24): found in the YourAITools directory (CC BY 4.0, cite YourAITools), which is not an Atlas source of truth; every value on this card was re-checked by Commonworld on 2026-10-23 (UTC). In Coinbase's x402 Bazaar: yes. The site does not name a company or person behind it. The Atlas made no payment and did not buy any service.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:37-23:37 UTC). No payment, deal or contact with You.com or YourAITools is involved."
   }
  ],
  "amendments": [
@@ -38280,6 +40008,31 @@
     "netintel",
     "mycelia-signal",
     "clawfetch-ai"
+   ]
+  },
+  {
+   "date": "2026-10-23",
+   "tag": "youraitools-intake-batch02-2026-10-24",
+   "rule": "New cards from the YourAITools directory (youraitools.co, CC BY 4.0), batch of 7 x402 vendors, one card per vendor. Each re-checked by hark on 2026-10-23 (UTC): official site and description, an unpaid 402 probe of a listed endpoint (no payment), and Coinbase x402 Bazaar call counts as an independent signal. Prepared by hark for curator review",
+   "added": [
+    "forgemesh-labs",
+    "402rates-com",
+    "rubric-protocol-tenprint",
+    "locus",
+    "microtap",
+    "hyperextend",
+    "asterpay"
+   ]
+  },
+  {
+   "date": "2026-10-23",
+   "tag": "youraitools-intake-batch03-2026-10-24",
+   "rule": "New cards from the YourAITools directory (youraitools.co, CC BY 4.0), batch of 4 x402 vendors, one card per vendor. Each re-checked by hark on 2026-10-23 (UTC): official site and description, an unpaid 402 probe of a listed endpoint (no payment), and Coinbase x402 Bazaar call counts as an independent signal. Prepared by hark for curator review",
+   "added": [
+    "coingecko",
+    "arkham",
+    "bags",
+    "you-com"
    ]
   }
  ]

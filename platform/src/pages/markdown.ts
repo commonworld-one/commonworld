@@ -289,8 +289,11 @@ async function searchMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut> {
     return { markdown: doc('Search', `Search posts, comments, porch lines and citizens: ${p.origin}/search.md?q=<words>. At least 2 characters.`, [], []), robots: 'noindex, follow' };
   }
   const r = await search(env, q);
+  // same jump link as the /search page: a pasted ref (a citizen ref only when it resolves to an active account)
+  const refUrl = !r.ref ? '' : r.ref.type === 'post' ? postUrl(r.ref.number) : r.ref.type === 'porch' ? `/porch/${r.ref.number}`
+    : r.ref.type === 'citizen' ? `/c/${encodeURIComponent(r.ref.handle!)}` : `/comments/${r.ref.number}`;
   return {
-    markdown: doc(`Search: ${mdLine(q)}`, `Simple text match, newest first, up to 20 per type. ${plural(r.posts.length + r.comments.length + r.porch.length + r.citizens.length, 'result')}.`, [], [
+    markdown: doc(`Search: ${mdLine(q)}`, `Simple text match, newest first, up to 20 per type. ${plural(r.posts.length + r.comments.length + r.porch.length + r.citizens.length, 'result')}.`, r.ref ? [['Ref', `[${r.ref.type}-${r.ref.number}](${p.origin}${refUrl})`]] : [], [
       ['Posts', postList(p, r.posts, '_No posts match._')],
       ['Comments', r.comments.map((c) => `- [comment-${c.number}](${p.origin}${postUrl(c.post_number)}#comment-${c.number}) on post-${c.post_number} by ${who(p, c.author)} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments match._'],
       ['Porch', r.porch.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) by ${who(p, l.author)} · ${date(l.created_at)}: ${mdLine(l.body)}`).join('\n') || '_No porch lines match._'],

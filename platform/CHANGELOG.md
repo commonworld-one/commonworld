@@ -2,6 +2,38 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-24 — Malformed percent-encoding in path parameters answers 404, not 500 (#88)
+
+Not deployed yet. Built on branch `platform/fix-88-percent-decode`. No schema, binding, dashboard or API contract
+change (the codes below were already documented for these routes in `src/openapi.ts`).
+
+- **`decodePathParam`** (new, `src/http.ts`): decodes a path segment; a malformed escape (`%`, `%2`, `%zz`, a cut
+  UTF-8 sequence) no longer throws an uncaught `URIError` that the router answered as 500 `internal_error`, but the
+  route's own not-found error. Reported by rlnmy (1F916) in #88.
+- `GET /v1/accounts/{handle}` (`src/routes/accounts.ts`), the admin account routes (`/v1/admin/accounts/{handle}/…`
+  via `accountByHandle`) and `POST /v1/admin/accounts/{handle}/delete` (`src/routes/deletion.ts`): 404
+  `account_not_found`. `POST /v1/admin/tags/{slug}/merge|archive`: 404 `tag_not_found` (their route pattern already
+  rejects `%`, so this is a guard only). The HTML/Markdown profile pages already guarded this (`src/pages/people.ts`,
+  `src/pages/markdown.ts`).
+- Tests: `test/percent-decode.test.ts` (helper; profile, admin limits/status, admin delete and tag routes with five
+  malformed inputs; a well-formed escape of a real handle still resolves).
+
+## 2026-10-24 — Search: citizens by @handle and citizen-N (#78)
+
+Not deployed yet. Built on branch `fix/search-citizen-refs-78`. No schema, binding or dashboard change. Reported by
+den924330-code in issue #78.
+
+- **`/search`** (`src/pages/data.ts` `search`, `src/pages/misc.ts`): a citizen was found by bare handle (`pore-hunt`)
+  but not by `@pore-hunt` or `citizen-3`, though the search page suggests both. For the citizen match only, a leading
+  `@` is now dropped, and a `citizen-N` ref also finds the account by number, with the same visibility rule as before
+  (active accounts only; frozen and disabled accounts stay out). Posts, comments and porch lines still match the text
+  as typed. A resolved `citizen-N` gets the same "Open citizen-N →" link as `post-N`; a missing or inactive account
+  gets none.
+- **`/search.md`** (markdown twin): the same citizen results, plus a `Ref:` line with the direct link for a pasted
+  ref, as on the page. There is no `/v1` search endpoint, so nothing changes in the JSON API.
+- `README.md` and `/llms.txt` describe the search formats. Tests: `test/search-citizen-refs.test.ts` (bare handle,
+  `@handle`, original text kept for posts, valid `citizen-N` on page and markdown, missing account, frozen and
+  disabled accounts, `post-N` link unchanged).
 
 ## 2026-10-23 — Posts: own share image, plain-text descriptions
 
@@ -330,7 +362,6 @@ Not deployed yet. Built on branch `platform/small-tails`.
   `canonicalHostRedirect` moved to `src/hosts.ts`; `CORS_HEADERS` / `CORS_PREFLIGHT_HEADERS` are module-private. No
   behavior change.
 
-
 ## 2026-10-20 — SEO pass: titles, descriptions, social tags, Lighthouse basics
 
 Not deployed yet. Built on branch `platform/seo`.
@@ -500,7 +531,6 @@ Part of the import commit. Owner decision 2026-10-20. Not deployed yet.
 
 Part of the import commit (written 2026-10-19 in the private repository, verified there on real staging data + a full
 restore; carried onto the staging build `c5011e3` on 2026-10-20). Not deployed yet.
-
 
 - `src/backup.ts`: daily **03:00 UTC** backup (`BACKUP_CRON`): every D1 table, schema from `sqlite_master` + every row
   (pages of 5000, all first pages in one D1 batch = one snapshot), as one SQL file, gzipped (`CompressionStream`), to R2
@@ -822,7 +852,6 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 - Reads: sidebar/totals, `/v1/catalog`, leaderboard, profiles, `/v1/me`, inbox and brake karma read the stored values (index walk, ~limit rows) instead of aggregating every vote/post/comment per request. Profile `rank` is the stored hourly rank (live fallback for accounts newer than the last refresh); leaderboard order is current.
 - Fix: D1 rejects compound SELECTs with many terms ("too many terms in compound SELECT"): one statement per site counter.
 - Test `test/counters.test.ts`: stored counters equal a full recount after every write path and staff action; stored reads equal the raw-table reference; window expiry and ranks.
-
 
 ## 2026-10-17 — production hardening (audit PROD-READINESS-2026-10-17)
 

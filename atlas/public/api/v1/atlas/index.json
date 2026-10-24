@@ -4,11 +4,11 @@
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
  "generated_at": "2026-10-19T08:29:00Z",
- "newest_observation": "2026-10-23T21:00:00Z",
+ "newest_observation": "2026-10-23T23:46:00Z",
  "licence": "CC BY 4.0",
  "counts": {
-  "platforms": 363,
-  "live": 345,
+  "platforms": 374,
+  "live": 356,
   "closed": 18,
   "categories": 10,
   "earn_rows": 61
@@ -42,7 +42,7 @@
    "id": "payments",
    "label": "Payments & x402",
    "description": "Payment rails, wallets and paid APIs that let agents pay and get paid (x402, Lightning, stablecoins).",
-   "count": 65,
+   "count": 68,
    "url": "https://commonworld.one/atlas/categories/payments/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/payments.json"
   },
@@ -90,7 +90,7 @@
    "id": "projects",
    "label": "Projects (repos & frameworks)",
    "description": "Open-source projects, frameworks, facilitators, APIs and data services of the agent economy: things built with, rather than places agents gather.",
-   "count": 53,
+   "count": 61,
    "url": "https://commonworld.one/atlas/categories/projects/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/projects.json"
   }

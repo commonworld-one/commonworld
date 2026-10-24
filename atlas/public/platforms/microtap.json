@@ -1,0 +1,195 @@
+{
+ "licence": "CC BY 4.0",
+ "source": "https://github.com/commonworld-one/commonworld",
+ "generated_at": "2026-10-19T08:29:00Z",
+ "id": "microtap",
+ "name": "MicroTap",
+ "url": "https://commonworld.one/atlas/platforms/microtap/",
+ "json_url": "https://commonworld.one/atlas/platforms/microtap.json",
+ "website": "https://x402tap.com",
+ "category": "projects",
+ "category_label": "Projects (repos & frameworks)",
+ "type": "project",
+ "status": "live",
+ "summary": "20 monetized x402 APIs for AI agents (crypto, DeFi, on-chain data, prediction markets, weather and web search), paid per call in USDC with no API keys or signup.",
+ "tags": [],
+ "has_money_flow": false,
+ "money_flow": [],
+ "key_number": {
+  "kind": "metric",
+  "value": 344,
+  "unit": "calls in 30 days (CDP Bazaar quality data)",
+  "window": "30 days to 2026-10-23",
+  "basis": "independent_source",
+  "observed_at": "2026-10-23T23:10:00Z",
+  "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xB810B599bc730Aa85800BABe7f5d160524322C86"
+ },
+ "verified_at": "2026-10-23T23:14:00Z",
+ "last_checked": "2026-10-23T23:14:00Z",
+ "claims_count": 8,
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with MicroTap or YourAITools is involved.",
+ "md_url": "https://commonworld.one/atlas/platforms/microtap/index.md",
+ "evidence_level": {
+  "level": 2,
+  "id": "public_dashboard",
+  "label": "public dashboard",
+  "claims_counted": 2
+ },
+ "keys_and_books": {
+  "keys": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "books": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "people": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  }
+ },
+ "first_task": null,
+ "replications": null,
+ "badge_status": "Verified · 2026-10-23",
+ "badge_svg": "https://commonworld.one/atlas/badge/microtap.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/microtap-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "claims": [
+  {
+   "kind": "canonical_url",
+   "statement": "https://x402tap.com is the official site: it is the address YourAITools lists for MicroTap and the site answers there (page title \"MicroTap — Pay-Per-Call APIs for AI Agents\").",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://x402tap.com",
+   "quote": "MicroTap — Pay-Per-Call APIs for AI Agents",
+   "observed_at": "2026-10-23T23:09:45Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://x402tap.com/ (HTTP 200, final https://x402tap.com/)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "site_reachable",
+   "statement": "The site serves real content without sign-in (HTTP 200). It also publishes an llms.txt for agents.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://x402tap.com",
+   "quote": "20 monetized x402 APIs for AI agents — crypto, DeFi, on-chain data, prediction markets, weather, and web search. No API keys, no signup — pay per call in USDC.",
+   "observed_at": "2026-10-23T23:09:45Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://x402tap.com/ (HTTP 200)",
+    "GET https://x402tap.com/llms.txt (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "description",
+   "statement": "Operator's own description: 20 monetized x402 APIs for AI agents — crypto, DeFi, on-chain data, prediction markets, weather, and web search. No API keys, no signup — pay per call in USDC.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "operator_claim",
+   "source_url": "https://x402tap.com/",
+   "quote": "20 monetized x402 APIs for AI agents — crypto, DeFi, on-chain data, prediction markets, weather, and web search. No API keys, no signup — pay per call in USDC.",
+   "observed_at": "2026-10-23T23:09:45Z",
+   "methods": [
+    "curl -sL -A \"<Chrome UA>\" https://x402tap.com/ (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "source_code",
+   "statement": "Public code repository linked from the official site.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://github.com/swaltersjrtest/microtap-mcp",
+   "quote": null,
+   "observed_at": "2026-10-23T23:14:10Z",
+   "methods": [
+    "GET https://github.com/swaltersjrtest/microtap-mcp (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "protocol",
+   "statement": "Commonworld's own unpaid check: an unpaid GET to https://x402tap.com/api/weather answered HTTP 402 with x402 v2 payment terms (scheme exact; network Arbitrum, Base, Polygon, Solana; asset USDC; price 0.01 USDC; payTo Base 0xB810B599bc730Aa85800BABe7f5d160524322C86; Solana 9fqXniDAn8hNMYC5C9waGv5u126bkwjU6qGgAoQeoWyo; plus 2 other network option(s)). YourAITools lists the price as $0.001–$0.025. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. The probed route is not the cheapest one listed.",
+   "value": 0.01,
+   "unit": "USDC per call (probed route)",
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://x402tap.com/api/weather",
+   "quote": "HTTP 402, x402Version 2, amount 10000, network eip155:8453",
+   "observed_at": "2026-10-23T23:09:46Z",
+   "methods": [
+    "unpaid GET https://x402tap.com/api/weather (HTTP 402, header:payment-required; no payment header sent)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "metric",
+   "statement": "Coinbase's x402 Bazaar (the CDP facilitator's discovery index) lists 38 resource(s) on this vendor's domain for the payTo address(es) we observed, with 344 calls in the last 30 days as reported by CDP (largest single resource: 27 unique payers; payers cannot be de-duplicated across resources). These are the facilitator's counts, not an Atlas observation of settlements.",
+   "value": 344,
+   "unit": "calls in 30 days (CDP Bazaar quality data)",
+   "window": "30 days to 2026-10-23",
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xB810B599bc730Aa85800BABe7f5d160524322C86",
+   "quote": "l30DaysTotalCalls (sum) 344; l30DaysUniquePayers (max) 27",
+   "observed_at": "2026-10-23T23:10:34Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xB810B599bc730Aa85800BABe7f5d160524322C86 (+ other observed payTo addresses), resources filtered to the vendor's own domain"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "recent_activity",
+   "statement": "Last paid call to one of these resources, per the CDP Bazaar: 2026-10-23 16:19 UTC.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xB810B599bc730Aa85800BABe7f5d160524322C86",
+   "quote": "lastCalledAt 2026-10-23T16:19:00Z",
+   "observed_at": "2026-10-23T23:10:34Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xB810B599bc730Aa85800BABe7f5d160524322C86"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "listing",
+   "statement": "Listed on YourAITools (youraitools.co, CC BY 4.0) in category marketplaces, added 2026-10-21, with its own unpaid 402 check dated 2026-10-22; also listed on Agentic.Market, public listing.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://youraitools.co/tool/microtap",
+   "quote": "Unpaid GET /api/weather returned HTTP 402 on 2026-10-22 with x402 payment terms: x402 v2, exact, 0.01 USDC on Base, Polygon, Arbitrum or Solana. Price checked via our 402 probe on 2026-10-22 (4 routes",
+   "observed_at": "2026-10-23T23:02:30Z",
+   "methods": [
+    "https://youraitools.co/listings.json (updated 2026-10-23, CC BY 4.0), copy fetched 2026-10-23T23:02:30Z"
+   ],
+   "outcome": "supported"
+  }
+ ],
+ "qa_status": "not_sampled"
+}

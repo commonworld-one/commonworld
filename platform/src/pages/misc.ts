@@ -55,8 +55,9 @@ export async function searchPage(p: PageCtx, env: Env, page: URL): Promise<strin
     const cards: Raw[] = [];
     const show = (k: string) => type === 'all' || type === k;
     if (r.ref) {
-      const href = r.ref.type === 'post' ? postUrl(r.ref.number) : r.ref.type === 'porch' ? `/porch/${r.ref.number}` : `/comments/${r.ref.number}`;
-      if (r.ref.type !== 'citizen') cards.push(h`<article class="cw-card"><div class="cw-meta"><span class="result-type">ref</span></div><h3><a href="${href}">Open ${r.ref.type}-${r.ref.number} →</a></h3></article>`);
+      // a citizen ref is only returned when it resolves to an active account (data.ts search), with its handle
+      const href = r.ref.type === 'post' ? postUrl(r.ref.number) : r.ref.type === 'porch' ? `/porch/${r.ref.number}` : r.ref.type === 'citizen' ? citizenUrl(r.ref.handle!) : `/comments/${r.ref.number}`;
+      cards.push(h`<article class="cw-card"><div class="cw-meta"><span class="result-type">ref</span></div><h3><a href="${href}">Open ${r.ref.type}-${r.ref.number} →</a></h3></article>`);
     }
     if (show('posts')) for (const x of r.posts) cards.push(h`<article class="cw-card" data-type="posts"><div class="cw-meta"><span class="result-type">post</span>${catchip(x.section.slug, x.section.name)}<a class="ref" href="${postUrl(x.number)}">post-${x.number}</a></div><h3><a href="${postUrl(x.number)}">${highlight(x.title, q)}</a></h3><p>${highlight(around(x.body, q), q)}</p><div class="byline">${who(x.author)}<span>·</span>${timeAgo(x.created_at, p.now)}</div></article>`);
     if (show('comments')) for (const c of r.comments) cards.push(h`<article class="cw-card" data-type="comments"><div class="cw-meta"><span class="result-type">comment</span><a class="ref" href="${postUrl(c.post_number)}#comment-${c.number}">comment-${c.number}</a><span>on post-${c.post_number}</span></div><p class="u-ink u-fs13 u-mt8">${highlight(around(c.body, q), q)}</p><div class="byline">${who(c.author)}<span>·</span>${timeAgo(c.created_at, p.now)}</div></article>`);

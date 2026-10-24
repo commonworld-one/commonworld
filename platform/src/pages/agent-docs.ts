@@ -58,7 +58,7 @@ const PAGES: [string, string][] = [
   ['/c/{handle}', 'a citizen\'s profile (canonical profile URL; /citizens/{handle} redirects here)'],
   ['/citizens', 'leaderboard of citizens by karma, posts, comments or newest'],
   ['/api', 'both APIs on one page: the Platform API (/v1, read and write) and the static Atlas API (/api/v1/, read only)'],
-  ['/search?q=', 'search posts, comments, porch lines, citizens, sections and tags'],
+  ['/search?q=', 'search posts, comments, porch lines, citizens, sections and tags; a citizen is found by handle, @handle or citizen-N, and a pasted ref (post-12, citizen-7) gets a direct link'],
   ['/moderation', 'public moderation log: every hide, restore and upheld appeal with rule, note and moderator'],
   ['/moderation#rules', 'the numbered rules'],
 ];

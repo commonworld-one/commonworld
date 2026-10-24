@@ -1,6 +1,6 @@
 import type { Ctx } from '../context';
 import { requireRole, type Principal } from '../auth';
-import { HttpError, intParam, json, nowIso, readJson } from '../http';
+import { HttpError, decodePathParam, intParam, json, nowIso, readJson } from '../http';
 import { DEFAULTS, VALIDATORS, getSettings, writeSettings, type SettingKey } from '../settings';
 import { PUBLIC_NOTE_MAX, RULES, ruleByNumber, ruleText } from '../rules';
 import { accountView, citizenPath, moderationLogUrl } from '../views';
@@ -25,7 +25,7 @@ const logAction = (c: Ctx, p: Principal, action: string, targetType: string, tar
     .bind(p.account.id, action, targetType, targetRef, why, details === null ? null : JSON.stringify(details), nowIso());
 
 async function accountByHandle(c: Ctx, raw: string) {
-  const row = await c.env.DB.prepare('SELECT * FROM accounts WHERE handle = ?').bind(decodeURIComponent(raw).toLowerCase()).first<any>();
+  const row = await c.env.DB.prepare('SELECT * FROM accounts WHERE handle = ?').bind(decodePathParam(raw, () => new HttpError(404, 'account_not_found')).toLowerCase()).first<any>();
   if (!row) throw new HttpError(404, 'account_not_found');
   return row;
 }
@@ -374,7 +374,7 @@ const TAG_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
  */
 export async function mergeTag(c: Ctx): Promise<Response> {
   const p = staff(c);
-  const from = decodeURIComponent(c.params[0]).toLowerCase();
+  const from = decodePathParam(c.params[0], () => new HttpError(404, 'tag_not_found', { slug: c.params[0] })).toLowerCase();
   const body = await readJson(c.request);
   const into = typeof body.into === 'string' ? body.into.trim().toLowerCase() : '';
   if (!TAG_SLUG.test(into)) throw new HttpError(400, 'invalid_merge_target');
@@ -424,7 +424,7 @@ export async function mergeTag(c: Ctx): Promise<Response> {
  */
 export async function archiveTag(c: Ctx): Promise<Response> {
   const p = staff(c);
-  const slug = decodeURIComponent(c.params[0]).toLowerCase();
+  const slug = decodePathParam(c.params[0], () => new HttpError(404, 'tag_not_found', { slug: c.params[0] })).toLowerCase();
   const body = await readJson(c.request);
   const note = publicNote(body);
   if (!note) throw new HttpError(400, 'note_required', { max_length: PUBLIC_NOTE_MAX });

@@ -23,7 +23,7 @@
  */
 import type { Ctx } from '../context';
 import { requireAuth, requireRole } from '../auth';
-import { HttpError, json, nowIso, readJson } from '../http';
+import { HttpError, decodePathParam, json, nowIso, readJson } from '../http';
 import { bumpContentCacheVersion } from '../cache-version';
 import { recountStatements } from '../counters';
 import { accountView } from '../views';
@@ -47,7 +47,7 @@ export async function requestDeletion(c: Ctx): Promise<Response> {
 /** POST /v1/admin/accounts/{handle}/delete — admins only. */
 export async function deleteAccount(c: Ctx): Promise<Response> {
   const p = requireRole(c.principal, 'admin');
-  const handle = decodeURIComponent(c.params[0]).toLowerCase();
+  const handle = decodePathParam(c.params[0], () => new HttpError(404, 'account_not_found')).toLowerCase();
   const body = await readJson(c.request);
   if (typeof body.confirm_handle !== 'string' || body.confirm_handle.trim().toLowerCase() !== handle) {
     throw new HttpError(400, 'confirm_handle_mismatch', { reason: 'send confirm_handle equal to the handle in the path' });
