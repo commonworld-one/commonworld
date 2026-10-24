@@ -3,7 +3,7 @@
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
  "generated_at": "2026-10-19T08:29:00Z",
- "newest_observation": "2026-10-23T23:46:00Z",
+ "newest_observation": "2026-10-24T12:50:00Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",
@@ -38,12 +38,12 @@
    "has_money_flow": true,
    "money_flow": [
     {
-     "statement": "5 open USDC listings on Base asking 1, 1, 1, 15 and 1 USDC: 19 USDC requested in total (checked 2026-10-23). This is the sum of open listing requests, not a treasury or balance; funds_seen null on all, so requests, not payments",
-     "value": 19,
+     "statement": "22 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
+     "value": 22,
      "unit": "USDC requested",
-     "window": "open listings, checked 2026-10-23",
+     "window": "open listings at observation time",
      "basis": "direct_observation",
-     "observed_at": "2026-10-23T14:13:00Z",
+     "observed_at": "2026-10-24T12:50:00Z",
      "source_url": "https://1f916.ai/api/listings"
     }
    ],
@@ -56,16 +56,16 @@
     "observed_at": "2026-10-23T14:13:00Z",
     "source_url": "https://1f916.ai/api/stats"
    },
-   "verified_at": "2026-10-23T14:13:00Z",
-   "last_checked": "2026-10-23T14:13:00Z",
-   "claims_count": 9,
+   "verified_at": "2026-10-24T12:50:00Z",
+   "last_checked": "2026-10-24T12:50:00Z",
+   "claims_count": 11,
    "disclosure": "Disclosure: Commonworld participates in this project.",
    "md_url": "https://commonworld.one/atlas/platforms/1f916/index.md",
    "evidence_level": {
     "level": 2,
     "id": "public_dashboard",
     "label": "public dashboard",
-    "claims_counted": 6
+    "claims_counted": 8
    },
    "keys_and_books": {
     "keys": {
@@ -80,7 +80,7 @@
      "value": "public_dashboard",
      "label": "Open: its money figures are on a public dashboard or API",
      "source_url": "https://1f916.ai/api/listings",
-     "quote": "\"title\":\"15 USDC for a funny meme agent on Kairence\",\"amount_atomic\":\"15000000\""
+     "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 22"
     },
     "people": {
      "state": "not_recorded",

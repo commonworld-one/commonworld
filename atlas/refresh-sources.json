@@ -11,9 +11,32 @@
     "  on_change_note: shown in the refresh PR for human follow-up.",
     "  statement: the claim text, regenerated from the same fetch on every refresh. {value} = the mapped number; {a.b.c} = another number from the same JSON (path mappings only; it must be in quote_fields so check.py can re-render the text from the claim's quote). A number that changes inside the text (a 7-day count beside a lifetime total) is a re-observation too. Without a statement, check.py fails when the old text holds numbers that are neither the value nor in the quote.",
     "  verify: optional {url, note} copied onto the claim: a smaller cross-check an agent can fetch within normal limits (same domain as url). Only real operator URLs; no invented totals.",
+    "  agg.decimals: optional on a sum over atomic token units (e.g. 6 for USDC): the integer sum is divided once by 10^decimals, so the value is in whole tokens.",
+    "  agg.fail_if_more: optional on a single-page read (no paginate): the name of the response's own completeness flag (e.g. has_more). If it is missing or not false, the read fails instead of publishing an undercount.",
     "replications: optional {format, repo, workflow, branch}: replication counts for a register where review means replication (atlas/site/replications.py). The files are read at the newest commit on branch whose workflow push run succeeded and counted the way that validator counts; the record (counts, pinned commit, run URL) goes to atlas/data/replications.json and is published as `replications` on the card."
   ],
   "sources": {
+    "1f916": {
+      "numbers": [
+        {"id": "1f916-open-usdc-requested", "kind": "economic_flow", "url": "https://1f916.ai/api/listings",
+         "agg": {"list": "listings", "op": "sum", "field": "amount_atomic", "decimals": 6, "fail_if_more": "has_more",
+                 "where": {"lifecycle": "open", "chain_id": 8453, "token": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"}},
+         "unit": "USDC requested", "window": "open listings at observation time", "basis": "direct_observation",
+         "statement": "{value} USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
+         "match": {"source_url": "https://1f916.ai/api/listings", "unit": "USDC requested"},
+         "on_change_note": "1F916 open listings re-counted from the public API. Requested is not paid: receipts on a listing are the payments (see the listing's receipts count)."},
+        {"id": "1f916-open-usdc-listings", "kind": "metric", "url": "https://1f916.ai/api/listings",
+         "agg": {"list": "listings", "op": "count", "fail_if_more": "has_more",
+                 "where": {"lifecycle": "open", "chain_id": 8453, "token": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"}},
+         "unit": "open USDC listings", "window": "open listings at observation time", "basis": "direct_observation",
+         "statement": "{value} open USDC listings on Base (public listings API, default view)"},
+        {"id": "1f916-open-listings-funds-seen", "kind": "metric", "url": "https://1f916.ai/api/listings",
+         "agg": {"list": "listings", "op": "count", "fail_if_more": "has_more",
+                 "where": {"lifecycle": "open", "chain_id": 8453, "token": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "funds_seen_atomic": "*"}},
+         "unit": "open USDC listings with funds seen", "window": "open listings at observation time", "basis": "direct_observation",
+         "statement": "{value} open USDC listings with a recorded funds_seen snapshot (the funder wallet's balance read once at posting; a snapshot, not a hold or a payment)"}
+      ]
+    },
     "agent-errata": {
       "replications": {"format": "agent-errata", "repo": "piiiico/agent-errata", "workflow": "validate.yml", "branch": "main"}
     },

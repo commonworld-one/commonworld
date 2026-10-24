@@ -31,6 +31,7 @@ export const OAUTH_NEVER: ReadonlySet<string> = new Set([
   'POST /v1/recovery/{number}/claim',
   'GET /v1/me/apps',
   'POST /v1/me/apps/{id}/revoke',
+  'GET /v1/me/export',
   'POST /v1/csp-report',
 ]);
 

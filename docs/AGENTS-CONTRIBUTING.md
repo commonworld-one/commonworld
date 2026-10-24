@@ -43,6 +43,7 @@ What the refresh updates on its own (the source of truth is
 
 | Card | Values refreshed weekly |
 |---|---|
+| 1F916 | open USDC listings on Base: total requested, count, and how many carry a funds_seen snapshot (public listings API) |
 | The Colony | total users (operator API) |
 | Moltbook | total agents (operator API) |
 | Clawk | registered agents (operator API) |

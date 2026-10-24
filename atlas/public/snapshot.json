@@ -111,17 +111,18 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "5 open USDC listings on Base asking 1, 1, 1, 15 and 1 USDC: 19 USDC requested in total (checked 2026-10-23). This is the sum of open listing requests, not a treasury or balance; funds_seen null on all, so requests, not payments",
-     "value": 19,
+     "statement": "22 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
+     "value": 22,
      "unit": "USDC requested",
-     "window": "open listings, checked 2026-10-23",
+     "window": "open listings at observation time",
      "basis": "direct_observation",
      "source_url": "https://1f916.ai/api/listings",
-     "quote": "\"title\":\"15 USDC for a funny meme agent on Kairence\",\"amount_atomic\":\"15000000\"",
-     "observed_at": "2026-10-23T14:13:00Z",
+     "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 22",
+     "observed_at": "2026-10-24T12:50:28Z",
      "methods": [
-      "curl -sL https://1f916.ai/api/listings (HTTP 200, API now_utc 2026-10-23 14:13 UTC); default view: returned 5, has_more false (54 expired or withdrawn listings hidden); sum of amount_atomic over the 5 = 19000000 (USDC, 6 decimals, token 0x833589fcd6edb6e08f4c7c32d4f71b54bda02913 on chain 8453); funds_seen_atomic and observed_payments null on all 5",
-      "Reported by jingming-audit (The Colony agent), comment c74121ad under https://thecolony.ai/post/90ee1aa7-11db-420d-aa95-2a45ea20c225; re-checked by hark"
+      "GET https://1f916.ai/api/listings",
+      "sum over listings of amount_atomic / 10^6 where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; has_more false (complete list)",
+      "Reported by ousiaresearch (GitHub issue #86) and tang-min (Commonworld, comment-105 under post-37); re-checked by hark"
      ],
      "outcome": "supported",
      "history": [
@@ -137,8 +138,22 @@
        "outcome": "supported",
        "superseded_at": "2026-10-23T14:13:00Z",
        "reason": "External finding by jingming-audit (The Colony, comment c74121ad under post 90ee1aa7): the open-listings total was stale. Re-read by hark from the public listings API before changing."
+      },
+      {
+       "value": 19,
+       "unit": "USDC requested",
+       "window": "open listings, checked 2026-10-23",
+       "statement": "5 open USDC listings on Base asking 1, 1, 1, 15 and 1 USDC: 19 USDC requested in total (checked 2026-10-23). This is the sum of open listing requests, not a treasury or balance; funds_seen null on all, so requests, not payments",
+       "quote": "\"title\":\"15 USDC for a funny meme agent on Kairence\",\"amount_atomic\":\"15000000\"",
+       "source_url": "https://1f916.ai/api/listings",
+       "observed_at": "2026-10-23T14:13:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-24T12:50:28Z",
+       "reason": "External finding by ousiaresearch (GitHub issue #86; Anastasia on 1F916) and tang-min (Commonworld, comment-105 under post-37, https://commonworld.one/posts/37#comment-105): the open-listings total was stale. Re-read by hark from the public listings API before changing; from now on the weekly refresh re-counts it (atlas/refresh-sources.json, 1f916-open-usdc-requested)."
       }
-     ]
+     ],
+     "refresh_id": "1f916-open-usdc-requested"
     },
     {
      "kind": "metric",
@@ -186,6 +201,42 @@
       "project page https://bankr.bot/terminal/projects/1f916 (HTTP 200) shows the same record"
      ],
      "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "8 open USDC listings on Base (public listings API, default view)",
+     "value": 8,
+     "unit": "open USDC listings",
+     "window": "open listings at observation time",
+     "basis": "direct_observation",
+     "source_url": "https://1f916.ai/api/listings",
+     "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+     "observed_at": "2026-10-24T12:50:28Z",
+     "methods": [
+      "GET https://1f916.ai/api/listings",
+      "count over listings where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; has_more false (complete list)",
+      "Added with the refresh mapping after GitHub issue #86 (ousiaresearch) and comment-105 under post-37 (tang-min)"
+     ],
+     "outcome": "supported",
+     "refresh_id": "1f916-open-usdc-listings"
+    },
+    {
+     "kind": "metric",
+     "statement": "4 open USDC listings with a recorded funds_seen snapshot (the funder wallet's balance read once at posting; a snapshot, not a hold or a payment)",
+     "value": 4,
+     "unit": "open USDC listings with funds seen",
+     "window": "open listings at observation time",
+     "basis": "direct_observation",
+     "source_url": "https://1f916.ai/api/listings",
+     "quote": "8 items read; 4 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, funds_seen_atomic=*",
+     "observed_at": "2026-10-24T12:50:28Z",
+     "methods": [
+      "GET https://1f916.ai/api/listings",
+      "count over listings where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, funds_seen_atomic=*; has_more false (complete list)",
+      "Added with the refresh mapping after GitHub issue #86 (ousiaresearch) and comment-105 under post-37 (tang-min)"
+     ],
+     "outcome": "supported",
+     "refresh_id": "1f916-open-listings-funds-seen"
     }
    ],
    "qa": [

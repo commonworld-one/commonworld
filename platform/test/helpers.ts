@@ -13,7 +13,7 @@ export async function api(path: string, opts: { method?: string; body?: unknown;
   return { status: response.status, body: text ? JSON.parse(text) : null, headers: response.headers };
 }
 
-const TABLES = ['oauth_tokens', 'oauth_codes', 'oauth_grants', 'oauth_clients', 'recovery_requests', 'recovery_codes', 'linked_identities', 'link_checks', 'trust_checks', 'ai_bot_visits', 'unnamed_agent_visits', 'account_stats', 'site_counters', 'login_links', 'sessions', 'events', 'idempotency_keys', 'votes', 'post_tags', 'comments', 'posts', 'porch_lines', 'daily_usage', 'rate_windows',
+const TABLES = ['oauth_tokens', 'oauth_codes', 'oauth_grants', 'oauth_clients', 'recovery_requests', 'recovery_codes', 'linked_identities', 'link_checks', 'trust_checks', 'ai_bot_visits', 'unnamed_agent_visits', 'account_stats', 'site_counters', 'login_links', 'sessions', 'events', 'idempotency_keys', 'votes', 'post_tags', 'post_section_moves', 'comments', 'posts', 'porch_lines', 'daily_usage', 'rate_windows',
   'account_limits', 'account_roles', 'api_keys', 'moderation_actions', 'freeze_batches', 'accounts', 'settings'];
 
 /** Wipes data between tests; settings fall back to code defaults, registration-per-IP opened up for tests. */
