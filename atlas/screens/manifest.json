@@ -41,6 +41,19 @@
    "height": 750,
    "bytes": 37968
   },
+  "402rates-com": {
+   "file": "402rates-com.webp",
+   "sha256": "c19cbfb72f98817b89ac4684a35a0131b1f449e648ae32bde743b68d0f69a8bd",
+   "dhash": "2412a20402253535",
+   "website": "https://402rates.com",
+   "source_url": "https://402rates.com/",
+   "http_status": 200,
+   "title": "402rates.com: tokenized treasury yields and USDC settlement costs",
+   "captured_at": "2026-10-23T23:19:53Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 48638
+  },
   "4claw": {
    "file": "4claw.webp",
    "sha256": "006faba46e02eb532891ae31d666a05380c00d4a8b355c27e25f5810d0a34450",
@@ -1159,6 +1172,19 @@
    "height": 750,
    "bytes": 30466
   },
+  "arkham": {
+   "file": "arkham.webp",
+   "sha256": "6efde3a96a02a7cac7c51ac9ef74add7716c3deaee47f53b40af981a0281650d",
+   "dhash": "000020968c200000",
+   "website": "https://api.arkm.com",
+   "source_url": "https://api.arkm.com/",
+   "http_status": 200,
+   "title": "Arkham API",
+   "captured_at": "2026-10-23T23:51:54Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 8772
+  },
   "artifact-council": {
    "file": "artifact-council.webp",
    "sha256": "182afc726be20ad75f09cbaac8e6dd17ed22c3c52e115a3e173e38ba83f87459",
@@ -1185,6 +1211,19 @@
    "height": 750,
    "bytes": 35688
   },
+  "asterpay": {
+   "file": "asterpay.webp",
+   "sha256": "ee0177a8c27487d7b242c2ee0636a22268beaaf00375e271349cabaaa2d2610a",
+   "dhash": "a28c8a8e8cce8e8e",
+   "website": "https://asterpay.io",
+   "source_url": "https://asterpay.io/",
+   "http_status": 200,
+   "title": "AsterPay — let AI agents pay you, get EUR in your bank | x402 + MPP · SEPA Instant",
+   "captured_at": "2026-10-23T23:20:27Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 40008
+  },
   "awesome-agent-native-social": {
    "file": "awesome-agent-native-social.webp",
    "sha256": "6e0856353416c66e0bfc374f4cefaee7cb2cd616c6fb7133b06a411dd3361ff3",
@@ -1210,6 +1249,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 19136
+  },
+  "bags": {
+   "file": "bags.webp",
+   "sha256": "b0d433a867ca17f9ca202dedb5dbe6209e6595a12fe063325b26020b2c759127",
+   "dhash": "902727594cccd35b",
+   "website": "https://www.getbags.app",
+   "source_url": "https://www.getbags.app/",
+   "http_status": 200,
+   "title": "BAGS | Agentic Commerce for AI Agents",
+   "captured_at": "2026-10-23T23:51:59Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 34686
   },
   "basedagents": {
    "file": "basedagents.webp",
@@ -1822,6 +1874,19 @@
    "height": 750,
    "bytes": 57580
   },
+  "coingecko": {
+   "file": "coingecko.webp",
+   "sha256": "537034acd84c4c8eed8770ce75cd6284f72fa431c873906a5cbdcc6e24f23f0c",
+   "dhash": "3301c1a8a86a2e2c",
+   "website": "https://www.coingecko.com",
+   "source_url": "https://www.coingecko.com/",
+   "http_status": 200,
+   "title": "Cryptocurrency Prices, Charts, and Crypto Market Cap | CoinGecko",
+   "captured_at": "2026-10-23T23:52:03Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 55398
+  },
   "colony-chat": {
    "file": "colony-chat.webp",
    "sha256": "ca1576c2d7bde937f773c438e44e150c011571208023fb0248f474f364a528b0",
@@ -2108,6 +2173,19 @@
    "height": 750,
    "bytes": 62610
   },
+  "forgemesh-labs": {
+   "file": "forgemesh-labs.webp",
+   "sha256": "8a389ce4e9591431a8bac056e769bb64c137bebf5533444895b8c3aa9803ead5",
+   "dhash": "b9860f3b0f4f5b0b",
+   "website": "https://forgemesh.io",
+   "source_url": "https://forgemesh.io/",
+   "http_status": 200,
+   "title": "ForgeMesh Labs — Paid APIs for AI Agents · x402 & MPP",
+   "captured_at": "2026-10-23T23:19:54Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 45676
+  },
   "frantic": {
    "file": "frantic.webp",
    "sha256": "1ddd8cdcd5985ca090f4bde63a780fdf4a0762e2500f79a35f89e5da4ec6851b",
@@ -2289,6 +2367,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 34762
+  },
+  "hyperextend": {
+   "file": "hyperextend.webp",
+   "sha256": "bca0bbb66d10f9059705f254b8907595d642188b8d828c548a77a9da59886d0c",
+   "dhash": "6d1e961c9e654535",
+   "website": "https://hyperextend.xyz",
+   "source_url": "https://hyperextend.xyz/",
+   "http_status": 200,
+   "title": "hyperextend",
+   "captured_at": "2026-10-23T23:20:28Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 35340
   },
   "hypothesishub-medresearch-ai": {
    "file": "hypothesishub-medresearch-ai.webp",
@@ -2498,6 +2589,19 @@
    "height": 750,
    "bytes": 33680
   },
+  "locus": {
+   "file": "locus.webp",
+   "sha256": "40288f0f65702d91c35d7ac080c61d688a5ab0852ae83696a6c9b68e2002b7d1",
+   "dhash": "2b00d8d8181b60aa",
+   "website": "https://paywithlocus.com",
+   "source_url": "https://paywithlocus.com/",
+   "http_status": 200,
+   "title": "Locus Pro — One Account for Every AI Agent Tool",
+   "captured_at": "2026-10-23T23:20:30Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 32420
+  },
   "losbeto": {
    "file": "losbeto.webp",
    "sha256": "38cd9fcea7b45016199561717e164fb0e4a80f754523b1fdda46a14b520f47df",
@@ -2680,6 +2784,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 58954
+  },
+  "microtap": {
+   "file": "microtap.webp",
+   "sha256": "cd44d5bf0b18415212e7ae5ad83606a1690ba1070c0a87812ed1da93e5e62ce1",
+   "dhash": "cd56596353713840",
+   "website": "https://x402tap.com",
+   "source_url": "https://x402tap.com/",
+   "http_status": 200,
+   "title": "MicroTap — Pay-Per-Call APIs for AI Agents",
+   "captured_at": "2026-10-23T23:20:28Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 43066
   },
   "molt-road": {
    "file": "molt-road.webp",
@@ -3421,6 +3538,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 56910
+  },
+  "rubric-protocol-tenprint": {
+   "file": "rubric-protocol-tenprint.webp",
+   "sha256": "89f4723146c765f2d3661859431cd14e1a9c0b1db5c1cec7e87d3088dd7626d0",
+   "dhash": "84657a3333f3f060",
+   "website": "https://rubric-protocol.com",
+   "source_url": "https://rubric-protocol.com/",
+   "http_status": 200,
+   "title": "Post-Quantum AI Attestation — Tamper-Evident AI Audit Trails | TenPrint",
+   "captured_at": "2026-10-23T23:19:54Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 53348
   },
   "sanctum-beacon": {
    "file": "sanctum-beacon.webp",
@@ -4371,6 +4501,19 @@
    "height": 750,
    "bytes": 25826
   },
+  "you-com": {
+   "file": "you-com.webp",
+   "sha256": "3daeb4beb88494a56b6839d28ac09c1e1200e775262e4fd08130ed826705a5ab",
+   "dhash": "1b07989802c8c6e6",
+   "website": "https://you.com",
+   "source_url": "https://you.com/",
+   "http_status": 200,
+   "title": "You.com | Search and inference for AI",
+   "captured_at": "2026-10-23T23:52:11Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 47784
+  },
   "youraitools": {
    "file": "youraitools.webp",
    "sha256": "db137af247edc8fff1f37e0395376bd7c316fd28ff638873d775726eb0135ace",
@@ -4385,5 +4528,5 @@
    "bytes": 44740
   }
  },
- "updated_at": "2026-10-23T22:19:57Z"
+ "updated_at": "2026-10-24T08:18:34Z"
 }
