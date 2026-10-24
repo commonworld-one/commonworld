@@ -17,14 +17,19 @@
  * `truncated` so a very large account never gets a silently cut file (the caps are far above any real account today).
  */
 import type { Ctx } from '../context';
-import { requireAuth } from '../auth';
+import type { Env } from '../env';
+import { requireAuth, type AccountRow } from '../auth';
 import { json } from '../http';
 import { getSettings } from '../settings';
 import { queryStats } from '../stats';
 import { accountView, hiddenAncestorSql } from '../views';
 
 export const EXPORT_FORMAT = 'commonworld.export.v1';
-/** Per-list row cap. Reaching it sets `truncated` on that list; nothing is cut silently. */
+/**
+ * Per-list row cap. Reaching it sets `truncated` on that list; nothing is cut silently. Every query the export runs is
+ * bounded by it: the lists read one lookahead row (cap + 1) to know whether they were cut, and the supporting queries
+ * (tags, upvotes received) read only the rows of the posts and comments inside the cap.
+ */
 export const EXPORT_MAX_ROWS = 5000;
 
 interface ContentRow {
@@ -74,35 +79,55 @@ function textOf(row: ContentRow, field: 'title' | 'body'): string | null {
 
 const withdrawnOf = (row: ContentRow) => (row.withdrawn_at ? { at: row.withdrawn_at, reason: row.withdraw_reason } : null);
 
-export async function exportMine(c: Ctx): Promise<Response> {
-  const p = requireAuth(c.principal);
-  const accountId = p.account.id;
-  const settings = await getSettings(c.env);
-  const [stats] = await queryStats(c.env, settings, { accountId });
-  const limit = EXPORT_MAX_ROWS + 1;
-
+/** The raw rows behind one export, every query bounded by `maxRows` (the lists read one extra row as lookahead). */
+export async function exportRows(env: Env, accountId: string, maxRows: number = EXPORT_MAX_ROWS) {
+  const limit = maxRows + 1;
+  // The posts and comments that make it into the file: the first `maxRows` by number, the same order the lists use.
+  // Tags and upvotes received are read for these only, so a very large account never makes a supporting query unbounded.
+  const cappedPosts = 'SELECT number FROM posts WHERE author_id = ? ORDER BY number LIMIT ?';
+  const cappedComments = 'SELECT number FROM comments WHERE author_id = ? ORDER BY number LIMIT ?';
   const [postsRes, tagsRes, commentVotesRes, postVotesRes, commentsRes, porchRes, votesRes] = await Promise.all([
-    c.env.DB.prepare(`SELECT number, section_slug, title, body, status, created_at, withdrawn_at, withdraw_reason
+    env.DB.prepare(`SELECT number, section_slug, title, body, status, created_at, withdrawn_at, withdraw_reason
         FROM posts WHERE author_id = ? ORDER BY number LIMIT ?`).bind(accountId, limit).all<ContentRow>(),
-    c.env.DB.prepare(`SELECT pt.post_number, pt.tag_slug FROM post_tags pt
-        JOIN posts p ON p.number = pt.post_number WHERE p.author_id = ? ORDER BY pt.post_number, pt.tag_slug`)
-      .bind(accountId).all<{ post_number: number; tag_slug: string }>(),
-    c.env.DB.prepare(`SELECT target_type, target_number, COUNT(*) AS n FROM votes
-        WHERE target_author_id = ? AND target_type = 'comment' GROUP BY target_number`)
-      .bind(accountId).all<{ target_type: string; target_number: number; n: number }>(),
-    c.env.DB.prepare(`SELECT target_type, target_number, COUNT(*) AS n FROM votes
-        WHERE target_author_id = ? AND target_type = 'post' GROUP BY target_number`)
-      .bind(accountId).all<{ target_type: string; target_number: number; n: number }>(),
-    c.env.DB.prepare(`SELECT c.number, c.post_number, c.parent_number, c.body, c.status, c.created_at, c.withdrawn_at, c.withdraw_reason,
+    env.DB.prepare(`SELECT pt.post_number, pt.tag_slug FROM post_tags pt
+        WHERE pt.post_number IN (${cappedPosts}) ORDER BY pt.post_number, pt.tag_slug`)
+      .bind(accountId, maxRows).all<{ post_number: number; tag_slug: string }>(),
+    env.DB.prepare(`SELECT target_type, target_number, COUNT(*) AS n FROM votes
+        WHERE target_author_id = ? AND target_type = 'comment' AND target_number IN (${cappedComments}) GROUP BY target_number`)
+      .bind(accountId, accountId, maxRows).all<{ target_type: string; target_number: number; n: number }>(),
+    env.DB.prepare(`SELECT target_type, target_number, COUNT(*) AS n FROM votes
+        WHERE target_author_id = ? AND target_type = 'post' AND target_number IN (${cappedPosts}) GROUP BY target_number`)
+      .bind(accountId, accountId, maxRows).all<{ target_type: string; target_number: number; n: number }>(),
+    env.DB.prepare(`SELECT c.number, c.post_number, c.parent_number, c.body, c.status, c.created_at, c.withdrawn_at, c.withdraw_reason,
         CASE WHEN EXISTS (SELECT 1 FROM posts hp WHERE hp.number = c.post_number AND hp.status = 'hidden') THEN 1 ELSE 0 END AS post_hidden,
         CASE WHEN ${hiddenAncestorSql('c')} THEN 1 ELSE 0 END AS ancestor_hidden
         FROM comments c WHERE c.author_id = ? ORDER BY c.number LIMIT ?`).bind(accountId, limit).all<ContentRow>(),
-    c.env.DB.prepare(`SELECT number, body, status, created_at, withdrawn_at, withdraw_reason
+    env.DB.prepare(`SELECT number, body, status, created_at, withdrawn_at, withdraw_reason
         FROM porch_lines WHERE author_id = ? ORDER BY number LIMIT ?`).bind(accountId, limit).all<ContentRow>(),
-    c.env.DB.prepare(`SELECT v.target_type, v.target_number, v.karma_eligible, v.created_at, vc.post_number AS comment_post_number
+    env.DB.prepare(`SELECT v.target_type, v.target_number, v.karma_eligible, v.created_at, vc.post_number AS comment_post_number
         FROM votes v LEFT JOIN comments vc ON v.target_type = 'comment' AND vc.number = v.target_number
         WHERE v.voter_id = ? ORDER BY v.created_at, v.target_type, v.target_number LIMIT ?`).bind(accountId, limit).all<VoteRow>(),
   ]);
+  return { postsRes, tagsRes, commentVotesRes, postVotesRes, commentsRes, porchRes, votesRes };
+}
+
+export async function exportMine(c: Ctx): Promise<Response> {
+  const p = requireAuth(c.principal);
+  return json(200, await buildExport(c.env, p.account));
+}
+
+/** The export document for one account. `maxRows` is the per-list cap (EXPORT_MAX_ROWS; tests pass a small one). */
+export async function buildExport(env: Env, account: AccountRow, maxRows: number = EXPORT_MAX_ROWS) {
+  const accountId = account.id;
+  const settings = await getSettings(env);
+  const [stats] = await queryStats(env, settings, { accountId });
+  const { postsRes, tagsRes, commentVotesRes, postVotesRes, commentsRes, porchRes, votesRes } = await exportRows(env, accountId, maxRows);
+
+  // Only the rows inside the cap are exported; the lookahead row only tells whether the list was cut.
+  const postRows = postsRes.results.slice(0, maxRows);
+  const commentRows = commentsRes.results.slice(0, maxRows);
+  const porchRows = porchRes.results.slice(0, maxRows);
+  const voteRows = votesRes.results.slice(0, maxRows);
 
   const tags = new Map<number, string[]>();
   for (const t of tagsRes.results) {
@@ -115,7 +140,7 @@ export async function exportMine(c: Ctx): Promise<Response> {
   const commentVotes = new Map<number, number>();
   for (const v of commentVotesRes.results) commentVotes.set(v.target_number, v.n);
 
-  const posts = postsRes.results.slice(0, EXPORT_MAX_ROWS).map((r) => ({
+  const posts = postRows.map((r) => ({
     number: r.number,
     ref: `post-${r.number}`,
     url: `/posts/${r.number}`,
@@ -129,7 +154,7 @@ export async function exportMine(c: Ctx): Promise<Response> {
     upvotes: postVotes.get(r.number) ?? 0,
   }));
 
-  const comments = commentsRes.results.slice(0, EXPORT_MAX_ROWS).map((r) => ({
+  const comments = commentRows.map((r) => ({
     number: r.number,
     ref: `comment-${r.number}`,
     url: `/posts/${r.post_number}#comment-${r.number}`,
@@ -143,7 +168,7 @@ export async function exportMine(c: Ctx): Promise<Response> {
     upvotes: commentVotes.get(r.number) ?? 0,
   }));
 
-  const porch = porchRes.results.slice(0, EXPORT_MAX_ROWS).map((r) => ({
+  const porch = porchRows.map((r) => ({
     number: r.number,
     ref: `porch-${r.number}`,
     url: `/porch#porch-${r.number}`,
@@ -158,7 +183,7 @@ export async function exportMine(c: Ctx): Promise<Response> {
     if (r.target_type === 'post') return `/posts/${r.target_number}`;
     return r.comment_post_number ? `/posts/${r.comment_post_number}#comment-${r.target_number}` : null;
   };
-  const votes = votesRes.results.slice(0, EXPORT_MAX_ROWS).map((r) => ({
+  const votes = voteRows.map((r) => ({
     target_type: r.target_type,
     target: { number: r.target_number, ref: `${r.target_type}-${r.target_number}`, url: voteUrl(r) },
     karma_eligible: r.karma_eligible === 1,
@@ -167,10 +192,10 @@ export async function exportMine(c: Ctx): Promise<Response> {
 
   const redacted = (rows: ContentRow[]) => rows.filter(isRedacted).length;
 
-  return json(200, {
+  return {
     format: EXPORT_FORMAT,
     generated_at: new Date().toISOString(),
-    account: accountView(p.account),
+    account: accountView(account),
     counts: {
       posts: stats?.posts ?? 0,
       comments: stats?.comments ?? 0,
@@ -185,13 +210,14 @@ export async function exportMine(c: Ctx): Promise<Response> {
     porch,
     votes,
     truncated: {
-      posts: postsRes.results.length > EXPORT_MAX_ROWS,
-      comments: commentsRes.results.length > EXPORT_MAX_ROWS,
-      porch: porchRes.results.length > EXPORT_MAX_ROWS,
-      votes: votesRes.results.length > EXPORT_MAX_ROWS,
+      posts: postsRes.results.length > maxRows,
+      comments: commentsRes.results.length > maxRows,
+      porch: porchRes.results.length > maxRows,
+      votes: votesRes.results.length > maxRows,
     },
-    redacted_hidden: { posts: redacted(postsRes.results), comments: redacted(commentsRes.results), porch: redacted(porchRes.results) },
+    // counted over the exported rows only, never the lookahead row past the cap
+    redacted_hidden: { posts: redacted(postRows), comments: redacted(commentRows), porch: redacted(porchRows) },
     note: 'Title and body are null for content moderation hid (listed so you know it exists; appeal by email, see /v1/rules). A comment under a hidden post or below a hidden comment is redacted the same way, with hidden_context "post" or "thread". Withdrawn content keeps the empty text D1 holds and carries withdrawn {at, reason}. Upvotes are the votes ever cast on each item; karma counts only the eligible ones. Your API key only: an OAuth app can never download this.',
-    docs: { api: '/v1/me/export', page: '/export', markdown: '/export.md', account: '/v1/me', profile: accountView(p.account).url, deletion: '/v1/me/deletion-request' },
-  });
+    docs: { api: '/v1/me/export', page: '/export', markdown: '/export.md', account: '/v1/me', profile: accountView(account).url, deletion: '/v1/me/deletion-request' },
+  };
 }

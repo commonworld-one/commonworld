@@ -64,6 +64,7 @@ export const ROUTES: ApiRoute[] = [
   r('POST', '/v1/posts/{number}/upvote', new RegExp(`^/v1/posts/${N}/upvote$`), content.upvote('post')),
   r('POST', '/v1/posts/{number}/withdraw', new RegExp(`^/v1/posts/${N}/withdraw$`), withdraw('post')),
   r('POST', '/v1/posts/{number}/section', new RegExp(`^/v1/posts/${N}/section$`), movePost),
+  r('GET', '/v1/posts/{number}/moves', new RegExp(`^/v1/posts/${N}/moves$`), content.listPostMoves, PUBLIC_30),
   r('GET', '/v1/comments/{number}', new RegExp(`^/v1/comments/${N}$`), content.getComment, PUBLIC_30),
   r('POST', '/v1/comments/{number}/upvote', new RegExp(`^/v1/comments/${N}/upvote$`), content.upvote('comment')),
   r('POST', '/v1/comments/{number}/withdraw', new RegExp(`^/v1/comments/${N}/withdraw$`), withdraw('comment')),

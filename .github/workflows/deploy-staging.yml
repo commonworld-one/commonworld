@@ -1,0 +1,143 @@
+name: Deploy platform (staging)
+# Staging deploy of the Commonworld platform (Worker commonworld-api-staging + D1 commonworld-staging, folder platform/).
+# See docs/DEPLOY.md, "Staging deploy from GitHub".
+#
+# Why it exists: Workers Static Assets are uploaded with a short-lived upload JWT in the Authorization header
+# (POST /accounts/<id>/workers/assets/upload). An egress proxy that injects the Cloudflare API token on every request
+# to api.cloudflare.com overwrites that JWT, so the upload fails with 401 and a sandboxed agent cannot deploy staging.
+# A GitHub runner sends the JWT untouched.
+#
+# Only started by hand (Actions -> Deploy platform (staging) -> Run workflow, "Use workflow from" = main) with the
+# branch or commit to try on staging. The workflow file itself always comes from main; the deployed code comes from
+# the input ref. Every wrangler call is pinned to --env staging; the job stops if wrangler.toml at that ref does not
+# map env.staging to commonworld-api-staging / commonworld-staging. Never runs on pull_request, push or schedule.
+#
+# Secret: CLOUDFLARE_API_TOKEN of the GitHub environment `staging` = a staging-only token (Workers Scripts: Edit on the
+# staging Worker, D1: Edit). It must NOT be the production token. CLOUDFLARE_ACCOUNT_ID sits next to it.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch or full commit sha in this repository to deploy to staging
+        required: true
+        type: string
+      apply_migrations:
+        description: Apply pending D1 migrations on commonworld-staging before the deploy
+        required: false
+        default: true
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: deploy-platform-staging
+  cancel-in-progress: false
+jobs:
+  deploy:
+    name: Deploy to staging
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: staging
+      url: https://staging.commonworld.one/
+    env:
+      REF: ${{ inputs.ref }}
+    steps:
+      - name: Ref is a plain branch name or sha
+        run: |
+          case "$REF" in ''|-*|*..*|*[!A-Za-z0-9._/-]*) echo "::error::bad ref '$REF'"; exit 1 ;; esac
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+      - name: wrangler.toml maps env.staging to the staging Worker and database only
+        run: |
+          set -euo pipefail
+          [ -f platform/wrangler.toml ] || { echo "::error::no platform/wrangler.toml at $REF"; exit 1; }
+          python3 - <<'PY'
+          import sys, tomllib
+          cfg = tomllib.load(open('platform/wrangler.toml', 'rb'))
+          st = (cfg.get('env') or {}).get('staging') or {}
+          name = st.get('name')
+          dbs = [d.get('database_name') for d in (st.get('d1_databases') or [])]
+          routes = [r.get('pattern') for r in (st.get('routes') or [])]
+          print('env.staging name:', name, 'd1:', dbs, 'routes:', routes)
+          ok = name == 'commonworld-api-staging' and dbs == ['commonworld-staging'] and routes and all(p == 'staging.commonworld.one' for p in routes)
+          sys.exit(0 if ok else 'env.staging must be commonworld-api-staging / commonworld-staging / staging.commonworld.one only')
+          PY
+          echo "deploying $(git rev-parse HEAD) ($REF) to staging"
+          echo "## Staging deploy of \`$(git rev-parse HEAD)\` ($REF)" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install
+        working-directory: platform
+        run: npm ci --no-audit --no-fund
+      - name: Typecheck
+        working-directory: platform
+        run: npx tsc --noEmit
+      - name: Test
+        working-directory: platform
+        run: npm test
+      - name: Build the Atlas into the Worker's Static Assets
+        env:
+          CW_PRIVATE_TERMS: ${{ secrets.CW_PRIVATE_TERMS }}
+        run: |
+          set -euo pipefail
+          [ -n "$CW_PRIVATE_TERMS" ] || echo "::warning::CW_PRIVATE_TERMS not set: forbidden-text check skipped for this staging build"
+          python -m pip install -r requirements.txt
+          node platform/scripts/build-atlas-assets.mjs --src "$GITHUB_WORKSPACE" --build
+      - name: Routing check against this Atlas build
+        working-directory: platform
+        env:
+          CW_REQUIRE_ATLAS_DIST: '1'
+        run: npx vitest run test/atlas-assets.test.ts
+      - name: Migration report (staging has no gate, report only)
+        if: inputs.apply_migrations
+        working-directory: platform
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          npx wrangler d1 migrations list commonworld-staging --remote --env staging 2>&1 | tee "$RUNNER_TEMP/migrations-pending.txt"
+          cd "$GITHUB_WORKSPACE"
+          python scripts/check-migrations.py --dir platform/migrations --pending-from "$RUNNER_TEMP/migrations-pending.txt" \
+            --sha "$(git rev-parse HEAD)" --warn-only
+      - name: Apply database migrations (staging)
+        if: inputs.apply_migrations
+        working-directory: platform
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler d1 migrations apply commonworld-staging --remote --env staging
+      - name: Deploy the Worker (staging)
+        working-directory: platform
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy --env staging --message "staging $(git rev-parse --short HEAD) ($REF)"
+      - name: Smoke test (staging)
+        run: |
+          set -u
+          host=https://staging.commonworld.one
+          body=$(mktemp)
+          check() {  # path, expected text in the body ('' = any); up to 6 tries, 10 s apart
+            local code=000
+            for _ in 1 2 3 4 5 6; do
+              code=$(curl -sS --max-time 15 -o "$body" -w '%{http_code}' "$host$1") || code=000
+              if [ "$code" = 200 ] && { [ -z "$2" ] || grep -qF -- "$2" "$body"; }; then echo "ok   $1"; return 0; fi
+              sleep 10
+            done
+            echo "::error::smoke failed on $1 (last status $code)"; return 1
+          }
+          fail=0
+          check / '' || fail=1
+          check /health '"environment":"staging"' || fail=1
+          check /api/v1/index.json '' || fail=1
+          check /atlas/ '' || fail=1
+          exit $fail
