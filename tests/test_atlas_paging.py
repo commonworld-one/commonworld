@@ -283,10 +283,10 @@ class Redirects(unittest.TestCase):
         files += [f'atlas/page/{n}/{f}' for n in range(2, n_pages + 1) for f in ('index.html', 'index.md')]
         for rel in files:
             os.makedirs(os.path.dirname(os.path.join(d, rel)), exist_ok=True)
-            open(os.path.join(d, rel), 'w').write('x')
+            Path(d, rel).write_text('x')
         red = ''.join(l + '\n' for l in self.run_with_baseline(FakeSite(n_pages * 50, {}), [], record))
-        open(os.path.join(d, '_redirects'), 'w').write(red)
-        open(os.path.join(d, '_headers'), 'w').write(build.vanished_page_headers(red))
+        Path(d, '_redirects').write_text(red)
+        Path(d, '_headers').write_text(build.vanished_page_headers(red))
 
     def test_full_cycle_8_7_8_pages(self):
         # owner decision 2026-10-24 (continuum's acceptance criteria): page 8 is 200, the list shrinks to 7 pages and page 8
@@ -310,17 +310,18 @@ class Redirects(unittest.TestCase):
 
             def get(path):
                 try:
-                    r = op.open(f'http://127.0.0.1:{srv.server_address[1]}{path}')
-                    return r.status, r.headers.get('location'), r.headers.get('cache-control')
+                    with op.open(f'http://127.0.0.1:{srv.server_address[1]}{path}') as r:
+                        return r.status, r.headers.get('location'), r.headers.get('cache-control')
                 except urllib.error.HTTPError as ex:
-                    return ex.code, ex.headers.get('location'), ex.headers.get('cache-control')
+                    with ex:
+                        return ex.code, ex.headers.get('location'), ex.headers.get('cache-control')
             page8 = {'/atlas/page/8/': '/atlas/page/7/', '/atlas/page/8/index.md': '/atlas/page/7/index.md', '/api/v1/atlas/page/8.json': '/api/v1/atlas/page/7.json'}
             never = ['/atlas/page/9/', '/atlas/page/9/index.md', '/api/v1/atlas/page/9.json']
             try:
                 for stage, n_pages in (('8 pages', 8), ('7 pages', 7), ('8 pages again', 8)):
                     self.serve_build(d, n_pages, rec)
-                    red = open(os.path.join(d, '_redirects')).read()
-                    hdr = open(os.path.join(d, '_headers')).read()
+                    red = Path(d, '_redirects').read_text()
+                    hdr = Path(d, '_headers').read_text()
                     for path, to in page8.items():
                         status, loc, cc = get(path)
                         if n_pages == 8:

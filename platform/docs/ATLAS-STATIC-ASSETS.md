@@ -72,6 +72,39 @@ the build's. The Worker only adds `'nonce-…'` after `script-src 'self'` on HTM
 4. Staging rollback: `npx wrangler rollback --env staging`, or `ATLAS_SOURCE = ""` in `[env.staging.vars]` + deploy
    (= the old proxy to `commonworld.pages.dev`).
 
+## Vanished list pages: staging drill before release (PR #112)
+
+A list page that vanished because its list got shorter answers a temporary **302** to the list's last page with
+`Cache-Control: no-store` (owner decision 2026-10-24 22:19 EEST). HTML 302s run the Worker (`serveAtlasAsset` sets the
+header); the `index.md` and JSON 302s are static (run_worker_first negatives) and get the header from the Atlas `_headers`.
+Static Assets attaches `_headers` to `_redirects` responses too: `handleRequest` in cloudflare/workers-sdk
+`packages/workers-shared/asset-worker/src/handler.ts` ends with `attachCustomHeaders(request, response, …)` for every
+response, redirects included, and Miniflare (same code) shows it in `test/atlas-assets.test.ts`. The docs line "redirects
+execute before headers … the redirect will win out" means the redirect is served instead of the file. This must still be
+seen once on real Cloudflare before production:
+
+1. The normal build has no vanished page (`check.py`: "0 redirect lines for vanished pages"), and the whole Atlas cannot
+   shrink without removing cards (growth guard). So the drill shrinks one category in a **throwaway** branch, never merged:
+   `python3 atlas/site/tools/vanish_drill.py prepare` moves 2 social cards to `work` (102 → 100 cards: 3 → 2 pages), then
+   commit on e.g. `drill/vanish-social` (build + `check.py` pass on it; checked 2026-10-24).
+2. Deploy the PR head to staging (Actions → *Deploy platform (staging)*), then
+   `python3 atlas/site/tools/vanish_drill.py check --base https://staging.commonworld.one --state full`.
+3. Deploy `drill/vanish-social` to staging, then `… check --base https://staging.commonworld.one --state shrunk`:
+   `/atlas/categories/social/page/3/`, `/page/3`, `/page/3/index.md` and `/api/v1/atlas/categories/social/page/3.json`
+   answer **302** to page 2 with **`cache-control: no-store`**.
+4. Deploy the PR head again, then `… --state full`: page 3 is a plain **200** again (no `location`), not shadowed.
+5. Every run also checks: `/page/1/` → **301** (no `no-store`); never-existed page 4 of social and page 9 of the whole Atlas
+   → **404** in HTML, `index.md` and JSON; `/atlas/page/8/` (+ `index.md`, JSON) → 200. Delete the drill branch after.
+
+If step 3 shows the static 302s **without** `no-store`, the fix is to serve those redirects from the Worker: route the
+vanished `index.md` / JSON paths through the Worker (narrow the `!/atlas/*.md` / `!/api/*` negatives in run_worker_first)
+and let `serveAtlasAsset` set the header, as it does for HTML. (Without any Cache-Control a 302 is not stored by browsers or
+the Cloudflare cache by default, so the effect would be small, but the decision asks for the explicit header.)
+
+`_headers` budget: Cloudflare allows 100 rules. The normal build writes 29; each vanished page adds 2 (its `index.md` and
+its JSON page; HTML needs none). So about 35 pages can be vanished at once. `check.py` and
+`scripts/build-atlas-assets.mjs` fail the build above 100 rules.
+
 ## Launch day and Pages retirement
 
 Done on 2026-10-20 (cutover steps and their record: `../docs/DEPLOY.md`, "First production deploy"). Releases go only through

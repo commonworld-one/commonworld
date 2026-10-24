@@ -374,7 +374,10 @@ def paged_record_checks(update=False):
         for l in red:
             m = re.match(re.escape(first) + r'page/([0-9]+)[/ ]', l)
             if m and int(m.group(1)) > max(top, 1): fails.append(f'_redirects redirects a page that never existed: {l}')
-    hdr = open(os.path.join(DIST, '_headers')).read() if os.path.exists(os.path.join(DIST, '_headers')) else ''
+    hdr = ''
+    if os.path.exists(os.path.join(DIST, '_headers')):
+        with open(os.path.join(DIST, '_headers'), encoding='utf-8') as fh:
+            hdr = fh.read()
     rules = {}
     cur = None
     for l in hdr.splitlines():

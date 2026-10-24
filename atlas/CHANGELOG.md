@@ -11,6 +11,7 @@ Owner decision 2026-10-24 22:19 EEST (Nerd 27 Dk), raised by continuum (Commonwo
 - **When the page comes back** it is built again and gets no redirect rule at all, so it is a normal **200** page. `check.py` fails a build whose `_redirects` names a page that is built, a vanished page that is a 301, or a static 302 without its `no-store` header.
 - Unchanged: the `/page/1/` alias of each list stays a permanent **301** to the list URL; a page number that never existed stays **404** in every format; card URLs and slugs are never redirected.
 - Tests: the cycle 8 pages → 7 → 8 (page 8: 200, then 302 to page 7, then 200 again) for HTML, Markdown, JSON and MCP; the `Cache-Control` of the 302; 404 for never-existed pages in every format.
+- **Before release:** a staging drill on real Cloudflare (`site/tools/vanish_drill.py`, steps in `platform/docs/ATLAS-STATIC-ASSETS.md`): one category shrinks from 3 to 2 pages in a throwaway branch and grows back, checking 200 → 302 (`no-store`) → 200, the 301 alias and 404s in HTML, Markdown and JSON. `_headers` budget: 29 rules today, +2 per vanished page, limit 100.
 
 ## 2026-10-24 — Paged lists: /atlas/page/N/, 50 cards a page, filters from the search index
 

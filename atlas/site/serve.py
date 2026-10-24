@@ -11,13 +11,20 @@ browser runs under the same strict CSP as production (minus HSTS and upgrade-ins
 """
 import gzip, http.server, io, os, sys
 
+
+def _read(path, mode='rb'):
+    """Whole file, closed at once (no ResourceWarning in tests)."""
+    with open(path, mode, **({'encoding': 'utf-8'} if mode == 'r' else {})) as fh:
+        return fh.read()
+
+
 DIST = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dist')
 
 
 def site_headers():
     """Headers of the `/*` block in dist/_headers, adapted for plain http on localhost."""
     try:
-        txt = open(os.path.join(DIST, '_headers'), encoding='utf-8').read()
+        txt = _read(os.path.join(DIST, '_headers'), 'r')
     except OSError:
         return []
     out, cur = [], None
@@ -41,7 +48,7 @@ FILTER_PARAMS = ('q', 'category', 'status', 'type', 'feature', 'tag', 'sort')  #
 def redirects():
     """{path: (target, status)} from the 301 and 302 lines of dist/_redirects."""
     try:
-        lines = open(os.path.join(DIST, '_redirects'), encoding='utf-8').read().splitlines()
+        lines = _read(os.path.join(DIST, '_redirects'), 'r').splitlines()
     except OSError:
         return {}
     return {p[0]: (p[1], int(p[2])) for p in (l.split() for l in lines) if len(p) == 3 and p[2] in ('301', '302')}
@@ -67,7 +74,7 @@ class H(http.server.SimpleHTTPRequestHandler):
         if os.path.isdir(fs):
             fs = os.path.join(fs, 'index.html')
         if os.path.isfile(fs) and fs.endswith(GZ_EXT) and 'gzip' in (self.headers.get('Accept-Encoding') or ''):
-            body = gzip.compress(open(fs, 'rb').read(), 6)  # like Cloudflare: text is sent compressed (Lighthouse measures this)
+            body = gzip.compress(_read(fs), 6)  # like Cloudflare: text is sent compressed (Lighthouse measures this)
             self.send_response(200)
             self.send_header('Content-Type', self.guess_type(fs))
             self.send_header('Content-Encoding', 'gzip')
@@ -76,7 +83,7 @@ class H(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             return io.BytesIO(body)
         if not os.path.isfile(fs):
-            body = open(os.path.join(DIST, '404.html'), 'rb').read()
+            body = _read(os.path.join(DIST, '404.html'))
             self.send_response(404)
             self.send_header('Content-Type', 'text/html; charset=utf-8')
             self.send_header('Content-Length', str(len(body)))
