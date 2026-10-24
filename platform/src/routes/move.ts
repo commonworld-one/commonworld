@@ -9,7 +9,8 @@
  * What changes: only posts.section_slug. The post keeps its number, id, URL (/posts/{n} has no section in it), author,
  * title, body, tags, comments and votes. Stored section counters (post_count, comment_count) of the two sections are
  * recounted in the same D1 batch; tag counts are global and do not change; the content cache version is bumped, so
- * cached section, post and list pages and public reads show the move at once (src/cache-version.ts).
+ * cached section, post and list pages and public reads show the move at once (src/cache-version.ts). When the guarded
+ * UPDATE changes no row (lost race), no statement of the batch writes: no move row, event, key, recount or bump.
  *
  * Public, permanent record (migration 0023, table post_section_moves): from, to, actor, the role used (author or
  * admin), time and reason. The post JSON carries `moves` (oldest first), the post page and its Markdown twin show
@@ -92,8 +93,12 @@ export async function movePost(c: Ctx): Promise<Response> {
   const at = nowIso();
   const moveId = `move_${crypto.randomUUID()}`;
   const db = c.env.DB;
-  // Every statement after the UPDATE only acts when this request's UPDATE moved the post (its move row exists).
+  // The UPDATE only changes the post when it is still in `from`, visible and not withdrawn. Every statement after it
+  // (move row, event, idempotency key, section recount, cache bump) only writes when this request's UPDATE moved the
+  // post: the move row is inserted on changes() = 1, and the rest check that this request's move row exists. A lost
+  // race (another move, a hide or a withdrawal in between) therefore writes nothing at all.
   const moved = 'EXISTS (SELECT 1 FROM post_section_moves WHERE id = ?1)';
+  const movedGuard = { sql: 'EXISTS (SELECT 1 FROM post_section_moves WHERE id = ?2)', value: moveId };
   let changed = 0;
   try {
     const [update] = await db.batch([
@@ -106,10 +111,11 @@ export async function movePost(c: Ctx): Promise<Response> {
         .bind(moveId, number, p.account.id, from, to, reason, role, at),
       ...(idem.key ? [db.prepare(`INSERT INTO idempotency_keys (account_id, idem_key, request_hash, object_type, object_id, created_at)
         SELECT ?2, ?3, ?4, ?5, ?6, ?7 WHERE ${moved}`).bind(moveId, p.account.id, idem.key, idem.hash, objectType, row.id, at)] : []),
-      // stored counters of both sections, exact (reference recount, src/counters.ts)
-      sectionRecountStatement(db, [from, to]),
-      // the post now lists under another section: cached section, post and list pages and public reads drop at once
-      bumpContentCacheVersion(db),
+      // stored counters of both sections, exact (reference recount, src/counters.ts); only when this request moved it
+      sectionRecountStatement(db, [from, to], movedGuard),
+      // the post now lists under another section: cached section, post and list pages and public reads drop at once;
+      // only when this request moved it (a lost race changed nothing public, so nothing to invalidate)
+      bumpContentCacheVersion(db, movedGuard),
     ]);
     changed = update.meta.changes ?? 0;
   } catch (error) {

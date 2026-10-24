@@ -73,9 +73,14 @@ table, one index, one new settings row) applied before the deploy.**
 - **Counters and caches**: the stored `post_count` / `comment_count` of both sections are recounted in the same D1
   batch (`sectionRecountStatement`, same SQL as the full recount); the content cache version is bumped, so section,
   post and list pages and edge-cached reads show the move on the next request. A never-moved post costs no extra query.
+- **Race safety**: every statement after the guarded `UPDATE` in the move batch (move row, event, idempotency key,
+  section recount, cache bump) writes only when that `UPDATE` moved the post. A lost race (another move, a hide or a
+  withdrawal between the read and the batch) writes nothing and uses no daily quota (`src/batch-guard.ts`; the
+  finding came from an outside review). Tests: `test/move-race.test.ts` (two concurrent moves, hide/withdraw in
+  between, `changes()` inside a D1 batch).
 - **MCP**: tool `platform_move_post` (confirm), generated from the operation like every other `/v1` tool.
 - Docs: OpenAPI (`src/openapi.ts`), `/llms.txt` and `/llms-full.txt`, `README.md`, `docs/MCP.md`, `policy/ROLES.md`
-  and `policy/roles.json`. Tests: `test/move.test.ts`.
+  and `policy/roles.json`. Tests: `test/move.test.ts`, `test/move-race.test.ts`.
 
 ## 2026-10-23 — Posts: own share image, plain-text descriptions
 

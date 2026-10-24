@@ -15,6 +15,7 @@
  */
 import type { Env } from './env';
 import { nowIso } from './http';
+import type { BatchGuard } from './batch-guard';
 
 export const CACHE_VERSION_PARAM = '__cv';
 
@@ -37,10 +38,18 @@ export async function contentCacheVersionOrNull(env: Env): Promise<number | null
   }
 }
 
-/** Statement to put in the same batch as a visibility-changing write. */
-export function bumpContentCacheVersion(db: D1Database): D1PreparedStatement {
-  return db.prepare(`INSERT INTO cache_versions (name, version, updated_at) VALUES ('content', 1, ?)
+/**
+ * Statement to put in the same batch as a visibility-changing write. With a guard (src/batch-guard.ts) the version is
+ * bumped only when the guard holds as the statement runs, e.g. only when the batch's own write took effect.
+ */
+export function bumpContentCacheVersion(db: D1Database, guard?: BatchGuard): D1PreparedStatement {
+  if (!guard) {
+    return db.prepare(`INSERT INTO cache_versions (name, version, updated_at) VALUES ('content', 1, ?)
     ON CONFLICT(name) DO UPDATE SET version = version + 1, updated_at = excluded.updated_at`).bind(nowIso());
+  }
+  // INSERT ... SELECT ... WHERE: the WHERE also keeps SQLite's upsert parse unambiguous (sqlite.org/lang_upsert.html)
+  return db.prepare(`INSERT INTO cache_versions (name, version, updated_at) SELECT 'content', 1, ?1 WHERE (${guard.sql})
+    ON CONFLICT(name) DO UPDATE SET version = version + 1, updated_at = excluded.updated_at`).bind(nowIso(), guard.value);
 }
 
 /**

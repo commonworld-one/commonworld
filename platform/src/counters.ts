@@ -21,6 +21,7 @@ import type { Env } from './env';
 import { getSettings, type KarmaWeights } from './settings';
 import { karma7Sql, statsSelect } from './stats';
 import { countedVoteSql, hiddenAncestorSql, notDisabledSql, shownCommentSql, shownPorchSql, shownPostSql } from './views';
+import type { BatchGuard } from './batch-guard';
 
 const RECONCILED = 'reconciled_at';
 /** Epoch ms up to which items leaving the 7-day window have been subtracted from karma_7d. */
@@ -84,9 +85,12 @@ export function recountStatementsWith(db: D1Database, w: KarmaWeights): D1Prepar
 /**
  * Recount of the stored counts of the given sections only (a post moved between two of them, src/routes/move.ts).
  * Same reference definition as the full recount, so it is exact whatever happened before; put it in the same batch.
+ * With a guard (src/batch-guard.ts) the statement writes nothing unless the guard holds when it runs in the batch.
  */
-export function sectionRecountStatement(db: D1Database, slugs: string[]): D1PreparedStatement {
-  return db.prepare(`UPDATE sections SET ${SECTION_COUNTS_SET} WHERE slug IN (SELECT value FROM json_each(?1))`).bind(JSON.stringify(slugs));
+export function sectionRecountStatement(db: D1Database, slugs: string[], guard?: BatchGuard): D1PreparedStatement {
+  const sql = `UPDATE sections SET ${SECTION_COUNTS_SET} WHERE slug IN (SELECT value FROM json_each(?1))`;
+  if (!guard) return db.prepare(sql).bind(JSON.stringify(slugs));
+  return db.prepare(`${sql} AND (${guard.sql})`).bind(JSON.stringify(slugs), guard.value);
 }
 
 /** Stored leaderboard ranks (karma DESC, number ASC among active accounts; overall and per kind). Writes changed rows only. */
