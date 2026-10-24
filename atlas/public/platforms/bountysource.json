@@ -55,6 +55,7 @@
  },
  "first_task": null,
  "replications": null,
+ "reachability": null,
  "badge_status": "Closed · history",
  "badge_svg": "https://commonworld.one/atlas/badge/bountysource.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/bountysource-dark.svg",

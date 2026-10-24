@@ -91,7 +91,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "1human",
@@ -145,7 +146,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "402atlas",
@@ -209,7 +211,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "402rates-com",
@@ -269,7 +272,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "4claw",
@@ -332,7 +336,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "8004agents",
@@ -395,7 +400,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "8004scan",
@@ -459,7 +465,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "a2a-directory",
@@ -511,7 +518,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "a2a-list",
@@ -571,7 +579,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "a2a-protocol",
@@ -627,7 +636,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "a2a-registry-org",
@@ -690,7 +700,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "a2a-registry-a2aregistry-org",
@@ -754,7 +765,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "aamio-board",
@@ -808,7 +820,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "abund-ai",
@@ -875,7 +888,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentic-commerce-protocol-openai-stripe",
@@ -931,7 +945,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "adam-message",
@@ -985,7 +1000,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-almanac",
@@ -1039,7 +1055,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-arena-agentarena-de",
@@ -1102,7 +1119,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-board-juleskreuer",
@@ -1156,7 +1174,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-bounties",
@@ -1230,7 +1249,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-colony-juluo",
@@ -1296,7 +1316,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-commons",
@@ -1359,7 +1380,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-commons-algo",
@@ -1413,7 +1435,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-communication-platform",
@@ -1468,7 +1491,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-ctf-events",
@@ -1522,7 +1546,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-errata",
@@ -1590,7 +1615,8 @@
     "method_url": "https://github.com/piiiico/agent-errata/blob/919465f08748a2dfa4612406f441cc6e0332cf60/scripts/validate.ts",
     "validate_run_url": "https://github.com/piiiico/agent-errata/actions/runs/39508705693",
     "observed_at": "2026-10-20T22:53:26Z"
-   }
+   },
+   "reachability": null
   },
   {
    "id": "agent-memory-wiki",
@@ -1645,7 +1671,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "username-md-agent-names",
@@ -1697,7 +1724,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-tavern",
@@ -1751,7 +1779,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentbadge-agent-venue",
@@ -1828,7 +1857,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-wikis",
@@ -1883,7 +1913,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-x-ossoonline",
@@ -1937,7 +1968,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent402-tools",
@@ -1989,7 +2021,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent4science",
@@ -2056,7 +2089,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentagon",
@@ -2118,7 +2152,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentarxiv-agxiv",
@@ -2174,7 +2209,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentbazaar",
@@ -2226,7 +2262,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentboard-ai",
@@ -2283,7 +2320,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentcard",
@@ -2335,7 +2373,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentchan",
@@ -2398,7 +2437,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentconnex",
@@ -2452,7 +2492,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentdm",
@@ -2507,7 +2548,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentel",
@@ -2561,7 +2603,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentgigs",
@@ -2613,7 +2656,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentgram",
@@ -2678,7 +2722,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agenthansa",
@@ -2741,7 +2786,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentic-market",
@@ -2804,7 +2850,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agenticmarket",
@@ -2859,7 +2906,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentindex-x402looker",
@@ -2919,7 +2967,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentleague",
@@ -2971,7 +3020,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentlux",
@@ -3023,7 +3073,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentndx",
@@ -3075,7 +3126,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentpedia-openagents",
@@ -3131,7 +3183,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentpedia-io",
@@ -3194,7 +3247,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentpub",
@@ -3258,7 +3312,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentrust-trace-registry",
@@ -3313,7 +3368,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agents-gather",
@@ -3367,7 +3423,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agents-trust",
@@ -3427,7 +3484,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agents-json",
@@ -3481,7 +3539,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agents4science-2025",
@@ -3544,7 +3603,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentscan",
@@ -3599,7 +3659,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentsports",
@@ -3651,7 +3712,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentstore-agentpay",
@@ -3703,7 +3765,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentsvc-io",
@@ -3763,7 +3826,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentsy",
@@ -3815,7 +3879,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agentworld",
@@ -3867,7 +3932,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agenty",
@@ -3927,7 +3993,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agent-governance-institute",
@@ -3981,7 +4048,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agonaut",
@@ -4036,7 +4104,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agora-burmaster",
@@ -4090,7 +4159,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agora-tundrabit",
@@ -4144,7 +4214,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agoragentic",
@@ -4196,7 +4267,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "agrenting",
@@ -4248,7 +4320,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ai-agent-message-board",
@@ -4303,7 +4376,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ai-agents-hotline",
@@ -4365,7 +4439,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ai-commons-forum",
@@ -4419,7 +4494,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ai-societies-network-openwitness",
@@ -4481,7 +4557,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ai-village",
@@ -4536,7 +4613,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "aibtc-bounty-board",
@@ -4621,7 +4699,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "aicq",
@@ -4677,7 +4756,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ainglish",
@@ -4741,7 +4821,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "airaxiv",
@@ -4796,7 +4877,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "aixiv-online",
@@ -4859,7 +4941,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "aixiv-science",
@@ -4923,7 +5006,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "algora",
@@ -4980,7 +5064,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "alipay-ai-pay",
@@ -5040,7 +5125,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "amazon-alexa-for-shopping",
@@ -5102,7 +5188,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "anthropic-claude-commerce-agents-blueprint",
@@ -5154,7 +5241,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "apify-store",
@@ -5228,7 +5316,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "arena42-agent-arena",
@@ -5291,7 +5380,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "arenabot",
@@ -5343,7 +5433,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "arkham",
@@ -5403,7 +5494,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "allium-x402-data",
@@ -5458,7 +5550,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "artifact-council",
@@ -5523,7 +5616,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "artificiety",
@@ -5577,7 +5671,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "asterpay",
@@ -5637,7 +5732,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "awesome-agent-native-social",
@@ -5692,7 +5788,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ax1-console",
@@ -5774,7 +5871,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "bags",
@@ -5834,7 +5932,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "basedagents",
@@ -5908,7 +6007,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "basis-theory",
@@ -5960,7 +6060,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "bitrefill-api-x402",
@@ -6043,7 +6144,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "blockrun",
@@ -6126,7 +6228,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "botbeat",
@@ -6190,7 +6293,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "botmural",
@@ -6252,7 +6356,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "botnet",
@@ -6306,7 +6411,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "botxiv",
@@ -6361,7 +6467,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "bountix",
@@ -6413,7 +6520,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "trybounty",
@@ -6465,7 +6573,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "bountybook",
@@ -6547,7 +6656,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "bountyhub",
@@ -6602,7 +6712,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "bountysource",
@@ -6657,7 +6768,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "campfire-agents-board",
@@ -6712,7 +6824,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "catena-labs",
@@ -6764,7 +6877,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "celo-x402-facilitator",
@@ -6837,7 +6951,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "centaurxiv",
@@ -6903,7 +7018,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "cheaptokens",
@@ -6985,7 +7101,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "chirper",
@@ -7037,7 +7154,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "church-of-molt",
@@ -7092,7 +7210,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "circle-agent-stack",
@@ -7148,7 +7267,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clash-of-coins-checkout",
@@ -7231,7 +7351,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "claw-earn",
@@ -7296,7 +7417,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "claw402",
@@ -7379,7 +7501,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawarena",
@@ -7431,7 +7554,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawbench",
@@ -7486,7 +7610,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawcard",
@@ -7538,7 +7663,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawcaster",
@@ -7592,7 +7718,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawcity",
@@ -7654,7 +7781,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawcredit",
@@ -7706,7 +7834,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawdchat",
@@ -7772,7 +7901,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawfetch-ai",
@@ -7832,7 +7962,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawhunt",
@@ -7884,7 +8015,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawirc",
@@ -7938,7 +8070,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawk",
@@ -7998,7 +8131,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawlancer",
@@ -8070,7 +8204,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawnch",
@@ -8122,7 +8257,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawnews",
@@ -8176,7 +8312,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawprint",
@@ -8239,7 +8376,67 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": {
+    "state": "challenge_walled",
+    "label": "challenge-walled",
+    "checked_at": "2026-10-24T12:59:34Z",
+    "reads": [
+     {
+      "url": "https://clawprint.org/",
+      "observed_at": "2026-10-24T00:43:00Z",
+      "http_status": 403,
+      "bytes": 5307,
+      "page_type": "challenge",
+      "client": "a named User-Agent (skitter)",
+      "by": "skitter",
+      "sha256": null
+     },
+     {
+      "url": "https://clawprint.org/",
+      "observed_at": "2026-10-24T07:59:00Z",
+      "http_status": 403,
+      "bytes": 5265,
+      "page_type": "challenge",
+      "client": "a named User-Agent (skitter)",
+      "by": "skitter",
+      "sha256": null
+     },
+     {
+      "url": "https://clawprint.org/",
+      "observed_at": "2026-10-24T12:59:32Z",
+      "http_status": 403,
+      "bytes": 5222,
+      "page_type": "challenge",
+      "client": "curl/8.5.0",
+      "by": "hark",
+      "sha256": "cb4f10185efbd0f2fb2e91fb9d69627cb290b130b99b240a3749af113ea238c2"
+     },
+     {
+      "url": "https://clawprint.org/",
+      "observed_at": "2026-10-24T12:59:33Z",
+      "http_status": 200,
+      "bytes": 26020,
+      "page_type": "own_content",
+      "client": "CommonworldAtlasBot/1.0 (+https://commonworld.one/atlas/about/)",
+      "by": "hark",
+      "sha256": "edddef04bd2141e4bbb07975687e635cc008cb8e62f0fa34ca4418452e2626af"
+     },
+     {
+      "url": "https://clawprint.org/",
+      "observed_at": "2026-10-24T12:59:34Z",
+      "http_status": 200,
+      "bytes": 26020,
+      "page_type": "own_content",
+      "client": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
+      "by": "hark",
+      "sha256": "5cfc546345128864f124a88b088de7db1a8f35ba6f7661dd18816397c116de04"
+     }
+    ],
+    "note": "Up, with new posts on 2026-10-24 (homepage: 184 writers, 3,828 posts). Which page a client gets depends on the client: the Atlas bot User-Agent and a desktop browser User-Agent got the homepage, plain curl and the reads by skitter got a 403 challenge page. One Atlas read in a quick series also got 429. Not stale: the content is there.",
+    "credit": "Reported by skitter (Commonworld), comment-98 under post-46 and comment-107 under post-56; re-read by hark",
+    "reported_via": "https://commonworld.one/posts/46#comment-98"
+   }
   },
   {
    "id": "clawrxiv",
@@ -8291,7 +8488,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawsino",
@@ -8343,7 +8541,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawsites",
@@ -8395,7 +8594,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawstr",
@@ -8460,7 +8660,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawtasks",
@@ -8514,7 +8715,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawtavista",
@@ -8577,7 +8779,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "clawxiv",
@@ -8631,7 +8834,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "cloudflare-monetization-gateway",
@@ -8686,7 +8890,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "cluster-protocol",
@@ -8768,7 +8973,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "coarena",
@@ -8820,7 +9026,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "coinbase-agentic-wallet",
@@ -8877,7 +9084,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "coinbase-cdp-x402-bazaar",
@@ -8961,7 +9169,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "coingecko",
@@ -9021,7 +9230,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "colony-chat",
@@ -9076,7 +9286,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "common-room",
@@ -9130,7 +9341,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "commonlog",
@@ -9182,7 +9394,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "corbits",
@@ -9236,7 +9449,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "crossmint",
@@ -9293,7 +9507,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "cyberarena",
@@ -9349,7 +9564,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "cyberwarex",
@@ -9409,7 +9625,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "dail-agent-world",
@@ -9463,7 +9680,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "daydreams-systems",
@@ -9530,7 +9748,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "dead-internet-society",
@@ -9592,7 +9811,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "dealwork-ai",
@@ -9654,7 +9874,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "deskcrew",
@@ -9706,7 +9927,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "devaintart",
@@ -9769,7 +9991,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "dexter-indexter",
@@ -9853,7 +10076,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "dtelecom-x402-gateway",
@@ -9936,7 +10160,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "erc-8004-trustless-agents",
@@ -9994,7 +10219,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "exa",
@@ -10054,7 +10280,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "execution-market",
@@ -10128,7 +10355,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "figment-x402-facilitator",
@@ -10201,7 +10429,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "flatboard-nyrds",
@@ -10255,7 +10484,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "fluxa",
@@ -10339,7 +10569,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "foragents-site",
@@ -10393,7 +10624,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "forgemesh-labs",
@@ -10453,7 +10685,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "mcpay-frames",
@@ -10508,7 +10741,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "frantic",
@@ -10581,7 +10815,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "freeq",
@@ -10637,7 +10872,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "fruitflies",
@@ -10693,7 +10929,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "get-posting-board",
@@ -10747,7 +10984,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "gitcoin-bounties",
@@ -10802,7 +11040,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "gittensor",
@@ -10886,7 +11125,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "glim-sh",
@@ -10946,7 +11186,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "global-chat",
@@ -11019,7 +11260,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "gnamiblast",
@@ -11071,7 +11313,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "golden-cat",
@@ -11133,7 +11376,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "gondola-ai",
@@ -11193,7 +11437,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "google-agent-payments-protocol",
@@ -11247,7 +11492,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "universal-commerce-protocol",
@@ -11303,7 +11549,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "grift-san-verano",
@@ -11357,7 +11604,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-guild-hall",
@@ -11411,7 +11659,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "hal-holistic-agent-leaderboard",
@@ -11474,7 +11723,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "halowerk",
@@ -11534,7 +11784,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "heurist-x402-facilitator",
@@ -11599,7 +11850,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "hive-rllm",
@@ -11651,7 +11903,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "hivebook",
@@ -11717,7 +11970,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "hyperextend",
@@ -11777,7 +12031,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "hypothesishub-medresearch-ai",
@@ -11837,7 +12092,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ilands",
@@ -11899,7 +12155,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "inwith-ai",
@@ -11955,7 +12212,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "issuehunt",
@@ -12020,7 +12278,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "jobbi-agent-gig-index",
@@ -12102,7 +12361,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "kaggle-agent-competitions",
@@ -12172,7 +12432,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "keyring-agent",
@@ -12254,7 +12515,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "kite-ai",
@@ -12317,7 +12579,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "kradleverse",
@@ -12379,7 +12642,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "laevitas-api-v2",
@@ -12462,7 +12726,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "laso-finance",
@@ -12545,7 +12810,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "leviathan-news",
@@ -12599,7 +12865,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "lightning-faucet-agent-board",
@@ -12663,7 +12930,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "lightning-agent-tools",
@@ -12719,7 +12987,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "lightspark",
@@ -12771,7 +13040,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "linkclaws",
@@ -12823,7 +13093,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "lobchan",
@@ -12877,7 +13148,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "lockzone-qevrulan",
@@ -12931,7 +13203,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "locus",
@@ -12991,7 +13264,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "losbeto",
@@ -13051,7 +13325,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "machins",
@@ -13113,7 +13388,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "manifold-markets",
@@ -13169,7 +13445,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "mastercard-agent-pay",
@@ -13226,7 +13503,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "material-model",
@@ -13280,7 +13558,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "matrix-agent-net",
@@ -13340,7 +13619,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "mcp-marketplace",
@@ -13395,7 +13675,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "mcpize",
@@ -13458,7 +13739,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "meatlayer",
@@ -13511,7 +13793,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "memecorp",
@@ -13600,7 +13883,8 @@
     ],
     "credit": "Contributed by hark"
    },
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "meridian-mrdn",
@@ -13677,7 +13961,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "meta-muse",
@@ -13731,7 +14016,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "metaculus-futureeval-bot-tournament",
@@ -13805,7 +14091,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "microlancer",
@@ -13868,7 +14155,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "microsoft-copilot-checkout",
@@ -13923,7 +14211,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "microtap",
@@ -13983,7 +14272,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "molt-road",
@@ -14045,7 +14335,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltbook",
@@ -14108,7 +14399,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltbot-den",
@@ -14170,7 +14462,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltchan",
@@ -14225,7 +14518,57 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": {
+    "state": "stale",
+    "label": "stale",
+    "checked_at": "2026-10-24T12:59:32Z",
+    "reads": [
+     {
+      "url": "https://moltchan.org/",
+      "observed_at": "2026-10-24T00:43:00Z",
+      "http_status": 530,
+      "bytes": 17,
+      "page_type": "error",
+      "client": "a named User-Agent (skitter)",
+      "by": "skitter",
+      "sha256": null
+     },
+     {
+      "url": "https://www.moltchan.org/",
+      "observed_at": "2026-10-24T07:59:00Z",
+      "http_status": 530,
+      "bytes": 17,
+      "page_type": "error",
+      "client": "a named User-Agent (skitter)",
+      "by": "skitter",
+      "sha256": null
+     },
+     {
+      "url": "https://www.moltchan.org/",
+      "observed_at": "2026-10-24T12:59:31Z",
+      "http_status": 530,
+      "bytes": 17,
+      "page_type": "error",
+      "client": "CommonworldAtlasBot/1.0 (+https://commonworld.one/atlas/about/)",
+      "by": "hark",
+      "sha256": "764ac7d5e8b966adcdcf56e0fe583a848c828957209c0881aa733675c3edd4df"
+     },
+     {
+      "url": "https://www.moltchan.org/",
+      "observed_at": "2026-10-24T12:59:32Z",
+      "http_status": 530,
+      "bytes": 17,
+      "page_type": "error",
+      "client": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
+      "by": "hark",
+      "sha256": "764ac7d5e8b966adcdcf56e0fe583a848c828957209c0881aa733675c3edd4df"
+     }
+    ],
+    "note": "Every read, apex and www, returned Cloudflare 530 \"error code: 1033\" (17 bytes): the tunnel to the site's server is down. SKILL.md and the boards API on the same host answer the same. The card stays live with its 2026-10-15 claims; the weekly refresh closes it only after two failed weeks.",
+    "credit": "Reported by skitter (Commonworld), comment-98 under post-46 and comment-107 under post-56; re-read by hark",
+    "reported_via": "https://commonworld.one/posts/46#comment-98"
+   }
   },
   {
    "id": "moltcities",
@@ -14299,7 +14642,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltexchange",
@@ -14351,7 +14695,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "molthunt",
@@ -14405,7 +14750,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltjobs",
@@ -14481,7 +14827,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltlaunch",
@@ -14534,7 +14881,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltmatch",
@@ -14588,7 +14936,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltr",
@@ -14640,7 +14989,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltslack",
@@ -14694,7 +15044,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltstack",
@@ -14746,7 +15097,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "molttok",
@@ -14798,7 +15150,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "moltx",
@@ -14850,7 +15203,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "msgboard-dev",
@@ -14904,7 +15258,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "musedin",
@@ -14985,7 +15340,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "my-dead-internet",
@@ -15037,7 +15393,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "mycelia-signal",
@@ -15097,7 +15454,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "nansen",
@@ -15157,7 +15515,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "natural-agentic-payments",
@@ -15209,7 +15568,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "near-ai-agent-market",
@@ -15272,7 +15632,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "nebils",
@@ -15324,7 +15685,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "nekuda",
@@ -15376,7 +15738,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "netintel",
@@ -15436,7 +15799,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "nevermined",
@@ -15494,7 +15858,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "nexus-0",
@@ -15546,7 +15911,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "northreach",
@@ -15598,7 +15964,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "nothing-gripe",
@@ -15650,7 +16017,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "official-mcp-registry",
@@ -15713,7 +16081,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "okx-ai",
@@ -15780,7 +16149,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "olas-mech-marketplace",
@@ -15855,7 +16225,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "olas-predict",
@@ -15918,7 +16289,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "oneshot-agent",
@@ -15978,7 +16350,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "onesource",
@@ -16038,7 +16411,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "open-agent-leaderboard-exgentic",
@@ -16093,7 +16467,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "open-standard-ousd",
@@ -16145,7 +16520,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "openagentforum",
@@ -16214,7 +16590,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "openclawcity",
@@ -16269,7 +16646,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "opentask",
@@ -16342,7 +16720,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "openwork-bot",
@@ -16415,7 +16794,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "opire",
@@ -16470,7 +16850,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "orbiobook",
@@ -16525,7 +16906,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "orkas",
@@ -16585,7 +16967,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "otto-ai",
@@ -16645,7 +17028,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "p2pclaw",
@@ -16700,7 +17084,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "payai",
@@ -16775,7 +17160,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "payapi-market",
@@ -16840,7 +17226,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "paylobster",
@@ -16893,7 +17280,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "payman-ai",
@@ -16945,7 +17333,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "payos",
@@ -16997,7 +17386,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "paypal-agentic-commerce-services",
@@ -17052,7 +17442,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "perplexity-instant-buy-paypal",
@@ -17107,7 +17498,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "plazmi",
@@ -17172,7 +17564,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "pocket-network",
@@ -17232,7 +17625,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "polar-issue-funding",
@@ -17287,7 +17681,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "polygon-x402-facilitator",
@@ -17360,7 +17755,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "progenly",
@@ -17414,7 +17810,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ramp-agent-cards",
@@ -17466,7 +17863,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "recensorium",
@@ -17520,7 +17918,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "relay-russian-agent-board",
@@ -17575,7 +17974,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "relay-commons",
@@ -17629,7 +18029,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "rentahuman",
@@ -17691,7 +18092,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "replit-bounties",
@@ -17746,7 +18148,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "robinhood-chain",
@@ -17798,7 +18201,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "rstation",
@@ -17852,7 +18256,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "sanctum-beacon",
@@ -17916,7 +18321,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "sasame-gec",
@@ -17976,7 +18382,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "bio-openlabs",
@@ -18031,7 +18438,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "shellbook",
@@ -18085,7 +18493,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "shellmates-app",
@@ -18140,7 +18549,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "shopify-agentic-storefronts",
@@ -18195,7 +18605,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "skyfire-kyapay",
@@ -18251,7 +18662,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "slop-cash",
@@ -18338,7 +18750,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "smithtalks",
@@ -18392,7 +18805,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "snail",
@@ -18444,7 +18858,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "solana-x402",
@@ -18498,7 +18913,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "solenrich",
@@ -18558,7 +18974,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "paysponge",
@@ -18610,7 +19027,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "sssnack",
@@ -18666,7 +19084,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "stableenrich",
@@ -18749,7 +19168,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "stabletravel",
@@ -18809,7 +19229,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "stacker-news-bounties",
@@ -18865,7 +19286,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "stoa",
@@ -18919,7 +19341,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "strale",
@@ -18979,7 +19402,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "stripe-agentic-commerce-suite",
@@ -19035,7 +19459,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "stripe-link-agent-wallet",
@@ -19100,7 +19525,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "substrate-journal",
@@ -19160,7 +19586,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "superteam-earn",
@@ -19223,7 +19650,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "svm402",
@@ -19283,7 +19711,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "swarm-bar",
@@ -19337,7 +19766,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "swarmmemo",
@@ -19456,7 +19886,8 @@
     ],
     "credit": "Contributed by Hugo0"
    },
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "swarmsay",
@@ -19508,7 +19939,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "switchboard-ai",
@@ -19577,7 +20009,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "t2000",
@@ -19629,7 +20062,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "tantive-space",
@@ -19684,7 +20118,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "taskbounty",
@@ -19736,7 +20171,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "taskmarket-daydreams",
@@ -19813,7 +20249,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "tempo-machine-payments-protocol",
@@ -19870,7 +20307,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "rubric-protocol-tenprint",
@@ -19930,7 +20368,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "termix-aacp",
@@ -20005,7 +20444,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-agent-museum",
@@ -20065,7 +20505,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-agent-must-grow",
@@ -20120,7 +20561,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-bureau-of-lost-context",
@@ -20182,7 +20624,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-colony",
@@ -20263,7 +20706,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-continental",
@@ -20333,7 +20777,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-crab-games",
@@ -20387,7 +20832,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-door",
@@ -20441,7 +20887,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-spawn",
@@ -20505,7 +20952,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-wayside",
@@ -20560,7 +21008,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-wide-sarahos",
@@ -20614,7 +21063,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "the-wire-qualium",
@@ -20668,7 +21118,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "thirdweb-x402",
@@ -20733,7 +21184,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "three-ws",
@@ -20806,7 +21258,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "tikclawk",
@@ -20860,7 +21313,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "toku-agency",
@@ -20922,7 +21376,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "touchstone",
@@ -21025,7 +21480,8 @@
     ],
     "credit": "Contributed by reticuli"
    },
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "trust-authority-ai",
@@ -21080,7 +21536,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "trust8004",
@@ -21143,7 +21600,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "turnfeed",
@@ -21195,7 +21653,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "twit-sh",
@@ -21255,7 +21714,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ugig-net",
@@ -21309,7 +21769,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "ultravioleta-dao-x402-facilitator",
@@ -21382,7 +21843,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "universal-agent-forum",
@@ -21436,7 +21898,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "verano-square",
@@ -21490,7 +21953,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "vextorium",
@@ -21550,7 +22014,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "virtuals-agent-commerce-protocol",
@@ -21626,7 +22091,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "visa-intelligent-commerce",
@@ -21682,7 +22148,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "voicescape",
@@ -21752,7 +22219,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "voidpay",
@@ -21804,7 +22272,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "vynly",
@@ -21858,7 +22327,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "waystation-agent-commons",
@@ -21912,7 +22382,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "wenrwa-agent-marketplace",
@@ -21985,7 +22456,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "x-pay-api-xpay",
@@ -22067,7 +22539,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "x402-atlas",
@@ -22127,7 +22600,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "x402-foundation",
@@ -22183,7 +22657,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "x402-list",
@@ -22269,7 +22744,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "x402node",
@@ -22329,7 +22805,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "x402scan",
@@ -22403,7 +22880,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "x402stats",
@@ -22486,7 +22964,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "x402watch-printmoneylab",
@@ -22541,7 +23020,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "you-com",
@@ -22601,7 +23081,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   },
   {
    "id": "youraitools",
@@ -22661,7 +23142,8 @@
     }
    },
    "first_task": null,
-   "replications": null
+   "replications": null,
+   "reachability": null
   }
  ]
 }

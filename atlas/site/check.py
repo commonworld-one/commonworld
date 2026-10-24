@@ -1183,6 +1183,40 @@ def replications_checks(pages):
     return fails
 
 
+def reachability_checks(pages):
+    """Reachability notes (atlas/site/reachability.py): atlas/data/reachability.json is valid and only names live cards; every per-entry JSON
+    carries `reachability` exactly as published from that file (null without a record); platforms.json agrees; the card page shows the
+    Reachability block and the stale / challenge-walled chip, and its Markdown twin the '## Reachability' section, exactly when there is a record."""
+    import reachability as reach
+    fails = []
+    pdir = os.path.join(DIST, 'atlas', 'platforms')
+    recs = {fn[:-5]: json.load(open(os.path.join(pdir, fn), encoding='utf-8')) for fn in sorted(os.listdir(pdir)) if fn.endswith('.json')}
+    cards = reach.load()
+    fails += reach.validate(cards, {s for s, r in recs.items() if r.get('status') == 'live'}, set(recs))
+    for slug, r in recs.items():
+        w = f'reachability: {slug}'
+        want = reach.published(cards, slug) if r.get('status') == 'live' else None
+        if 'reachability' not in r: fails.append(f'{w}: entry JSON lacks the reachability field'); continue
+        if r['reachability'] != want: fails.append(f'{w}: entry JSON reachability differs from atlas/data/reachability.json')
+        u = f'/atlas/platforms/{slug}/'
+        h = open(pages[u], encoding='utf-8').read() if u in pages else ''
+        mdp = os.path.join(DIST, 'atlas', 'platforms', slug, 'index.md')
+        md = open(mdp, encoding='utf-8').read() if os.path.exists(mdp) else ''
+        if ('id="h-reach"' in h) != bool(want): fails.append(f'{w}: card page Reachability block out of step with the record')
+        if ('## Reachability' in md) != bool(want): fails.append(f'{w}: Markdown twin Reachability section out of step')
+        if want:
+            if f'chip reach {want["state"]}' not in h: fails.append(f'{w}: card page lacks the {want["label"]} chip')
+            if html.escape(reach.sentence(want)) not in h or reach.sentence(want) not in md: fails.append(f'{w}: state line differs from the record')
+            for x in want['reads']:
+                if x['url'] not in md or x['observed_at'] not in md: fails.append(f'{w}: a read is missing from the Markdown twin')
+    pl = json.load(open(os.path.join(DIST, 'atlas', 'platforms.json'), encoding='utf-8'))
+    for r in pl.get('platforms') or []:
+        if r.get('reachability') != (recs.get(r['id']) or {}).get('reachability'): fails.append(f'reachability: platforms.json {r["id"]} differs from its entry file')
+    n = {s: sum(1 for r in recs.values() if (r.get('reachability') or {}).get('state') == s) for s in reach.STATES}
+    print(f'reachability: {n["stale"]} stale, {n["challenge_walled"]} challenge-walled card(s)')
+    return fails
+
+
 def cards_v2_checks(pages):
     """Cards v2 (atlas/site/cards_v2.py, atlas/CURATION.md#cards-v2): the curated keys-and-books and first-task files are valid against
     the published claims; every per-entry JSON carries evidence_level / keys_and_books / first_task exactly as the rules compute them
@@ -1590,6 +1624,7 @@ def main():
     fails += markdown_twin_checks(pages)[0]
     fails += cards_v2_checks(pages)
     fails += replications_checks(pages)
+    fails += reachability_checks(pages)
     fails += stats_checks(parsed, pages, locs)
     fails += badge_checks(parsed, pages, locs)
     fails += api_checks(parsed, locs)

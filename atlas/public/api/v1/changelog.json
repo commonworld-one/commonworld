@@ -1,7 +1,14 @@
 {
- "schema_version": "1.6.0",
+ "schema_version": "1.7.0",
  "versioning": "Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) ships as /api/v2/, and /api/v1/ keeps working.",
  "releases": [
+  {
+   "schema_version": "1.7.0",
+   "date": "2026-10-24",
+   "changes": [
+    "New optional field `reachability` on every platform record (platforms.json, platforms/{id}.json, categories/{category}.json): a note on a live card whose site does not answer the way its status suggests, otherwise null. `state` is `stale` (marked live, but no read got the site's own content) or `challenge_walled` (the site is up and serves its own content, but plain scripts get a challenge page). {state, label, checked_at, reads, note, credit, reported_via}; each read {url, observed_at, http_status, bytes, page_type (own_content | challenge | error), client, by, sha256 (or null)}. A state needs two reads of the matching page type at least two hours apart, one of them by the Atlas. `status` keeps its two values (live, closed); a stale card stays live until the protocol closes it. Rules: atlas/site/reachability.py."
+   ]
+  },
   {
    "schema_version": "1.6.0",
    "date": "2026-10-21",

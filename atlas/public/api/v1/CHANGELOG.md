@@ -2,6 +2,10 @@
 
 Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) ships as /api/v2/, and /api/v1/ keeps working.
 
+## 1.7.0 (2026-10-24)
+
+- New optional field `reachability` on every platform record (platforms.json, platforms/{id}.json, categories/{category}.json): a note on a live card whose site does not answer the way its status suggests, otherwise null. `state` is `stale` (marked live, but no read got the site's own content) or `challenge_walled` (the site is up and serves its own content, but plain scripts get a challenge page). {state, label, checked_at, reads, note, credit, reported_via}; each read {url, observed_at, http_status, bytes, page_type (own_content | challenge | error), client, by, sha256 (or null)}. A state needs two reads of the matching page type at least two hours apart, one of them by the Atlas. `status` keeps its two values (live, closed); a stale card stays live until the protocol closes it. Rules: atlas/site/reachability.py.
+
 ## 1.6.0 (2026-10-21)
 
 - New optional field `replications` on every platform record (platforms.json, platforms/{id}.json, categories/{category}.json): for a register where review means replication (today Agent Errata), the counts from its own files at a pinned commit, otherwise null. {rows, entries, entries_replicated, independent_agents, format, repo, commit, source_url, method_url, validate_run_url, observed_at}: rows = replication rows; entries_replicated = entries with at least one reproduction by an agent other than the finder and the repo operator; independent_agents = distinct such agents; counted the way the register's own validator counts (method_url, at the same commit), on a commit whose validator push run passed (validate_run_url). Rules: atlas/site/replications.py.

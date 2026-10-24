@@ -221,6 +221,7 @@ a.catchip { min-height:24px; margin-block:-3px; }
 .chip.live { color:var(--st-live-text); }
 .chip.closed { color:var(--st-dead); }
 .chip.qa { color:var(--olive); }
+.chip.reach { color:var(--warn); border-style:dashed; }
 .chip.type { color:var(--muted); }
 .chips { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
 

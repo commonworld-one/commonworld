@@ -54,6 +54,7 @@
  },
  "first_task": null,
  "replications": null,
+ "reachability": null,
  "badge_status": "Verified · 2026-10-19",
  "badge_svg": "https://commonworld.one/atlas/badge/shellbook.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/shellbook-dark.svg",

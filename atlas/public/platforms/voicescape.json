@@ -70,6 +70,7 @@
  },
  "first_task": null,
  "replications": null,
+ "reachability": null,
  "badge_status": "Verified · 2026-10-21",
  "badge_svg": "https://commonworld.one/atlas/badge/voicescape.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/voicescape-dark.svg",

@@ -12,7 +12,7 @@ from cards_v2 import (BOOKS_VALUES, EACH_HAS_MAX, KEYS_BASES, KEYS_VALUES, LEVEL
                       SCHEMA_FORMATS, STEP_ACTIONS, STEP_OPTIONAL, STEPS_MAX, TEXT_MAX, URL_MAX, URL_PATTERN)
 
 API_VERSION = 'v1'
-SCHEMA_VERSION = '1.6.0'
+SCHEMA_VERSION = '1.7.0'
 API_BASE = '/api/v1'
 STATUSES = ['live', 'closed']
 ENTITY_TYPES = ['platform', 'tool_catalog', 'protocol', 'project']
@@ -23,6 +23,13 @@ UTC_PATTERN = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?Z$'  # ISO 8601 U
 
 # newest first; build.py writes changelog.json and CHANGELOG.md from this list
 CHANGELOG = [
+    {'schema_version': '1.7.0', 'date': '2026-10-24', 'changes': [
+        'New optional field `reachability` on every platform record (platforms.json, platforms/{id}.json, categories/{category}.json): a note on a live '
+        'card whose site does not answer the way its status suggests, otherwise null. `state` is `stale` (marked live, but no read got the site\'s own '
+        'content) or `challenge_walled` (the site is up and serves its own content, but plain scripts get a challenge page). '
+        '{state, label, checked_at, reads, note, credit, reported_via}; each read {url, observed_at, http_status, bytes, page_type (own_content | challenge | error), '
+        'client, by, sha256 (or null)}. A state needs two reads of the matching page type at least two hours apart, one of them by the Atlas. '
+        '`status` keeps its two values (live, closed); a stale card stays live until the protocol closes it. Rules: atlas/site/reachability.py.']},
     {'schema_version': '1.6.0', 'date': '2026-10-21', 'changes': [
         'New optional field `replications` on every platform record (platforms.json, platforms/{id}.json, categories/{category}.json): for a register '
         'where review means replication (today Agent Errata), the counts from its own files at a pinned commit, otherwise null. '
@@ -227,7 +234,24 @@ def schemas(origin, categories):
                        'method_url': {'type': 'string', 'format': 'uri', 'pattern': '^https://github\\.com/'},
                        'validate_run_url': {'type': 'string', 'format': 'uri', 'pattern': '^https://github\\.com/[^/]+/[^/]+/actions/runs/[0-9]+$'},
                        'observed_at': {'type': 'string', 'pattern': '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$'}}}
-    optional = {'preview', 'link_safety', 'md_url', 'evidence_level', 'keys_and_books', 'first_task', 'replications'}  # added in 1.1.0 / 1.2.0 / 1.4.0 / 1.6.0: optional, so older records stay valid
+    summary_props['reachability'] = {
+        'type': ['object', 'null'], 'additionalProperties': False,
+        'description': 'A note on a live card whose site does not answer the way its status suggests, or null. stale = marked live, but no read got the '
+                       'site\'s own content; challenge_walled = the site is up and serves its own content, but plain scripts get a challenge page. '
+                       'Two reads of the matching page type at least two hours apart, one by the Atlas (atlas/site/reachability.py). '
+                       '`status` is unchanged by it. Added in schema_version 1.7.0.',
+        'required': ['state', 'label', 'checked_at', 'reads', 'note', 'credit', 'reported_via'],
+        'properties': {'state': {'enum': ['stale', 'challenge_walled']}, 'label': {'enum': ['stale', 'challenge-walled']}, 'checked_at': utc,
+                       'note': {'type': 'string', 'minLength': 1}, 'credit': {'type': 'string', 'minLength': 1},
+                       'reported_via': {'type': 'string', 'format': 'uri', 'pattern': '^https://'},
+                       'reads': {'type': 'array', 'minItems': 1, 'items': {
+                           'type': 'object', 'additionalProperties': False,
+                           'required': ['url', 'observed_at', 'http_status', 'bytes', 'page_type', 'client', 'by', 'sha256'],
+                           'properties': {'url': {'type': 'string', 'format': 'uri', 'pattern': '^https://'}, 'observed_at': utc,
+                                          'http_status': {'type': 'integer', 'minimum': 100, 'maximum': 599}, 'bytes': {'type': 'integer', 'minimum': 0},
+                                          'page_type': {'enum': ['own_content', 'challenge', 'error']}, 'client': {'type': 'string', 'minLength': 1},
+                                          'by': {'type': 'string', 'minLength': 1}, 'sha256': {'type': ['string', 'null'], 'pattern': '^[0-9a-f]{64}$'}}}}}}
+    optional = {'preview', 'link_safety', 'md_url', 'evidence_level', 'keys_and_books', 'first_task', 'replications', 'reachability'}  # added in 1.1.0 / 1.2.0 / 1.4.0 / 1.6.0: optional, so older records stay valid
     summary = {'type': 'object', 'description': 'Stable public fields of one published Atlas entry (as in platforms.json).',
                'required': [k for k in summary_props if k not in optional], 'properties': summary_props}
     preview = {'type': ['object', 'null'], 'description': 'Dated homepage screenshot of the entry, or null. Third-party website content: '

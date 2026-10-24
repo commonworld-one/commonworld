@@ -23,6 +23,15 @@ A published card is marked closed in one of two ways, and the card says which. A
 1. **Human review** (this protocol, step 6): an official shutdown/sunset statement, or at least two independent signals (e.g. the domain fails by two methods AND no activity anywhere for 90+ days). Cards closed this way are never reopened automatically: a re-registered or parked domain can answer HTTP 200 too. Reopening needs a new check.
 2. **Automated weekly check** (`atlas/refresh.py`): each week the primary URL is fetched with several attempts plus alternate URLs (http/https, www). The first failed week only marks the entry as suspected in `atlas/data/refresh-state.json`; nothing is published. A second consecutive failed week marks the card closed (`include_closed_history`) with a `site_reachable` claim (`direct_observation`, outcome `contradicted`) and a `status_history` record `by: atlas/refresh.py`. The card then shows "Closed by automated check since <date>". If the site answers again in a later weekly check, the card reopens automatically (back to live, with a new claim and history record). The checker validates every redirect and connects to the exact DNS addresses it validated, without using system proxies; private, local, cloud-internal and special platform addresses are refused and count as failed attempts. JSON reads are capped at 1 MB per response and 25 MB per aggregate source read; aggregate processing is capped at 100,000 rows and 50 pages. Pagination offsets must be decimal values of at most 12 digits.
 
+### Between live and closed: reachability notes
+
+A live card can still need a warning before either route closes it. Two notes exist (rules in [`site/reachability.py`](site/reachability.py), data in [`data/reachability.json`](data/reachability.json)):
+
+- **stale**: the card says live, but no read got the site's own content (for example Cloudflare 530 "error code: 1033"). The card stays live with all its claims until the site answers again or one of the two routes above closes it.
+- **challenge-walled**: the site is up and serves its own content, but plain scripts get a challenge page (for example 403 "Just a moment..."). This is still reachable under this protocol; the note says that what a client sees depends on the client.
+
+A note needs two reads of the matching page type (`own_content`, `challenge`, `error`) at least two hours apart, one of them by the Atlas itself, so one bad minute or one outside report alone never moves a card. `status` keeps its two values; the note is the separate field `reachability`.
+
 In both cases the page, the URL and the permanent ID are kept.
 
 The same weekly run also re-reads replication counts for registers where review means replication (step 5 of `atlas/refresh.py`; rules in [CURATION.md](CURATION.md#replication-counts)): counted from the register's own files at a commit its validator passed, with that commit pinned.

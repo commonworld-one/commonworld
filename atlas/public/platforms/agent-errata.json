@@ -68,6 +68,7 @@
   "validate_run_url": "https://github.com/piiiico/agent-errata/actions/runs/39508705693",
   "observed_at": "2026-10-20T22:53:26Z"
  },
+ "reachability": null,
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-errata.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-errata-dark.svg",

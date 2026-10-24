@@ -29,6 +29,7 @@ import screens  # noqa: E402  (homepage screenshots from the orphan branch atlas
 import events as atlas_events  # noqa: E402  (public events log: atlas/data/events.jsonl)
 import cards_v2 as cv2  # noqa: E402  (cards v2: evidence ladder, keys and books, first task; atlas/CURATION.md)
 import replications as repl  # noqa: E402  (replication counts on a card: atlas/data/replications.json)
+import reachability as reach  # noqa: E402  (stale / challenge-walled notes on live cards: atlas/data/reachability.json)
 
 e = cw.e
 DEFAULT_DATA = os.path.normpath(os.path.join(HERE, '..', 'data', 'snapshot-verified-2026-10-15.json'))
@@ -200,6 +201,7 @@ def enrich(site, tags):
         c['_kb'] = cv2.keys_and_books(c, getattr(site, 'keys_books', {}), evo)
         c['_task'] = cv2.first_task(c, getattr(site, 'first_tasks', {}))
         c['_repl'] = repl.published(getattr(site, 'replications', {}), c['slug'])
+        c['_reach'] = reach.published(getattr(site, 'reachability', {}), c['slug']) if c.get('status') == 'live' else None
 
 
 def keynum_html(c):
@@ -214,7 +216,9 @@ def keynum_html(c):
 def status_chip(c):
     if c['status'] == 'closed':
         return '<span class="chip closed"><i class="dot closed"></i>closed</span>'
-    return '<span class="chip live"><i class="dot"></i>live</span>'
+    r = c.get('_reach')
+    note = (f'<span class="chip reach {r["state"]}" title="{e(reach.STATE_TEXT[r["state"]])}">{e(r["label"])}</span>' if r else '')
+    return '<span class="chip live"><i class="dot"></i>live</span>' + note
 
 
 REFRESH_TOOL = 'atlas/refresh.py'  # the automated weekly check (status_history[].by)
@@ -818,10 +822,32 @@ def repl_md(r):
             f"Counting rules: {r['method_url']}. Observed {r['observed_at']}."]
 
 
+def reach_html(r):
+    """Reachability block (atlas/site/reachability.py), only on live cards with a stale or challenge-walled note."""
+    if not r:
+        return ''
+    rows = ''.join(f'<li><code>{e(x["observed_at"])}</code> · {ext_link(x["url"], e(x["url"]))} · HTTP {x["http_status"]}, {fmt_num(x["bytes"])} bytes'
+                   + (f', sha256 <code>{e(x["sha256"][:16])}…</code>' if x.get('sha256') else '')
+                   + f' · <b>{e(x["page_type"].replace("_", " "))}</b> · client: {e(x["client"])} · read by {e(x["by"])}</li>' for x in r['reads'])
+    return (f'<section class="cw-panel cw-panel-gap reachability" aria-labelledby="h-reach"><div class="cw-panel-head"><h2 id="h-reach">Reachability</h2>'
+            f'<span class="chip reach {r["state"]}">{e(r["label"])}</span></div><div class="cw-panel-body">'
+            f'<p class="reach-line">{e(reach.sentence(r))}</p><p>{e(r["note"])}</p><ul class="reach-reads">{rows}</ul>'
+            f'<p class="claim-meta">{e(r["credit"])} via {ext_link(r["reported_via"], "the report")}. '
+            f'Rules: two reads of the same page type at least two hours apart, one of them by the Atlas '
+            f'(<a href="{REPO_URL}/blob/main/atlas/site/reachability.py" rel="nofollow noopener">reachability.py</a>).</p></div></section>')
+
+
+def reach_md(r):
+    if not r:
+        return []
+    return ['', '## Reachability', '', reach.sentence(r), '', r['note'], ''] + [f'- {reach.read_line(x)}' for x in r['reads']] + \
+           ['', f"{r['credit']} via {r['reported_via']}. Rules: {REPO_URL}/blob/main/atlas/site/reachability.py"]
+
+
 def v2_panels(site, c):
     return (f'<section class="cw-panel v2-panel" aria-labelledby="h-v2"><div class="cw-panel-head"><h2 id="h-v2">Evidence, keys and books</h2></div>'
             f'<div class="cw-panel-body v2-grid">{ladder_html(site, c["_ev"])}{kb_html(site, c["_kb"])}</div></section>'
-            f'{task_html(site, c["_task"])}{repl_html(c.get("_repl"))}')
+            f'{task_html(site, c["_task"])}{repl_html(c.get("_repl"))}{reach_html(c.get("_reach"))}')
 
 
 def md_cell(v):
@@ -832,7 +858,7 @@ def build_platform_md(site, c):
     """Markdown twin of a card page (<card>/index.md): the same facts, ladder, keys and books, first task and claims."""
     A, b = site.abs, site.base
     claims = card_claims(c)
-    st = ('Closed (history)' if c['status'] == 'closed' else 'Live')
+    st = ('Closed (history)' if c['status'] == 'closed' else 'Live' + (f" ({c['_reach']['label']})" if c.get('_reach') else ''))
     ev = c['_ev']
     L = [f"# {c['name']}", '', f"> {c['_desc']}" if c.get('_desc') else '> Atlas entry', '',
          f"Canonical page: {A(c['_url'])} · JSON: {A(b + '/platforms/' + c['slug'] + '.json')} · Permanent ID: `{c['slug']}`", '',
@@ -855,6 +881,7 @@ def build_platform_md(site, c):
         L += ['', '## First task', '', f"**{t['title']}**", ''] + [f'{i}. {s}' for i, s in enumerate(t['steps_text'], 1)] + \
              ['', f"Done when: {t['done_when']}", '', f"{t['credit']} via {t['contributed_via']}: {t['source_url']}. Verified by {t['verified_by']} on {t['verified_on']}: {t['verification']}"]
     L += repl_md(c.get('_repl'))
+    L += reach_md(c.get('_reach'))
     L += ['', '## Verified facts', '', '| What | Statement | Value | Basis | Outcome | Evidence | Observed | Source |', '|---|---|---|---|---|---|---|---|']
     for x in claims:
         lv = cv2.claim_level(x, c['_evo'])
@@ -2393,7 +2420,7 @@ def agent_record(site, c):
             'verified_at': iso(c['_verified']), 'last_checked': iso(c['_verified']), 'claims_count': len(claims),
             'disclosure': c.get('disclosure'), 'preview': preview_record(site, c), 'link_safety': link_safety_of(site, c),
             'md_url': site.abs(c['_url'] + 'index.md'), 'evidence_level': c['_ev'], 'keys_and_books': c['_kb'], 'first_task': c['_task'],
-            'replications': c['_repl']}
+            'replications': c['_repl'], 'reachability': c['_reach']}
 
 
 MIRROR_DIR = os.path.normpath(os.path.join(HERE, '..', 'public'))
@@ -2536,6 +2563,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 - Per entry as Markdown: {A(f'{b}/platforms/')}<id>/index.md, the card page as plain Markdown (take the URL from md_url)
 - Cards v2 fields on every record (schema_version 1.4.0; 1.5.0 removed first_task.code and first_task.no_code): evidence_level {{level 1-3 or null, id, label, claims_counted}}, the highest evidence-ladder level of the card's supported money and activity claims (1 operator says = the platform's own words; 2 public dashboard = a public stats page, dashboard or API; 3 public transactions = one block-explorer record, such as a transaction, address or block, set only by a curator who opened it; the automatic rule gives at most level 2); keys_and_books {{keys, books, people}}, each {{state recorded or not_recorded, value, label, source_url, quote}}; books comes only from a supported money-flow claim at evidence level 2 or 3 (never curated); keys also has basis (operator_says = the label is the operator's claim, "The operator says ..."; onchain_verified = smart contract recorded on a public explorer, with contract_url, the explorer page of its address or token); people names an organization, never an individual person; first_task (a verified, read-only first step for newcomers with credit, or null; steps are typed objects from a closed list of actions, open_page, find_field and check_field, with steps_text holding the sentence the site renders for each; nothing to download or run; contract: {REPO_URL}/blob/main/atlas/CURATION.md#first-task-contract). Money and activity claims in <id>.json carry evidence_level and evidence_label, plus evidence_note where a curator opened the source and set the level by hand (rules for a manual relabel: {REPO_URL}/blob/main/atlas/CURATION.md#curator-review-of-a-level). Rule: {A(f'{b}/about/#evidence-ladder')}
 - Replications (schema_version 1.6.0): replication counts for a register where review means replication, or null; {{rows, entries, entries_replicated, independent_agents, format, repo, commit, source_url, method_url, validate_run_url, observed_at}}, counted at a pinned commit of the register the way its own validator counts (rows = replication rows; entries_replicated = entries with at least one reproduction by an agent other than the finder and the repo operator; independent_agents = distinct such agents); contract: {REPO_URL}/blob/main/atlas/site/replications.py
+- Reachability (schema_version 1.7.0): on a live card whose site does not answer the way its status suggests, reachability {{state, label, checked_at, reads, note, credit, reported_via}}, otherwise null. state stale = marked live, but no read got the site's own content (the card stays live until the protocol closes it); state challenge_walled = the site is up and serves its own content, but plain scripts get a challenge page, so what you see depends on your client. Each read: url, observed_at, http_status, bytes, page_type (own_content, challenge, error), client, by, sha256. Two reads of the same page type at least two hours apart, one by the Atlas; contract: {REPO_URL}/blob/main/atlas/site/reachability.py
 - Closed entries: closed by human review (official statement or at least two independent signals; never reopened automatically) or by the automated weekly check (unreachable in 2 consecutive weekly checks; reopens automatically if the site answers again). A single failed load is never proof.
 - IDs are readable slugs made from the platform name (examples: {', '.join(c['slug'] for c in exs)}). Never guess or construct an ID: take it from platforms.json or llms-full.txt. An ID that is not listed there does not exist in the Atlas.
 {ex_lines}
@@ -2595,6 +2623,7 @@ Some agent tools cannot reach the site directly. The same published files are mi
 - Versioned API v1: {A(api_v1.API_BASE + '/index.json')}
 - Per entry: take json_url from platforms.json; never construct an ID. Each card page also has a Markdown twin (md_url)
 - Replication counts: records of registers where review means replication carry replications {{rows, entries, entries_replicated, independent_agents, commit, source_url, method_url, validate_run_url, observed_at}}, counted at a pinned commit the way the register's validator counts; null elsewhere
+- Reachability: live cards whose site does not answer the way the status suggests carry reachability {{state stale or challenge_walled, label, checked_at, reads, note, credit, reported_via}}; null elsewhere. status itself stays live or closed
 - Cards v2: every record has evidence_level (1 operator says, 2 public dashboard, 3 public transactions set only by a curator who opened the record, or null = not recorded yet), keys_and_books (keys, books, people; filled only from sourced claims on the card; books only from a money-flow claim at evidence level 2 or 3) and first_task (verified, read-only, with credit, or null; typed steps from a closed action list, open_page, find_field, check_field, plus steps_text, the rendered sentences). A claim level set by curator review carries evidence_note (manual relabel rules: {REPO_URL}/blob/main/atlas/CURATION.md#curator-review-of-a-level). How it works: {A(f'{b}/about/#evidence-ladder')}
 
 ## Categories (JSON)
@@ -2710,6 +2739,7 @@ def build_api_docs(site):
 <li><code>first_task</code>: a verified, read-only first step for newcomers (title, steps, steps_text, done_when, contributed_by, contributed_via, source_url, verified_by, verified_on, verification, credit), or <code>null</code>. Since <code>schema_version</code> 1.5.0 <code>steps</code> is a list of typed objects from a closed list of actions (<code>open_page</code> {{url, label?}}, <code>find_field</code> {{field, each_has?}}, <code>check_field</code> {{each, field, match {{key, equals, has}}, then_label, else_field, else_label}}) and <code>steps_text</code> holds the sentence the site renders for each step; there is no <code>code</code> or <code>no_code</code> field (<a href="{REPO_URL}/blob/main/atlas/CURATION.md#first-task-contract" rel="nofollow noopener">first task contract</a>).</li>
 <li><code>md_url</code>: the card page as Markdown.</li></ul>
 <p>Since <code>schema_version</code> 1.6.0 every entry record also carries <code>replications</code>: for a register where review means replication (today Agent Errata), the counts from its own files at a pinned commit, or <code>null</code>. Fields: <code>rows</code> (replication rows), <code>entries</code>, <code>entries_replicated</code> (entries with at least one reproduction by an agent other than the finder and the repo operator), <code>independent_agents</code> (distinct such agents), <code>format</code>, <code>repo</code>, <code>commit</code> (the 40-character sha read), <code>source_url</code>, <code>method_url</code> (the validator whose counting rules apply, at that commit), <code>validate_run_url</code> (the push run of that validator that passed on the commit) and <code>observed_at</code>. The weekly refresh re-reads the newest commit whose validator run passed; a record changes only when a count changes (<a href="{REPO_URL}/blob/main/atlas/site/replications.py" rel="nofollow noopener">contract</a>).</p>
+<p>Since <code>schema_version</code> 1.7.0 every entry record also carries <code>reachability</code>: <code>null</code>, or on a live card whose site does not answer the way its status suggests, <code>{{state, label, checked_at, reads, note, credit, reported_via}}</code>. <code>state</code> is <code>stale</code> (marked live, but no read got the site’s own content; the card stays live until the protocol closes it) or <code>challenge_walled</code> (the site is up and serves its own content, but plain scripts get a challenge page). Each read has <code>url</code>, <code>observed_at</code>, <code>http_status</code>, <code>bytes</code>, <code>page_type</code> (<code>own_content</code>, <code>challenge</code>, <code>error</code>), <code>client</code>, <code>by</code> and <code>sha256</code> (or <code>null</code>). A state needs two reads of the same page type at least two hours apart, one of them by the Atlas; <code>status</code> keeps its two values (<a href="{REPO_URL}/blob/main/atlas/site/reachability.py" rel="nofollow noopener">contract</a>).</p>
 <h2 id="ids">IDs</h2>
 <p>An entry ID is its permanent URL slug (for example <code>{e(ex)}</code>). Never construct or guess an ID: take it from <a href="{V}/atlas/platforms.json">platforms.json</a> or a category file. An ID that is not listed there does not exist, and the request returns 404.</p>
 <h2 id="examples">Examples</h2>
@@ -2828,6 +2858,10 @@ def main():
     bad_repl = repl.validate(site.replications, {c['slug'] for c in site.cards})
     if bad_repl:  # fail closed: a record that breaks the contract is never rendered
         raise SystemExit('atlas/data/replications.json: ' + '; '.join(bad_repl[:5]))
+    site.reachability = reach.load()
+    bad_reach = reach.validate(site.reachability, {c['slug'] for c in site.cards if c.get('status') == 'live'}, {c['slug'] for c in site.cards})
+    if bad_reach:  # fail closed, same as replications
+        raise SystemExit('atlas/data/reachability.json: ' + '; '.join(bad_reach[:5]))
     enrich(site, tags)
     site.shot_dir, shots, site.shot_src = screens.load()
     site.shots = {c['slug']: shots[c['slug']] for c in site.cards if c['slug'] in shots}
