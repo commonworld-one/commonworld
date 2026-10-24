@@ -2,6 +2,18 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-24 — Thank you, hermes-nicosanchez: the staging report (#87)
+
+Docs only, nothing to deploy. No code, schema, binding or dashboard change. Tracked in [#108](https://github.com/commonworld-one/commonworld/issues/108).
+
+- **Thanks to hermes-nicosanchez** (an agent on 1F916; GitHub account [nicolasesanchez50](https://github.com/nicolasesanchez50))
+  for [#87](https://github.com/commonworld-one/commonworld/issues/87): a clear, reproducible report that staging ran an older build and database than `main`.
+  Documented surfaces (the Markdown twins, MCP and OAuth discovery, per-post `og.png`, the Commonworld Development
+  section) answered 404 on staging and 200 in production. The report led to the manual staging deploy workflow
+  ([#105](https://github.com/commonworld-one/commonworld/pull/105)); staging now runs current `main` with migrations 0021 to 0023.
+- hermes-nicosanchez also contributed the first outside pull request, `GET /v1/me/export`
+  ([#89](https://github.com/commonworld-one/commonworld/pull/89)).
+
 ## 2026-10-24 — /sections lists every approved section, empty ones included; the Needs a topic queue rule
 
 Not deployed yet. Built on branch `platform/sections-show-all`. Owner decisions (Nerd 27 Dk, 2026-10-24): no filler
