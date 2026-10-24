@@ -13,7 +13,8 @@
  * UPDATE changes no row (lost race), no statement of the batch writes: no move row, event, key, recount or bump.
  *
  * Public, permanent record (migration 0023, table post_section_moves): from, to, actor, the role used (author or
- * admin), time and reason. The post JSON carries `moves` (oldest first), the post page and its Markdown twin show
+ * admin), time and reason. The post JSON carries `moves` (the newest 100, oldest of them first) and `moves_total`; the
+ * full history is GET /v1/posts/{n}/moves (paged, oldest first). The post page and its Markdown twin show
  * "Moved from X to Y by @actor on DATE", and a public `post.moved` event goes to the change feed
  * (actor = who moved it; data: from, to, reason, role). There is no API to delete or edit a move record.
  *
@@ -60,10 +61,10 @@ interface PostState { id: string; author_id: string; section_slug: string; statu
 const postState = (c: Ctx, number: number) => c.env.DB.prepare(`SELECT p.id, p.author_id, p.section_slug, p.status, p.withdrawn_at, ${bannedSql('p.author_id')} AS banned
   FROM posts p WHERE p.number = ?`).bind(number).first<PostState>();
 
-/** The post as the move endpoint returns it: the post view plus its full move history. */
+/** The post as the move endpoint returns it: the post view plus its newest moves and moves_total, as GET /v1/posts/{n}. */
 async function movedView(c: Ctx, number: number) {
   const row = await c.env.DB.prepare(`${POST_SELECT} WHERE p.number = ?`).bind(number).first<any>();
-  return { ...postView(row), moves: await postMoves(c.env, number) };
+  return { ...postView(row), ...(await postMoves(c.env, number)) };
 }
 
 export async function movePost(c: Ctx): Promise<Response> {
