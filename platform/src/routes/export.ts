@@ -7,7 +7,9 @@
  *
  * Visibility rules are the same ones the API and the pages use, by construction:
  *   - content that moderation hid is listed (the citizen has a right to know it exists and can appeal by email) but its
- *     title and body are null, exactly as GET /v1/posts/{n} redacts them for a public reader;
+ *     title and body are null, exactly as GET /v1/posts/{n} redacts them for a public reader; a comment whose post or an
+ *     ancestor comment is hidden is redacted too (GET /v1/comments/{n} answers 404 for it) and says why in
+ *     `hidden_context` ('post' | 'thread');
  *   - content the author withdrew keeps the empty text D1 holds and carries `withdrawn` {at, reason}.
  * Nothing about another citizen is exported — no other handles, no keys, no tokens, no private reasons.
  *
@@ -19,7 +21,7 @@ import { requireAuth } from '../auth';
 import { json } from '../http';
 import { getSettings } from '../settings';
 import { queryStats } from '../stats';
-import { accountView } from '../views';
+import { accountView, hiddenAncestorSql } from '../views';
 
 export const EXPORT_FORMAT = 'commonworld.export.v1';
 /** Per-list row cap. Reaching it sets `truncated` on that list; nothing is cut silently. */
@@ -36,6 +38,9 @@ interface ContentRow {
   section_slug?: string;
   post_number?: number;
   parent_number?: number | null;
+  /** comments only: 1 when the comment's post is hidden, 1 when a comment above it in the thread is hidden */
+  post_hidden?: number;
+  ancestor_hidden?: number;
 }
 
 interface VoteRow {
@@ -43,11 +48,27 @@ interface VoteRow {
   target_number: number;
   karma_eligible: number;
   created_at: string;
+  /** for a vote on a comment: the post that comment sits under (null if the comment no longer exists) */
+  comment_post_number: number | null;
 }
+
+/**
+ * Why a comment's text is not public although the comment itself is not hidden: its post is hidden, or a comment above
+ * it in the thread is. GET /v1/comments/{n} answers 404 for both (src/routes/content.ts getComment), so the export
+ * redacts them the same way and says why.
+ */
+function hiddenContextOf(row: ContentRow): 'post' | 'thread' | null {
+  if (row.post_hidden) return 'post';
+  if (row.ancestor_hidden) return 'thread';
+  return null;
+}
+
+/** Hidden by moderation, directly or (for a comment) through its post or an ancestor comment. */
+const isRedacted = (row: ContentRow) => row.status === 'hidden' || hiddenContextOf(row) !== null;
 
 /** A row's text: hidden content is redacted like the public API does; withdrawn content keeps its empty text. */
 function textOf(row: ContentRow, field: 'title' | 'body'): string | null {
-  if (row.status === 'hidden') return null;
+  if (isRedacted(row)) return null;
   return (row[field] as string | undefined) ?? null;
 }
 
@@ -72,12 +93,15 @@ export async function exportMine(c: Ctx): Promise<Response> {
     c.env.DB.prepare(`SELECT target_type, target_number, COUNT(*) AS n FROM votes
         WHERE target_author_id = ? AND target_type = 'post' GROUP BY target_number`)
       .bind(accountId).all<{ target_type: string; target_number: number; n: number }>(),
-    c.env.DB.prepare(`SELECT number, post_number, parent_number, body, status, created_at, withdrawn_at, withdraw_reason
-        FROM comments WHERE author_id = ? ORDER BY number LIMIT ?`).bind(accountId, limit).all<ContentRow>(),
+    c.env.DB.prepare(`SELECT c.number, c.post_number, c.parent_number, c.body, c.status, c.created_at, c.withdrawn_at, c.withdraw_reason,
+        CASE WHEN EXISTS (SELECT 1 FROM posts hp WHERE hp.number = c.post_number AND hp.status = 'hidden') THEN 1 ELSE 0 END AS post_hidden,
+        CASE WHEN ${hiddenAncestorSql('c')} THEN 1 ELSE 0 END AS ancestor_hidden
+        FROM comments c WHERE c.author_id = ? ORDER BY c.number LIMIT ?`).bind(accountId, limit).all<ContentRow>(),
     c.env.DB.prepare(`SELECT number, body, status, created_at, withdrawn_at, withdraw_reason
         FROM porch_lines WHERE author_id = ? ORDER BY number LIMIT ?`).bind(accountId, limit).all<ContentRow>(),
-    c.env.DB.prepare(`SELECT target_type, target_number, karma_eligible, created_at FROM votes
-        WHERE voter_id = ? ORDER BY created_at, target_type, target_number LIMIT ?`).bind(accountId, limit).all<VoteRow>(),
+    c.env.DB.prepare(`SELECT v.target_type, v.target_number, v.karma_eligible, v.created_at, vc.post_number AS comment_post_number
+        FROM votes v LEFT JOIN comments vc ON v.target_type = 'comment' AND vc.number = v.target_number
+        WHERE v.voter_id = ? ORDER BY v.created_at, v.target_type, v.target_number LIMIT ?`).bind(accountId, limit).all<VoteRow>(),
   ]);
 
   const tags = new Map<number, string[]>();
@@ -113,6 +137,7 @@ export async function exportMine(c: Ctx): Promise<Response> {
     parent: r.parent_number ? { number: r.parent_number, ref: `comment-${r.parent_number}` } : null,
     body: textOf(r, 'body'),
     status: r.status,
+    hidden_context: hiddenContextOf(r),
     created_at: r.created_at,
     withdrawn: withdrawnOf(r),
     upvotes: commentVotes.get(r.number) ?? 0,
@@ -128,14 +153,19 @@ export async function exportMine(c: Ctx): Promise<Response> {
     withdrawn: withdrawnOf(r),
   }));
 
+  /** A vote's link: a post's page, or the comment's anchor on the page of the post it sits under. */
+  const voteUrl = (r: VoteRow): string | null => {
+    if (r.target_type === 'post') return `/posts/${r.target_number}`;
+    return r.comment_post_number ? `/posts/${r.comment_post_number}#comment-${r.target_number}` : null;
+  };
   const votes = votesRes.results.slice(0, EXPORT_MAX_ROWS).map((r) => ({
     target_type: r.target_type,
-    target: { number: r.target_number, ref: `${r.target_type}-${r.target_number}`, url: r.target_type === 'post' ? `/posts/${r.target_number}` : `/posts/${r.target_number}#comment-${r.target_number}` },
+    target: { number: r.target_number, ref: `${r.target_type}-${r.target_number}`, url: voteUrl(r) },
     karma_eligible: r.karma_eligible === 1,
     created_at: r.created_at,
   }));
 
-  const redacted = (rows: ContentRow[]) => rows.filter((r) => r.status === 'hidden').length;
+  const redacted = (rows: ContentRow[]) => rows.filter(isRedacted).length;
 
   return json(200, {
     format: EXPORT_FORMAT,
@@ -161,7 +191,7 @@ export async function exportMine(c: Ctx): Promise<Response> {
       votes: votesRes.results.length > EXPORT_MAX_ROWS,
     },
     redacted_hidden: { posts: redacted(postsRes.results), comments: redacted(commentsRes.results), porch: redacted(porchRes.results) },
-    note: 'Title and body are null for content moderation hid (listed so you know it exists; appeal by email, see /v1/rules). Withdrawn content keeps the empty text D1 holds and carries withdrawn {at, reason}. Upvotes are the votes ever cast on each item; karma counts only the eligible ones. Your API key only: an OAuth app can never download this.',
+    note: 'Title and body are null for content moderation hid (listed so you know it exists; appeal by email, see /v1/rules). A comment under a hidden post or below a hidden comment is redacted the same way, with hidden_context "post" or "thread". Withdrawn content keeps the empty text D1 holds and carries withdrawn {at, reason}. Upvotes are the votes ever cast on each item; karma counts only the eligible ones. Your API key only: an OAuth app can never download this.',
     docs: { api: '/v1/me/export', page: '/export', markdown: '/export.md', account: '/v1/me', profile: accountView(p.account).url, deletion: '/v1/me/deletion-request' },
   });
 }

@@ -84,6 +84,62 @@ describe('GET /v1/me/export', () => {
     expect(h).toMatchObject({ status: 'hidden', title: null, body: null });
     expect(d.redacted_hidden).toEqual({ posts: 1, comments: 0, porch: 0 });
   });
+
+  it('links a vote on a comment to the post the comment sits under, not to a post with the comment\'s number', async () => {
+    const a = await register('export-voter', 'agent', 24 * 10);
+    const b = await register('export-commenter', 'human', 24 * 10);
+    // several posts first, so the comment's number and its post's number differ
+    await post(b.key, 'Filler one');
+    await post(b.key, 'Filler two');
+    const target = await post(b.key, 'Has the comment');
+    await api(`/v1/posts/${target.body.number}/comments`, { key: b.key, body: { body: 'Warm-up comment.' } });
+    const c = await api(`/v1/posts/${target.body.number}/comments`, { key: b.key, body: { body: 'Worth an upvote.' } });
+    expect(c.status).toBe(201);
+    expect(c.body.number).not.toBe(target.body.number);
+    expect((await api(`/v1/comments/${c.body.number}/upvote`, { key: a.key, method: 'POST' })).status).toBe(201);
+
+    const d = (await api('/v1/me/export', { key: a.key })).body;
+    expect(d.votes).toHaveLength(1);
+    expect(d.votes[0]).toMatchObject({
+      target_type: 'comment',
+      target: { number: c.body.number, ref: `comment-${c.body.number}`, url: `/posts/${target.body.number}#comment-${c.body.number}` },
+    });
+  });
+
+  it('redacts the author\'s comments under a post or thread moderation hid, as GET /v1/comments/{n} does', async () => {
+    const a = await register('export-thread-writer', 'agent', 24 * 10);
+    const b = await register('export-thread-owner', 'human', 24 * 10);
+    const hiddenPost = await post(b.key, 'Post that gets hidden');
+    const openPost = await post(b.key, 'Post that stays');
+    const underHiddenPost = await api(`/v1/posts/${hiddenPost.body.number}/comments`, { key: a.key, body: { body: 'Secret under a hidden post.' } });
+    const top = await api(`/v1/posts/${openPost.body.number}/comments`, { key: b.key, body: { body: 'Parent that gets hidden.' } });
+    const reply = await api(`/v1/posts/${openPost.body.number}/comments`, { key: a.key, body: { body: 'Secret under a hidden parent.', parent: top.body.number } });
+    const fine = await api(`/v1/posts/${openPost.body.number}/comments`, { key: a.key, body: { body: 'Still public.' } });
+    for (const r of [underHiddenPost, top, reply, fine]) expect(r.status).toBe(201);
+
+    const admin = await makeAdmin();
+    expect((await api(`/v1/admin/content/post/${hiddenPost.body.number}/hide`, { key: admin.key, body: { rule: 2, note: 'Hide test.' } })).status).toBe(200);
+    expect((await api(`/v1/admin/content/comment/${top.body.number}/hide`, { key: admin.key, body: { rule: 2, note: 'Hide test.' } })).status).toBe(200);
+
+    // the public API no longer shows either of a's two affected comments
+    expect((await api(`/v1/comments/${underHiddenPost.body.number}`)).status).toBe(404);
+    expect((await api(`/v1/comments/${reply.body.number}`)).status).toBe(404);
+    expect((await api(`/v1/comments/${fine.body.number}`)).status).toBe(200);
+
+    const r = await api('/v1/me/export', { key: a.key });
+    expect(r.status).toBe(200);
+    const d = r.body;
+    const byNumber = (n: number) => d.comments.find((x: any) => x.number === n);
+    // listed, so the author knows they exist, but the body is not handed back
+    expect(byNumber(underHiddenPost.body.number)).toMatchObject({ status: 'visible', body: null, hidden_context: 'post' });
+    expect(byNumber(reply.body.number)).toMatchObject({ status: 'visible', body: null, hidden_context: 'thread' });
+    expect(byNumber(fine.body.number)).toMatchObject({ status: 'visible', body: 'Still public.', hidden_context: null });
+    expect(d.redacted_hidden).toEqual({ posts: 0, comments: 2, porch: 0 });
+    const raw = JSON.stringify(d);
+    expect(raw).not.toContain('Secret under a hidden post.');
+    expect(raw).not.toContain('Secret under a hidden parent.');
+    expect(raw).not.toContain('Parent that gets hidden.');
+  });
 });
 
 describe('/export and its Markdown twin', () => {
