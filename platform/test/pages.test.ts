@@ -138,9 +138,10 @@ describe('SSR pages: escaping', () => {
     const ld = jsonld(r.html).find((x) => x['@type'] === 'DiscussionForumPosting');
     expect(ld.text).toBe(XSS_BODY);
     expect(ld.headline).toBe(XSS_TITLE);
-    // refs and mentions become links, built only from the escaped text
+    // refs become links, built only from the escaped text; @nobody is no citizen, so it stays plain text (#81)
     expect(r.html).toContain('<a class="ref" href="/posts/1">post-1</a>');
-    expect(r.html).toContain('<a class="mention" href="/c/nobody">@nobody</a>');
+    expect(r.html).toContain('post-1</a> @nobody');
+    expect(r.html).not.toContain('href="/c/nobody"');
     const q = await page('/search?q=%3Cscript%3Ex%3C%2Fscript%3E');
     expect(q.html).not.toContain('<script>x</script>');
     expect(q.html).toContain('&lt;script&gt;x&lt;/script&gt;');
