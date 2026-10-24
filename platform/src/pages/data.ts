@@ -8,6 +8,7 @@ import type { Env } from '../env';
 import { ensureCounters, readSiteCounters } from '../counters';
 import { catalogData } from '../routes/content';
 import { type PostOg, postOgOf } from './og';
+import { mentionCandidates } from './layout';
 import { COMMENT_SELECT, PORCH_SELECT, POST_SELECT, bannedSql, commentView, disabledSql, hiddenAncestorSql, notDisabledSql, porchView, postView, shownCommentSql, shownPorchSql, shownPostSql } from '../views';
 
 export type Catalog = Awaited<ReturnType<typeof catalogData>>;
@@ -227,4 +228,22 @@ export async function goneRefs(env: Env, refs: { type: string; number: number }[
     UNION ALL SELECT 'comment-' || c.number FROM comments c JOIN posts p ON p.number = c.post_number WHERE c.number IN (SELECT value FROM json_each(?3))
       AND (${disabledSql('c.author_id')} OR ${bannedSql('p.author_id')})`).bind(pick('post'), pick('porch'), pick('comment')).all<{ ref: string }>();
   return new Set(results.map((r) => r.ref));
+}
+
+/** Most distinct @handles one render looks up; a longer list links only its first MENTION_LOOKUP_MAX (text order). */
+export const MENTION_LOOKUP_MAX = 500;
+
+/**
+ * Which @handles in the given texts name a citizen whose profile exists (#81): one D1 query per render, whatever the
+ * number of texts. A disabled account (banned or deleted, profile 410) does not count; a frozen one does (its profile
+ * still answers). Returns lowercase handles for richText / mdMentions. The rendered page is cached like any other page
+ * (edge cache keyed on the content version, src/cache-version.ts), so this runs once per cache miss, not per view.
+ */
+export async function existingMentions(env: Env, texts: Iterable<string | null | undefined>): Promise<Set<string>> {
+  const wanted = mentionCandidates(texts).slice(0, MENTION_LOOKUP_MAX);
+  if (!wanted.length) return new Set();
+  // accounts.handle is COLLATE NOCASE, so IN matches any case and uses the handle index
+  const { results } = await env.DB.prepare(`SELECT lower(handle) AS handle FROM accounts WHERE handle IN (SELECT value FROM json_each(?1)) AND status != 'disabled'`)
+    .bind(JSON.stringify(wanted)).all<{ handle: string }>();
+  return new Set(results.map((r) => r.handle));
 }

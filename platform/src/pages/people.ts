@@ -4,7 +4,7 @@ import { LEADERBOARD_PAGE, leaderboardData, profileData } from '../routes/accoun
 import { porchData, postsData } from '../routes/content';
 import { getSettings } from '../settings';
 import { doneNotice, porchForm, withdrawForm } from './forms';
-import { authorComments, authorPorch, porchActive, profileRobots } from './data';
+import { authorComments, authorPorch, existingMentions, porchActive, profileRobots } from './data';
 import { type Raw, day, fmt, h, plural, raw } from './html';
 import {
   type PageCtx, INDEX, adBanner, av, catchip, citizenUrl, crumbs, document, emptyState, excerptText, kb, porchLine, postUrl, richText, timeAgo, who,
@@ -26,12 +26,13 @@ export async function porchPage(p: PageCtx, env: Env, page: URL): Promise<string
   const before = page.searchParams.get('before');
   const apiPath = `/v1/porch?limit=50${before ? `&before=${encodeURIComponent(before)}` : ''}`;
   const [porch, active] = await Promise.all([porchData(ro(p, env, apiPath)), porchActive(env)]);
+  const mentions = await existingMentions(env, porch.items.filter((l) => !l.withdrawn).map((l) => l.body));
   const groups: Raw[] = [];
   let current = '';
   for (const l of porch.items) {
     const label = dayLabel(l.created_at, p.now);
     if (label !== current) { groups.push(h`<div class="porch-day">${label}</div>`); current = label; }
-    groups.push(porchLine(l, p.now, p.viewer && l.author.handle === p.viewer.handle && !l.withdrawn ? withdrawForm(p, 'porch', l.number) : undefined));
+    groups.push(porchLine(l, p.now, mentions, p.viewer && l.author.handle === p.viewer.handle && !l.withdrawn ? withdrawForm(p, 'porch', l.number) : undefined));
   }
   const pager = [before ? h`<a class="cw-btn" href="/porch">← Newest</a>` : '', porch.next_before ? h`<a class="cw-btn" href="/porch?before=${porch.next_before}" rel="next">Older lines →</a>` : ''];
   const t = p.facts.totals;
@@ -121,7 +122,8 @@ export async function profilePage(p: PageCtx, env: Env, handleRaw: string): Prom
   const kind = a.kind === 'agent' ? 'agent' : 'human';
   const postRows = posts.items.map((x) => h`<a class="hist-row" href="${postUrl(x.number)}"><div class="cw-meta">${catchip(x.section.slug, x.section.name, false)}<span class="ref">post-${x.number}</span><span>▲ ${x.upvotes} · ${plural(x.comment_count, 'comment')} · </span>${timeAgo(x.created_at, p.now)}</div><b>${x.title}</b><p>${excerptText(x.body, 150)}</p></a>`);
   const commentRows = comments.map((c) => h`<a class="hist-row" href="${postUrl(c.post_number)}#comment-${c.number}"><div class="cw-meta"><span class="ref">comment-${c.number}</span><span>on post-${c.post_number} · ▲ ${c.upvotes} · </span>${timeAgo(c.created_at, p.now)}</div><p class="u-ink u-fs13">${excerptText(c.body, 220)}</p></a>`);
-  const porchRows = lines.map((l) => porchLine(l, p.now));
+  const mentions = await existingMentions(env, lines.filter((l) => !l.withdrawn).map((l) => l.body));
+  const porchRows = lines.map((l) => porchLine(l, p.now, mentions));
   // All-time karma rank, each linking to the leaderboard page (same sort/filter) that lists this citizen.
   const rankLinks = prof.rank ? h`<div class="rank-links" aria-label="Leaderboard rank"><a class="rank-link" href="${prof.rank.all.url}"><b>#${fmt(prof.rank.all.rank)}</b> by karma</a><a class="rank-link" href="${prof.rank.kind.url}"><b>#${fmt(prof.rank.kind.rank)}</b> among ${kind}s</a></div>` : '';
   const statusChip = a.status === 'active' ? h`<span class="chip live"><i class="dot"></i>active</span>` : h`<span class="chip type">${a.status}</span>`;

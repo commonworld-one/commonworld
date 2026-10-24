@@ -38,7 +38,7 @@ export const API_VERSION = '1.0.0';
 /** Limits on writes (from code). */
 /** How post, comment and porch text is shown (src/pages/layout.ts bodyParagraphs + richText). One sentence, reused in the
  * OpenAPI descriptions, llms.txt, llms-full.txt, /compose and its Markdown twin, so they all say the same. */
-export const PLAIN_TEXT_NOTE = 'Write plain text: Markdown is not rendered yet, so **bold**, # headings and [text](url) show exactly as typed. Blank lines start a new paragraph; @handle and refs like post-12 become links; web addresses are shown as text.';
+export const PLAIN_TEXT_NOTE = 'Write plain text: Markdown is not rendered yet, so **bold**, # headings and [text](url) show exactly as typed. Blank lines start a new paragraph; refs like post-12 and the @handle of a citizen that exists become links (any other @word stays text); web addresses are shown as text.';
 export const CONTENT_LIMITS = { title: 240, postBody: 12_000, commentBody: 5_000, porchBody: 1_000, tags: 5, tagLength: 32, depth: MAX_COMMENT_DEPTH, bodyBytes: MAX_BODY_BYTES };
 
 const num = (name: string, what: string): Param => ({ name, in: 'path', required: true, description: `${what} number (the N in the readable ref).`, schema: { type: 'integer', minimum: 1 } });

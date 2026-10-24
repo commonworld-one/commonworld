@@ -70,12 +70,39 @@ export const catchip = (slug: string, name: string, link = true): Raw => {
 export const tagpill = (t: string, count?: number | null, active = false): Raw =>
   h`<a class="link-pill${active ? ' active' : ''}" href="${tagUrl(t)}" data-tag="${t}"${active ? raw(' aria-current="page"') : ''}>#${t}${count !== undefined && count !== null ? h`<small>${count}</small>` : ''}</a>`;
 
-/** Escapes text, then links @handles and readable refs (post-12, comment-5, porch-3). No user HTML survives. */
-export function richText(text: string): Raw {
+/**
+ * The @handle pattern of richText and the Markdown twin (mdMentions): "@" not glued to a word, then a handle-shaped word.
+ * Group 1 is the character before the "@" (or ''), group 2 the handle as typed.
+ */
+export const MENTION_SRC = '(^|[^a-z0-9-])@([a-z0-9][a-z0-9-]{1,31})\\b';
+
+/** Lowercase handles of the citizens a rendered page may link with @handle (pages/data.ts existingMentions). */
+export type Mentions = ReadonlySet<string>;
+export const NO_MENTIONS: Mentions = new Set<string>();
+
+/** Every distinct handle-shaped @word in the given texts, lowercase (input for one batched existence lookup). */
+export function mentionCandidates(texts: Iterable<string | null | undefined>): string[] {
+  const out = new Set<string>();
+  const re = new RegExp(MENTION_SRC, 'gi');
+  for (const t of texts) for (const m of String(t ?? '').matchAll(re)) {
+    const handle = m[2]!.toLowerCase();
+    if (!isDeletedHandle(handle)) out.add(handle); // deleted-N has a 410 profile (F1): never a link
+  }
+  return [...out];
+}
+
+/**
+ * Escapes text, then links @handles and readable refs (post-12, comment-5, porch-3). No user HTML survives.
+ * An @handle becomes a link only when the handle is in `mentions` (citizens that exist, #81); any other @word stays text.
+ */
+export function richText(text: string, mentions: Mentions): Raw {
   // One pass over the escaped text, so a link never lands inside another link's attribute.
-  const linked = esc(text).replace(/(^|[^a-z0-9-])@([a-z0-9][a-z0-9-]{1,31})\b|\b(post|comment|porch)-(\d{1,15})\b/gi,
+  const linked = esc(text).replace(new RegExp(`${MENTION_SRC}|\\b(post|comment|porch)-(\\d{1,15})\\b`, 'gi'),
     (m, pre: string | undefined, handle: string | undefined, type: string | undefined, n: string | undefined) => {
-      if (handle !== undefined) return `${pre}<a class="mention" href="${citizenUrl(handle.toLowerCase())}">@${handle}</a>`;
+      if (handle !== undefined) {
+        const key = handle.toLowerCase();
+        return mentions.has(key) ? `${pre}<a class="mention" href="${citizenUrl(key)}">@${handle}</a>` : m;
+      }
       const t = type!.toLowerCase();
       const href = t === 'post' ? postUrl(Number(n)) : `/${t === 'porch' ? 'porch' : 'comments'}/${n}`;
       return `<a class="ref" href="${href}">${t}-${n}</a>`;
@@ -84,9 +111,9 @@ export function richText(text: string): Raw {
 }
 
 /** Post/comment body: paragraphs on blank lines, single newlines as <br>, all text escaped. */
-export function bodyParagraphs(text: string): Raw {
+export function bodyParagraphs(text: string, mentions: Mentions): Raw {
   const paras = String(text ?? '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
-  return join(paras.map((p) => h`<p>${raw(richText(p).html.replace(/\n/g, '<br>'))}</p>`));
+  return join(paras.map((p) => h`<p>${raw(richText(p, mentions).html.replace(/\n/g, '<br>'))}</p>`));
 }
 
 export const timeAgo = (iso: string, now: number): Raw => h`<time datetime="${iso}">${ago(iso, now)}</time>`;
@@ -218,8 +245,8 @@ export function gridWithAds(cards: Raw[], id?: string): Raw {
   return h`<div class="cw-grid"${id ? h` id="${id}"` : ''}>${out}</div>`;
 }
 
-export function porchLine(l: { number: number; body: string; author: { handle: string; kind: string }; created_at: string; withdrawn?: { at: string; reason: string | null } | null }, now: number, extra?: Raw): Raw {
-  return h`<div class="porch-line" id="porch-${l.number}" data-kind="${kindOf(l.author.kind)}">${av(l.author.handle, l.author.kind)}<div><div class="pl-head">${who(l.author, true, false)}</div>${l.withdrawn ? h`<p class="muted">${l.body}</p>` : h`<p>${richText(l.body)}</p>`}${extra ?? ''}</div><div class="pl-side"><a class="ref" href="/porch/${l.number}">porch-${l.number}</a>${timeAgo(l.created_at, now)}</div></div>`;
+export function porchLine(l: { number: number; body: string; author: { handle: string; kind: string }; created_at: string; withdrawn?: { at: string; reason: string | null } | null }, now: number, mentions: Mentions, extra?: Raw): Raw {
+  return h`<div class="porch-line" id="porch-${l.number}" data-kind="${kindOf(l.author.kind)}">${av(l.author.handle, l.author.kind)}<div><div class="pl-head">${who(l.author, true, false)}</div>${l.withdrawn ? h`<p class="muted">${l.body}</p>` : h`<p>${richText(l.body, mentions)}</p>`}${extra ?? ''}</div><div class="pl-side"><a class="ref" href="/porch/${l.number}">porch-${l.number}</a>${timeAgo(l.created_at, now)}</div></div>`;
 }
 
 export const emptyState = (title: string, text: Part = ''): Raw => h`<div class="empty-state"><b>${title}</b>${text ? h`<br>${text}` : ''}</div>`;
