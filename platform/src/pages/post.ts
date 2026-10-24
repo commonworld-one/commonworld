@@ -3,6 +3,7 @@ import { HttpError, goneError } from '../http';
 import { profileData } from '../routes/accounts';
 import { postData, postsData } from '../routes/content';
 import { MAX_COMMENT_DEPTH, isDeletedHandle } from '../views';
+import { type PostMove, moveDay } from '../post-moves';
 import { type ModerationItem, lastModeration, lastModerationMany } from '../routes/moderation';
 import { goneCommentStubs, hiddenCommentStubs, postStatus } from './data';
 import { ruleLabel } from './misc';
@@ -35,6 +36,20 @@ const ldPerson = (p: PageCtx, a: { handle: string; kind: string }) => ({
 
 function voterList(voters: Voter[]): Raw {
   return h`<div class="voter-list">${voters.map((v) => h`<a class="voter" href="${citizenUrl(v.handle)}">${av(v.handle, v.kind)}@${v.handle}</a>`)}</div>`;
+}
+
+/**
+ * The public record of a post's section moves, oldest first: "Moved from X to Y by @actor on YYYY-MM-DD" (+ reason).
+ * Same words as moveNote (src/post-moves.ts), with links to the sections and the citizen.
+ */
+function movesNote(moves: PostMove[]): Raw {
+  const line = (m: PostMove) => {
+    const by = m.actor
+      ? h`<a href="${citizenUrl(m.actor.handle)}">@${m.actor.handle}</a>${m.actor_role === 'admin' ? ' (admin)' : ''}`
+      : h`an account that is no longer active`;
+    return h`<li>Moved from <a href="${sectionUrl(m.from.slug)}">${m.from.name}</a> to <a href="${sectionUrl(m.to.slug)}">${m.to.name}</a> by ${by} on <time datetime="${m.created_at}">${moveDay(m.created_at)}</time>${m.reason ? h`: ${m.reason}` : ''}</li>`;
+  };
+  return h`<ul class="muted u-fs12 u-mt10 post-moves" aria-label="Section moves">${moves.map(line)}</ul>`;
 }
 
 /** A rendered page plus extra response headers (hidden posts add X-Commonworld-Status). */
@@ -106,6 +121,7 @@ ${doneNotice(p, page)}
 <article class="entry-head post-head u-bb0 u-pb0"><div class="cw-meta">${catchip(post.section.slug, post.section.name)}<span class="chip">post-${n}</span></div>
 <h1>${post.title}</h1>
 <div class="byline">${who(post.author)}<span>·</span><time datetime="${post.created_at}">${day(post.created_at)}</time></div>
+${post.moves.length ? movesNote(post.moves) : ''}
 ${post.tags.length ? h`<div class="card-tags">${post.tags.map((t) => tagpill(t))}</div>` : ''}
 ${adBanner('cw-post-top')}
 ${post.withdrawn ? h`<div class="notice-box">${post.body}<br><span class="muted">The author withdrew this post <time datetime="${post.withdrawn.at}">${ago(post.withdrawn.at, p.now)}</time>. Its number, author, comments and votes stay; there is no edit.</span></div>` : h`<div class="post-body">${bodyParagraphs(post.body)}</div>`}

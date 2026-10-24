@@ -14,6 +14,8 @@
  *     with an empty body and no tags, so the other people's comments stay (Privacy promise: deleting your content
  *     does not delete theirs);
  *   - placeholders and stubs drop a withdraw reason too (it is the account's own words): they show "[deleted]";
+ *   - section moves (migration 0023): records of posts that are deleted go with them, their post.moved events go,
+ *     and any move reason the account wrote is cleared on the records that stay (from, to, role and time stay);
  *   - change-feed events that describe the account's own writing (post/comment/porch created, its withdrawals, votes it gave or got)
  *     are deleted; account.created stays (its actor now shows deleted-N); moderation records stay (they never held
  *     content), and staff-log entries that named the old handle are rewritten to deleted-N;
@@ -84,14 +86,21 @@ export async function deleteAccount(c: Ctx): Promise<Response> {
   const out = await db.batch([
     db.prepare('PRAGMA defer_foreign_keys = true'),
     // feed events about the account's own writing (before the rows they point at go)
-    db.prepare(`DELETE FROM events WHERE type IN ('post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn') AND actor_id = ?1`).bind(u),
+    db.prepare(`DELETE FROM events WHERE type IN ('post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn', 'post.moved') AND actor_id = ?1`).bind(u),
+    // section moves (migration 0023): move events of the account's posts go; reasons the account wrote on kept
+    // records are cleared (from, to, role and time stay); move records of posts that are deleted go with them below
+    db.prepare(`DELETE FROM events WHERE type = 'post.moved' AND ${own('post', 'posts')}`).bind(u),
+    db.prepare('UPDATE post_section_moves SET reason = NULL WHERE actor_id = ?1').bind(u),
     db.prepare(`DELETE FROM events WHERE type = 'vote.created' AND (${own('post', 'posts')} OR ${own('comment', 'comments')})`).bind(u),
     db.prepare('DELETE FROM votes WHERE voter_id = ?1 OR target_author_id = ?1').bind(u),
     // comments: placeholders for those with other people's replies below, the rest deleted
     db.prepare(`UPDATE comments SET body = '${DELETED_TITLE}', withdrawn_at = NULL, withdraw_reason = NULL WHERE author_id = ?1 AND number IN (SELECT value FROM json_each(?2))`).bind(u, keep),
     db.prepare('DELETE FROM comments WHERE author_id = ?1 AND number NOT IN (SELECT value FROM json_each(?2))').bind(u, keep),
-    // posts: stubs where other people commented, the rest deleted
+    // posts: stubs where other people commented, the rest deleted. Every child row of a post that is deleted goes
+    // first, and only after the account's comments are gone: a post whose only comments were the account's own is
+    // deleted too, so its move records must go here, not before the comments (else the deferred FK fails the batch)
     db.prepare('DELETE FROM post_tags WHERE post_number IN (SELECT number FROM posts WHERE author_id = ?1)').bind(u),
+    db.prepare('DELETE FROM post_section_moves WHERE post_number IN (SELECT number FROM posts WHERE author_id = ?1 AND NOT EXISTS (SELECT 1 FROM comments c WHERE c.post_number = posts.number))').bind(u),
     db.prepare(`UPDATE posts SET title = '${DELETED_TITLE}', body = '', withdrawn_at = NULL, withdraw_reason = NULL WHERE author_id = ?1 AND EXISTS (SELECT 1 FROM comments c WHERE c.post_number = posts.number)`).bind(u),
     db.prepare('DELETE FROM posts WHERE author_id = ?1 AND NOT EXISTS (SELECT 1 FROM comments c WHERE c.post_number = posts.number)').bind(u),
     db.prepare('DELETE FROM porch_lines WHERE author_id = ?1').bind(u),

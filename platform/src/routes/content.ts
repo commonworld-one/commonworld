@@ -9,6 +9,7 @@ import { bumpSite, bumpStats, ensureCounters } from '../counters';
 import { bumpContentCacheVersion } from '../cache-version';
 import { APPEAL, RULES_NOTE, ruleText, rulesData } from '../rules';
 import { assertLinksSafe } from '../link-check';
+import { postMoves } from '../post-moves';
 import { COMMENT_SELECT, MAX_COMMENT_DEPTH, POST_SELECT, PORCH_SELECT, citizenPath, commentView, bannedSql, countedVoteSql, disabledSql, hiddenAncestorSql, moderationLogUrl, notDisabledSql, porchView, postView, shownPorchSql, shownPostSql } from '../views';
 
 const NEEDS_TOPIC = 'needs-a-topic';
@@ -115,7 +116,11 @@ function choice<T extends string>(c: ReadCtx, name: string, allowed: readonly T[
  *   sort=top               most upvotes inside `window` (default 7d), page with `offset` -> `next_offset`
  *   sort=discussed         most visible comments inside `window` (default 7d), page with `offset`
  *   window=24h|7d|30d|all  only for top/discussed
+ * Ranked paging stops at RANKED_OFFSET_MAX: a page whose next offset would pass the cap answers next_offset null
+ * (the ranking is truncated there), so every non-null next_offset is an offset the route accepts (#94).
  */
+export const RANKED_OFFSET_MAX = 1000;
+
 export async function listPosts(c: Ctx): Promise<Response> {
   return json(200, await postsData(c));
 }
@@ -148,12 +153,13 @@ export async function postsData(c: ReadCtx) {
   const where = filters.join(' AND ');
   if (ranked) {
     if (c.url.searchParams.has('before')) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'before', reason: 'use_offset_for_ranked_sorts' });
-    const offset = intParam(c.url, 'offset', 0, 0, 1000);
+    const offset = intParam(c.url, 'offset', 0, 0, RANKED_OFFSET_MAX);
     const order = sort === 'top' ? 'upvotes DESC, comment_count DESC, p.number DESC' : 'comment_count DESC, upvotes DESC, p.number DESC';
     const { results } = await c.env.DB.prepare(`SELECT * FROM (${POST_SELECT}) p WHERE ${where.replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY ${order} LIMIT ? OFFSET ?`)
       .bind(...binds, limit + 1, offset).all();
     const items = results.slice(0, limit).map(postView);
-    return { sort, kind, window, items, next_offset: results.length > limit ? offset + limit : null } as PostsPage;
+    const next = offset + limit;
+    return { sort, kind, window, items, next_offset: results.length > limit && next <= RANKED_OFFSET_MAX ? next : null } as PostsPage;
   }
   if (c.url.searchParams.has('offset')) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'offset', reason: 'use_before_for_latest_or_unanswered' });
   const before = intParam(c.url, 'before', 0, 0, Number.MAX_SAFE_INTEGER);
@@ -207,8 +213,11 @@ async function assertPostNotGone(env: Env, number: number) {
   if (await env.DB.prepare(`SELECT 1 FROM posts p WHERE p.number = ? AND ${bannedSql('p.author_id')}`).bind(number).first()) throw goneError('content_gone', { ref: `post-${number}` });
 }
 
+/** POST_SELECT plus `has_moves` (0/1, one index probe on post_section_moves), so a never-moved post costs no extra query. */
+const POST_SELECT_WITH_MOVES = POST_SELECT.replace(/^SELECT p\.\*,/, 'SELECT p.*, EXISTS (SELECT 1 FROM post_section_moves m WHERE m.post_number = p.number) AS has_moves,');
+
 async function visiblePost(c: ReadCtx, number: number) {
-  const row = await c.env.DB.prepare(`${POST_SELECT} WHERE p.number = ? AND p.status = 'visible'`).bind(number).first<any>();
+  const row = await c.env.DB.prepare(`${POST_SELECT_WITH_MOVES} WHERE p.number = ? AND p.status = 'visible'`).bind(number).first<any>();
   await assertPostNotGone(c.env, number);
   if (!row) throw new HttpError(404, 'post_not_found');
   return row;
@@ -249,6 +258,8 @@ export async function postData(c: ReadCtx) {
   }
   return {
     ...postView(post),
+    // public, permanent record of section moves (src/post-moves.ts), oldest first; [] when never moved
+    moves: post.has_moves ? await postMoves(c.env, post.number) : [],
     voters: (postVotes.results as any[]).map((v) => ({ handle: v.handle as string, kind: v.kind as string, url: citizenPath(v.handle as string) })),
     comments: (comments.results as any[]).map((row) => ({ ...commentView(row), voters: byComment.get(row.number) ?? [] })),
   };
@@ -523,7 +534,7 @@ const EVENT_OBJECT_GONE = `CASE e.object_type
     ELSE 0 END`;
 
 /** Events a disabled actor's own writing produced: dropped for public readers (F1). Other events by them (tag.created) keep, with actor null. */
-const ACTOR_WRITING_EVENTS = new Set(['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn']);
+const ACTOR_WRITING_EVENTS = new Set(['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn', 'post.moved']);
 
 /**
  * Events strictly after `cursor` (an event seq), oldest first. Poll with the returned next_cursor.
