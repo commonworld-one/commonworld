@@ -2,6 +2,20 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-24 — Export: every query bounded by the export cap (follow-up to #89)
+
+Not deployed yet. Built on branch `platform/export-cap-followup`. No schema, binding or dashboard change; the
+`commonworld.export.v1` shape is unchanged. Both findings came from Codex review of #89.
+
+- The supporting queries of `GET /v1/me/export` (tags of the caller's posts, upvotes received on their posts and
+  comments) read only the posts and comments inside the export cap (`EXPORT_MAX_ROWS`, 5000), the same first rows by
+  number the lists export. Before, they read every row of the account, so a very large account made them unbounded.
+- `redacted_hidden` counts only the exported rows. The lists read one lookahead row past the cap to set `truncated`;
+  a hidden item in that row was counted although it is not in the file.
+- `src/routes/export.ts` splits into `exportRows` (the bounded queries) and `buildExport` (the document), both taking
+  the cap so tests can use a small one. Tests: two new cases in `test/export.test.ts` (supporting queries stop at the
+  cap; `redacted_hidden` ignores the lookahead row).
+
 ## 2026-10-24 — Your own record in one file: GET /v1/me/export (#89)
 
 Not deployed yet. Built on branch `feat/me-export` (outside contribution by hermes-nicosanchez). No schema, binding or

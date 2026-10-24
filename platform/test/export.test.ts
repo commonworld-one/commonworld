@@ -4,8 +4,10 @@
  * rules as the API (hidden text redacted, withdrawn content marked).
  */
 import { beforeEach, describe, expect, it } from 'vitest';
-import { exports } from 'cloudflare:workers';
+import { env, exports } from 'cloudflare:workers';
 import { api, makeAdmin, post, register, resetDb } from './helpers';
+import { buildExport, exportRows } from '../src/routes/export';
+import type { AccountRow } from '../src/auth';
 
 beforeEach(resetDb);
 
@@ -139,6 +141,75 @@ describe('GET /v1/me/export', () => {
     expect(raw).not.toContain('Secret under a hidden post.');
     expect(raw).not.toContain('Secret under a hidden parent.');
     expect(raw).not.toContain('Parent that gets hidden.');
+  });
+});
+
+describe('the export cap bounds every query', () => {
+  // A small cap stands in for EXPORT_MAX_ROWS (5000): the same code path, without writing thousands of rows.
+  const CAP = 2;
+  const accountRow = async (id: string) => (await env.DB.prepare('SELECT * FROM accounts WHERE id = ?').bind(id).first<AccountRow>())!;
+
+  it('reads tags and upvotes received only for the posts and comments inside the cap', async () => {
+    const a = await register('export-cap-writer', 'agent', 24 * 10);
+    const b = await register('export-cap-voter', 'human', 24 * 10);
+    const posts = [];
+    for (const title of ['Cap one', 'Cap two', 'Past the cap']) {
+      const r = await post(a.key, title, { tags: ['alpha'] });
+      expect(r.status).toBe(201);
+      posts.push(r.body.number as number);
+    }
+    const comments = [];
+    for (const body of ['Comment one.', 'Comment two.', 'Comment past the cap.']) {
+      const r = await api(`/v1/posts/${posts[0]}/comments`, { key: a.key, body: { body } });
+      expect(r.status).toBe(201);
+      comments.push(r.body.number as number);
+    }
+    for (const n of posts) expect((await api(`/v1/posts/${n}/upvote`, { key: b.key, method: 'POST' })).status).toBe(201);
+    for (const n of comments) expect((await api(`/v1/comments/${n}/upvote`, { key: b.key, method: 'POST' })).status).toBe(201);
+
+    const rows = await exportRows(env as any, a.id, CAP);
+    // the lists read one lookahead row, so truncation is visible
+    expect(rows.postsRes.results.map((r) => r.number)).toEqual(posts);
+    expect(rows.commentsRes.results.map((r) => r.number)).toEqual(comments);
+    // the supporting queries stop at the cap: nothing for the post or comment past it
+    expect(rows.tagsRes.results.map((t) => t.post_number)).toEqual(posts.slice(0, CAP));
+    expect(rows.postVotesRes.results.map((v) => v.target_number).sort((x, y) => x - y)).toEqual(posts.slice(0, CAP));
+    expect(rows.commentVotesRes.results.map((v) => v.target_number).sort((x, y) => x - y)).toEqual(comments.slice(0, CAP));
+
+    const d = await buildExport(env as any, await accountRow(a.id), CAP);
+    expect(d.truncated).toMatchObject({ posts: true, comments: true });
+    expect(d.posts.map((p) => p.number)).toEqual(posts.slice(0, CAP));
+    expect(d.posts.every((p) => p.tags.join() === 'alpha' && p.upvotes === 1)).toBe(true);
+    expect(d.comments.every((c) => c.upvotes === 1)).toBe(true);
+  });
+
+  it('counts redacted_hidden over the exported rows only, never the lookahead row past the cap', async () => {
+    const a = await register('export-cap-hidden', 'agent', 24 * 10);
+    const owner = await register('export-cap-owner', 'human', 24 * 10);
+    const ps = [];
+    for (const title of ['Shown one', 'Shown two', 'Hidden past the cap']) ps.push((await post(a.key, title)).body.number as number);
+    const host = await post(owner.key, 'Host post');
+    const cs = [];
+    for (const body of ['Reply one.', 'Reply two.', 'Hidden reply past the cap.']) {
+      cs.push((await api(`/v1/posts/${host.body.number}/comments`, { key: a.key, body: { body } })).body.number as number);
+    }
+    for (const body of ['Porch one.', 'Porch two.', 'Hidden porch past the cap.']) {
+      expect((await api('/v1/porch', { key: a.key, body: { body } })).status).toBe(201);
+    }
+    const lastPorch = (await env.DB.prepare('SELECT MAX(number) AS n FROM porch_lines WHERE author_id = ?').bind(a.id).first<{ n: number }>())!.n;
+    const admin = await makeAdmin();
+    expect((await api(`/v1/admin/content/post/${ps[2]}/hide`, { key: admin.key, body: { rule: 2, note: 'Cap test.' } })).status).toBe(200);
+    expect((await api(`/v1/admin/content/comment/${cs[2]}/hide`, { key: admin.key, body: { rule: 2, note: 'Cap test.' } })).status).toBe(200);
+    expect((await api(`/v1/admin/content/porch/${lastPorch}/hide`, { key: admin.key, body: { rule: 2, note: 'Cap test.' } })).status).toBe(200);
+
+    const capped = await buildExport(env as any, await accountRow(a.id), CAP);
+    expect(capped.truncated).toMatchObject({ posts: true, comments: true, porch: true });
+    expect(capped.redacted_hidden).toEqual({ posts: 0, comments: 0, porch: 0 });
+
+    // with room for every row, the same hidden items are counted
+    const full = await buildExport(env as any, await accountRow(a.id), CAP + 1);
+    expect(full.truncated).toMatchObject({ posts: false, comments: false, porch: false });
+    expect(full.redacted_hidden).toEqual({ posts: 1, comments: 1, porch: 1 });
   });
 });
 
