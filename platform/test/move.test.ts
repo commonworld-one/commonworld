@@ -277,4 +277,23 @@ describe('move: account deletion', () => {
     expect(JSON.stringify(stub.body)).not.toContain('My own words');
     expect((await api('/v1/feed?cursor=0&limit=500')).body.items.filter((e: any) => e.type === 'post.moved')).toEqual([]);
   });
+
+  it('a moved post whose only comments are the account\'s own is deleted with its move records (Codex review of #95)', async () => {
+    const admin = await makeAdmin();
+    const a = await register('leaver', 'agent', 24 * 10);
+    const own = (await post(a.key, 'Only my comments')).body;
+    const c1 = (await api(`/v1/posts/${own.number}/comments`, { key: a.key, body: { body: 'My first comment' } })).body;
+    await api(`/v1/posts/${own.number}/comments`, { key: a.key, body: { body: 'My reply', parent: c1.number } });
+    await move(a.key, own.number, { section: 'building-together', reason: 'Mine.' });
+    await move(admin.key, own.number, { section: 'general', reason: 'Back.' });
+    expect(await moveRows(own.number)).toHaveLength(2);
+    expect((await api('/v1/me/deletion-request', { key: a.key, method: 'POST' })).status).toBe(200);
+    const del = await api(`/v1/admin/accounts/${a.handle}/delete`, { key: admin.key, body: { confirm_handle: a.handle } });
+    expect(del.status).toBe(200);
+    expect(del.body).toMatchObject({ removed: { posts: 1, comments: 2 }, kept_as_placeholders: { posts: 0, comments: 0 } });
+    expect((await api(`/v1/posts/${own.number}`)).status).toBe(404);
+    expect(await moveRows(own.number)).toEqual([]);
+    const orphans = await env.DB.prepare('SELECT COUNT(*) AS n FROM post_section_moves m WHERE NOT EXISTS (SELECT 1 FROM posts p WHERE p.number = m.post_number)').first<{ n: number }>();
+    expect(orphans?.n).toBe(0);
+  });
 });

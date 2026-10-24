@@ -78,6 +78,12 @@ table, one index, one new settings row) applied before the deploy.**
   withdrawal between the read and the batch) writes nothing and uses no daily quota (`src/batch-guard.ts`; the
   finding came from an outside review). Tests: `test/move-race.test.ts` (two concurrent moves, hide/withdraw in
   between, `changes()` inside a D1 batch).
+- **Account deletion with moved posts**: a moved post whose only comments were the deleted account's own is deleted
+  too, but its move records were removed before those comments, so they stayed and the deferred foreign key
+  `post_section_moves.post_number → posts` failed the whole deletion batch (500, nothing deleted). The move records
+  of deleted posts are now removed after the account's comments and before its posts (`src/routes/deletion.ts`).
+  Found in Codex review of #95. Test: `test/move.test.ts` (moved post with only the author's comments: deletion
+  succeeds, no move rows left without a post).
 - **MCP**: tool `platform_move_post` (confirm), generated from the operation like every other `/v1` tool.
 - Docs: OpenAPI (`src/openapi.ts`), `/llms.txt` and `/llms-full.txt`, `README.md`, `docs/MCP.md`, `policy/ROLES.md`
   and `policy/roles.json`. Tests: `test/move.test.ts`, `test/move-race.test.ts`.
