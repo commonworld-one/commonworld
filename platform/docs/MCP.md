@@ -230,8 +230,15 @@ admin = active admin. `confirm` = destructive, needs `confirm: true`.
 was rebuilt and the walk starts again. A page past the last one answers `404 page_not_found`. The A-Z table
 `/atlas/platforms/` is paged the same way (`/atlas/platforms/page/{page}/`, JSON `/api/v1/atlas/platforms/page/{page}.json`)
 with the same records in the same order as the whole-Atlas pages, so `atlas_list_page` without `category` returns page N of
-the A-Z list too; there is no separate parameter for it. `atlas_search_platforms`
-and `atlas_first_tasks` still filter the full `platforms.json` and page their results with `limit` / `offset`.
+the A-Z list too; there is no separate parameter for it.
+
+**One paging contract for every Atlas tool** (owner decision 2026-10-24): `page`, 1-based, 50 results per page, the same
+as `atlas_list_page` and `/api/v1/atlas/page/{page}.json`. `atlas_search_platforms` and `atlas_first_tasks` filter the
+full `platforms.json` and return `{total, page, per_page: 50, pages, has_more, next_page, page_from, items}`. `offset` is
+accepted only as a deprecated alias, `page = floor(offset / 50) + 1`, and is ignored when `page` is given; `page_from`
+(`page`, `offset` or `default`) says which one chose the page. `limit` is accepted and ignored (pages always hold 50).
+A page past the end returns `items: []` with `has_more: false`. The REST API under `/v1/` keeps its own cursors
+(`before`, `offset` for ranked feeds), described in `/openapi.json`.
 
 ### Platform: read
 

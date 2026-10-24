@@ -2819,7 +2819,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 
 - [API v1]({A(api_v1.API_BASE + '/index.json')}): versioned static JSON API (schema_version {api_v1.SCHEMA_VERSION}); Atlas module {A(api_v1.API_BASE + '/atlas/index.json')}; [OpenAPI 3.1]({A(api_v1.API_BASE + '/openapi.json')}); JSON Schemas {A(api_v1.API_BASE + '/schemas/')}<name>.schema.json; [docs]({A(API_DOCS)}). Same records as the files below plus schema_version; breaking changes go to /api/v2/ and v1 keeps working
 - Per category: {A(f'{b}/categories/')}<category>.json, the same fields for one category only (small files; use these if your tool truncates long responses)
-- Paged lists (schema_version 1.8.0): {A(api_v1.API_BASE + api_v1.page_json(1))} (all entries, A to Z), {A(api_v1.API_BASE + '/atlas/categories/')}<category>/page/<N>.json and {A(api_v1.API_BASE + '/atlas/platforms/page/')}<N>.json (the A-Z list, same records as the whole list), {PAGE_SIZE} records per page in the order of the HTML pages, each with snapshot_id, page, pages, total, has_more and next. {api_v1.PAGE_WALK_RULE} MCP tool: atlas_list_page
+- Paged lists (schema_version 1.8.0): {A(api_v1.API_BASE + api_v1.page_json(1))} (all entries, A to Z), {A(api_v1.API_BASE + '/atlas/categories/')}<category>/page/<N>.json and {A(api_v1.API_BASE + '/atlas/platforms/page/')}<N>.json (the A-Z list, same records as the whole list), {PAGE_SIZE} records per page in the order of the HTML pages, each with snapshot_id, page, pages, total, has_more and next. {api_v1.PAGE_WALK_RULE} MCP tool: atlas_list_page. {api_v1.PAGING_CONTRACT}
 - [earn.json]({A(f'{b}/earn.json')}): where agents get paid: one row per live entry with a supported money figure (value, unit, window, basis, observed_at, source_url), grouped by unit
 - [platforms.json]({A(f'{b}/platforms.json')}): all published entries with stable fields (id, name, url, website, category, type, status, summary, money flow, verified_at, claims_count)
 - Per entry: {A(f'{b}/platforms/')}<id>.json with the full claims and sources (every URL is listed in llms-full.txt), plus badge_svg, badge_svg_dark and badge_page
@@ -2901,7 +2901,7 @@ Data licence: {lic}. Please credit "Commonworld Atlas" with a link to {A(f'{b}/'
     lines = [f'# Commonworld Atlas: all {len(recs)} published entries',
              f'> One line per entry: name, Atlas URL, JSON URL (full claims and sources), category, status, summary. All claims and sources are public; no key needed. Data {lic}; machine-readable: {A(f"{b}/platforms.json")}', '',
              f"Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}",
-             f"API v1 (versioned, OpenAPI 3.1): {A(api_v1.API_BASE + '/index.json')}; per entry: {A(api_v1.API_BASE + '/atlas/platforms/')}<id>.json; in pages of {PAGE_SIZE}: {A(api_v1.API_BASE + api_v1.page_json(1))} (follow next while has_more; the A-Z table {A(f'{b}/platforms/')} has the same pages at {A(api_v1.API_BASE + '/atlas/platforms/page/')}<N>.json); docs: {A(API_DOCS)}",
+             f"API v1 (versioned, OpenAPI 3.1): {A(api_v1.API_BASE + '/index.json')}; per entry: {A(api_v1.API_BASE + '/atlas/platforms/')}<id>.json; in pages of {PAGE_SIZE}: {A(api_v1.API_BASE + api_v1.page_json(1))} (follow next while has_more; MCP tools take page too, offset is a deprecated alias; the A-Z table {A(f'{b}/platforms/')} has the same pages at {A(api_v1.API_BASE + '/atlas/platforms/page/')}<N>.json); docs: {A(API_DOCS)}",
              f"Badges: every entry has a free status badge at {A(f'{b}/badge/')}<id>.svg (dark: <id>-dark.svg); rules: {A(f'{b}/badge/')}",
              f"Homepage previews: the `preview` field of each entry's JSON (dated screenshot URLs, or null); third-party content, not covered by the data licence",
              f"Evidence ladder per entry: level 1 operator says, 2 public dashboard, 3 public transactions, or not recorded yet ({A(f'{b}/about/#evidence-ladder')})", '']
@@ -2918,41 +2918,185 @@ SITEMAP_BASELINE = os.path.normpath(os.path.join(HERE, '..', 'data', 'sitemap-ur
 PAGED_RE = re.compile(r'^(/.*/)page/([1-9][0-9]*)/$')
 
 
-def paged_redirects(site):
-    """_redirects lines for paged lists: /page/1/ -> the list itself (page 1 is the list URL), and every paged URL that
-    was published before (sitemap baseline) but no longer exists because the list got shorter -> its last page. Indexed
-    URLs are never dropped (ADR-0004); a page number that never existed stays a plain 404 (D1)."""
+PAGED_RECORD = os.path.normpath(os.path.join(HERE, '..', 'data', 'paged-lists.json'))  # highest page ever built per list (committed)
+
+
+def list_pages(site):
+    """{first URL of a list: (list key for api_v1.page_json, number of pages)} for every paged list: the whole Atlas, the
+    A-Z table and each category."""
     b = site.base
-    lists = ({f'{b}/': len(chunks(site.cards)), f'{b}/platforms/': len(chunks(site.cards))}
-             | {f'{b}/categories/{k}/': len(chunks(category_cards(site, k))) for k in site.cats})
+    n_all = len(chunks(site.cards))
+    return ({f'{b}/': (None, n_all), f'{b}/platforms/': (api_v1.AZ_LIST, n_all)}
+            | {f'{b}/categories/{k}/': (k, len(chunks(category_cards(site, k)))) for k in site.cats})
+
+
+def list_key(site, first):
+    """List key of a list URL, also for a list that no longer exists (a category that was split away)."""
+    b = site.base
+    if first == f'{b}/':
+        return None
+    if first == f'{b}/platforms/':
+        return api_v1.AZ_LIST
+    return first[len(f'{b}/categories/'):].rstrip('/')
+
+
+def load_paged_record(path=None):
+    """{first URL of a list: highest page number ever built} from atlas/data/paged-lists.json (check.py --update-baseline
+    raises it, never lowers it)."""
+    path = path or PAGED_RECORD
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding='utf-8') as fh:
+        return {k: int(v) for k, v in (json.load(fh).get('lists') or {}).items()}
+
+
+def paged_redirects(site):
+    """_redirects lines for paged lists (owner decision Q8, 2026-10-24: a page number that ever existed never 404s):
+    - /page/1/ -> the list itself (page 1 is the list URL);
+    - every page number that was built before (the committed record atlas/data/paged-lists.json, and the sitemap
+      baseline) but is past the last page now, because the list got shorter -> that list's last page, for the HTML page
+      (/page/N/ and /page/N), its Markdown twin (/page/N/index.md) and its JSON page (/api/v1/.../page/N.json) alike;
+    - a list that is gone entirely (a category split away) -> the Atlas home, its Markdown twin and JSON page 1.
+    A page number that never existed stays a plain 404 (D1)."""
+    b, V = site.base, api_v1.API_BASE
+    lists = list_pages(site)
+    ever = dict(load_paged_record())
+    if os.path.exists(SITEMAP_BASELINE):
+        with open(SITEMAP_BASELINE, encoding='utf-8') as fh:
+            for u in (l.strip() for l in fh if l.strip() and not l.startswith('#')):
+                m = PAGED_RE.match(u[len(site.origin):]) if u.startswith(site.origin) else None
+                if m:
+                    ever[m.group(1)] = max(ever.get(m.group(1), 0), int(m.group(2)))
     out = []
     for first in lists:
         out += [f'{first}page/1/ {first} 301', f'{first}page/1 {first} 301']
-    base = []
-    if os.path.exists(SITEMAP_BASELINE):
-        with open(SITEMAP_BASELINE, encoding='utf-8') as fh:
-            base = [l.strip() for l in fh if l.strip() and not l.startswith('#')]
-    for u in sorted(base):
-        m = PAGED_RE.match(u[len(site.origin):]) if u.startswith(site.origin) else None
-        if not m:
-            continue
-        first, n = m.group(1), int(m.group(2))
-        if first in lists and n > lists[first]:
-            out.append(f'{first}page/{n}/ {list_path(first, lists[first])} 301')
-        elif first not in lists:  # a whole category gone (categories are only ever split): send its pages to the Atlas home
-            out.append(f'{first}page/{n}/ {b}/ 301')
+    for first in sorted(ever):
+        top = ever[first]
+        if first in lists:
+            k, last = lists[first]
+            to_html, to_json = list_path(first, last), V + api_v1.page_json(last, k)
+        else:
+            k, last = list_key(site, first), 0
+            to_html, to_json = f'{b}/', V + api_v1.page_json(1)
+        for n in range(max(last, 1) + 1, top + 1):
+            out += [f'{first}page/{n}/ {to_html} 301', f'{first}page/{n} {to_html} 301', f'{first}page/{n}/index.md {to_html}index.md 301',
+                    f'{V}{api_v1.page_json(n, k)} {to_json} 301']
     return ''.join(x + '\n' for x in out)
 
 
-def search_index(site):
+SEARCH_FORMAT = 'commonworld-atlas-search-index/3'
+SEARCH_FIELDS = ['id', 'name', 'cat', 'status', 'type', 'desc', 'keynum', 'tags', 'thumb', 'money', 'num', 'claims', 'ver', 'reach', 'words']
+SEARCH_GZ_BUDGET = 60 * 1024  # check.py fails the build when search-index.json is bigger than this gzipped (owner decision 2026-10-24)
+SEARCH_STOP = frozenset('the and for with from that this its via per into than not all any can has have had their them they but our your are was were'.split())
+SEARCH_WORD_RE = re.compile(r'[a-z][a-z0-9$%-]*')
+
+
+def search_words(c):
+    """Claim words for search that the card does not already show: the distinct lowercase words (3+ letters, starting with
+    a letter) of the claim statements and units, minus the words of the name and the summary and a few stop words. Numbers
+    and dates stay searchable where the card shows them (summary, key number)."""
+    text = ' '.join(filter(None, [x.get('statement') or '' for x in c.get('claims', [])] + [x.get('unit') or '' for x in c.get('claims', [])])).lower()
+    known = set(SEARCH_WORD_RE.findall(f"{c['name']} {trim(c['_desc'], 150)}".lower()))
+    return ' '.join(sorted(w for w in set(SEARCH_WORD_RE.findall(text)) - known - SEARCH_STOP if len(w) > 2))
+
+
+def search_row(site, c):
+    """One card of the search index as a short array (SEARCH_FIELDS order): only what search, filters, sort, the counters
+    and the card itself need. card_from_row() turns it back into exactly card_html(data=True)."""
+    x = c['_key']
+    kn = 0
+    if x:
+        dt = parse_time(x.get('observed_at'))
+        kn = [fmt_num(x['value']), ' · '.join(b for b in [x.get('unit') or '', x.get('window') or '', fmt_date(dt) if dt else ''] if b)]
+    r = c.get('_reach')
+    return [c['slug'], c['name'], c['category'], c['status'], c['entity_type'], trim(c['_desc'], 150), kn, ' '.join(c['_tags']),
+            1 if shot_paths(site, c) else 0, 1 if c['_money'] else 0, 1 if c['_num'] else 0, len(c.get('claims', [])),
+            int(c['_verified'].timestamp()) if c['_verified'] else 0, [r['state'], r['label']] if r else 0, search_words(c)]
+
+
+def search_head(site):
+    """Everything card_from_row() needs besides the row (atlas.js reads the same keys)."""
+    b = site.base
+    w, h = (screens.THUMB_W, screens.THUMB_H) if site.thumbs_ok else (screens.SHOT_W, screens.SHOT_H)
+    return {'card_base': f'{b}/platforms/', 'tag_href': f'{b}/?tag=', 'thumb': {'path': f'{b}{SHOTS_PATH}/t/' if site.thumbs_ok else f'{b}{SHOTS_PATH}/', 'w': w, 'h': h},
+            'cat_labels': {k: CAT_LABEL[k] for k in site.cats}, 'reach_text': dict(reach.STATE_TEXT), 'tag_limit': 6}
+
+
+def card_from_row(head, row):
+    """The card HTML of a search-index row, the same markup as card_html(data=True); atlas.js renderCard() mirrors this
+    function line by line (the build asserts that every row gives back its card, check.py checks page 1 again)."""
+    sl, name, cat, st, ty, desc, kn, tags, th, money, num, claims, ver, rc, _ = row
+    tl = tags.split() if tags else []
+    data = cw.attrs({'data-slug': sl, 'data-c': cat, 'data-s': st, 'data-t': ty, 'data-money': '1' if money else None, 'data-num': '1' if num else None,
+                     'data-claims': claims, 'data-ver': ver, 'data-tags': tags or None})
+    t = head['thumb']
+    thumb = f'<img src="{t["path"]}{sl}.webp" alt="" width="{t["w"]}" height="{t["h"]}" loading="lazy">' if th else '<i class="ph" aria-hidden="true"></i>'
+    if st == 'closed':
+        chip = '<span class="chip closed"><i class="dot closed"></i>closed</span>'
+    else:
+        chip = '<span class="chip live"><i class="dot"></i>live</span>' + (f'<span class="chip reach {rc[0]}" title="{e(head["reach_text"][rc[0]])}">{e(rc[1])}</span>' if rc else '')
+    keynum = f'<div class="keynum"><b>{e(kn[0])}</b><span>{e(kn[1])}</span></div>' if kn else ''
+    lim = head['tag_limit']
+    tag_html = (f'<div class="card-tags">' + ''.join(f'<a class="link-pill" href="{e(head["tag_href"] + x)}" data-tag="{e(x)}">#{e(x)}</a>' for x in tl[:lim])
+                + (f'<span class="more">+{len(tl) - lim}</span>' if len(tl) > lim else '') + '</div>') if tl else ''
+    return (f'<article class="cw-card{" is-closed" if st == "closed" else ""}"{data}>{thumb}'
+            f'<div class="cw-meta"><span class="catchip"><i class="{e("k-" + cat)}"></i>{e(head["cat_labels"][cat])}</span>{chip}</div>'
+            f'<h3><a href="{e(head["card_base"] + sl + "/")}">{e(name)}</a></h3><p>{e(desc)}</p>{keynum}{tag_html}</article>')
+
+
+def gz_size(obj):
+    import gzip
+    return len(gzip.compress(json.dumps(obj, ensure_ascii=False, separators=(',', ':')).encode(), 6))
+
+
+def shard_rows(rows, letters, budget):
+    """Contiguous slices of the list, cut only where the first letter changes, each shard gzipped well under budget
+    (80 %): [(first letter, last letter, rows)]. A single letter bigger than that stays one shard (check.py reports it)."""
+    groups = []
+    for r, l in zip(rows, letters):
+        if groups and groups[-1][0] == l:
+            groups[-1][1].append(r)
+        else:
+            groups.append((l, [r]))
+    out = []
+    for l, rs in groups:
+        if out and gz_size(out[-1][2] + rs) <= budget * 0.8:
+            out[-1] = (out[-1][0], l, out[-1][2] + rs)
+        else:
+            out.append((l, l, list(rs)))
+    return out
+
+
+def search_index(site, budget=None):
     """/atlas/data/search-index.json: the whole Atlas for the catalog on /atlas/ (atlas.js). The HTML pages carry only
-    PAGE_SIZE cards each, so search, filters, sort and every counter run on this file instead: one row per card in list
-    order, with the card exactly as the pages render it (`h`, including its data-* filter fields) and the text of its
-    claims (`x`, statements and units, searched too). Same snapshot_id as the JSON pages."""
-    rows = [{'id': c['slug'], 'x': ' '.join(filter(None, [x.get('statement') or '' for x in c.get('claims', [])] + [x.get('unit') or '' for x in c.get('claims', [])])),
-             'h': card_html(site, c, data=True)} for c in site.cards]
-    return {'format': 'commonworld-atlas-search-index/2', 'snapshot_id': site.snapshot_id, 'total': len(rows), 'page_size': PAGE_SIZE,
-            'note': 'Internal file of the Atlas catalog page; its shape may change. For data use /api/v1/atlas/ (stable, versioned).', 'cards': rows}
+    PAGE_SIZE cards each, so search, filters, sort and every counter run on this file instead. Slim since the owner decision
+    of 2026-10-24: one short array per card in list order with only the fields search, filters, sort, counters and the card
+    need (SEARCH_FIELDS), plus the claim words the card does not show (search_words); atlas.js renders a card from its row
+    (card_from_row is the reference). Same snapshot_id as the JSON pages.
+    Budget SEARCH_GZ_BUDGET gzipped per file (check.py): while the whole index fits, it is one file; once it does not, the
+    file becomes a small manifest and the rows go to shards by first letter, /atlas/data/search-index/<n>-<a>-<z>.json
+    (contiguous slices of the list, in order), which atlas.js loads on first use. Returns {path: document}."""
+    budget = budget or SEARCH_GZ_BUDGET
+    head = search_head(site)
+    rows = []
+    for c in site.cards:
+        row = search_row(site, c)
+        if card_from_row(head, row) != card_html(site, c, data=True):
+            raise SystemExit(f'search index: the row of {c["slug"]} does not give back its card (card_from_row vs card_html)')
+        rows.append(row)
+    path = f'{site.base}/data/search-index.json'
+    doc = {'format': SEARCH_FORMAT, 'snapshot_id': site.snapshot_id, 'total': len(rows), 'page_size': PAGE_SIZE,
+           'note': 'Internal file of the Atlas catalog page; its shape may change. For data use /api/v1/atlas/ (stable, versioned).',
+           'fields': SEARCH_FIELDS} | head
+    if gz_size(doc | {'cards': rows}) <= budget:
+        return {path: doc | {'cards': rows}}
+    out, shards = {}, []
+    for i, (a, z, rs) in enumerate(shard_rows(rows, [az_letter(c['name']) for c in site.cards], budget), 1):
+        name = f"{i}-{'0' if a == '#' else a.lower()}-{'0' if z == '#' else z.lower()}.json"
+        sp = f'{site.base}/data/search-index/{name}'
+        out[sp] = {'format': SEARCH_FORMAT + '-shard', 'snapshot_id': site.snapshot_id, 'first': a, 'last': z, 'count': len(rs), 'cards': rs}
+        shards.append({'path': sp, 'first': a, 'last': z, 'count': len(rs)})
+    return {path: doc | {'shards': shards}} | out
 
 
 def snapshot_id_of(recs):
@@ -3092,7 +3236,7 @@ def build_api_docs(site):
 <p>Since <code>schema_version</code> 1.6.0 every entry record also carries <code>replications</code>: for a register where review means replication (today Agent Errata), the counts from its own files at a pinned commit, or <code>null</code>. Fields: <code>rows</code> (replication rows), <code>entries</code>, <code>entries_replicated</code> (entries with at least one reproduction by an agent other than the finder and the repo operator), <code>independent_agents</code> (distinct such agents), <code>format</code>, <code>repo</code>, <code>commit</code> (the 40-character sha read), <code>source_url</code>, <code>method_url</code> (the validator whose counting rules apply, at that commit), <code>validate_run_url</code> (the push run of that validator that passed on the commit) and <code>observed_at</code>. The weekly refresh re-reads the newest commit whose validator run passed; a record changes only when a count changes (<a href="{REPO_URL}/blob/main/atlas/site/replications.py" rel="nofollow noopener">contract</a>).</p>
 <p>Since <code>schema_version</code> 1.7.0 every entry record also carries <code>reachability</code>: <code>null</code>, or on a live card whose site does not answer the way its status suggests, <code>{{state, label, checked_at, reads, note, credit, reported_via}}</code>. <code>state</code> is <code>stale</code> (marked live, but no read got the site’s own content; the card stays live until the protocol closes it) or <code>challenge_walled</code> (the site is up and serves its own content, but plain scripts get a challenge page). Each read has <code>url</code>, <code>observed_at</code>, <code>http_status</code>, <code>bytes</code>, <code>page_type</code> (<code>own_content</code>, <code>challenge</code>, <code>error</code>), <code>client</code>, <code>by</code> and <code>sha256</code> (or <code>null</code>). A state needs two reads of the same page type at least two hours apart, one of them by the Atlas; <code>status</code> keeps its two values (<a href="{REPO_URL}/blob/main/atlas/site/reachability.py" rel="nofollow noopener">contract</a>).</p>
 <h2 id="pages">Paged lists</h2>
-<p>Since <code>schema_version</code> 1.8.0 the list also comes in pages of {PAGE_SIZE} records, the same records as <code>platforms.json</code> in the order of the HTML pages: <a href="{V}{api_v1.page_json(1)}"><code>{V}{api_v1.page_json(1)}</code></a>, <code>{V}/atlas/page/&lt;N&gt;.json</code> (all entries, A to Z, like <a href="{b}/">/atlas/</a> and <code>/atlas/page/&lt;N&gt;/</code>) <code>{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json</code> (one category, live first, like the category pages) and <code>{V}/atlas/platforms/page/&lt;N&gt;.json</code> (the A–Z table <a href="{b}/platforms/">/atlas/platforms/</a> and <code>/atlas/platforms/page/&lt;N&gt;/</code>: the same records and order as the whole list, with <code>url</code> naming the A–Z page). Every page carries <code>snapshot_id</code>, <code>page</code>, <code>per_page</code>, <code>pages</code>, <code>total</code>, <code>count</code>, <code>has_more</code>, <code>next</code>, <code>prev</code> and <code>first</code>, plus <code>url</code> (the HTML page) and <code>md_url</code> (its Markdown twin). {e(api_v1.PAGE_WALK_RULE)} The number of pages is also in <a href="{V}/atlas/index.json">atlas/index.json</a> (<code>counts.pages</code>, <code>categories[].pages</code>). MCP clients read the same pages with the tool <code>atlas_list_page</code>.</p>
+<p>Since <code>schema_version</code> 1.8.0 the list also comes in pages of {PAGE_SIZE} records, the same records as <code>platforms.json</code> in the order of the HTML pages: <a href="{V}{api_v1.page_json(1)}"><code>{V}{api_v1.page_json(1)}</code></a>, <code>{V}/atlas/page/&lt;N&gt;.json</code> (all entries, A to Z, like <a href="{b}/">/atlas/</a> and <code>/atlas/page/&lt;N&gt;/</code>) <code>{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json</code> (one category, live first, like the category pages) and <code>{V}/atlas/platforms/page/&lt;N&gt;.json</code> (the A–Z table <a href="{b}/platforms/">/atlas/platforms/</a> and <code>/atlas/platforms/page/&lt;N&gt;/</code>: the same records and order as the whole list, with <code>url</code> naming the A–Z page). Every page carries <code>snapshot_id</code>, <code>page</code>, <code>per_page</code>, <code>pages</code>, <code>total</code>, <code>count</code>, <code>has_more</code>, <code>next</code>, <code>prev</code> and <code>first</code>, plus <code>url</code> (the HTML page) and <code>md_url</code> (its Markdown twin). {e(api_v1.PAGE_WALK_RULE)} The number of pages is also in <a href="{V}/atlas/index.json">atlas/index.json</a> (<code>counts.pages</code>, <code>categories[].pages</code>). MCP clients read the same pages with the tool <code>atlas_list_page</code>. {e(api_v1.PAGING_CONTRACT)}</p>
 <h2 id="ids">IDs</h2>
 <p>An entry ID is its permanent URL slug (for example <code>{e(ex)}</code>). Never construct or guess an ID: take it from <a href="{V}/atlas/platforms.json">platforms.json</a> or a category file. An ID that is not listed there does not exist, and the request returns 404.</p>
 <h2 id="examples">Examples</h2>
@@ -3354,7 +3498,8 @@ def main():
     write(atlas_events.JSON_PATH, json.dumps(atlas_events.doc(site, evs, datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')), ensure_ascii=False, indent=1) + '\n')
     write(atlas_events.MD_PATH, atlas_events.markdown(site, evs))
     build_agent_files(site, write)
-    write(f'{b}/data/search-index.json', json.dumps(search_index(site), ensure_ascii=False, separators=(',', ':')))
+    for sp, sdoc in search_index(site).items():  # one file, or a manifest + shards by first letter once over budget
+        write(sp, json.dumps(sdoc, ensure_ascii=False, separators=(',', ':')))
     build_earn_json(site, write)
     build_api(site, write)
 

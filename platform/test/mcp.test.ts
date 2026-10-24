@@ -5,7 +5,7 @@
 import { env, exports } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { OPERATIONS, schemaOf } from '../src/openapi';
-import { REST_EXCLUDED, REST_TOOLS, TOOLS, TOOL_BY_NAME, CONFIRM_ARG, IDEMPOTENCY_ARG, UNTRUSTED_TEXT } from '../src/mcp/tools';
+import { REST_EXCLUDED, REST_TOOLS, TOOLS, TOOL_BY_NAME, CONFIRM_ARG, IDEMPOTENCY_ARG, UNTRUSTED_TEXT, ATLAS_PAGE_SIZE, atlasPaged } from '../src/mcp/tools';
 import { MCP_LEGACY_VERSIONS, MCP_LIST_TTL_MS, MCP_MAX_BODY_BYTES, MCP_PROTOCOL_VERSIONS, MCP_WELL_KNOWN, validateArgs } from '../src/mcp/server';
 import { resetAtlasCache } from '../src/mcp/atlas';
 import MCP_DOC from '../docs/MCP.md?raw';
@@ -322,7 +322,15 @@ describe('tools/call', () => {
     expect(found.data.items[0].claims).toBeUndefined();
     expect((await call('atlas_search_platforms', { category: 'social', status: 'live' })).data.items.map((p: any) => p.id)).toEqual(['demo']);
     expect((await call('atlas_search_platforms', { tag: 'x402' })).data.items.map((p: any) => p.id)).toEqual(['payhub']);
-    expect((await call('atlas_search_platforms', { limit: 1 })).data.next_offset).toBe(1);
+    // one paging contract (2026-10-24): page, 1-based, 50 per page; offset is an alias (page = floor(offset / 50) + 1); limit is ignored
+    const sp1 = (await call('atlas_search_platforms', {})).data;
+    expect(sp1).toMatchObject({ page: 1, per_page: 50, pages: 1, has_more: false, next_page: null, page_from: 'default' });
+    expect(sp1.items.length).toBe(sp1.total);
+    expect((await call('atlas_search_platforms', { limit: 1 })).data.items.length).toBe(sp1.total);
+    expect((await call('atlas_search_platforms', { offset: 49 })).data).toMatchObject({ page: 1, page_from: 'offset' });
+    expect((await call('atlas_search_platforms', { offset: 50 })).data).toMatchObject({ page: 2, page_from: 'offset', items: [] });
+    expect((await call('atlas_search_platforms', { page: 1, offset: 120 })).data).toMatchObject({ page: 1, page_from: 'page' });
+    expect((await call('atlas_first_tasks', { offset: 100 })).data).toMatchObject({ page: 3, per_page: 50, page_from: 'offset' });
     const card = await call('atlas_get_platform', { id: 'demo' });
     expect(card.data.claims[0].source_url).toBe('https://demo.example');
     const missing = await call('atlas_get_platform', { id: 'nope' });
@@ -545,5 +553,21 @@ describe('protocol 2026-07-28 (stateless, no handshake)', () => {
     expect((await modern('tools/call', { name: 'atlas_earn', arguments: {} }, {}, c.key)).status).toBe(200);
     expect((await modern('tools/call', { name: 'account_me', arguments: {} }, {}, c.key)).body.result.isError).toBeUndefined();
     expect((await modern('tools/call', { name: 'atlas_earn', arguments: {} }, {}, c.key)).status).toBe(429);
+  });
+});
+
+describe('Atlas tools: one paging contract (page, 1-based, 50 per page; offset alias)', () => {
+  const rows = Array.from({ length: 120 }, (_, i) => i);
+  it('page wins, offset maps to floor(offset / 50) + 1, limit is ignored', () => {
+    expect(ATLAS_PAGE_SIZE).toBe(50);
+    expect(atlasPaged(rows, {})).toMatchObject({ total: 120, page: 1, per_page: 50, pages: 3, has_more: true, next_page: 2, page_from: 'default' });
+    expect(atlasPaged(rows, { page: 3 })).toMatchObject({ page: 3, has_more: false, next_page: null, page_from: 'page' });
+    expect(atlasPaged(rows, { page: 3 }).items).toEqual(rows.slice(100));
+    expect(atlasPaged(rows, { offset: 0 }).page).toBe(1);
+    expect(atlasPaged(rows, { offset: 99 }).page).toBe(2);
+    expect(atlasPaged(rows, { offset: 100 })).toMatchObject({ page: 3, page_from: 'offset' });
+    expect(atlasPaged(rows, { page: 2, offset: 100 })).toMatchObject({ page: 2, page_from: 'page' });
+    expect(atlasPaged(rows, { limit: 5 }).items.length).toBe(50);
+    expect(atlasPaged(rows, { page: 9 })).toMatchObject({ page: 9, items: [], has_more: false, next_page: null });
   });
 });

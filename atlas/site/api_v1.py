@@ -34,6 +34,8 @@ CHANGELOG = [
         'The A-Z list /atlas/platforms/ is paged the same way: /atlas/platforms/page/{page}/ (page 1 is /atlas/platforms/) with JSON pages '
         '/api/v1/atlas/platforms/page/{page}.json (same shape and walk rule, the same records and order as /api/v1/atlas/page/{page}.json, '
         'url and md_url name the A-Z HTML page).',
+        'One paging contract for lists: `page`, 1-based, 50 per page; the MCP tools atlas_search_platforms and atlas_first_tasks take `page` too '
+        '(`offset` only as a deprecated alias, page = floor(offset / 50) + 1, the response names the page used).',
         'atlas/index.json: new counts.pages, a paging block {page_size, pages, snapshot_id, first, az_first, walk_rule}, categories[].pages and '
         'categories[].first_page, and links.page / links.category_page / links.az_page URL templates.']},
     {'schema_version': '1.7.0', 'date': '2026-10-24', 'changes': [
@@ -110,6 +112,9 @@ CHANGELOG = [
 # Paged lists (ADR-0001, decisions D2-D4): static JSON pages of PAGE_SIZE records each, built with the site.
 # The location is still an open question (Q6): every page URL is made by page_json() below, so moving them is one edit here.
 PAGE_SIZE = 50
+PAGING_CONTRACT = ('One paging contract everywhere: `page`, 1-based, 50 per page, as in /api/v1/atlas/page/{page}.json. The MCP tools '
+                   'atlas_list_page, atlas_search_platforms and atlas_first_tasks take `page`; `offset` is only a deprecated alias '
+                   '(page = floor(offset / 50) + 1) and the response names the page used.')
 PAGE_WALK_RULE = ('Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; '
                   'if it changes between two pages, the list was rebuilt in between: start again from page 1. A page number past the last '
                   'page returns HTTP 404.')
@@ -368,7 +373,7 @@ def openapi(origin, categories, example_ids, docs_url, licence):
         'openapi': '3.1.0',
         'info': {'title': 'Commonworld Atlas API', 'version': SCHEMA_VERSION,
                  'summary': 'Static, read-only JSON API of the Commonworld Atlas of agent platforms. The live platform API is separate: ' + origin + '/openapi.json',
-                 'description': ('Plain static JSON files, rebuilt with every change to the site. '
+                 'description': ('Plain static JSON files, rebuilt with every change to the site. ' + PAGING_CONTRACT + ' '
                                  'generated_at: ' + GENERATED_AT_DESC + ' newest_observation: ' + NEWEST_OBSERVATION_DESC + ' '
                                  'No key, no rate limit beyond fair use; '
                                  'CORS is open (Access-Control-Allow-Origin: *). Responses may be cached by Cloudflare and browsers for up to a few hours. '

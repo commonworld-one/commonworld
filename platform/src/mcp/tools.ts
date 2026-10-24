@@ -219,7 +219,34 @@ function atlasTool(name: string, title: string, description: string, path: strin
   };
 }
 
-const page = { limit: { type: 'integer', minimum: 1, maximum: 100, description: '1-100, default 20' }, offset: { type: 'integer', minimum: 0, maximum: 10000, description: 'default 0' } };
+/**
+ * One paging contract for every Atlas tool (owner decision 2026-10-24): `page`, 1-based, ATLAS_PAGE_SIZE results per page,
+ * the same as atlas_list_page and /api/v1/atlas/page/{page}.json. `offset` is accepted only as a documented alias,
+ * page = floor(offset / 50) + 1; `limit` is accepted and ignored (pages always hold 50). The response says which page was
+ * used and how it was chosen (`page_from`: page | offset | default).
+ */
+export const ATLAS_PAGE_SIZE = 50;
+const page = {
+  page: { type: 'integer', minimum: 1, maximum: 10000, description: `Page number, 1-based, ${ATLAS_PAGE_SIZE} results per page (default 1): the same paging as atlas_list_page and /api/v1/atlas/page/{page}.json. Follow next_page while has_more is true.` },
+  offset: { type: 'integer', minimum: 0, maximum: 500000, description: `Deprecated alias of page: page = floor(offset / ${ATLAS_PAGE_SIZE}) + 1. Ignored when page is given. The response says the page used (page, page_from).` },
+  limit: { type: 'integer', minimum: 1, maximum: 100, description: `Deprecated and ignored: every page holds ${ATLAS_PAGE_SIZE} results.` },
+};
+
+/** The page an Atlas tool call asks for: `page` wins, else the `offset` alias, else page 1. */
+export function atlasPageOf(a: Record<string, unknown>): { page: number; page_from: 'page' | 'offset' | 'default' } {
+  if (a.page !== undefined && a.page !== null) return { page: Math.max(1, Math.floor(num(a.page, 1))), page_from: 'page' };
+  if (a.offset !== undefined && a.offset !== null) return { page: Math.floor(Math.max(0, num(a.offset, 0)) / ATLAS_PAGE_SIZE) + 1, page_from: 'offset' };
+  return { page: 1, page_from: 'default' };
+}
+
+/** One page of rows in the shared contract: total, page, per_page, pages, has_more, next_page, page_from, items. */
+export function atlasPaged<T>(rows: T[], a: Record<string, unknown>): { total: number; page: number; per_page: number; pages: number; has_more: boolean; next_page: number | null; page_from: string; items: T[] } {
+  const { page: p, page_from } = atlasPageOf(a);
+  const pages = Math.max(1, Math.ceil(rows.length / ATLAS_PAGE_SIZE));
+  const items = rows.slice((p - 1) * ATLAS_PAGE_SIZE, p * ATLAS_PAGE_SIZE);
+  const has_more = p * ATLAS_PAGE_SIZE < rows.length;
+  return { total: rows.length, page: p, per_page: ATLAS_PAGE_SIZE, pages, has_more, next_page: has_more ? p + 1 : null, page_from, items };
+}
 const category = { type: 'string', pattern: '^[a-z0-9-]{1,64}$', description: 'Category id from atlas_list_categories (e.g. social, work, payments).' };
 
 export const ATLAS_TOOLS: ToolDef[] = [
@@ -230,7 +257,7 @@ export const ATLAS_TOOLS: ToolDef[] = [
       return { name: i.name, url: i.url, generated_at: i.generated_at, newest_observation: i.newest_observation, licence: i.licence, counts: i.counts, categories: i.categories, id_rule: i.id_rule, links: i.links };
     }),
   atlasTool('atlas_search_platforms', 'Search Atlas platforms',
-    'Search and filter the verified platforms where AI agents act. Every word of `query` must match the id, name, summary, website, category or tags. Returns short rows (id, name, summary, category, status, tags, key number, evidence level, has_first_task); get the full card with atlas_get_platform.',
+    'Search and filter the verified platforms where AI agents act. Every word of `query` must match the id, name, summary, website, category or tags. Returns short rows (id, name, summary, category, status, tags, key number, evidence level, has_first_task), 50 per page (`page`, 1-based; `offset` is a deprecated alias); get the full card with atlas_get_platform.',
     ATLAS_FILES.platforms, {
       query: { type: 'string', maxLength: 200, description: 'Words to match (case-insensitive). Empty = all.' },
       category, status: { type: 'string', enum: ['live', 'closed'], description: 'live or closed (history card)' },
@@ -240,9 +267,8 @@ export const ATLAS_TOOLS: ToolDef[] = [
       ...page,
     }, [], async (env, a) => {
       const list = await readAtlasJson(env, ATLAS_FILES.platforms);
-      const res = searchPlatforms(Array.isArray(list.platforms) ? list.platforms : [], { query: str(a.query), category: str(a.category), status: str(a.status), tag: str(a.tag), has_money_flow: bool(a.has_money_flow), has_first_task: bool(a.has_first_task), limit: num(a.limit, 20), offset: num(a.offset, 0) });
-      const offset = num(a.offset, 0);
-      return { total: res.total, offset, limit: num(a.limit, 20), next_offset: offset + res.items.length < res.total ? offset + res.items.length : null, items: res.items, generated_at: list.generated_at, licence: list.licence };
+      const res = searchPlatforms(Array.isArray(list.platforms) ? list.platforms : [], { query: str(a.query), category: str(a.category), status: str(a.status), tag: str(a.tag), has_money_flow: bool(a.has_money_flow), has_first_task: bool(a.has_first_task), limit: Number.MAX_SAFE_INTEGER, offset: 0 });
+      return { ...atlasPaged(res.items, a), generated_at: list.generated_at, licence: list.licence };
     }),
   atlasTool('atlas_list_page', 'Atlas list, one page',
     'One page of the Atlas list as published: 50 platform records per page, A to Z (or one category, live first), the same records and order as the pages /atlas/page/N/. '
@@ -258,12 +284,11 @@ export const ATLAS_TOOLS: ToolDef[] = [
     '/api/v1/atlas/platforms/{id}.json', { id: { type: 'string', pattern: ATLAS_ID.source, description: 'Permanent platform id (slug) from atlas_search_platforms.' } }, ['id'],
     async (env, a) => readAtlasJson(env, ATLAS_FILES.platform(String(a.id)), 'platform_not_found'), true),
   atlasTool('atlas_first_tasks', 'First tasks for agents',
-    'Platforms whose card has a first task: a short, checked sequence of steps an agent can do there first (title, steps, done_when, who contributed it). Optional category filter.',
+    'Platforms whose card has a first task: a short, checked sequence of steps an agent can do there first (title, steps, done_when, who contributed it). Optional category filter. 50 per page (`page`, 1-based; `offset` is a deprecated alias).',
     ATLAS_FILES.platforms, { category, ...page }, [], async (env, a) => {
       const list = await readAtlasJson(env, ATLAS_FILES.platforms);
       const rows = (Array.isArray(list.platforms) ? list.platforms : []).filter((p: any) => p.first_task && (!a.category || p.category === a.category));
-      const offset = num(a.offset, 0), limit = num(a.limit, 20);
-      return { total: rows.length, offset, limit, items: rows.slice(offset, offset + limit).map((p: any) => ({ id: p.id, name: p.name, url: p.url, category: p.category, status: p.status, first_task: p.first_task })) };
+      return atlasPaged(rows.map((p: any) => ({ id: p.id, name: p.name, url: p.url, category: p.category, status: p.status, first_task: p.first_task })), a);
     }, true),
   atlasTool('atlas_earn', 'Where agents get paid',
     'Rows of live platforms with a supported money figure (value, unit, window, basis, source, observed_at), grouped by unit as on the Atlas earn page. Values are never converted between units.',

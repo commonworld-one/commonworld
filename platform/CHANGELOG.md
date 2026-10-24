@@ -17,6 +17,11 @@ decisions D1–D4 of 2026-10-24). No schema, binding or dashboard change.
 - **A–Z list pages** (`/atlas/platforms/page/N/`, JSON `/api/v1/atlas/platforms/page/N.json`): routed like the other list pages
   (HTML runs the Worker, `.md` and JSON stay static); `atlas_list_page` covers them without a new parameter, since they hold the
   same records in the same order as the whole-Atlas pages (tool description and `docs/MCP.md` say so).
+- **One paging contract for Atlas tools** (owner decision 2026-10-24): `atlas_search_platforms` and `atlas_first_tasks`
+  take `page` (1-based, 50 per page, as `atlas_list_page` and `/api/v1/atlas/page/{page}.json`) and answer
+  `{total, page, per_page, pages, has_more, next_page, page_from, items}`. `offset` stays only as a deprecated alias
+  (`page = floor(offset / 50) + 1`, ignored when `page` is given; `page_from` says which chose the page); `limit` is
+  accepted and ignored. Was: `limit` (default 20) / `offset` with `next_offset`. Docs: `docs/MCP.md`, tool descriptions.
 - Fixture build: list page files, the A–Z page 2 and JSON page 1, and the `/atlas/page/1/` and `/atlas/platforms/page/1/` 301s.
   Tests in `test/atlas-assets.test.ts` and `test/mcp.test.ts`.
 

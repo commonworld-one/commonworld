@@ -1,8 +1,8 @@
 /* Atlas index (/atlas/ = page 1 of the list): instant search + filters (category, status, type, features, tags — all
    combined with AND), sorting, live counts, URL state, and native sponsored cards re-inserted after every 12 visible cards.
    The page carries only its own cards (50; the rest are on /atlas/page/N/). Search, filters, sort and every counter work on
-   the whole Atlas: on first use the cards come from /atlas/data/search-index.json (one row per card: the card as the pages
-   render it, plus its claim text). With no filter and the default sort the page shows its own cards and the pager again. */
+   the whole Atlas: on first use the cards come from /atlas/data/search-index.json (one short row per card with the fields
+   search, filters, counters and the card need, plus the claim words the card does not show; renderCard() builds the card). With no filter and the default sort the page shows its own cards and the pager again. */
 (function () {
   var root = document.getElementById('catalog');
   var grid = document.getElementById('grid');
@@ -34,22 +34,57 @@
   }
   pageCards.forEach(function (c) { prep(c); });
 
+  // one card from its search-index row (fields in idx.fields order); mirrors card_from_row() in build.py, which the build
+  // checks against the server-rendered card, so a filtered card looks exactly like the same card on a list page
+  var ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' };
+  function hesc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (ch) { return ESC[ch]; }); }
+  function renderCard(idx, r) {
+    var sl = r[0], st = r[3], kn = r[6], tags = r[7] ? r[7].split(' ') : [], rc = r[13], t = idx.thumb, lim = idx.tag_limit;
+    var data = ' data-slug="' + hesc(sl) + '" data-c="' + hesc(r[2]) + '" data-s="' + hesc(st) + '" data-t="' + hesc(r[4]) + '"'
+      + (r[9] ? ' data-money="1"' : '') + (r[10] ? ' data-num="1"' : '') + (r[11] ? ' data-claims="' + hesc(r[11]) + '"' : '') + (r[12] ? ' data-ver="' + hesc(r[12]) + '"' : '')  // 0 is left out, as cw.attrs() does
+      + (r[7] ? ' data-tags="' + hesc(r[7]) + '"' : '');
+    var thumb = r[8] ? '<img src="' + t.path + sl + '.webp" alt="" width="' + t.w + '" height="' + t.h + '" loading="lazy">' : '<i class="ph" aria-hidden="true"></i>';
+    var chip = st === 'closed' ? '<span class="chip closed"><i class="dot closed"></i>closed</span>'
+      : '<span class="chip live"><i class="dot"></i>live</span>' + (rc ? '<span class="chip reach ' + rc[0] + '" title="' + hesc(idx.reach_text[rc[0]]) + '">' + hesc(rc[1]) + '</span>' : '');
+    var keynum = kn ? '<div class="keynum"><b>' + hesc(kn[0]) + '</b><span>' + hesc(kn[1]) + '</span></div>' : '';
+    var tagHtml = tags.length ? '<div class="card-tags">' + tags.slice(0, lim).map(function (x) {
+      return '<a class="link-pill" href="' + hesc(idx.tag_href + x) + '" data-tag="' + hesc(x) + '">#' + hesc(x) + '</a>';
+    }).join('') + (tags.length > lim ? '<span class="more">+' + (tags.length - lim) + '</span>' : '') + '</div>' : '';
+    return '<article class="cw-card' + (st === 'closed' ? ' is-closed' : '') + '"' + data + '>' + thumb
+      + '<div class="cw-meta"><span class="catchip"><i class="' + hesc('k-' + r[2]) + '"></i>' + hesc(idx.cat_labels[r[2]]) + '</span>' + chip + '</div>'
+      + '<h3><a href="' + hesc(idx.card_base + sl + '/') + '">' + hesc(r[1]) + '</a></h3><p>' + hesc(r[5]) + '</p>' + keynum + tagHtml + '</article>';
+  }
+
   // the whole Atlas: fetched once, on first interaction (keeps the page light); ready() runs fn once the cards are there
   var loading = null;
   function loadAll() {
     if (loading) return loading;
     if (!window.fetch) { loading = Promise.resolve(false); return loading; }
     root.setAttribute('data-index', 'loading');
-    loading = fetch(root.getAttribute('data-search-index')).then(function (r) {
-      if (!r.ok) throw new Error('search index: HTTP ' + r.status);  // an error page is a failed load, never an empty Atlas
-      return r.json();
+    var getJson = function (u) {
+      return fetch(u).then(function (r) {
+        if (!r.ok) throw new Error('search index: HTTP ' + r.status);  // an error page is a failed load, never an empty Atlas
+        return r.json();
+      });
+    };
+    loading = getJson(root.getAttribute('data-search-index')).then(function (idx) {
+      if (!idx.shards) return idx;
+      // over budget the index is a manifest + shards by first letter (contiguous slices of the list): load them all, in order
+      return Promise.all(idx.shards.map(function (s) { return getJson(s.path); })).then(function (parts) {
+        idx.cards = [];
+        parts.forEach(function (p) {
+          if (p.snapshot_id !== idx.snapshot_id) throw new Error('search index: shard from another build');
+          idx.cards = idx.cards.concat(p.cards || []);
+        });
+        return idx;
+      });
     }).then(function (idx) {
       var tpl = document.createElement('template'), out = [];
       (idx.cards || []).forEach(function (row) {
-        tpl.innerHTML = row.h;
+        tpl.innerHTML = renderCard(idx, row);
         var c = tpl.content.firstElementChild;
         if (!c) return;
-        prep(c, row.x);
+        prep(c, row[14]);
         out.push(c);
       });
       allCards = out;

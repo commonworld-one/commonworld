@@ -1,6 +1,7 @@
 """Paged Atlas lists (ADR-0001, owner decisions D1-D4 of 2026-10-24): /atlas/ is page 1, /atlas/page/N/ the rest, 50 cards a
 page; JSON pages under /api/v1/atlas/ (location: open question Q6, one function api_v1.page_json). The whole built site is
 checked by atlas/site/check.py (paged_list_checks, paged_json_checks); these tests pin the rules of the helpers."""
+import json
 import os
 import sys
 import tempfile
@@ -140,17 +141,74 @@ class AzList(unittest.TestCase):
         self.assertEqual(api_v1.expand_paths(spec, [], [], {None: 2}), ['/atlas/platforms/page/1.json', '/atlas/platforms/page/2.json'])
 
 
+class SearchIndex(unittest.TestCase):
+    """Slim search index (owner decision 2026-10-24): short rows, claim words the card does not show, a 60 KB gzip budget
+    per file, shards by first letter once the whole index would be over it."""
+
+    def test_budget_is_the_same_in_build_and_check(self):
+        self.assertEqual(build.SEARCH_GZ_BUDGET, 60 * 1024)
+        self.assertEqual(check.SEARCH_GZ_BUDGET, build.SEARCH_GZ_BUDGET)
+
+    def test_words_leave_out_what_the_card_shows(self):
+        c = {'name': 'Lightning Hub', '_desc': 'Pays agents in sats.', 'claims': [
+            {'statement': 'Agents earned 12,000 sats over Lightning in October', 'unit': 'sats'}, {'statement': 'Open API for agents'}]}
+        w = build.search_words(c).split()
+        self.assertEqual(w, sorted(w))
+        self.assertIn('earned', w)
+        self.assertIn('october', w)
+        self.assertIn('api', w)
+        for gone in ('lightning', 'sats', 'agents', 'the', '12', '000', 'in'):
+            self.assertNotIn(gone, w)
+
+    def test_shards_are_contiguous_letter_slices_in_order(self):
+        rows = [[f'r{i}', 'x' * 400 + str(i)] for i in range(60)]
+        letters = ['A'] * 20 + ['B'] * 20 + ['C'] * 20
+        big = build.shard_rows(rows, letters, 10 ** 9)
+        self.assertEqual([(a, z, len(r)) for a, z, r in big], [('A', 'C', 60)])
+        small = build.shard_rows(rows, letters, 1)  # tiny budget: one shard per letter, never cut inside a letter
+        self.assertEqual([(a, z, len(r)) for a, z, r in small], [('A', 'A', 20), ('B', 'B', 20), ('C', 'C', 20)])
+        self.assertEqual([r for _, _, rs in small for r in rs], rows)
+
+
 class Redirects(unittest.TestCase):
-    def run_with_baseline(self, site, urls):
+    def run_with_baseline(self, site, urls, record=None):
         with tempfile.NamedTemporaryFile('w', suffix='.txt', delete=False) as f:
             f.write('# baseline\n' + ''.join(u + '\n' for u in urls))
-        old = build.SITEMAP_BASELINE
-        build.SITEMAP_BASELINE = f.name
+        with tempfile.NamedTemporaryFile('w', suffix='.json', delete=False) as r:
+            json.dump({'lists': record or {}}, r)
+        old, old_rec = build.SITEMAP_BASELINE, build.PAGED_RECORD
+        build.SITEMAP_BASELINE, build.PAGED_RECORD = f.name, r.name
         try:
             return build.paged_redirects(site).splitlines()
         finally:
-            build.SITEMAP_BASELINE = old
+            build.SITEMAP_BASELINE, build.PAGED_RECORD = old, old_rec
             os.unlink(f.name)
+            os.unlink(r.name)
+
+    def test_q8_a_page_that_ever_existed_never_404s(self):
+        # owner decision Q8 (2026-10-24): the committed record of the highest page ever built; a shrunk list sends every
+        # vanished page (HTML, Markdown twin, JSON) to its last page; numbers above the record never existed and stay 404
+        site = FakeSite(120, {'social': 60})  # 3 pages now; social 2 pages
+        lines = self.run_with_baseline(site, [], {'/atlas/': 5, '/atlas/platforms/': 5, '/atlas/categories/social/': 2, '/atlas/categories/gone/': 2})
+        for n in (4, 5):
+            self.assertIn(f'/atlas/page/{n}/ /atlas/page/3/ 301', lines)
+            self.assertIn(f'/atlas/page/{n} /atlas/page/3/ 301', lines)
+            self.assertIn(f'/atlas/page/{n}/index.md /atlas/page/3/index.md 301', lines)
+            self.assertIn(f'/api/v1/atlas/page/{n}.json /api/v1/atlas/page/3.json 301', lines)
+            self.assertIn(f'/atlas/platforms/page/{n}/ /atlas/platforms/page/3/ 301', lines)
+            self.assertIn(f'/atlas/platforms/page/{n}/index.md /atlas/platforms/page/3/index.md 301', lines)
+            self.assertIn(f'/api/v1/atlas/platforms/page/{n}.json /api/v1/atlas/platforms/page/3.json 301', lines)
+        self.assertFalse(any(l.startswith(('/atlas/page/6', '/atlas/platforms/page/6', '/api/v1/atlas/page/6')) for l in lines))  # never existed
+        self.assertFalse(any(l.startswith(('/atlas/page/3', '/atlas/page/2')) for l in lines))  # still exist
+        self.assertFalse(any(l.startswith('/atlas/categories/social/page/2') for l in lines))  # social still has 2 pages
+        self.assertIn('/atlas/categories/gone/page/2/ /atlas/ 301', lines)  # a whole list gone: to the Atlas home
+        self.assertIn('/api/v1/atlas/categories/gone/page/2.json /api/v1/atlas/page/1.json 301', lines)
+
+    def test_record_file_covers_every_list(self):
+        rec = build.load_paged_record()
+        self.assertIn('/atlas/', rec)
+        self.assertIn('/atlas/platforms/', rec)
+        self.assertEqual(rec['/atlas/'], rec['/atlas/platforms/'])
 
     def test_page_1_redirects_to_the_list(self):
         lines = self.run_with_baseline(FakeSite(120, {'social': 10}), [])

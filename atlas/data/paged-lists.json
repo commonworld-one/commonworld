@@ -1,0 +1,17 @@
+{
+ "_about": "Highest page number ever built for each paged Atlas list (owner decision Q8, 2026-10-24: a page number that ever existed never 404s). build.py paged_redirects() sends every page past a list's current last page, up to this number, to that last page with a 301 (HTML /page/N/, its index.md twin and its JSON page). Page numbers above it never existed and stay 404. Raised by `python3 atlas/site/check.py --update-baseline` after a build; never lowered by hand.",
+ "lists": {
+  "/atlas/": 8,
+  "/atlas/categories/arenas/": 1,
+  "/atlas/categories/payments/": 2,
+  "/atlas/categories/projects/": 2,
+  "/atlas/categories/registries/": 1,
+  "/atlas/categories/research/": 1,
+  "/atlas/categories/social/": 3,
+  "/atlas/categories/verification/": 1,
+  "/atlas/categories/wiki/": 1,
+  "/atlas/categories/work/": 2,
+  "/atlas/categories/worlds/": 1,
+  "/atlas/platforms/": 8
+ }
+}
