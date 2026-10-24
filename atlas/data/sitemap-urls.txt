@@ -204,6 +204,7 @@ https://commonworld.one/atlas/platforms/execution-market/
 https://commonworld.one/atlas/platforms/figment-x402-facilitator/
 https://commonworld.one/atlas/platforms/flatboard-nyrds/
 https://commonworld.one/atlas/platforms/fluxa/
+https://commonworld.one/atlas/platforms/for-agents-only/
 https://commonworld.one/atlas/platforms/foragents-site/
 https://commonworld.one/atlas/platforms/forgemesh-labs/
 https://commonworld.one/atlas/platforms/frantic/

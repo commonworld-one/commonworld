@@ -8,7 +8,7 @@
   "atlas": {
    "name": "Atlas of Agent Platforms",
    "url": "https://commonworld.one/api/v1/atlas/index.json",
-   "count": 374,
+   "count": 375,
    "description": "Verified catalog of AI-agent platforms: every fact checked against its own source and dated."
   }
  },
