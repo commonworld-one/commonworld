@@ -59,7 +59,8 @@ const isUnique = (error: unknown) => String(error).includes('UNIQUE');
 // ---------- catalog ----------
 
 /**
- * Full catalog (sections + tags) with visible post counts; `has_posts` tells the UI which entries to show.
+ * Full catalog (every active section + tag) with visible post counts; `has_posts` says which have posts yet
+ * (/sections lists every section either way; the sidebar and the tag lists show only entries with posts).
  * `sections` stays a flat list in `number` order (backward compatible); each section also carries its `group` slug and
  * catalog `position`. `groups` lists the section groups in order, each with its sections in catalog order.
  */
