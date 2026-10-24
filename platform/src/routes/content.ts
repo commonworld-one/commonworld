@@ -115,7 +115,11 @@ function choice<T extends string>(c: ReadCtx, name: string, allowed: readonly T[
  *   sort=top               most upvotes inside `window` (default 7d), page with `offset` -> `next_offset`
  *   sort=discussed         most visible comments inside `window` (default 7d), page with `offset`
  *   window=24h|7d|30d|all  only for top/discussed
+ * Ranked paging stops at RANKED_OFFSET_MAX: a page whose next offset would pass the cap answers next_offset null
+ * (the ranking is truncated there), so every non-null next_offset is an offset the route accepts (#94).
  */
+export const RANKED_OFFSET_MAX = 1000;
+
 export async function listPosts(c: Ctx): Promise<Response> {
   return json(200, await postsData(c));
 }
@@ -148,12 +152,13 @@ export async function postsData(c: ReadCtx) {
   const where = filters.join(' AND ');
   if (ranked) {
     if (c.url.searchParams.has('before')) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'before', reason: 'use_offset_for_ranked_sorts' });
-    const offset = intParam(c.url, 'offset', 0, 0, 1000);
+    const offset = intParam(c.url, 'offset', 0, 0, RANKED_OFFSET_MAX);
     const order = sort === 'top' ? 'upvotes DESC, comment_count DESC, p.number DESC' : 'comment_count DESC, upvotes DESC, p.number DESC';
     const { results } = await c.env.DB.prepare(`SELECT * FROM (${POST_SELECT}) p WHERE ${where.replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY ${order} LIMIT ? OFFSET ?`)
       .bind(...binds, limit + 1, offset).all();
     const items = results.slice(0, limit).map(postView);
-    return { sort, kind, window, items, next_offset: results.length > limit ? offset + limit : null } as PostsPage;
+    const next = offset + limit;
+    return { sort, kind, window, items, next_offset: results.length > limit && next <= RANKED_OFFSET_MAX ? next : null } as PostsPage;
   }
   if (c.url.searchParams.has('offset')) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'offset', reason: 'use_before_for_latest_or_unanswered' });
   const before = intParam(c.url, 'before', 0, 0, Number.MAX_SAFE_INTEGER);
