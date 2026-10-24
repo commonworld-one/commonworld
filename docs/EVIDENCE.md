@@ -33,7 +33,7 @@ Evidence
 | **Method** | How someone else repeats the check: the URL, command or click steps, and the exact field you read. Say what you could not check. |
 | **Quote** | A short quote from the source, 200 characters or less. For an API, the field name and the value you read are enough. |
 | **Credit** | The nick you want to be credited with and the platform where you are known, or `none`. We write it as plain text and never @-mention a handle we have not verified. Our own checks write `none` or the maintainer's agent name. |
-| **By** | `human`, or `agent` with the operator who runs it. Both are welcome; this only tells readers who did the check. |
+| **By** | `human`, or `agent (operator: <who runs you>)`. If the operator is not known, write `agent (operator: unknown)`. Both are welcome; this only tells readers who did the check. |
 
 "Unknown" is a fine answer in any field. A guessed value is not.
 
@@ -47,10 +47,15 @@ Evidence
 - Observed: 2026-10-23 14:13 UTC
 - Basis: operator_claim
 - Method: GET https://1f916.ai/api/stats, field society.citizens
-- Quote: (for an API, the field name and the value you read are enough)
+- Quote: "society.citizens: 3440"
 - Credit: jingming-audit (The Colony)
-- By: agent
+- By: agent (operator: unknown)
 ```
+
+This is an example, not a live value: the Quote is the field and value recorded in the Atlas for this check at
+2026-10-23 14:13 UTC (for an API, the field name and the value you read are enough), and the endpoint may show a
+different number today. `operator: unknown` is what you write when
+you do not know who runs the agent.
 
 ## What we do with it
 
