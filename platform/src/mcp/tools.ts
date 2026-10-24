@@ -274,11 +274,16 @@ export const ATLAS_TOOLS: ToolDef[] = [
     'One page of the Atlas list as published: 50 platform records per page, A to Z (or one category, live first), the same records and order as the pages /atlas/page/N/. '
     + 'The A-Z table /atlas/platforms/page/N/ (JSON /api/v1/atlas/platforms/page/N.json) has the same records in the same order as page N without a category, so this tool covers it too. '
     + 'Each page carries snapshot_id, page, pages, total, has_more and next. To read the whole list: start at page 1 and ask for page + 1 while has_more is true; '
-    + 'every page of one build has the same snapshot_id, and if it changes during the walk the list was rebuilt, so start again from page 1. A page past the last one is 404 page_not_found.',
+    + 'every page of one build has the same snapshot_id, and if it changes during the walk the list was rebuilt, so start again from page 1. A page past the last one is 404 page_not_found, unless that page number existed before and the list got shorter: then the last page is returned with requested_page and moved_to_last_page: true (check snapshot_id and start again).',
     '/api/v1/atlas/page/{page}.json', {
       page: { type: 'integer', minimum: 1, maximum: 10000, description: 'Page number, 1-based (default 1).' },
       category: { ...category, description: 'Optional: one category id from atlas_list_categories; omit for the whole Atlas.' },
-    }, [], async (env, a) => readAtlasJson(env, ATLAS_FILES.page(num(a.page, 1), str(a.category)), 'page_not_found'), true),
+    }, [], async (env, a) => {
+      const want = num(a.page, 1);
+      const doc = await readAtlasJson(env, ATLAS_FILES.page(want, str(a.category)), 'page_not_found');
+      // a page that existed before but is past the end now redirects to the last page: say so, so a walk can restart
+      return doc && typeof doc.page === 'number' && doc.page !== want ? { ...doc, requested_page: want, moved_to_last_page: true } : doc;
+    }, true),
   atlasTool('atlas_get_platform', 'Atlas platform card',
     'The full card of one platform: every claim with statement, value, basis, source_url, quote and observed_at, plus money flow, evidence level, first task and badge links.',
     '/api/v1/atlas/platforms/{id}.json', { id: { type: 'string', pattern: ATLAS_ID.source, description: 'Permanent platform id (slug) from atlas_search_platforms.' } }, ['id'],

@@ -347,6 +347,10 @@ describe('tools/call', () => {
     const past = await call('atlas_list_page', { page: 2 });
     expect(past.isError).toBe(true);
     expect(past.data).toMatchObject({ status: 404, error: { code: 'page_not_found' } });
+    // page 3 existed before (the fixture _redirects sends it to the last page, as paged_redirects does when a list shrinks)
+    const moved = await call('atlas_list_page', { page: 3 });
+    expect(moved.isError).toBeUndefined();
+    expect(moved.data).toMatchObject({ page: 1, requested_page: 3, moved_to_last_page: true, snapshot_id: '0123456789abcdef' });
     expect((await call('atlas_list_page', { page: 0 })).data.error.code).toBe('invalid_arguments');
     expect((await call('atlas_list_page', { category: '../x' })).data.error.code).toBe('invalid_arguments');
     expect((await call('commonworld_stats')).data.metrics[0].status).toBe('coming');
@@ -569,5 +573,17 @@ describe('Atlas tools: one paging contract (page, 1-based, 50 per page; offset a
     expect(atlasPaged(rows, { page: 2, offset: 100 })).toMatchObject({ page: 2, page_from: 'page' });
     expect(atlasPaged(rows, { limit: 5 }).items.length).toBe(50);
     expect(atlasPaged(rows, { page: 9 })).toMatchObject({ page: 9, items: [], has_more: false, next_page: null });
+  });
+});
+
+describe('Atlas JSON redirects the MCP tools follow', () => {
+  it('only same-build Atlas JSON paths', async () => {
+    const { atlasRedirectPath } = await import('../src/mcp/atlas');
+    expect(atlasRedirectPath('/api/v1/atlas/page/7.json')).toBe('/api/v1/atlas/page/7.json');
+    expect(atlasRedirectPath('https://commonworld.one/api/v1/atlas/platforms/page/7.json')).toBe('/api/v1/atlas/platforms/page/7.json');
+    expect(atlasRedirectPath('https://evil.example/api/v1/atlas/page/7.json')).toBeNull();
+    expect(atlasRedirectPath('/atlas/page/7/')).toBeNull();
+    expect(atlasRedirectPath('/api/v1/atlas/page/7.json?x=1')).toBeNull();
+    expect(atlasRedirectPath(null)).toBeNull();
   });
 });

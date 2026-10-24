@@ -227,7 +227,10 @@ admin = active admin. `confirm` = destructive, needs `confirm: true`.
 `atlas_list_page` reads the same static list pages as the site (50 records per page, Atlas schema_version 1.8.0): pass
 `page` (1-based) and optionally `category`. To read the whole list, start at page 1 and ask for `page + 1` while
 `has_more` is true; every page of one build carries the same `snapshot_id`, so if it changes during the walk the list
-was rebuilt and the walk starts again. A page past the last one answers `404 page_not_found`. The A-Z table
+was rebuilt and the walk starts again. A page past the last one answers `404 page_not_found`, unless that page number
+existed before and the list got shorter: the static build answers it with a 301 to the list's last page (owner decision
+Q8), the tool follows that one hop and returns the last page with `requested_page` and `moved_to_last_page: true`
+(the `snapshot_id` has changed, so start the walk again). The A-Z table
 `/atlas/platforms/` is paged the same way (`/atlas/platforms/page/{page}/`, JSON `/api/v1/atlas/platforms/page/{page}.json`)
 with the same records in the same order as the whole-Atlas pages, so `atlas_list_page` without `category` returns page N of
 the A-Z list too; there is no separate parameter for it.

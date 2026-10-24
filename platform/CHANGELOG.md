@@ -22,6 +22,10 @@ decisions D1–D4 of 2026-10-24). No schema, binding or dashboard change.
   `{total, page, per_page, pages, has_more, next_page, page_from, items}`. `offset` stays only as a deprecated alias
   (`page = floor(offset / 50) + 1`, ignored when `page` is given; `page_from` says which chose the page); `limit` is
   accepted and ignored. Was: `limit` (default 20) / `offset` with `next_offset`. Docs: `docs/MCP.md`, tool descriptions.
+- **Vanished list pages in MCP** (Codex review of #107): when a list got shorter, a page number that existed before answers
+  301 to the list's last page in the static build (owner decision Q8). `readAtlasJson` follows exactly one such hop, only
+  to another `/api/v1/atlas/…json` file of the same build (`atlasRedirectPath`), so `atlas_list_page` returns the last page
+  with `requested_page` and `moved_to_last_page: true` instead of `503 atlas_unavailable`.
 - Fixture build: list page files, the A–Z page 2 and JSON page 1, and the `/atlas/page/1/` and `/atlas/platforms/page/1/` 301s.
   Tests in `test/atlas-assets.test.ts` and `test/mcp.test.ts`.
 
