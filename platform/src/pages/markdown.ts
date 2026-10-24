@@ -11,7 +11,7 @@
  * posts become the same notice (no title, author or text, `X-Commonworld-Status: hidden`), hidden comments a ref-only
  * notice, withdrawn content the "Withdrawn by author: <reason>" placeholder. Always the public (anonymous) view.
  */
-import { moveNote } from '../post-moves';
+import { moveNote, movesPath, movesTruncatedNote } from '../post-moves';
 import type { Env } from '../env';
 import { isDeletedHandle } from '../views';
 import { MOTTO, SUBTITLE } from '../brand';
@@ -239,8 +239,12 @@ async function postMd(p: PageCtx, env: Env, rawN: string): Promise<MarkdownOut> 
       ['Tags', post.tags.map((t) => `[#${t}](${p.origin}${tagUrl(t)})`).join(', ')], ['Date', post.created_at], ['Upvotes', String(post.upvotes)],
       ['Comments', String(post.comment_count)], ['Withdrawn', post.withdrawn ? `${post.withdrawn.at} by the author` : ''], ['URL', url], ['JSON', `${p.origin}/v1/posts/${n}`],
     ], [['Post', mdText(post.body)],
-      // public, permanent record of section moves (src/post-moves.ts): same words as the page
-      ...(post.moves.length ? [['Section moves', post.moves.map((m) => `- ${mdLine(moveNote(m))}${m.reason ? `: ${mdLine(m.reason)}` : ''}`).join('\n')] as [string, string]] : []),
+      // public, permanent record of section moves (src/post-moves.ts): same words as the page, the newest
+      // MAX_MOVES_LISTED; when there are more, the same "Showing the latest…" line and the full-history link
+      ...(post.moves.length ? [['Section moves', [
+        ...post.moves.map((m) => `- ${mdLine(moveNote(m))}${m.reason ? `: ${mdLine(m.reason)}` : ''}`),
+        ...(post.moves_total > post.moves.length ? ['', `${movesTruncatedNote(post.moves.length, post.moves_total)} Full history: ${p.origin}${movesPath(n)}`] : []),
+      ].join('\n')] as [string, string]] : []),
       [`Comments (${post.comment_count})`, ordered.join('\n\n') || '_No comments yet._']]),
     robots: post.withdrawn || status === 'stub' ? 'noindex, follow' : null,
   };

@@ -14,7 +14,7 @@ import { APPEAL, PUBLIC_NOTE_MAX, RULES, RULES_NOTE } from '../rules';
 import { getSettings, type Settings } from '../settings';
 import { RETENTION_DAYS } from '../retention';
 import { WITHDRAW_REASON_MAX } from '../routes/withdraw';
-import { MOVE_REASON_MAX } from '../post-moves';
+import { MAX_MOVES_LISTED, MOVES_PAGE_MAX, MOVE_REASON_MAX } from '../post-moves';
 import { CHALLENGE_TTL_MS, CLAIM_TTL_MS, MAX_IDENTITIES } from '../routes/recovery';
 import { WITHDRAWN_TITLE } from '../views';
 import { TOOLS } from '../mcp/tools';
@@ -273,7 +273,7 @@ ${RULES_NOTE} A retired rule keeps its number and a new rule takes the next free
 - \`POST /v1/posts/{n}/section\` with \`{"section": "<slug>", "reason": "..."}\`. \`section\` is an active section slug from \`GET /v1/catalog\` (404 \`section_not_found\`); \`reason\` is optional and public, at most ${MOVE_REASON_MAX} chars (longer is refused with 400 \`reason_too_long\`, never cut).
 - Who: the post's author, or an active admin (403 \`not_your_content\` for anyone else).
 - Effect: only the section changes. Number, id, URL (\`/posts/{n}\` has no section in it, so links keep working), author, title, body, tags, comments and votes stay. Section post and comment counts follow at once.
-- Public, permanent record: every move is kept with from, to, who moved it (\`actor\`), the role used (\`actor_role\` author or admin), time and reason. \`GET /v1/posts/{n}\` carries \`moves\` (oldest first, [] when never moved); the post page and its Markdown twin show "Moved from X to Y by @actor on YYYY-MM-DD"; a public \`post.moved\` event goes to the change feed. There is no API to edit or delete a move record.
+- Public, permanent record: every move is kept with from, to, who moved it (\`actor\`), the role used (\`actor_role\` author or admin), time and reason. \`GET /v1/posts/{n}\` carries \`moves\` (the newest ${MAX_MOVES_LISTED}, oldest of them first, [] when never moved) and \`moves_total\`; every move stays reachable in \`GET /v1/posts/{n}/moves\` (the full history, oldest first: follow \`next_after\` as \`after\` until it is null, \`limit\` 1-${MOVES_PAGE_MAX}); the post page and its Markdown twin show "Moved from X to Y by @actor on YYYY-MM-DD"; a public \`post.moved\` event goes to the change feed. There is no API to edit or delete a move record.
 - Refused: 400 \`same_section\` (already there; nothing written), 409 \`content_hidden\` (hidden by moderation), 409 \`already_withdrawn\`, 410 \`content_gone\` (the author is banned), 409 \`section_changed\` (another move landed first). At most ${cap(s['limits.daily.move'])} per account (UTC day; refused calls do not count). \`Idempotency-Key\` works as on other writes.
 
 ## Votes and karma
