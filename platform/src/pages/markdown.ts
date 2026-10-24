@@ -12,6 +12,7 @@
  * notice, withdrawn content the "Withdrawn by author: <reason>" placeholder. Always the public (anonymous) view.
  */
 import { moveNote, movesPath, movesTruncatedNote } from '../post-moves';
+import { commentsAfterParam, commentsPath, commentsWindowNote } from '../post-comments';
 import type { Env } from '../env';
 import { isDeletedHandle } from '../views';
 import { MOTTO, SUBTITLE } from '../brand';
@@ -21,7 +22,7 @@ import { LIMITS, MAX_TAGS, porchData, postData, postsData } from '../routes/cont
 import { PLAIN_TEXT_NOTE } from '../openapi';
 import { lastModeration, lastModerationMany, moderationLogData } from '../routes/moderation';
 import { APPEAL, RULES, RULES_NOTE } from '../rules';
-import { authorComments, authorPorch, existingMentions, profileRobots, goneCommentStubs, goneRefs, hiddenCommentStubs, postStatus, search } from './data';
+import { authorComments, authorPorch, existingMentions, profileRobots, goneCommentStubs, goneRefs, hiddenCommentStubs, postStatus, search, stubRange } from './data';
 import { feedApiPath, loadFeed } from './feed';
 import { excerpt, plural } from './html';
 import { type Mentions, MENTION_SRC, type PageCtx, EMPTY_SECTION_TEXT, citizenUrl, composeUrl, hasMarkdownTwin, markdownPath, postUrl, sectionUrl, tagUrl } from './layout';
@@ -218,7 +219,7 @@ async function tagMd(p: PageCtx, env: Env, page: URL, tag: string): Promise<Mark
   };
 }
 
-async function postMd(p: PageCtx, env: Env, rawN: string): Promise<MarkdownOut> {
+async function postMd(p: PageCtx, env: Env, page: URL, rawN: string): Promise<MarkdownOut> {
   const n = Number(rawN);
   const status = await postStatus(env, n);
   if (status === null) throw new HttpError(404, 'post_not_found');
@@ -231,17 +232,22 @@ async function postMd(p: PageCtx, env: Env, rawN: string): Promise<MarkdownOut> 
       robots: 'noindex, follow', headers: { 'x-commonworld-status': 'hidden' },
     };
   }
-  const post = await postData(ro(p, env, `/v1/posts/${n}`, [rawN]));
-  const [stubs, gone, mentions] = await Promise.all([hiddenCommentStubs(env, n), goneCommentStubs(env, n),
+  // #114: one window of the comments, as on the HTML page (`?after=N`, the cursor of GET /v1/posts/{n}/comments)
+  const after = commentsAfterParam(page);
+  const post = await postData(ro(p, env, `/v1/posts/${n}`, [rawN]), { commentsAfter: after });
+  const range = stubRange(after, post.comments, post.comments_next_after);
+  const [stubs, gone, mentions] = await Promise.all([hiddenCommentStubs(env, n, range), goneCommentStubs(env, n, range),
     // one lookup for every @handle in the twin: only citizens that exist become links (#81), as on the HTML page
     existingMentions(env, [...(post.withdrawn ? [] : [post.body]), ...post.comments.filter((c) => !c.withdrawn).map((c) => c.body)])]);
   const mod = await lastModerationMany(env, 'comment', stubs.map((s) => s.number));
   type Node = { number: number; parent: number | null; text: string };
   const url = p.origin + postUrl(n);
+  // a reply whose parent is in an earlier window is listed at the top level, linked to its parent (/comments/{n})
+  const shown = new Set<number>([...post.comments.map((c) => c.number), ...stubs.map((s) => s.number), ...gone.map((s) => s.number)]);
   const nodes: Node[] = [
     ...post.comments.map((c) => ({
       number: c.number, parent: c.parent_number,
-      text: `### comment-${c.number}\n\n- Author: ${who(p, c.author)}${c.author.handle === post.author.handle ? ' — post author' : ''}\n- Date: ${c.created_at}\n- Upvotes: ${c.upvotes}\n${c.parent_number ? `- Reply to: [comment-${c.parent_number}](${url}#comment-${c.parent_number})\n` : ''}- Link: ${url}#comment-${c.number}\n\n${c.withdrawn ? mdText(c.body) : mdBody(p, c.body, mentions)}`,
+      text: `### comment-${c.number}\n\n- Author: ${who(p, c.author)}${c.author.handle === post.author.handle ? ' — post author' : ''}\n- Date: ${c.created_at}\n- Upvotes: ${c.upvotes}\n${c.parent_number ? `- Reply to: [comment-${c.parent_number}](${shown.has(c.parent_number) ? `${url}#comment-${c.parent_number}` : `${p.origin}/comments/${c.parent_number}`})\n` : ''}- Link: ${url}#comment-${c.number}\n\n${c.withdrawn ? mdText(c.body) : mdBody(p, c.body, mentions)}`,
     })),
     ...stubs.map((s) => {
       const ev = mod.get(s.number);
@@ -251,11 +257,18 @@ async function postMd(p: PageCtx, env: Env, rawN: string): Promise<MarkdownOut> 
     ...gone.map((s) => ({ number: s.number, parent: s.parent_number, text: `### comment-${s.number} (comment hidden)\n\nComment hidden.` })),
   ];
   const kids = new Map<number | null, Node[]>();
-  for (const x of nodes) kids.set(x.parent ?? null, [...(kids.get(x.parent ?? null) ?? []), x]);
+  for (const x of nodes) { const k = x.parent !== null && shown.has(x.parent) ? x.parent : null; kids.set(k, [...(kids.get(k) ?? []), x]); }
   const ordered: string[] = [];
   const walk = (parent: number | null) => { for (const x of (kids.get(parent) ?? []).sort((a, b) => a.number - b.number)) { ordered.push(x.text); walk(x.number); } };
   walk(null);
   const first = String(post.body ?? '').split(/\n\s*\n/)[0] ?? '';
+  // only part of the comments here (#114): say so, and link the first and the next window and the paged JSON
+  const pager = after === 0 && post.comments_next_after === null ? '' : [
+    commentsWindowNote(post.comments.length, post.comments_total, after),
+    ...(after > 0 ? [`First comments: ${p.origin}${postUrl(n)}.md`] : []),
+    ...(post.comments_next_after !== null ? [`Next comments: ${p.origin}${postUrl(n)}.md?after=${post.comments_next_after}`] : []),
+    `All comments as JSON: ${p.origin}${commentsPath(n)}`,
+  ].join(' ');
   return {
     markdown: doc(mdLine(post.title), mdText(excerpt(first, 400)), [
       ['Ref', `post-${n}`], ['Author', who(p, post.author)], ['Section', `[${mdLine(post.section.name)}](${p.origin}${sectionUrl(post.section.slug)})`],
@@ -268,8 +281,10 @@ async function postMd(p: PageCtx, env: Env, rawN: string): Promise<MarkdownOut> 
         ...post.moves.map((m) => `- ${mdLine(moveNote(m))}${m.reason ? `: ${mdLine(m.reason)}` : ''}`),
         ...(post.moves_total > post.moves.length ? ['', `${movesTruncatedNote(post.moves.length, post.moves_total)} Full history: ${p.origin}${movesPath(n)}`] : []),
       ].join('\n')] as [string, string]] : []),
-      [`Comments (${post.comment_count})`, ordered.join('\n\n') || '_No comments yet._']]),
-    robots: post.withdrawn || status === 'stub' ? 'noindex, follow' : null,
+      [`Comments (${post.comment_count})`, [
+        ...(pager ? [pager, ''] : []), ordered.join('\n\n') || '_No comments yet._', ...(pager ? ['', pager] : []),
+      ].join('\n')]]),
+    robots: post.withdrawn || status === 'stub' || after > 0 ? 'noindex, follow' : null,
   };
 }
 
@@ -403,7 +418,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === API_PAGE_PATH) return { markdown: apiMarkdown(p.origin), robots: null };
   if ((m = path.match(/^\/s\/([a-z0-9-]{1,64})$/))) return sectionMd(p, env, page, m[1]);
   if ((m = path.match(/^\/t\/([a-z0-9-]{1,64})$/))) return tagMd(p, env, page, m[1]);
-  if ((m = path.match(/^\/posts\/(\d{1,15})$/))) return postMd(p, env, m[1]);
+  if ((m = path.match(/^\/posts\/(\d{1,15})$/))) return postMd(p, env, page, m[1]);
   if ((m = path.match(/^\/c\/([^/]{1,96})$/))) return profileMd(p, env, m[1]);
   throw new HttpError(404, 'page_not_found');
 }

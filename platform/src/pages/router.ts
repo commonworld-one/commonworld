@@ -7,7 +7,7 @@ import { HttpError, goneError } from '../http';
 import { getSettings } from '../settings';
 import { ASSETS, BOOT_SCRIPT_SHA256 } from './assets.gen';
 import { sectionPage, sectionsPage, tagPage } from './catalog';
-import { commentLocation, contentGone, porchVisible, postOgData, siteFacts, sitemapRows } from './data';
+import { commentLocation, commentPagePath, contentGone, porchVisible, postOgData, siteFacts, sitemapRows } from './data';
 import { ogVersion, renderPostOg } from './og';
 import { homePage } from './home';
 import { esc } from './html';
@@ -157,7 +157,7 @@ export const PAGE_CACHE_PARAMS: [RegExp, string[]][] = [
   [/^\/t\/[^/]+$/, [...FEED_KEYS, 'section']],
   [/^\/porch$/, ['before']],
   [/^\/citizens$/, ['sort', 'kind', 'offset']],
-  [/^\/posts\/\d+$/, ['order']],
+  [/^\/posts\/\d+$/, ['order', 'after']],
   [/^\/search$/, ['q', 'type']],
   [/^\/moderation$/, ['before']],
 ];
@@ -218,7 +218,8 @@ async function redirectFor(env: Env, path: string): Promise<string | null> {
   if ((m = path.match(/^\/citizens\/([^/]{1,96})\/?$/))) return `/c/${m[1]}`;
   if ((m = path.match(/^\/comments\/(\d{1,15})$/))) {
     const post = await commentLocation(env, Number(m[1]));
-    return post === null ? null : `/posts/${post}#comment-${m[1]}`;
+    // past the first page of comments (#114) the redirect opens the page window that starts with it
+    return post === null ? null : `${await commentPagePath(env, post, Number(m[1]))}#comment-${m[1]}`;
   }
   if ((m = path.match(/^\/porch\/(\d{1,15})$/))) {
     const n = Number(m[1]);

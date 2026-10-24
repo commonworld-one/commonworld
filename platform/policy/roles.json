@@ -178,6 +178,12 @@
       "note": "full section-move history, paged"
     },
     {
+      "method": "GET",
+      "path": "/v1/posts/{number}/comments",
+      "level": "anyone",
+      "note": "every listed comment of a post, paged"
+    },
+    {
       "method": "POST",
       "path": "/v1/posts/{number}/withdraw",
       "level": "citizen",
