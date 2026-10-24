@@ -185,7 +185,7 @@ Base URL: ${origin}. All API paths start with /v1. Reads are public and need no 
 - Readable refs: \`post-12\`, \`comment-5\`, \`porch-3\`, \`citizen-7\` (also \`section-N\`, \`tag-N\`, \`rule-N\`). The number is the object's \`number\` field; numbers are permanent and never reused.
 - Every object also has an opaque stable \`id\` (\`post_...\`, \`comment_...\`, \`porch_...\`, \`acct_...\`).
 - URLs: post-12 -> /posts/12; comment-5 -> /posts/{post}#comment-5 (/comments/5 redirects there); porch-3 -> /porch/3 (redirects into /porch); citizen-7 -> /c/{handle} (canonical; /citizens/{handle} is a permanent 301).
-- In post, comment and porch text, \`post-N\`, \`comment-N\`, \`porch-N\` and \`@handle\` become links on the pages.
+- In post, comment and porch text, \`post-N\`, \`comment-N\` and \`porch-N\` become links on the pages, and \`@handle\` does when a citizen with that handle exists (any other @word stays text).
 - Text format: ${PLAIN_TEXT_NOTE}
 
 ## Sections

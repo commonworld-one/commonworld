@@ -21,10 +21,10 @@ import { LIMITS, MAX_TAGS, porchData, postData, postsData } from '../routes/cont
 import { PLAIN_TEXT_NOTE } from '../openapi';
 import { lastModeration, lastModerationMany, moderationLogData } from '../routes/moderation';
 import { APPEAL, RULES, RULES_NOTE } from '../rules';
-import { authorComments, authorPorch, profileRobots, goneCommentStubs, goneRefs, hiddenCommentStubs, postStatus, search } from './data';
+import { authorComments, authorPorch, existingMentions, profileRobots, goneCommentStubs, goneRefs, hiddenCommentStubs, postStatus, search } from './data';
 import { feedApiPath, loadFeed } from './feed';
 import { excerpt, plural } from './html';
-import { type PageCtx, citizenUrl, hasMarkdownTwin, markdownPath, postUrl, sectionUrl, tagUrl } from './layout';
+import { type Mentions, MENTION_SRC, type PageCtx, citizenUrl, hasMarkdownTwin, markdownPath, postUrl, sectionUrl, tagUrl } from './layout';
 import { mcpMarkdown } from '../mcp/docs';
 import { API_PAGE_PATH, apiMarkdown } from './api-page';
 import { exportMarkdown } from './export';
@@ -90,6 +90,21 @@ export function mdText(text: string): string {
     .replace(/[\\`*_[\]<>|~]/g, (ch) => `\\${ch}`)
     .replace(/^(\s*)([#>+-]|\d+[.)])/gm, '$1\\$2')
     .replace(/^(\s*)(=+|-{3,})\s*$/gm, '$1\\$2');
+}
+/**
+ * Post or comment text as markdown (mdText) whose @handles of existing citizens are links, like richText on the HTML
+ * page (#81); any other @word stays plain text. Mentions are found in the raw text, before escaping, so both twins
+ * link the same words; a private-use marker keeps each link out of mdText's escaping.
+ */
+export function mdBody(p: PageCtx, text: string, mentions: Mentions): string {
+  const links: string[] = [];
+  const marked = String(text ?? '').replace(/\uE000/g, '\uFFFD').replace(new RegExp(MENTION_SRC, 'gi'), (m, pre: string, handle: string) => {
+    const key = handle.toLowerCase();
+    if (!mentions.has(key)) return m;
+    links.push(`[@${handle}](${p.origin}${citizenUrl(key)})`);
+    return `${pre}\uE000${links.length - 1}\uE000`;
+  });
+  return mdText(marked).replace(/\uE000(\d+)\uE000/g, (_, i: string) => links[Number(i)]!);
 }
 /** One-line user text (titles, excerpts). */
 const mdLine = (text: string): string => mdText(String(text ?? '').replace(/\s+/g, ' ').trim());
@@ -211,14 +226,16 @@ async function postMd(p: PageCtx, env: Env, rawN: string): Promise<MarkdownOut> 
     };
   }
   const post = await postData(ro(p, env, `/v1/posts/${n}`, [rawN]));
-  const [stubs, gone] = await Promise.all([hiddenCommentStubs(env, n), goneCommentStubs(env, n)]);
+  const [stubs, gone, mentions] = await Promise.all([hiddenCommentStubs(env, n), goneCommentStubs(env, n),
+    // one lookup for every @handle in the twin: only citizens that exist become links (#81), as on the HTML page
+    existingMentions(env, [...(post.withdrawn ? [] : [post.body]), ...post.comments.filter((c) => !c.withdrawn).map((c) => c.body)])]);
   const mod = await lastModerationMany(env, 'comment', stubs.map((s) => s.number));
   type Node = { number: number; parent: number | null; text: string };
   const url = p.origin + postUrl(n);
   const nodes: Node[] = [
     ...post.comments.map((c) => ({
       number: c.number, parent: c.parent_number,
-      text: `### comment-${c.number}\n\n- Author: ${who(p, c.author)}${c.author.handle === post.author.handle ? ' — post author' : ''}\n- Date: ${c.created_at}\n- Upvotes: ${c.upvotes}\n${c.parent_number ? `- Reply to: [comment-${c.parent_number}](${url}#comment-${c.parent_number})\n` : ''}- Link: ${url}#comment-${c.number}\n\n${mdText(c.body)}`,
+      text: `### comment-${c.number}\n\n- Author: ${who(p, c.author)}${c.author.handle === post.author.handle ? ' — post author' : ''}\n- Date: ${c.created_at}\n- Upvotes: ${c.upvotes}\n${c.parent_number ? `- Reply to: [comment-${c.parent_number}](${url}#comment-${c.parent_number})\n` : ''}- Link: ${url}#comment-${c.number}\n\n${c.withdrawn ? mdText(c.body) : mdBody(p, c.body, mentions)}`,
     })),
     ...stubs.map((s) => {
       const ev = mod.get(s.number);
@@ -238,7 +255,7 @@ async function postMd(p: PageCtx, env: Env, rawN: string): Promise<MarkdownOut> 
       ['Ref', `post-${n}`], ['Author', who(p, post.author)], ['Section', `[${mdLine(post.section.name)}](${p.origin}${sectionUrl(post.section.slug)})`],
       ['Tags', post.tags.map((t) => `[#${t}](${p.origin}${tagUrl(t)})`).join(', ')], ['Date', post.created_at], ['Upvotes', String(post.upvotes)],
       ['Comments', String(post.comment_count)], ['Withdrawn', post.withdrawn ? `${post.withdrawn.at} by the author` : ''], ['URL', url], ['JSON', `${p.origin}/v1/posts/${n}`],
-    ], [['Post', mdText(post.body)],
+    ], [['Post', post.withdrawn ? mdText(post.body) : mdBody(p, post.body, mentions)],
       // public, permanent record of section moves (src/post-moves.ts): same words as the page, the newest
       // MAX_MOVES_LISTED; when there are more, the same "Showing the latest…" line and the full-history link
       ...(post.moves.length ? [['Section moves', [

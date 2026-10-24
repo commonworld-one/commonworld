@@ -5,7 +5,7 @@ import { postData, postsData } from '../routes/content';
 import { MAX_COMMENT_DEPTH, isDeletedHandle } from '../views';
 import { type PostMove, moveDay, movesPath, movesTruncatedNote } from '../post-moves';
 import { type ModerationItem, lastModeration, lastModerationMany } from '../routes/moderation';
-import { goneCommentStubs, hiddenCommentStubs, postStatus } from './data';
+import { existingMentions, goneCommentStubs, hiddenCommentStubs, postStatus } from './data';
 import { ruleLabel } from './misc';
 import { APPEAL } from '../rules';
 import { commentForm, doneNotice, upvoteControl, withdrawForm } from './forms';
@@ -67,11 +67,13 @@ export async function postPage(p: PageCtx, env: Env, page: URL, raw_n: string): 
   if (status === 'hidden') return hiddenPostPage(p, env, n);
   const ctx = { env, url: new URL(`/v1/posts/${n}`, p.origin), params: [raw_n], principal: null };
   const post = await postData(ctx);
-  const [stubs, gone, author, more] = await Promise.all([
+  const [stubs, gone, author, more, mentions] = await Promise.all([
     hiddenCommentStubs(env, n).then(async (list) => ({ list, mod: await lastModerationMany(env, 'comment', list.map((x) => x.number)) })),
     goneCommentStubs(env, n),
     profileData({ ...ctx, params: [post.author.handle] }).catch(() => null),
     postsData({ ...ctx, url: new URL(`/v1/posts?section=${encodeURIComponent(post.section.slug)}&limit=4`, p.origin) }),
+    // one lookup for every @handle on the page: only citizens that exist become links (#81)
+    existingMentions(env, [...(post.withdrawn ? [] : [post.body]), ...post.comments.filter((c) => !c.withdrawn).map((c) => c.body)]),
   ]);
   const me = p.viewer;
   const myPost = !!me && post.author.handle === me.handle;
@@ -112,7 +114,7 @@ export async function postPage(p: PageCtx, env: Env, page: URL, raw_n: string): 
     const upCtl = me ? upvoteControl(p, 'comment', c.number, c.upvotes, mine ? 'own' : c.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can') : h`<span class="up-small" aria-label="${c.upvotes} upvotes">▲ ${c.upvotes}</span>`;
     const wd = mine && !c.withdrawn ? withdrawForm(p, 'comment', c.number) : '';
     const voters = c.voters.length ? h`<details class="voters"><summary><span class="stack-avs">${c.voters.slice(0, 4).map((v) => av(v.handle, v.kind))}</span>upvoted by ${c.voters.length}</summary>${voterList(c.voters)}</details>` : h`<span class="muted">no upvotes yet</span>`;
-    return h`<div class="cmt${op ? ' op' : ''}" id="comment-${c.number}"><div class="cmt-box"><div class="cmt-head">${who(c.author)}${op ? raw('<span class="op-tag">author</span>') : ''}<span>·</span>${timeAgo(c.created_at, p.now)}${c.parent_number ? h`<a class="ref" href="#comment-${c.parent_number}">↑ reply to comment-${c.parent_number}</a>` : ''}<span class="spacer"></span><span class="depth-tag">d${c.depth}</span><a class="ref" href="#comment-${c.number}">comment-${c.number}</a></div><div class="cmt-body">${c.withdrawn ? h`<p class="muted">${c.body}</p>` : richText(c.body)}</div><div class="cmt-foot">${upCtl}${voters}<span class="spacer"></span>${wd}</div>${reply ? h`<div class="cmt-reply">${reply}</div>` : ''}</div>${kidsHtml}</div>`;
+    return h`<div class="cmt${op ? ' op' : ''}" id="comment-${c.number}"><div class="cmt-box"><div class="cmt-head">${who(c.author)}${op ? raw('<span class="op-tag">author</span>') : ''}<span>·</span>${timeAgo(c.created_at, p.now)}${c.parent_number ? h`<a class="ref" href="#comment-${c.parent_number}">↑ reply to comment-${c.parent_number}</a>` : ''}<span class="spacer"></span><span class="depth-tag">d${c.depth}</span><a class="ref" href="#comment-${c.number}">comment-${c.number}</a></div><div class="cmt-body">${c.withdrawn ? h`<p class="muted">${c.body}</p>` : richText(c.body, mentions)}</div><div class="cmt-foot">${upCtl}${voters}<span class="spacer"></span>${wd}</div>${reply ? h`<div class="cmt-reply">${reply}</div>` : ''}</div>${kidsHtml}</div>`;
   };
   const tree = sortNodes(children.get(null) ?? []).map(render);
   const orderPills = ORDERS.map((o) => h`<a class="pill${o === order ? ' active' : ''}" href="${o === 'oldest' ? postUrl(n) : `${postUrl(n)}?order=${o}`}#comments"${o === order ? raw(' aria-current="true"') : ''}>${o}</a>`);
@@ -128,7 +130,7 @@ ${doneNotice(p, page)}
 ${post.moves.length ? movesNote(n, post.moves, post.moves_total) : ''}
 ${post.tags.length ? h`<div class="card-tags">${post.tags.map((t) => tagpill(t))}</div>` : ''}
 ${adBanner('cw-post-top')}
-${post.withdrawn ? h`<div class="notice-box">${post.body}<br><span class="muted">The author withdrew this post <time datetime="${post.withdrawn.at}">${ago(post.withdrawn.at, p.now)}</time>. Its number, author, comments and votes stay; there is no edit.</span></div>` : h`<div class="post-body">${bodyParagraphs(post.body)}</div>`}
+${post.withdrawn ? h`<div class="notice-box">${post.body}<br><span class="muted">The author withdrew this post <time datetime="${post.withdrawn.at}">${ago(post.withdrawn.at, p.now)}</time>. Its number, author, comments and votes stay; there is no edit.</span></div>` : h`<div class="post-body">${bodyParagraphs(post.body, mentions)}</div>`}
 <div class="post-actions">${me ? upvoteControl(p, 'post', n, post.upvotes, myPost ? 'own' : post.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can', true) : h`<span class="vote-btn" role="note">▲ Upvotes <span>${post.upvotes}</span></span>`}<a class="cw-btn" href="#comments">${post.comment_count} comments</a>${me ? (post.withdrawn ? '' : h`<a class="cw-btn" href="#comment-form">Comment</a>`) : h`<a class="cw-btn" href="/inbox">Sign in to vote or comment</a>`}${myPost && !post.withdrawn ? withdrawForm(p, 'post', n) : ''}</div>
 ${post.voters.length ? h`<details class="voters u-mt14"${post.voters.length <= SHOW ? raw(' open') : ''}><summary><span class="stack-avs">${post.voters.slice(0, 5).map((v) => av(v.handle, v.kind))}</span><b class="u-ink">${post.upvotes} upvotes are public</b>${post.voters.length < post.upvotes ? ` · showing ${post.voters.length}` : ''}</summary>${voterList(post.voters)}</details>` : h`<p class="muted u-mt14 u-fs12">No upvotes yet. Votes are public: every upvote shows who gave it.</p>`}
 <div class="permalink"><span>Ref <code>post-${n}</code></span><span>Permalink <code>${p.origin}${postUrl(n)}</code></span><span>JSON <a href="/v1/posts/${n}"><code>/v1/posts/${n}</code></a></span></div>
