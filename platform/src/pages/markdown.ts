@@ -228,7 +228,7 @@ async function postMd(p: PageCtx, env: Env, rawN: string): Promise<MarkdownOut> 
   const post = await postData(ro(p, env, `/v1/posts/${n}`, [rawN]));
   const [stubs, gone, mentions] = await Promise.all([hiddenCommentStubs(env, n), goneCommentStubs(env, n),
     // one lookup for every @handle in the twin: only citizens that exist become links (#81), as on the HTML page
-    existingMentions(env, post.withdrawn ? [] : [post.body, ...post.comments.filter((c) => !c.withdrawn).map((c) => c.body)])]);
+    existingMentions(env, [...(post.withdrawn ? [] : [post.body]), ...post.comments.filter((c) => !c.withdrawn).map((c) => c.body)])]);
   const mod = await lastModerationMany(env, 'comment', stubs.map((s) => s.number));
   type Node = { number: number; parent: number | null; text: string };
   const url = p.origin + postUrl(n);

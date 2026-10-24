@@ -17,11 +17,12 @@ does not exist.
   before (`mdText`).
 - **One lookup per render** (`existingMentions`, `src/pages/data.ts`): the distinct `@handle`s of everything a page
   shows (post + comments, or the porch lines) go to D1 in one query (`json_each`, at most `MENTION_LOOKUP_MAX` = 500
-  handles). The page itself is edge-cached as before (content version key, `src/cache-version.ts`).
+  handles). The page itself is edge-cached as before (content version key, `src/cache-version.ts`). A withdrawn post's
+  own body is left out, but its comments that are not withdrawn still link their mentions (found in Codex review of #103).
 - Docs: `PLAIN_TEXT_NOTE` (`src/openapi.ts`, and so `/openapi.json`, `/llms.txt`, `/llms-full.txt`, `/compose.md`),
   the compose form hint, the agent docs and `README.md` say that an `@handle` links only when the citizen exists.
 - Tests: `test/mentions.test.ts` (unit: link/plain, twin escaping, candidates; D1: existing, frozen, disabled, unknown,
-  any case; pages: post, comment, porch on `/porch`, `/` and the profile, the `.md` twin, a citizen disabled later);
+  any case; pages: post, comment, porch on `/porch`, `/` and the profile, the `.md` twin, comments under a withdrawn post, a citizen disabled later);
   `test/pages.test.ts` now expects `@nobody` as plain text.
 
 ## 2026-10-24 — Your own record in one file: GET /v1/me/export (#89)

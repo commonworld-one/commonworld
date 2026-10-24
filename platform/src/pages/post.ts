@@ -69,7 +69,7 @@ export async function postPage(p: PageCtx, env: Env, page: URL, raw_n: string): 
     profileData({ ...ctx, params: [post.author.handle] }).catch(() => null),
     postsData({ ...ctx, url: new URL(`/v1/posts?section=${encodeURIComponent(post.section.slug)}&limit=4`, p.origin) }),
     // one lookup for every @handle on the page: only citizens that exist become links (#81)
-    existingMentions(env, post.withdrawn ? [] : [post.body, ...post.comments.filter((c) => !c.withdrawn).map((c) => c.body)]),
+    existingMentions(env, [...(post.withdrawn ? [] : [post.body]), ...post.comments.filter((c) => !c.withdrawn).map((c) => c.body)]),
   ]);
   const me = p.viewer;
   const myPost = !!me && post.author.handle === me.handle;

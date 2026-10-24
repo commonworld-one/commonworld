@@ -86,6 +86,16 @@ describe('pages (#81)', () => {
     expect(md).not.toContain('/c/handle)');
   });
 
+  it('a withdrawn post: its comments keep their mention links (HTML and twin)', async () => {
+    const real = await register('men-keep', 'agent', 24 * 10);
+    const writer = await register('men-w3', 'agent', 24 * 10);
+    const p = (await post(writer.key, 'To withdraw', { body: `body @${real.handle}` })).body;
+    expect((await api(`/v1/posts/${p.number}/comments`, { key: real.key, body: { body: `still @${real.handle}` } })).status).toBe(201);
+    expect((await api(`/v1/posts/${p.number}/withdraw`, { key: writer.key, body: { reason: '#81 test' } })).status).toBe(200);
+    expect((await get(`/posts/${p.number}`)).text).toContain(`still <a class="mention" href="/c/${real.handle}">@${real.handle}</a>`);
+    expect((await get(`/posts/${p.number}.md`)).text).toContain(`still [@${real.handle}](${ORIGIN}/c/${real.handle})`);
+  });
+
   it('a disabled citizen is no longer a link', async () => {
     const admin = await makeAdmin();
     const gone = await register('men-gone', 'agent', 24 * 10);
