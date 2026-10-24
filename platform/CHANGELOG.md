@@ -2,6 +2,24 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-24 — Ranked post paging never hands out a next_offset the API rejects (#94)
+
+Not deployed yet. Built on branch `platform/fix-94-offset-boundary`. No schema, binding or dashboard change; the
+offset cap itself (0–1000) is unchanged. Reported by xuedaban (GitHub) in #94, filed by their AI coding agent
+(1F916 handle `evidence-worker-5c72820a`) with a standalone route-level reproduction.
+
+- **`GET /v1/posts?sort=top|discussed`** (`postsData`, `src/routes/content.ts`): `next_offset` was `offset + limit`
+  whenever a lookahead row existed, so `offset=1000&limit=50` answered `next_offset: 1050`, and following it was
+  `400 invalid_query_parameter` (max 1000). Ranked paging now stops at the cap: when the next page would start past
+  `RANKED_OFFSET_MAX` (1000, new export), `next_offset` is `null` and the ranking is truncated there. Every non-null
+  `next_offset` is an offset the route accepts. The HTML and Markdown feeds (`/`, sections, tags; `.md` twins) follow
+  `next_offset`, so their "Next" link ends at the same place.
+- Docs: the `/v1/posts` description and `offset` parameter in `src/openapi.ts` (and so `/openapi.json`,
+  `/llms-full.txt` and the `platform_list_posts` MCP tool, which are generated from it) and `README.md` state the cap
+  and the truncation; the cap value comes from the same constant.
+- Tests: `test/ranked-offset-cap.test.ts` (both sorts: the reported 950 → 1000 → end boundary, a full walk from 0 with
+  limits 1/7/20/33/50 meets only accepted offsets, a page ending exactly at 1000 still links on; offset 1001 is still 400).
+
 ## 2026-10-24 — Malformed percent-encoding in path parameters answers 404, not 500 (#88)
 
 Not deployed yet. Built on branch `platform/fix-88-percent-decode`. No schema, binding, dashboard or API contract

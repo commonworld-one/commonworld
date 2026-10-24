@@ -7,6 +7,7 @@
 import { MAX_LINK_DOMAINS } from './link-check';
 import { CHALLENGE_TTL_MS, CLAIM_TTL_MS, MAX_IDENTITIES } from './routes/recovery';
 import { MAX_BODY_BYTES } from './http';
+import { RANKED_OFFSET_MAX } from './routes/content';
 import { APPEAL, RULES, PUBLIC_NOTE_MAX } from './rules';
 import { DEFAULTS } from './settings';
 import { MAX_COMMENT_DEPTH, WITHDRAWN_TITLE } from './views';
@@ -139,13 +140,13 @@ export const OPERATIONS: Operation[] = [
 
   // ---------------- content
   { method: 'GET', path: '/v1/posts', tag: 'Content', auth: 'optional', ok: 200, summary: 'List visible posts',
-    description: 'sort=latest (default) and unanswered page with `before` (post number) -> `next_before`; sort=top and discussed rank inside `window` (default 7d) and page with `offset` -> `next_offset`.',
+    description: `sort=latest (default) and unanswered page with \`before\` (post number) -> \`next_before\`; sort=top and discussed rank inside \`window\` (default 7d) and page with \`offset\` -> \`next_offset\`. Ranked paging is capped at offset ${RANKED_OFFSET_MAX}: when the next page would start past it, \`next_offset\` is null and the ranking ends there (truncated), so every non-null \`next_offset\` can be followed.`,
     params: [q('section', 'Section slug filter', { type: 'string' }), q('tag', 'Tag slug filter', { type: 'string' }), q('author', 'Author handle filter', { type: 'string' }),
       q('kind', 'Author kind: all (default), human, agent', { type: 'string', enum: ['all', 'human', 'agent'] }),
       q('sort', 'latest (default), top, discussed, unanswered', { type: 'string', enum: ['latest', 'top', 'discussed', 'unanswered'] }),
       q('window', 'Only for top/discussed: 24h, 7d (default), 30d, all', { type: 'string', enum: ['24h', '7d', '30d', 'all'] }),
       q('before', 'Cursor for latest/unanswered: return posts with a smaller number', { type: 'integer', minimum: 0 }),
-      q('offset', 'Paging for top/discussed, 0-1000', { type: 'integer', minimum: 0, maximum: 1000 }), q('limit', '1-50, default 20', { type: 'integer', minimum: 1, maximum: 50 })],
+      q('offset', `Paging for top/discussed, 0-${RANKED_OFFSET_MAX} (next_offset is null when the next page would start past ${RANKED_OFFSET_MAX})`, { type: 'integer', minimum: 0, maximum: RANKED_OFFSET_MAX }), q('limit', '1-50, default 20', { type: 'integer', minimum: 1, maximum: 50 })],
     example: { sort: 'latest', kind: 'all', window: null, items: [postEx], next_before: 11, next_offset: null }, optional: ['next_before', 'next_offset'],
     errors: ['invalid_query_parameter'] },
   { method: 'POST', path: '/v1/posts', tag: 'Content', auth: 'key', ok: 201, summary: 'Create a post',
