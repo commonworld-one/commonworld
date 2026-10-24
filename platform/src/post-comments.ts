@@ -18,6 +18,7 @@
  */
 import type { Env } from './env';
 import { COMMENT_SELECT, citizenPath, commentView, hiddenAncestorSql, notDisabledSql } from './views';
+import { type VoteKey, encodeVoteCursor, votersNextPath } from './voters';
 
 /** Comments listed with a post (JSON, page, Markdown twin): the oldest this many. */
 export const MAX_COMMENTS_LISTED = 500;
@@ -28,20 +29,25 @@ export const MAX_VOTERS_PER_COMMENT = 100;
 
 /** API path of a post's full comment list. */
 export const commentsPath = (postNumber: number): string => `/v1/posts/${postNumber}/comments`;
-/** API path of the next page of a post's comments, after comment `after`. */
-export const commentsNextPath = (postNumber: number, after: number): string => `${commentsPath(postNumber)}?after=${after}`;
+/** API path of the next page of a post's comments, after comment `after`, inside the walk's high-water mark. */
+export const commentsNextPath = (postNumber: number, after: number, through: number | null): string =>
+  `${commentsPath(postNumber)}?after=${after}${through === null ? '' : `&through=${through}`}`;
 
 export interface Voter { handle: string; kind: string; url: string }
-export type ListedComment = ReturnType<typeof commentView> & { voters: Voter[] };
+export type ListedComment = ReturnType<typeof commentView> & { voters: Voter[]; voters_next: string | null };
 
 /**
  * `publicCount`: the post's `comment_count` (POST_SELECT), the total for public readers; when given, the window skips
  * its own COUNT for them. Staff always count, since their list also holds replies under hidden comments.
  */
-export interface WindowOpts { after: number; limit: number; staff: boolean; publicCount?: number }
+export interface WindowOpts { after: number; limit: number; staff: boolean; publicCount?: number; through?: number | null }
 
-/** One window of a post's comments: at most `limit` with number > `after`, oldest first. */
-export interface CommentsWindow { total: number; items: ListedComment[]; next_after: number | null }
+/**
+ * One window of a post's comments: at most `limit` with after < number <= through, oldest first. `through` is the
+ * high-water mark of the walk: the newest comment number of the post when the walk started (given back by the first
+ * page, sent again by the client), so comments written during a walk never extend it; null when the post has none.
+ */
+export interface CommentsWindow { total: number; items: ListedComment[]; next_after: number | null; through: number | null }
 
 /**
  * SQL filter of the listed comments of one post (binds: post number). Same rule as the comment list of the post JSON
@@ -59,42 +65,61 @@ const listedSql = (alias: string, staff: boolean): string =>
  */
 export async function commentsWindow(env: Env, postNumber: number, opts: WindowOpts): Promise<CommentsWindow> {
   const { after, limit, staff } = opts;
-  const windowSql = `SELECT w.number FROM comments w WHERE ${listedSql('w', staff)} AND w.number > ? ORDER BY w.number LIMIT ?`;
+  const through = opts.through ?? null;
+  // high-water mark: the given `through`, else the post's newest comment number now (one index lookup, constant)
+  const hw = '(SELECT MAX(h.number) FROM comments h WHERE h.post_number = ?)';
+  const upTo = (alias: string) => `${alias}.number <= COALESCE(?, ${hw})`;
+  const windowSql = `SELECT w.number FROM comments w WHERE ${listedSql('w', staff)} AND w.number > ? AND ${upTo('w')} ORDER BY w.number LIMIT ?`;
   // public readers: the total is the post's comment_count (POST_SELECT counts with exactly this filter), so no COUNT
   const counted = !staff && opts.publicCount !== undefined;
   const results = await env.DB.batch([
-    env.DB.prepare(`${COMMENT_SELECT} WHERE ${listedSql('c', staff)} AND c.number > ? ORDER BY c.number LIMIT ?`).bind(postNumber, after, limit + 1),
+    env.DB.prepare(`${COMMENT_SELECT.replace(/^SELECT c\.\*,/, `SELECT c.*, COALESCE(?, ${hw}) AS high_water,`)} WHERE ${listedSql('c', staff)} AND c.number > ? AND ${upTo('c')} ORDER BY c.number LIMIT ?`)
+      .bind(through, postNumber, postNumber, after, through, postNumber, limit + 1),
     // voters of this window's comments only, the oldest MAX_VOTERS_PER_COMMENT of each (votes by primary key)
-    env.DB.prepare(`SELECT target_number, handle, kind FROM (
-        SELECT v.target_number, a.handle, a.kind, ROW_NUMBER() OVER (PARTITION BY v.target_number ORDER BY v.created_at, a.number) AS rn
+    env.DB.prepare(`SELECT target_number, handle, kind, created_at, voter_number FROM (
+        SELECT v.target_number, a.handle, a.kind, v.created_at, a.number AS voter_number,
+          ROW_NUMBER() OVER (PARTITION BY v.target_number ORDER BY v.created_at, a.number) AS rn
         FROM votes v JOIN accounts a ON a.id = v.voter_id
         WHERE v.target_type = 'comment' AND v.target_number IN (${windowSql}) AND a.status <> 'disabled'
-      ) WHERE rn <= ? ORDER BY target_number, rn`).bind(postNumber, after, limit, MAX_VOTERS_PER_COMMENT),
+      ) WHERE rn <= ? ORDER BY target_number, rn`).bind(postNumber, after, through, postNumber, limit, MAX_VOTERS_PER_COMMENT),
     ...(counted ? [] : [env.DB.prepare(`SELECT COUNT(*) AS n FROM comments c WHERE ${listedSql('c', staff)}`).bind(postNumber)]),
   ]);
   const [rows, votes, count] = results;
   const byComment = new Map<number, Voter[]>();
-  for (const v of votes.results as { target_number: number; handle: string; kind: string }[]) {
+  const lastVote = new Map<number, VoteKey>();
+  for (const v of votes.results as { target_number: number; handle: string; kind: string; created_at: string; voter_number: number }[]) {
     const list = byComment.get(v.target_number) ?? [];
     list.push({ handle: v.handle, kind: v.kind, url: citizenPath(v.handle) });
     byComment.set(v.target_number, list);
+    lastVote.set(v.target_number, { at: v.created_at, n: v.voter_number });
   }
   const all = rows.results as any[];
-  const items = all.slice(0, limit).map((row) => ({ ...commentView(row), voters: byComment.get(row.number) ?? [] }));
+  const items = all.slice(0, limit).map((row) => {
+    const voters = byComment.get(row.number) ?? [];
+    const last = lastVote.get(row.number);
+    // more counted votes than listed: the rest are in GET /v1/comments/{n}/voters, from the last one listed here
+    const next = last && row.upvotes > voters.length ? votersNextPath('comment', row.number, encodeVoteCursor(last)) : null;
+    return { ...commentView(row), voters, voters_next: next };
+  });
+  const highWater = all.length ? (all[0].high_water as number | null) : through;
   return {
     total: counted ? Number(opts.publicCount) : Number((count.results[0] as { n: number } | undefined)?.n ?? 0),
     items,
     next_after: all.length > limit ? items[items.length - 1].number : null,
+    through: highWater ?? null,
   };
 }
 
 /** One page of a post's full comment list (GET /v1/posts/{n}/comments). */
-export interface PostCommentsPage { post_number: number; total: number; items: ListedComment[]; next_after: number | null }
+export interface PostCommentsPage { post_number: number; total: number; through: number | null; has_more: boolean; items: ListedComment[]; next_after: number | null }
 
-/** Same shape as a page of GET /v1/posts/{n}/moves: {post_number, total, items, next_after}. */
+/**
+ * The shape of a page of GET /v1/posts/{n}/moves ({post_number, total, items, next_after}) plus the walk's high-water
+ * mark `through` and `has_more` (= next_after is not null).
+ */
 export async function postCommentsPage(env: Env, postNumber: number, opts: WindowOpts): Promise<PostCommentsPage> {
   const w = await commentsWindow(env, postNumber, opts);
-  return { post_number: postNumber, total: w.total, items: w.items, next_after: w.next_after };
+  return { post_number: postNumber, total: w.total, through: w.through, has_more: w.next_after !== null, items: w.items, next_after: w.next_after };
 }
 
 /**

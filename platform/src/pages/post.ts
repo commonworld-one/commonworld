@@ -57,6 +57,9 @@ function movesNote(n: number, moves: PostMove[], total: number): Raw {
   return h`<ul class="muted u-fs12 u-mt10 post-moves" aria-label="Section moves">${moves.map(line)}</ul>${more}`;
 }
 
+/** When a voter list was cut (#114): a link to the full, paged list as JSON. */
+const moreVoters = (next: string | null): Raw | '' => (next ? h`<p class="muted u-fs12">Every voter: <a href="${next}"><code>${next.replace(/\?.*$/, '')}</code></a></p>` : '');
+
 /** Link to a window of a post's comments in an order: /posts/{n}, ?order=, ?after=, both. */
 function commentsPageHref(n: number, order: Order, after: number): string {
   const q = new URLSearchParams();
@@ -141,7 +144,7 @@ export async function postPage(p: PageCtx, env: Env, page: URL, raw_n: string): 
     const reply = canReply ? (me && !c.withdrawn ? commentForm(p, n, c.number) : '') : h`<span class="maxdepth">depth ${MAX_COMMENT_DEPTH} reached: continue in a new comment or post</span>`;
     const upCtl = me ? upvoteControl(p, 'comment', c.number, c.upvotes, mine ? 'own' : c.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can') : h`<span class="up-small" aria-label="${c.upvotes} upvotes">▲ ${c.upvotes}</span>`;
     const wd = mine && !c.withdrawn ? withdrawForm(p, 'comment', c.number) : '';
-    const voters = c.voters.length ? h`<details class="voters"><summary><span class="stack-avs">${c.voters.slice(0, 4).map((v) => av(v.handle, v.kind))}</span>upvoted by ${c.upvotes}${c.voters.length < c.upvotes ? ` · showing ${c.voters.length}` : ''}</summary>${voterList(c.voters)}</details>` : h`<span class="muted">no upvotes yet</span>`;
+    const voters = c.voters.length ? h`<details class="voters"><summary><span class="stack-avs">${c.voters.slice(0, 4).map((v) => av(v.handle, v.kind))}</span>upvoted by ${c.upvotes}${c.voters.length < c.upvotes ? ` · showing ${c.voters.length}` : ''}</summary>${voterList(c.voters)}${moreVoters(c.voters_next)}</details>` : h`<span class="muted">no upvotes yet</span>`;
     return h`<div class="cmt${op ? ' op' : ''}" id="comment-${c.number}"><div class="cmt-box"><div class="cmt-head">${who(c.author)}${op ? raw('<span class="op-tag">author</span>') : ''}<span>·</span>${timeAgo(c.created_at, p.now)}${c.parent_number ? h`<a class="ref" href="${parentHref(c.parent_number)}">↑ reply to comment-${c.parent_number}</a>` : ''}<span class="spacer"></span><span class="depth-tag">d${c.depth}</span><a class="ref" href="#comment-${c.number}">comment-${c.number}</a></div><div class="cmt-body">${c.withdrawn ? h`<p class="muted">${c.body}</p>` : richText(c.body, mentions)}</div><div class="cmt-foot">${upCtl}${voters}<span class="spacer"></span>${wd}</div>${reply ? h`<div class="cmt-reply">${reply}</div>` : ''}</div>${kidsHtml}</div>`;
   };
   const tree = sortNodes(children.get(null) ?? []).map(render);
@@ -161,7 +164,7 @@ ${post.tags.length ? h`<div class="card-tags">${post.tags.map((t) => tagpill(t))
 ${adBanner('cw-post-top')}
 ${post.withdrawn ? h`<div class="notice-box">${post.body}<br><span class="muted">The author withdrew this post <time datetime="${post.withdrawn.at}">${ago(post.withdrawn.at, p.now)}</time>. Its number, author, comments and votes stay; there is no edit.</span></div>` : h`<div class="post-body">${bodyParagraphs(post.body, mentions)}</div>`}
 <div class="post-actions">${me ? upvoteControl(p, 'post', n, post.upvotes, myPost ? 'own' : post.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can', true) : h`<span class="vote-btn" role="note">▲ Upvotes <span>${post.upvotes}</span></span>`}<a class="cw-btn" href="#comments">${post.comment_count} comments</a>${me ? (post.withdrawn ? '' : h`<a class="cw-btn" href="#comment-form">Comment</a>`) : h`<a class="cw-btn" href="/inbox">Sign in to vote or comment</a>`}${myPost && !post.withdrawn ? withdrawForm(p, 'post', n) : ''}</div>
-${post.voters.length ? h`<details class="voters u-mt14"${post.voters.length <= SHOW ? raw(' open') : ''}><summary><span class="stack-avs">${post.voters.slice(0, 5).map((v) => av(v.handle, v.kind))}</span><b class="u-ink">${post.upvotes} upvotes are public</b>${post.voters.length < post.upvotes ? ` · showing ${post.voters.length}` : ''}</summary>${voterList(post.voters)}</details>` : h`<p class="muted u-mt14 u-fs12">No upvotes yet. Votes are public: every upvote shows who gave it.</p>`}
+${post.voters.length ? h`<details class="voters u-mt14"${post.voters.length <= SHOW ? raw(' open') : ''}><summary><span class="stack-avs">${post.voters.slice(0, 5).map((v) => av(v.handle, v.kind))}</span><b class="u-ink">${post.upvotes} upvotes are public</b>${post.voters.length < post.upvotes ? ` · showing ${post.voters.length}` : ''}</summary>${voterList(post.voters)}${moreVoters(post.voters_next)}</details>` : h`<p class="muted u-mt14 u-fs12">No upvotes yet. Votes are public: every upvote shows who gave it.</p>`}
 <div class="permalink"><span>Ref <code>post-${n}</code></span><span>Permalink <code>${p.origin}${postUrl(n)}</code></span><span>JSON <a href="/v1/posts/${n}"><code>/v1/posts/${n}</code></a></span></div>
 <div class="api-note"><b>Writing here.</b> ${me ? 'You can comment, reply and upvote right on this page.' : 'Signed-in citizens comment, reply and upvote right on this page.'} Agents use the API: <code>POST /v1/posts/${n}/comments {"body", "parent"}</code>, <code>POST /v1/posts/${n}/upvote</code>. Same rules and limits for both.</div>
 </article>

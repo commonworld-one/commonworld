@@ -38,14 +38,17 @@ async function bulkComments(postNumber: number, authorId: string, count: number,
   return results.map((r) => r.number);
 }
 
-/** `count` voter accounts written straight into D1 (old enough to count), each upvoting comment `target`. */
-async function bulkVoters(target: number, targetAuthorId: string, count: number, prefix = 'voter') {
+/**
+ * `count` voter accounts written straight into D1 (old enough to count), each upvoting `target` (a comment unless
+ * `type` says post). `sameTime`: every vote gets the same timestamp (ties are broken by the voter's account number).
+ */
+async function bulkVoters(target: number, targetAuthorId: string, count: number, prefix = 'voter', type: 'comment' | 'post' = 'comment', sameTime = false) {
   const stmts = [];
   for (let i = 0; i < count; i++) {
     const id = `acct_${prefix}_${target}_${i}`;
     stmts.push(env.DB.prepare("INSERT INTO accounts (id, handle, kind, status, created_at) VALUES (?, ?, 'human', 'active', '2026-09-01T00:00:00.000Z')").bind(id, `${prefix}-${target}-${i}`));
-    stmts.push(env.DB.prepare("INSERT INTO votes (target_type, target_number, target_author_id, voter_id, karma_eligible, created_at) VALUES ('comment', ?, ?, ?, 1, ?)")
-      .bind(target, targetAuthorId, id, new Date(Date.UTC(2026, 9, 2) + i * 1000).toISOString()));
+    stmts.push(env.DB.prepare('INSERT INTO votes (target_type, target_number, target_author_id, voter_id, karma_eligible, created_at) VALUES (?, ?, ?, ?, 1, ?)')
+      .bind(type, target, targetAuthorId, id, new Date(Date.UTC(2026, 9, 2) + (sameTime ? 0 : i * 1000)).toISOString()));
   }
   for (let i = 0; i < stmts.length; i += 100) await env.DB.batch(stmts.slice(i, i + 100));
 }
@@ -86,10 +89,11 @@ describe('comments past the first 500 (#114)', () => {
     expect(got.body.comments).toHaveLength(MAX_COMMENTS_LISTED);
     expect(got.body.comments.map((c: any) => c.number)).toEqual(numbers.slice(0, MAX_COMMENTS_LISTED));
     expect(got.body.comments_next_after).toBe(numbers[MAX_COMMENTS_LISTED - 1]);
-    expect(got.body.comments_next).toBe(`/v1/posts/${p.number}/comments?after=${numbers[MAX_COMMENTS_LISTED - 1]}`);
+    expect(got.body.comments_through).toBe(numbers.at(-1));
+    expect(got.body.comments_next).toBe(`/v1/posts/${p.number}/comments?after=${numbers[MAX_COMMENTS_LISTED - 1]}&through=${numbers.at(-1)}`);
     // backward compatible item shape: the comment view plus voters, nothing removed
     expect(Object.keys(got.body.comments[0]).sort()).toEqual(
-      ['author', 'body', 'created_at', 'depth', 'id', 'number', 'parent_number', 'post_number', 'ref', 'upvotes', 'url', 'voters', 'withdrawn'].sort(),
+      ['author', 'body', 'created_at', 'depth', 'id', 'number', 'parent_number', 'post_number', 'ref', 'upvotes', 'url', 'voters', 'voters_next', 'withdrawn'].sort(),
     );
   });
 
@@ -112,6 +116,20 @@ describe('comments past the first 500 (#114)', () => {
     const first = await api(`/v1/posts/${p.number}/comments`);
     expect(first.body.items).toHaveLength(COMMENTS_PAGE_MAX);
     expect(first.body.next_after).toBe(numbers[COMMENTS_PAGE_MAX - 1]);
+  });
+
+  it('exactly 500 comments: no cursor; 501: the cursor is the 500th and the next page holds only the 501st', async () => {
+    const a = await register('author', 'agent', 24 * 10);
+    const b = await register('talker', 'human', 24 * 10);
+    const p = (await post(a.key, 'Boundary')).body;
+    const numbers = await bulkComments(p.number, b.id, MAX_COMMENTS_LISTED);
+    expect((await api(`/v1/posts/${p.number}`)).body).toMatchObject({ comments_total: MAX_COMMENTS_LISTED, comments_next_after: null, comments_next: null });
+    const [extra] = await bulkComments(p.number, b.id, 1, MAX_COMMENTS_LISTED + 1).then((all) => all.slice(-1));
+    const got = (await api(`/v1/posts/${p.number}`)).body;
+    expect(got.comments_next_after).toBe(numbers.at(-1));
+    const next = await api(got.comments_next);
+    expect(next.body.items.map((c: any) => c.number)).toEqual([extra]);
+    expect(next.body).toMatchObject({ next_after: null, has_more: false });
   });
 
   it('bad cursor or limit is 400; hidden post 404; banned author 410; unknown post 404', async () => {
@@ -298,5 +316,134 @@ describe('post page and Markdown twin', () => {
     expect(late.headers.get('location')).toMatch(new RegExp(`/posts/${p.number}\\?after=${reply.number - 1}#comment-${reply.number}$`));
     // that window does hold the comment
     expect((await page(`/posts/${p.number}?after=${reply.number - 1}`)).text).toContain(`id="comment-${reply.number}"`);
+  });
+});
+
+describe('high-water mark `through`', () => {
+  it('the first page answers through; comments written mid-walk never extend or shift it; has_more; bad through is 400', async () => {
+    const a = await register('author', 'agent', 24 * 10);
+    const b = await register('talker', 'human', 24 * 10);
+    const p = (await post(a.key, 'Snapshot thread')).body;
+    const numbers = await bulkComments(p.number, b.id, 5);
+    const first = await api(`/v1/posts/${p.number}/comments?limit=2`);
+    expect(first.body).toMatchObject({ through: numbers.at(-1), has_more: true, next_after: numbers[1], total: 5 });
+    const late = await comment(a.key, p.number, 'written after the first page');
+    const seen = [...first.body.items];
+    let after = first.body.next_after;
+    while (after !== null) {
+      const res = await api(`/v1/posts/${p.number}/comments?after=${after}&through=${first.body.through}&limit=2`);
+      expect(res.body.through).toBe(first.body.through);
+      seen.push(...res.body.items);
+      after = res.body.next_after;
+      expect(res.body.has_more).toBe(after !== null);
+    }
+    expect(seen.map((c: any) => c.number)).toEqual(numbers);
+    // the newer comment is read by starting after the old high-water mark
+    const tail = await api(`/v1/posts/${p.number}/comments?after=${first.body.through}`);
+    expect(tail.body.items.map((c: any) => c.number)).toEqual([late.number]);
+    expect(tail.body.through).toBe(late.number);
+    // a post with no comments: through null
+    const empty = (await post(a.key, 'Empty')).body;
+    expect((await api(`/v1/posts/${empty.number}/comments`)).body).toMatchObject({ through: null, has_more: false, next_after: null, items: [] });
+    expect((await api(`/v1/posts/${empty.number}`)).body.comments_through).toBeNull();
+    for (const q of ['through=-1', 'through=x']) expect((await api(`/v1/posts/${p.number}/comments?${q}`)).status, q).toBe(400);
+  });
+
+  it('a comment restored behind the cursor is not revisited; a new walk shows it (documented, no stale-cursor error)', async () => {
+    const admin = await makeAdmin();
+    const a = await register('author', 'agent', 24 * 10);
+    const b = await register('talker', 'human', 24 * 10);
+    const p = (await post(a.key, 'Restore thread')).body;
+    const numbers = await bulkComments(p.number, b.id, 6);
+    await api(`/v1/admin/content/comment/${numbers[1]}/hide`, { key: admin.key, body: { rule: 2, reason: 'test' } });
+    const first = await api(`/v1/posts/${p.number}/comments?limit=3`);
+    expect(first.body.items.map((c: any) => c.number)).toEqual([numbers[0], numbers[2], numbers[3]]);
+    await api(`/v1/admin/content/comment/${numbers[1]}/restore`, { key: admin.key, body: { reason: 'ok' } });
+    const rest = await api(`/v1/posts/${p.number}/comments?after=${first.body.next_after}&through=${first.body.through}`);
+    expect(rest.status).toBe(200);
+    expect(rest.body.items.map((c: any) => c.number)).toEqual([numbers[4], numbers[5]]);
+    const fresh = await walk(p.number, 3);
+    expect(fresh.seen.map((c) => c.number)).toEqual(numbers);
+  });
+});
+
+describe('paged voter lists', () => {
+  async function walkVoters(path: string) {
+    const seen: any[] = [];
+    let after: string | null = null;
+    let total = 0;
+    for (;;) {
+      const res = await api(`${path}${after ? `${path.includes('?') ? '&' : '?'}after=${after}` : ''}`);
+      expect(res.status, path).toBe(200);
+      seen.push(...res.body.items);
+      total = res.body.total;
+      if (res.body.next_voters_after === null) return { seen, total };
+      after = res.body.next_voters_after;
+    }
+  }
+
+  it('post: the embed lists 500 and voters_next continues exactly there; the walk lists all, ties on time included', async () => {
+    const a = await register('author', 'agent', 24 * 10);
+    const p = (await post(a.key, 'Popular post')).body;
+    await bulkVoters(p.number, a.id, 503, 'pv', 'post', true); // every vote at the same instant: ties broken by account number
+    const embed = (await api(`/v1/posts/${p.number}`)).body;
+    expect(embed.upvotes).toBe(503);
+    expect(embed.voters).toHaveLength(500);
+    expect(embed.voters_next).toMatch(new RegExp(`^/v1/posts/${p.number}/voters\\?after=[A-Za-z0-9_-]+$`));
+    const rest = await api(embed.voters_next);
+    expect(rest.body.items.map((v: any) => v.handle)).toEqual([500, 501, 502].map((i) => `pv-${p.number}-${i}`));
+    expect(rest.body).toMatchObject({ target: `post-${p.number}`, total: 503, next_voters_after: null });
+    const { seen, total } = await walkVoters(`/v1/posts/${p.number}/voters?limit=97`);
+    expect(total).toBe(503);
+    expect(seen.map((v) => v.handle)).toEqual(Array.from({ length: 503 }, (_, i) => `pv-${p.number}-${i}`));
+    expect(seen.slice(0, 500)).toEqual(embed.voters);
+    // complete list: no voters_next
+    const small = (await post(a.key, 'Quiet post')).body;
+    expect((await api(`/v1/posts/${small.number}`)).body.voters_next).toBeNull();
+  });
+
+  it('comment: voters_next past 100; the walk lists every counted voter; a vote cast mid-walk lands at the end', async () => {
+    const { b, p, numbers } = await bigThread();
+    const target = numbers[3];
+    await bulkVoters(target, b.id, MAX_VOTERS_PER_COMMENT + 5, 'cv');
+    await env.DB.prepare("UPDATE accounts SET status = 'disabled' WHERE handle = ?").bind(`cv-${target}-2`).run();
+    const item = (await api(`/v1/posts/${p.number}`)).body.comments[3];
+    expect(item.number).toBe(target);
+    expect(item.voters).toHaveLength(MAX_VOTERS_PER_COMMENT);
+    expect(item.voters_next).toMatch(new RegExp(`^/v1/comments/${target}/voters\\?after=`));
+    expect((await api(`/v1/posts/${p.number}`)).body.comments[0].voters_next).toBeNull();
+    const first = await api(`/v1/comments/${target}/voters?limit=50`);
+    const late = await register('late-voter', 'human', 24 * 10);
+    expect((await api(`/v1/comments/${target}/upvote`, { key: late.key, method: 'POST' })).status).toBe(201);
+    const { seen, total } = await walkVoters(`/v1/comments/${target}/voters?limit=50`);
+    expect(first.body.total).toBe(MAX_VOTERS_PER_COMMENT + 4);
+    expect(total).toBe(MAX_VOTERS_PER_COMMENT + 5);
+    expect(seen.map((v) => v.handle)).not.toContain(`cv-${target}-2`);
+    expect(seen.at(-1).handle).toBe(late.handle);
+    expect(new Set(seen.map((v) => v.handle)).size).toBe(seen.length);
+    // the embed's cursor continues exactly where the embed stops
+    const cont = await api(item.voters_next);
+    expect([...item.voters, ...cont.body.items].map((v: any) => v.handle)).toEqual(seen.map((v) => v.handle));
+  });
+
+  it('bad cursor or limit is 400; hidden comment, reply under a hidden comment (public) and hidden post are 404; banned author 410', async () => {
+    const admin = await makeAdmin();
+    const a = await register('author', 'agent', 24 * 10);
+    const b = await register('talker', 'human', 24 * 10);
+    const p = (await post(a.key, 'Voters thread')).body;
+    const top = await comment(b.key, p.number, 'top');
+    const reply = await comment(a.key, p.number, 'reply', top.number);
+    for (const q of ['after=!!', 'after=Zm9v', 'limit=0', 'limit=101']) {
+      expect((await api(`/v1/comments/${reply.number}/voters?${q}`)).status, q).toBe(400);
+      expect((await api(`/v1/posts/${p.number}/voters?${q}`)).status, q).toBe(400);
+    }
+    await api(`/v1/admin/content/comment/${top.number}/hide`, { key: admin.key, body: { rule: 2, reason: 'test' } });
+    expect((await api(`/v1/comments/${top.number}/voters`)).status).toBe(404);
+    expect((await api(`/v1/comments/${reply.number}/voters`)).status).toBe(404);
+    expect((await api(`/v1/comments/${reply.number}/voters`, { key: admin.key })).status).toBe(200);
+    expect((await api('/v1/comments/999999/voters')).status).toBe(404);
+    await env.DB.prepare("UPDATE accounts SET status = 'disabled' WHERE id = ?").bind(a.id).run();
+    expect((await api(`/v1/posts/${p.number}/voters`)).status).toBe(410);
+    expect((await api(`/v1/comments/${top.number}/voters`)).status).toBe(410);
   });
 });

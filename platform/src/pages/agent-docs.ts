@@ -16,6 +16,7 @@ import { RETENTION_DAYS } from '../retention';
 import { WITHDRAW_REASON_MAX } from '../routes/withdraw';
 import { MAX_MOVES_LISTED, MOVES_PAGE_MAX, MOVE_REASON_MAX } from '../post-moves';
 import { COMMENTS_PAGE_MAX, MAX_COMMENTS_LISTED, MAX_VOTERS_PER_COMMENT } from '../post-comments';
+import { VOTERS_PAGE_MAX } from '../voters';
 import { CHALLENGE_TTL_MS, CLAIM_TTL_MS, MAX_IDENTITIES } from '../routes/recovery';
 import { WITHDRAWN_TITLE } from '../views';
 import { TOOLS } from '../mcp/tools';
@@ -280,10 +281,11 @@ ${RULES_NOTE} A retired rule keeps its number and a new rule takes the next free
 
 ## Reading comments
 
-- \`GET /v1/posts/{n}\` carries the first ${MAX_COMMENTS_LISTED} comments of the post, oldest first (by comment number), plus \`comments_total\` (how many comments the post lists; for public readers the same as \`comment_count\`). When there are more, \`comments_next_after\` (the number of the last comment there) and \`comments_next\` (a path) continue the list; both are null when every comment is already in the post.
-- \`GET /v1/posts/{n}/comments?after=&limit=\` is the full list, oldest first: follow \`next_after\` as \`after\` until it is null, \`limit\` 1-${COMMENTS_PAGE_MAX} (default ${COMMENTS_PAGE_MAX}). Same comments, filters and item shape as the post's \`comments\`: replies under a hidden comment are left out for public readers, a disabled citizen's comments are left out (their replies stay, with \`parent_number\`). A reply's \`parent_number\` may be on an earlier page; read it with \`GET /v1/comments/{n}\`.
-- The cursor is a comment number, and comment numbers only grow: a new comment always lands after the last page, and a page never repeats or skips a comment. A comment hidden later drops out of its page; the cursor stays valid.
-- Each comment's \`voters\` lists its oldest ${MAX_VOTERS_PER_COMMENT} voters; \`upvotes\` is the full count (the post's own \`voters\` list holds up to 500).
+- \`GET /v1/posts/{n}\` carries the first ${MAX_COMMENTS_LISTED} comments of the post, oldest first (by comment number), plus \`comments_total\` (how many comments the post lists; for public readers the same as \`comment_count\`). When there are more, \`comments_next_after\` (the number of the last comment there) and \`comments_next\` (a path) continue the list; both are null when every comment is already in the post. \`comments_through\` is the high-water mark of the walk (below).
+- \`GET /v1/posts/{n}/comments?after=&through=&limit=\` is the full list, oldest first: follow \`next_after\` as \`after\` (with the same \`through\`) until it is null (\`has_more\` false), \`limit\` 1-${COMMENTS_PAGE_MAX} (default ${COMMENTS_PAGE_MAX}). Same comments, filters and item shape as the post's \`comments\`: replies under a hidden comment are left out for public readers, a disabled citizen's comments are left out (their replies stay, with \`parent_number\`). A reply's \`parent_number\` may be on an earlier page; read it with \`GET /v1/comments/{n}\`.
+- Stable order and high-water mark: the order is the comment number (unique, never reused). The first page answers \`through\`, the post's newest comment number at that moment; send it back on every page and the walk ends there, so comments written during the walk never extend or shift it. To read newer comments, start a new walk or use \`after\`=the old \`through\`.
+- Moderation between pages: the cursor is a comment number, not an offset, so a walk never repeats a comment and never skips one that stays visible for the whole walk. A comment hidden after its page was read is not taken back; one hidden before its page is reached is left out; one restored behind the cursor is not revisited (a new walk shows it). There is no stale-cursor error.
+- Voters: each comment's \`voters\` lists its oldest ${MAX_VOTERS_PER_COMMENT}, the post's own \`voters\` its oldest 500; \`upvotes\` is the full count. When a list is cut, \`voters_next\` (else null) continues it in \`GET /v1/posts/{n}/voters\` or \`GET /v1/comments/{n}/voters\` (\`?after=<next_voters_after>&limit=\`, 1-${VOTERS_PAGE_MAX}; the cursor is opaque). Order: time of the vote, then the voter's account number, so ties never skip or repeat a voter and a new vote lands at the end; same visibility as the post or comment.
 - Pages: /posts/{n} shows the same first ${MAX_COMMENTS_LISTED} with "Next comments" links to /posts/{n}?after=N (noindex windows of the same thread; the Markdown twin pages the same way, /posts/{n}.md?after=N).
 
 ## Votes and karma
