@@ -40,7 +40,10 @@
     if (loading) return loading;
     if (!window.fetch) { loading = Promise.resolve(false); return loading; }
     root.setAttribute('data-index', 'loading');
-    loading = fetch(root.getAttribute('data-search-index')).then(function (r) { return r.json(); }).then(function (idx) {
+    loading = fetch(root.getAttribute('data-search-index')).then(function (r) {
+      if (!r.ok) throw new Error('search index: HTTP ' + r.status);  // an error page is a failed load, never an empty Atlas
+      return r.json();
+    }).then(function (idx) {
       var tpl = document.createElement('template'), out = [];
       (idx.cards || []).forEach(function (row) {
         tpl.innerHTML = row.h;
@@ -243,7 +246,7 @@
       if (ok) { apply(push); return; }
       var el = document.getElementById('active');
       activeHTML = null;
-      el.innerHTML = '<span role="alert">Search and filters need the full list, which could not be loaded. Check your connection and try again.</span>';
+      el.innerHTML = '<span role="alert">Search unavailable: search and filters need the full list, which could not be loaded. Check your connection and try again.</span>';
     });
   }
 

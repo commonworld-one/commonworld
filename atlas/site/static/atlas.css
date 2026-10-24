@@ -254,3 +254,9 @@
 .cw-pager a[aria-current="page"] { background:var(--ink); color:var(--paper); border-color:var(--ink); }
 .cw-pager .is-off { color:var(--muted); }
 .cw-pager[hidden], .cw-more[hidden] { display:none; }
+.cw-azbar { margin:14px 0 10px; }
+.cw-azbar ol { display:flex; flex-wrap:wrap; gap:4px; list-style:none; margin:0; padding:0; font-size:13px; }
+.cw-azbar a, .cw-azbar span { display:inline-flex; align-items:center; justify-content:center; min-width:28px; min-height:28px; border-radius:8px; }
+.cw-azbar a { border:1px solid var(--line); background:var(--paper); color:var(--ink); text-decoration:none; }
+.cw-azbar a:hover { border-color:var(--ink); }
+.cw-azbar span { color:var(--muted); opacity:.55; }

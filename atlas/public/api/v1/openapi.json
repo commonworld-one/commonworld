@@ -246,6 +246,43 @@
     }
    }
   },
+  "/atlas/platforms/page/{page}.json": {
+   "get": {
+    "tags": [
+     "atlas"
+    ],
+    "operationId": "listPlatformsAzPage",
+    "summary": "One page of 50 entries of the A-Z list /atlas/platforms/ (same records and order as /atlas/page/{page}.json)",
+    "description": "Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. A page number past the last page returns HTTP 404.",
+    "parameters": [
+     {
+      "name": "page",
+      "in": "path",
+      "required": true,
+      "description": "Page number, 1-based. The number of pages is in atlas/index.json (counts.pages, categories[].pages) and in every page (pages).",
+      "schema": {
+       "type": "integer",
+       "minimum": 1
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "One A-Z list page",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "./schemas/platform-page.schema.json"
+        }
+       }
+      }
+     },
+     "404": {
+      "description": "No such page"
+     }
+    }
+   }
+  },
   "/atlas/categories/{category}/page/{page}.json": {
    "get": {
     "tags": [

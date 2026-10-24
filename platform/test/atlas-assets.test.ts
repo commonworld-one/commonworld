@@ -67,6 +67,7 @@ describe('A3 routing contract (wrangler.toml run_worker_first)', () => {
       '/atlas/screens/index.json', '/atlas/badge/1f916.svg', '/atlas/badge/', '/atlas/data/claims.json', '/atlas/platforms/1f916.json', '/atlas/categories/social.json',
       '/atlas/platforms.json', '/atlas/earn.json', '/atlas/decisions.json', '/atlas/llms.txt', '/atlas/sitemap.xml', '/atlas/decisions/index.md', '/atlas/events.md', '/atlas/platforms/1f916/index.md', '/atlas/categories/social/index.md', '/atlas/events.json', '/stats.json',
       '/atlas/index.md', '/atlas/page/2/index.md', '/atlas/categories/social/page/2/index.md', '/api/v1/atlas/page/1.json', '/api/v1/atlas/categories/social/page/2.json',
+      '/atlas/platforms/index.md', '/atlas/platforms/page/2/index.md', '/api/v1/atlas/platforms/page/1.json',
       '/stats/index.md', '/about/index.md', '/privacy/index.md', '/terms/index.md', '/api/v1/index.json', '/api/v1/openapi.json', '/api/v1/CHANGELOG.md', '/api/v1/schemas/platform.schema.json', '/.well-known/security.txt']) {
       expect(runsWorkerFirst(p), p).toBe(false);
     }
@@ -75,7 +76,7 @@ describe('A3 routing contract (wrangler.toml run_worker_first)', () => {
   it('v1 and the Atlas HTML pages run the Worker first', () => {
     for (const p of ['/', '/porch', '/sections', '/s/general', '/posts/1', '/c/someone', '/search', '/login', '/admin', '/v1/catalog', '/health', '/assets/ssr.css',
       '/favicon.ico', '/robots.txt', '/sitemap.xml', '/sitemap-v1.xml', '/llms.txt', '/llms-full.txt', '/openapi.json', '/porch.md',
-      '/atlas', '/atlas/', '/atlas/page/2/', '/atlas/categories/social/page/3/', '/atlas/platforms/1f916/', '/atlas/categories/social/', '/atlas/earn/', '/atlas/decisions/', '/atlas/about/', '/atlas/privacy/',
+      '/atlas', '/atlas/', '/atlas/page/2/', '/atlas/categories/social/page/3/', '/atlas/platforms/1f916/', '/atlas/platforms/', '/atlas/platforms/page/2/', '/atlas/categories/social/', '/atlas/earn/', '/atlas/decisions/', '/atlas/about/', '/atlas/privacy/',
       '/privacy/', '/terms/', '/about/', '/stats/', '/404.html', '/0123456789abcdef0123456789abcdef.txt']) {
       expect(runsWorkerFirst(p), p).toBe(true);
     }
@@ -164,6 +165,14 @@ describe('A3: the Atlas from Static Assets (ATLAS_SOURCE=assets)', () => {
     expect(p1.headers.get('location')).toBe('/atlas/');
     expect((await call('/atlas/page/2/')).status).toBe(200);
     expect((await call('/atlas/page/99/')).status).toBe(404);
+    // the A-Z list pages the same way (#107)
+    const az1 = await call('/atlas/platforms/page/1/');
+    expect(az1.status).toBe(301);
+    expect(az1.headers.get('location')).toBe('/atlas/platforms/');
+    expect((await call('/atlas/platforms/page/2/')).status).toBe(200);
+    expect((await call('/atlas/platforms/page/99/')).status).toBe(404);
+    expect((await call('/api/v1/atlas/platforms/page/1.json')).status).toBe(200);
+    expect((await call('/api/v1/atlas/platforms/page/99.json')).status).toBe(404);
   });
 
   it('filter and search views of Atlas pages are noindex (X-Robots-Tag); plain list pages and other query strings are not (D1)', async () => {

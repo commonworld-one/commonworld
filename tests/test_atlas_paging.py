@@ -87,11 +87,57 @@ class SnapshotId(unittest.TestCase):
         later = [r | {'link_safety': {'status': 'clean', 'checked_at': '2026-10-25T00:00:00Z'}, 'preview': {'path': '/atlas/screens/a.webp'}} for r in self.REC]
         self.assertEqual(build.snapshot_id_of(self.REC), build.snapshot_id_of(later))
 
+    def test_checked_at_only_change_keeps_the_id(self):
+        # Codex review of #107 (P1): a daily link-safety run that only moves checked_at must not change snapshot_id
+        later = [r | {'link_safety': r['link_safety'] | {'checked_at': 'Sun 2026-10-25 3:00 AM EEST (UTC+03:00)'}} for r in self.REC]
+        self.assertEqual(build.snapshot_id_of(self.REC), build.snapshot_id_of(later))
+
     def test_changes_with_the_list(self):
         sid = build.snapshot_id_of(self.REC)
         self.assertRegex(sid, r'^[0-9a-f]{16}$')
         self.assertNotEqual(sid, build.snapshot_id_of(self.REC[:1]))
         self.assertNotEqual(sid, build.snapshot_id_of([self.REC[0] | {'name': 'A2'}, self.REC[1]]))
+
+
+class AzList(unittest.TestCase):
+    """The A-Z list /atlas/platforms/ is paged like the other lists (#107): /atlas/platforms/page/N/, JSON
+    /api/v1/atlas/platforms/page/N.json, and a letter jump bar that links each letter to the page where it starts."""
+
+    def test_letters(self):
+        self.assertEqual(build.az_letter('agentlux'), 'A')
+        self.assertEqual(build.az_letter('Émile'), 'E')  # accents fold to their letter
+        self.assertEqual(build.az_letter('0xAgents'), '#')
+        self.assertEqual(build.az_letter('_x'), '#')
+        self.assertEqual(build.az_letter(''), '#')
+        self.assertEqual(check.az_letter('Émile'), build.az_letter('Émile'))  # check.py uses the same rule
+        self.assertEqual(build.AZ_LETTERS, check.AZ_LETTERS)
+        self.assertEqual(build.az_anchor('#'), 'az-0')
+        self.assertEqual(build.az_anchor('Q'), 'az-q')
+
+    def test_starts_name_the_page_where_a_letter_begins(self):
+        cards = [{'slug': f'a{i}', 'name': f'A{i:03d}'} for i in range(60)] + [{'slug': 'b0', 'name': 'B'}, {'slug': 'c0', 'name': 'C'}]
+        st = build.az_starts(cards)
+        self.assertEqual(st, {'A': (1, 'a0'), 'B': (2, 'b0'), 'C': (2, 'c0')})
+        h = build.az_jump_html('/atlas/platforms/', st)
+        self.assertIn('href="/atlas/platforms/#az-a"', h)
+        self.assertIn('href="/atlas/platforms/page/2/#az-b"', h)
+        self.assertIn('<span aria-hidden="true">Z</span>', h)  # a letter with no entry is not a link
+        self.assertEqual(h.count('<li>'), 27)
+
+    def test_json_path_and_reserved_slug(self):
+        self.assertEqual(api_v1.page_json(3, api_v1.AZ_LIST), '/atlas/platforms/page/3.json')
+        self.assertTrue(check.AZ_JSON_RE.match('/atlas/platforms/page/3.json'))
+        self.assertFalse(check.AZ_JSON_RE.match('/atlas/platforms/page.json'))
+        self.assertNotRegex(api_v1.AZ_LIST, api_v1.ID_PATTERN)  # can never be a category id
+        self.assertIn('page', build.RESERVED_SLUGS)
+        self.assertTrue(check.is_card_url('/atlas/platforms/bountybook/'))
+        for u in ('/atlas/platforms/', '/atlas/platforms/page/2/', '/atlas/platforms/page/'):
+            self.assertFalse(check.is_card_url(u), u)
+        self.assertTrue(check.PAGED_HTML_RE.match('/atlas/platforms/page/2/'))
+
+    def test_openapi_promises_az_pages(self):
+        spec = {'paths': {'/atlas/platforms/page/{page}.json': {}}}
+        self.assertEqual(api_v1.expand_paths(spec, [], [], {None: 2}), ['/atlas/platforms/page/1.json', '/atlas/platforms/page/2.json'])
 
 
 class Redirects(unittest.TestCase):
@@ -120,7 +166,16 @@ class Redirects(unittest.TestCase):
         self.assertIn('/atlas/page/4/ /atlas/page/3/ 301', lines)
         self.assertIn('/atlas/categories/social/page/2/ /atlas/categories/social/ 301', lines)
         self.assertIn('/atlas/categories/gone/page/2/ /atlas/ 301', lines)
-        self.assertFalse(any(l.startswith('/atlas/platforms/') for l in lines))
+        # card URLs are never redirected; only the A-Z list's own /page/1/ rule names /atlas/platforms/
+        self.assertEqual([l for l in lines if l.startswith('/atlas/platforms/')],
+                         ['/atlas/platforms/page/1/ /atlas/platforms/ 301', '/atlas/platforms/page/1 /atlas/platforms/ 301'])
+
+    def test_az_list_page_1_and_shrinking(self):
+        O = 'https://commonworld.one'
+        lines = self.run_with_baseline(FakeSite(120, {}), [O + '/atlas/platforms/page/3/', O + '/atlas/platforms/page/5/'])
+        self.assertIn('/atlas/platforms/page/1/ /atlas/platforms/ 301', lines)
+        self.assertNotIn('/atlas/platforms/page/3/ /atlas/platforms/page/3/ 301', lines)
+        self.assertIn('/atlas/platforms/page/5/ /atlas/platforms/page/3/ 301', lines)
 
 
 if __name__ == '__main__':

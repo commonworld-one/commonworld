@@ -197,6 +197,33 @@ with sync_playwright() as p:
         pg.click('.cw-pager a[rel="prev"]'); pg.wait_for_url('**/atlas/')
         check('pager "Previous" on page 2 opens /atlas/', pg.url.endswith('/atlas/'))
 
+    # search index down (Codex review of #107, P2): no filtering of the page's own 50 cards, a clear notice, and a retry on the next interaction
+    fc = br.new_context(viewport={'width': 1280, 'height': 900})
+    fc.route('**/www.googletagmanager.com/**', lambda route: route.fulfill(status=200, body=''))
+    fc.route('**/atlas/data/search-index.json*', lambda route: route.fulfill(status=503, body='down'))
+    fp = fc.new_page(); fp.goto(B + '/atlas/')
+    fp.evaluate("document.querySelector('[data-f-status=\"closed\"]').click()")  # JS click: the consent banner of a fresh context may cover the chip
+    wait_js(fp, "document.getElementById('catalog').dataset.index === 'failed'"); fp.wait_for_timeout(200)
+    check(f'index fails: page keeps its {N_PAGE1} cards, says so, no partial filter', fp.evaluate(VIS) == N_PAGE1
+          and 'could not be loaded' in fp.inner_text('#active') and fp.locator('#active [role="alert"]').count() == 1)
+    fc.unroute('**/atlas/data/search-index.json*')
+    fp.evaluate("document.querySelector('[data-f-status=\"live\"]').click()")
+    check('index fails: the next interaction loads it again', wait_js(fp, "document.getElementById('catalog').dataset.index === 'loaded'"))
+    fc.close()
+
+    # the A-Z list is paged too (#107): /atlas/platforms/page/N/ with a letter jump bar
+    if N_PAGES > 1:
+        pg.goto(B + '/atlas/platforms/page/2/')
+        rows = pg.locator('main table.list tbody tr').count()
+        check(f'/atlas/platforms/page/2/: {rows} rows, canonical self, rel=prev to /atlas/platforms/', 0 < rows <= PAGE_SIZE
+              and pg.get_attribute('link[rel="canonical"]', 'href') == 'https://commonworld.one/atlas/platforms/page/2/'
+              and pg.get_attribute('link[rel="prev"]', 'href') == '/atlas/platforms/')
+        last = pg.locator('.cw-azbar a').last
+        href = last.get_attribute('href')
+        last.click(); pg.wait_for_load_state()
+        anchor = href.split('#')[1]
+        check(f'A-Z jump bar: last letter opens {href} and its row exists', pg.url.endswith(href) and pg.locator(f'tr#{anchor}').count() == 1)
+
     # share buttons (platform page): placement, links, copy via keyboard, GA4 'share' event only with consent, native share
     SHARE_EVT = "(m) => (window.dataLayer||[]).some(a => a && a[0]==='event' && a[1]==='share' && (!m || (a[2]||{}).method===m))"
     canon = 'https://commonworld.one/atlas/platforms/the-colony/'

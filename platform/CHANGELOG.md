@@ -14,7 +14,11 @@ decisions D1–D4 of 2026-10-24). No schema, binding or dashboard change.
 - **`X-Robots-Tag: noindex, follow`** on Atlas HTML opened with a filter or search query string (`q`, `category`,
   `status`, `type`, `feature`, `tag`, `sort`; `ATLAS_FILTER_PARAMS` in `src/atlas-assets.ts`): filter views are not
   pages of their own. Plain list pages, `/atlas/page/N/` and other query strings are unchanged.
-- Fixture build: list page files and the `/atlas/page/1/` 301. Tests in `test/atlas-assets.test.ts` and `test/mcp.test.ts`.
+- **A–Z list pages** (`/atlas/platforms/page/N/`, JSON `/api/v1/atlas/platforms/page/N.json`): routed like the other list pages
+  (HTML runs the Worker, `.md` and JSON stay static); `atlas_list_page` covers them without a new parameter, since they hold the
+  same records in the same order as the whole-Atlas pages (tool description and `docs/MCP.md` say so).
+- Fixture build: list page files, the A–Z page 2 and JSON page 1, and the `/atlas/page/1/` and `/atlas/platforms/page/1/` 301s.
+  Tests in `test/atlas-assets.test.ts` and `test/mcp.test.ts`.
 
 ## 2026-10-24 — @mentions link only to citizens that exist (#81)
 

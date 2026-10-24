@@ -246,6 +246,7 @@ export const ATLAS_TOOLS: ToolDef[] = [
     }),
   atlasTool('atlas_list_page', 'Atlas list, one page',
     'One page of the Atlas list as published: 50 platform records per page, A to Z (or one category, live first), the same records and order as the pages /atlas/page/N/. '
+    + 'The A-Z table /atlas/platforms/page/N/ (JSON /api/v1/atlas/platforms/page/N.json) has the same records in the same order as page N without a category, so this tool covers it too. '
     + 'Each page carries snapshot_id, page, pages, total, has_more and next. To read the whole list: start at page 1 and ask for page + 1 while has_more is true; '
     + 'every page of one build has the same snapshot_id, and if it changes during the walk the list was rebuilt, so start again from page 1. A page past the last one is 404 page_not_found.',
     '/api/v1/atlas/page/{page}.json', {

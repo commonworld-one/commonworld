@@ -227,7 +227,10 @@ admin = active admin. `confirm` = destructive, needs `confirm: true`.
 `atlas_list_page` reads the same static list pages as the site (50 records per page, Atlas schema_version 1.8.0): pass
 `page` (1-based) and optionally `category`. To read the whole list, start at page 1 and ask for `page + 1` while
 `has_more` is true; every page of one build carries the same `snapshot_id`, so if it changes during the walk the list
-was rebuilt and the walk starts again. A page past the last one answers `404 page_not_found`. `atlas_search_platforms`
+was rebuilt and the walk starts again. A page past the last one answers `404 page_not_found`. The A-Z table
+`/atlas/platforms/` is paged the same way (`/atlas/platforms/page/{page}/`, JSON `/api/v1/atlas/platforms/page/{page}.json`)
+with the same records in the same order as the whole-Atlas pages, so `atlas_list_page` without `category` returns page N of
+the A-Z list too; there is no separate parameter for it. `atlas_search_platforms`
 and `atlas_first_tasks` still filter the full `platforms.json` and page their results with `limit` / `offset`.
 
 ### Platform: read

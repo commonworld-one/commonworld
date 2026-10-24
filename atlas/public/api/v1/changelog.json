@@ -7,7 +7,8 @@
    "date": "2026-10-24",
    "changes": [
     "New paged lists: /api/v1/atlas/page/{page}.json (all entries, A to Z) and /api/v1/atlas/categories/{category}/page/{page}.json (one category, live first, then A to Z), 50 records per page, the same records as platforms.json in the order of the HTML pages /atlas/page/{page}/ and /atlas/categories/{category}/page/{page}/ (page 1 is /atlas/ and /atlas/categories/{category}/). Every page carries snapshot_id, page, per_page, pages, total, count, has_more, next, prev, first, full_list, walk_rule, url (HTML) and md_url (Markdown twin); schema platform-page.schema.json. Walk: start at page 1, follow next until has_more is false; every page of one build has the same snapshot_id, and if it changes mid-walk the list was rebuilt, so start again. A page past the last one returns 404. The full files (platforms.json, categories/{category}.json) stay complete and unchanged.",
-    "atlas/index.json: new counts.pages, a paging block {page_size, pages, snapshot_id, first, walk_rule}, categories[].pages and categories[].first_page, and links.page / links.category_page URL templates."
+    "The A-Z list /atlas/platforms/ is paged the same way: /atlas/platforms/page/{page}/ (page 1 is /atlas/platforms/) with JSON pages /api/v1/atlas/platforms/page/{page}.json (same shape and walk rule, the same records and order as /api/v1/atlas/page/{page}.json, url and md_url name the A-Z HTML page).",
+    "atlas/index.json: new counts.pages, a paging block {page_size, pages, snapshot_id, first, az_first, walk_rule}, categories[].pages and categories[].first_page, and links.page / links.category_page / links.az_page URL templates."
    ]
   },
   {
