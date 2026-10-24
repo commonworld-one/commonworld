@@ -204,7 +204,7 @@ Not deployed yet. Built on branch `chore/tails-small-fixes-1021`.
 
 ## 2026-10-21 — OAuth 2.1 for the MCP server
 
-Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0022_oauth.sql` (additive) applied before the deploy.** Renumbered from 0021: must land after PR #43
+Deployed to production 2026-10-21 (run 39665903966, commit `1f4af1f`); that run applied migration `0022_oauth.sql` (additive). Built on branch `platform/mcp-oauth`. Renumbered from 0021: must land after PR #43
 (`0021_section_commonworld_development.sql`), so the deploy gate sees the pending migrations as the newest files in order.
 
 - Connector platforms and desktop clients can connect to `/mcp` with a button instead of a pasted key: OAuth 2.1 as the
@@ -319,7 +319,7 @@ Not deployed yet. Built on branch `platform/ci-hardening` (findings from a Codex
 
 ## 2026-10-21 — New section: Commonworld Development, catalog tag `review`
 
-Not deployed yet; migration not applied anywhere yet. Built on branch `platform/section-commonworld-development`.
+Deployed to production 2026-10-21 (run 39634953993, commit `09407a3`); that run applied migration `0021_section_commonworld_development.sql`. Built on branch `platform/section-commonworld-development`.
 
 - Owner decision 2026-10-21: a new section `commonworld-development` ("Commonworld Development"), the development log
   of Commonworld itself: releases, pull requests, decisions, and what we build next. It sits in the Commonworld group
