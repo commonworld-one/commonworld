@@ -10,7 +10,8 @@ Why: lychee.toml treats /posts/ (and /v1/) as Worker routes, because the static 
                (the page route the links point at); a #comment-N fragment is looked up in the post's visible comments
 
 Exit code: 1 only when the Worker answers 404 (or 410) for a referenced post. Network errors, timeouts, 429/5xx after
-retries, withdrawn posts and missing #comment-N anchors are printed as GitHub ::warning:: lines and do not fail.
+retries, posts left unchecked when the time budget (default 300 s) runs out or the Worker stops answering,
+withdrawn posts and missing #comment-N anchors are printed as GitHub ::warning:: lines and do not fail.
 
   python scripts/check-worker-post-links.py                  # dist + docs, against https://commonworld.one
   python scripts/check-worker-post-links.py --list           # only print what was collected, no network
@@ -103,10 +104,18 @@ def group(refs):
     return dict(sorted(out.items()))
 
 
-def request(url, method='GET', retries=3, timeout=20, backoff=4.0):
-    """Return (status, body bytes or None, error text or None). Retries network errors, 429 and 5xx."""
-    last = None
+def request(url, method='GET', retries=3, timeout=20, backoff=4.0, deadline=None):
+    """Return (status, body bytes or None, error text or None). Retries network errors, 429 and 5xx.
+
+    deadline (time.monotonic() value): no new attempt or wait starts after it, so the whole run stays bounded.
+    """
+    last = (None, None, 'not attempted (time budget spent)')
     for attempt in range(retries + 1):
+        if deadline is not None:
+            left = deadline - time.monotonic()
+            if left <= 1:
+                break
+            timeout = min(timeout, left)
         req = urllib.request.Request(url, method=method, headers={'User-Agent': USER_AGENT, 'Accept': 'application/json'})
         try:
             with urllib.request.urlopen(req, timeout=timeout) as r:
@@ -123,24 +132,39 @@ def request(url, method='GET', retries=3, timeout=20, backoff=4.0):
             last = (None, None, f'{type(e).__name__}: {getattr(e, "reason", e)}')
             wait = backoff * (attempt + 1)
         if attempt < retries:
+            if deadline is not None and time.monotonic() + wait >= deadline:
+                break
             time.sleep(wait)
     return last
 
 
-def check(grouped, base, delay=1.0, retries=3, out=print):
-    """Check each post; return (broken, warnings) as lists of strings."""
+def check(grouped, base, delay=1.0, retries=3, out=print, budget=300.0, max_unreachable=3, clock=time.monotonic):
+    """Check each post; return (broken, warnings) as lists of strings.
+
+    budget: seconds for the whole run (well inside the CI job timeout). When it is spent, or after max_unreachable
+    posts in a row got no HTTP answer at all, the remaining posts are reported as one warning, never as broken.
+    """
     broken, warnings = [], []
     base = base.rstrip('/')
     first = True
-    for n, g in grouped.items():
+    deadline = clock() + budget
+    unreachable = 0
+    items = list(grouped.items())
+    for i, (n, g) in enumerate(items):
+        if clock() >= deadline or unreachable >= max_unreachable:
+            rest = [str(m) for m, _ in items[i:]]
+            why = 'time budget spent' if unreachable < max_unreachable else f'Worker unreachable for {unreachable} posts in a row'
+            warnings.append(f'{len(rest)} posts not checked ({why}): {", ".join(rest)}')
+            break
         where = ', '.join(g['sources'][:5]) + (f' (+{len(g["sources"]) - 5} more)' if len(g['sources']) > 5 else '')
         results = {}
         for kind, url, method in (('api', f'{base}/v1/posts/{n}', 'GET'), ('page', f'{base}/posts/{n}', 'HEAD')):
             if not first:
                 time.sleep(delay)
             first = False
-            results[kind] = (url,) + tuple(request(url, method, retries=retries))
+            results[kind] = (url,) + tuple(request(url, method, retries=retries, deadline=deadline))
         statuses = {k: v[1] for k, v in results.items()}
+        unreachable = unreachable + 1 if all(s is None for s in statuses.values()) else 0
         line = f'post {n}: api {statuses["api"]}, page {statuses["page"]}  <- {where}'
         dead = [k for k, s in statuses.items() if s in (404, 410)]
         if dead:
@@ -179,6 +203,7 @@ def main(argv=None):
     ap.add_argument('--no-docs', action='store_true')
     ap.add_argument('--delay', type=float, default=1.0, help='seconds between requests (polite rate)')
     ap.add_argument('--retries', type=int, default=3)
+    ap.add_argument('--budget', type=float, default=300.0, help='seconds for the whole check; the rest becomes a warning')
     ap.add_argument('--list', action='store_true', help='print collected links and exit (no network)')
     ap.add_argument('--summary', help='append a Markdown summary to this file (e.g. $GITHUB_STEP_SUMMARY)')
     a = ap.parse_args(argv)
@@ -194,7 +219,7 @@ def main(argv=None):
         for n, g in grouped.items():
             print(f'post {n}: {", ".join(g["sources"])}' + (f'  fragments {sorted(g["fragments"])}' if g['fragments'] else ''))
         return 0
-    broken, warnings = check(grouped, a.base, delay=a.delay, retries=a.retries)
+    broken, warnings = check(grouped, a.base, delay=a.delay, retries=a.retries, budget=a.budget)
     if a.summary:
         with open(a.summary, 'a', encoding='utf-8') as f:
             f.write(f'## Worker post links\n\n{len(grouped)} posts referenced, {len(broken)} broken (404/410), {len(warnings)} warnings.\n\n')

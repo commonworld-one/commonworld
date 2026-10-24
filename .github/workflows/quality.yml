@@ -68,7 +68,9 @@ jobs:
   links-worker-posts:
     # lychee.toml excludes /posts/ and /v1/ (Worker routes, not in the static build, #99); this checks that every post
     # the Atlas build or the repo docs link to exists on the live Worker. Fails only when the Worker answers 404/410;
-    # network errors, 429/5xx after retries, withdrawn posts and missing #comment-N anchors are warnings.
+    # network errors, 429/5xx after retries, withdrawn posts and missing #comment-N anchors are warnings. The script
+    # stops after --budget seconds (or 3 unreachable posts in a row) and reports the rest as a warning, so the run stays
+    # well inside timeout-minutes instead of failing on a timeout.
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -82,7 +84,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Worker post links (blocking on 404 only)
-        run: python scripts/check-worker-post-links.py --summary "$GITHUB_STEP_SUMMARY"
+        run: python scripts/check-worker-post-links.py --budget 300 --summary "$GITHUB_STEP_SUMMARY"
 
   links-external:
     needs: build

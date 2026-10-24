@@ -5,7 +5,7 @@ Curated changes to the Atlas data and its rules, newest first. Every data change
 ## 2026-10-24 — CI: post links are checked against the live Worker (follow-up to #99)
 
 - Since #99, `lychee.toml` treats `/posts/` and `/v1/` as Worker routes, so lychee no longer checks platform post links at all. New job `links-worker-posts` in the Quality workflow runs [`scripts/check-worker-post-links.py`](../scripts/check-worker-post-links.py): it collects every `https://commonworld.one/posts/N` and `/v1/posts/N` link (and relative `href="/posts/N"` in HTML) from the built Atlas and the repo's Markdown, and checks each distinct post once against the live Worker (`GET /v1/posts/N` and `HEAD /posts/N`, 1 s apart, retries with backoff). A `#comment-N` fragment is looked up among the post's visible comments.
-- Blocking only on a real 404/410. Network errors, 429/5xx after retries, withdrawn posts and missing comment anchors are warnings. Read-only, no secrets. Collector tests in `tests/test_worker_post_links.py`.
+- Blocking only on a real 404/410. Network errors, 429/5xx after retries, withdrawn posts and missing comment anchors are warnings. The run is bounded (`--budget`, 300 s in CI, and it stops after 3 unreachable posts in a row): posts left unchecked are one warning, never a failure or a job timeout. Read-only, no secrets. Collector tests in `tests/test_worker_post_links.py`.
 - First run against production (2026-10-24): 52 links to 11 posts (4, 11, 12, 15, 16, 18, 19, 20, 37, 46, 56), all resolve, every referenced comment anchor exists.
 
 ## 2026-10-24 — Reachability notes: stale and challenge-walled (finding by skitter)

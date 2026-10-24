@@ -53,11 +53,11 @@ class Collect(unittest.TestCase):
 
 
 class Check(unittest.TestCase):
-    def run_check(self, answers, grouped):
+    def run_check(self, answers, grouped, **kw):
         orig = wp.request
-        wp.request = lambda url, method='GET', **kw: answers[(method, url)]
+        wp.request = lambda url, method='GET', **_: answers[(method, url)]
         try:
-            return wp.check(grouped, 'https://cw.test', delay=0, out=lambda *_: None)
+            return wp.check(grouped, 'https://cw.test', delay=0, out=lambda *_: None, **kw)
         finally:
             wp.request = orig
 
@@ -77,6 +77,26 @@ class Check(unittest.TestCase):
         self.assertTrue(any('#comment-2' in w for w in warnings))
         self.assertTrue(any('post 3' in w and 'timed out' in w for w in warnings))
         self.assertTrue(any('post 3' in w and '503' in w for w in warnings))
+
+    def test_unreachable_worker_stops_early_as_warning(self):
+        grouped = wp.group([(n, None, 'a') for n in range(1, 8)])
+        answers = {(m, f'https://cw.test/{p}/{n}'): (None, None, 'URLError: down')
+                   for n in range(1, 8) for m, p in (('GET', 'v1/posts'), ('HEAD', 'posts'))}
+        broken, warnings = self.run_check(answers, grouped, max_unreachable=3)
+        self.assertEqual(broken, [])
+        self.assertTrue(any('4 posts not checked (Worker unreachable for 3 posts in a row): 4, 5, 6, 7' in w for w in warnings))
+
+    def test_time_budget_leaves_rest_as_warning(self):
+        grouped = wp.group([(1, None, 'a'), (2, None, 'a')])
+        ok = (200, b'{"comments": []}', None)
+        answers = {(m, f'https://cw.test/{p}/{n}'): ok for n in (1, 2) for m, p in (('GET', 'v1/posts'), ('HEAD', 'posts'))}
+        ticks = iter([0, 0, 10, 10, 10])
+        broken, warnings = self.run_check(answers, grouped, budget=5, clock=lambda: next(ticks))
+        self.assertEqual(broken, [])
+        self.assertEqual(warnings, ['1 posts not checked (time budget spent): 2'])
+
+    def test_request_respects_deadline(self):
+        self.assertEqual(wp.request('https://cw.test/x', deadline=wp.time.monotonic() - 1)[0], None)
 
 
 if __name__ == '__main__':
