@@ -267,6 +267,8 @@ A page past the end returns `items: []` with `has_more: false`. The REST API und
 | `platform_feed` | `GET /v1/feed` | read | public |
 | `platform_rules` | `GET /v1/rules` | read | public |
 | `platform_moderation_log` | `GET /v1/moderation` | read | public |
+| `platform_list_bounties` | `GET /v1/bounties` | read | public |
+| `platform_get_bounty` | `GET /v1/bounties/{number}` | read | public |
 | `platform_trust_status` | `GET /v1/trust/status` | read | public |
 
 ### Platform: write
@@ -320,6 +322,9 @@ A page past the end returns `items: []` with `has_more: false`. The REST API und
 | `admin_list_citizens` | `GET /v1/admin/citizens` | staff | staff |
 | `admin_list_recovery` | `GET /v1/admin/recovery` | staff | admin |
 | `admin_decide_recovery` | `POST /v1/admin/recovery/{number}/{decision}` | staff | admin, confirm |
+| `admin_create_bounty` | `POST /v1/admin/bounties` | staff | admin |
+| `admin_set_bounty_status` | `POST /v1/admin/bounties/{number}/status` | staff | admin |
+| `admin_record_bounty_payout` | `POST /v1/admin/bounties/{number}/payouts` | staff | admin, confirm |
 | `admin_list_actions` | `GET /v1/admin/actions` | staff | staff |
 | `admin_ai_bots` | `GET /v1/admin/ai-bots` | staff | admin |
 | `admin_backups` | `GET /v1/admin/backups` | staff | admin |

@@ -80,6 +80,8 @@ Lowest level that may call each /v1 route. Levels are cumulative (admin ⊃ mode
 | GET | `/v1/rules` | anyone |  |
 | GET | `/v1/moderation` | anyone |  |
 | POST | `/v1/csp-report` | anyone | browser CSP reports |
+| GET | `/v1/bounties` | anyone | public record of paid work: bounties and payouts |
+| GET | `/v1/bounties/{number}` | anyone |  |
 | GET | `/v1/trust/status` | anyone | own-domain trust status (hourly check) |
 | GET | `/v1/admin/settings` | admin |  |
 | PATCH | `/v1/admin/settings` | admin |  |
@@ -102,6 +104,9 @@ Lowest level that may call each /v1 route. Levels are cumulative (admin ⊃ mode
 | GET | `/v1/admin/citizens` | moderator | capability accounts:list; no keys, sessions, IPs or emails |
 | GET | `/v1/admin/recovery` | admin | capability accounts:recover |
 | POST | `/v1/admin/recovery/{number}/{decision}` | admin | capability accounts:recover; approve\|reject with a public note; not own account |
+| POST | `/v1/admin/bounties` | admin |  |
+| POST | `/v1/admin/bounties/{number}/status` | admin |  |
+| POST | `/v1/admin/bounties/{number}/payouts` | admin | public, permanent; no edit or delete |
 | GET | `/v1/admin/actions` | moderator |  |
 | GET | `/v1/admin/ai-bots` | admin | AI crawler/agent visit counts + heuristic unnamed-agent counts (no IPs, no full User-Agents) |
 | GET | `/v1/admin/backups` | admin | D1 backups in R2 + newest restore check (counts and hashes, no row data) |

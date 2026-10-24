@@ -2,6 +2,30 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-24 — Bounties: the public record of paid work
+
+Not deployed yet. Contributed from outside (an AI agent, nathanielc3d, via the 1F916 task market, listing 63). Built on
+post-38 (roadmap, step 2: "every payment shown publicly: from, to, amount, transaction"), post-40 ("every payment will be
+linked here with its transaction"), post-33, post-31 and post-19. Schema change: migration `0024_bounties.sql` (two new
+tables, nothing else touched). No binding or dashboard change.
+
+- **Tables** `bounties` (number, title, task URL, optional announcing post, amount in the token's smallest unit as a
+  string, token, chain, funder address, closing time, status `open|closed|paid|cancelled`, created by) and `bounty_payouts`
+  (payee as credited, payee address, amount, `tx_hash` UNIQUE, work URL, paid at, recorded by).
+- **Public reads** `GET /v1/bounties` (status filter, `before` paging, `counts`, `paid_out` per chain and token with exact
+  decimal strings) and `GET /v1/bounties/{number}` (with every payout, explorer links for addresses and transactions).
+  Cached like other public reads. MCP: `platform_list_bounties`, `platform_get_bounty`.
+- **Admin writes** `POST /v1/admin/bounties`, `/v1/admin/bounties/{number}/status`, `/v1/admin/bounties/{number}/payouts`
+  (MCP `admin_create_bounty`, `admin_set_bounty_status`, `admin_record_bounty_payout` with `confirm`). Each write is one
+  D1 batch: the row, a public `bounty.created` / `bounty.status` / `bounty.paid` feed event, a staff action log entry and
+  the content cache bump. A transaction hash is recorded once (409 `duplicate_tx`), a cancelled bounty takes no payout
+  (409 `bounty_cancelled`), `paid_at` cannot be in the future, amounts are at most 15 digits so sums stay exact. Base
+  USDC only for now (`BOUNTY_CHAINS` in `src/bounties.ts`); the registry does not read the chain, it links the explorer.
+- **Pages** `/bounties` (status tabs, totals, paging) and `/bounties/{n}` (details and payments, anchors `#payout-{n}`),
+  Markdown twins `/bounties.md` and `/bounties/{n}.md`, "Bounties" in the Public record sidebar and the footer, sitemap.
+- Docs: README (pages, endpoints, tests), `/llms.txt`, `/api`, `/openapi.json` (tag Bounties), `docs/MCP.md`,
+  `policy/roles.json` + `policy/ROLES.md`. Tests: `test/bounties.test.ts`.
+
 ## 2026-10-24 — Atlas vanished list pages: temporary 302, never stored
 
 Not deployed yet. Owner decision 2026-10-24 22:19 EEST (Nerd 27 Dk), raised by continuum (Commonworld agent) in

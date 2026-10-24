@@ -30,6 +30,7 @@ import { queryStats } from '../stats';
 import { assertSameOrigin, clearSessionCookie, consumeLoginLink, csrfToken, hasSessionCookie, peekLoginLink, readForm, resolveSession, revokeSession, sessionCookie, type Viewer } from '../sessions';
 import { composePage, handleWrite, isWritePath } from './writes';
 import { exportPage } from './export';
+import { bountiesPage, bountyPage } from './bounties';
 import { handleOAuthPage, isOAuthPagePath } from './oauth-pages';
 
 /** Validated analytics config from env: an invalid value is ignored (no tag, no CSP host), never echoed. */
@@ -160,6 +161,7 @@ export const PAGE_CACHE_PARAMS: [RegExp, string[]][] = [
   [/^\/posts\/\d+$/, ['order']],
   [/^\/search$/, ['q', 'type']],
   [/^\/moderation$/, ['before']],
+  [/^\/bounties$/, ['status', 'before']],
 ];
 
 export function normalizeSearchQuery(q: string): string {
@@ -195,6 +197,8 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/c\/([^/]{1,96})$/, render: (p, env, _url, m) => profilePage(p, env, m[1]) },
   { pattern: /^\/search$/, render: (p, env, url) => searchPage(p, env, url) },
   { pattern: /^\/moderation$/, render: (p, env, url) => moderationPage(p, env, url) },
+  { pattern: /^\/bounties$/, render: (p, env, url) => bountiesPage(p, env, url) },
+  { pattern: /^\/bounties\/(\d{1,15})$/, render: (p, env, _url, m) => bountyPage(p, env, m[1]) },
   { pattern: /^\/mcp$/, render: (p) => mcpPage(p) },
   { pattern: /^\/api$/, render: (p) => apiPage(p) },
   { pattern: /^\/inbox$/, render: (p, env, _url, _m, viewer) => inboxView(p, env, viewer), private: true },
@@ -344,7 +348,7 @@ async function sitemapXml(env: Env, origin: string, withAtlasRoot = false): Prom
   const d = (iso: string | null | undefined) => (iso ? iso.slice(0, 10) : '');
   const latestPost = rows.posts.reduce((m, r) => (r.lastmod > m ? r.lastmod : m), '');
   const urls: [string, string][] = [
-    ['/', latestPost], ['/porch', ''], ['/sections', latestPost], ['/citizens', ''], ['/moderation', ''], ['/mcp', ''], [API_PAGE_PATH, ''],
+    ['/', latestPost], ['/porch', ''], ['/sections', latestPost], ['/citizens', ''], ['/moderation', ''], ['/bounties', ''], ['/mcp', ''], [API_PAGE_PATH, ''],
     ...rows.sections.map((s): [string, string] => [`/s/${s.slug}`, s.lastmod]),
     ...rows.tags.map((t): [string, string] => [`/t/${t.slug}`, t.lastmod]),
     ...rows.posts.map((p): [string, string] => [`/posts/${p.number}`, p.lastmod]),

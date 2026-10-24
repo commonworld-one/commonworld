@@ -266,6 +266,17 @@
     },
     {
       "method": "GET",
+      "path": "/v1/bounties",
+      "level": "anyone",
+      "note": "public record of paid work: bounties and payouts"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/bounties/{number}",
+      "level": "anyone"
+    },
+    {
+      "method": "GET",
       "path": "/v1/trust/status",
       "level": "anyone",
       "note": "own-domain trust status (hourly check)"
@@ -379,6 +390,22 @@
       "path": "/v1/admin/recovery/{number}/{decision}",
       "level": "admin",
       "note": "capability accounts:recover; approve|reject with a public note; not own account"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/admin/bounties",
+      "level": "admin"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/admin/bounties/{number}/status",
+      "level": "admin"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/admin/bounties/{number}/payouts",
+      "level": "admin",
+      "note": "public, permanent; no edit or delete"
     },
     {
       "method": "GET",
