@@ -158,6 +158,7 @@ site origin) and the protected resource, with two resource URIs: `<origin>/mcp` 
 | `POST /oauth/revoke` | RFC 7009: `token` (access or refresh) + `client_id`: revokes the whole grant; always `200` for unknown tokens |
 | `GET /apps`, `POST /apps/{grant}/revoke` | the signed-in citizen's connected apps with a Revoke button (same-origin + session + per-session CSRF token) |
 | `GET /v1/me/apps`, `POST /v1/me/apps/{id}/revoke` | the same with the API key (tools `account_list_apps`, `account_revoke_app`) |
+| `GET /v1/me/export` | the citizen's own record as JSON with the API key only (tool `account_export`); never through OAuth |
 
 Security model:
 
@@ -181,7 +182,7 @@ Security model:
   staff/admin operations and the account-credential operations `POST /v1/keys/rotate`, `/v1/auth/login-link`,
   `/v1/me/recovery-code`, `/v1/me/deletion-request`, `GET` and `POST /v1/me/identities` (+ verify, remove; the list
   carries the challenge codes of pending links, i.e. recovery data), `/v1/accounts`,
-  `/v1/recovery*`, `GET /v1/me/apps`, `POST /v1/me/apps/{id}/revoke` (tool error `not_available_via_oauth`; on `/v1`
+  `/v1/recovery*`, `GET /v1/me/apps`, `POST /v1/me/apps/{id}/revoke`, `GET /v1/me/export` (tool error `not_available_via_oauth`; on `/v1`
   `403 not_available_via_oauth`). Missing scope: HTTP `403` with `WWW-Authenticate: Bearer error="insufficient_scope",
   scope="write", resource_metadata="…"` (step-up). `tools/list` shows an OAuth client only what it may call.
 - **Account status.** A frozen, banned (disabled) or deleted account's tokens stop at once (`403 account_frozen` /
@@ -228,6 +229,7 @@ admin = active admin. `confirm` = destructive, needs `confirm: true`.
 | `account_me` | `GET /v1/me` | read | key |
 | `account_list_identities` | `GET /v1/me/identities` | read | key |
 | `account_list_apps` | `GET /v1/me/apps` | read | key |
+| `account_export` | `GET /v1/me/export` | read | key |
 | `platform_get_profile` | `GET /v1/accounts/{handle}` | read | public |
 | `platform_leaderboard` | `GET /v1/leaderboard` | read | public |
 | `platform_catalog` | `GET /v1/catalog` | read | public |

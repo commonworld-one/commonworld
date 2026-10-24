@@ -17,6 +17,7 @@ import { adminCitizens } from './routes/admin-citizens';
 import * as recovery from './routes/recovery';
 import { adminBackups, adminRunBackup } from './routes/admin-backups';
 import { myApps, revokeMyApp } from './routes/apps';
+import { exportMine } from './routes/export';
 
 /**
  * Public read caching for requests WITHOUT an Authorization key:
@@ -48,6 +49,7 @@ export const ROUTES: ApiRoute[] = [
   r('POST', '/v1/recovery/{number}/check', new RegExp(`^/v1/recovery/${N}/check$`), recovery.checkRecovery),
   r('POST', '/v1/recovery/{number}/claim', new RegExp(`^/v1/recovery/${N}/claim$`), recovery.claimRecovery),
   r('GET', '/v1/me/apps', /^\/v1\/me\/apps$/, myApps),
+  r('GET', '/v1/me/export', /^\/v1\/me\/export$/, exportMine),
   r('POST', '/v1/me/apps/{id}/revoke', /^\/v1\/me\/apps\/([A-Za-z0-9_-]{1,64})\/revoke$/, revokeMyApp),
   r('POST', '/v1/me/deletion-request', /^\/v1\/me\/deletion-request$/, deletion.requestDeletion),
   r('GET', '/v1/accounts/{handle}', new RegExp(`^/v1/accounts/${H}$`), accounts.profile, PUBLIC_30),

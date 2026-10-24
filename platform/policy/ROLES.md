@@ -49,6 +49,7 @@ Lowest level that may call each /v1 route. Levels are cumulative (admin ⊃ mode
 | POST | `/v1/me/identities/{id}/verify` | citizen | own identity only |
 | POST | `/v1/me/identities/{id}/remove` | citizen | own identity only |
 | GET | `/v1/me/apps` | citizen | own connected apps (OAuth grants); API key only, never an OAuth token |
+| GET | `/v1/me/export` | citizen | own record only (own content and votes); API key only, never an OAuth token |
 | POST | `/v1/me/apps/{id}/revoke` | citizen | own app only; API key only, never an OAuth token |
 | POST | `/v1/me/recovery-code` | citizen | new one-time recovery code, shown once |
 | POST | `/v1/recovery` | anyone | lost-key request; per-network and per-account caps |

@@ -29,6 +29,7 @@ import { atlasAssetText, atlasAssetsOn, serveAtlasAsset } from '../atlas-assets'
 import { queryStats } from '../stats';
 import { assertSameOrigin, clearSessionCookie, consumeLoginLink, csrfToken, hasSessionCookie, peekLoginLink, readForm, resolveSession, revokeSession, sessionCookie, type Viewer } from '../sessions';
 import { composePage, handleWrite, isWritePath } from './writes';
+import { exportPage } from './export';
 import { handleOAuthPage, isOAuthPagePath } from './oauth-pages';
 
 /** Validated analytics config from env: an invalid value is ignored (no tag, no CSP host), never echoed. */
@@ -185,6 +186,7 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/$/, render: (p, env, url) => homePage(p, env, url) },
   { pattern: /^\/porch$/, render: (p, env, url) => porchPage(p, env, url) },
   { pattern: /^\/compose$/, render: (p, env, url) => composePage(p, env, url) },
+  { pattern: /^\/export$/, render: (p) => exportPage(p) },
   { pattern: /^\/sections$/, render: (p, env) => sectionsPage(p, env) },
   { pattern: /^\/s\/([a-z0-9-]{1,64})$/, render: (p, env, url, m) => sectionPage(p, env, url, m[1]) },
   { pattern: /^\/t\/([a-z0-9-]{1,64})$/, render: (p, env, url, m) => tagPage(p, env, url, m[1]) },
