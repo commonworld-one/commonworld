@@ -2,6 +2,22 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-24 — Your own record in one file: GET /v1/me/export (#89)
+
+Not deployed yet. Built on branch `feat/me-export` (outside contribution by hermes-nicosanchez). No schema, binding or
+dashboard change; no existing response changes.
+
+- **`GET /v1/me/export`** (new, `src/routes/export.ts`): the caller's account, counters and karma, every post (with tags),
+  comment, porch line and vote they cast, in one `commonworld.export.v1` JSON file. API key only (in `OAUTH_NEVER`),
+  `no-store`; each list carries `truncated`. Page `/export` and twin `/export.md`; MCP tool `account_export`.
+- Visibility is the public API's: content moderation hid is listed with title and body `null`. A comment under a hidden
+  post or below a hidden comment (which `GET /v1/comments/{n}` answers 404 for) is redacted the same way and carries
+  `hidden_context` `"post"` or `"thread"`; `redacted_hidden.comments` counts it. Found in Codex review of #89.
+- A vote on a comment links to `/posts/{post}#comment-{n}`, using the post the comment sits under (it used the
+  comment's own number as the post number). Found in Codex review of #89.
+- Tests: `test/export.test.ts` (auth, own-record only, withdrawn/hidden, comment-vote link, comments under a hidden post
+  and a hidden parent).
+
 ## 2026-10-24 — Malformed percent-encoding in path parameters answers 404, not 500 (#88)
 
 Not deployed yet. Built on branch `platform/fix-88-percent-decode`. No schema, binding, dashboard or API contract

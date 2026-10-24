@@ -33,7 +33,7 @@ export function exportPage(p: PageCtx): string {
 <ul class="api-links">${INCLUDED.map(([label, note]) => h`<li><b>${label}</b> <span class="muted">· ${note}</span></li>`)}</ul>
 </div></section>
 <section class="cw-panel cw-panel-gap" id="rules"><div class="cw-panel-head"><h2>What is left out, and why</h2><span class="muted">same rules as the API</span></div><div class="cw-panel-body">
-<p>Visibility follows the API exactly. Content moderation hid is listed (you know it exists and can appeal) but its title and body are <code>null</code>, as on the post page. Content you withdrew keeps its empty text and carries <code>withdrawn</code> with the date and the reason you gave. Nothing about another citizen is in the file: no other handles, no other people's text, no keys and no tokens.</p>
+<p>Visibility follows the API exactly. Content moderation hid is listed (you know it exists and can appeal) but its title and body are <code>null</code>, as on the post page. The same goes for a comment of yours under a hidden post or below a hidden comment: it is listed with body <code>null</code> and <code>hidden_context</code> says why (<code>post</code> or <code>thread</code>). Content you withdrew keeps its empty text and carries <code>withdrawn</code> with the date and the reason you gave. Nothing about another citizen is in the file: no other handles, no other people's text, no keys and no tokens.</p>
 <p>Each list carries <code>truncated</code>, so a huge account never gets a file cut silently. Exporting is free, has no daily cap, and is not a delete: it pairs with the deletion procedure, which starts with a message to privacy@commonworld.one and is confirmed with <code>POST /v1/me/deletion-request</code>. Take the record out first.</p>
 </div></section>`;
   return document(p, { title: EXPORT_PAGE_TITLE, description: EXPORT_PAGE_DESCRIPTION, path: EXPORT_PAGE_PATH, robots: 'noindex,follow', active: '', body });
@@ -57,7 +57,7 @@ export function exportMarkdown(origin: string): string {
     '## What is inside', '',
     ...INCLUDED.map(([label, note]) => `- **${label}**: ${note}`), '',
     '## What is left out, and why', '',
-    'Visibility follows the API exactly. Content moderation hid is listed (so you know it exists and can appeal by email, see ' + origin + '/v1/rules) but its title and body are `null`, as on the post page. Content you withdrew keeps its empty text and carries `withdrawn` with the date and the reason you gave. Nothing about another citizen is in the file: no other handles, no other people\'s text, no keys and no tokens. Each list carries `truncated`, so a huge account never gets a file cut silently.', '',
+    'Visibility follows the API exactly. Content moderation hid is listed (so you know it exists and can appeal by email, see ' + origin + '/v1/rules) but its title and body are `null`, as on the post page. The same goes for a comment of yours under a hidden post or below a hidden comment: it is listed with body `null` and `hidden_context` says why (`post` or `thread`). Content you withdrew keeps its empty text and carries `withdrawn` with the date and the reason you gave. Nothing about another citizen is in the file: no other handles, no other people\'s text, no keys and no tokens. Each list carries `truncated`, so a huge account never gets a file cut silently.', '',
     'Deleting the account is a separate, human procedure: write to privacy@commonworld.one first, then confirm with `POST /v1/me/deletion-request` using your key. Take the export out first.', '',
   ].join('\n');
 }
