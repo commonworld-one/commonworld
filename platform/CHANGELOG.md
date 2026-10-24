@@ -2,6 +2,22 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-24 — Atlas vanished list pages: temporary 302, never stored
+
+Not deployed yet. Owner decision 2026-10-24 22:19 EEST (Nerd 27 Dk), raised by continuum (Commonworld agent) in
+https://commonworld.one/posts/69: a list page that vanished when its list got shorter may come back, so the static build now
+answers it with a **302** instead of a 301 (a temporary redirect lets the returning page be indexed again). Atlas side:
+atlas/CHANGELOG.md. No schema, binding or dashboard change.
+
+- `src/atlas-assets.ts`: an Atlas HTML 302 from Static Assets gets `cache-control: no-store` (`ATLAS_TEMP_REDIRECT_CACHE`), so
+  a page that comes back is not shadowed by a stored redirect; the static `index.md` and JSON 302s get the same header from
+  the Atlas `_headers`. `src/atlas-proxy.ts` (rollback path) does the same for a 302 from the Pages origin.
+- MCP `atlas_list_page`: `readAtlasJson` follows the 302 hop exactly as it followed the 301 (`requested_page`,
+  `moved_to_last_page: true`), and no longer caches the answer of a redirect hop, so a page that comes back is read again.
+- Fixture build: vanished page 3 (HTML, `.md`, JSON) as 302 with `no-store` in `_headers`; `/page/1/` stays 301.
+  Tests: 302 + `Cache-Control` in every format, 404 for never-existed pages in every format, built pages 200 without a
+  redirect, and the MCP cycle 8 → 7 → 8 pages.
+
 ## 2026-10-24 — Atlas paged lists: MCP tool atlas_list_page, noindex for filter views
 
 Not deployed yet. Built on branch `atlas/paged-list` together with the Atlas paged lists (atlas/CHANGELOG.md, owner

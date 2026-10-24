@@ -4,4 +4,7 @@
 /atlas/page/1 /atlas/ 301
 /atlas/platforms/page/1/ /atlas/platforms/ 301
 /atlas/platforms/page/1 /atlas/platforms/ 301
-/api/v1/atlas/page/3.json /api/v1/atlas/page/1.json 301
+/atlas/page/3/ /atlas/page/2/ 302
+/atlas/page/3 /atlas/page/2/ 302
+/atlas/page/3/index.md /atlas/page/2/index.md 302
+/api/v1/atlas/page/3.json /api/v1/atlas/page/1.json 302

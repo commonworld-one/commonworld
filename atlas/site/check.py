@@ -302,9 +302,10 @@ def growth_guard(locs, update=False):
         fails.append(f'missing URL baseline {os.path.relpath(BASELINE, HERE)} (run check.py --update-baseline once)')
     stubs = {f"/atlas/platforms/{r['slug']}/" for r in load_removed()}  # link-safety removals keep a noindex stub instead
     stubs = {x for x in stubs if os.path.isfile(os.path.join(DIST, x.lstrip('/'), 'index.html'))}
-    # a paged list URL that no longer exists because its list got shorter answers 301 to the new last page (build.py paged_redirects)
-    paged301 = {l.split()[0] for l in redfile.splitlines() if len(l.split()) == 3 and l.split()[2] == '301' and PAGED_HTML_RE.match(l.split()[0])}
-    removed = sorted(u for u in base - locs if u[len(ORIGIN):] not in red and u[len(ORIGIN):] not in stubs and u[len(ORIGIN):] not in paged301)
+    # a paged list URL that no longer exists because its list got shorter answers 302 (temporary: it may come back) to the
+    # new last page (build.py paged_redirects, VANISHED_PAGE_STATUS)
+    paged_moved = {l.split()[0] for l in redfile.splitlines() if len(l.split()) == 3 and l.split()[2] == str(VANISHED_PAGE_STATUS) and PAGED_HTML_RE.match(l.split()[0])}
+    removed = sorted(u for u in base - locs if u[len(ORIGIN):] not in red and u[len(ORIGIN):] not in stubs and u[len(ORIGIN):] not in paged_moved)
     if removed:
         fails.append(f'{len(removed)} published URL(s) disappeared from the sitemap (pages are never removed; add a 301 in atlas/data/redirects.json if moved): {removed[:10]}')
     cur = {c['slug'] for c in json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms']}
@@ -322,14 +323,19 @@ def growth_guard(locs, update=False):
 
 
 PAGED_RECORD = os.path.join(DATA_DIR, 'paged-lists.json')
+VANISHED_PAGE_STATUS = 302  # same as build.py: a vanished list page may come back, so its redirect is temporary (owner decision 2026-10-24)
+VANISHED_PAGE_CACHE = 'no-store'  # same as build.py: that 302 is never stored, so a page that comes back is not shadowed
+HEADERS_MAX_RULES = 100  # Cloudflare Static Assets / Pages limit for _headers
 
 
 def paged_record_checks(update=False):
     """Q8 (owner decision 2026-10-24): a page number that ever existed never 404s. atlas/data/paged-lists.json records the
     highest page ever built per list (whole Atlas, A-Z, each category); it must cover every list as built now (else run
     check.py --update-baseline, which raises it and never lowers it) and every paged URL of the sitemap baseline. Every page
-    past a list's last page, up to that record, answers 301 to the last page in _redirects for /page/N/, /page/N,
-    /page/N/index.md and its JSON page; nothing above the record is redirected (it never existed: 404)."""
+    past a list's last page, up to that record, answers 302 (temporary, owner decision 2026-10-24 22:19 EEST: the page may
+    come back) to the last page in _redirects for /page/N/, /page/N, /page/N/index.md and its JSON page; nothing above the
+    record is redirected (it never existed: 404); no vanished page is a 301; and no page built now has a redirect rule (a page
+    that came back is a normal 200 page; Cloudflare applies _redirects before files)."""
     sys.path.insert(0, HERE)
     import api_v1
     fails = []
@@ -359,13 +365,35 @@ def paged_record_checks(update=False):
         to = html_list_path(first, last) if first in now else '/atlas/'
         to_json = '/api/v1' + (api_v1.page_json(last, k) if first in now else api_v1.page_json(1))
         for n in range(max(last, 1) + 1, top + 1):
-            for want in (f'{first}page/{n}/ {to} 301', f'{first}page/{n} {to} 301', f'{first}page/{n}/index.md {to}index.md 301',
-                         f'/api/v1{api_v1.page_json(n, k)} {to_json} 301'):
+            s = VANISHED_PAGE_STATUS
+            for want in (f'{first}page/{n}/ {to} {s}', f'{first}page/{n} {to} {s}', f'{first}page/{n}/index.md {to}index.md {s}',
+                         f'/api/v1{api_v1.page_json(n, k)} {to_json} {s}'):
                 n_red += 1
                 if want not in lines: fails.append(f'_redirects lacks {want} (page {n} of {first} existed before)')
+                if want[:-3] + '301' in lines: fails.append(f'_redirects has a permanent 301 for a vanished page (must be {s}, it may come back): {want[:-4]}')
         for l in red:
             m = re.match(re.escape(first) + r'page/([0-9]+)[/ ]', l)
             if m and int(m.group(1)) > max(top, 1): fails.append(f'_redirects redirects a page that never existed: {l}')
+    hdr = open(os.path.join(DIST, '_headers')).read() if os.path.exists(os.path.join(DIST, '_headers')) else ''
+    rules = {}
+    cur = None
+    for l in hdr.splitlines():
+        if l.strip() and not l.startswith((' ', '\t')) and not l.startswith('#'):
+            cur = l.strip(); rules.setdefault(cur, [])
+        elif cur and l.strip():
+            rules[cur].append(l.strip())
+    if len(rules) > HEADERS_MAX_RULES: fails.append(f'_headers has {len(rules)} rules (Cloudflare allows {HEADERS_MAX_RULES})')
+    for l in red:  # the static 302s (Markdown twin, JSON page) must not be cached: a page that comes back must not be shadowed
+        p = l.split()
+        if len(p) == 3 and p[2] == str(VANISHED_PAGE_STATUS) and p[0].endswith(('/index.md', '.json')) and f'Cache-Control: {VANISHED_PAGE_CACHE}' not in rules.get(p[0], []):
+            fails.append(f'_headers lacks "Cache-Control: {VANISHED_PAGE_CACHE}" for the temporary redirect {p[0]}')
+    for l in red:  # a page that is built now (came back, or never left) must not be redirected
+        p = l.split()
+        if len(p) == 3 and (PAGED_HTML_RE.match(p[0].replace('index.md', '')) or (p[0].startswith('/api/v1/atlas/') and '/page/' in p[0])) and not re.search(r'/page/1/?$|/page/1\.json$', p[0]):
+            src = p[0] if not p[0].startswith('/api/v1/') else p[0][len('/api/v1'):]
+            fs = os.path.join(DIST, 'api', 'v1', src.lstrip('/')) if p[0].startswith('/api/v1/') else os.path.join(DIST, p[0].lstrip('/'))
+            if os.path.isfile(fs) or os.path.isfile(os.path.join(fs, 'index.html')):
+                fails.append(f'_redirects redirects a page that is built (it came back and must answer 200): {l}')
     print(f'paged record: {len(rec)} lists, {n_red} redirect lines for vanished pages')
     return fails
 

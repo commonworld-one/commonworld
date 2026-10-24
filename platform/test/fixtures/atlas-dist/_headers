@@ -1,3 +1,7 @@
+/atlas/page/3/index.md
+  Cache-Control: no-store
+/api/v1/atlas/page/3.json
+  Cache-Control: no-store
 /atlas/assets/*
   Cache-Control: public, max-age=604800
 /atlas/platforms/*.json

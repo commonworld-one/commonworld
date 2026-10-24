@@ -69,6 +69,9 @@ export function isAtlasFilterView(url: URL): boolean {
   return false;
 }
 
+/** Cache-Control of a temporary (302) Atlas redirect: never stored (same value as build.py VANISHED_PAGE_CACHE). */
+export const ATLAS_TEMP_REDIRECT_CACHE = 'no-store';
+
 export const atlasAssetsOn = (env: Env): boolean => env.ATLAS_SOURCE === 'assets' && !!env.ASSETS;
 
 const MARK = "script-src 'self'";
@@ -89,7 +92,8 @@ export function withAtlasNonce(res: Response): Response {
 /**
  * An Atlas path the Worker owns (HTML pages, the IndexNow key file, anything not matched by a negative pattern),
  * answered from the ASSETS binding. Status, body and the `_headers` headers come from Static Assets; the Worker adds
- * the nonce, turns the asset layer's 307 slash/`.html` redirects into Pages' 308, and marks closed staging noindex.
+ * the nonce, turns the asset layer's 307 slash/`.html` redirects into Pages' 308, sends `cache-control: no-store` on
+ * the temporary 302s of vanished list pages, and marks closed staging noindex.
  */
 export async function serveAtlasAsset(request: Request, env: Env, url: URL): Promise<Response> {
   if (request.method !== 'GET' && request.method !== 'HEAD') {
@@ -109,6 +113,10 @@ export async function serveAtlasAsset(request: Request, env: Env, url: URL): Pro
   }
   let out = new Response(request.method === 'HEAD' ? null : res.body, res);
   if (out.status === 307 && out.headers.has('location')) out = new Response(null, { status: 308, headers: out.headers });
+  // A list page that vanished when its list got shorter answers a temporary 302 (atlas/site/build.py paged_redirects): the
+  // page may come back, so the redirect is never stored and a page that returns is not shadowed by a remembered redirect.
+  // (The Markdown twins and JSON pages are static: _headers gives their 302s the same no-store.)
+  if (out.status === 302) out.headers.set('cache-control', ATLAS_TEMP_REDIRECT_CACHE);
   const location = out.headers.get('location');
   if (location) {
     const to = new URL(location, url);

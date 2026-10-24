@@ -57,9 +57,12 @@ export async function readAtlasJson<T = any>(env: Env, path: string, notFound = 
   let res: Response | null;
   try { res = await fetchAtlas(env, path); } catch { throw new HttpError(503, 'atlas_unavailable'); }
   if (!res) throw new HttpError(503, 'atlas_unavailable');
-  // A list page that was published before but is past the end now answers 301 to that list's last page (atlas/site/build.py
-  // paged_redirects, owner decision Q8). Follow exactly one such hop, only to another Atlas JSON file of the same build.
+  // A list page that was published before but is past the end now answers a temporary 302 to that list's last page
+  // (atlas/site/build.py paged_redirects, owner decision Q8; 302 since 2026-10-24 because the page may come back; it was 301
+  // before, and any 3xx is still accepted). Follow exactly one such hop, only to another Atlas JSON file of the same build.
   const to = res.status >= 301 && res.status <= 308 ? atlasRedirectPath(res.headers.get('location')) : null;
+  // the answer of a redirect hop is not kept: the redirect is temporary, and a page that comes back must be read again
+  const keep = !to;
   if (to) {
     await res.body?.cancel();
     try { res = await fetchAtlas(env, to); } catch { throw new HttpError(503, 'atlas_unavailable'); }
@@ -72,7 +75,7 @@ export async function readAtlasJson<T = any>(env: Env, path: string, notFound = 
   let value: unknown;
   try { value = JSON.parse(text); } catch { throw new HttpError(503, 'atlas_unavailable'); }
   if (cache.size > 64) cache.clear();
-  cache.set(path, { at: Date.now(), value });
+  if (keep) cache.set(path, { at: Date.now(), value });
   return value as T;
 }
 

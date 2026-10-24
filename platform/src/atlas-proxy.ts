@@ -64,6 +64,8 @@ export async function proxyAtlas(request: Request, env: Env, url: URL, origin: s
     const to = new URL(location, origin);
     if (to.origin === origin) out.headers.set('location', to.pathname + to.search + to.hash);
   }
+  // a temporary redirect (a vanished list page that may come back) is never stored, as on the Static Assets path
+  if (out.status === 302) out.headers.set('cache-control', 'no-store');
   out.headers.delete('set-cookie');
   out.headers.set('x-cw-upstream', 'atlas');
   if (env.PAGES_NOINDEX === '1') out.headers.set('x-robots-tag', 'noindex, nofollow');

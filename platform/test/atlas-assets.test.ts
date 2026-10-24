@@ -175,6 +175,52 @@ describe('A3: the Atlas from Static Assets (ATLAS_SOURCE=assets)', () => {
     expect((await call('/api/v1/atlas/platforms/page/99.json')).status).toBe(404);
   });
 
+  it('a vanished list page (it may come back) answers a temporary 302 that is never stored, in every format', async () => {
+    noNetwork();
+    // HTML runs the Worker: the 302 from _redirects gets cache-control: no-store
+    for (const p of ['/atlas/page/3/', '/atlas/page/3']) {
+      const r = await call(p);
+      expect(r.status, p).toBe(302);
+      expect(r.headers.get('location'), p).toBe('/atlas/page/2/');
+      expect(r.headers.get('cache-control'), p).toBe('no-store');
+    }
+    // Markdown twin and JSON page are served by Static Assets without the Worker (run_worker_first negatives):
+    // _headers gives their 302s the same no-store (Static Assets applies _headers to _redirects responses)
+    for (const [p, to] of [['/atlas/page/3/index.md', '/atlas/page/2/index.md'], ['/api/v1/atlas/page/3.json', '/api/v1/atlas/page/1.json']]) {
+      expect(runsWorkerFirst(p), p).toBe(false);
+      const r = await (env as any).ASSETS.fetch(new Request(`${PROD}${p}`, { redirect: 'manual' }));
+      expect(r.status, p).toBe(302);
+      expect(r.headers.get('location'), p).toBe(to);
+      expect(r.headers.get('cache-control'), p).toBe('no-store');
+    }
+    // only the /page/1/ alias stays a permanent 301 (and keeps no no-store)
+    const p1 = await call('/atlas/page/1/');
+    expect(p1.status).toBe(301);
+    expect(p1.headers.get('cache-control')).not.toBe('no-store');
+  });
+
+  it('a page number that never existed is a 404 in every format (HTML, Markdown twin, JSON)', async () => {
+    noNetwork();
+    for (const p of ['/atlas/page/99/', '/atlas/platforms/page/99/', '/atlas/page/99/index.md', '/api/v1/atlas/page/99.json',
+      '/api/v1/atlas/platforms/page/99.json', '/api/v1/atlas/categories/social/page/99.json']) {
+      const r = await call(p);
+      expect(r.status, p).toBe(404);
+      expect(r.headers.get('location'), p).toBeNull();
+    }
+  });
+
+  it('a list page that is built (one that came back after a shrink) is a plain 200 page with no redirect', async () => {
+    noNetwork();
+    // atlas/site/build.py paged_redirects emits a 302 only for pages past the current last page, never for a built page,
+    // and check.py fails a build whose _redirects names a built page (Static Assets applies _redirects before files)
+    for (const p of ['/atlas/page/2/', '/atlas/platforms/page/2/', '/api/v1/atlas/page/1.json', '/api/v1/atlas/platforms/page/1.json',
+      '/api/v1/atlas/categories/social/page/1.json']) {
+      const r = await call(p);
+      expect(r.status, p).toBe(200);
+      expect(r.headers.get('location'), p).toBeNull();
+    }
+  });
+
   it('filter and search views of Atlas pages are noindex (X-Robots-Tag); plain list pages and other query strings are not (D1)', async () => {
     noNetwork();
     for (const q of ['?tag=x402', '?q=mcp', '?category=social&status=live', '?sort=claims', '?feature=money', '?type=platform']) {

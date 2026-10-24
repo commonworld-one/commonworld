@@ -228,8 +228,10 @@ admin = active admin. `confirm` = destructive, needs `confirm: true`.
 `page` (1-based) and optionally `category`. To read the whole list, start at page 1 and ask for `page + 1` while
 `has_more` is true; every page of one build carries the same `snapshot_id`, so if it changes during the walk the list
 was rebuilt and the walk starts again. A page past the last one answers `404 page_not_found`, unless that page number
-existed before and the list got shorter: the static build answers it with a 301 to the list's last page (owner decision
-Q8), the tool follows that one hop and returns the last page with `requested_page` and `moved_to_last_page: true`
+existed before and the list got shorter: the static build answers it with a temporary 302 to the list's last page (owner
+decision Q8; 302, not 301, because the page may come back), the tool follows that one hop and returns the last page with
+`requested_page` and `moved_to_last_page: true` (the answer of the hop is not cached, so when the page comes back it is read
+again as a normal page)
 (the `snapshot_id` has changed, so start the walk again). The A-Z table
 `/atlas/platforms/` is paged the same way (`/atlas/platforms/page/{page}/`, JSON `/api/v1/atlas/platforms/page/{page}.json`)
 with the same records in the same order as the whole-Atlas pages, so `atlas_list_page` without `category` returns page N of

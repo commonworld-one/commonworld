@@ -1,5 +1,5 @@
 {
- "_about": "Highest page number ever built for each paged Atlas list (owner decision Q8, 2026-10-24: a page number that ever existed never 404s). build.py paged_redirects() sends every page past a list's current last page, up to this number, to that last page with a 301 (HTML /page/N/, its index.md twin and its JSON page). Page numbers above it never existed and stay 404. Raised by `python3 atlas/site/check.py --update-baseline` after a build; never lowered by hand.",
+ "_about": "Highest page number ever built for each paged Atlas list (owner decision Q8, 2026-10-24: a page number that ever existed never 404s). build.py paged_redirects() sends every page past a list's current last page, up to this number, to that last page with a temporary 302, never stored (HTML /page/N/, its index.md twin and its JSON page; owner decision 2026-10-24 22:19 EEST: the page may come back, and then it is a normal 200 page again). Page numbers above it never existed and stay 404. Raised by `python3 atlas/site/check.py --update-baseline` after a build; never lowered by hand.",
  "lists": {
   "/atlas/": 8,
   "/atlas/categories/arenas/": 1,

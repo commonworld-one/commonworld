@@ -191,18 +191,18 @@ class Redirects(unittest.TestCase):
         site = FakeSite(120, {'social': 60})  # 3 pages now; social 2 pages
         lines = self.run_with_baseline(site, [], {'/atlas/': 5, '/atlas/platforms/': 5, '/atlas/categories/social/': 2, '/atlas/categories/gone/': 2})
         for n in (4, 5):
-            self.assertIn(f'/atlas/page/{n}/ /atlas/page/3/ 301', lines)
-            self.assertIn(f'/atlas/page/{n} /atlas/page/3/ 301', lines)
-            self.assertIn(f'/atlas/page/{n}/index.md /atlas/page/3/index.md 301', lines)
-            self.assertIn(f'/api/v1/atlas/page/{n}.json /api/v1/atlas/page/3.json 301', lines)
-            self.assertIn(f'/atlas/platforms/page/{n}/ /atlas/platforms/page/3/ 301', lines)
-            self.assertIn(f'/atlas/platforms/page/{n}/index.md /atlas/platforms/page/3/index.md 301', lines)
-            self.assertIn(f'/api/v1/atlas/platforms/page/{n}.json /api/v1/atlas/platforms/page/3.json 301', lines)
+            self.assertIn(f'/atlas/page/{n}/ /atlas/page/3/ 302', lines)
+            self.assertIn(f'/atlas/page/{n} /atlas/page/3/ 302', lines)
+            self.assertIn(f'/atlas/page/{n}/index.md /atlas/page/3/index.md 302', lines)
+            self.assertIn(f'/api/v1/atlas/page/{n}.json /api/v1/atlas/page/3.json 302', lines)
+            self.assertIn(f'/atlas/platforms/page/{n}/ /atlas/platforms/page/3/ 302', lines)
+            self.assertIn(f'/atlas/platforms/page/{n}/index.md /atlas/platforms/page/3/index.md 302', lines)
+            self.assertIn(f'/api/v1/atlas/platforms/page/{n}.json /api/v1/atlas/platforms/page/3.json 302', lines)
         self.assertFalse(any(l.startswith(('/atlas/page/6', '/atlas/platforms/page/6', '/api/v1/atlas/page/6')) for l in lines))  # never existed
         self.assertFalse(any(l.startswith(('/atlas/page/3', '/atlas/page/2')) for l in lines))  # still exist
         self.assertFalse(any(l.startswith('/atlas/categories/social/page/2') for l in lines))  # social still has 2 pages
-        self.assertIn('/atlas/categories/gone/page/2/ /atlas/ 301', lines)  # a whole list gone: to the Atlas home
-        self.assertIn('/api/v1/atlas/categories/gone/page/2.json /api/v1/atlas/page/1.json 301', lines)
+        self.assertIn('/atlas/categories/gone/page/2/ /atlas/ 302', lines)  # a whole list gone: to the Atlas home
+        self.assertIn('/api/v1/atlas/categories/gone/page/2.json /api/v1/atlas/page/1.json 302', lines)
 
     def test_record_file_covers_every_list(self):
         rec = build.load_paged_record()
@@ -220,10 +220,10 @@ class Redirects(unittest.TestCase):
         O = 'https://commonworld.one'
         lines = self.run_with_baseline(FakeSite(120, {'social': 10}), [O + '/atlas/page/3/', O + '/atlas/page/4/', O + '/atlas/categories/social/page/2/',
                                                                          O + '/atlas/categories/gone/page/2/', O + '/atlas/platforms/x/'])
-        self.assertNotIn('/atlas/page/3/ /atlas/page/3/ 301', lines)  # page 3 still exists (120 cards = 3 pages)
-        self.assertIn('/atlas/page/4/ /atlas/page/3/ 301', lines)
-        self.assertIn('/atlas/categories/social/page/2/ /atlas/categories/social/ 301', lines)
-        self.assertIn('/atlas/categories/gone/page/2/ /atlas/ 301', lines)
+        self.assertNotIn('/atlas/page/3/ /atlas/page/3/ 302', lines)  # page 3 still exists (120 cards = 3 pages)
+        self.assertIn('/atlas/page/4/ /atlas/page/3/ 302', lines)
+        self.assertIn('/atlas/categories/social/page/2/ /atlas/categories/social/ 302', lines)
+        self.assertIn('/atlas/categories/gone/page/2/ /atlas/ 302', lines)
         # card URLs are never redirected; only the A-Z list's own /page/1/ rule names /atlas/platforms/
         self.assertEqual([l for l in lines if l.startswith('/atlas/platforms/')],
                          ['/atlas/platforms/page/1/ /atlas/platforms/ 301', '/atlas/platforms/page/1 /atlas/platforms/ 301'])
@@ -232,9 +232,112 @@ class Redirects(unittest.TestCase):
         O = 'https://commonworld.one'
         lines = self.run_with_baseline(FakeSite(120, {}), [O + '/atlas/platforms/page/3/', O + '/atlas/platforms/page/5/'])
         self.assertIn('/atlas/platforms/page/1/ /atlas/platforms/ 301', lines)
-        self.assertNotIn('/atlas/platforms/page/3/ /atlas/platforms/page/3/ 301', lines)
-        self.assertIn('/atlas/platforms/page/5/ /atlas/platforms/page/3/ 301', lines)
+        self.assertNotIn('/atlas/platforms/page/3/ /atlas/platforms/page/3/ 302', lines)
+        self.assertIn('/atlas/platforms/page/5/ /atlas/platforms/page/3/ 302', lines)
 
+    def test_vanished_pages_are_temporary_302_page_1_alias_stays_301(self):
+        # owner decision 2026-10-24 22:19 EEST: a vanished list page may come back, so its redirect is temporary (302);
+        # only the /page/1/ alias of a list is permanent (301); no vanished page is ever a 301
+        lines = self.run_with_baseline(FakeSite(120, {'social': 60}), [], {'/atlas/': 5, '/atlas/platforms/': 5, '/atlas/categories/social/': 2})
+        self.assertEqual(build.VANISHED_PAGE_STATUS, 302)
+        self.assertEqual(check.VANISHED_PAGE_STATUS, build.VANISHED_PAGE_STATUS)
+        for l in lines:
+            src, _, code = l.split()
+            if src.rstrip('/').endswith('/page/1'):
+                self.assertEqual(code, '301', l)
+            else:
+                self.assertEqual(code, '302', l)
+        self.assertIn('/atlas/page/1/ /atlas/ 301', lines)
+        self.assertIn('/atlas/platforms/page/1/ /atlas/platforms/ 301', lines)
+        self.assertIn('/atlas/page/5/ /atlas/page/3/ 302', lines)
+
+    def test_vanished_page_that_comes_back_is_a_plain_page_again(self):
+        # a list shrinks from 5 pages to 3 (pages 4 and 5 answer 302), then grows back to 5: pages 4 and 5 are built
+        # again and get no redirect rule at all, so they answer 200 (Cloudflare applies _redirects before files)
+        rec = {'/atlas/': 5, '/atlas/platforms/': 5}
+        shrunk = self.run_with_baseline(FakeSite(120, {}), [], rec)
+        self.assertIn('/atlas/page/4/ /atlas/page/3/ 302', shrunk)
+        self.assertIn('/api/v1/atlas/page/5.json /api/v1/atlas/page/3.json 302', shrunk)
+        back = self.run_with_baseline(FakeSite(250, {}), [], rec)
+        for n in (2, 3, 4, 5):
+            for pre in (f'/atlas/page/{n}', f'/atlas/platforms/page/{n}', f'/api/v1/atlas/page/{n}.json', f'/api/v1/atlas/platforms/page/{n}.json'):
+                self.assertFalse(any(l.startswith(pre) for l in back), (pre, back))
+        self.assertEqual(sorted(back), sorted(['/atlas/page/1/ /atlas/ 301', '/atlas/page/1 /atlas/ 301',
+                                               '/atlas/platforms/page/1/ /atlas/platforms/ 301', '/atlas/platforms/page/1 /atlas/platforms/ 301']))
+
+    def test_static_302s_get_no_store_headers(self):
+        lines = self.run_with_baseline(FakeSite(350, {}), [], {'/atlas/': 8, '/atlas/platforms/': 8})
+        hdr = build.vanished_page_headers(''.join(l + '\n' for l in lines))
+        self.assertEqual(build.VANISHED_PAGE_CACHE, 'no-store')
+        for path in ('/atlas/page/8/index.md', '/api/v1/atlas/page/8.json', '/atlas/platforms/page/8/index.md', '/api/v1/atlas/platforms/page/8.json'):
+            self.assertIn(f'{path}\n  Cache-Control: no-store\n', hdr)
+        self.assertNotIn('/atlas/page/8/\n', hdr)  # HTML runs the Worker, which sets it
+        self.assertNotIn('page/1', hdr)  # the 301 alias is not touched
+
+    def serve_build(self, d, n_pages, record):
+        """A tiny static build of the whole-Atlas list with n_pages pages (HTML, Markdown twin, JSON) and the _redirects /
+        _headers that build.py writes for it; answered by serve.py (the same rules as the static serving)."""
+        import shutil
+        shutil.rmtree(d, ignore_errors=True)
+        files = ['atlas/index.html', 'atlas/index.md', '404.html'] + [f'api/v1/atlas/page/{n}.json' for n in range(1, n_pages + 1)]
+        files += [f'atlas/page/{n}/{f}' for n in range(2, n_pages + 1) for f in ('index.html', 'index.md')]
+        for rel in files:
+            os.makedirs(os.path.dirname(os.path.join(d, rel)), exist_ok=True)
+            open(os.path.join(d, rel), 'w').write('x')
+        red = ''.join(l + '\n' for l in self.run_with_baseline(FakeSite(n_pages * 50, {}), [], record))
+        open(os.path.join(d, '_redirects'), 'w').write(red)
+        open(os.path.join(d, '_headers'), 'w').write(build.vanished_page_headers(red))
+
+    def test_full_cycle_8_7_8_pages(self):
+        # owner decision 2026-10-24 (continuum's acceptance criteria): page 8 is 200, the list shrinks to 7 pages and page 8
+        # answers a 302 to page 7 that is never stored, the list grows back to 8 and page 8 is a plain 200 again; HTML,
+        # Markdown twin and JSON alike. A page number that never existed (9) is 404 in every format at every step.
+        import http.server, threading, urllib.request, urllib.error
+        import serve
+        rec = {'/atlas/': 8, '/atlas/platforms/': 8}
+        with tempfile.TemporaryDirectory() as root:
+            d = os.path.join(root, 'dist')
+            old = serve.DIST
+            serve.DIST = d
+            H = type('H', (serve.H,), {'log_message': lambda *a: None, '__init__': lambda self, *a, **k: http.server.SimpleHTTPRequestHandler.__init__(self, *a, directory=serve.DIST, **k)})
+            srv = http.server.ThreadingHTTPServer(('127.0.0.1', 0), H)
+            threading.Thread(target=srv.serve_forever, daemon=True).start()
+
+            class NoRedirect(urllib.request.HTTPRedirectHandler):
+                def redirect_request(self, *a, **k):
+                    return None
+            op = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect)
+
+            def get(path):
+                try:
+                    r = op.open(f'http://127.0.0.1:{srv.server_address[1]}{path}')
+                    return r.status, r.headers.get('location'), r.headers.get('cache-control')
+                except urllib.error.HTTPError as ex:
+                    return ex.code, ex.headers.get('location'), ex.headers.get('cache-control')
+            page8 = {'/atlas/page/8/': '/atlas/page/7/', '/atlas/page/8/index.md': '/atlas/page/7/index.md', '/api/v1/atlas/page/8.json': '/api/v1/atlas/page/7.json'}
+            never = ['/atlas/page/9/', '/atlas/page/9/index.md', '/api/v1/atlas/page/9.json']
+            try:
+                for stage, n_pages in (('8 pages', 8), ('7 pages', 7), ('8 pages again', 8)):
+                    self.serve_build(d, n_pages, rec)
+                    red = open(os.path.join(d, '_redirects')).read()
+                    hdr = open(os.path.join(d, '_headers')).read()
+                    for path, to in page8.items():
+                        status, loc, cc = get(path)
+                        if n_pages == 8:
+                            self.assertEqual((status, loc), (200, None), (stage, path))
+                            self.assertNotIn(path + ' ', red, stage)
+                            self.assertNotIn(path + '\n', hdr, stage)
+                        else:
+                            self.assertEqual((status, loc, cc), (302, to, 'no-store'), (stage, path))
+                            if path.endswith(('.md', '.json')):  # static on Cloudflare: the no-store comes from _headers
+                                self.assertIn(f'{path}\n  Cache-Control: no-store\n', hdr, stage)
+                    for path in never:
+                        self.assertEqual(get(path)[0], 404, (stage, path))
+                    self.assertEqual(get('/atlas/page/1/')[:2], (301, '/atlas/'), stage)
+            finally:
+                srv.shutdown()
+                srv.server_close()
+                serve.DIST = old
 
 if __name__ == '__main__':
     unittest.main()

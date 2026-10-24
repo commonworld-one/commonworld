@@ -25,7 +25,8 @@ N_ALL, N_CLOSED = len(_SNAP), sum(1 for c in _SNAP if c.get('status') == 'closed
 N_PAY = sum(1 for c in _SNAP if c.get('category') == 'payments')
 PAGE_SIZE = 50  # cards per list page (D4)
 N_PAGE1, N_PAGES = min(PAGE_SIZE, N_ALL), max(1, -(-N_ALL // PAGE_SIZE))
-# highest page ever built (atlas/data/paged-lists.json, owner decision Q8): pages up to it answer 301 to the last page when the
+# highest page ever built (atlas/data/paged-lists.json, owner decision Q8): pages up to it answer 302 (temporary: the page may
+# come back, owner decision 2026-10-24) to the last page when the
 # list got shorter, so the 404 probe is the first number that never existed (Codex review of #107)
 _EVER = max(N_PAGES, json.load(open(os.path.join(HERE, '..', '..', 'data', 'paged-lists.json')))['lists'].get('/atlas/', 0))
 N_NEVER = _EVER + 1
@@ -54,7 +55,7 @@ op = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect)
 for url, code in [('/atlas/nope/', 404), ('/atlas/about', 301), ('/atlas/about/', 200), ('/atlas/data/search-index.json', 200),
                   ('/privacy', 301), ('/privacy/', 200), ('/terms/', 200), ('/atlas/privacy/', 200), ('/atlas/terms/', 200), ('/sitemap.xml', 200), ('/', 200), ('/about/', 200), ('/about', 301),
                   ('/atlas/page/2/', 200), ('/atlas/page/1/', 301), ('/atlas/page/1', 301), (f'/atlas/page/{N_NEVER}/', 404), (f'/atlas/platforms/page/{N_NEVER}/', 404), ('/atlas/page/0/', 404),
-                  ('/atlas/index.md', 200), ('/atlas/page/2/index.md', 200), ('/api/v1/atlas/page/1.json', 200), (f'/api/v1/atlas/page/{N_NEVER}.json', 404), (f'/api/v1/atlas/platforms/page/{N_NEVER}.json', 404),
+                  ('/atlas/index.md', 200), ('/atlas/page/2/index.md', 200), ('/api/v1/atlas/page/1.json', 200), (f'/api/v1/atlas/page/{N_NEVER}.json', 404), (f'/atlas/page/{N_NEVER}/index.md', 404), (f'/atlas/platforms/page/{N_NEVER}/index.md', 404), (f'/api/v1/atlas/platforms/page/{N_NEVER}.json', 404),
                   ('/api/v1/index.json', 200), ('/api/v1/openapi.json', 200), ('/api/v1/atlas/platforms/bountybook.json', 200), ('/api/v1/atlas/platforms/nope.json', 404), ('/atlas/api/', 200)]:
     try:
         r = op.open(B + url); got = r.status
@@ -62,13 +63,13 @@ for url, code in [('/atlas/nope/', 404), ('/atlas/about', 301), ('/atlas/about/'
         got = ex.code
     check(f'HTTP {url} -> {code}', got == code)
 _last = '/atlas/' if N_PAGES == 1 else f'/atlas/page/{N_PAGES}/'
-for n in range(N_PAGES + 1, _EVER + 1):  # pages that existed before and are past the end now: 301 to the last page
+for n in range(N_PAGES + 1, _EVER + 1):  # pages that existed before and are past the end now: 302 to the last page
     for url, to in [(f'/atlas/page/{n}/', _last), (f'/atlas/page/{n}/index.md', _last + 'index.md'), (f'/api/v1/atlas/page/{n}.json', f'/api/v1/atlas/page/{N_PAGES}.json')]:
         try:
-            r = op.open(B + url); got, loc = r.status, r.headers.get('location')
+            r = op.open(B + url); got, loc, cc = r.status, r.headers.get('location'), r.headers.get('cache-control')
         except urllib.error.HTTPError as ex:
-            got, loc = ex.code, ex.headers.get('location')
-        check(f'HTTP {url} (published before) -> 301 {to}', got == 301 and (loc or '').endswith(to))
+            got, loc, cc = ex.code, ex.headers.get('location'), ex.headers.get('cache-control')
+        check(f'HTTP {url} (published before) -> 302 {to}, Cache-Control: no-store', got == 302 and (loc or '').endswith(to) and cc == 'no-store')
 
 VIS = "Array.from(document.querySelectorAll('#grid .cw-card[data-slug]')).filter(c=>!c.hidden).length"
 ADS_OK = """(() => { const k = Array.from(document.querySelectorAll('#grid > .cw-card')).filter(c => !c.hidden);

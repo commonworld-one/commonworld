@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Local preview server for the built Atlas (stdlib only). Mimics the live static serving (Workers Static Assets in the platform Worker, same rules as the legacy Cloudflare Pages build):
 clean directory URLs, /atlas/x -> 301 /atlas/x/, real 404 status with /404.html, / serves the Commonworld landing (dist/index.html),
-301s from dist/_redirects for paths that have no file (e.g. /atlas/page/1/ -> /atlas/), and X-Robots-Tag: noindex on Atlas
+301s and 302s from dist/_redirects for paths that have no file (e.g. /atlas/page/1/ -> /atlas/ 301, a vanished list page -> 302), and X-Robots-Tag: noindex on Atlas
 HTML pages opened with a filter or search query string (as the platform Worker sends).
 Sends the site-wide security headers from dist/_headers (the `/*` block: CSP, Permissions-Policy, ...) so a local
 browser runs under the same strict CSP as production (minus HSTS and upgrade-insecure-requests, which need https).
@@ -39,12 +39,12 @@ FILTER_PARAMS = ('q', 'category', 'status', 'type', 'feature', 'tag', 'sort')  #
 
 
 def redirects():
-    """{path: target} from the 301 lines of dist/_redirects."""
+    """{path: (target, status)} from the 301 and 302 lines of dist/_redirects."""
     try:
         lines = open(os.path.join(DIST, '_redirects'), encoding='utf-8').read().splitlines()
     except OSError:
         return {}
-    return {p[0]: p[1] for p in (l.split() for l in lines) if len(p) == 3 and p[2] == '301'}
+    return {p[0]: (p[1], int(p[2])) for p in (l.split() for l in lines) if len(p) == 3 and p[2] in ('301', '302')}
 
 
 class H(http.server.SimpleHTTPRequestHandler):
@@ -55,8 +55,9 @@ class H(http.server.SimpleHTTPRequestHandler):
         path = self.path.split('?', 1)[0].split('#', 1)[0]
         fs = self.translate_path(path)
         self._noindex = False
-        if not os.path.exists(fs) and path in redirects():
-            return self._redirect(redirects()[path], 301)
+        red = redirects()
+        if not os.path.exists(fs) and path in red:
+            return self._redirect(*red[path])
         query = self.path[len(path):].lstrip('?')
         if query and any(kv.split('=', 1)[0] in FILTER_PARAMS for kv in query.split('&')):
             self._noindex = True
@@ -87,6 +88,8 @@ class H(http.server.SimpleHTTPRequestHandler):
     def _redirect(self, loc, code):
         self.send_response(code)
         self.send_header('Location', loc)
+        if code == 302:  # a vanished list page may come back: like the Worker and _headers, its redirect is never stored
+            self.send_header('Cache-Control', 'no-store')
         self.send_header('Content-Length', '0')
         self.end_headers()
         return None

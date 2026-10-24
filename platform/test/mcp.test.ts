@@ -347,7 +347,8 @@ describe('tools/call', () => {
     const past = await call('atlas_list_page', { page: 2 });
     expect(past.isError).toBe(true);
     expect(past.data).toMatchObject({ status: 404, error: { code: 'page_not_found' } });
-    // page 3 existed before (the fixture _redirects sends it to the last page, as paged_redirects does when a list shrinks)
+    // page 3 existed before (the fixture _redirects sends it to the last page with a temporary 302, as paged_redirects does
+    // when a list shrinks); the tool follows the 302 hop exactly as it followed the 301
     const moved = await call('atlas_list_page', { page: 3 });
     expect(moved.isError).toBeUndefined();
     expect(moved.data).toMatchObject({ page: 1, requested_page: 3, moved_to_last_page: true, snapshot_id: '0123456789abcdef' });
@@ -585,5 +586,36 @@ describe('Atlas JSON redirects the MCP tools follow', () => {
     expect(atlasRedirectPath('/atlas/page/7/')).toBeNull();
     expect(atlasRedirectPath('/api/v1/atlas/page/7.json?x=1')).toBeNull();
     expect(atlasRedirectPath(null)).toBeNull();
+  });
+
+  it('full cycle 8 pages -> 7 pages -> 8 pages: page 8 is 200, then a 302 to page 7, then 200 again (never shadowed)', async () => {
+    // a stand-in for Static Assets of three builds: _redirects first (as Cloudflare applies them), then files
+    const build = (pages: number, redirects: Record<string, string>) => ({
+      fetch: async (req: Request) => {
+        const path = new URL(req.url).pathname;
+        if (redirects[path]) return new Response(null, { status: 302, headers: { location: redirects[path], 'cache-control': 'no-store' } });
+        const m = path.match(/^\/api\/v1\/atlas\/page\/([0-9]+)\.json$/);
+        const n = m ? Number(m[1]) : 0;
+        if (n >= 1 && n <= pages) {
+          return new Response(JSON.stringify({ snapshot_id: `s${pages}`, page: n, pages, has_more: n < pages, platforms: [] }), { headers: { 'content-type': 'application/json' } });
+        }
+        return new Response('not found', { status: 404, headers: { 'content-type': 'text/html' } });
+      },
+    });
+    const tool = TOOL_BY_NAME.get('atlas_list_page')!;
+    const read = (assets: unknown, page: number) => tool.atlas!({ ASSETS: assets } as any, { page }) as Promise<any>;
+    const eight = build(8, {});
+    const seven = build(7, { '/api/v1/atlas/page/8.json': '/api/v1/atlas/page/7.json' });
+    // build 1: 8 pages, page 8 is a plain page
+    expect(await read(eight, 8)).toEqual({ snapshot_id: 's8', page: 8, pages: 8, has_more: false, platforms: [] });
+    resetAtlasCache(); // a deploy starts new isolates
+    // build 2: the list shrank to 7 pages, page 8 answers 302 to page 7; the tool follows the 302 exactly as it followed a 301
+    expect(await read(seven, 8)).toMatchObject({ page: 7, pages: 7, requested_page: 8, moved_to_last_page: true, snapshot_id: 's7' });
+    // build 3: page 8 is back. No cache reset here: the answer of the redirect hop was not kept, so it cannot shadow the page
+    const back = await read(eight, 8);
+    expect(back).toEqual({ snapshot_id: 's8', page: 8, pages: 8, has_more: false, platforms: [] });
+    expect(back.moved_to_last_page).toBeUndefined();
+    // a page number that never existed is 404 page_not_found in every build
+    for (const assets of [eight, seven]) await expect(read(assets, 9)).rejects.toMatchObject({ status: 404, code: 'page_not_found' });
   });
 });

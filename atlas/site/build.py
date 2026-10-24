@@ -2919,6 +2919,15 @@ PAGED_RE = re.compile(r'^(/.*/)page/([1-9][0-9]*)/$')
 
 
 PAGED_RECORD = os.path.normpath(os.path.join(HERE, '..', 'data', 'paged-lists.json'))  # highest page ever built per list (committed)
+# Status of the redirect for a list page that existed before but is past the end now (owner decision 2026-10-24 22:19 EEST):
+# 302, temporary, because the page may come back when the list grows again, and then it must be a normal 200 page that
+# search engines index again (a 301 tells them to drop the old URL for good). Only the /page/1/ alias of a list is a 301.
+VANISHED_PAGE_STATUS = 302
+# Cache-Control of that 302: never stored, so a page that comes back is never shadowed by a remembered redirect. The Worker
+# sets it on the HTML 302s (platform/src/atlas-assets.ts); the Markdown twins and JSON pages are served by Static Assets
+# without the Worker, so _headers names each of their vanished paths (vanished_page_headers; Static Assets applies _headers
+# to _redirects responses too).
+VANISHED_PAGE_CACHE = 'no-store'
 
 
 def list_pages(site):
@@ -2952,13 +2961,15 @@ def load_paged_record(path=None):
 
 def paged_redirects(site):
     """_redirects lines for paged lists (owner decision Q8, 2026-10-24: a page number that ever existed never 404s):
-    - /page/1/ -> the list itself (page 1 is the list URL);
+    - /page/1/ -> the list itself (page 1 is the list URL), 301: permanent, page 1 is always the list URL;
     - every page number that was built before (the committed record atlas/data/paged-lists.json, and the sitemap
       baseline) but is past the last page now, because the list got shorter -> that list's last page, for the HTML page
       (/page/N/ and /page/N), its Markdown twin (/page/N/index.md) and its JSON page (/api/v1/.../page/N.json) alike;
     - a list that is gone entirely (a category split away) -> the Atlas home, its Markdown twin and JSON page 1.
-    A page number that never existed stays a plain 404 (D1)."""
-    b, V = site.base, api_v1.API_BASE
+    Vanished pages answer 302 (VANISHED_PAGE_STATUS, temporary): the page may come back. A page that exists in this build
+    (a list that grew back) gets no rule at all, so it is a normal 200 page again. A page number that never existed stays
+    a plain 404 (D1). Card URLs are never redirected here."""
+    b, V, s = site.base, api_v1.API_BASE, VANISHED_PAGE_STATUS
     lists = list_pages(site)
     ever = dict(load_paged_record())
     if os.path.exists(SITEMAP_BASELINE):
@@ -2979,9 +2990,20 @@ def paged_redirects(site):
             k, last = list_key(site, first), 0
             to_html, to_json = f'{b}/', V + api_v1.page_json(1)
         for n in range(max(last, 1) + 1, top + 1):
-            out += [f'{first}page/{n}/ {to_html} 301', f'{first}page/{n} {to_html} 301', f'{first}page/{n}/index.md {to_html}index.md 301',
-                    f'{V}{api_v1.page_json(n, k)} {to_json} 301']
+            out += [f'{first}page/{n}/ {to_html} {s}', f'{first}page/{n} {to_html} {s}', f'{first}page/{n}/index.md {to_html}index.md {s}',
+                    f'{V}{api_v1.page_json(n, k)} {to_json} {s}']
     return ''.join(x + '\n' for x in out)
+
+
+def vanished_page_headers(redirects_text):
+    """_headers rules for the static vanished-page 302s of paged_redirects() (Markdown twins and JSON pages; the HTML 302s
+    run the Worker, which sets the same header): Cache-Control: no-store on each exact path."""
+    out = []
+    for l in redirects_text.splitlines():
+        p = l.split()
+        if len(p) == 3 and p[2] == str(VANISHED_PAGE_STATUS) and p[0].endswith(('/index.md', '.json')):
+            out.append(f'{p[0]}\n  Cache-Control: {VANISHED_PAGE_CACHE}\n')
+    return ''.join(out)
 
 
 SEARCH_FORMAT = 'commonworld-atlas-search-index/3'
@@ -3525,7 +3547,7 @@ def main():
     moved = (json.load(open(red_path)).get('redirects') or {}) if os.path.exists(red_path) else {}
     write('/_redirects', ''.join(f'{old} {new} 301\n{old.rstrip("/")} {new} 301\n' for old, new, _ in old_legal if old != new)
           + ''.join(f'{old} {new} 301\n' for old, new in moved.items()) + paged_redirects(site))
-    write('/_headers', f"""{b}/assets/*
+    write('/_headers', vanished_page_headers(paged_redirects(site)) + f"""{b}/assets/*
   Cache-Control: public, max-age=604800
 {b}/og/*
   Cache-Control: public, max-age=86400
