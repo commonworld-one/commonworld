@@ -2,6 +2,11 @@
 
 Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) ships as /api/v2/, and /api/v1/ keeps working.
 
+## 1.8.0 (2026-10-24)
+
+- New paged lists: /api/v1/atlas/page/{page}.json (all entries, A to Z) and /api/v1/atlas/categories/{category}/page/{page}.json (one category, live first, then A to Z), 50 records per page, the same records as platforms.json in the order of the HTML pages /atlas/page/{page}/ and /atlas/categories/{category}/page/{page}/ (page 1 is /atlas/ and /atlas/categories/{category}/). Every page carries snapshot_id, page, per_page, pages, total, count, has_more, next, prev, first, full_list, walk_rule, url (HTML) and md_url (Markdown twin); schema platform-page.schema.json. Walk: start at page 1, follow next until has_more is false; every page of one build has the same snapshot_id, and if it changes mid-walk the list was rebuilt, so start again. A page past the last one returns 404. The full files (platforms.json, categories/{category}.json) stay complete and unchanged.
+- atlas/index.json: new counts.pages, a paging block {page_size, pages, snapshot_id, first, walk_rule}, categories[].pages and categories[].first_page, and links.page / links.category_page URL templates.
+
 ## 1.7.0 (2026-10-24)
 
 - New optional field `reachability` on every platform record (platforms.json, platforms/{id}.json, categories/{category}.json): a note on a live card whose site does not answer the way its status suggests, otherwise null. `state` is `stale` (marked live, but no read got the site's own content) or `challenge_walled` (the site is up and serves its own content, but plain scripts get a challenge page). {state, label, checked_at, reads, note, credit, reported_via}; each read {url, observed_at, http_status, bytes, page_type (own_content | challenge | error), client, by, sha256 (or null)}. A state needs two reads of the matching page type at least two hours apart, one of them by the Atlas. `status` keeps its two values (live, closed); a stale card stays live until the protocol closes it. Rules: atlas/site/reachability.py.

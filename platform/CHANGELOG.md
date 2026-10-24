@@ -2,6 +2,20 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-24 — Atlas paged lists: MCP tool atlas_list_page, noindex for filter views
+
+Not deployed yet. Built on branch `atlas/paged-list` together with the Atlas paged lists (atlas/CHANGELOG.md, owner
+decisions D1–D4 of 2026-10-24). No schema, binding or dashboard change.
+
+- **MCP `atlas_list_page`** (new, `src/mcp/tools.ts`): one page of the Atlas list from the static files
+  `/api/v1/atlas/page/{page}.json` or `/api/v1/atlas/categories/{category}/page/{page}.json` (50 records, `snapshot_id`,
+  `has_more`, `next`); a page past the last one is `404 page_not_found`. Marked untrusted output (records carry
+  third-party text). `atlas_search_platforms` and `atlas_first_tasks` are unchanged (they filter the full list).
+- **`X-Robots-Tag: noindex, follow`** on Atlas HTML opened with a filter or search query string (`q`, `category`,
+  `status`, `type`, `feature`, `tag`, `sort`; `ATLAS_FILTER_PARAMS` in `src/atlas-assets.ts`): filter views are not
+  pages of their own. Plain list pages, `/atlas/page/N/` and other query strings are unchanged.
+- Fixture build: list page files and the `/atlas/page/1/` 301. Tests in `test/atlas-assets.test.ts` and `test/mcp.test.ts`.
+
 ## 2026-10-24 — Every section move stays reachable past 100 (follow-up to #95)
 
 Not deployed yet. Built on branch `platform/post-moves-pagination`. No schema, binding or dashboard change; no migration.

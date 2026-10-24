@@ -6,6 +6,8 @@
       "url": [
         "http://127.0.0.1:8080/",
         "http://127.0.0.1:8080/atlas/",
+        "http://127.0.0.1:8080/atlas/page/2/",
+        "http://127.0.0.1:8080/atlas/categories/social/",
         "http://127.0.0.1:8080/atlas/about/",
         "http://127.0.0.1:8080/atlas/decisions/",
         "http://127.0.0.1:8080/atlas/platforms/bountybook/",

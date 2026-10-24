@@ -12,7 +12,7 @@ from cards_v2 import (BOOKS_VALUES, EACH_HAS_MAX, KEYS_BASES, KEYS_VALUES, LEVEL
                       SCHEMA_FORMATS, STEP_ACTIONS, STEP_OPTIONAL, STEPS_MAX, TEXT_MAX, URL_MAX, URL_PATTERN)
 
 API_VERSION = 'v1'
-SCHEMA_VERSION = '1.7.0'
+SCHEMA_VERSION = '1.8.0'
 API_BASE = '/api/v1'
 STATUSES = ['live', 'closed']
 ENTITY_TYPES = ['platform', 'tool_catalog', 'protocol', 'project']
@@ -23,6 +23,16 @@ UTC_PATTERN = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?Z$'  # ISO 8601 U
 
 # newest first; build.py writes changelog.json and CHANGELOG.md from this list
 CHANGELOG = [
+    {'schema_version': '1.8.0', 'date': '2026-10-24', 'changes': [
+        'New paged lists: /api/v1/atlas/page/{page}.json (all entries, A to Z) and /api/v1/atlas/categories/{category}/page/{page}.json '
+        '(one category, live first, then A to Z), 50 records per page, the same records as platforms.json in the order of the HTML pages '
+        '/atlas/page/{page}/ and /atlas/categories/{category}/page/{page}/ (page 1 is /atlas/ and /atlas/categories/{category}/). '
+        'Every page carries snapshot_id, page, per_page, pages, total, count, has_more, next, prev, first, full_list, walk_rule, url (HTML) and md_url '
+        '(Markdown twin); schema platform-page.schema.json. Walk: start at page 1, follow next until has_more is false; every page of one build '
+        'has the same snapshot_id, and if it changes mid-walk the list was rebuilt, so start again. A page past the last one returns 404. '
+        'The full files (platforms.json, categories/{category}.json) stay complete and unchanged.',
+        'atlas/index.json: new counts.pages, a paging block {page_size, pages, snapshot_id, first, walk_rule}, categories[].pages and '
+        'categories[].first_page, and links.page / links.category_page URL templates.']},
     {'schema_version': '1.7.0', 'date': '2026-10-24', 'changes': [
         'New optional field `reachability` on every platform record (platforms.json, platforms/{id}.json, categories/{category}.json): a note on a live '
         'card whose site does not answer the way its status suggests, otherwise null. `state` is `stale` (marked live, but no read got the site\'s own '
@@ -94,6 +104,19 @@ CHANGELOG = [
         'Same records as the older /atlas/*.json files, which keep working unchanged.',
         'An ID or category that does not exist returns HTTP 404 (the site\'s HTML error page, not JSON). Never construct an ID; take it from atlas/platforms.json.']},
 ]
+# Paged lists (ADR-0001, decisions D2-D4): static JSON pages of PAGE_SIZE records each, built with the site.
+# The location is still an open question (Q6): every page URL is made by page_json() below, so moving them is one edit here.
+PAGE_SIZE = 50
+PAGE_WALK_RULE = ('Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; '
+                  'if it changes between two pages, the list was rebuilt in between: start again from page 1. A page number past the last '
+                  'page returns HTTP 404.')
+
+
+def page_json(n, category=None):
+    """Path (under API_BASE) of JSON list page n (1-based): the whole Atlas, or one category."""
+    return f'/atlas/page/{n}.json' if category is None else f'/atlas/categories/{category}/page/{n}.json'
+
+
 GENERATED_AT_DESC = 'Time the source data snapshot was produced.'
 NEWEST_OBSERVATION_DESC = 'Newest observed_at of any published claim; can be later than generated_at when claims were amended after the snapshot.'
 VERSIONING = ('Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, '
@@ -295,7 +318,27 @@ def schemas(origin, categories):
                            'source': uri, 'fields_note': {'type': 'string'}, 'count': {'type': 'integer', 'minimum': 0},
                            'no_figure': {'type': 'array', 'items': {'type': 'string', 'pattern': ID_PATTERN}},
                            'rows': {'type': 'array', 'items': {'$ref': 'earn-row.schema.json'}}}}
+    nurl = {'type': ['string', 'null'], 'format': 'uri', 'pattern': '^https?://'}
+    ppage = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': S('platform-page.schema.json'),
+             'title': 'Commonworld Atlas list page',
+             'description': f'One page of {PAGE_SIZE} published entries (/api/v1/atlas/page/{{page}}.json, /api/v1/atlas/categories/{{category}}/page/{{page}}.json). '
+                            + PAGE_WALK_RULE + ' Added in schema_version 1.8.0.',
+             'type': 'object',
+             'required': ['schema_version', 'name', 'url', 'generated_at', 'licence', 'snapshot_id', 'page', 'per_page', 'pages', 'total', 'count',
+                          'has_more', 'next', 'prev', 'first', 'full_list', 'platforms'],
+             'properties': list_meta | {
+                 'md_url': uri | {'description': 'This page as Markdown.'},
+                 'snapshot_id': {'type': 'string', 'pattern': '^[0-9a-f]{16}$', 'description': 'Build id of the list: the same on every page of one build.'},
+                 'page': {'type': 'integer', 'minimum': 1}, 'per_page': {'type': 'integer', 'minimum': 1},
+                 'pages': {'type': 'integer', 'minimum': 1}, 'total': {'type': 'integer', 'minimum': 0},
+                 'has_more': {'type': 'boolean', 'description': 'true when a next page exists.'},
+                 'next': nurl | {'description': 'URL of the next page, or null on the last page.'},
+                 'prev': nurl | {'description': 'URL of the previous page, or null on page 1.'},
+                 'first': uri, 'full_list': uri | {'description': 'The complete list in one file (platforms.json or the category file).'},
+                 'walk_rule': {'type': 'string'},
+                 'category': {'enum': categories}, 'category_label': {'type': 'string'}}}
     return {'platform.schema.json': platform, 'platform-list.schema.json': plist, 'category.schema.json': category,
+            'platform-page.schema.json': ppage,
             'earn-row.schema.json': earn_row, 'earn.schema.json': earn}
 
 
@@ -308,6 +351,9 @@ def openapi(origin, categories, example_ids, docs_url, licence):
            'schema': {'type': 'string', 'pattern': ID_PATTERN}, 'examples': {x: {'value': x} for x in example_ids}}
     catp = {'name': 'category', 'in': 'path', 'required': True, 'description': 'Category key, as listed in atlas/index.json.',
             'schema': {'type': 'string', 'enum': categories}}
+    pagep = {'name': 'page', 'in': 'path', 'required': True,
+             'description': 'Page number, 1-based. The number of pages is in atlas/index.json (counts.pages, categories[].pages) and in every page (pages).',
+             'schema': {'type': 'integer', 'minimum': 1}}
     return {
         'openapi': '3.1.0',
         'info': {'title': 'Commonworld Atlas API', 'version': SCHEMA_VERSION,
@@ -336,17 +382,29 @@ def openapi(origin, categories, example_ids, docs_url, licence):
                                                    'responses': js('./schemas/platform.schema.json', 'One entry') | {'404': {'description': 'No entry with this ID'}}}},
             '/atlas/categories/{category}.json': {'get': {'tags': ['atlas'], 'operationId': 'listCategory', 'summary': 'Entries of one category', 'parameters': [catp],
                                                           'responses': js('./schemas/category.schema.json', 'Entries of one category') | {'404': {'description': 'No such category'}}}},
+            '/atlas/page/{page}.json': {'get': {'tags': ['atlas'], 'operationId': 'listPlatformsPage',
+                                                'summary': f'One page of {PAGE_SIZE} entries, A to Z (snapshot_id, has_more, next)', 'description': PAGE_WALK_RULE,
+                                                'parameters': [pagep],
+                                                'responses': js('./schemas/platform-page.schema.json', 'One list page') | {'404': {'description': 'No such page'}}}},
+            '/atlas/categories/{category}/page/{page}.json': {'get': {'tags': ['atlas'], 'operationId': 'listCategoryPage',
+                                                                      'summary': f'One page of {PAGE_SIZE} entries of one category, live first', 'description': PAGE_WALK_RULE,
+                                                                      'parameters': [catp, pagep],
+                                                                      'responses': js('./schemas/platform-page.schema.json', 'One category list page') | {'404': {'description': 'No such category or page'}}}},
             '/atlas/earn.json': {'get': {'tags': ['atlas'], 'operationId': 'getEarn', 'summary': 'Where agents get paid: money figures grouped by unit',
                                          'responses': js('./schemas/earn.schema.json', 'Money figures by unit')}},
         },
     }
 
 
-def expand_paths(spec, ids, categories):
-    """Every concrete file path (under API_BASE) the OpenAPI spec promises."""
-    out = []
+def expand_paths(spec, ids, categories, pages=None):
+    """Every concrete file path (under API_BASE) the OpenAPI spec promises. pages: {None: pages of the whole list,
+    category: pages of that category} (from atlas/index.json)."""
+    out, pages = [], pages or {}
     for p in spec['paths']:
-        if '{id}' in p:
+        if '{page}' in p:
+            for k in ([c for c in categories] if '{category}' in p else [None]):
+                out += [(p.replace('{category}', k) if k else p).replace('{page}', str(n)) for n in range(1, pages.get(k, 1) + 1)]
+        elif '{id}' in p:
             out += [p.replace('{id}', i) for i in ids]
         elif '{category}' in p:
             out += [p.replace('{category}', k) for k in categories]

@@ -23,6 +23,8 @@ import json  # noqa: E402
 _SNAP = json.load(open(os.path.join(HERE, '..', 'dist', 'atlas', 'data', 'snapshot.json')))['platforms']  # counts follow the built data
 N_ALL, N_CLOSED = len(_SNAP), sum(1 for c in _SNAP if c.get('status') == 'closed')
 N_PAY = sum(1 for c in _SNAP if c.get('category') == 'payments')
+PAGE_SIZE = 50  # cards per list page (D4)
+N_PAGE1, N_PAGES = min(PAGE_SIZE, N_ALL), max(1, -(-N_ALL // PAGE_SIZE))
 PRODUCT = json.load(open(os.path.join(HERE, '..', 'site-config.json')))['site'].get('product_url') or '/'
 from playwright.sync_api import sync_playwright  # noqa: E402
 
@@ -47,6 +49,8 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 op = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect)
 for url, code in [('/atlas/nope/', 404), ('/atlas/about', 301), ('/atlas/about/', 200), ('/atlas/data/search-index.json', 200),
                   ('/privacy', 301), ('/privacy/', 200), ('/terms/', 200), ('/atlas/privacy/', 200), ('/atlas/terms/', 200), ('/sitemap.xml', 200), ('/', 200), ('/about/', 200), ('/about', 301),
+                  ('/atlas/page/2/', 200), ('/atlas/page/1/', 301), ('/atlas/page/1', 301), (f'/atlas/page/{N_PAGES + 1}/', 404), ('/atlas/page/0/', 404),
+                  ('/atlas/index.md', 200), ('/atlas/page/2/index.md', 200), ('/api/v1/atlas/page/1.json', 200), (f'/api/v1/atlas/page/{N_PAGES + 1}.json', 404),
                   ('/api/v1/index.json', 200), ('/api/v1/openapi.json', 200), ('/api/v1/atlas/platforms/bountybook.json', 200), ('/api/v1/atlas/platforms/nope.json', 404), ('/atlas/api/', 200)]:
     try:
         r = op.open(B + url); got = r.status
@@ -123,17 +127,24 @@ with sync_playwright() as p:
     pg.click('.cw-announce-x'); pg.reload()
     check('announcement dismissed and remembered', not pg.is_visible('.cw-announce'))
 
-    # catalog
+    # catalog: /atlas/ is page 1 of the list (50 cards + pager); search, filters, sort and counters run on the whole Atlas
     v, a, good = pg.evaluate(ADS_OK)
-    check(f'all {v} cards, {a} native ads after every 12', v == N_ALL and good)
+    check(f'page 1 shows {v} cards (of {N_ALL}), {a} native ads after every 12', v == N_PAGE1 and good)
+    check(f'pager shown on page 1 (page 1 of {N_PAGES})', N_PAGES == 1 or (pg.is_visible('#pager') and f'Page 1 of {N_PAGES}' in pg.inner_text('#pager')))
+    check('index not fetched before the first interaction', pg.evaluate("document.getElementById('catalog').dataset.index") is None)
     check('hint line shown', 'Tags combine with AND.' in pg.inner_text('#active'))
-    pg.fill('#q', 'termix'); pg.wait_for_timeout(250)
+    pg.fill('#q', 'termix')
+    check('search index loaded on first use', wait_js(pg, "document.getElementById('catalog').dataset.index === 'loaded'"))
+    pg.wait_for_timeout(250)
     n = pg.evaluate(VIS)
     check(f'search "termix" ({n})', 1 <= n <= 3)
+    check('pager hidden while searching, page noindex', not pg.is_visible('#pager') and pg.get_attribute('meta[name="robots"]', 'content') == 'noindex,follow')
     pg.fill('#q', 'Lightning sats'); pg.wait_for_timeout(600)
     n = pg.evaluate(VIS)
     check(f'search reaches claim statements ("Lightning sats" -> {n})', n >= 1 and pg.evaluate("!document.querySelector('[data-slug=\"the-colony\"]').hidden"))
     pg.fill('#q', ''); pg.wait_for_timeout(250)
+    check(f'empty search: back to page 1 ({pg.evaluate(VIS)} cards, pager, indexable)', pg.evaluate(VIS) == N_PAGE1 and (N_PAGES == 1 or pg.is_visible('#pager'))
+          and pg.get_attribute('meta[name="robots"]', 'content').startswith('index,follow'))
     pg.click('[data-f-status="closed"]')
     n = pg.evaluate(VIS)
     check(f'status chip closed -> {N_CLOSED} ({n})', n == N_CLOSED)
@@ -170,8 +181,21 @@ with sync_playwright() as p:
     first = pg.evaluate("+document.querySelector('#grid .cw-card[data-slug]:not([hidden])').dataset.claims")
     mx = pg.evaluate("Math.max(...Array.from(document.querySelectorAll('#grid .cw-card[data-slug]')).map(c=>+c.dataset.claims))")
     check('sort by most claims', first == mx)
+    pg.select_option('#f-sort', 'name'); pg.click('#f-reset')
+    check(f'reset + default sort: page 1 again ({pg.evaluate(VIS)} cards)', pg.evaluate(VIS) == N_PAGE1 and pg.inner_text('#list-count').startswith('Showing 1–'))
     pg.goto(B + '/atlas/?status=closed&type=platform&q=x')
+    wait_js(pg, "document.getElementById('catalog').dataset.index === 'loaded'"); pg.wait_for_timeout(200)
     check('state restored from URL', pg.evaluate(VIS) <= N_CLOSED and pg.input_value('#q') == 'x')
+
+    # page 2 of the list: plain static page, its own 50 cards, prev/next links, self-canonical
+    if N_PAGES > 1:
+        pg.goto(B + '/atlas/page/2/')
+        n2 = pg.locator('main .cw-grid .cw-card:not(.cw-adcard)').count()
+        check(f'/atlas/page/2/: {n2} cards, canonical self, rel=prev to /atlas/', 0 < n2 <= PAGE_SIZE
+              and pg.get_attribute('link[rel="canonical"]', 'href') == 'https://commonworld.one/atlas/page/2/'
+              and pg.get_attribute('link[rel="prev"]', 'href') == '/atlas/' and pg.get_attribute('.cw-pager a[rel="prev"]', 'href') == '/atlas/')
+        pg.click('.cw-pager a[rel="prev"]'); pg.wait_for_url('**/atlas/')
+        check('pager "Previous" on page 2 opens /atlas/', pg.url.endswith('/atlas/'))
 
     # share buttons (platform page): placement, links, copy via keyboard, GA4 'share' event only with consent, native share
     SHARE_EVT = "(m) => (window.dataLayer||[]).some(a => a && a[0]==='event' && a[1]==='share' && (!m || (a[2]||{}).method===m))"

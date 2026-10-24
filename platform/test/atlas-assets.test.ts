@@ -66,6 +66,7 @@ describe('A3 routing contract (wrangler.toml run_worker_first)', () => {
     for (const p of ['/atlas/assets/atlas.css', '/atlas/assets/cw-components.js', '/atlas/assets/favicon.ico', '/atlas/og/1f916.png', '/atlas/screens/1f916.webp',
       '/atlas/screens/index.json', '/atlas/badge/1f916.svg', '/atlas/badge/', '/atlas/data/claims.json', '/atlas/platforms/1f916.json', '/atlas/categories/social.json',
       '/atlas/platforms.json', '/atlas/earn.json', '/atlas/decisions.json', '/atlas/llms.txt', '/atlas/sitemap.xml', '/atlas/decisions/index.md', '/atlas/events.md', '/atlas/platforms/1f916/index.md', '/atlas/categories/social/index.md', '/atlas/events.json', '/stats.json',
+      '/atlas/index.md', '/atlas/page/2/index.md', '/atlas/categories/social/page/2/index.md', '/api/v1/atlas/page/1.json', '/api/v1/atlas/categories/social/page/2.json',
       '/stats/index.md', '/about/index.md', '/privacy/index.md', '/terms/index.md', '/api/v1/index.json', '/api/v1/openapi.json', '/api/v1/CHANGELOG.md', '/api/v1/schemas/platform.schema.json', '/.well-known/security.txt']) {
       expect(runsWorkerFirst(p), p).toBe(false);
     }
@@ -74,7 +75,7 @@ describe('A3 routing contract (wrangler.toml run_worker_first)', () => {
   it('v1 and the Atlas HTML pages run the Worker first', () => {
     for (const p of ['/', '/porch', '/sections', '/s/general', '/posts/1', '/c/someone', '/search', '/login', '/admin', '/v1/catalog', '/health', '/assets/ssr.css',
       '/favicon.ico', '/robots.txt', '/sitemap.xml', '/sitemap-v1.xml', '/llms.txt', '/llms-full.txt', '/openapi.json', '/porch.md',
-      '/atlas', '/atlas/', '/atlas/platforms/1f916/', '/atlas/categories/social/', '/atlas/earn/', '/atlas/decisions/', '/atlas/about/', '/atlas/privacy/',
+      '/atlas', '/atlas/', '/atlas/page/2/', '/atlas/categories/social/page/3/', '/atlas/platforms/1f916/', '/atlas/categories/social/', '/atlas/earn/', '/atlas/decisions/', '/atlas/about/', '/atlas/privacy/',
       '/privacy/', '/terms/', '/about/', '/stats/', '/404.html', '/0123456789abcdef0123456789abcdef.txt']) {
       expect(runsWorkerFirst(p), p).toBe(true);
     }
@@ -157,6 +158,27 @@ describe('A3: the Atlas from Static Assets (ATLAS_SOURCE=assets)', () => {
     const old = await call('/atlas/privacy/');
     expect(old.status).toBe(301);
     expect(old.headers.get('location')).toBe('/privacy/');
+    // paged lists: page 1 is the list itself (_redirects 301), a page past the last one is a plain 404
+    const p1 = await call('/atlas/page/1/');
+    expect(p1.status).toBe(301);
+    expect(p1.headers.get('location')).toBe('/atlas/');
+    expect((await call('/atlas/page/2/')).status).toBe(200);
+    expect((await call('/atlas/page/99/')).status).toBe(404);
+  });
+
+  it('filter and search views of Atlas pages are noindex (X-Robots-Tag); plain list pages and other query strings are not (D1)', async () => {
+    noNetwork();
+    for (const q of ['?tag=x402', '?q=mcp', '?category=social&status=live', '?sort=claims', '?feature=money', '?type=platform']) {
+      const r = await call('/atlas/' + q);
+      expect(r.status, q).toBe(200);
+      expect(r.headers.get('x-robots-tag'), q).toBe('noindex, follow');
+    }
+    expect((await call('/atlas/page/2/?tag=x402')).headers.get('x-robots-tag')).toBe('noindex, follow');
+    expect((await call('/atlas/')).headers.get('x-robots-tag')).toBeNull();
+    expect((await call('/atlas/page/2/')).headers.get('x-robots-tag')).toBeNull();
+    expect((await call('/atlas/?utm_source=x')).headers.get('x-robots-tag')).toBeNull();
+    expect((await call('/api/v1/atlas/page/1.json?q=x')).headers.get('x-robots-tag')).toBeNull(); // JSON, not a page
+    expect((await call('/atlas/?tag=x402', { ...VARS, PAGES_NOINDEX: '1' })).headers.get('x-robots-tag')).toBe('noindex, nofollow');
   });
 
   it('Worker-owned Atlas files (IndexNow key, security.txt, static API) still answer if they reach the Worker', async () => {

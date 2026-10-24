@@ -1,0 +1,181 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://commonworld.one/api/v1/schemas/platform-page.schema.json",
+ "title": "Commonworld Atlas list page",
+ "description": "One page of 50 published entries (/api/v1/atlas/page/{page}.json, /api/v1/atlas/categories/{category}/page/{page}.json). Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. A page number past the last page returns HTTP 404. Added in schema_version 1.8.0.",
+ "type": "object",
+ "required": [
+  "schema_version",
+  "name",
+  "url",
+  "generated_at",
+  "licence",
+  "snapshot_id",
+  "page",
+  "per_page",
+  "pages",
+  "total",
+  "count",
+  "has_more",
+  "next",
+  "prev",
+  "first",
+  "full_list",
+  "platforms"
+ ],
+ "properties": {
+  "schema_version": {
+   "type": "string"
+  },
+  "name": {
+   "type": "string"
+  },
+  "description": {
+   "type": "string"
+  },
+  "url": {
+   "type": "string",
+   "format": "uri",
+   "pattern": "^https?://"
+  },
+  "generated_at": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
+   "format": "date-time",
+   "description": "Time the source data snapshot was produced."
+  },
+  "newest_observation": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
+   "format": "date-time",
+   "description": "Newest observed_at of any published claim; can be later than generated_at when claims were amended after the snapshot."
+  },
+  "licence": {
+   "type": "string"
+  },
+  "licence_url": {
+   "type": "string",
+   "format": "uri",
+   "pattern": "^https?://"
+  },
+  "source": {
+   "type": "string",
+   "format": "uri",
+   "pattern": "^https?://"
+  },
+  "corrections": {
+   "type": "string",
+   "format": "uri",
+   "pattern": "^https?://"
+  },
+  "protocol": {
+   "type": "string",
+   "format": "uri",
+   "pattern": "^https?://"
+  },
+  "full_data": {
+   "type": "string",
+   "format": "uri",
+   "pattern": "^https?://"
+  },
+  "count": {
+   "type": "integer",
+   "minimum": 0
+  },
+  "fields_note": {
+   "type": "string"
+  },
+  "platforms": {
+   "type": "array",
+   "items": {
+    "$ref": "platform.schema.json#/$defs/platformSummary"
+   }
+  },
+  "md_url": {
+   "type": "string",
+   "format": "uri",
+   "pattern": "^https?://",
+   "description": "This page as Markdown."
+  },
+  "snapshot_id": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{16}$",
+   "description": "Build id of the list: the same on every page of one build."
+  },
+  "page": {
+   "type": "integer",
+   "minimum": 1
+  },
+  "per_page": {
+   "type": "integer",
+   "minimum": 1
+  },
+  "pages": {
+   "type": "integer",
+   "minimum": 1
+  },
+  "total": {
+   "type": "integer",
+   "minimum": 0
+  },
+  "has_more": {
+   "type": "boolean",
+   "description": "true when a next page exists."
+  },
+  "next": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "format": "uri",
+   "pattern": "^https?://",
+   "description": "URL of the next page, or null on the last page."
+  },
+  "prev": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "format": "uri",
+   "pattern": "^https?://",
+   "description": "URL of the previous page, or null on page 1."
+  },
+  "first": {
+   "type": "string",
+   "format": "uri",
+   "pattern": "^https?://"
+  },
+  "full_list": {
+   "type": "string",
+   "format": "uri",
+   "pattern": "^https?://",
+   "description": "The complete list in one file (platforms.json or the category file)."
+  },
+  "walk_rule": {
+   "type": "string"
+  },
+  "category": {
+   "enum": [
+    "social",
+    "worlds",
+    "work",
+    "payments",
+    "research",
+    "verification",
+    "arenas",
+    "registries",
+    "wiki",
+    "projects"
+   ]
+  },
+  "category_label": {
+   "type": "string"
+  }
+ }
+}

@@ -56,6 +56,19 @@ export function runsWorkerFirst(path: string, patterns: readonly string[] = ATLA
   return pos.some((p) => re(p).test(path)) && !neg.some((p) => re(p).test(path));
 }
 
+/**
+ * Query parameters of the Atlas catalog's filter and search views (atlas/site/static/atlas.js keeps them in the URL; same list
+ * in atlas/site/serve.py). Owner decision D1 (2026-10-24): paged list pages are indexable and self-canonical, filter and search
+ * views are noindex. The views are the same static file as the plain list, so the noindex travels as a response header.
+ */
+export const ATLAS_FILTER_PARAMS: readonly string[] = ['q', 'category', 'status', 'type', 'feature', 'tag', 'sort'];
+
+/** True for an Atlas URL that opens a filter or search view (any of ATLAS_FILTER_PARAMS in the query string). */
+export function isAtlasFilterView(url: URL): boolean {
+  for (const k of url.searchParams.keys()) if (ATLAS_FILTER_PARAMS.includes(k)) return true;
+  return false;
+}
+
 export const atlasAssetsOn = (env: Env): boolean => env.ATLAS_SOURCE === 'assets' && !!env.ASSETS;
 
 const MARK = "script-src 'self'";
@@ -104,6 +117,7 @@ export async function serveAtlasAsset(request: Request, env: Env, url: URL): Pro
   out.headers.delete('set-cookie');
   out.headers.set('x-cw-upstream', 'atlas-assets');
   if (env.PAGES_NOINDEX === '1') out.headers.set('x-robots-tag', 'noindex, nofollow');
+  else if (isAtlasFilterView(url) && (out.headers.get('content-type') || '').startsWith('text/html')) out.headers.set('x-robots-tag', 'noindex, follow');
   return withAtlasNonce(out);
 }
 

@@ -244,6 +244,14 @@ export const ATLAS_TOOLS: ToolDef[] = [
       const offset = num(a.offset, 0);
       return { total: res.total, offset, limit: num(a.limit, 20), next_offset: offset + res.items.length < res.total ? offset + res.items.length : null, items: res.items, generated_at: list.generated_at, licence: list.licence };
     }),
+  atlasTool('atlas_list_page', 'Atlas list, one page',
+    'One page of the Atlas list as published: 50 platform records per page, A to Z (or one category, live first), the same records and order as the pages /atlas/page/N/. '
+    + 'Each page carries snapshot_id, page, pages, total, has_more and next. To read the whole list: start at page 1 and ask for page + 1 while has_more is true; '
+    + 'every page of one build has the same snapshot_id, and if it changes during the walk the list was rebuilt, so start again from page 1. A page past the last one is 404 page_not_found.',
+    '/api/v1/atlas/page/{page}.json', {
+      page: { type: 'integer', minimum: 1, maximum: 10000, description: 'Page number, 1-based (default 1).' },
+      category: { ...category, description: 'Optional: one category id from atlas_list_categories; omit for the whole Atlas.' },
+    }, [], async (env, a) => readAtlasJson(env, ATLAS_FILES.page(num(a.page, 1), str(a.category)), 'page_not_found'), true),
   atlasTool('atlas_get_platform', 'Atlas platform card',
     'The full card of one platform: every claim with statement, value, basis, source_url, quote and observed_at, plus money flow, evidence level, first task and badge links.',
     '/api/v1/atlas/platforms/{id}.json', { id: { type: 'string', pattern: ATLAS_ID.source, description: 'Permanent platform id (slug) from atlas_search_platforms.' } }, ['id'],

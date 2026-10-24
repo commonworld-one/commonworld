@@ -243,3 +243,14 @@
 .task-steps { margin:6px 0 8px; padding-left:20px; font-size:14px; line-height:1.55; overflow-wrap:anywhere; }
 .task-done { font-size:14px; margin:0 0 8px; }
 @media (max-width:760px) { .v2-grid { grid-template-columns:1fr; } .kb-row { grid-template-columns:1fr; gap:0; } }
+
+/* paged lists (/atlas/, /atlas/page/N/, category pages): plain links, work without JS; 24x24 px tap targets at least */
+.cw-pager { display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; margin:22px 0 6px; font-size:14px; }
+.cw-pager-info { color:var(--muted); margin-right:auto; }
+.cw-pager ol { display:flex; flex-wrap:wrap; gap:6px; list-style:none; margin:0; padding:0; }
+.cw-pager li.gap { color:var(--muted); padding:0 2px; line-height:34px; }
+.cw-pager a, .cw-pager-step { display:inline-flex; align-items:center; justify-content:center; min-width:34px; min-height:34px; padding:0 10px; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); text-decoration:none; }
+.cw-pager a:hover { border-color:var(--ink); }
+.cw-pager a[aria-current="page"] { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.cw-pager .is-off { color:var(--muted); }
+.cw-pager[hidden], .cw-more[hidden] { display:none; }

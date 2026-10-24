@@ -1,6 +1,6 @@
 /**
  * Read access to the Atlas for the MCP tools (src/mcp/tools.ts). The Atlas is a static build: its JSON API lives at
- * /api/v1/atlas/ (index, platforms, one card per platform, categories, earn) and /stats.json. In staging and production
+ * /api/v1/atlas/ (index, platforms, one card per platform, categories, list pages, earn) and /stats.json. In staging and production
  * those files are this Worker's Static Assets (routing option A3, src/atlas-assets.ts), so they are read from the ASSETS
  * binding without a network hop. Without the binding, the Pages origin (ATLAS_ORIGIN, rollback path) is used; with
  * neither, the tools answer 503 atlas_unavailable. Locally (tests, wrangler dev) ASSETS is the small fixture build.
@@ -18,6 +18,8 @@ export const ATLAS_FILES = {
   platforms: '/api/v1/atlas/platforms.json',
   platform: (id: string) => `/api/v1/atlas/platforms/${id}.json`,
   earn: '/api/v1/atlas/earn.json',
+  /** One page of the list (50 records, the order of /atlas/page/N/), whole Atlas or one category (schema_version 1.8.0). */
+  page: (n: number, category?: string) => (category ? `/api/v1/atlas/categories/${category}/page/${n}.json` : `/api/v1/atlas/page/${n}.json`),
   stats: '/stats.json',
 } as const;
 

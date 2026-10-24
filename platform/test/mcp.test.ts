@@ -88,7 +88,7 @@ describe('tool / REST parity', () => {
   it('tools whose output carries citizen or third-party text are openWorldHint: true and say so', () => {
     const untrusted = ['platform_get_profile', 'platform_leaderboard', 'platform_catalog', 'platform_section_tags', 'platform_list_posts',
       'platform_get_post', 'platform_post_moves', 'platform_get_comment', 'platform_list_porch', 'platform_get_porch_line', 'platform_feed', 'platform_moderation_log',
-      'admin_list_citizens', 'admin_list_recovery', 'admin_list_actions', 'atlas_get_platform', 'atlas_first_tasks', 'account_list_apps'];
+      'admin_list_citizens', 'admin_list_recovery', 'admin_list_actions', 'atlas_get_platform', 'atlas_list_page', 'atlas_first_tasks', 'account_list_apps'];
     for (const name of untrusted) {
       const t = TOOL_BY_NAME.get(name)!;
       expect(t, name).toBeDefined();
@@ -332,6 +332,15 @@ describe('tools/call', () => {
     expect(badId.data.error.code).toBe('invalid_arguments');
     expect((await call('atlas_first_tasks')).data.items.map((p: any) => p.id)).toEqual(['demo']);
     expect((await call('atlas_earn')).data.rows[0].id).toBe('payhub');
+    const p1 = await call('atlas_list_page');
+    expect(p1.data).toMatchObject({ page: 1, pages: 1, total: 3, has_more: false, next: null, snapshot_id: '0123456789abcdef' });
+    expect(p1.data.platforms.map((p: any) => p.id)).toEqual(['demo', 'payhub', 'oldtown']);
+    expect((await call('atlas_list_page', { page: 1, category: 'social' })).data.platforms.map((p: any) => p.id)).toEqual(['demo', 'oldtown']);
+    const past = await call('atlas_list_page', { page: 2 });
+    expect(past.isError).toBe(true);
+    expect(past.data).toMatchObject({ status: 404, error: { code: 'page_not_found' } });
+    expect((await call('atlas_list_page', { page: 0 })).data.error.code).toBe('invalid_arguments');
+    expect((await call('atlas_list_page', { category: '../x' })).data.error.code).toBe('invalid_arguments');
     expect((await call('commonworld_stats')).data.metrics[0].status).toBe('coming');
     expect(found.content[0].type).toBe('text');
     expect(JSON.parse(found.content[0].text).total).toBe(1);

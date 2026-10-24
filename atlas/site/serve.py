@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Local preview server for the built Atlas (stdlib only). Mimics the live static serving (Workers Static Assets in the platform Worker, same rules as the legacy Cloudflare Pages build):
-clean directory URLs, /atlas/x -> 301 /atlas/x/, real 404 status with /404.html, / serves the Commonworld landing (dist/index.html).
+clean directory URLs, /atlas/x -> 301 /atlas/x/, real 404 status with /404.html, / serves the Commonworld landing (dist/index.html),
+301s from dist/_redirects for paths that have no file (e.g. /atlas/page/1/ -> /atlas/), and X-Robots-Tag: noindex on Atlas
+HTML pages opened with a filter or search query string (as the platform Worker sends).
 Sends the site-wide security headers from dist/_headers (the `/*` block: CSP, Permissions-Policy, ...) so a local
 browser runs under the same strict CSP as production (minus HSTS and upgrade-insecure-requests, which need https).
 
@@ -33,6 +35,16 @@ def site_headers():
 
 
 GZ_EXT = ('.html', '.css', '.js', '.json', '.svg', '.xml', '.txt', '.md')
+FILTER_PARAMS = ('q', 'category', 'status', 'type', 'feature', 'tag', 'sort')  # same list as platform/src/atlas-assets.ts ATLAS_FILTER_PARAMS
+
+
+def redirects():
+    """{path: target} from the 301 lines of dist/_redirects."""
+    try:
+        lines = open(os.path.join(DIST, '_redirects'), encoding='utf-8').read().splitlines()
+    except OSError:
+        return {}
+    return {p[0]: p[1] for p in (l.split() for l in lines) if len(p) == 3 and p[2] == '301'}
 
 
 class H(http.server.SimpleHTTPRequestHandler):
@@ -42,6 +54,12 @@ class H(http.server.SimpleHTTPRequestHandler):
     def send_head(self):
         path = self.path.split('?', 1)[0].split('#', 1)[0]
         fs = self.translate_path(path)
+        self._noindex = False
+        if not os.path.exists(fs) and path in redirects():
+            return self._redirect(redirects()[path], 301)
+        query = self.path[len(path):].lstrip('?')
+        if query and any(kv.split('=', 1)[0] in FILTER_PARAMS for kv in query.split('&')):
+            self._noindex = True
         if os.path.isdir(fs) and not path.endswith('/'):
             q = self.path[len(path):]
             return self._redirect(path + '/' + q, 301)
@@ -75,6 +93,8 @@ class H(http.server.SimpleHTTPRequestHandler):
 
     def end_headers(self):
         self.send_header('Cache-Control', 'no-cache')
+        if getattr(self, '_noindex', False):
+            self.send_header('X-Robots-Tag', 'noindex')
         for k, v in site_headers():
             self.send_header(k, v)
         super().end_headers()
