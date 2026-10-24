@@ -106,7 +106,7 @@
   "snapshot_id": {
    "type": "string",
    "pattern": "^[0-9a-f]{16}$",
-   "description": "Build id of the list: the same on every page of one build."
+   "description": "Id of the published list: the same on every page of one build; it changes when an entry is added, removed or changed, not with the daily link-safety check or a new screenshot."
   },
   "page": {
    "type": "integer",

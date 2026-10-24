@@ -78,6 +78,22 @@ class Helpers(unittest.TestCase):
                                '/atlas/categories/social/page/2.json', '/atlas/categories/wiki/page/1.json', '/atlas/platforms/a.json'])
 
 
+class SnapshotId(unittest.TestCase):
+    REC = [{'id': 'a', 'name': 'A', 'link_safety': {'status': 'clean', 'checked_at': '2026-10-24T00:00:00Z'}, 'preview': None},
+           {'id': 'b', 'name': 'B', 'link_safety': {'status': 'clean', 'checked_at': '2026-10-24T00:00:00Z'}, 'preview': None}]
+
+    def test_stable_across_daily_link_check_and_screenshots(self):
+        # the id is in the committed GitHub mirror: a daily link-safety report or a new screenshot must not change it (Codex review of #107)
+        later = [r | {'link_safety': {'status': 'clean', 'checked_at': '2026-10-25T00:00:00Z'}, 'preview': {'path': '/atlas/screens/a.webp'}} for r in self.REC]
+        self.assertEqual(build.snapshot_id_of(self.REC), build.snapshot_id_of(later))
+
+    def test_changes_with_the_list(self):
+        sid = build.snapshot_id_of(self.REC)
+        self.assertRegex(sid, r'^[0-9a-f]{16}$')
+        self.assertNotEqual(sid, build.snapshot_id_of(self.REC[:1]))
+        self.assertNotEqual(sid, build.snapshot_id_of([self.REC[0] | {'name': 'A2'}, self.REC[1]]))
+
+
 class Redirects(unittest.TestCase):
     def run_with_baseline(self, site, urls):
         with tempfile.NamedTemporaryFile('w', suffix='.txt', delete=False) as f:

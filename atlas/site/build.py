@@ -2602,15 +2602,19 @@ MIRROR_DIR = os.path.normpath(os.path.join(HERE, '..', 'public'))
 RAW_BASE = 'https://raw.githubusercontent.com/commonworld-one/commonworld/main/atlas/public'
 
 
+MIRROR_DROP = ('preview', 'link_safety')  # fields that change outside main (screenshots branch, daily link check)
+
+
 def _mirror_json(src, dst, indent):
-    """Copy one agent JSON file into the mirror without the `preview` field: screenshots live on the orphan branch
-    atlas-screens, so keeping the field here would make the committed mirror stale whenever that branch moves."""
+    """Copy one agent JSON file into the mirror without the `preview` and `link_safety` fields: screenshots live on the
+    orphan branch atlas-screens and link safety changes with every daily check, so keeping them here would make the
+    committed mirror stale whenever that branch moves or the daily report is committed."""
     doc = json.load(open(src, encoding='utf-8'))
-    doc.pop('preview', None)
-    doc.pop('link_safety', None)
+    for k in MIRROR_DROP:
+        doc.pop(k, None)
     for r in doc.get('platforms') or []:
-        r.pop('preview', None)
-        r.pop('link_safety', None)
+        for k in MIRROR_DROP:
+            r.pop(k, None)
     txt = json.dumps(doc, ensure_ascii=False, indent=1) if indent else json.dumps(doc, ensure_ascii=False, separators=(',', ':'))
     with open(dst, 'w', encoding='utf-8') as fh:
         fh.write(txt + '\n')
@@ -2869,9 +2873,14 @@ def search_index(site):
 
 
 def snapshot_id_of(recs):
-    """Build id of the published list: the same records give the same id (reproducible builds), any change gives a new one."""
+    """Build id of the published list: the same records give the same id (reproducible builds); any change to the list
+    (an entry added, removed or renamed, so pages shift) or to a card's own fields gives a new one. The fields in
+    MIRROR_DROP (`preview`, `link_safety`) are left out: they change outside main (screenshots branch, daily link check),
+    never move an entry to another page, and the id is also in the committed GitHub mirror (api/v1/atlas/index.json),
+    which must not go stale with every daily report (Codex review of #107)."""
     import hashlib
-    return hashlib.sha256(json.dumps(recs, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()).hexdigest()[:16]
+    stable = [{k: v for k, v in r.items() if k not in MIRROR_DROP} for r in recs]
+    return hashlib.sha256(json.dumps(stable, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()).hexdigest()[:16]
 
 
 # ---------------------------------------------------------------- static API v1 (/api/v1/)

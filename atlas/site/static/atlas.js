@@ -53,7 +53,7 @@
       if (!TOTAL) TOTAL = out.length;
       root.setAttribute('data-index', 'loaded');
       return true;
-    }).catch(function () { root.setAttribute('data-index', 'failed'); return false; });
+    }).catch(function () { root.setAttribute('data-index', 'failed'); loading = null; return false; });  // next interaction retries
     return loading;
   }
   function isDefault() {
@@ -235,9 +235,16 @@
   }
 
   // every change goes through run(): the whole Atlas is loaded first when the new view needs it
+  // when the whole Atlas cannot be loaded, filters are not applied to this page's 50 cards alone (that would hide matches):
+  // the page stays as it is and says so; the next interaction tries again
   function run(push) {
     if (isDefault() || allCards) { apply(push); return; }
-    loadAll().then(function () { apply(push); });
+    loadAll().then(function (ok) {
+      if (ok) { apply(push); return; }
+      var el = document.getElementById('active');
+      activeHTML = null;
+      el.innerHTML = '<span role="alert">Search and filters need the full list, which could not be loaded. Check your connection and try again.</span>';
+    });
   }
 
   function toggle(set, k) { set.has(k) ? set.delete(k) : set.add(k); }

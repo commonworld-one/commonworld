@@ -328,7 +328,8 @@ def schemas(origin, categories):
                           'has_more', 'next', 'prev', 'first', 'full_list', 'platforms'],
              'properties': list_meta | {
                  'md_url': uri | {'description': 'This page as Markdown.'},
-                 'snapshot_id': {'type': 'string', 'pattern': '^[0-9a-f]{16}$', 'description': 'Build id of the list: the same on every page of one build.'},
+                 'snapshot_id': {'type': 'string', 'pattern': '^[0-9a-f]{16}$', 'description': 'Id of the published list: the same on every page of one build; '
+                                 'it changes when an entry is added, removed or changed, not with the daily link-safety check or a new screenshot.'},
                  'page': {'type': 'integer', 'minimum': 1}, 'per_page': {'type': 'integer', 'minimum': 1},
                  'pages': {'type': 'integer', 'minimum': 1}, 'total': {'type': 'integer', 'minimum': 0},
                  'has_more': {'type': 'boolean', 'description': 'true when a next page exists.'},
