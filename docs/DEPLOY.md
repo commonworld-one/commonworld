@@ -17,11 +17,29 @@ fallback with automatic deployments off (see the cutover section below).
 | Address | `staging.commonworld.one` | `commonworld.one` (and `www`) |
 | Worker | `commonworld-api-staging` | `commonworld-api` |
 | Database (D1) | `commonworld-staging` | `commonworld-prod` |
-| Who deploys | the maintainers' agent (Hark), with its own staging-only Cloudflare token, outside GitHub | the GitHub workflow `Deploy platform (production)`, after the owner's approval |
-| Token in GitHub | none | yes, as a secret of the GitHub environment `production` |
+| Who deploys | the maintainers' agent (Hark) or a maintainer, through the GitHub workflow `Deploy platform (staging)` (see [Staging deploy from GitHub](#staging-deploy-from-github)) | the GitHub workflow `Deploy platform (production)`, after the owner's approval |
+| Token in GitHub | a staging-only token, as a secret of the GitHub environment `staging` | yes, as a secret of the GitHub environment `production` |
 
 Staging is where every change is tried first. Production is only ever deployed from a commit that is already on
 `main`.
+
+## Staging deploy from GitHub
+
+Why: Workers Static Assets are uploaded with a short-lived upload JWT in the `Authorization` header
+(`POST /accounts/<id>/workers/assets/upload`). In Hark's sandbox an egress proxy injects the Cloudflare API token on
+every request to `api.cloudflare.com` and overwrites that JWT, so `npm run deploy:staging` there fails at the asset
+upload with `401 Unauthorized` (API-token calls such as D1 migrations still work). A GitHub runner sends the JWT as is.
+
+How: Actions → *Deploy platform (staging)* → *Run workflow*, "Use workflow from" = `main`, field `ref` = the branch or
+commit to try. The job checks that `env.staging` in that commit's `wrangler.toml` points only at
+`commonworld-api-staging` / `commonworld-staging` / `staging.commonworld.one`, runs typecheck + tests, builds the
+Atlas, lists and applies pending staging migrations (scanner in report-only mode), deploys with `--env staging` and
+smoke-tests `staging.commonworld.one`.
+
+One-time setup (owner): GitHub → Settings → Environments → New environment `staging`; deployment branches: `main`
+only; environment secrets `CLOUDFLARE_API_TOKEN` (a staging-only token, never the production one) and
+`CLOUDFLARE_ACCOUNT_ID`. The code from the chosen `ref` runs in the same job as the token, so anyone with write
+access who can start the workflow can use that token: keep it staging-scoped.
 
 ## Secrets: what lives where
 
