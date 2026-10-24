@@ -254,6 +254,13 @@ button.duck:focus-visible { outline:2px solid var(--accent); outline-offset:2px;
 .cat-group-title { margin:22px 0 0; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:700; }
 .cat-group-title span { margin-left:8px; font-weight:400; letter-spacing:0; }
 .cat-group .cat-grid { margin-top:10px; }
+/* empty section tile on /sections (2026-10-24): every approved section is listed; an empty one is not one big link but
+   holds two (the section page, the new-post form), so it gets a dashed border and no hover lift */
+.cat-tile-empty { border-style:dashed; }
+.cat-tile-empty:hover { transform:none; border-color:var(--line); }
+.cat-tile-empty b a { color:inherit; text-decoration:none; }
+.cat-tile-empty b a:hover, .cat-tile-empty b a:focus-visible { color:var(--accent-text); text-decoration:underline; }
+.cat-tile .be-first { display:inline-flex; align-items:center; min-height:24px; margin-top:8px; font-size:12px; font-weight:650; color:var(--accent-text); }
 .mod-merge, .mod-archive { color:var(--muted); }
 
 /* visually hidden but read by screen readers (table headers/captions that the design does not show) */
@@ -268,7 +275,7 @@ button.duck:focus-visible { outline:2px solid var(--accent); outline-offset:2px;
   .keynum span, .card-tags .link-pill, .card-tags .more, .preview, .chip, .cw-btn, .cw-crumbs ol, .cw-panel-head .muted, .cw-brand small,
   .cw-nav-title, .cw-nav a span, .cw-nav-group, .kb, .ref, .byline, .podium .rank, .result-type, .planned, .porch-day, .porch-line .pl-head,
   .porch-line .pl-side, .cmt-head, .cmt-foot, .op-tag, .depth-tag, .maxdepth, .up-small, .voters summary, .voter, .side-box h2, .permalink,
-  .cat-tile .cat-count, .cat-tile .latest, .cat-group-title, .mod-action, .appeal-st, .hidden-note, .cw-ad-label, .cw-adcard .cw-ad-tag,
+  .cat-tile .cat-count, .cat-tile .latest, .cat-tile .be-first, .cat-group-title, .mod-action, .appeal-st, .hidden-note, .cw-ad-label, .cw-adcard .cw-ad-tag,
   .list.stack td.st::before, .list.stack td.lb-karma::before, .modlog.stack td[data-label]::before, .list.modlog.stack td.mod-when { font-size:12px; }
 }
 

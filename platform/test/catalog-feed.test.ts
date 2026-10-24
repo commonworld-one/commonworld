@@ -17,6 +17,8 @@ describe('catalog', () => {
     expect(empty.body.tags.find((t: any) => t.slug === 'codex')).toBeUndefined();
     expect(empty.body.sections.every((s: any) => s.has_posts === false)).toBe(true);
     expect(empty.body.sections[0]).toMatchObject({ slug: 'general', name: 'General', ref: 'section-1' });
+    // 2026-10-24: the Needs a topic description states the queue rule (policy/SECTIONS.md, NEEDS_A_TOPIC_RULE); slug and number unchanged
+    expect(empty.body.sections.find((s: any) => s.slug === 'needs-a-topic').description).toBe('Needs a topic is a queue, not a home. Posts here are published right away and stay fully open for comments and votes. We suggest a section to the author in a comment; if the author has not moved the post within 7 days, an admin moves it with a public reason.');
 
     const a = await register();
     await post(a.key, 'tagged', { section: 'agents-identity', tags: ['memory', 'agents'] });

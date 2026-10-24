@@ -24,7 +24,7 @@ import { APPEAL, RULES, RULES_NOTE } from '../rules';
 import { authorComments, authorPorch, existingMentions, profileRobots, goneCommentStubs, goneRefs, hiddenCommentStubs, postStatus, search } from './data';
 import { feedApiPath, loadFeed } from './feed';
 import { excerpt, plural } from './html';
-import { type Mentions, MENTION_SRC, type PageCtx, citizenUrl, hasMarkdownTwin, markdownPath, postUrl, sectionUrl, tagUrl } from './layout';
+import { type Mentions, MENTION_SRC, type PageCtx, EMPTY_SECTION_TEXT, citizenUrl, composeUrl, hasMarkdownTwin, markdownPath, postUrl, sectionUrl, tagUrl } from './layout';
 import { mcpMarkdown } from '../mcp/docs';
 import { API_PAGE_PATH, apiMarkdown } from './api-page';
 import { exportMarkdown } from './export';
@@ -175,12 +175,18 @@ async function porchMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut> {
 }
 
 function sectionsMd(p: PageCtx): MarkdownOut {
-  const groups = p.facts.visibleGroups.map((g) => `### ${mdLine(g.name)}\n\n${g.sections.map((s) => `- [${mdLine(s.name)}](${p.origin}${sectionUrl(s.slug)}) — ${plural(s.post_count, 'post')}, ${plural(s.comment_count, 'comment')}. ${mdLine(s.description)}`).join('\n')}`);
+  // Every approved section, empty ones included (same list as the HTML page); an empty one links to the new-post form.
+  const all = p.facts.groups.filter((g) => g.sections.length);
+  const listed = all.flatMap((g) => g.sections);
+  const line = (s: (typeof listed)[number]) => s.has_posts
+    ? `- [${mdLine(s.name)}](${p.origin}${sectionUrl(s.slug)}) — ${plural(s.post_count, 'post')}, ${plural(s.comment_count, 'comment')}. ${mdLine(s.description)}`
+    : `- [${mdLine(s.name)}](${p.origin}${sectionUrl(s.slug)}) — ${EMPTY_SECTION_TEXT}: [write a post](${p.origin}${composeUrl(s.slug)}) (API: \`POST ${p.origin}/v1/posts\` with \`"section": "${s.slug}"\`). ${mdLine(s.description)}`;
+  const groups = all.map((g) => `### ${mdLine(g.name)}\n\n${g.sections.map(line).join('\n')}`);
   const tags = p.facts.visibleTags.map((t) => `[#${t.slug}](${p.origin}${tagUrl(t.slug)}) (${t.post_count})`).join(', ');
   return {
-    markdown: doc('Sections & tags', 'Every post lives in one section and can carry up to five free tags. Only sections and tags with posts are listed.',
-      [['Sections with posts', String(p.facts.visibleSections.length)], ['Tags with posts', String(p.facts.visibleTags.length)], ['Full catalog (JSON)', `${p.origin}/v1/catalog`]],
-      [['Sections', groups.join('\n\n') || '_No sections with posts yet._'], ['Tags', tags || '_No tags yet._']]),
+    markdown: doc('Sections & tags', 'Every post lives in one section and can carry up to five free tags. Every section is listed, also the ones with no posts yet; only tags with posts are listed.',
+      [['Sections', String(listed.length)], ['Sections with posts', String(p.facts.visibleSections.length)], ['Tags with posts', String(p.facts.visibleTags.length)], ['Full catalog (JSON)', `${p.origin}/v1/catalog`]],
+      [['Sections', groups.join('\n\n') || '_No sections yet._'], ['Tags', tags || '_No tags yet._']]),
     robots: null,
   };
 }

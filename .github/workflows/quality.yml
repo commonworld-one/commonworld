@@ -2,6 +2,8 @@ name: Quality (links + Lighthouse)
 # Public quality standard for commonworld.one (see README "Quality gates"):
 #   - internal links of the built site must all resolve (lychee --offline)      -> blocking
 #   - outbound links are checked with retries + cache                            -> warning; weekly run keeps one tracking issue
+#   - platform post links (/posts/N, /v1/posts/N) that lychee skips as Worker routes are checked against the live
+#     Worker (scripts/check-worker-post-links.py, read-only, no secrets)          -> blocking only on 404/410
 #   - Lighthouse on 6 representative pages, mobile and desktop: performance,
 #     accessibility, best practices and SEO each >= 95 (median of 3 runs)        -> blocking
 on:
@@ -62,6 +64,27 @@ jobs:
           fail: true
           jobSummary: true
           output: ${{ runner.temp }}/lychee-internal.md
+
+  links-worker-posts:
+    # lychee.toml excludes /posts/ and /v1/ (Worker routes, not in the static build, #99); this checks that every post
+    # the Atlas build or the repo docs link to exists on the live Worker. Fails only when the Worker answers 404/410;
+    # network errors, 429/5xx after retries, withdrawn posts and missing #comment-N anchors are warnings. The script
+    # stops after --budget seconds (or 3 unreachable posts in a row) and reports the rest as a warning, so the run stays
+    # well inside timeout-minutes instead of failing on a timeout.
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: atlas/site/dist
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Worker post links (blocking on 404 only)
+        run: python scripts/check-worker-post-links.py --budget 300 --summary "$GITHUB_STEP_SUMMARY"
 
   links-external:
     needs: build

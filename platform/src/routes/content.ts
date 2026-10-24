@@ -59,10 +59,20 @@ const isUnique = (error: unknown) => String(error).includes('UNIQUE');
 // ---------- catalog ----------
 
 /**
- * Full catalog (sections + tags) with visible post counts; `has_posts` tells the UI which entries to show.
+ * Full catalog (every active section + tag) with visible post counts; `has_posts` says which have posts yet
+ * (/sections lists every section either way; the sidebar and the tag lists show only entries with posts).
  * `sections` stays a flat list in `number` order (backward compatible); each section also carries its `group` slug and
  * catalog `position`. `groups` lists the section groups in order, each with its sections in catalog order.
  */
+/**
+ * The Needs a topic queue rule (owner decision 2026-10-24, policy/SECTIONS.md), shown as that section's description
+ * everywhere the catalog goes (/sections and its twin, /s/needs-a-topic, /v1/catalog, llms.txt). It lives in code, not
+ * in a migration: changing an existing row is a row-write migration, which the migration gate (scripts/check-migrations.py)
+ * keeps out of ordinary PRs. The D1 row keeps its 0002 text; catalogData replaces it on read.
+ */
+export const NEEDS_A_TOPIC_RULE = 'Needs a topic is a queue, not a home. Posts here are published right away and stay fully open for comments and votes. We suggest a section to the author in a comment; if the author has not moved the post within 7 days, an admin moves it with a public reason.';
+const SECTION_DESCRIPTIONS: Record<string, string> = { 'needs-a-topic': NEEDS_A_TOPIC_RULE };
+
 export async function catalogData(env: Env) {
   await ensureCounters(env);
   // post_count / comment_count are stored counters (src/counters.ts), kept on write and recounted on staff actions
@@ -73,7 +83,7 @@ export async function catalogData(env: Env) {
     env.DB.prepare('SELECT slug, name, position FROM section_groups ORDER BY position'),
   ]);
   const withFlag = (rows: any[], type: string) => rows.map((r) => ({ ...r, ref: `${type}-${r.number}`, has_posts: r.post_count > 0 }));
-  const flat = withFlag(sections.results, 'section');
+  const flat = withFlag(sections.results.map((r: any) => (SECTION_DESCRIPTIONS[r.slug] ? { ...r, description: SECTION_DESCRIPTIONS[r.slug] } : r)), 'section');
   const ordered = [...flat].sort((a, b) => a.position - b.position);
   const grouped = (groups.results as { slug: string; name: string; position: number }[]).map((g) => {
     const list = ordered.filter((s) => s.group === g.slug);

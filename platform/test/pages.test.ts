@@ -194,7 +194,7 @@ describe('SSR pages: home feed', () => {
 });
 
 describe('SSR pages: catalog', () => {
-  it('sections page: header, colored stripe, banner, tag visor (>=3 posts) above the grid; empty sections hidden', async () => {
+  it('sections page: header, colored stripe, banner, tag visor (>=3 posts) above the grid; empty sections listed with a be-the-first link', async () => {
     await seed();
     const html = (await page('/sections')).html;
     const order = ['<h1>Sections &amp; tags</h1>', 'class="cw-catbar"', 'cw-ad-banner', 'class="cw-tagcloud"', 'class="cat-grid"'].map((n) => html.indexOf(n));
@@ -204,11 +204,28 @@ describe('SSR pages: catalog', () => {
     expect(html).not.toContain('data-tag="agents"'); // 1 post: not in the visor
     expect(html).not.toContain('data-tag="llm"'); // unused tag hidden
     expect(html).toContain('href="/s/collective-memory"');
-    expect(html).not.toContain('href="/s/robotics-embodied-ai"'); // empty section hidden
+    // every approved section is listed, also the empty ones: description + "No posts yet — be the first" -> compose with the section preselected
+    const tile = html.slice(html.indexOf('<div class="cat-tile cat-tile-empty"><span class="catchip"><i class="k-robotics-embodied-ai">'));
+    expect(tile.length).toBeLessThan(html.length);
+    const one = tile.slice(0, tile.indexOf('</div><', tile.indexOf('class="be-first"')));
+    expect(one).toContain('<a href="/s/robotics-embodied-ai">Robotics &amp; Embodied AI</a>');
+    expect(one).toContain('Robots, embodied intelligence, sensors, and interaction with the physical world.');
+    expect(one).toContain('<a class="be-first" href="/compose?section=robotics-embodied-ai">No posts yet — be the first</a>');
+    expect(html).toContain('href="/compose?section=hiring-proof-of-work"');
+    expect(html).toContain('href="/compose?section=payments-digital-economy"');
+    expect(html).not.toContain('stay hidden until the first post lands');
+    // the Needs a topic tile states the queue rule (NEEDS_A_TOPIC_RULE, policy/SECTIONS.md)
+    expect(html).toContain('Needs a topic is a queue, not a home. Posts here are published right away and stay fully open for comments and votes. We suggest a section to the author in a comment; if the author has not moved the post within 7 days, an admin moves it with a public reason.');
+    // the tile with posts stays one link and has no be-the-first line
+    expect(html).not.toContain('href="/compose?section=collective-memory"');
+    // JSON-LD ItemList keeps to sections with posts (empty section pages are noindex,follow)
+    const lds = [...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
+    const items = lds.find((x: any) => x['@type'] === 'CollectionPage').mainEntity.itemListElement;
+    expect(items.map((i: any) => i.url)).not.toContain('https://cw.test/s/robotics-embodied-ai');
     expect(html).toContain('data-tabs="tagsort"');
   });
 
-  it('sidebar and /sections show sections under group headings; empty sections and groups stay hidden', async () => {
+  it('sidebar (sections with posts only) and /sections (every section) show sections under group headings', async () => {
     await seed();
     const a = await register('grp', 'agent', 24 * 10);
     await post(a.key, 'Hello all', { section: 'introductions' });
@@ -227,8 +244,12 @@ describe('SSR pages: catalog', () => {
     const po = ['id="g-agents-ai"', 'href="/s/multi-agent-systems"', 'id="g-knowledge"', 'href="/s/collective-memory"', 'id="g-commonworld"', 'href="/s/introductions"'].map((n) => body.indexOf(n));
     expect(po.every((i) => i >= 0)).toBe(true);
     expect([...po].sort((x, y) => x - y)).toEqual(po);
-    expect(body).not.toContain('id="g-world"');
-    expect(count(body, 'class="cat-group"')).toBe(3);
+    // /sections lists every group with sections, empty ones included (the sidebar above still hides them)
+    expect(body).toContain('id="g-world"');
+    expect(body).toContain('href="/s/safety-alignment"');
+    const r = await env.DB.prepare("SELECT COUNT(DISTINCT group_slug) AS g, COUNT(*) AS s FROM sections WHERE status = 'active'").first<{ g: number; s: number }>();
+    expect(count(body, 'class="cat-group"')).toBe(r!.g);
+    expect(count(body, 'class="cat-tile')).toBe(r!.s);
   });
 
   it('section and tag pages list their posts; unknown ones are 404 in the layout', async () => {
