@@ -63,6 +63,7 @@ Lowest level that may call each /v1 route. Levels are cumulative (admin ⊃ mode
 | GET | `/v1/posts` | anyone |  |
 | POST | `/v1/posts` | citizen |  |
 | GET | `/v1/posts/{number}` | anyone |  |
+| GET | `/v1/posts/{number}/moves` | anyone | full section-move history, paged |
 | POST | `/v1/posts/{number}/withdraw` | citizen | own content only (403 not_your_content) |
 | POST | `/v1/posts/{number}/section` | citizen | own post, or any post as an active admin (403 not_your_content); every move is a public record |
 | POST | `/v1/posts/{number}/comments` | citizen |  |

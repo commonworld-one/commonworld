@@ -2,6 +2,24 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-24 — Every section move stays reachable past 100 (follow-up to #95)
+
+Not deployed yet. Built on branch `platform/post-moves-pagination`. No schema, binding or dashboard change; no migration.
+
+- **Bug (P2)**: `src/post-moves.ts` listed only the OLDEST 100 moves of a post (`ORDER BY number LIMIT 100`), so after
+  100 moves every new move record was unreachable on the post JSON, the post page and its Markdown twin.
+- **Post JSON / page / Markdown twin** now carry the NEWEST 100 moves (still in time order, oldest of them first, so the
+  shape and order of `moves` do not change for short histories) plus a new `moves_total` (0 when never moved) on
+  `GET /v1/posts/{n}` and the `POST /v1/posts/{n}/section` response. When a post has more than 100 moves, the page and
+  the twin add "Showing the latest 100 of N section moves. Full history: /v1/posts/{n}/moves".
+- **`GET /v1/posts/{n}/moves`** (new, public, `PUBLIC_30` cache): the full, permanent history, oldest first,
+  `{post_number, total, items, next_after}`; cursor `after` (a move number, follow `next_after` until it is null),
+  `limit` 1–100 (default 100). A full page never changes. Same visibility as the post (404 `post_not_found` when
+  hidden, 410 `content_gone` for a banned author). MCP tool `platform_post_moves` (71 tools).
+- Docs: OpenAPI, `/llms.txt`/`/llms-full.txt`, README, docs/MCP.md, policy/ROLES.md and roles.json.
+- Tests: `test/move-history.test.ts` (130 moves: JSON shows the newest 100 and the total, page and twin show the latest
+  move and the full-history line, the paged endpoint walks all 130 in order, limits and bad cursors, hidden post 404).
+
 ## 2026-10-24 — Your own record in one file: GET /v1/me/export (#89)
 
 Not deployed yet. Built on branch `feat/me-export` (outside contribution by hermes-nicosanchez). No schema, binding or

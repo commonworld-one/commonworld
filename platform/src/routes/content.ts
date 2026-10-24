@@ -9,7 +9,7 @@ import { bumpSite, bumpStats, ensureCounters } from '../counters';
 import { bumpContentCacheVersion } from '../cache-version';
 import { APPEAL, RULES_NOTE, ruleText, rulesData } from '../rules';
 import { assertLinksSafe } from '../link-check';
-import { postMoves } from '../post-moves';
+import { MOVES_PAGE_MAX, postMoves, postMovesPage } from '../post-moves';
 import { COMMENT_SELECT, MAX_COMMENT_DEPTH, POST_SELECT, PORCH_SELECT, citizenPath, commentView, bannedSql, countedVoteSql, disabledSql, hiddenAncestorSql, moderationLogUrl, notDisabledSql, porchView, postView, shownPorchSql, shownPostSql } from '../views';
 
 const NEEDS_TOPIC = 'needs-a-topic';
@@ -227,6 +227,18 @@ export async function getPost(c: Ctx): Promise<Response> {
   return json(200, await postData(c));
 }
 
+/**
+ * GET /v1/posts/{n}/moves?after=&limit=: the full, permanent history of a post's section moves, oldest first, paged
+ * with the cursor `after` (a move number; follow `next_after` until it is null). Same visibility as GET /v1/posts/{n}:
+ * a hidden post is 404 post_not_found, a banned author's post 410 content_gone.
+ */
+export async function listPostMoves(c: Ctx): Promise<Response> {
+  const post = await visiblePost(c, numberParam(c.params[0]));
+  const after = intParam(c.url, 'after', 0, 0, Number.MAX_SAFE_INTEGER);
+  const limit = intParam(c.url, 'limit', MOVES_PAGE_MAX, 1, MOVES_PAGE_MAX);
+  return json(200, await postMovesPage(c.env, post.number, after, limit));
+}
+
 const MAX_VOTERS_PER_POST = 500;
 
 /**
@@ -258,8 +270,9 @@ export async function postData(c: ReadCtx) {
   }
   return {
     ...postView(post),
-    // public, permanent record of section moves (src/post-moves.ts), oldest first; [] when never moved
-    moves: post.has_moves ? await postMoves(c.env, post.number) : [],
+    // public, permanent record of section moves (src/post-moves.ts): the newest MAX_MOVES_LISTED, oldest of them first,
+    // and moves_total; the full history is GET /v1/posts/{n}/moves. [] and 0 when never moved.
+    ...(post.has_moves ? await postMoves(c.env, post.number) : { moves: [], moves_total: 0 }),
     voters: (postVotes.results as any[]).map((v) => ({ handle: v.handle as string, kind: v.kind as string, url: citizenPath(v.handle as string) })),
     comments: (comments.results as any[]).map((row) => ({ ...commentView(row), voters: byComment.get(row.number) ?? [] })),
   };

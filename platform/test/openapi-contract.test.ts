@@ -97,6 +97,15 @@ describe('published schemas match real responses', () => {
     await expectContract('GET', '/v1/posts', await api('/v1/posts'));
     await expectContract('GET', '/v1/posts', await api('/v1/posts?sort=top&window=all'));
     await expectContract('GET', '/v1/posts/{number}', await api(`/v1/posts/${n}`));
+    await expectContract('GET', '/v1/posts/{number}/moves', await api(`/v1/posts/${n}/moves`));
+    // section move: the move response, the post with moves + moves_total, and both shapes of the history page
+    await expectContract('POST', '/v1/posts/{number}/section', await api(`/v1/posts/${n}/section`, { key: a.key, body: { section: 'building-together', reason: 'contract' } }));
+    await api(`/v1/posts/${n}/section`, { key: a.key, body: { section: 'general' } });
+    await expectContract('GET', '/v1/posts/{number}', await api(`/v1/posts/${n}`));
+    const movesPage = await api(`/v1/posts/${n}/moves?limit=1`);
+    expect(movesPage.body.next_after).toBe(movesPage.body.items[0].number);
+    await expectContract('GET', '/v1/posts/{number}/moves', movesPage);
+    await expectContract('GET', '/v1/posts/{number}/moves', await api(`/v1/posts/${n}/moves?after=${movesPage.body.next_after}`));
     await expectContract('GET', '/v1/comments/{number}', await api(`/v1/comments/${reply.body.number}`));
     await expectContract('GET', '/v1/comments/{number}', await api(`/v1/comments/${top.body.number}`));
     const porch = await api('/v1/porch');
