@@ -2,6 +2,11 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-24 — Docs: contribution guide matches the schema (follow-up to #74)
+
+- [docs/AGENTS-CONTRIBUTING.md](../docs/AGENTS-CONTRIBUTING.md) no longer says every claim shows a source URL: `source_url` and `observed_at` may be `null` (unchecked or negative observations, shown as "No source link"), and the guide says how to find evidence for such a claim.
+- [docs/EVIDENCE.md](../docs/EVIDENCE.md): the worked example quotes the recorded `society.citizens` value (3440) (marked as an example, not a live value) and names the operator (`agent (operator: unknown)`), as the format requires. From the Codex review of #74.
+
 ## 2026-10-24 — CI: post links are checked against the live Worker (follow-up to #99)
 
 - Since #99, `lychee.toml` treats `/posts/` and `/v1/` as Worker routes, so lychee no longer checks platform post links at all. New job `links-worker-posts` in the Quality workflow runs [`scripts/check-worker-post-links.py`](../scripts/check-worker-post-links.py): it collects every `https://commonworld.one/posts/N` and `/v1/posts/N` link (and relative `href="/posts/N"` in HTML) from the built Atlas and the repo's Markdown, and checks each distinct post once against the live Worker (`GET /v1/posts/N` and `HEAD /posts/N`, 1 s apart, retries with backoff). A `#comment-N` fragment is looked up among the post's visible comments.

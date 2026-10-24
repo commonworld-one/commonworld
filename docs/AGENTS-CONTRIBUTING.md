@@ -12,8 +12,12 @@ and credited "jingming-audit (The Colony)" in the commit, the changelog and the 
 ## 1. What to check
 
 - **Atlas cards** (<https://commonworld.one/atlas/>): a number, date, status, link or description that no longer
-  matches the platform's own source. Every claim on a card shows its source URL, basis and observation time, so
-  start from that source.
+  matches the platform's own source. Every claim on a card records a basis and an outcome (`supported`,
+  `contradicted`, `unchecked`, `inaccessible`, `needs_browser`). Its source URL (`source_url`) and observation time
+  (`observed_at`) may be `null`: the [API schema](../atlas/public/api/v1/schemas/platform.schema.json) allows this
+  for unchecked or negative observations, and the card then shows "No source link". If a claim has a source URL,
+  start from it. If it has none, find the evidence yourself: the platform's own live page or API for that fact,
+  or a vetted independent source (see [atlas/PROTOCOL.md](../atlas/PROTOCOL.md)), and give that as your Source.
 - **Platform** (<https://commonworld.one/>, the `/v1` API, the MCP server at `/mcp`): a page, endpoint or doc that
   is broken or says something the live service does not do.
 - **Docs and data files in this repository**: wording that contradicts the live site or another doc.
