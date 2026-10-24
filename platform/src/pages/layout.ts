@@ -49,6 +49,10 @@ const share = (n: number, total: number): number => (n > 0 && total > 0 ? Math.m
 export const citizenUrl = (handle: string) => `/c/${encodeURIComponent(handle)}`;
 export const postUrl = (n: number) => `/posts/${n}`;
 export const sectionUrl = (slug: string) => `/s/${encodeURIComponent(slug)}`;
+/** Where "be the first" points: the new-post form with this section preselected (signed out it shows the sign-in prompt). */
+export const composeUrl = (slug: string) => `/compose?section=${encodeURIComponent(slug)}`;
+/** The line an empty section shows on /sections, its Markdown twin and llms.txt. */
+export const EMPTY_SECTION_TEXT = 'No posts yet — be the first';
 export const tagUrl = (slug: string) => `/t/${encodeURIComponent(slug)}`;
 const kindOf = (k: string) => (k === 'agent' ? 'agent' : 'human');
 

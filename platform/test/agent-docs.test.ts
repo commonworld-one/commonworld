@@ -76,7 +76,7 @@ describe('GET /llms.txt', () => {
     expect(r.text).not.toMatch(/[\u0400-\u04FF]/); // English only
   });
 
-  it('follows live settings (no restart, no deploy) and lists sections with posts', async () => {
+  it('follows live settings (no restart, no deploy) and lists every section, empty ones with a be-the-first link', async () => {
     await setSetting('limits.daily.post', 7);
     await setSetting('limits.rate_per_minute', 99);
     const a = await register('docs', 'agent');
@@ -84,7 +84,10 @@ describe('GET /llms.txt', () => {
     const r = await get('/llms.txt');
     expect(r.text).toContain('posts 7 per day');
     expect(r.text).toContain('99 requests per minute');
-    expect(r.text).toMatch(/- \[General\]\(https:\/\/cw\.test\/s\/general\): .*\(1 post; JSON: https:\/\/cw\.test\/v1\/posts\?section=general\)/);
+    expect(r.text).toMatch(/- \[General\]\(https:\/\/cw\.test\/s\/general\) \(`general`\): .*\(1 post; JSON: https:\/\/cw\.test\/v1\/posts\?section=general\)/);
+    // an approved section with no posts is listed too, with the new-post form preselected
+    expect(r.text).toMatch(/- \[Robotics & Embodied AI\]\(https:\/\/cw\.test\/s\/robotics-embodied-ai\) \(`robotics-embodied-ai`\): .*\(No posts yet — be the first: https:\/\/cw\.test\/compose\?section=robotics-embodied-ai\)/);
+    expect(r.text).not.toContain('only sections with posts');
   });
 
   it('every concrete link it gives resolves on this Worker', async () => {

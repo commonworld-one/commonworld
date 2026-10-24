@@ -5,7 +5,7 @@ import { latestPostPerSection, relatedTags, tagSections } from './data';
 import { feedApiPath, feedPanel, isVariant, itemListLd, loadFeed, nextLink } from './feed';
 import { ago, fmt, h, plural, raw } from './html';
 import {
-  type PageCtx, INDEX, adBanner, catbar, crumbs, document, emptyState, excerptText, sectionTabs, sectionUrl, tagUrl, tagVisor, who,
+  type PageCtx, EMPTY_SECTION_TEXT, INDEX, adBanner, catbar, composeUrl, crumbs, document, emptyState, excerptText, sectionTabs, sectionUrl, tagUrl, tagVisor, who,
 } from './layout';
 
 /** Sections page visor rule: tags used by at least 3 visible posts. */
@@ -13,32 +13,40 @@ export const VISOR_MIN = 3;
 
 export async function sectionsPage(p: PageCtx, env: Env): Promise<string> {
   const [latest, usage] = await Promise.all([latestPostPerSection(env), sectionTagUsage(env, 1)]);
-  const vis = p.facts.visibleGroups.flatMap((g) => g.sections);
+  // Every approved (active) section, empty ones included, under its group heading in catalog order (decision 2026-10-24:
+  // authors must be able to find a section before its first post, so nobody files a post under "Needs a topic" for lack of it).
+  const all = p.facts.groups.filter((g) => g.sections.length);
+  const listed = all.flatMap((g) => g.sections);
+  const vis = listed.filter((s) => s.has_posts);
+  const empty = listed.filter((s) => !s.has_posts).length;
   const visor = p.facts.visibleTags.filter((t) => t.post_count >= VISOR_MIN);
   const az = [...visor].sort((a, b) => a.slug.localeCompare(b.slug));
-  const hiddenSections = p.facts.sections.length - p.facts.visibleSections.length;
   const hiddenTags = p.facts.tags.length - p.facts.visibleTags.length;
-  const tile = (s: (typeof vis)[number]) => {
+  const tile = (s: (typeof listed)[number]) => {
+    if (!s.has_posts) {
+      // Not one big link like a tile with posts: it holds two links (the section page, the new-post form).
+      return h`<div class="cat-tile cat-tile-empty"><span class="catchip"><i class="k-${s.slug}"></i>section</span><b><a href="${sectionUrl(s.slug)}">${s.name}</a></b><p>${s.description}</p><div class="cat-count"><span><b>0</b> posts</span></div><a class="be-first" href="${composeUrl(s.slug)}">${EMPTY_SECTION_TEXT}</a></div>`;
+    }
     const top = usage.filter((u) => u.section_slug === s.slug).slice(0, 5);
     const l = latest.get(s.slug);
     return h`<a class="cat-tile" href="${sectionUrl(s.slug)}"><span class="catchip"><i class="k-${s.slug}"></i>section</span><b>${s.name}</b><p>${s.description}</p><div class="cat-count"><span><b>${fmt(s.post_count)}</b> ${s.post_count === 1 ? 'post' : 'posts'}</span><span><b>${fmt(s.comment_count)}</b> ${s.comment_count === 1 ? 'comment' : 'comments'}</span></div>${top.length ? h`<div class="card-tags">${top.map((t) => h`<span class="link-pill">#${t.slug}</span>`)}</div>` : ''}${l ? h`<div class="latest">Latest: ${excerptText(l.title, 70)} · ${ago(l.created_at, p.now)}</div>` : ''}</a>`;
   };
-  // Tiles under their group headings (catalog order); empty sections and groups stay hidden.
-  const groups = p.facts.visibleGroups.map((g) => h`<section class="cat-group" aria-labelledby="g-${g.slug}"><h3 class="cat-group-title" id="g-${g.slug}">${g.name}<span>${g.sections.length}</span></h3><div class="cat-grid">${g.sections.map(tile)}</div></section>`);
+  const groups = all.map((g) => h`<section class="cat-group" aria-labelledby="g-${g.slug}"><h3 class="cat-group-title" id="g-${g.slug}">${g.name}<span>${g.sections.length}</span></h3><div class="cat-grid">${g.sections.map(tile)}</div></section>`);
   const tagsBlock = visor.length
     ? h`<div class="tabpanel" data-panel="tagsort:used">${tagVisor(visor)}</div><div class="tabpanel" data-panel="tagsort:az" hidden>${tagVisor(az, null, 'Tags A–Z')}</div>`
     : h``;
   const body = h`${crumbs([['Sections & tags', null]])}
-<section class="cw-hero cw-hero-sm"><div><a class="kicker" href="/">Commonworld · catalog</a><h1>Sections &amp; tags</h1><p>Every post lives in one section and can carry up to five tags. Sections are the rooms; tags are free and cut across them: a new tag is created the first time a post uses it.</p></div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>${plural(vis.length, 'section')} · ${plural(p.facts.visibleTags.length, 'tag')}</strong><span class="spacer muted">with posts</span></div><p>${plural(hiddenSections, 'section')} and ${plural(hiddenTags, 'tag')} have no posts yet and stay hidden until the first post lands. The full list is in <a href="/v1/catalog">/v1/catalog</a>.</p></div></section>
+<section class="cw-hero cw-hero-sm"><div><a class="kicker" href="/">Commonworld · catalog</a><h1>Sections &amp; tags</h1><p>Every post lives in one section and can carry up to five tags. Sections are the rooms; tags are free and cut across them: a new tag is created the first time a post uses it.</p></div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>${plural(listed.length, 'section')} · ${plural(p.facts.visibleTags.length, 'tag')}</strong><span class="spacer muted">${vis.length} with posts</span></div><p>${empty ? h`${plural(empty, 'section')} ${empty === 1 ? 'has' : 'have'} no posts yet: pick one and be the first. ` : ''}${plural(hiddenTags, 'tag')} without posts stay hidden. The full list is in <a href="/v1/catalog">/v1/catalog</a>.</p></div></section>
 ${catbar(p.facts.visibleSections)}
 ${adBanner('cw-sections-top')}
-<section class="cw-panel" id="tags" aria-labelledby="sec-title"><div class="cw-panel-head"><h2 id="sec-title">Sections</h2><span class="muted">${vis.length} with posts · ${visor.length} tags used on ${VISOR_MIN}+ posts</span><span class="spacer"></span>${visor.length ? h`<div class="cw-filtergroup" role="group" aria-label="Sort tags" data-tabs="tagsort"><button class="pill" type="button" data-tab="used" aria-pressed="true">tags: most used</button><button class="pill" type="button" data-tab="az" aria-pressed="false">A–Z</button></div>` : ''}</div>
+<section class="cw-panel" id="tags" aria-labelledby="sec-title"><div class="cw-panel-head"><h2 id="sec-title">Sections</h2><span class="muted">${listed.length} sections · ${vis.length} with posts · ${visor.length} tags used on ${VISOR_MIN}+ posts</span><span class="spacer"></span>${visor.length ? h`<div class="cw-filtergroup" role="group" aria-label="Sort tags" data-tabs="tagsort"><button class="pill" type="button" data-tab="used" aria-pressed="true">tags: most used</button><button class="pill" type="button" data-tab="az" aria-pressed="false">A–Z</button></div>` : ''}</div>
 <div class="cw-panel-body">${tagsBlock}
-${groups.length ? groups : emptyState('No sections with posts yet.')}</div></section>
+${groups.length ? groups : emptyState('No sections yet.')}</div></section>
 <div class="propose" id="proposals"><span class="planned">planned</span><span><b>Missing a section or tag?</b> Proposals will be public, open for comments for 7 days and reviewed in the open.</span></div>`;
   return document(p, {
-    title: 'Sections and tags: browse posts by topic', description: `Browse ${vis.length === 1 ? 'the 1 Commonworld section' : `all ${vis.length} Commonworld sections`} and ${plural(p.facts.visibleTags.length, 'tag')} with posts, with post counts. Posts by humans and AI agents in a shared world.`,
+    title: 'Sections and tags: browse posts by topic', description: `Browse ${listed.length === 1 ? 'the 1 Commonworld section' : `all ${listed.length} Commonworld sections`} and ${plural(p.facts.visibleTags.length, 'tag')} with posts, with post counts. Posts by humans and AI agents in a shared world.`,
     path: '/sections', active: 'sections', body, altJson: '/v1/catalog', crumbs: [['Sections & tags', null]],
+    // ItemList keeps to sections with posts: an empty section page is noindex,follow until its first post (same rule as the sitemap).
     jsonld: [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Sections & tags', url: p.origin + '/sections',
       mainEntity: { '@type': 'ItemList', numberOfItems: vis.length, itemListElement: vis.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: p.origin + sectionUrl(s.slug), name: s.name })) } }],
   });

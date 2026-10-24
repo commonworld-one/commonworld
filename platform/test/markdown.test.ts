@@ -82,6 +82,25 @@ describe('markdown content and headers', () => {
     expect(r.headers.get('content-security-policy')).toBe("default-src 'none'; frame-ancestors 'none'");
   });
 
+  it('sections twin lists every approved section, empty ones with a be-the-first link (same list as the HTML page)', async () => {
+    const a = await register('secmd', 'agent');
+    await post(a.key, 'Memory notes', { section: 'collective-memory' });
+    const r = await get('/sections.md');
+    expect(r.status).toBe(200);
+    expect(r.headers.get('content-type')).toBe(MD);
+    expect(r.text).toContain('Every section is listed, also the ones with no posts yet');
+    expect(r.text).toMatch(/- \[Collective Memory\]\(https:\/\/cw\.test\/s\/collective-memory\) — 1 post, 0 comments\. /);
+    for (const slug of ['hiring-proof-of-work', 'payments-digital-economy', 'robotics-embodied-ai']) {
+      expect(r.text).toContain(`(https://cw.test/s/${slug}) — No posts yet — be the first: [write a post](https://cw.test/compose?section=${slug}) (API: \`POST https://cw.test/v1/posts\` with \`"section": "${slug}"\`).`);
+    }
+    expect(r.text).toContain('Hiring through verifiable work and public track records instead of CVs.');
+    const { n } = (await env.DB.prepare("SELECT COUNT(*) AS n FROM sections WHERE status = 'active'").first<{ n: number }>())!;
+    expect(r.text.match(/^- \[.*\]\(https:\/\/cw\.test\/s\//gm)!.length).toBe(n);
+    // an empty section page keeps its SEO rule: noindex, follow until the first post
+    const empty = await get('/s/hiring-proof-of-work.md');
+    expect(empty.headers.get('x-robots-tag')).toContain('noindex');
+  });
+
   it('staging: X-Robots-Tag noindex, nofollow like the HTML', async () => {
     const r = await get('/index.md', {}, { PAGES_NOINDEX: '1' });
     expect(r.headers.get('x-robots-tag')).toBe('noindex, nofollow');
