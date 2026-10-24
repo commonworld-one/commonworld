@@ -9,15 +9,17 @@ Why: lychee.toml treats /posts/ (and /v1/) as Worker routes, because the static 
   2. check     each distinct post once against the live Worker: GET /v1/posts/N (public, no key) and HEAD /posts/N
                (the page route the links point at); a #comment-N fragment is looked up in the post's visible comments
 
-Exit code: 1 only when the Worker answers 404 (or 410) for a referenced post. Network errors, timeouts, 429/5xx after
-retries, posts left unchecked when the time budget (default 300 s) runs out or the Worker stops answering,
-withdrawn posts and missing #comment-N anchors are printed as GitHub ::warning:: lines and do not fail.
+Exit code: 1 only when the Worker answers 404 (or 410) for a referenced post. Network errors (including a response
+cut off midway, http.client.IncompleteRead), timeouts, 429/5xx after retries, posts left unchecked when the time
+budget (default 300 s) runs out or the Worker stops answering, withdrawn posts and missing
+#comment-N anchors are printed as GitHub ::warning:: lines and do not fail.
 
   python scripts/check-worker-post-links.py                  # dist + docs, against https://commonworld.one
   python scripts/check-worker-post-links.py --list           # only print what was collected, no network
   python scripts/check-worker-post-links.py --base URL --dist PATH --delay 1.0
 """
 import argparse
+import http.client
 import json
 import os
 import re
@@ -128,7 +130,10 @@ def request(url, method='GET', retries=3, timeout=20, backoff=4.0, deadline=None
             ra = e.headers.get('Retry-After') if e.headers else None
             if ra and ra.isdigit():
                 wait = max(wait, min(int(ra), 60))
-        except (urllib.error.URLError, TimeoutError, OSError) as e:
+        except (urllib.error.URLError, http.client.HTTPException, TimeoutError, OSError) as e:
+            # http.client.HTTPException covers a response cut off midway (IncompleteRead while reading the body),
+            # a garbled status line (BadStatusLine) and a dropped connection (RemoteDisconnected, which is also a
+            # ConnectionResetError, an OSError): transient, so retried and then reported as a warning, never broken
             last = (None, None, f'{type(e).__name__}: {getattr(e, "reason", e)}')
             wait = backoff * (attempt + 1)
         if attempt < retries:

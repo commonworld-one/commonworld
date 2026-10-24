@@ -2,10 +2,14 @@
 
 No network: the checker is exercised with a stubbed request function.
 """
+import http.client
 import importlib.util
 import os
+import socket
 import tempfile
+import threading
 import unittest
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -97,6 +101,97 @@ class Check(unittest.TestCase):
 
     def test_request_respects_deadline(self):
         self.assertEqual(wp.request('https://cw.test/x', deadline=wp.time.monotonic() - 1)[0], None)
+
+
+class _CutResponse:
+    """urlopen() result whose body read is cut off midway, as when the server or a proxy drops a chunked 200."""
+    status = 200
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def read(self, *_):
+        raise http.client.IncompleteRead(b'{"comm', 120)
+
+
+class _OkResponse(_CutResponse):
+    def read(self, *_):
+        return b'{"comments": []}'
+
+
+class Interrupted(unittest.TestCase):
+    """Codex review on #101: http.client.IncompleteRead must go through the retry -> warning path, not crash the job."""
+
+    def stub_urlopen(self, answers):
+        orig = wp.urllib.request.urlopen
+        calls = []
+
+        def fake(req, timeout=None):
+            calls.append(req.get_method())
+            a = answers.pop(0) if len(answers) > 1 else answers[0]
+            if isinstance(a, BaseException):
+                raise a
+            return a
+        wp.urllib.request.urlopen = fake
+        self.addCleanup(setattr, wp.urllib.request, 'urlopen', orig)
+        return calls
+
+    def test_incomplete_read_is_retried_then_a_warning(self):
+        calls = self.stub_urlopen([_CutResponse()])
+        status, body, err = wp.request('https://cw.test/v1/posts/1', retries=2, backoff=0)
+        self.assertEqual((status, body), (None, None))
+        self.assertIn('IncompleteRead', err)
+        self.assertEqual(len(calls), 3)  # first try + 2 retries
+
+    def test_incomplete_read_then_success(self):
+        self.stub_urlopen([_CutResponse(), _OkResponse()])
+        self.assertEqual(wp.request('https://cw.test/v1/posts/1', retries=2, backoff=0), (200, b'{"comments": []}', None))
+
+    def test_other_http_client_errors_are_transient(self):
+        for exc in (http.client.RemoteDisconnected('closed'), http.client.BadStatusLine('garbage'), ConnectionResetError(104, 'reset')):
+            with self.subTest(exc=type(exc).__name__):
+                self.stub_urlopen([exc])
+                status, _, err = wp.request('https://cw.test/posts/1', method='HEAD', retries=1, backoff=0)
+                self.assertIsNone(status)
+                self.assertIn(type(exc).__name__, err)
+
+    def test_check_does_not_fail_on_cut_response(self):
+        self.stub_urlopen([_CutResponse()])
+        broken, warnings = wp.check(wp.group([(1, None, 'a')]), 'https://cw.test', delay=0, retries=0, out=lambda *_: None)
+        self.assertEqual(broken, [])
+        self.assertTrue(any('post 1' in w and 'IncompleteRead' in w for w in warnings))
+
+    def test_real_interrupted_chunked_response(self):
+        # a local server that announces a chunked 200, sends part of one chunk and closes the connection
+        srv = socket.socket()
+        srv.bind(('127.0.0.1', 0))
+        srv.listen(4)
+        self.addCleanup(srv.close)
+        port = srv.getsockname()[1]
+
+        def serve():
+            for _ in range(2):
+                try:
+                    conn, _ = srv.accept()
+                except OSError:
+                    return
+                with conn:
+                    conn.recv(65536)
+                    conn.sendall(b'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n'
+                                 b'40\r\n{"comments": [')
+        t = threading.Thread(target=serve, daemon=True)
+        t.start()
+        # talk to the local server directly, even where the environment sets an HTTP proxy
+        env = mock.patch.dict(os.environ, {'no_proxy': '127.0.0.1', 'NO_PROXY': '127.0.0.1'})
+        env.start()
+        self.addCleanup(env.stop)
+        status, body, err = wp.request(f'http://127.0.0.1:{port}/v1/posts/1', retries=1, backoff=0, timeout=5)
+        t.join(5)
+        self.assertEqual((status, body), (None, None))
+        self.assertIn('IncompleteRead', err)
 
 
 if __name__ == '__main__':
