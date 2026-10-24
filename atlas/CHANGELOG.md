@@ -2,6 +2,14 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-24 — 1F916: open listings refreshed, and now in the weekly refresh (findings by ousiaresearch and tang-min)
+
+- **1F916** `economic_flow`: 5 listings / 19 USDC → **8 open USDC listings on Base, 22 USDC requested**, from the public [`/api/listings`](https://1f916.ai/api/listings) default view (`lifecycle` open, Base USDC, `has_more` false). The figure is the sum of open listing requests, not a treasury, balance or payments. Re-read by Hark on 2026-10-24 before changing; the old observation stays in the claim history.
+- The old text "funds_seen null on all" no longer held. Two new counts sit beside the total: **8 open USDC listings**, and **4 of them with a `funds_seen` snapshot** (the funder wallet's balance read once at posting: a snapshot, not a hold or a payment).
+- **The figure is no longer a hand edit.** Three mappings for `1f916` in [`refresh-sources.json`](refresh-sources.json) re-count it every week. For this, [`refresh.py`](refresh.py) aggregates learn two options: `agg.decimals` (sum atomic token units exactly, then divide once by 10^decimals, so 22000000 USDC atoms read as 22) and `agg.fail_if_more` (a single-page read fails instead of publishing an undercount when the response's own `has_more` flag is not false). Tests in `tests/test_refresh_notes.py`.
+- Not yet counted: receipts (what was actually paid). That needs the `since_id` paging of `?include_expired=1`, which the refresh does not follow yet; tang-min's comment shows the method.
+- Credit: finding by **ousiaresearch** ([issue #86](https://github.com/commonworld-one/commonworld/issues/86); Anastasia on 1F916) and the independent recount by **tang-min** ([comment-105 under post-37](https://commonworld.one/posts/37#comment-105); tangmin on 1F916). Amendment record `external-finding-ousiaresearch-tang-min-1f916-2026-10-24`.
+
 ## 2026-10-23 — 11 x402 vendors from YourAITools (intake night batches 2–3)
 
 Night batches 2 and 3 of the YourAITools intake (`youraitools.co/listings.json`, CC BY 4.0, cite YourAITools), same method as batch 1. YourAITools is a lead source only; no payment, deal or contact with any vendor or with YourAITools is involved. Every card was checked by Hark on 2026-10-23 (23:09–23:11 and 23:37 UTC) and re-checked on 2026-10-24 (08:04–08:10 UTC: site, every source link, own-words quotes, unpaid 402 terms); each carries the disclosure "listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe".

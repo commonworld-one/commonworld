@@ -368,6 +368,10 @@ def read_mapping(m, fields_out=None):
             methods.append(f'GET {url}')
             nxt = doc.get('nextOffset') if isinstance(doc, dict) else None
             has_more = doc.get('hasMore') if isinstance(doc, dict) else False
+            flag = ag.get('fail_if_more')
+            if flag and m.get('paginate') != 'offset' and isinstance(doc, dict) and dig(doc, flag) is not False:
+                # a single-page read whose own completeness flag is missing or not false would be a silent undercount
+                return None, None, methods + [f'GET {url}'], f'{url}: list is not complete ({flag} is {json.dumps(dig(doc, flag))})'
             next_url = None
             if m.get('paginate') == 'offset' and has_more:
                 if pages >= MAX_AGG_PAGES:
@@ -412,10 +416,20 @@ def read_mapping(m, fields_out=None):
         if ag['op'] == 'count':
             val = selected_items
         else:
-            val = int(total_value) if float(total_value).is_integer() else round(total_value, 6)
+            dec = ag.get('decimals')
+            if dec:
+                # atomic token units (e.g. USDC, 6 decimals): exact integer sum first, then one division
+                if not isinstance(total_value, int):
+                    return None, None, methods, f'decimals set but {ag["field"]} values are not whole atomic units'
+                q_, r_ = divmod(total_value, 10 ** dec)
+                val = q_ if r_ == 0 else round(total_value / 10 ** dec, dec)
+            else:
+                val = int(total_value) if float(total_value).is_integer() else round(total_value, 6)
         where = ', '.join(f'{k}={v}' for k, v in (ag.get('where') or {}).items())
-        quote = f'{total_items} items read; {selected_items} with {where}' + (f'; sum {ag["field"]} = {val}' if ag['op'] == 'sum' else '')
-        methods.append(f'{ag["op"]} over {ag["list"]}' + (f' of {ag["field"]}' if ag['op'] == 'sum' else '') + (f' where {where}' if where else ''))
+        scale = f' / 10^{ag["decimals"]}' if ag['op'] == 'sum' and ag.get('decimals') else ''
+        quote = f'{total_items} items read; {selected_items} with {where}' + (f'; sum {ag["field"]}{scale} = {val}' if ag['op'] == 'sum' else '')
+        methods.append(f'{ag["op"]} over {ag["list"]}' + (f' of {ag["field"]}{scale}' if ag['op'] == 'sum' else '') + (f' where {where}' if where else '')
+                       + (f'; {ag["fail_if_more"]} false (complete list)' if ag.get('fail_if_more') else ''))
         return val, quote, methods, None
     doc, err = get_json(m['url'])
     if err:
@@ -524,6 +538,13 @@ def mapping_problems(m):
             probs.append(f'{m["id"]}: aggregate mappings only support {{value}} in statement, not {{{f}}}')
         elif f not in qf:
             probs.append(f'{m["id"]}: statement field {{{f}}} is not in quote_fields')
+    ag = m.get('agg') or {}
+    if 'decimals' in ag:
+        d = ag['decimals']
+        if ag.get('op') != 'sum' or isinstance(d, bool) or not isinstance(d, int) or not 0 < d <= 18:
+            probs.append(f'{m["id"]}: agg.decimals must be an integer 1-18 on a sum')
+    if ag.get('fail_if_more') is not None and (not isinstance(ag['fail_if_more'], str) or m.get('paginate')):
+        probs.append(f'{m["id"]}: agg.fail_if_more must be a field name, and only on a single-page read (no paginate)')
     v = m.get('verify')
     if v is not None:
         if not isinstance(v, dict) or not str(v.get('url', '')).startswith('https://') or not (v.get('note') or '').strip():
