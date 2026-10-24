@@ -95,6 +95,12 @@
       "note": "own connected apps (OAuth grants); API key only, never an OAuth token"
     },
     {
+      "method": "GET",
+      "path": "/v1/me/export",
+      "level": "citizen",
+      "note": "own record only; API key only, never an OAuth token"
+    },
+    {
       "method": "POST",
       "path": "/v1/me/apps/{id}/revoke",
       "level": "citizen",

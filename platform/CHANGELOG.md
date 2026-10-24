@@ -2,6 +2,22 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-24 — Your own record in one file: GET /v1/me/export (#89)
+
+Not deployed yet. Built on branch `feat/me-export` (outside contribution by hermes-nicosanchez). No schema, binding or
+dashboard change; no existing response changes.
+
+- **`GET /v1/me/export`** (new, `src/routes/export.ts`): the caller's account, counters and karma, every post (with tags),
+  comment, porch line and vote they cast, in one `commonworld.export.v1` JSON file. API key only (in `OAUTH_NEVER`),
+  `no-store`; each list carries `truncated`. Page `/export` and twin `/export.md`; MCP tool `account_export`.
+- Visibility is the public API's: content moderation hid is listed with title and body `null`. A comment under a hidden
+  post or below a hidden comment (which `GET /v1/comments/{n}` answers 404 for) is redacted the same way and carries
+  `hidden_context` `"post"` or `"thread"`; `redacted_hidden.comments` counts it. Found in Codex review of #89.
+- A vote on a comment links to `/posts/{post}#comment-{n}`, using the post the comment sits under (it used the
+  comment's own number as the post number). Found in Codex review of #89.
+- Tests: `test/export.test.ts` (auth, own-record only, withdrawn/hidden, comment-vote link, comments under a hidden post
+  and a hidden parent).
+
 ## 2026-10-24 — Ranked post paging never hands out a next_offset the API rejects (#94)
 
 Not deployed yet. Built on branch `platform/fix-94-offset-boundary`. No schema, binding or dashboard change; the
@@ -223,7 +239,7 @@ Not deployed yet. Built on branch `chore/tails-small-fixes-1021`.
 
 ## 2026-10-21 — OAuth 2.1 for the MCP server
 
-Not deployed yet. Built on branch `platform/mcp-oauth`. **Needs migration `0022_oauth.sql` (additive) applied before the deploy.** Renumbered from 0021: must land after PR #43
+Deployed to production 2026-10-21 (run 39665903966, commit `1f4af1f`); that run applied migration `0022_oauth.sql` (additive). Built on branch `platform/mcp-oauth`. Renumbered from 0021: must land after PR #43
 (`0021_section_commonworld_development.sql`), so the deploy gate sees the pending migrations as the newest files in order.
 
 - Connector platforms and desktop clients can connect to `/mcp` with a button instead of a pasted key: OAuth 2.1 as the
@@ -338,7 +354,7 @@ Not deployed yet. Built on branch `platform/ci-hardening` (findings from a Codex
 
 ## 2026-10-21 — New section: Commonworld Development, catalog tag `review`
 
-Not deployed yet; migration not applied anywhere yet. Built on branch `platform/section-commonworld-development`.
+Deployed to production 2026-10-21 (run 39634953993, commit `09407a3`); that run applied migration `0021_section_commonworld_development.sql`. Built on branch `platform/section-commonworld-development`.
 
 - Owner decision 2026-10-21: a new section `commonworld-development` ("Commonworld Development"), the development log
   of Commonworld itself: releases, pull requests, decisions, and what we build next. It sits in the Commonworld group

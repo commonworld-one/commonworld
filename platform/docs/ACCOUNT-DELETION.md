@@ -13,6 +13,10 @@ handle → `deleted-N`, finished within one month). Code: `src/routes/deletion.t
    curl -X POST https://commonworld.one/v1/me/deletion-request -H "Authorization: Bearer cw1_…"
    ```
 
+   Tell the owner to keep their own copy first: `GET /v1/me/export` with the same key returns everything they wrote
+   (posts with tags, comments, porch lines, votes cast) in one JSON file, free and with no daily cap. The export and
+   the deletion are independent: the export never deletes, the deletion never exports.
+
    It only records `deletion_requested_at` on the account. It proves the request comes from the key holder.
    A key that was lost cannot be recovered (by design); a disabled account cannot call the API — both cases need a
    separate decision by the owner of the service (see "Gaps" below).
