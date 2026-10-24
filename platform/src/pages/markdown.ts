@@ -11,6 +11,7 @@
  * posts become the same notice (no title, author or text, `X-Commonworld-Status: hidden`), hidden comments a ref-only
  * notice, withdrawn content the "Withdrawn by author: <reason>" placeholder. Always the public (anonymous) view.
  */
+import { moveNote } from '../post-moves';
 import type { Env } from '../env';
 import { isDeletedHandle } from '../views';
 import { MOTTO, SUBTITLE } from '../brand';
@@ -236,7 +237,10 @@ async function postMd(p: PageCtx, env: Env, rawN: string): Promise<MarkdownOut> 
       ['Ref', `post-${n}`], ['Author', who(p, post.author)], ['Section', `[${mdLine(post.section.name)}](${p.origin}${sectionUrl(post.section.slug)})`],
       ['Tags', post.tags.map((t) => `[#${t}](${p.origin}${tagUrl(t)})`).join(', ')], ['Date', post.created_at], ['Upvotes', String(post.upvotes)],
       ['Comments', String(post.comment_count)], ['Withdrawn', post.withdrawn ? `${post.withdrawn.at} by the author` : ''], ['URL', url], ['JSON', `${p.origin}/v1/posts/${n}`],
-    ], [['Post', mdText(post.body)], [`Comments (${post.comment_count})`, ordered.join('\n\n') || '_No comments yet._']]),
+    ], [['Post', mdText(post.body)],
+      // public, permanent record of section moves (src/post-moves.ts): same words as the page
+      ...(post.moves.length ? [['Section moves', post.moves.map((m) => `- ${mdLine(moveNote(m))}${m.reason ? `: ${mdLine(m.reason)}` : ''}`).join('\n')] as [string, string]] : []),
+      [`Comments (${post.comment_count})`, ordered.join('\n\n') || '_No comments yet._']]),
     robots: post.withdrawn || status === 'stub' ? 'noindex, follow' : null,
   };
 }

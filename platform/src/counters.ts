@@ -54,6 +54,11 @@ export function windowCountStatements(db: D1Database, now: number = Date.now()):
   ];
 }
 
+/** Reference post_count / comment_count of a section (same SQL as the full recount), for `sections.slug = <slug>`. */
+const SECTION_COUNTS_SET = `post_count = (SELECT COUNT(*) FROM posts p WHERE p.section_slug = sections.slug AND ${shownPostSql('p')}),
+      comment_count = (SELECT COUNT(*) FROM comments c JOIN posts p ON p.number = c.post_number
+        WHERE p.section_slug = sections.slug AND ${shownPostSql('p')} AND c.status = 'visible' AND ${notDisabledSql('c.author_id')} AND NOT ${hiddenAncestorSql('c')})`;
+
 /** Statements that recompute every stored counter from the raw tables (reference definitions). */
 export function recountStatementsWith(db: D1Database, w: KarmaWeights): D1PreparedStatement[] {
   const since = new Date(Date.now() - 7 * 24 * 3_600_000).toISOString();
@@ -64,10 +69,7 @@ export function recountStatementsWith(db: D1Database, w: KarmaWeights): D1Prepar
       db.prepare(`INSERT OR REPLACE INTO site_counters (name, value) VALUES (?1, (${sql}))`).bind(name)),
     ...windowCountStatements(db),
     db.prepare('INSERT OR REPLACE INTO site_counters (name, value) VALUES (?1, ?2)').bind(RECONCILED, Date.now()),
-    db.prepare(`UPDATE sections SET
-      post_count = (SELECT COUNT(*) FROM posts p WHERE p.section_slug = sections.slug AND ${shownPostSql('p')}),
-      comment_count = (SELECT COUNT(*) FROM comments c JOIN posts p ON p.number = c.post_number
-        WHERE p.section_slug = sections.slug AND ${shownPostSql('p')} AND c.status = 'visible' AND ${notDisabledSql('c.author_id')} AND NOT ${hiddenAncestorSql('c')})`),
+    db.prepare(`UPDATE sections SET ${SECTION_COUNTS_SET}`),
     db.prepare(`UPDATE tags SET post_count = (SELECT COUNT(*) FROM post_tags pt JOIN posts p ON p.number = pt.post_number
       WHERE pt.tag_slug = tags.slug AND ${shownPostSql('p')})`),
     db.prepare('DELETE FROM account_stats'),
@@ -77,6 +79,14 @@ export function recountStatementsWith(db: D1Database, w: KarmaWeights): D1Prepar
     db.prepare('INSERT OR REPLACE INTO site_counters (name, value) VALUES (?1, ?2)').bind(K7_EXPIRED, Date.now()),
     ...rankStatements(db),
   ];
+}
+
+/**
+ * Recount of the stored counts of the given sections only (a post moved between two of them, src/routes/move.ts).
+ * Same reference definition as the full recount, so it is exact whatever happened before; put it in the same batch.
+ */
+export function sectionRecountStatement(db: D1Database, slugs: string[]): D1PreparedStatement {
+  return db.prepare(`UPDATE sections SET ${SECTION_COUNTS_SET} WHERE slug IN (SELECT value FROM json_each(?1))`).bind(JSON.stringify(slugs));
 }
 
 /** Stored leaderboard ranks (karma DESC, number ASC among active accounts; overall and per kind). Writes changed rows only. */

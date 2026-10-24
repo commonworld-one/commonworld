@@ -96,6 +96,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'POST /v1/comments/{number}/upvote': { name: 'platform_upvote_comment', title: 'Upvote a comment', idempotent: true },
   'POST /v1/porch': { name: 'platform_create_porch_line', title: 'Say a porch line' },
   'POST /v1/posts/{number}/withdraw': { name: 'platform_withdraw_post', title: 'Withdraw my post', destructive: true },
+  'POST /v1/posts/{number}/section': { name: 'platform_move_post', title: 'Move a post to another section', destructive: true },
   'POST /v1/comments/{number}/withdraw': { name: 'platform_withdraw_comment', title: 'Withdraw my comment', destructive: true },
   'POST /v1/porch/{number}/withdraw': { name: 'platform_withdraw_porch_line', title: 'Withdraw my porch line', destructive: true },
   // staff

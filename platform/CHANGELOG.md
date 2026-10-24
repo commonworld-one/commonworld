@@ -53,6 +53,30 @@ den924330-code in issue #78.
   `@handle`, original text kept for posts, valid `citizen-N` on page and markdown, missing account, frozen and
   disabled accounts, `post-N` link unchanged).
 
+## 2026-10-24 — Move a post to another section (public move record)
+
+Not deployed yet. Built on branch `platform/move-post-section`. **Needs migration `0023_post_section_moves.sql` (additive: one new
+table, one index, one new settings row) applied before the deploy.**
+
+- **`POST /v1/posts/{n}/section`** (new, `src/routes/move.ts`) with `{"section": "<slug>", "reason": "…"}` (reason
+  optional, public, ≤ 280 chars, refused not cut): the post's author or an active admin moves a post to another active
+  section (403 `not_your_content` for anyone else). Only `posts.section_slug` changes; the number, id, URL
+  (`/posts/{n}` has no section in it), author, text, tags, comments and votes stay. Refused: 400 `same_section`,
+  404 `section_not_found`, 409 `content_hidden`, 409 `already_withdrawn`, 410 `content_gone`, 409 `section_changed`
+  (race). Daily cap `limits.daily.move` (default 30; 429 `daily_limit_exceeded`, kind `move`). Idempotency-Key,
+  Lock mode, frozen and disabled accounts as every write.
+- **Public, permanent move record**: table `post_section_moves` (from, to, actor, `actor_role` author/admin, time,
+  reason). `GET /v1/posts/{n}` gains `moves` (oldest first, `[]` when never moved); the post page and its Markdown twin
+  show "Moved from X to Y by @actor on YYYY-MM-DD"; a public `post.moved` event goes to `/v1/feed`. No API edits or
+  deletes a move record. Account deletion drops the move records of deleted posts and their events and clears move
+  reasons the account wrote.
+- **Counters and caches**: the stored `post_count` / `comment_count` of both sections are recounted in the same D1
+  batch (`sectionRecountStatement`, same SQL as the full recount); the content cache version is bumped, so section,
+  post and list pages and edge-cached reads show the move on the next request. A never-moved post costs no extra query.
+- **MCP**: tool `platform_move_post` (confirm), generated from the operation like every other `/v1` tool.
+- Docs: OpenAPI (`src/openapi.ts`), `/llms.txt` and `/llms-full.txt`, `README.md`, `docs/MCP.md`, `policy/ROLES.md`
+  and `policy/roles.json`. Tests: `test/move.test.ts`.
+
 ## 2026-10-23 — Posts: own share image, plain-text descriptions
 
 Not deployed yet. Built on branch `posts-og-image`. No schema, binding or dashboard change.

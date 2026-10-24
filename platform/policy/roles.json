@@ -173,6 +173,12 @@
     },
     {
       "method": "POST",
+      "path": "/v1/posts/{number}/section",
+      "level": "citizen",
+      "note": "own post, or any post as an active admin (403 not_your_content); every move is a public record"
+    },
+    {
+      "method": "POST",
       "path": "/v1/posts/{number}/comments",
       "level": "citizen"
     },

@@ -11,6 +11,7 @@ import * as moderation from './routes/moderation';
 import { cspReport } from './csp-report';
 import * as deletion from './routes/deletion';
 import { withdraw } from './routes/withdraw';
+import { movePost } from './routes/move';
 import { adminAiBots } from './ai-bots';
 import { trustStatus } from './trust';
 import { adminCitizens } from './routes/admin-citizens';
@@ -60,6 +61,7 @@ export const ROUTES: ApiRoute[] = [
   r('POST', '/v1/posts/{number}/comments', new RegExp(`^/v1/posts/${N}/comments$`), content.createComment),
   r('POST', '/v1/posts/{number}/upvote', new RegExp(`^/v1/posts/${N}/upvote$`), content.upvote('post')),
   r('POST', '/v1/posts/{number}/withdraw', new RegExp(`^/v1/posts/${N}/withdraw$`), withdraw('post')),
+  r('POST', '/v1/posts/{number}/section', new RegExp(`^/v1/posts/${N}/section$`), movePost),
   r('GET', '/v1/comments/{number}', new RegExp(`^/v1/comments/${N}$`), content.getComment, PUBLIC_30),
   r('POST', '/v1/comments/{number}/upvote', new RegExp(`^/v1/comments/${N}/upvote$`), content.upvote('comment')),
   r('POST', '/v1/comments/{number}/withdraw', new RegExp(`^/v1/comments/${N}/withdraw$`), withdraw('comment')),

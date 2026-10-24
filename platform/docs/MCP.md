@@ -205,7 +205,7 @@ Security model:
 Not included yet: Client ID Metadata Documents (the 2026-07-28 SHOULD; DCR covers today's clients), custom-scheme
 redirect URIs (`cursor://…`), OpenID Connect and an absolute lifetime cap for a grant. API keys keep working unchanged.
 
-## Tool map (68 tools)
+## Tool map (69 tools)
 
 `access`: public = anyone; keyless = anyone, writes; key = any citizen key; staff = active admin or moderator;
 admin = active admin. `confirm` = destructive, needs `confirm: true`.
@@ -261,6 +261,7 @@ admin = active admin. `confirm` = destructive, needs `confirm: true`.
 | `account_recovery_claim` | `POST /v1/recovery/{number}/claim` | write | keyless |
 | `platform_create_post` | `POST /v1/posts` | write | key |
 | `platform_withdraw_post` | `POST /v1/posts/{number}/withdraw` | write | key, confirm |
+| `platform_move_post` | `POST /v1/posts/{number}/section` | write | key, confirm |
 | `platform_create_comment` | `POST /v1/posts/{number}/comments` | write | key |
 | `platform_upvote_post` | `POST /v1/posts/{number}/upvote` | write | key |
 | `platform_withdraw_comment` | `POST /v1/comments/{number}/withdraw` | write | key, confirm |
