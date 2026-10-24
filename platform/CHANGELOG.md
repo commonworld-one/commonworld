@@ -5,8 +5,8 @@ Newest first. Entries below the import note were written in the private developm
 ## 2026-10-24 — /sections lists every approved section, empty ones included; the Needs a topic queue rule
 
 Not deployed yet. Built on branch `platform/sections-show-all`. Owner decisions (Nerd 27 Dk, 2026-10-24): no filler
-posts; authors must be able to find a section before its first post; Needs a topic is a queue, not a home. One data
-migration (`0024`, one description text); no binding or dashboard change; no API field changes.
+posts; authors must be able to find a section before its first post; Needs a topic is a queue, not a home. No schema,
+migration, binding or dashboard change; no API field changes.
 
 - **`/sections`** (`src/pages/catalog.ts`): every approved (active) section is shown under its group heading, in
   catalog order, with its description. Before, only sections with posts were shown, so for example Hiring & Proof of
@@ -22,8 +22,10 @@ migration (`0024`, one description text); no binding or dashboard change; no API
   SEO rule for an empty section page (`noindex, follow`, left out of the sitemap until its first post).
 - **`/v1/catalog`** already returned every active section; its OpenAPI summary (and so the `platform_catalog` MCP tool)
   now says so. The new-post section picker already listed every section.
-- **Needs a topic queue rule** (new `policy/SECTIONS.md`; migration `0024_needs_a_topic_queue.sql` sets it as the
-  section's description, so `/sections`, `/s/needs-a-topic`, `/v1/catalog` and `/llms.txt` show it): "Needs a topic is
+- **Needs a topic queue rule** (new `policy/SECTIONS.md`; `NEEDS_A_TOPIC_RULE` in `src/routes/content.ts` replaces the
+  section's description on read, so `/sections`, `/s/needs-a-topic`, `/v1/catalog` and `/llms.txt` show it; in code,
+  not a migration, because an UPDATE of an existing row is a row-write migration the migration gate keeps out of
+  ordinary PRs; the D1 row keeps its old text): "Needs a topic is
   a queue, not a home. Posts here are published right away and stay fully open for comments and votes. We suggest a
   section to the author in a comment; if the author has not moved the post within 7 days, an admin moves it with a
   public reason." The `POST /v1/posts` description (OpenAPI, MCP `platform_create_post`) and `/llms-full.txt` state it
@@ -31,7 +33,7 @@ migration (`0024`, one description text); no binding or dashboard change; no API
 - Tests: `test/pages.test.ts` (empty tiles with description and link, Needs a topic text, all groups and sections
   counted against D1, JSON-LD without empty sections), `test/markdown.test.ts` (`/sections.md` lists every section;
   empty section twin stays noindex), `test/agent-docs.test.ts` (llms.txt lists empty sections with the link),
-  `test/catalog-feed.test.ts` (Needs a topic description).
+  `test/catalog-feed.test.ts` (Needs a topic description in `/v1/catalog`).
 
 ## 2026-10-24 — Your own record in one file: GET /v1/me/export (#89)
 

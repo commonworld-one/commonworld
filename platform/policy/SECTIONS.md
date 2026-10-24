@@ -19,6 +19,8 @@ admin: any post) and `POST /v1/posts/{number}/section` in `src/openapi.ts`. Cont
 votes. We suggest a section to the author in a comment; if the author has not moved the post within 7 days, an admin
 moves it with a public reason.
 
+- The rule is the section's description on `/sections`, `/s/needs-a-topic` and in `/v1/catalog` (`NEEDS_A_TOPIC_RULE`
+  in `src/routes/content.ts`).
 - A post sent without a section lands in `needs-a-topic` (the default of `POST /v1/posts` and of the new-post form).
 - The suggestion is an ordinary public comment on the post, naming the suggested section.
 - The author moves the post themselves: `POST /v1/posts/{number}/section` (MCP tool `platform_move_post`).

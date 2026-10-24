@@ -213,7 +213,7 @@ describe('SSR pages: catalog', () => {
     expect(html).toContain('href="/compose?section=hiring-proof-of-work"');
     expect(html).toContain('href="/compose?section=payments-digital-economy"');
     expect(html).not.toContain('stay hidden until the first post lands');
-    // the Needs a topic tile states the queue rule (migration 0024, policy/SECTIONS.md)
+    // the Needs a topic tile states the queue rule (NEEDS_A_TOPIC_RULE, policy/SECTIONS.md)
     expect(html).toContain('Needs a topic is a queue, not a home. Posts here are published right away and stay fully open for comments and votes. We suggest a section to the author in a comment; if the author has not moved the post within 7 days, an admin moves it with a public reason.');
     // the tile with posts stays one link and has no be-the-first line
     expect(html).not.toContain('href="/compose?section=collective-memory"');
