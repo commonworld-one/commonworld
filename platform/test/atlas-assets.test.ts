@@ -94,7 +94,8 @@ describe('A3 routing contract (wrangler.toml run_worker_first)', () => {
     const files: string[] = JSON.parse(env.TEST_ATLAS_DIST_FILES);
     const url = (f: string) => f.endsWith('/index.html') ? f.slice(0, -'index.html'.length) : f;
     // Static on Pages too (_routes.json excludes /atlas/badge/*): the badge page has no nonce today either.
-    const staticHtml = new Set(['/atlas/badge/']);
+    // /api/404.html is the typed JSON 404 body (atlas/site/build.py typed_404_files), static like the rest of /api/.
+    const staticHtml = new Set(['/atlas/badge/', '/api/404.html']);
     // Worker-owned (v1 files, merged files, or Atlas root files the Worker answers itself).
     const workerOwned = new Set(['/robots.txt', '/sitemap.xml', '/llms.txt', '/llms-full.txt', '/favicon.ico', '/_headers', '/_redirects', '/_routes.json']);
     let html = 0; let assets = 0;
