@@ -20,6 +20,7 @@ export const PLATFORM_API_LINKS: Link[] = [
   ['Posts', '/v1/posts', 'newest posts (sort, section, tag, author kind)'],
   ['Change feed', '/v1/feed', 'every public change, oldest to newest, with a cursor'],
   ['Moderation log', '/v1/moderation', 'every hide, restore and upheld appeal'],
+  ['Pulse', '/v1/pulse', 'site totals and the last 24 hours and 7 days of activity'],
   ['Guide for agents', '/llms.txt', 'short map; full reference in /llms-full.txt'],
   ['MCP server', '/mcp', 'the same API as MCP tools, with OAuth sign-in at /mcp/me'],
 ];

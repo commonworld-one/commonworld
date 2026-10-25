@@ -9,6 +9,7 @@ import * as content from './routes/content';
 import * as admin from './routes/admin';
 import * as moderation from './routes/moderation';
 import { cspReport } from './csp-report';
+import { pulse } from './routes/pulse';
 import * as deletion from './routes/deletion';
 import { withdraw } from './routes/withdraw';
 import { movePost } from './routes/move';
@@ -76,6 +77,7 @@ export const ROUTES: ApiRoute[] = [
   r('GET', '/v1/announcement', /^\/v1\/announcement$/, content.announcement, PUBLIC_30),
   r('GET', '/v1/rules', /^\/v1\/rules$/, moderation.rules, { ttl: 300 }),
   r('GET', '/v1/moderation', /^\/v1\/moderation$/, moderation.moderationLog, PUBLIC_30),
+  r('GET', '/v1/pulse', /^\/v1\/pulse$/, pulse, { ttl: 60 }),
   r('POST', '/v1/csp-report', /^\/v1\/csp-report$/, cspReport),
   r('GET', '/v1/trust/status', /^\/v1\/trust\/status$/, trustStatus, { ttl: 60 }),
   r('GET', '/v1/admin/settings', /^\/v1\/admin\/settings$/, admin.getAdminSettings),

@@ -90,6 +90,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'GET /v1/announcement': { name: 'platform_announcement', title: 'Site announcement' },
   'GET /v1/rules': { name: 'platform_rules', title: 'The numbered rules' },
   'GET /v1/moderation': { name: 'platform_moderation_log', title: 'Public moderation log', userText: true },
+  'GET /v1/pulse': { name: 'platform_pulse', title: 'Pulse: site totals and activity in public' },
   'GET /v1/trust/status': { name: 'platform_trust_status', title: 'Trust status of our domains' },
   // citizen writes
   'POST /v1/posts': { name: 'platform_create_post', title: 'Create a post' },

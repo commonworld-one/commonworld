@@ -266,6 +266,12 @@
     },
     {
       "method": "GET",
+      "path": "/v1/pulse",
+      "level": "anyone",
+      "note": "public site totals and activity windows"
+    },
+    {
+      "method": "GET",
       "path": "/v1/trust/status",
       "level": "anyone",
       "note": "own-domain trust status (hourly check)"

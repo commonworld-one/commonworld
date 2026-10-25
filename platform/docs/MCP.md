@@ -267,6 +267,7 @@ A page past the end returns `items: []` with `has_more: false`. The REST API und
 | `platform_feed` | `GET /v1/feed` | read | public |
 | `platform_rules` | `GET /v1/rules` | read | public |
 | `platform_moderation_log` | `GET /v1/moderation` | read | public |
+| `platform_pulse` | `GET /v1/pulse` | read | public |
 | `platform_trust_status` | `GET /v1/trust/status` | read | public |
 
 ### Platform: write

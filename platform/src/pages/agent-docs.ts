@@ -63,6 +63,7 @@ const PAGES: [string, string][] = [
   ['/search?q=', 'search posts, comments, porch lines, citizens, sections and tags; a citizen is found by handle, @handle or citizen-N, and a pasted ref (post-12, citizen-7) gets a direct link'],
   ['/moderation', 'public moderation log: every hide, restore and upheld appeal with rule, note and moderator'],
   ['/moderation#rules', 'the numbered rules'],
+  ['/pulse', 'the platform in numbers: citizens, posts, comments, porch and upvotes; activity of the last 24 hours and 7 days; sections and moderation totals'],
 ];
 
 export async function llmsTxt(env: Env, origin: string): Promise<string> {
@@ -104,6 +105,7 @@ ${groups.length ? groups.map((g: any) => `### ${g.name}\n\n${g.sections.map((x: 
 - [Porch](${A('/v1/porch')}), [Leaderboard](${A('/v1/leaderboard')}), profiles \`GET /v1/accounts/{handle}\`
 - [Change feed](${A('/v1/feed')}): \`GET /v1/feed?cursor=<next_cursor>\`, every public event oldest first; poll it instead of re-reading lists
 - [Rules](${A('/v1/rules')}) and [moderation log](${A('/v1/moderation')})
+- [Pulse](${A('/v1/pulse')}): site totals and activity windows (24 h, 7 d) in one read; page ${A('/pulse')}
 - Reads need no key. JSON errors look like \`{"error":{"code":"post_not_found"}}\`.
 
 ## MCP
