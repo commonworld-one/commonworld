@@ -2160,6 +2160,19 @@
    "height": 750,
    "bytes": 39262
   },
+  "for-agents-only": {
+   "file": "for-agents-only.webp",
+   "sha256": "a4c141e7bd712794a54fb115d9327a5261c1eeb087dcf2f553acf090871a419a",
+   "dhash": "e44b5bf471602000",
+   "website": "https://noivanwashere.com/agents/",
+   "source_url": "https://noivanwashere.com/agents/",
+   "http_status": 200,
+   "title": "FOR AGENTS ONLY — Ivan Kalinichev",
+   "captured_at": "2026-10-25T20:14:16Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 18880
+  },
   "foragents-site": {
    "file": "foragents-site.webp",
    "sha256": "41592b938ef8c736b6ff5b219f37fcf55720a3f05555420ba3ea800b22bcb46b",
@@ -2732,6 +2745,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 28728
+  },
+  "memecorp": {
+   "file": "memecorp.webp",
+   "sha256": "dae270de2019e1ec23221a81d8be8c0a5991b1f6e572df8a45be72f3544aa312",
+   "dhash": "c304043b0f45039e",
+   "website": "https://memecorp.us/",
+   "source_url": "https://memecorp.us/",
+   "http_status": 200,
+   "title": "memecorp · real memes, real DOGE, real aura",
+   "captured_at": "2026-10-25T20:14:17Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 52524
   },
   "meridian-mrdn": {
    "file": "meridian-mrdn.webp",
@@ -3409,6 +3435,20 @@
    "height": 750,
    "bytes": 37504
   },
+  "perplexity-instant-buy-paypal": {
+   "file": "perplexity-instant-buy-paypal.webp",
+   "sha256": "f7655067949eb1c5383b798726df52a1372700df33395e1437a3657fe9650424",
+   "dhash": "228684baf8e0b0b2",
+   "website": "https://www.perplexity.ai/hub/blog/shopping-that-puts-you-first",
+   "source_url": "https://newsroom.paypal-corp.com/2025-11-PayPal-and-Perplexity-Launch-Instant-Buy",
+   "http_status": 200,
+   "title": "Press Release: PayPal and Perplexity Launch Instant Buy Ahead of Black Friday",
+   "captured_at": "2026-10-25T20:14:30Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 31322,
+   "shot_url": "https://newsroom.paypal-corp.com/2025-11-PayPal-and-Perplexity-Launch-Instant-Buy"
+  },
   "plazmi": {
    "file": "plazmi.webp",
    "sha256": "a5cc30d8f18d9ea150049852e224034388f0a67aac9628928d1dc18936f498d9",
@@ -3629,6 +3669,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 24982
+  },
+  "smithtalks": {
+   "file": "smithtalks.webp",
+   "sha256": "dbe841129f4c30d214a46b5160efa0c3d7c105710c513b4a56e5b9560b40558b",
+   "dhash": "0000100c0c100000",
+   "website": "https://smithtalks.pages.dev/",
+   "source_url": "https://smithtalks.pages.dev/",
+   "http_status": 200,
+   "title": "SmithTalks — a message network for autonomous agents, no registration",
+   "captured_at": "2026-10-25T20:14:29Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 3474
   },
   "snail": {
    "file": "snail.webp",
@@ -4345,6 +4398,19 @@
    "height": 750,
    "bytes": 63940
   },
+  "voicescape": {
+   "file": "voicescape.webp",
+   "sha256": "a50bbc689426490813fac39f0414cb8a77a7e4aa237a68dff1aaeccca0a4adb6",
+   "dhash": "f0f8e226924c4cb0",
+   "website": "https://voicescape.vercel.app/",
+   "source_url": "https://voicescape.vercel.app/",
+   "http_status": 200,
+   "title": "Voicescape — Your blockpage, your vibe, on-chain tips",
+   "captured_at": "2026-10-25T20:14:36Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 28020
+  },
   "voidpay": {
    "file": "voidpay.webp",
    "sha256": "dfd04018f48626a3f8535102442cc4812be395dbce4b789fbd88bf30bddbcae9",
@@ -4528,5 +4594,5 @@
    "bytes": 44740
   }
  },
- "updated_at": "2026-10-24T08:18:34Z"
+ "updated_at": "2026-10-25T20:18:14Z"
 }
