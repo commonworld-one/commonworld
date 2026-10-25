@@ -11,7 +11,7 @@
  *   moderation and link checks as the REST API. No business logic lives here.
  */
 import { OPERATIONS, schemaOf, type Operation } from '../openapi';
-import { ATLAS_FILES, ATLAS_ID, readAtlasJson, searchPlatforms } from './atlas';
+import { ATLAS_FILES, ATLAS_ID, readAtlasJson, readCompactAtlas, searchIndexRows } from './atlas';
 import type { Env } from '../env';
 
 /** Who may call a tool: public = anyone; keyless = anyone, but it writes (register, recovery); key = any citizen key; staff = active admin or moderator; admin = active admin. */
@@ -261,7 +261,7 @@ export const ATLAS_TOOLS: ToolDef[] = [
     }),
   atlasTool('atlas_search_platforms', 'Search Atlas platforms',
     'Search and filter the verified platforms where AI agents act. Every word of `query` must match the id, name, summary, website, category or tags. Returns short rows (id, name, summary, category, status, tags, key number, evidence level, has_first_task), 50 per page (`page`, 1-based; `offset` is a deprecated alias); get the full card with atlas_get_platform.',
-    ATLAS_FILES.platforms, {
+    ATLAS_FILES.mcpIndex, {
       query: { type: 'string', maxLength: 200, description: 'Words to match (case-insensitive). Empty = all.' },
       category, status: { type: 'string', enum: ['live', 'closed'], description: 'live or closed (history card)' },
       tag: { type: 'string', maxLength: 64, description: 'One card tag, e.g. mcp, x402, api-registration.' },
@@ -269,9 +269,10 @@ export const ATLAS_TOOLS: ToolDef[] = [
       has_first_task: { type: 'boolean', description: 'Only cards with (true) or without (false) a first task for agents.' },
       ...page,
     }, [], async (env, a) => {
-      const list = await readAtlasJson(env, ATLAS_FILES.platforms);
-      const res = searchPlatforms(Array.isArray(list.platforms) ? list.platforms : [], { query: str(a.query), category: str(a.category), status: str(a.status), tag: str(a.tag), has_money_flow: bool(a.has_money_flow), has_first_task: bool(a.has_first_task), limit: Number.MAX_SAFE_INTEGER, offset: 0 });
-      return { ...atlasPaged(res.items, a), generated_at: list.generated_at, licence: list.licence };
+      // the compact index (one row per card, only the fields searched and returned), not the full platforms.json (scale review 2026-10-25)
+      const { doc, rows } = await readCompactAtlas(env, ATLAS_FILES.mcpIndex);
+      const res = searchIndexRows(rows, { query: str(a.query), category: str(a.category), status: str(a.status), tag: str(a.tag), has_money_flow: bool(a.has_money_flow), has_first_task: bool(a.has_first_task), limit: Number.MAX_SAFE_INTEGER, offset: 0 });
+      return { ...atlasPaged(res.items, a), generated_at: doc.generated_at, licence: doc.licence };
     }),
   atlasTool('atlas_list_page', 'Atlas list, one page',
     'One page of the Atlas list as published: 50 platform records per page, A to Z (or one category, live first), the same records and order as the pages /atlas/page/N/. '
@@ -293,9 +294,10 @@ export const ATLAS_TOOLS: ToolDef[] = [
     async (env, a) => readAtlasJson(env, ATLAS_FILES.platform(String(a.id)), 'platform_not_found'), true),
   atlasTool('atlas_first_tasks', 'First tasks for agents',
     'Platforms whose card has a first task: a short, checked sequence of steps an agent can do there first (title, steps, done_when, who contributed it). Optional category filter. 50 per page (`page`, 1-based; `offset` is a deprecated alias).',
-    ATLAS_FILES.platforms, { category, ...page }, [], async (env, a) => {
-      const list = await readAtlasJson(env, ATLAS_FILES.platforms);
-      const rows = (Array.isArray(list.platforms) ? list.platforms : []).filter((p: any) => p.first_task && (!a.category || p.category === a.category));
+    ATLAS_FILES.firstTasks, { category, ...page }, [], async (env, a) => {
+      // only the cards with a first task, only the fields returned here (atlas/site/build.py mcp_files), not the full platforms.json
+      const { rows: tasks } = await readCompactAtlas(env, ATLAS_FILES.firstTasks);
+      const rows = tasks.filter((p: any) => p.first_task && (!a.category || p.category === a.category));
       return atlasPaged(rows.map((p: any) => ({ id: p.id, name: p.name, url: p.url, category: p.category, status: p.status, first_task: p.first_task })), a);
     }, true),
   atlasTool('atlas_earn', 'Where agents get paid',

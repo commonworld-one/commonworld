@@ -217,10 +217,10 @@ admin = active admin. `confirm` = destructive, needs `confirm: true`.
 | Tool | REST endpoint / source | Kind | Access |
 |---|---|---|---|
 | `atlas_list_categories` | Atlas `/api/v1/atlas/index.json` | read | public |
-| `atlas_search_platforms` | Atlas `/api/v1/atlas/platforms.json` | read | public |
+| `atlas_search_platforms` | Atlas `/api/v1/atlas/mcp-index.json` (compact index; shards under `/api/v1/atlas/mcp-index/` once it is large) | read | public |
 | `atlas_list_page` | Atlas `/api/v1/atlas/page/{page}.json` (and `/api/v1/atlas/categories/{category}/page/{page}.json`) | read | public |
 | `atlas_get_platform` | Atlas `/api/v1/atlas/platforms/{id}.json` | read | public |
-| `atlas_first_tasks` | Atlas `/api/v1/atlas/platforms.json` | read | public |
+| `atlas_first_tasks` | Atlas `/api/v1/atlas/first-tasks.json` (shards under `/api/v1/atlas/first-tasks/` once it is large) | read | public |
 | `atlas_earn` | Atlas `/api/v1/atlas/earn.json` | read | public |
 | `commonworld_stats` | Atlas `/stats.json` | read | public |
 
@@ -241,11 +241,26 @@ the A-Z list too; there is no separate parameter for it.
 
 **One paging contract for every Atlas tool** (owner decision 2026-10-24): `page`, 1-based, 50 results per page, the same
 as `atlas_list_page` and `/api/v1/atlas/page/{page}.json`. `atlas_search_platforms` and `atlas_first_tasks` filter the
-full `platforms.json` and return `{total, page, per_page: 50, pages, has_more, next_page, page_from, items}`. `offset` is
+whole Atlas and return `{total, page, per_page: 50, pages, has_more, next_page, page_from, items}`. `offset` is
 accepted only as a deprecated alias, `page = floor(offset / 50) + 1`, and is ignored when `page` is given; `page_from`
 (`page`, `offset` or `default`) says which one chose the page. `limit` is accepted and ignored (pages always hold 50).
 A page past the end returns `items: []` with `has_more: false`. The REST API under `/v1/` keeps its own cursors
 (`before`, `offset` for ranked feeds), described in `/openapi.json`.
+
+**Compact files for search and first tasks** (scale review, 2026-10-25): `atlas_search_platforms` and `atlas_first_tasks`
+no longer read the full `platforms.json` (about 0.9 MB with 375 cards; it stays published, unchanged). The Atlas build
+writes two small files for them: `/api/v1/atlas/mcp-index.json`, one row per card with exactly the fields a search result
+carries (`id, name, url, json_url, website, category, category_label, type, status, summary, tags, has_money_flow,
+key_number, verified_at, evidence_level, disclosure, has_first_task`, which are also every field the search filters and
+matches on), and `/api/v1/atlas/first-tasks.json`, only the cards with a first task and only the fields the tool returns
+(`id, name, url, category, status, first_task`). Both carry `snapshot_id`, `generated_at` and `licence`. Each file stays
+under 200 KB gzipped and 1,000,000 bytes raw (`atlas/site/check.py` fails the build otherwise); once the whole list would
+not fit, the file becomes a manifest (`shards: [{path, first, last, count}]`) and the rows go to shards cut by first letter
+(`/api/v1/atlas/mcp-index/<n>-<a>-<z>.json`), which the server reads and joins in order. A shard of another build, a missing
+shard or a count that does not add up answers `503 atlas_unavailable` (fail closed). The results are the same as before,
+byte for byte (`test/mcp-compact.test.ts` runs both tools over the real build, old path against new). These files are
+internal to the MCP server and their shape may change; for data use `platforms.json`. The server reads no Atlas file over
+2,000,000 bytes: it refuses a larger `Content-Length` before reading and stops reading a stream at the limit.
 
 ### Platform: read
 

@@ -3099,9 +3099,11 @@ def gz_size(obj):
     return len(gzip.compress(json.dumps(obj, ensure_ascii=False, separators=(',', ':')).encode(), 6))
 
 
-def shard_rows(rows, letters, budget):
+def shard_rows(rows, letters, budget, fits=None):
     """Contiguous slices of the list, cut only where the first letter changes, each shard gzipped well under budget
-    (80 %): [(first letter, last letter, rows)]. A single letter bigger than that stays one shard (check.py reports it)."""
+    (80 %): [(first letter, last letter, rows)]. A single letter bigger than that stays one shard (check.py reports it).
+    `fits(rows)` replaces the size test when a file has more than one budget (the MCP index: gzipped and raw)."""
+    fits = fits or (lambda rs: gz_size(rs) <= budget * 0.8)
     groups = []
     for r, l in zip(rows, letters):
         if groups and groups[-1][0] == l:
@@ -3110,7 +3112,7 @@ def shard_rows(rows, letters, budget):
             groups.append((l, [r]))
     out = []
     for l, rs in groups:
-        if out and gz_size(out[-1][2] + rs) <= budget * 0.8:
+        if out and fits(out[-1][2] + rs):
             out[-1] = (out[-1][0], l, out[-1][2] + rs)
         else:
             out.append((l, l, list(rs)))
@@ -3147,6 +3149,60 @@ def search_index(site, budget=None):
         out[sp] = {'format': SEARCH_FORMAT + '-shard', 'snapshot_id': site.snapshot_id, 'first': a, 'last': z, 'count': len(rs), 'cards': rs}
         shards.append({'path': sp, 'first': a, 'last': z, 'count': len(rs)})
     return {path: doc | {'shards': shards}} | out
+
+
+# Compact files of the MCP server (platform/src/mcp/tools.ts, scale review 2026-10-25): atlas_search_platforms and
+# atlas_first_tasks read these instead of the full platforms.json, which stays published unchanged.
+MCP_INDEX_PATH = '/api/v1/atlas/mcp-index.json'
+MCP_FIRST_TASKS_PATH = '/api/v1/atlas/first-tasks.json'
+MCP_INDEX_FORMAT = 'commonworld-atlas-mcp-index/1'
+MCP_FIRST_TASKS_FORMAT = 'commonworld-atlas-first-tasks/1'
+# The fields of a search result row, in this order: ROW_FIELDS of platform/src/mcp/atlas.ts (slimRow), then has_first_task.
+# They are also every field searchPlatforms() filters and matches on, so the tool never needs the full record.
+MCP_ROW_FIELDS = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags',
+                  'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure']
+MCP_FIRST_TASK_FIELDS = ['id', 'name', 'url', 'category', 'status', 'first_task']
+MCP_GZ_BUDGET = 200 * 1024  # per file, gzipped (check.py); past it the file becomes a manifest + shards by first letter
+MCP_RAW_BUDGET = 1_000_000  # per file, raw bytes (check.py); the MCP server refuses any Atlas file over 2,000,000 bytes
+MCP_MAX_BYTES = 2_000_000   # = MAX_ATLAS_BYTES in platform/src/mcp/atlas.ts (tests/test_mcp_index.py keeps them equal)
+MCP_NOTE = ('Internal file of the Commonworld MCP server (atlas_search_platforms, atlas_first_tasks); its shape may change. '
+            'For data use /api/v1/atlas/platforms.json (stable, versioned).')
+
+
+def mcp_row(r):
+    """One search row: the record's MCP_ROW_FIELDS that it has (as slimRow copies only present keys) + has_first_task."""
+    return {k: r[k] for k in MCP_ROW_FIELDS if k in r} | {'has_first_task': r.get('first_task') is not None}
+
+
+def raw_size(obj):
+    return len(json.dumps(obj, ensure_ascii=False, separators=(',', ':')).encode())
+
+
+def compact_files(path, fmt, head, rows, letters, gz_budget=None, raw_budget=None):
+    """{path: document} of one compact MCP file: the whole list in one file while it fits both budgets (gzipped and raw),
+    else a manifest at `path` and contiguous shards by first letter at <path without .json>/<n>-<a>-<z>.json, in list
+    order, like search_index(). Every file carries the build's snapshot_id; the manifest says how many rows in total."""
+    gz_budget, raw_budget = gz_budget or MCP_GZ_BUDGET, raw_budget or MCP_RAW_BUDGET
+    doc = {'format': fmt, 'note': MCP_NOTE} | head | {'total': len(rows)}
+    whole = doc | {'rows': rows}
+    if gz_size(whole) <= gz_budget and raw_size(whole) <= raw_budget:
+        return {path: whole}
+    fits = lambda rs: gz_size(rs) <= gz_budget * 0.8 and raw_size(rs) <= raw_budget * 0.8
+    out, shards = {}, []
+    for i, (a, z, rs) in enumerate(shard_rows(rows, letters, gz_budget, fits), 1):
+        sp = f"{path[:-len('.json')]}/{i}-{'0' if a == '#' else a.lower()}-{'0' if z == '#' else z.lower()}.json"
+        out[sp] = {'format': fmt + '-shard', 'snapshot_id': head['snapshot_id'], 'first': a, 'last': z, 'count': len(rs), 'rows': rs}
+        shards.append({'path': sp, 'first': a, 'last': z, 'count': len(rs)})
+    return {path: doc | {'shards': shards}} | out
+
+
+def mcp_files(recs, letters, head, gz_budget=None, raw_budget=None):
+    """The two compact MCP files from the published records (platforms.json order): the search index (every record as
+    mcp_row) and the first tasks (records with a first_task). head = snapshot_id, generated_at, licence of platforms.json."""
+    tasks = [(r, l) for r, l in zip(recs, letters) if r.get('first_task') is not None]
+    return (compact_files(MCP_INDEX_PATH, MCP_INDEX_FORMAT, head, [mcp_row(r) for r in recs], letters, gz_budget, raw_budget)
+            | compact_files(MCP_FIRST_TASKS_PATH, MCP_FIRST_TASKS_FORMAT, head, [{k: r.get(k) for k in MCP_FIRST_TASK_FIELDS} for r, _ in tasks],
+                            [l for _, l in tasks], gz_budget, raw_budget))
 
 
 def snapshot_id_of(recs):
@@ -3200,6 +3256,10 @@ def build_api(site, write):
                 doc |= {'category': k, 'category_label': CAT_LABEL[k]}
             doc['platforms'] = [by_id[c['slug']] for c in pc]
             write(V + api_v1.page_json(n, k), api_json(doc, indent=False))
+    # compact files of the MCP server: search rows and first tasks, the same records as platforms.json (no URL removed)
+    head = {'snapshot_id': site.snapshot_id, 'generated_at': gen, 'licence': lic}
+    for p, doc in mcp_files(site.agent_recs, [az_letter(c['name']) for c in site.cards], head).items():
+        write(p, json.dumps(doc, ensure_ascii=False, separators=(',', ':')) + '\n')
     for name, sch in api_v1.schemas(site.origin, site.cats).items():
         write(f'{V}/schemas/{name}', api_json(sch))
     ids = [c['slug'] for c in site.cards]
@@ -3287,6 +3347,8 @@ def build_api_docs(site):
 <p>Since <code>schema_version</code> 1.7.0 every entry record also carries <code>reachability</code>: <code>null</code>, or on a live card whose site does not answer the way its status suggests, <code>{{state, label, checked_at, reads, note, credit, reported_via}}</code>. <code>state</code> is <code>stale</code> (marked live, but no read got the site’s own content; the card stays live until the protocol closes it) or <code>challenge_walled</code> (the site is up and serves its own content, but plain scripts get a challenge page). Each read has <code>url</code>, <code>observed_at</code>, <code>http_status</code>, <code>bytes</code>, <code>page_type</code> (<code>own_content</code>, <code>challenge</code>, <code>error</code>), <code>client</code>, <code>by</code> and <code>sha256</code> (or <code>null</code>). A state needs two reads of the same page type at least two hours apart, one of them by the Atlas; <code>status</code> keeps its two values (<a href="{REPO_URL}/blob/main/atlas/site/reachability.py" rel="nofollow noopener">contract</a>).</p>
 <h2 id="pages">Paged lists</h2>
 <p>Since <code>schema_version</code> 1.8.0 the list also comes in pages of {PAGE_SIZE} records, the same records as <code>platforms.json</code> in the order of the HTML pages: <a href="{V}{api_v1.page_json(1)}"><code>{V}{api_v1.page_json(1)}</code></a>, <code>{V}/atlas/page/&lt;N&gt;.json</code> (all entries, A to Z, like <a href="{b}/">/atlas/</a> and <code>/atlas/page/&lt;N&gt;/</code>) <code>{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json</code> (one category, live first, like the category pages) and <code>{V}/atlas/platforms/page/&lt;N&gt;.json</code> (the A–Z table <a href="{b}/platforms/">/atlas/platforms/</a> and <code>/atlas/platforms/page/&lt;N&gt;/</code>: the same records and order as the whole list, with <code>url</code> naming the A–Z page). Every page carries <code>snapshot_id</code>, <code>page</code>, <code>per_page</code>, <code>pages</code>, <code>total</code>, <code>count</code>, <code>has_more</code>, <code>next</code>, <code>prev</code> and <code>first</code>, plus <code>url</code> (the HTML page) and <code>md_url</code> (its Markdown twin). {e(api_v1.PAGE_WALK_RULE)} The number of pages is also in <a href="{V}/atlas/index.json">atlas/index.json</a> (<code>counts.pages</code>, <code>categories[].pages</code>). MCP clients read the same pages with the tool <code>atlas_list_page</code>. {e(api_v1.PAGING_CONTRACT)} {e(api_v1.PAGE_ONE_RULE)} A <code>.json</code> file that does not exist under <code>/api/</code> answers HTTP 404 with a JSON error body <code>{e(api_v1.NOT_FOUND_SHAPE)}</code>.</p>
+<h2 id="mcp-files">Compact files of the MCP server</h2>
+<p>The MCP tools <code>atlas_search_platforms</code> and <code>atlas_first_tasks</code> at <code>/mcp</code> read two small files instead of the full <code>platforms.json</code>: <code>{V}/atlas/mcp-index.json</code> (one row per entry with only the fields a search result carries) and <code>{V}/atlas/first-tasks.json</code> (only the entries with a first task). Each stays under {MCP_GZ_BUDGET // 1024} KB gzipped and {MCP_RAW_BUDGET:,} bytes; past that it becomes a manifest with <code>shards</code> cut by first letter (<code>{V}/atlas/mcp-index/&lt;n&gt;-&lt;a&gt;-&lt;z&gt;.json</code>). They carry the same records as <code>platforms.json</code> and the build’s <code>snapshot_id</code>, but they are internal to the MCP server: their shape may change without a <code>schema_version</code> bump. For data, use <code>platforms.json</code>, the paged lists or the per-entry files, which keep working.</p>
 <h2 id="ids">IDs</h2>
 <p>An entry ID is its permanent URL slug (for example <code>{e(ex)}</code>). Never construct or guess an ID: take it from <a href="{V}/atlas/platforms.json">platforms.json</a> or a category file. An ID that is not listed there does not exist, and the request returns 404.</p>
 <h2 id="examples">Examples</h2>

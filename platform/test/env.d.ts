@@ -9,6 +9,7 @@ declare namespace Cloudflare {
     CW_PRIVATE_TERMS: string;
     TEST_WRANGLER_TOML: string;
     TEST_ATLAS_DIST_FILES: string;
+    TEST_ATLAS_MCP_FILES: string;
     TEST_MIGRATIONS: import('cloudflare:test').D1Migration[];
   }
 }

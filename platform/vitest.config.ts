@@ -27,6 +27,27 @@ function atlasDistFiles(): string {
   return JSON.stringify(out);
 }
 
+/**
+ * The files of a real Atlas build that the MCP search and first-tasks tools read, old path and new (platforms.json, the
+ * compact mcp-index.json / first-tasks.json and their shards), as {path: text}: test/mcp-compact.test.ts runs both tools over
+ * them and checks the results are identical. Empty without a build (CI builds one and sets CW_REQUIRE_ATLAS_DIST=1).
+ */
+function atlasMcpFiles(): string {
+  const dir = path.resolve(process.env.CW_PUBLIC_DIR ?? path.join(import.meta.dirname, '..'), 'atlas', 'site', 'dist');
+  const api = path.join(dir, 'api', 'v1', 'atlas');
+  if (!fs.existsSync(path.join(api, 'platforms.json'))) {
+    if (process.env.CW_REQUIRE_ATLAS_DIST === '1') throw new Error(`CW_REQUIRE_ATLAS_DIST=1 but no Atlas build at ${dir}`);
+    return '';
+  }
+  const out: Record<string, string> = {};
+  const add = (rel: string) => { const f = path.join(api, rel); if (fs.existsSync(f)) out[`/api/v1/atlas/${rel}`] = fs.readFileSync(f, 'utf8'); };
+  for (const f of ['platforms.json', 'index.json', 'mcp-index.json', 'first-tasks.json']) add(f);
+  for (const sub of ['mcp-index', 'first-tasks']) {
+    if (fs.existsSync(path.join(api, sub))) for (const f of fs.readdirSync(path.join(api, sub))) add(`${sub}/${f}`);
+  }
+  return JSON.stringify(out);
+}
+
 export default defineConfig(async () => {
   const migrations = await readD1Migrations(path.join(import.meta.dirname, 'migrations'));
   return {
@@ -48,6 +69,8 @@ export default defineConfig(async () => {
             // wrangler.toml as text (test/atlas-assets.test.ts checks run_worker_first in every environment)
             TEST_WRANGLER_TOML: fs.readFileSync(path.join(import.meta.dirname, 'wrangler.toml'), 'utf8'),
             TEST_ATLAS_DIST_FILES: atlasDistFiles(),
+            // the real build's platforms.json and compact MCP files (test/mcp-compact.test.ts: old path vs new path)
+            TEST_ATLAS_MCP_FILES: atlasMcpFiles(),
             // in-memory double for the RL_<tier> Rate Limiting bindings (src/ratelimit.ts)
             RATE_LIMIT_DOUBLE: '1',
             // link checks at publish answer no_data without network (src/link-check.ts); test/ui-writes.test.ts turns it off

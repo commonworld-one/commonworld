@@ -618,6 +618,86 @@ def load_search_index():
     return si, fails
 
 
+MCP_GZ_BUDGET = 200 * 1024    # same as build.MCP_GZ_BUDGET: every compact MCP file under 200 KB gzipped (build.py shards past it)
+MCP_RAW_BUDGET = 1_000_000    # same as build.MCP_RAW_BUDGET: and under 1,000,000 bytes raw
+MCP_MAX_BYTES = 2_000_000     # same as MAX_ATLAS_BYTES in platform/src/mcp/atlas.ts: the MCP server refuses a bigger Atlas file
+MCP_COMPACT = {'/api/v1/atlas/mcp-index.json': 'commonworld-atlas-mcp-index/1', '/api/v1/atlas/first-tasks.json': 'commonworld-atlas-first-tasks/1'}
+
+
+def load_compact(path, fmt):
+    """One compact MCP file (platform/src/mcp/tools.ts) as one document, rows joined from its shards when it is sharded, plus
+    failures: the manifest and every shard in budget (gzipped and raw), shards under <path>/ with the build's snapshot_id,
+    counts right. Returns (doc, files, fails)."""
+    fails, fp = [], os.path.join(DIST, path.lstrip('/'))
+    if not os.path.isfile(fp):
+        return {}, [], [f'{path} missing (the MCP tools atlas_search_platforms / atlas_first_tasks read it)']
+    doc, files = json.load(open(fp, encoding='utf-8')), [fp]
+    if doc.get('format') != fmt: fails.append(f'{path}: format {doc.get("format")!r}, expected {fmt!r}')
+    if doc.get('shards'):
+        rows, shard_dir = [], path[:-len('.json')] + '/'
+        for sh in doc['shards']:
+            sp = str(sh.get('path') or '')
+            if not sp.startswith(shard_dir) or not re.fullmatch(r'[0-9]+-[a-z0]-[a-z0]\.json', sp[len(shard_dir):]):
+                fails.append(f'{path}: shard path {sp!r} is not under {shard_dir}'); continue
+            sfp = os.path.join(DIST, sp.lstrip('/'))
+            files.append(sfp)
+            if not os.path.isfile(sfp): fails.append(f'{path}: shard {sp} missing'); continue
+            d = json.load(open(sfp, encoding='utf-8'))
+            if d.get('format') != fmt + '-shard' or d.get('snapshot_id') != doc.get('snapshot_id') or d.get('count') != len(d.get('rows') or []) or sh.get('count') != d.get('count'):
+                fails.append(f'{path}: shard {sp}: format, snapshot_id or count wrong')
+            rows += d.get('rows') or []
+        doc = doc | {'rows': rows}
+    elif not isinstance(doc.get('rows'), list):
+        fails.append(f'{path}: neither rows nor shards')
+    if doc.get('total') != len(doc.get('rows') or []): fails.append(f'{path}: total {doc.get("total")} != {len(doc.get("rows") or [])} rows')
+    for f in files:
+        if not os.path.isfile(f): continue
+        raw = open(f, 'rb').read()
+        gz = len(gzip.compress(raw, 6))
+        if gz > MCP_GZ_BUDGET: fails.append(f'{os.path.relpath(f, DIST)}: {gz} bytes gzipped > {MCP_GZ_BUDGET // 1024} KB MCP budget')
+        if len(raw) > MCP_RAW_BUDGET: fails.append(f'{os.path.relpath(f, DIST)}: {len(raw)} bytes > {MCP_RAW_BUDGET} bytes MCP raw budget')
+    return doc, files, fails
+
+
+def mcp_compact_checks():
+    """The compact files of the MCP server (scale review 2026-10-25): mcp-index.json holds exactly the search row of every
+    record of platforms.json in its order (build.mcp_row: the fields slimRow returns, which are also every field the search
+    filters on), first-tasks.json exactly the records with a first task; same snapshot_id, generated_at and licence as the
+    published list; every file in budget. platforms.json itself stays published. Every Atlas JSON file an MCP tool reads is
+    under MCP_MAX_BYTES, the limit the server enforces."""
+    sys.path.insert(0, HERE)
+    import build
+    fails = []
+    for k, v in (('MCP_GZ_BUDGET', MCP_GZ_BUDGET), ('MCP_RAW_BUDGET', MCP_RAW_BUDGET), ('MCP_MAX_BYTES', MCP_MAX_BYTES)):
+        if getattr(build, k) != v: fails.append(f'check.py {k} {v} != build.py {getattr(build, k)}')
+    lst = json.load(open(os.path.join(DIST, 'api', 'v1', 'atlas', 'platforms.json'), encoding='utf-8'))
+    snap = (json.load(open(os.path.join(DIST, 'api', 'v1', 'atlas', 'index.json'), encoding='utf-8')).get('paging') or {}).get('snapshot_id')
+    recs = lst.get('platforms') or []
+    want = {'/api/v1/atlas/mcp-index.json': [build.mcp_row(r) for r in recs],
+            '/api/v1/atlas/first-tasks.json': [{k: r.get(k) for k in build.MCP_FIRST_TASK_FIELDS} for r in recs if r.get('first_task') is not None]}
+    sizes = []
+    for path, fmt in MCP_COMPACT.items():
+        doc, files, f = load_compact(path, fmt)
+        fails += f
+        if not doc: continue
+        if doc.get('rows') != want[path]: fails.append(f'{path}: rows are not the records of platforms.json (in order, MCP fields only)')
+        for k, v in (('snapshot_id', snap), ('generated_at', lst.get('generated_at')), ('licence', lst.get('licence'))):
+            if doc.get(k) != v: fails.append(f'{path}: {k} {doc.get(k)!r} != {v!r}')
+        sizes.append(f"{path.rsplit('/', 1)[-1]} {len(doc.get('rows') or [])} rows in {len(files)} file(s)")
+    # every file an MCP Atlas tool reads (src/mcp/atlas.ts ATLAS_FILES) stays under the server's limit
+    read = [os.path.join(DIST, 'api', 'v1', 'atlas', n) for n in ('index.json', 'earn.json')] + [os.path.join(DIST, 'stats.json')]
+    for root, _, fs in os.walk(os.path.join(DIST, 'api', 'v1', 'atlas')):
+        rel = os.path.relpath(root, os.path.join(DIST, 'api', 'v1', 'atlas')).replace(os.sep, '/')
+        if rel in ('platforms', 'mcp-index', 'first-tasks') or rel.endswith('page'):
+            read += [os.path.join(root, f) for f in fs if f.endswith('.json')]
+    read += [os.path.join(DIST, p.lstrip('/')) for p in MCP_COMPACT]
+    big = [(os.path.getsize(f), os.path.relpath(f, DIST)) for f in read if os.path.isfile(f) and os.path.getsize(f) > MCP_MAX_BYTES]
+    if big: fails.append(f'MCP: Atlas files over {MCP_MAX_BYTES} bytes (the server would refuse them): {sorted(big)[-3:]}')
+    largest = max((os.path.getsize(f), os.path.relpath(f, DIST)) for f in read if os.path.isfile(f))
+    print(f'mcp compact files: {"; ".join(sizes)}; largest file an MCP tool reads {largest[0]} bytes ({largest[1]}, limit {MCP_MAX_BYTES})')
+    return fails
+
+
 def paged_list_checks(parsed, pages, locs):
     """HTML list pages (D1, D3, D4): /atlas/ and every category page 1, then /page/N/ up to the last page and nothing
     after it; each page shows at most PAGE_SIZE cards, exactly its slice of the list in order (so every card is
@@ -2058,6 +2138,7 @@ def main():
     fails += stats_checks(parsed, pages, locs)
     fails += badge_checks(parsed, pages, locs)
     fails += api_checks(parsed, locs)
+    fails += mcp_compact_checks()
     fails += paged_list_checks(parsed, pages, locs)
     fails += az_list_checks(parsed, pages, locs)
     fails += a11y_checks(pages)

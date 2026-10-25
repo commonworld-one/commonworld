@@ -2,6 +2,30 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-25 — MCP search and first tasks read a compact index (scale review, step A)
+
+Owner-approved step A of the scale review. Not deployed yet. No card data, no `schema_version` change, no URL removed:
+`platforms.json` stays published unchanged.
+
+- **Two new build files for the MCP server.** `/api/v1/atlas/mcp-index.json`: one row per card with exactly the fields a
+  search result carries (`site/build.py` `mcp_row`, the same fields as `slimRow` in `platform/src/mcp/atlas.ts`, which are
+  also every field the search filters and matches on). `/api/v1/atlas/first-tasks.json`: only the cards with a first task,
+  only `id, name, url, category, status, first_task`. Both carry `snapshot_id`, `generated_at` and `licence`. Today:
+  mcp-index 321,626 bytes (54,773 gzipped) and first-tasks 5,477 bytes (1,935 gzipped), against 886,510 bytes (94,189
+  gzipped) for `platforms.json`.
+- **Own budget, auto-sharding.** Each file stays under 200 KB gzipped and 1,000,000 bytes raw (`MCP_GZ_BUDGET`,
+  `MCP_RAW_BUDGET`). Past either one it becomes a manifest (`shards: [{path, first, last, count}]`) and the rows go to
+  contiguous shards cut by first letter, `/api/v1/atlas/mcp-index/<n>-<a>-<z>.json`, the same approach as the catalog
+  search index (`shard_rows`, which now takes a `fits` test for files with two budgets).
+- **`site/check.py`** (`mcp_compact_checks`): both files hold exactly the records of `platforms.json` in order (MCP fields
+  only), same `snapshot_id` / `generated_at` / `licence`; every file and shard within budget; shards under their folder with
+  the build's `snapshot_id` and right counts; and every Atlas file an MCP tool reads is under 2,000,000 bytes, the server's
+  read limit. Tests: `tests/test_mcp_index.py` (rows, tiny-budget sharding, the check loader, constants shared with the
+  server).
+- The files are internal to the MCP server (`format` `commonworld-atlas-mcp-index/1`, `commonworld-atlas-first-tasks/1`;
+  no `schema`, so the API schema validation leaves them out); the API docs page (`/atlas/api/#mcp-files`) says so. They
+  are not mirrored to `atlas/public/`.
+
 ## 2026-10-25 — Paging fixes: typed 404s, walk_rule with the 302, generated_at, page 1 in Markdown (API `schema_version` 1.9.0)
 
 Atlas paging findings checked on production 2026-10-25 11:00 EET; one PR approved by the owner (Nerd 27 Dk). Not deployed yet.
