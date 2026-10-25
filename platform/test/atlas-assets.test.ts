@@ -8,7 +8,7 @@ import { createExecutionContext, waitOnExecutionContext } from 'cloudflare:test'
 import { env } from 'cloudflare:workers';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import worker from '../src/index';
-import { ATLAS_NOT_FOUND_CACHE, ATLAS_NOT_FOUND_JSON_MESSAGE, ATLAS_NOT_FOUND_MD, ATLAS_RUN_WORKER_FIRST, atlasNotFoundKind, runsWorkerFirst, withAtlasNonce } from '../src/atlas-assets';
+import { ATLAS_NOT_FOUND_CACHE, ATLAS_NOT_FOUND_JSON_MESSAGE, ATLAS_NOT_FOUND_MD, ATLAS_RUN_WORKER_FIRST, atlasNotFoundKind, isTypedNotFoundFile, runsWorkerFirst, withAtlasNonce } from '../src/atlas-assets';
 import { isAtlasPath } from '../src/atlas-proxy';
 import { resetDb } from './helpers';
 
@@ -62,12 +62,11 @@ describe('A3 routing contract (wrangler.toml run_worker_first)', () => {
     expect(toml.match(/^ATLAS_SOURCE = "assets"$/gm)?.length).toBe(2);
   });
 
-  it('a missing file reaches the Worker in every environment (not_found_handling = "none"), so it can answer a typed 404', () => {
+  it('a miss keeps not_found_handling = "404-page" in every environment (the nearest 404.html: typed 404 bodies of the build)', () => {
     const toml = env.TEST_WRANGLER_TOML;
     const tables = [...toml.matchAll(/^\[((?:env\.\w+\.)?assets)\]\n([\s\S]*?)(?=^\[)/gm)];
     expect(tables.map((m) => m[1])).toEqual(['assets', 'env.staging.assets', 'env.production.assets']);
-    for (const m of tables) expect(m[2], m[1]).toMatch(/^not_found_handling = "none"$/m);
-    expect(toml).not.toMatch(/^not_found_handling = "404-page"$/m);
+    for (const m of tables) expect(m[2], m[1]).toMatch(/^not_found_handling = "404-page"$/m);
   });
 
   it('Atlas static files are served by Static Assets, never by the Worker', () => {
@@ -207,41 +206,50 @@ describe('A3: the Atlas from Static Assets (ATLAS_SOURCE=assets)', () => {
     expect(p1.headers.get('cache-control')).not.toBe('no-store');
   });
 
-  it('typed 404s: JSON under /api/ and for *.json, Markdown for *.md, the Atlas 404 page for HTML (Atlas paging findings 2026-10-25)', async () => {
+  it('typed 404s of static files: the nearest 404.html, JSON under /api/, Markdown for list-page twins (Atlas paging findings 2026-10-25)', async () => {
     noNetwork();
+    // the JSON pages and Markdown twins are static (run_worker_first negatives): Static Assets answers their misses itself
+    const assets = async (p: string, init: RequestInit = {}) => {
+      const r = await (env as any).ASSETS.fetch(new Request(`${PROD}${p}`, { redirect: 'manual', ...init }));
+      return { status: r.status, headers: r.headers as Headers, text: await r.text() };
+    };
     for (const p of ['/api/v1/atlas/page/9.json', '/api/v1/atlas/page/0.json', '/api/v1/atlas/page/abc.json', '/api/v1/atlas/page/99.json',
-      '/api/v1/atlas/categories/social/page/99.json', '/api/v1/atlas/platforms/page/99.json', '/api/v1/atlas/platforms/no-such-id.json',
-      '/api/v1/atlas/categories/no-such-category.json', '/api/v1/nope', '/atlas/platforms/no-such-id.json']) {
-      const r = await call(p);
+      '/api/v1/atlas/categories/social/page/99.json', '/api/v1/atlas/platforms/page/99.json', '/api/v1/atlas/platforms/no-such-id.json']) {
+      expect(runsWorkerFirst(p), p).toBe(false);
+      const r = await assets(p);
       expect(r.status, p).toBe(404);
       expect(r.headers.get('content-type'), p).toBe('application/json; charset=utf-8');
       expect(r.headers.get('access-control-allow-origin'), p).toBe('*');
-      expect(r.headers.get('cache-control'), p).toBe(ATLAS_NOT_FOUND_CACHE);
-      expect(r.headers.get('location'), p).toBeNull();
-      const body = JSON.parse(r.text);
-      expect(body.error, p).toEqual({ code: 'not_found', message: ATLAS_NOT_FOUND_JSON_MESSAGE, path: p });
-      expect(body.links.index, p).toBe(`${PROD}/api/v1/atlas/index.json`);
-      expect(r.headers.get('content-security-policy') ?? '', p).not.toContain('nonce'); // not HTML: no nonce
+      expect(JSON.parse(r.text).error, p).toEqual({ code: 'not_found', message: ATLAS_NOT_FOUND_JSON_MESSAGE });
     }
-    for (const p of ['/atlas/page/9/index.md', '/atlas/page/0/index.md', '/atlas/platforms/page/99/index.md', '/atlas/categories/social/page/99/index.md',
-      '/atlas/platforms/no-such-id/index.md']) {
-      const r = await call(p);
+    for (const p of ['/atlas/page/9/index.md', '/atlas/page/0/index.md', '/atlas/platforms/page/99/index.md']) {
+      expect(runsWorkerFirst(p), p).toBe(false);
+      const r = await assets(p);
       expect(r.status, p).toBe(404);
       expect(r.headers.get('content-type'), p).toBe('text/markdown; charset=utf-8');
       expect(r.text, p).toBe(ATLAS_NOT_FOUND_MD);
-      expect(r.text, p).not.toMatch(/<html|<!doctype/i);
     }
-    for (const p of ['/atlas/page/9/', '/atlas/page/0/', '/atlas/page/abc/']) {
+    // the same bodies when a JSON or Markdown path reaches the Worker (HEAD: no body)
+    const w = await call('/api/v1/atlas/page/9.json');
+    expect([w.status, w.headers.get('content-type')]).toEqual([404, 'application/json; charset=utf-8']);
+    expect(JSON.parse(w.text)).toEqual({ error: { code: 'not_found', message: ATLAS_NOT_FOUND_JSON_MESSAGE },
+      links: { index: `${PROD}/api/v1/atlas/index.json`, docs: `${PROD}/atlas/api/` } });
+    expect(w.headers.get('cache-control')).toBe(ATLAS_NOT_FOUND_CACHE);
+    const wm = await call('/atlas/page/9/index.md');
+    expect([wm.status, wm.headers.get('content-type'), wm.text]).toEqual([404, 'text/markdown; charset=utf-8', ATLAS_NOT_FOUND_MD]);
+    const head = await call('/api/v1/atlas/page/9.json', VARS, { method: 'HEAD' });
+    expect([head.status, head.text]).toEqual([404, '']);
+    // HTML misses run the Worker and always get the site 404 page, never the Markdown 404.html of a list folder
+    for (const p of ['/atlas/page/9/', '/atlas/page/0/', '/atlas/page/abc/', '/atlas/platforms/page/99/', '/atlas/page/404', '/atlas/page/404.html',
+      '/atlas/platforms/page/404']) {
       const r = await call(p);
       expect(r.status, p).toBe(404);
       expect(r.headers.get('content-type'), p).toMatch(/^text\/html/);
       expect(r.text, p).toContain('Atlas 404');
+      expect(nonceOf(r.headers.get('content-security-policy')), p).not.toBeNull();
     }
-    // HEAD: same status and type, no body
-    const head = await call('/api/v1/atlas/page/9.json', VARS, { method: 'HEAD' });
-    expect(head.status).toBe(404);
-    expect(head.headers.get('content-type')).toBe('application/json; charset=utf-8');
-    expect(head.text).toBe('');
+    expect(isTypedNotFoundFile('/atlas/categories/social/page/404.html')).toBe(true);
+    expect(isTypedNotFoundFile('/atlas/page/4/')).toBe(false);
     expect(atlasNotFoundKind('/api/v1/CHANGELOG.md')).toBe('json');
     expect(atlasNotFoundKind('/atlas/events.md')).toBe('markdown');
     expect(atlasNotFoundKind('/atlas/page/9/')).toBe('html');

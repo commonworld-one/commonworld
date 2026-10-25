@@ -10,8 +10,10 @@ Atlas paging findings checked on production 2026-10-25 11:00 EET; one PR approve
   (and any missing file under `/api/` or `*.json`) answer 404 with `Content-Type: application/json` and
   `{"error": {"code": "not_found", "message": "...", "path": "..."}, "links": {"index": "...", "docs": "..."}}`; a missing
   Markdown twin (`/atlas/page/9/index.md`) answers 404 as `text/markdown`. Before, both got the HTML 404 page. Status codes
-  are unchanged. The platform Worker answers these (its Static Assets now hand a miss to the Worker); `site/serve.py` does
-  the same locally.
+  are unchanged. Both stay static (no Worker request): Cloudflare serves the nearest `404.html`, so the build writes
+  `/api/404.html` (the JSON body) and `<list>/page/404.html` (Markdown) for every paged list, typed by `_headers`
+  (`/api/*.json` is now `application/json; charset=utf-8`). `site/check.py` checks them; `site/serve.py` does the same lookup
+  locally. Other missing Markdown twins (a card that does not exist) still get the site 404 page.
 - **`walk_rule` names the 302.** On every JSON page, in `atlas/index.json` `paging.walk_rule`, the schema and the API docs:
   when a list gets shorter, a page that existed before answers a temporary 302 (never cached) to the last page, e.g. page 8 →
   page 7; the page you land on has another `page` and a new `snapshot_id`, so start again from page 1; the redirect goes away

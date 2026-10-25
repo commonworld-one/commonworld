@@ -9,7 +9,7 @@ below is the state before the cutover, kept for the record. The old Cloudflare P
 | Request | Who answers | Billed Worker requests |
 |---|---|---|
 | Atlas static file: `/atlas/assets/*`, `/atlas/og/*`, `/atlas/screens/*`, `/atlas/badge/*`, `/atlas/data/*`, `/atlas/**.json`, `/atlas/**.txt`, `/atlas/**.xml`, `/atlas/**.md` (every Markdown twin: platform and category cards, decisions, events), `/stats.json`, `/stats/index.md`, `/about/index.md`, `/privacy/index.md`, `/terms/index.md`, `/api/*`, `/.well-known/security.txt` | Cloudflare Static Assets directly (headers from the Atlas `_headers`, redirects from `_redirects`) | **0** |
-| A miss on one of those paths (a file that does not exist, e.g. `/api/v1/atlas/page/9.json`, `/atlas/page/9/index.md`) | Worker (`not_found_handling = "none"`, since 2026-10-25) → typed 404 from `src/atlas-assets.ts`: JSON (`application/json`, `{error: {code: not_found, message, path}, links}`) under `/api/` and for `*.json`, Markdown (`text/markdown`) for `*.md`, the Atlas 404 page otherwise | 1 |
+| A miss on one of those paths (a file that does not exist) | Static Assets: the **nearest** `404.html` with 404 (`not_found_handling = "404-page"`). The Atlas build writes typed ones (2026-10-25): `/api/404.html` = a JSON error body for every miss under `/api/` (e.g. `/api/v1/atlas/page/9.json`), `<list>/page/404.html` = Markdown for a missing list-page twin (e.g. `/atlas/page/9/index.md`); `_headers` gives the content type by the requested path; anything else gets the root `404.html` | **0** |
 | Atlas HTML: `/atlas/…/`, `/privacy/`, `/terms/`, `/about/`, `/stats/`, Atlas 404s under those | Worker → `env.ASSETS.fetch` → + CSP nonce (`src/atlas-assets.ts`) | 1 |
 | Slashless / `.html` Atlas URL (`/atlas/platforms/x`) | Worker, 308 to the slash form (as Pages) | 1 |
 | Bare `/atlas`, `/privacy`, `/terms`, `/about`, `/stats` | Worker, 301 to the slash form | 1 |
@@ -18,11 +18,11 @@ below is the state before the cutover, kept for the record. The old Cloudflare P
 | Any other `/.well-known/*` | Worker → ASSETS (Atlas 404) | 1 |
 | `/`, v1 pages, `/v1/*`, `/assets/*`, `/robots.txt`, `/sitemap.xml`, `/llms.txt`, `/llms-full.txt`, `/favicon.ico` | Worker (v1); llms files append the Atlas file read from ASSETS (no network) | 1 |
 
-Why a miss runs the Worker: Static Assets has one 404 page for every path. With `not_found_handling = "404-page"` (until
-2026-10-25) a missing JSON page or Markdown twin got the HTML 404 page (under a `text/markdown` type for `.md`). With `"none"`
-a request for a file that does not exist is handed to the Worker, which answers the typed 404; an existing file is still
-served without the Worker, so only misses cost a request. `test/atlas-assets.test.ts` checks `"none"` in every `[assets]`
-table and the typed 404s.
+Typed 404s (2026-10-25): a `run_worker_first` negative path never reaches the Worker, also on a miss (checked on staging:
+with `not_found_handling = "none"` such a miss was an empty 404 without the Worker), so the JSON and Markdown 404 bodies are
+static files found by the nearest-`404.html` rule. An HTML miss runs the Worker, which always answers with the root
+`/404.html` (never the Markdown `404.html` of a list folder) and answers a direct request for one of those files
+(`/atlas/page/404`) with 404 too.
 
 The split is `[assets] run_worker_first` in `wrangler.toml` (`"/*"` plus the `!` patterns), the same in the top-level,
 staging and production tables and equal to `ATLAS_RUN_WORKER_FIRST` in `src/atlas-assets.ts`; `test/atlas-assets.test.ts`

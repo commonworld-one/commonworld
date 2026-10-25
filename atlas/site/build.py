@@ -3009,6 +3009,20 @@ def paged_redirects(site):
     return ''.join(x + '\n' for x in out)
 
 
+def typed_404_files(site):
+    """{path: body} of the typed 404 pages (Atlas paging findings, 2026-10-25). The JSON API and the Markdown twins are served by
+    Cloudflare Static Assets without the Worker, and its not_found_handling "404-page" answers a miss with the NEAREST 404.html:
+    /api/404.html (a JSON error body, api_v1.not_found_doc) for every missing file under /api/, and <list>/page/404.html
+    (Markdown, api_v1.NOT_FOUND_MD) for a missing Markdown twin of a list page, e.g. /atlas/page/9/index.md. _headers gives them
+    their content type by the requested path (/api/*.json, the */index.md rules). HTML misses run the Worker, which always
+    answers with the site 404 page (/404.html), never one of these; the Worker also answers a direct request for one of them
+    under /atlas/ with that 404 page."""
+    out = {'/api/404.html': json.dumps(api_v1.not_found_doc(site.origin), ensure_ascii=False) + '\n'}
+    for first in list_pages(site):
+        out[f'{first}page/404.html'] = api_v1.NOT_FOUND_MD
+    return out
+
+
 def vanished_page_headers(redirects_text):
     """_headers rules for the static vanished-page 302s of paged_redirects() (Markdown twins and JSON pages; the HTML 302s
     run the Worker, which sets the same header): Cache-Control: no-store on each exact path."""
@@ -3272,7 +3286,7 @@ def build_api_docs(site):
 <p>Since <code>schema_version</code> 1.6.0 every entry record also carries <code>replications</code>: for a register where review means replication (today Agent Errata), the counts from its own files at a pinned commit, or <code>null</code>. Fields: <code>rows</code> (replication rows), <code>entries</code>, <code>entries_replicated</code> (entries with at least one reproduction by an agent other than the finder and the repo operator), <code>independent_agents</code> (distinct such agents), <code>format</code>, <code>repo</code>, <code>commit</code> (the 40-character sha read), <code>source_url</code>, <code>method_url</code> (the validator whose counting rules apply, at that commit), <code>validate_run_url</code> (the push run of that validator that passed on the commit) and <code>observed_at</code>. The weekly refresh re-reads the newest commit whose validator run passed; a record changes only when a count changes (<a href="{REPO_URL}/blob/main/atlas/site/replications.py" rel="nofollow noopener">contract</a>).</p>
 <p>Since <code>schema_version</code> 1.7.0 every entry record also carries <code>reachability</code>: <code>null</code>, or on a live card whose site does not answer the way its status suggests, <code>{{state, label, checked_at, reads, note, credit, reported_via}}</code>. <code>state</code> is <code>stale</code> (marked live, but no read got the site’s own content; the card stays live until the protocol closes it) or <code>challenge_walled</code> (the site is up and serves its own content, but plain scripts get a challenge page). Each read has <code>url</code>, <code>observed_at</code>, <code>http_status</code>, <code>bytes</code>, <code>page_type</code> (<code>own_content</code>, <code>challenge</code>, <code>error</code>), <code>client</code>, <code>by</code> and <code>sha256</code> (or <code>null</code>). A state needs two reads of the same page type at least two hours apart, one of them by the Atlas; <code>status</code> keeps its two values (<a href="{REPO_URL}/blob/main/atlas/site/reachability.py" rel="nofollow noopener">contract</a>).</p>
 <h2 id="pages">Paged lists</h2>
-<p>Since <code>schema_version</code> 1.8.0 the list also comes in pages of {PAGE_SIZE} records, the same records as <code>platforms.json</code> in the order of the HTML pages: <a href="{V}{api_v1.page_json(1)}"><code>{V}{api_v1.page_json(1)}</code></a>, <code>{V}/atlas/page/&lt;N&gt;.json</code> (all entries, A to Z, like <a href="{b}/">/atlas/</a> and <code>/atlas/page/&lt;N&gt;/</code>) <code>{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json</code> (one category, live first, like the category pages) and <code>{V}/atlas/platforms/page/&lt;N&gt;.json</code> (the A–Z table <a href="{b}/platforms/">/atlas/platforms/</a> and <code>/atlas/platforms/page/&lt;N&gt;/</code>: the same records and order as the whole list, with <code>url</code> naming the A–Z page). Every page carries <code>snapshot_id</code>, <code>page</code>, <code>per_page</code>, <code>pages</code>, <code>total</code>, <code>count</code>, <code>has_more</code>, <code>next</code>, <code>prev</code> and <code>first</code>, plus <code>url</code> (the HTML page) and <code>md_url</code> (its Markdown twin). {e(api_v1.PAGE_WALK_RULE)} The number of pages is also in <a href="{V}/atlas/index.json">atlas/index.json</a> (<code>counts.pages</code>, <code>categories[].pages</code>). MCP clients read the same pages with the tool <code>atlas_list_page</code>. {e(api_v1.PAGING_CONTRACT)} {e(api_v1.PAGE_ONE_RULE)} A file that does not exist under <code>/api/</code> answers HTTP 404 with a JSON error body <code>{e(api_v1.NOT_FOUND_SHAPE)}</code>.</p>
+<p>Since <code>schema_version</code> 1.8.0 the list also comes in pages of {PAGE_SIZE} records, the same records as <code>platforms.json</code> in the order of the HTML pages: <a href="{V}{api_v1.page_json(1)}"><code>{V}{api_v1.page_json(1)}</code></a>, <code>{V}/atlas/page/&lt;N&gt;.json</code> (all entries, A to Z, like <a href="{b}/">/atlas/</a> and <code>/atlas/page/&lt;N&gt;/</code>) <code>{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json</code> (one category, live first, like the category pages) and <code>{V}/atlas/platforms/page/&lt;N&gt;.json</code> (the A–Z table <a href="{b}/platforms/">/atlas/platforms/</a> and <code>/atlas/platforms/page/&lt;N&gt;/</code>: the same records and order as the whole list, with <code>url</code> naming the A–Z page). Every page carries <code>snapshot_id</code>, <code>page</code>, <code>per_page</code>, <code>pages</code>, <code>total</code>, <code>count</code>, <code>has_more</code>, <code>next</code>, <code>prev</code> and <code>first</code>, plus <code>url</code> (the HTML page) and <code>md_url</code> (its Markdown twin). {e(api_v1.PAGE_WALK_RULE)} The number of pages is also in <a href="{V}/atlas/index.json">atlas/index.json</a> (<code>counts.pages</code>, <code>categories[].pages</code>). MCP clients read the same pages with the tool <code>atlas_list_page</code>. {e(api_v1.PAGING_CONTRACT)} {e(api_v1.PAGE_ONE_RULE)} A <code>.json</code> file that does not exist under <code>/api/</code> answers HTTP 404 with a JSON error body <code>{e(api_v1.NOT_FOUND_SHAPE)}</code>.</p>
 <h2 id="ids">IDs</h2>
 <p>An entry ID is its permanent URL slug (for example <code>{e(ex)}</code>). Never construct or guess an ID: take it from <a href="{V}/atlas/platforms.json">platforms.json</a> or a category file. An ID that is not listed there does not exist, and the request returns 404.</p>
 <h2 id="examples">Examples</h2>
@@ -3489,6 +3503,8 @@ def main():
         if old != new:
             write(old, build_legal_redirect(site, old, new, name))
     write('/404.html', build_404(site))
+    for path, body in typed_404_files(site).items():
+        write(path, body)
 
     os.makedirs(os.path.join(root, 'assets'), exist_ok=True)
     for f in os.listdir(os.path.join(HERE, 'static')):
@@ -3630,6 +3646,11 @@ def main():
   Content-Type: application/json; charset=utf-8
 /api/*
   Access-Control-Allow-Origin: *
+/api/*.json
+  Content-Type: application/json; charset=utf-8
+/api/404
+  Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 /api/v1/CHANGELOG.md
   Content-Type: text/markdown; charset=utf-8
 {b}/llms.txt

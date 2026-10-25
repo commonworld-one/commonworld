@@ -2,7 +2,7 @@
 """Local preview server for the built Atlas (stdlib only). Mimics the live static serving (Workers Static Assets in the platform Worker, same rules as the legacy Cloudflare Pages build):
 clean directory URLs, /atlas/x -> 301 /atlas/x/, real 404 status with /404.html, / serves the Commonworld landing (dist/index.html),
 301s and 302s from dist/_redirects for paths that have no file (e.g. /atlas/page/1/ -> /atlas/ 301, a vanished list page -> 302), typed 404s
-(JSON for /api/ and *.json, Markdown for *.md, like the Worker), and X-Robots-Tag: noindex on Atlas
+(the nearest 404.html for static JSON / Markdown files, as Static Assets serves them; the site 404 page for pages), and X-Robots-Tag: noindex on Atlas
 HTML pages opened with a filter or search query string (as the platform Worker sends).
 Sends the site-wide security headers from dist/_headers (the `/*` block: CSP, Permissions-Policy, ...) so a local
 browser runs under the same strict CSP as production (minus HSTS and upgrade-insecure-requests, which need https).
@@ -56,23 +56,23 @@ def redirects():
 
 
 def not_found_body(path):
-    """(content type, body) of a 404, typed like the platform Worker (platform/src/atlas-assets.ts atlasNotFound): JSON for the
-    API (/api/... and *.json), Markdown for a Markdown twin (*.md), the Atlas 404 page for everything else."""
-    import json
-    if path.startswith('/api/') or path.endswith('.json'):
-        doc = {'error': {'code': 'not_found', 'message': NOT_FOUND_JSON_MESSAGE, 'path': path},
-               'links': {'index': '/api/v1/atlas/index.json', 'docs': '/atlas/api/'}}
-        return 'application/json; charset=utf-8', (json.dumps(doc) + '\n').encode()
-    if path.endswith('.md'):
-        return 'text/markdown; charset=utf-8', NOT_FOUND_MD.encode()
-    return 'text/html; charset=utf-8', _read(os.path.join(DIST, '404.html'))
-
-
-# same text as platform/src/atlas-assets.ts (tests/test_atlas_paging.py compares them)
-NOT_FOUND_JSON_MESSAGE = ('No such file in the Atlas API. List pages are numbered from 1; the number of pages is `pages` on every page '
-                          'and counts.pages in /api/v1/atlas/index.json.')
-NOT_FOUND_MD = ('# Not found\n\nThere is no Markdown page at this address. The Atlas starts at /atlas/index.md; '
-                'list pages are numbered from 1 (page 1 is the list itself).\n')
+    """(content type, body) of a 404 like the live serving: a page (HTML) gets the site 404 page (the Worker always serves
+    /404.html); a static file (JSON under /api/ or *.json, a Markdown twin *.md) gets the NEAREST 404.html walking up from its
+    folder, as Cloudflare Static Assets does (build.py typed_404_files: /api/404.html is JSON, <list>/page/404.html Markdown),
+    typed by the requested path as the _headers rules do."""
+    kind = 'json' if path.startswith('/api/') or path.endswith('.json') else 'md' if path.endswith('.md') else 'html'
+    if kind == 'html':
+        return 'text/html; charset=utf-8', _read(os.path.join(DIST, '404.html'))
+    d = os.path.dirname(path.rstrip('/') if not path.endswith('/') else path[:-1])
+    while True:
+        fp = os.path.join(DIST, d.lstrip('/'), '404.html')
+        if os.path.isfile(fp):
+            break
+        if d in ('', '/'):
+            fp = os.path.join(DIST, '404.html')
+            break
+        d = os.path.dirname(d)
+    return ('application/json; charset=utf-8' if kind == 'json' else 'text/markdown; charset=utf-8'), _read(fp)
 
 
 class H(http.server.SimpleHTTPRequestHandler):

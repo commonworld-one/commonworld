@@ -32,9 +32,9 @@ CHANGELOG = [
         'Paging walk_rule (list pages, atlas/index.json paging.walk_rule, schema description) now states the temporary 302 for a page that '
         'existed before and is past the end after the list got shorter (page 8 -> page 7), and that a page number that never existed is a 404 '
         'with a JSON error body. The behaviour itself shipped in 1.8.0 (302 since 2026-10-24); the JSON 404 body is new.',
-        'A missing file under /api/ (for example /api/v1/atlas/page/9.json, page/0.json, page/abc.json) answers HTTP 404 with '
-        'Content-Type application/json and a body {error: {code: not_found, message, path}, links: {index, docs}} instead of the HTML 404 page; '
-        'a missing Markdown twin (*.md) answers 404 as text/markdown. Status codes are unchanged.',
+        'A missing .json file under /api/ (for example /api/v1/atlas/page/9.json, page/0.json, page/abc.json) answers HTTP 404 with '
+        'Content-Type application/json and a body {error: {code: not_found, message}, links: {index, docs}} instead of the HTML 404 page; '
+        'a missing Markdown twin of a list page (/atlas/page/9/index.md) answers 404 as text/markdown. Status codes are unchanged.',
         'Page 1 of a list: /page/1/index.md (Markdown) now answers 301 to the list\'s own index.md, like /page/1/ (HTML) already '
         'answers 301 to the list; JSON page 1 stays /api/v1/atlas/.../page/1.json (200), the `first` link of every page.']},
     {'schema_version': '1.8.0', 'date': '2026-10-24', 'changes': [
@@ -140,16 +140,30 @@ PAGE_WALK_RULE = ('Start at page 1 and follow `next` until `has_more` is false. 
 
 PAGE_ONE_RULE = ('Page 1 of a list is the list itself: /page/1/ and /page/1/index.md answer 301 to the list URL and its index.md; '
                  'JSON page 1 is the file page/1.json (the `first` link of every page).')
-# The 404 of a missing file under /api/ (served by the platform Worker, platform/src/atlas-assets.ts atlasNotFound, and by
-# serve.py locally): JSON, never the HTML error page. One wording here so the docs and the server agree.
-NOT_FOUND_SHAPE = '{"error": {"code": "not_found", "message": "...", "path": "/api/v1/..."}, "links": {"index": ".../api/v1/atlas/index.json", "docs": "..."}}'
+# Typed 404s (Atlas paging findings, 2026-10-25): a missing JSON page answers a JSON error body, a missing Markdown twin of a
+# list page answers Markdown, never the HTML 404 page. The API and the Markdown twins are static files served without the
+# Worker, so the bodies are static files too: Cloudflare Static Assets (not_found_handling "404-page") serves the NEAREST
+# 404.html, and build.py writes /api/404.html (this JSON) and <list>/page/404.html (NOT_FOUND_MD); _headers gives them their
+# content type. platform/src/atlas-assets.ts and serve.py use the same texts (tests/test_atlas_paging.py compares them).
+NOT_FOUND_MESSAGE = ('No such file in the Atlas API. List pages are numbered from 1; the number of pages is `pages` on every page '
+                     'and counts.pages in /api/v1/atlas/index.json.')
+NOT_FOUND_MD = ('# Not found\n\nThere is no Markdown page at this address. The Atlas starts at /atlas/index.md; '
+                'list pages are numbered from 1 (page 1 is the list itself).\n')
+NOT_FOUND_SHAPE = '{"error": {"code": "not_found", "message": "..."}, "links": {"index": ".../api/v1/atlas/index.json", "docs": ".../atlas/api/"}}'
+
+
+def not_found_doc(origin):
+    """Body of the JSON 404 (static /api/404.html, and the Worker's own JSON 404)."""
+    return {'error': {'code': 'not_found', 'message': NOT_FOUND_MESSAGE},
+            'links': {'index': f'{origin}{API_BASE}/atlas/index.json', 'docs': f'{origin}/atlas/api/'}}
+
+
 PAGE_MISSING = {
     '302': {'description': 'This page number existed before and is past the last page now (the list got shorter): temporary redirect '
                            '(Cache-Control: no-store) to the last page of the list. Start the walk again from page 1.'},
     '404': {'description': 'This page number never existed (or the category does not exist). JSON error body.',
             'content': {'application/json': {'schema': {'type': 'object', 'required': ['error'], 'properties': {
-                'error': {'type': 'object', 'required': ['code'], 'properties': {'code': {'const': 'not_found'}, 'message': {'type': 'string'},
-                                                                                  'path': {'type': 'string'}}},
+                'error': {'type': 'object', 'required': ['code'], 'properties': {'code': {'const': 'not_found'}, 'message': {'type': 'string'}}},
                 'links': {'type': 'object'}}}}}},
 }
 
@@ -412,7 +426,7 @@ def openapi(origin, categories, example_ids, docs_url, licence):
                  'summary': 'Static, read-only JSON API of the Commonworld Atlas of agent platforms. The live platform API is separate: ' + origin + '/openapi.json',
                  'description': ('Plain static JSON files, rebuilt with every change to the site. ' + PAGING_CONTRACT + ' '
                                  'generated_at: ' + GENERATED_AT_DESC + ' source_snapshot_at: ' + SOURCE_SNAPSHOT_AT_DESC + ' newest_observation: ' + NEWEST_OBSERVATION_DESC + ' '
-                                 'A file that does not exist answers HTTP 404 with a JSON error body ' + NOT_FOUND_SHAPE + '. '
+                                 'A .json file that does not exist answers HTTP 404 with a JSON error body ' + NOT_FOUND_SHAPE + '. '
                                  'No key, no rate limit beyond fair use; '
                                  'CORS is open (Access-Control-Allow-Origin: *). Responses may be cached by Cloudflare and browsers for up to a few hours. '
                                  + VERSIONING + ' Related file outside /api/: ' + origin + '/atlas/events.json, the public log of card changes '

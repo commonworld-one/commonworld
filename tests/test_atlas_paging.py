@@ -411,6 +411,9 @@ class WalkRule(unittest.TestCase):
                                       'next': f'/api/v1/atlas/page/{n + 1}.json' if n < n_pages else None,
                                       'platforms': [f'{sid}-{i}' for i in range((n - 1) * 50, min(n * 50, total))]}))
         Path(d, '404.html').write_text('<!doctype html><title>404</title>')
+        for rel, body in build.typed_404_files(FakeSite(total, {})).items():  # the typed 404 bodies build.py writes
+            Path(d, rel.lstrip('/')).parent.mkdir(parents=True, exist_ok=True)
+            Path(d, rel.lstrip('/')).write_text(body, encoding='utf-8')
         red = ''.join(l + '\n' for l in Redirects.run_with_baseline(self, FakeSite(total, {}), [], record))
         Path(d, '_redirects').write_text(red)
         Path(d, '_headers').write_text(build.vanished_page_headers(red))
@@ -481,15 +484,29 @@ def _ts_string(src, name):
 
 
 class TypedNotFound(unittest.TestCase):
-    """Atlas paging findings (2026-10-25): a page that does not exist answers 404 typed by its format (JSON for the API,
-    Markdown for a Markdown twin, the HTML 404 page for HTML), never the HTML page under a JSON or Markdown URL.
-    In production the platform Worker answers it (platform/src/atlas-assets.ts); serve.py mirrors it locally."""
+    """Atlas paging findings (2026-10-25): a page that does not exist answers 404 typed by its format (JSON for the API, Markdown
+    for the Markdown twin of a list page, the HTML 404 page for HTML), never the HTML page under a JSON or Markdown URL. The JSON
+    pages and twins are static, so the build writes the bodies as the nearest 404.html that Cloudflare Static Assets serves
+    (/api/404.html, <list>/page/404.html); serve.py does the same lookup; the Worker has the same texts for paths it serves."""
 
     def test_same_texts_as_the_worker(self):
-        import serve
         ts = (ROOT / 'platform' / 'src' / 'atlas-assets.ts').read_text(encoding='utf-8')
-        self.assertEqual(_ts_string(ts, 'ATLAS_NOT_FOUND_JSON_MESSAGE'), serve.NOT_FOUND_JSON_MESSAGE)
-        self.assertEqual(_ts_string(ts, 'ATLAS_NOT_FOUND_MD'), serve.NOT_FOUND_MD)
+        self.assertEqual(_ts_string(ts, 'ATLAS_NOT_FOUND_JSON_MESSAGE'), api_v1.NOT_FOUND_MESSAGE)
+        self.assertEqual(_ts_string(ts, 'ATLAS_NOT_FOUND_MD'), api_v1.NOT_FOUND_MD)
+        fx = ROOT / 'platform' / 'test' / 'fixtures' / 'atlas-dist'  # the Worker tests' fixture build carries the same bodies
+        self.assertEqual(json.loads((fx / 'api' / '404.html').read_text(encoding='utf-8')), api_v1.not_found_doc('https://commonworld.one'))
+        self.assertEqual((fx / 'atlas' / 'page' / '404.html').read_text(encoding='utf-8'), api_v1.NOT_FOUND_MD)
+
+    def test_build_writes_one_json_and_one_markdown_404_per_list(self):
+        files = build.typed_404_files(FakeSite(120, {'social': 60, 'work': 10}))
+        self.assertEqual(sorted(files), ['/api/404.html', '/atlas/categories/social/page/404.html', '/atlas/categories/work/page/404.html',
+                                         '/atlas/page/404.html', '/atlas/platforms/page/404.html'])
+        self.assertEqual(json.loads(files['/api/404.html']), api_v1.not_found_doc('https://commonworld.one'))
+        self.assertEqual(files['/atlas/page/404.html'], api_v1.NOT_FOUND_MD)
+        for rel in files:
+            self.assertTrue(check.TYPED_404_RE.match(rel.lstrip('/')), rel)  # check.py keeps them out of the page checks
+        self.assertFalse(check.TYPED_404_RE.match('404.html'))
+        self.assertFalse(check.TYPED_404_RE.match('atlas/page/2/index.html'))
 
     def test_404_bodies_by_format(self):
         with tempfile.TemporaryDirectory() as root:
@@ -501,16 +518,15 @@ class TypedNotFound(unittest.TestCase):
                           '/api/v1/atlas/categories/social/page/99.json', '/api/v1/nope'):
                     status, hdr, body, _ = srv.get(p)
                     self.assertEqual((status, hdr.get('content-type')), (404, 'application/json; charset=utf-8'), p)
-                    doc = json.loads(body)
-                    self.assertEqual(doc['error'], {'code': 'not_found', 'message': srv.serve.NOT_FOUND_JSON_MESSAGE, 'path': p})
-                    self.assertEqual(doc['links']['index'], '/api/v1/atlas/index.json')
-                for p in ('/atlas/page/9/index.md', '/atlas/page/0/index.md'):
+                    self.assertEqual(json.loads(body), api_v1.not_found_doc('https://commonworld.one'), p)
+                for p in ('/atlas/page/9/index.md', '/atlas/page/0/index.md', '/atlas/platforms/page/9/index.md'):
                     status, hdr, body, _ = srv.get(p)
                     self.assertEqual((status, hdr.get('content-type')), (404, 'text/markdown; charset=utf-8'), p)
-                    self.assertEqual(body.decode(), srv.serve.NOT_FOUND_MD)
-                status, hdr, body, _ = srv.get('/atlas/page/9/')
-                self.assertEqual((status, hdr.get('content-type')), (404, 'text/html; charset=utf-8'))
-                self.assertIn(b'<!doctype html>', body)
+                    self.assertEqual(body.decode(), api_v1.NOT_FOUND_MD, p)
+                for p in ('/atlas/page/9/', '/atlas/page/abc/'):
+                    status, hdr, body, _ = srv.get(p)
+                    self.assertEqual((status, hdr.get('content-type')), (404, 'text/html; charset=utf-8'), p)
+                    self.assertIn(b'<!doctype html>', body)
             finally:
                 srv.close()
 
