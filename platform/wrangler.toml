@@ -30,10 +30,15 @@ ratelimits = [
 # first. The list must equal ATLAS_RUN_WORKER_FIRST in src/atlas-assets.ts in every environment (test/atlas-assets.test.ts).
 # Locally (tests, wrangler dev) a small fixture stands in for the Atlas; staging/production use .atlas-dist, built by
 # `npm run atlas:build` from cw-public (scripts/build-atlas-assets.mjs). Deploy only via `npm run deploy:staging|production`.
+# not_found_handling = "none" in every environment (2026-10-25, Atlas paging findings): a request for a file that does not
+# exist reaches the Worker, which answers a typed 404 (JSON under /api/ and for *.json, Markdown for *.md, the Atlas 404
+# page otherwise; src/atlas-assets.ts serveAtlasAsset). With "404-page" Static Assets answered every miss with the HTML
+# 404 page, also for JSON and Markdown URLs. Existing files are still served without the Worker; a miss costs one Worker
+# request. A test checks all three tables.
 [assets]
 directory = "./test/fixtures/atlas-dist"
 binding = "ASSETS"
-not_found_handling = "404-page"
+not_found_handling = "none"
 html_handling = "auto-trailing-slash"
 run_worker_first = [
   "/*",
@@ -117,7 +122,7 @@ ATLAS_ORIGIN = "https://commonworld.pages.dev"
 [env.staging.assets]
 directory = "./.atlas-dist"
 binding = "ASSETS"
-not_found_handling = "404-page"
+not_found_handling = "none"
 html_handling = "auto-trailing-slash"
 run_worker_first = [
   "/*",
@@ -199,7 +204,7 @@ GA4_ID = "G-9QB65R36K6"
 [env.production.assets]
 directory = "./.atlas-dist"
 binding = "ASSETS"
-not_found_handling = "404-page"
+not_found_handling = "none"
 html_handling = "auto-trailing-slash"
 run_worker_first = [
   "/*",

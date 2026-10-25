@@ -604,6 +604,7 @@ def paged_list_checks(parsed, pages, locs):
     for first, slugs in lists.items():
         m = max(1, -(-len(slugs) // PAGE_SIZE))
         if f'{first}page/1/ {first} 301' not in red: fails.append(f'_redirects lacks {first}page/1/ -> {first} 301')
+        if f'{first}page/1/index.md {first}index.md 301' not in red: fails.append(f'_redirects lacks {first}page/1/index.md -> {first}index.md 301')
         if os.path.exists(os.path.join(DIST, first.lstrip('/'), 'page', '1')): fails.append(f'{first}page/1/ is built (page 1 is {first})')
         if os.path.exists(os.path.join(DIST, first.lstrip('/'), 'page', str(m + 1))): fails.append(f'{first}page/{m + 1}/ is built past the last page')
         for n in range(1, m + 1):
@@ -682,6 +683,7 @@ def az_list_checks(parsed, pages, locs):
         starts.setdefault(az_letter(c['name']), (i // PAGE_SIZE + 1, c['slug']))
     red = open(os.path.join(DIST, '_redirects')).read() if os.path.exists(os.path.join(DIST, '_redirects')) else ''
     if f'{first}page/1/ {first} 301' not in red: fails.append(f'_redirects lacks {first}page/1/ -> {first} 301')
+    if f'{first}page/1/index.md {first}index.md 301' not in red: fails.append(f'_redirects lacks {first}page/1/index.md -> {first}index.md 301')
     for n_bad in (1, m + 1):
         if os.path.exists(os.path.join(DIST, 'atlas', 'platforms', 'page', str(n_bad))): fails.append(f'{first}page/{n_bad}/ is built')
     row_re = re.compile(r'<tr(?: id="(az-[0-9a-z])")?><td><a href="/atlas/platforms/([a-z0-9-]+)/">')
@@ -862,6 +864,21 @@ def api_checks(parsed, locs):
     if (ai.get('counts') or {}).get('earn_rows') != (docs.get('/atlas/earn.json') or {}).get('count'): fails.append('api: earn row counts differ')
     if root.get('schema_version') != api_v1.SCHEMA_VERSION or root.get('version') != 'v1': fails.append('api: index.json version/schema_version')
     if not api_v1.pattern_ok(api_v1.UTC_PATTERN, str(root.get('generated_at'))): fails.append('api: index.json generated_at not ISO UTC')
+    # generated_at = the newest data in the build (schema_version 1.9.0): the later of source_snapshot_at and newest_observation,
+    # the same value in every data file (ISO strings of one format compare in time order)
+    gens = set()
+    gen_paths = ['/index.json', '/atlas/index.json', '/atlas/platforms.json', '/atlas/earn.json', '/atlas/page/1.json', '/atlas/platforms/page/1.json']
+    gen_paths += [f'/atlas/categories/{k}.json' for k in cats[:1]] + [f'/atlas/platforms/{i}.json' for i in ids[:1]]
+    for path in gen_paths:
+        d = docs.get(path) or {}
+        g, src = d.get('generated_at'), d.get('source_snapshot_at')
+        if not (api_v1.pattern_ok(api_v1.UTC_PATTERN, str(g)) and api_v1.pattern_ok(api_v1.UTC_PATTERN, str(src))):
+            fails.append(f'api: {path} generated_at / source_snapshot_at not ISO 8601 UTC ({g!r}, {src!r})'); continue
+        if g < src: fails.append(f'api: {path} generated_at {g} is earlier than source_snapshot_at {src}')
+        newest = d.get('newest_observation') or (docs.get('/atlas/index.json') or {}).get('newest_observation')
+        if newest and g != max(src, newest): fails.append(f'api: {path} generated_at {g} != later of source_snapshot_at {src} and newest_observation {newest}')
+        gens.add(g)
+    if len(gens) > 1: fails.append(f'api: generated_at differs between data files: {sorted(gens)}')
     for k in ('openapi', 'docs', 'llms_txt', 'license', 'github_mirror', 'changelog'):
         if not (root.get('links') or {}).get(k): fails.append(f'api: index.json links.{k} missing')
     if not os.path.isfile(os.path.join(V, 'CHANGELOG.md')): fails.append('api: CHANGELOG.md missing')

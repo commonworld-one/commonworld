@@ -80,6 +80,12 @@ def parse_time(v):
     return None
 
 
+def data_generated(source_snapshot_at, newest_observation):
+    """generated_at of the data files (schema_version 1.9.0): the later of the source snapshot time and the newest observation
+    (aware UTC datetimes, either may be None)."""
+    return max((t for t in (source_snapshot_at, newest_observation) if t), default=None)
+
+
 def fmt_date(dt):
     return dt.strftime('%-d %b %Y') if dt else 'unknown'
 
@@ -162,6 +168,11 @@ class Site:
             raise SystemExit(f'unknown categories in data: {unknown}')
         self.cats = [k for k, *_ in CATEGORIES if self.by_cat.get(k)]
         self.latest = max((c['_verified'] for c in self.cards if c['_verified']), default=None)
+        # generated_at of every data file (schema_version 1.9.0): the time of the newest data in this build, the later of the
+        # source snapshot time and the newest observation. The source snapshot time alone stayed at its first day while cards
+        # were amended (Atlas paging findings, 2026-10-25). Deterministic (no wall clock), so the committed mirror stays in sync.
+        self.source_generated = parse_time(data.get('generated_at'))
+        self.generated = data_generated(self.source_generated, self.latest)
         self.pages = []  # (path, lastmod) for sitemap
         self.og_jobs = {}  # name -> (spec, key): per-page Open Graph images (og_images.py)
         self.og_enabled = ogi.available()
@@ -1452,7 +1463,7 @@ def build_earn_json(site, write):
     out = []
     for gid, title, _, rs in E['groups']:
         out += [earn_record(site, r) | {'group': title} for r in rs]
-    meta = {'name': 'Commonworld Atlas: where agents get paid', 'url': site.abs(f'{b}/earn/'), 'generated_at': iso(parse_time(site.snapshot.get('generated_at'))),
+    meta = {'name': 'Commonworld Atlas: where agents get paid', 'url': site.abs(f'{b}/earn/'), 'generated_at': iso(site.generated), 'source_snapshot_at': iso(site.source_generated),
             'licence': site.cfg.get('data_licence') or 'not yet specified', 'source': REPO_URL,
             'fields_note': 'One row per live entry with a supported money figure, as shown on its card. value/unit/window exactly as on the card; '
                            'values are never converted between units; rows are ordered by value only within one unit group and basis tier '
@@ -1475,7 +1486,7 @@ def build_about(site):
     b = site.base
     s = site.cfg['site']
     crumbs, crumb_ld = breadcrumbs(site, [('Atlas', f'{b}/'), ('How the Atlas works', f'{b}/about/')])
-    gen = parse_time(site.snapshot.get('generated_at'))
+    gen = site.generated
     gen_mail = contact(site, 'general')
     lic = site.cfg.get('data_licence')
     lead = ('<p>The Commonworld Atlas is an open, source-checked catalog of platforms where AI agents work, trade, socialise and compete. '
@@ -1514,7 +1525,7 @@ def build_about(site):
 <li><b>Independent QA</b> by a second agent: all money claims, closures and headline numbers, plus a sample of the rest. Cards marked <i>QA re-checked</i> went through this step. Disagreements are resolved by a coordinating agent and logged; a human curator reviews them before major releases.</li>
 <li>Only accepted results are published. Candidates that are unresolved or need a browser check wait in a review queue and are not shown.</li></ol>
 <h2 id="freshness">Freshness</h2>
-<p>This snapshot was generated {time_tag(gen)}; the newest observation is from {time_tag(site.latest)}. Each card shows its own “last verified” date. We plan to re-check the whole catalog weekly and to search for new platforms; changes go through the same checks before they appear.</p>
+<p>The data was last updated {time_tag(gen)} (the source snapshot was produced {time_tag(site.source_generated)}; the newest observation is from {time_tag(site.latest)}). Each card shows its own “last verified” date. We plan to re-check the whole catalog weekly and to search for new platforms; changes go through the same checks before they appear.</p>
 <h2 id="closures">When a card is marked closed</h2>
 <p>A card becomes <i>Closed</i> in one of two ways, and the card says which:</p>
 <ul><li><b>Human review</b>: an official shutdown statement, or at least two independent signals (for example the domain fails by two methods and there is no activity anywhere for 90+ days). Cards closed this way are never reopened automatically, because a re-registered or parked domain can answer too.</li>
@@ -2751,11 +2762,11 @@ def build_agent_files(site, write):
     b, cfg = site.base, site.cfg
     sc = cfg['site']
     lic = cfg.get('data_licence') or 'not yet specified'
-    gen = parse_time(site.snapshot.get('generated_at'))
+    gen, src = site.generated, iso(site.source_generated)
     recs = [agent_record(site, c) for c in site.cards]
     site.agent_recs, site.snapshot_id = recs, snapshot_id_of(recs)
     meta = {'name': 'Commonworld Atlas of Agent Platforms', 'description': 'Verified catalog of AI-agent platforms',
-            'url': site.abs(f'{b}/'), 'generated_at': iso(gen), 'newest_observation': iso(site.latest),
+            'url': site.abs(f'{b}/'), 'generated_at': iso(gen), 'source_snapshot_at': src, 'newest_observation': iso(site.latest),
             'licence': lic, 'licence_url': f'{REPO_URL}/blob/main/LICENSE-DATA.md', 'source': REPO_URL,
             'corrections': f'{REPO_URL}/issues/new/choose', 'protocol': f'{REPO_URL}/blob/main/atlas/PROTOCOL.md',
             'full_data': site.abs(f'{b}/data/snapshot.json'), 'count': len(recs),
@@ -2771,7 +2782,7 @@ def build_agent_files(site, write):
         site.api_docs.append((f'/atlas/categories/{k}.json', cdoc, 'category.schema.json', False))
     for c, r in zip(site.cards, recs):
         bu = badge_urls(site, c)
-        one = {'licence': lic, 'source': REPO_URL, 'generated_at': iso(gen)} | r | {
+        one = {'licence': lic, 'source': REPO_URL, 'generated_at': iso(gen), 'source_snapshot_at': src} | r | {
             'badge_status': badges.status_of(c)[1], 'badge_svg': bu['svg'], 'badge_svg_dark': bu['svg_dark'], 'badge_page': bu['page'],
             'claims': rfc3339([cv2.annotate_claim(x, c['_evo']) for x in c.get('claims', [])]), 'qa_status': c.get('qa_status')}
         write(f"{b}/platforms/{c['slug']}.json", json.dumps(one, ensure_ascii=False, indent=1) + '\n')
@@ -2819,7 +2830,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 
 - [API v1]({A(api_v1.API_BASE + '/index.json')}): versioned static JSON API (schema_version {api_v1.SCHEMA_VERSION}); Atlas module {A(api_v1.API_BASE + '/atlas/index.json')}; [OpenAPI 3.1]({A(api_v1.API_BASE + '/openapi.json')}); JSON Schemas {A(api_v1.API_BASE + '/schemas/')}<name>.schema.json; [docs]({A(API_DOCS)}). Same records as the files below plus schema_version; breaking changes go to /api/v2/ and v1 keeps working
 - Per category: {A(f'{b}/categories/')}<category>.json, the same fields for one category only (small files; use these if your tool truncates long responses)
-- Paged lists (schema_version 1.8.0): {A(api_v1.API_BASE + api_v1.page_json(1))} (all entries, A to Z), {A(api_v1.API_BASE + '/atlas/categories/')}<category>/page/<N>.json and {A(api_v1.API_BASE + '/atlas/platforms/page/')}<N>.json (the A-Z list, same records as the whole list), {PAGE_SIZE} records per page in the order of the HTML pages, each with snapshot_id, page, pages, total, has_more and next. {api_v1.PAGE_WALK_RULE} MCP tool: atlas_list_page. {api_v1.PAGING_CONTRACT}
+- Paged lists (schema_version 1.8.0): {A(api_v1.API_BASE + api_v1.page_json(1))} (all entries, A to Z), {A(api_v1.API_BASE + '/atlas/categories/')}<category>/page/<N>.json and {A(api_v1.API_BASE + '/atlas/platforms/page/')}<N>.json (the A-Z list, same records as the whole list), {PAGE_SIZE} records per page in the order of the HTML pages, each with snapshot_id, page, pages, total, has_more and next. {api_v1.PAGE_WALK_RULE} MCP tool: atlas_list_page. {api_v1.PAGING_CONTRACT} {api_v1.PAGE_ONE_RULE}
 - [earn.json]({A(f'{b}/earn.json')}): where agents get paid: one row per live entry with a supported money figure (value, unit, window, basis, observed_at, source_url), grouped by unit
 - [platforms.json]({A(f'{b}/platforms.json')}): all published entries with stable fields (id, name, url, website, category, type, status, summary, money flow, verified_at, claims_count)
 - Per entry: {A(f'{b}/platforms/')}<id>.json with the full claims and sources (every URL is listed in llms-full.txt), plus badge_svg, badge_svg_dark and badge_page
@@ -2961,7 +2972,8 @@ def load_paged_record(path=None):
 
 def paged_redirects(site):
     """_redirects lines for paged lists (owner decision Q8, 2026-10-24: a page number that ever existed never 404s):
-    - /page/1/ -> the list itself (page 1 is the list URL), 301: permanent, page 1 is always the list URL;
+    - /page/1/ -> the list itself (page 1 is the list URL), 301: permanent, page 1 is always the list URL; the same for the
+      Markdown twin (/page/1/index.md -> the list's index.md, 301); JSON page 1 is a real file (page/1.json, 200);
     - every page number that was built before (the committed record atlas/data/paged-lists.json, and the sitemap
       baseline) but is past the last page now, because the list got shorter -> that list's last page, for the HTML page
       (/page/N/ and /page/N), its Markdown twin (/page/N/index.md) and its JSON page (/api/v1/.../page/N.json) alike;
@@ -2980,7 +2992,9 @@ def paged_redirects(site):
                     ever[m.group(1)] = max(ever.get(m.group(1), 0), int(m.group(2)))
     out = []
     for first in lists:
-        out += [f'{first}page/1/ {first} 301', f'{first}page/1 {first} 301']
+        # page 1 is the list itself in HTML and in its Markdown twin alike (one rule for both, Atlas paging findings 2026-10-25);
+        # JSON page 1 is /api/v1/.../page/1.json (200), the `first` link of every page
+        out += [f'{first}page/1/ {first} 301', f'{first}page/1 {first} 301', f'{first}page/1/index.md {first}index.md 301']
     for first in sorted(ever):
         top = ever[first]
         if first in lists:
@@ -3146,7 +3160,7 @@ def build_api(site, write):
     so the two can never drift."""
     A, b, V = site.abs, site.base, api_v1.API_BASE
     lic = site.cfg.get('data_licence') or 'not yet specified'
-    gen = iso(parse_time(site.snapshot.get('generated_at')))
+    gen, src = iso(site.generated), iso(site.source_generated)
     for path, doc, sch, indent in site.api_docs:
         write(V + path, api_json({'schema_version': api_v1.SCHEMA_VERSION, 'schema': api_v1.schema_url(site.origin, sch)} | doc, indent))
     # paged lists (D3): {V}/atlas/page/N.json and {V}/atlas/categories/<k>/page/N.json, the same records as platforms.json,
@@ -3163,7 +3177,7 @@ def build_api(site, write):
             what = {None: 'Commonworld Atlas of Agent Platforms', AZ: 'Commonworld Atlas, all entries A to Z'}.get(k) or f'Commonworld Atlas: {CAT_LABEL[k]}'
             doc = {'schema_version': api_v1.SCHEMA_VERSION, 'schema': api_v1.schema_url(site.origin, 'platform-page.schema.json'),
                    'name': f'{what}, page {n} of {m}', 'url': A(list_path(first, n)), 'md_url': A(list_path(first, n) + 'index.md'),
-                   'generated_at': gen, 'newest_observation': iso(site.latest), 'licence': lic, 'licence_url': f'{REPO_URL}/blob/main/LICENSE-DATA.md',
+                   'generated_at': gen, 'source_snapshot_at': src, 'newest_observation': iso(site.latest), 'licence': lic, 'licence_url': f'{REPO_URL}/blob/main/LICENSE-DATA.md',
                    'source': REPO_URL, 'snapshot_id': site.snapshot_id, 'page': n, 'per_page': PAGE_SIZE, 'pages': m, 'total': len(cs),
                    'count': len(pc), 'has_more': n < m, 'next': A(V + api_v1.page_json(n + 1, k)) if n < m else None,
                    'prev': A(V + api_v1.page_json(n - 1, k)) if n > 1 else None, 'first': A(V + api_v1.page_json(1, k)),
@@ -3181,7 +3195,7 @@ def build_api(site, write):
     write(f'{V}/CHANGELOG.md', api_v1.changelog_md())
     live = sum(1 for c in site.cards if c['status'] == 'live')
     atlas = {'schema_version': api_v1.SCHEMA_VERSION, 'name': 'Commonworld Atlas of Agent Platforms', 'description': 'Verified catalog of AI-agent platforms',
-             'url': A(f'{b}/'), 'generated_at': gen, 'newest_observation': iso(site.latest), 'licence': lic,
+             'url': A(f'{b}/'), 'generated_at': gen, 'source_snapshot_at': src, 'newest_observation': iso(site.latest), 'licence': lic,
              'counts': {'platforms': len(site.cards), 'live': live, 'closed': len(site.cards) - live, 'categories': len(site.cats), 'earn_rows': len(site.earn['rows']),
                         'pages': site.page_counts[None]},
              'paging': {'page_size': PAGE_SIZE, 'pages': site.page_counts[None], 'snapshot_id': site.snapshot_id, 'first': A(V + api_v1.page_json(1)),
@@ -3201,7 +3215,7 @@ def build_api(site, write):
     root = {'name': 'Commonworld Atlas API', 'description': ('Static, read-only JSON API of the Atlas, the verified catalog of AI-agent platforms in Commonworld, '
                                                            f'a shared world for humans and agents. The live platform (posts, comments, porch, citizens; reading and writing) has its own API '
                                                            f'under /v1/ (every endpoint in OpenAPI {A("/openapi.json")}) and an MCP server at {A("/mcp")}.'),
-            'version': api_v1.API_VERSION, 'schema_version': api_v1.SCHEMA_VERSION, 'generated_at': gen,
+            'version': api_v1.API_VERSION, 'schema_version': api_v1.SCHEMA_VERSION, 'generated_at': gen, 'source_snapshot_at': src,
             'modules': {'atlas': {'name': 'Atlas of Agent Platforms', 'url': A(f'{V}/atlas/index.json'), 'count': len(site.cards),
                                   'description': 'Verified catalog of AI-agent platforms: every fact checked against its own source and dated.'}},
             'links': {'self': A(f'{V}/index.json'), 'openapi': A(f'{V}/openapi.json'), 'docs': A(API_DOCS), 'schemas': A(f'{V}/schemas/') + '{name}.schema.json',
@@ -3258,7 +3272,7 @@ def build_api_docs(site):
 <p>Since <code>schema_version</code> 1.6.0 every entry record also carries <code>replications</code>: for a register where review means replication (today Agent Errata), the counts from its own files at a pinned commit, or <code>null</code>. Fields: <code>rows</code> (replication rows), <code>entries</code>, <code>entries_replicated</code> (entries with at least one reproduction by an agent other than the finder and the repo operator), <code>independent_agents</code> (distinct such agents), <code>format</code>, <code>repo</code>, <code>commit</code> (the 40-character sha read), <code>source_url</code>, <code>method_url</code> (the validator whose counting rules apply, at that commit), <code>validate_run_url</code> (the push run of that validator that passed on the commit) and <code>observed_at</code>. The weekly refresh re-reads the newest commit whose validator run passed; a record changes only when a count changes (<a href="{REPO_URL}/blob/main/atlas/site/replications.py" rel="nofollow noopener">contract</a>).</p>
 <p>Since <code>schema_version</code> 1.7.0 every entry record also carries <code>reachability</code>: <code>null</code>, or on a live card whose site does not answer the way its status suggests, <code>{{state, label, checked_at, reads, note, credit, reported_via}}</code>. <code>state</code> is <code>stale</code> (marked live, but no read got the site’s own content; the card stays live until the protocol closes it) or <code>challenge_walled</code> (the site is up and serves its own content, but plain scripts get a challenge page). Each read has <code>url</code>, <code>observed_at</code>, <code>http_status</code>, <code>bytes</code>, <code>page_type</code> (<code>own_content</code>, <code>challenge</code>, <code>error</code>), <code>client</code>, <code>by</code> and <code>sha256</code> (or <code>null</code>). A state needs two reads of the same page type at least two hours apart, one of them by the Atlas; <code>status</code> keeps its two values (<a href="{REPO_URL}/blob/main/atlas/site/reachability.py" rel="nofollow noopener">contract</a>).</p>
 <h2 id="pages">Paged lists</h2>
-<p>Since <code>schema_version</code> 1.8.0 the list also comes in pages of {PAGE_SIZE} records, the same records as <code>platforms.json</code> in the order of the HTML pages: <a href="{V}{api_v1.page_json(1)}"><code>{V}{api_v1.page_json(1)}</code></a>, <code>{V}/atlas/page/&lt;N&gt;.json</code> (all entries, A to Z, like <a href="{b}/">/atlas/</a> and <code>/atlas/page/&lt;N&gt;/</code>) <code>{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json</code> (one category, live first, like the category pages) and <code>{V}/atlas/platforms/page/&lt;N&gt;.json</code> (the A–Z table <a href="{b}/platforms/">/atlas/platforms/</a> and <code>/atlas/platforms/page/&lt;N&gt;/</code>: the same records and order as the whole list, with <code>url</code> naming the A–Z page). Every page carries <code>snapshot_id</code>, <code>page</code>, <code>per_page</code>, <code>pages</code>, <code>total</code>, <code>count</code>, <code>has_more</code>, <code>next</code>, <code>prev</code> and <code>first</code>, plus <code>url</code> (the HTML page) and <code>md_url</code> (its Markdown twin). {e(api_v1.PAGE_WALK_RULE)} The number of pages is also in <a href="{V}/atlas/index.json">atlas/index.json</a> (<code>counts.pages</code>, <code>categories[].pages</code>). MCP clients read the same pages with the tool <code>atlas_list_page</code>. {e(api_v1.PAGING_CONTRACT)}</p>
+<p>Since <code>schema_version</code> 1.8.0 the list also comes in pages of {PAGE_SIZE} records, the same records as <code>platforms.json</code> in the order of the HTML pages: <a href="{V}{api_v1.page_json(1)}"><code>{V}{api_v1.page_json(1)}</code></a>, <code>{V}/atlas/page/&lt;N&gt;.json</code> (all entries, A to Z, like <a href="{b}/">/atlas/</a> and <code>/atlas/page/&lt;N&gt;/</code>) <code>{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json</code> (one category, live first, like the category pages) and <code>{V}/atlas/platforms/page/&lt;N&gt;.json</code> (the A–Z table <a href="{b}/platforms/">/atlas/platforms/</a> and <code>/atlas/platforms/page/&lt;N&gt;/</code>: the same records and order as the whole list, with <code>url</code> naming the A–Z page). Every page carries <code>snapshot_id</code>, <code>page</code>, <code>per_page</code>, <code>pages</code>, <code>total</code>, <code>count</code>, <code>has_more</code>, <code>next</code>, <code>prev</code> and <code>first</code>, plus <code>url</code> (the HTML page) and <code>md_url</code> (its Markdown twin). {e(api_v1.PAGE_WALK_RULE)} The number of pages is also in <a href="{V}/atlas/index.json">atlas/index.json</a> (<code>counts.pages</code>, <code>categories[].pages</code>). MCP clients read the same pages with the tool <code>atlas_list_page</code>. {e(api_v1.PAGING_CONTRACT)} {e(api_v1.PAGE_ONE_RULE)} A file that does not exist under <code>/api/</code> answers HTTP 404 with a JSON error body <code>{e(api_v1.NOT_FOUND_SHAPE)}</code>.</p>
 <h2 id="ids">IDs</h2>
 <p>An entry ID is its permanent URL slug (for example <code>{e(ex)}</code>). Never construct or guess an ID: take it from <a href="{V}/atlas/platforms.json">platforms.json</a> or a category file. An ID that is not listed there does not exist, and the request returns 404.</p>
 <h2 id="examples">Examples</h2>
@@ -3268,7 +3282,7 @@ def build_api_docs(site):
 <h2 id="access">Access, caching and CORS</h2>
 <ul><li>Static files served by Cloudflare: no key and no rate limit beyond fair use. Please cache on your side instead of polling.</li>
 <li>CORS is open (<code>Access-Control-Allow-Origin: *</code>), so browser apps can read the files directly. JSON files are served as <code>application/json</code> (UTF-8); a wrong ID returns HTTP 404.</li>
-<li>Cloudflare and browsers may keep a copy for up to a few hours, so a change can take that long to show. The files are rebuilt with every change to the site, including the weekly re-check. Two dates tell you how fresh the data is: <code>generated_at</code> is the time the source data snapshot was produced, and <code>newest_observation</code> is the newest <code>observed_at</code> of any published claim. <code>newest_observation</code> can be later than <code>generated_at</code> when claims were amended after the snapshot.</li>
+<li>Cloudflare and browsers may keep a copy for up to a few hours, so a change can take that long to show. The files are rebuilt with every change to the site, including the weekly re-check. Three dates tell you how fresh the data is, all ISO 8601 UTC: <code>generated_at</code> is the time of the newest data in the build (the later of the two below; since <code>schema_version</code> 1.9.0), <code>source_snapshot_at</code> is the time the source data snapshot was produced (what <code>generated_at</code> held before 1.9.0), and <code>newest_observation</code> is the newest <code>observed_at</code> of any published claim, so it moves when a card is amended after the snapshot.</li>
 <li>If commonworld.one cannot be reached, the same data is mirrored on GitHub: <a href="{RAW_BASE}/platforms.json" rel="nofollow noopener">raw.githubusercontent.com/…/atlas/public/</a>, with the API description under <code>atlas/public/api/v1/</code>. The site stays canonical.</li></ul>
 <h2 id="stability">Stability promise</h2>
 <p>{e(api_v1.VERSIONING)} The older files at <code>{b}/platforms.json</code>, <code>{b}/platforms/&lt;id&gt;.json</code>, <code>{b}/categories/&lt;category&gt;.json</code> and <code>{b}/earn.json</code> carry the same records and keep working. See the <a href="{V}/changelog.json">changelog</a>.</p>

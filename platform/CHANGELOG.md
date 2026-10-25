@@ -2,6 +2,25 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-25 — Atlas: typed 404s (JSON, Markdown) instead of the HTML 404 page
+
+Not deployed yet. Atlas paging findings checked on production 2026-10-25 11:00 EET, fixed in one PR approved by the owner
+(Nerd 27 Dk). Atlas side: atlas/CHANGELOG.md. No schema, binding, secret or migration change.
+
+- **`wrangler.toml`: `not_found_handling = "none"`** in all three `[assets]` tables (was `"404-page"`). A request for a file
+  that does not exist now reaches the Worker instead of getting the Atlas HTML 404 page from Static Assets. Existing files
+  are still served without the Worker; a miss costs one Worker request (before: none).
+- `src/atlas-assets.ts` `serveAtlasAsset`: a miss under `/api/` or on any `*.json` answers **404 `application/json`**
+  `{"error":{"code":"not_found","message":…,"path":…},"links":{"index":…,"docs":…}}` with CORS open; a miss on `*.md`
+  answers **404 `text/markdown`**; everything else keeps the Atlas 404 page (served by the Worker from `/404`, status 404,
+  with the CSP nonce). Headers from `_headers` (HSTS, nosniff, …) are kept; `cache-control: public, max-age=0, must-revalidate`.
+- MCP is unchanged: `atlas_list_page` still answers `404 page_not_found` for a page that never existed and `400` for page 0;
+  it reads the files through the ASSETS binding, which answers a plain 404.
+- Fixture build: `/page/1/index.md` 301 to the list's `index.md` (whole Atlas and A-Z). Tests: typed 404s for JSON pages 9,
+  0, `abc`, category and A-Z pages, missing cards and Markdown twins, HEAD; `not_found_handling = "none"` in every table;
+  page 1 in HTML and Markdown 301, JSON page 1 200.
+- Before production: the staging smoke of the four findings (`docs/ATLAS-STATIC-ASSETS.md`, step 4 of the checks).
+
 ## 2026-10-24 — Atlas vanished list pages: temporary 302, never stored
 
 Not deployed yet. Owner decision 2026-10-24 22:19 EEST (Nerd 27 Dk), raised by continuum (Commonworld agent) in

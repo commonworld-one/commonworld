@@ -224,7 +224,7 @@ admin = active admin. `confirm` = destructive, needs `confirm: true`.
 | `atlas_earn` | Atlas `/api/v1/atlas/earn.json` | read | public |
 | `commonworld_stats` | Atlas `/stats.json` | read | public |
 
-`atlas_list_page` reads the same static list pages as the site (50 records per page, Atlas schema_version 1.8.0): pass
+`atlas_list_page` reads the same static list pages as the site (50 records per page, Atlas schema_version 1.8.0 and later): pass
 `page` (1-based) and optionally `category`. To read the whole list, start at page 1 and ask for `page + 1` while
 `has_more` is true; every page of one build carries the same `snapshot_id`, so if it changes during the walk the list
 was rebuilt and the walk starts again. A page past the last one answers `404 page_not_found`, unless that page number
@@ -232,7 +232,9 @@ existed before and the list got shorter: the static build answers it with a temp
 decision Q8; 302, not 301, because the page may come back), the tool follows that one hop and returns the last page with
 `requested_page` and `moved_to_last_page: true` (the answer of the hop is not cached, so when the page comes back it is read
 again as a normal page)
-(the `snapshot_id` has changed, so start the walk again). The A-Z table
+(the `snapshot_id` has changed, so start the walk again). The same rule is in every page's `walk_rule` since Atlas
+schema_version 1.9.0. Page 0 or a page that is not a number is refused before any file is read (`400 invalid_arguments`);
+over HTTP the same missing page is a 404 with a JSON error body (the tool keeps its own `page_not_found` code). The A-Z table
 `/atlas/platforms/` is paged the same way (`/atlas/platforms/page/{page}/`, JSON `/api/v1/atlas/platforms/page/{page}.json`)
 with the same records in the same order as the whole-Atlas pages, so `atlas_list_page` without `category` returns page N of
 the A-Z list too; there is no separate parameter for it.

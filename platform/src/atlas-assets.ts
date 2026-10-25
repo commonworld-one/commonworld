@@ -74,6 +74,47 @@ export const ATLAS_TEMP_REDIRECT_CACHE = 'no-store';
 
 export const atlasAssetsOn = (env: Env): boolean => env.ATLAS_SOURCE === 'assets' && !!env.ASSETS;
 
+/**
+ * Typed 404s (Atlas paging findings, 2026-10-25): a missing file under /api/ or any missing *.json answers a JSON error body,
+ * a missing Markdown twin (*.md) answers Markdown, never the HTML 404 page with a JSON or Markdown content type. The same
+ * texts are in atlas/site/serve.py (local preview; tests/test_atlas_paging.py compares them). Static Assets has no per-path
+ * 404 page, so these paths reach the Worker on a miss: wrangler.toml `not_found_handling = "none"` (an existing file is still
+ * served by Static Assets without the Worker).
+ */
+export const ATLAS_NOT_FOUND_JSON_MESSAGE = 'No such file in the Atlas API. List pages are numbered from 1; the number of pages is `pages` on every page '
+  + 'and counts.pages in /api/v1/atlas/index.json.';
+export const ATLAS_NOT_FOUND_MD = '# Not found\n\nThere is no Markdown page at this address. The Atlas starts at /atlas/index.md; '
+  + 'list pages are numbered from 1 (page 1 is the list itself).\n';
+/** Cache-Control of a typed 404: the same as the Atlas files (a page number can exist after the next build). */
+export const ATLAS_NOT_FOUND_CACHE = 'public, max-age=0, must-revalidate';
+
+export function atlasNotFoundKind(path: string): 'json' | 'markdown' | 'html' {
+  if (path.startsWith('/api/') || path.endsWith('.json')) return 'json';
+  if (path.endsWith('.md')) return 'markdown';
+  return 'html';
+}
+
+/** The JSON or Markdown 404 for `url`, keeping the asset layer's site-wide headers (`base`, from _headers); null for HTML paths. */
+export function atlasTypedNotFound(method: string, url: URL, base: Headers = new Headers()): Response | null {
+  const kind = atlasNotFoundKind(url.pathname);
+  if (kind === 'html') return null;
+  const headers = new Headers(base);
+  for (const h of ['content-length', 'content-encoding', 'etag', 'last-modified', 'location']) headers.delete(h);
+  headers.set('cache-control', ATLAS_NOT_FOUND_CACHE);
+  headers.set('x-content-type-options', 'nosniff');
+  let body: string;
+  if (kind === 'json') {
+    headers.set('content-type', 'application/json; charset=utf-8');
+    headers.set('access-control-allow-origin', '*');
+    body = JSON.stringify({ error: { code: 'not_found', message: ATLAS_NOT_FOUND_JSON_MESSAGE, path: url.pathname },
+      links: { index: `${url.origin}/api/v1/atlas/index.json`, docs: `${url.origin}/atlas/api/` } }) + '\n';
+  } else {
+    headers.set('content-type', 'text/markdown; charset=utf-8');
+    body = ATLAS_NOT_FOUND_MD;
+  }
+  return new Response(method === 'HEAD' ? null : body, { status: 404, headers });
+}
+
 const MARK = "script-src 'self'";
 
 /** Port of cw-public functions/_middleware.js: a fresh nonce in the Atlas CSP of an HTML response (for Cloudflare's injected script). */
@@ -93,7 +134,8 @@ export function withAtlasNonce(res: Response): Response {
  * An Atlas path the Worker owns (HTML pages, the IndexNow key file, anything not matched by a negative pattern),
  * answered from the ASSETS binding. Status, body and the `_headers` headers come from Static Assets; the Worker adds
  * the nonce, turns the asset layer's 307 slash/`.html` redirects into Pages' 308, sends `cache-control: no-store` on
- * the temporary 302s of vanished list pages, and marks closed staging noindex.
+ * the temporary 302s of vanished list pages, answers a missing JSON or Markdown file with a typed 404 (atlasTypedNotFound),
+ * and marks closed staging noindex.
  */
 export async function serveAtlasAsset(request: Request, env: Env, url: URL): Promise<Response> {
   if (request.method !== 'GET' && request.method !== 'HEAD') {
@@ -103,11 +145,23 @@ export async function serveAtlasAsset(request: Request, env: Env, url: URL): Pro
   for (const name of ['accept', 'accept-encoding', 'accept-language', 'if-none-match', 'if-modified-since', 'range', 'user-agent']) {
     const v = request.headers.get(name); if (v) headers.set(name, v);
   }
-  // Static Assets applies not_found_handling ("404-page" = the Atlas 404.html, status 404) to page navigations.
+  // not_found_handling is "none" (wrangler.toml): a miss is a bare 404 here and gets its typed 404 below (JSON, Markdown, or
+  // the Atlas 404 page). The navigate mode is kept so a "404-page" setting would still give the HTML page for HTML paths.
   headers.set('sec-fetch-mode', 'navigate');
   let res = await env.ASSETS!.fetch(new Request(url.toString(), { method: request.method, headers, redirect: 'manual' }));
+  if (res.status === 404) {
+    // JSON (API) and Markdown paths get a typed 404, never the HTML error page
+    const typed = atlasTypedNotFound(request.method, url, res.headers);
+    if (typed) {
+      await res.body?.cancel();
+      typed.headers.delete('set-cookie');
+      typed.headers.set('x-cw-upstream', 'atlas-assets');
+      if (env.PAGES_NOINDEX === '1') typed.headers.set('x-robots-tag', 'noindex, nofollow');
+      return typed;
+    }
+  }
   if (res.status === 404 && !(res.headers.get('content-type') || '').startsWith('text/html')) {
-    // not_found_handling did not apply: serve the Atlas 404 page ourselves, still with status 404
+    // no 404 page from the asset layer (not_found_handling "none"): serve the Atlas 404 page ourselves, still with status 404
     const page = await env.ASSETS!.fetch(new Request(new URL('/404', url).toString(), { method: request.method, headers, redirect: 'manual' }));
     if (page.status === 200) res = new Response(request.method === 'HEAD' ? null : page.body, { status: 404, headers: page.headers });
   }

@@ -211,10 +211,16 @@ class Redirects(unittest.TestCase):
         self.assertEqual(rec['/atlas/'], rec['/atlas/platforms/'])
 
     def test_page_1_redirects_to_the_list(self):
+        # page 1 is the list itself in HTML and in its Markdown twin alike (Atlas paging findings 2026-10-25: the Markdown
+        # /page/1/index.md was a 404 while HTML /page/1/ was a 301); JSON page 1 is a real file and is never redirected
         lines = self.run_with_baseline(FakeSite(120, {'social': 10}), [])
         self.assertIn('/atlas/page/1/ /atlas/ 301', lines)
         self.assertIn('/atlas/page/1 /atlas/ 301', lines)
+        self.assertIn('/atlas/page/1/index.md /atlas/index.md 301', lines)
         self.assertIn('/atlas/categories/social/page/1/ /atlas/categories/social/ 301', lines)
+        self.assertIn('/atlas/categories/social/page/1/index.md /atlas/categories/social/index.md 301', lines)
+        self.assertIn('/atlas/platforms/page/1/index.md /atlas/platforms/index.md 301', lines)
+        self.assertFalse(any(l.startswith('/api/') and '/page/1.json' in l.split()[0] for l in lines))
 
     def test_published_page_past_the_end_moves_to_the_last_page(self):
         O = 'https://commonworld.one'
@@ -226,7 +232,8 @@ class Redirects(unittest.TestCase):
         self.assertIn('/atlas/categories/gone/page/2/ /atlas/ 302', lines)
         # card URLs are never redirected; only the A-Z list's own /page/1/ rule names /atlas/platforms/
         self.assertEqual([l for l in lines if l.startswith('/atlas/platforms/')],
-                         ['/atlas/platforms/page/1/ /atlas/platforms/ 301', '/atlas/platforms/page/1 /atlas/platforms/ 301'])
+                         ['/atlas/platforms/page/1/ /atlas/platforms/ 301', '/atlas/platforms/page/1 /atlas/platforms/ 301',
+                          '/atlas/platforms/page/1/index.md /atlas/platforms/index.md 301'])
 
     def test_az_list_page_1_and_shrinking(self):
         O = 'https://commonworld.one'
@@ -243,7 +250,7 @@ class Redirects(unittest.TestCase):
         self.assertEqual(check.VANISHED_PAGE_STATUS, build.VANISHED_PAGE_STATUS)
         for l in lines:
             src, _, code = l.split()
-            if src.rstrip('/').endswith('/page/1'):
+            if src.rstrip('/').endswith('/page/1') or src.endswith('/page/1/index.md'):
                 self.assertEqual(code, '301', l)
             else:
                 self.assertEqual(code, '302', l)
@@ -262,8 +269,9 @@ class Redirects(unittest.TestCase):
         for n in (2, 3, 4, 5):
             for pre in (f'/atlas/page/{n}', f'/atlas/platforms/page/{n}', f'/api/v1/atlas/page/{n}.json', f'/api/v1/atlas/platforms/page/{n}.json'):
                 self.assertFalse(any(l.startswith(pre) for l in back), (pre, back))
-        self.assertEqual(sorted(back), sorted(['/atlas/page/1/ /atlas/ 301', '/atlas/page/1 /atlas/ 301',
-                                               '/atlas/platforms/page/1/ /atlas/platforms/ 301', '/atlas/platforms/page/1 /atlas/platforms/ 301']))
+        self.assertEqual(sorted(back), sorted(['/atlas/page/1/ /atlas/ 301', '/atlas/page/1 /atlas/ 301', '/atlas/page/1/index.md /atlas/index.md 301',
+                                               '/atlas/platforms/page/1/ /atlas/platforms/ 301', '/atlas/platforms/page/1 /atlas/platforms/ 301',
+                                               '/atlas/platforms/page/1/index.md /atlas/platforms/index.md 301']))
 
     def test_static_302s_get_no_store_headers(self):
         lines = self.run_with_baseline(FakeSite(350, {}), [], {'/atlas/': 8, '/atlas/platforms/': 8})
@@ -335,10 +343,200 @@ class Redirects(unittest.TestCase):
                     for path in never:
                         self.assertEqual(get(path)[0], 404, (stage, path))
                     self.assertEqual(get('/atlas/page/1/')[:2], (301, '/atlas/'), stage)
+                    self.assertEqual(get('/atlas/page/1/index.md')[:2], (301, '/atlas/index.md'), stage)
+                    self.assertEqual(get('/api/v1/atlas/page/1.json')[:2], (200, None), stage)
             finally:
                 srv.shutdown()
                 srv.server_close()
                 serve.DIST = old
+
+
+class LocalServer:
+    """serve.py on a free port over a temporary dist (the same static rules as Cloudflare: _redirects, typed 404s)."""
+
+    def __init__(self, d):
+        import http.server, threading
+        import serve
+        self.serve, self.old = serve, serve.DIST
+        serve.DIST = d
+        H = type('H', (serve.H,), {'log_message': lambda *a: None, '__init__': lambda self, *a, **k: http.server.SimpleHTTPRequestHandler.__init__(self, *a, directory=serve.DIST, **k)})
+        self.srv = http.server.ThreadingHTTPServer(('127.0.0.1', 0), H)
+        threading.Thread(target=self.srv.serve_forever, daemon=True).start()
+        self.base = f'http://127.0.0.1:{self.srv.server_address[1]}'
+
+    def get(self, path, follow=True, method='GET'):
+        """(status, headers, body bytes, final path) of one request; follow=False keeps a redirect as the answer."""
+        import urllib.request, urllib.error
+
+        class NoRedirect(urllib.request.HTTPRedirectHandler):
+            def redirect_request(self, *a, **k):
+                return None
+        op = urllib.request.build_opener(urllib.request.ProxyHandler({}), *([] if follow else [NoRedirect]))
+        req = urllib.request.Request(self.base + path, method=method)
+        try:
+            with op.open(req) as r:
+                return r.status, r.headers, r.read(), r.geturl()[len(self.base):]
+        except urllib.error.HTTPError as ex:
+            with ex:
+                return ex.code, ex.headers, ex.read(), path
+
+    def close(self):
+        self.srv.shutdown()
+        self.srv.server_close()
+        self.serve.DIST = self.old
+
+
+class WalkRule(unittest.TestCase):
+    """Atlas paging findings (2026-10-25): walk_rule states the temporary 302 of a vanished page and the JSON 404, and a client
+    that follows walk_rule reads the whole list exactly once through a shrink (8 -> 7 pages) and a regrowth (7 -> 8)."""
+
+    def test_rule_names_302_and_404(self):
+        r = api_v1.PAGE_WALK_RULE
+        self.assertIn('HTTP 302', r)
+        self.assertIn('page 8 -> page 7', r)
+        self.assertIn('start again from page 1', r)
+        self.assertIn('HTTP 404', r)
+        self.assertIn('application/json', r)
+        self.assertIn('never cached', r)
+
+    def build_list(self, d, n_pages, sid, record):
+        """A whole-Atlas list of n_pages JSON pages (snapshot sid) plus the _redirects / _headers build.py writes for it."""
+        import shutil
+        shutil.rmtree(d, ignore_errors=True)
+        total = n_pages * 50
+        for n in range(1, n_pages + 1):
+            fp = Path(d, 'api', 'v1', 'atlas', 'page', f'{n}.json')
+            fp.parent.mkdir(parents=True, exist_ok=True)
+            fp.write_text(json.dumps({'snapshot_id': sid, 'page': n, 'pages': n_pages, 'total': total, 'has_more': n < n_pages,
+                                      'next': f'/api/v1/atlas/page/{n + 1}.json' if n < n_pages else None,
+                                      'platforms': [f'{sid}-{i}' for i in range((n - 1) * 50, min(n * 50, total))]}))
+        Path(d, '404.html').write_text('<!doctype html><title>404</title>')
+        red = ''.join(l + '\n' for l in Redirects.run_with_baseline(self, FakeSite(total, {}), [], record))
+        Path(d, '_redirects').write_text(red)
+        Path(d, '_headers').write_text(build.vanished_page_headers(red))
+
+    def walk(self, srv, start='/api/v1/atlas/page/1.json', max_restarts=3):
+        """A client that follows walk_rule: follow next while has_more; restart from page 1 when snapshot_id changes or the
+        page answered is not the page asked for (a 302 to the last page). Returns (ids, restarts, redirects seen)."""
+        restarts, redirects = 0, []
+        while True:
+            ids, url, sid, want = [], start, None, None
+            ok = True
+            while url:
+                status, _, body, final = srv.get(url)
+                self.assertEqual(status, 200, url)
+                if final != url:
+                    redirects.append((url, final))
+                d = json.loads(body)
+                want = want + 1 if want else int(url.rsplit('/', 1)[1].split('.')[0])
+                if (sid and d['snapshot_id'] != sid) or d['page'] != want:
+                    ok = False
+                    break
+                sid = sid or d['snapshot_id']
+                ids += d['platforms']
+                url = d['next'] if d['has_more'] else None
+            if ok:
+                return ids, restarts, redirects
+            restarts += 1
+            start = '/api/v1/atlas/page/1.json'
+            self.assertLessEqual(restarts, max_restarts)
+
+    def test_walk_survives_shrink_8_7_8(self):
+        rec = {'/atlas/': 8, '/atlas/platforms/': 8}
+        with tempfile.TemporaryDirectory() as root:
+            d = os.path.join(root, 'dist')
+            self.build_list(d, 8, 'a' * 16, rec)
+            srv = LocalServer(d)
+            try:
+                ids, restarts, _ = self.walk(srv)
+                self.assertEqual((len(ids), len(set(ids)), restarts), (400, 400, 0))
+                # the list shrinks to 7 pages while a client holds the URL of page 8: 302 (no-store) to page 7
+                self.build_list(d, 7, 'b' * 16, rec)
+                status, hdr, _, _ = srv.get('/api/v1/atlas/page/8.json', follow=False)
+                self.assertEqual((status, hdr.get('location'), hdr.get('cache-control')), (302, '/api/v1/atlas/page/7.json', 'no-store'))
+                ids, restarts, redirects = self.walk(srv, start='/api/v1/atlas/page/8.json')
+                self.assertEqual(redirects[0], ('/api/v1/atlas/page/8.json', '/api/v1/atlas/page/7.json'))
+                self.assertEqual(restarts, 1)  # landed on page 7 instead of 8: start again from page 1, as walk_rule says
+                self.assertEqual((len(ids), len(set(ids)), {i[:16] for i in ids}), (350, 350, {'b' * 16}))
+                # page 9 never existed: a JSON 404 at every step
+                status, hdr, body, _ = srv.get('/api/v1/atlas/page/9.json')
+                self.assertEqual((status, hdr.get('content-type')), (404, 'application/json; charset=utf-8'))
+                self.assertEqual(json.loads(body)['error']['code'], 'not_found')
+                # it grows back to 8 pages: page 8 is a plain 200 again, no redirect, and a walk reads all 400 once
+                self.build_list(d, 8, 'c' * 16, rec)
+                status, hdr, _, _ = srv.get('/api/v1/atlas/page/8.json', follow=False)
+                self.assertEqual((status, hdr.get('location')), (200, None))
+                ids, restarts, redirects = self.walk(srv)
+                self.assertEqual((len(ids), len(set(ids)), restarts, redirects), (400, 400, 0, []))
+            finally:
+                srv.close()
+
+
+def _ts_string(src, name):
+    """The value of `export const <name> = '...' + '...';` in a TypeScript file (single-quoted pieces, \\n escapes)."""
+    import re
+    m = re.search(r'export const ' + name + r" = ((?:\s*\+?\s*'(?:[^'\\]|\\.)*')+);", src)
+    pieces = re.findall(r"'((?:[^'\\]|\\.)*)'", m.group(1))
+    return ''.join(pieces).replace('\\n', '\n').replace("\\'", "'")
+
+
+class TypedNotFound(unittest.TestCase):
+    """Atlas paging findings (2026-10-25): a page that does not exist answers 404 typed by its format (JSON for the API,
+    Markdown for a Markdown twin, the HTML 404 page for HTML), never the HTML page under a JSON or Markdown URL.
+    In production the platform Worker answers it (platform/src/atlas-assets.ts); serve.py mirrors it locally."""
+
+    def test_same_texts_as_the_worker(self):
+        import serve
+        ts = (ROOT / 'platform' / 'src' / 'atlas-assets.ts').read_text(encoding='utf-8')
+        self.assertEqual(_ts_string(ts, 'ATLAS_NOT_FOUND_JSON_MESSAGE'), serve.NOT_FOUND_JSON_MESSAGE)
+        self.assertEqual(_ts_string(ts, 'ATLAS_NOT_FOUND_MD'), serve.NOT_FOUND_MD)
+
+    def test_404_bodies_by_format(self):
+        with tempfile.TemporaryDirectory() as root:
+            d = os.path.join(root, 'dist')
+            WalkRule.build_list(self, d, 2, 'a' * 16, {'/atlas/': 2, '/atlas/platforms/': 2})
+            srv = LocalServer(d)
+            try:
+                for p in ('/api/v1/atlas/page/9.json', '/api/v1/atlas/page/0.json', '/api/v1/atlas/page/abc.json',
+                          '/api/v1/atlas/categories/social/page/99.json', '/api/v1/nope'):
+                    status, hdr, body, _ = srv.get(p)
+                    self.assertEqual((status, hdr.get('content-type')), (404, 'application/json; charset=utf-8'), p)
+                    doc = json.loads(body)
+                    self.assertEqual(doc['error'], {'code': 'not_found', 'message': srv.serve.NOT_FOUND_JSON_MESSAGE, 'path': p})
+                    self.assertEqual(doc['links']['index'], '/api/v1/atlas/index.json')
+                for p in ('/atlas/page/9/index.md', '/atlas/page/0/index.md'):
+                    status, hdr, body, _ = srv.get(p)
+                    self.assertEqual((status, hdr.get('content-type')), (404, 'text/markdown; charset=utf-8'), p)
+                    self.assertEqual(body.decode(), srv.serve.NOT_FOUND_MD)
+                status, hdr, body, _ = srv.get('/atlas/page/9/')
+                self.assertEqual((status, hdr.get('content-type')), (404, 'text/html; charset=utf-8'))
+                self.assertIn(b'<!doctype html>', body)
+            finally:
+                srv.close()
+
+
+class GeneratedAt(unittest.TestCase):
+    """generated_at (schema_version 1.9.0) is the time of the newest data in the build: the later of the source snapshot time
+    and the newest observation, ISO 8601 UTC; the old value stays as source_snapshot_at."""
+
+    def test_later_of_snapshot_and_newest_observation(self):
+        snap = build.parse_time('2026-10-19T08:29:56Z')
+        newest = build.parse_time('2026-10-24T12:50:00Z')
+        self.assertEqual(build.iso(build.data_generated(snap, newest)), '2026-10-24T12:50:00Z')
+        self.assertEqual(build.iso(build.data_generated(newest, snap)), '2026-10-24T12:50:00Z')
+        self.assertEqual(build.data_generated(snap, None), snap)
+        self.assertIsNone(build.data_generated(None, None))
+        self.assertRegex(build.iso(build.data_generated(snap, newest)), api_v1.UTC_PATTERN)
+
+    def test_schema_documents_both_fields(self):
+        sch = api_v1.schemas('https://commonworld.one', ['social'])
+        for name in ('platform.schema.json', 'platform-list.schema.json', 'category.schema.json', 'platform-page.schema.json', 'earn.schema.json'):
+            props = sch[name]['properties']
+            self.assertIn('source_snapshot_at', props, name)
+            self.assertIn('newest observation', props['generated_at']['description'].replace('newest_observation', 'newest observation'), name)
+        self.assertEqual(api_v1.SCHEMA_VERSION, '1.9.0')
+        self.assertEqual(api_v1.CHANGELOG[0]['schema_version'], api_v1.SCHEMA_VERSION)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -8,7 +8,8 @@ below is the state before the cutover, kept for the record. The old Cloudflare P
 
 | Request | Who answers | Billed Worker requests |
 |---|---|---|
-| Atlas static file: `/atlas/assets/*`, `/atlas/og/*`, `/atlas/screens/*`, `/atlas/badge/*`, `/atlas/data/*`, `/atlas/**.json`, `/atlas/**.txt`, `/atlas/**.xml`, `/atlas/**.md` (every Markdown twin: platform and category cards, decisions, events), `/stats.json`, `/stats/index.md`, `/about/index.md`, `/privacy/index.md`, `/terms/index.md`, `/api/*`, `/.well-known/security.txt` | Cloudflare Static Assets directly (headers from the Atlas `_headers`, redirects from `_redirects`, a miss = Atlas `404.html` with 404) | **0** |
+| Atlas static file: `/atlas/assets/*`, `/atlas/og/*`, `/atlas/screens/*`, `/atlas/badge/*`, `/atlas/data/*`, `/atlas/**.json`, `/atlas/**.txt`, `/atlas/**.xml`, `/atlas/**.md` (every Markdown twin: platform and category cards, decisions, events), `/stats.json`, `/stats/index.md`, `/about/index.md`, `/privacy/index.md`, `/terms/index.md`, `/api/*`, `/.well-known/security.txt` | Cloudflare Static Assets directly (headers from the Atlas `_headers`, redirects from `_redirects`) | **0** |
+| A miss on one of those paths (a file that does not exist, e.g. `/api/v1/atlas/page/9.json`, `/atlas/page/9/index.md`) | Worker (`not_found_handling = "none"`, since 2026-10-25) → typed 404 from `src/atlas-assets.ts`: JSON (`application/json`, `{error: {code: not_found, message, path}, links}`) under `/api/` and for `*.json`, Markdown (`text/markdown`) for `*.md`, the Atlas 404 page otherwise | 1 |
 | Atlas HTML: `/atlas/…/`, `/privacy/`, `/terms/`, `/about/`, `/stats/`, Atlas 404s under those | Worker → `env.ASSETS.fetch` → + CSP nonce (`src/atlas-assets.ts`) | 1 |
 | Slashless / `.html` Atlas URL (`/atlas/platforms/x`) | Worker, 308 to the slash form (as Pages) | 1 |
 | Bare `/atlas`, `/privacy`, `/terms`, `/about`, `/stats` | Worker, 301 to the slash form | 1 |
@@ -16,6 +17,12 @@ below is the state before the cutover, kept for the record. The old Cloudflare P
 | `/.well-known/mcp.json` (MCP discovery manifest) | Worker (`src/mcp/docs.ts` `mcpWellKnown`) | 1 |
 | Any other `/.well-known/*` | Worker → ASSETS (Atlas 404) | 1 |
 | `/`, v1 pages, `/v1/*`, `/assets/*`, `/robots.txt`, `/sitemap.xml`, `/llms.txt`, `/llms-full.txt`, `/favicon.ico` | Worker (v1); llms files append the Atlas file read from ASSETS (no network) | 1 |
+
+Why a miss runs the Worker: Static Assets has one 404 page for every path. With `not_found_handling = "404-page"` (until
+2026-10-25) a missing JSON page or Markdown twin got the HTML 404 page (under a `text/markdown` type for `.md`). With `"none"`
+a request for a file that does not exist is handed to the Worker, which answers the typed 404; an existing file is still
+served without the Worker, so only misses cost a request. `test/atlas-assets.test.ts` checks `"none"` in every `[assets]`
+table and the typed 404s.
 
 The split is `[assets] run_worker_first` in `wrangler.toml` (`"/*"` plus the `!` patterns), the same in the top-level,
 staging and production tables and equal to `ATLAS_RUN_WORKER_FIRST` in `src/atlas-assets.ts`; `test/atlas-assets.test.ts`
@@ -64,6 +71,8 @@ the build's. The Worker only adds `'nonce-…'` after `script-src 'self'` on HTM
    - `curl -sI $H/atlas/` → 200, `x-cw-upstream: atlas-assets`, CSP with `'nonce-…'`; twice → two different nonces.
    - `curl -sI $H/atlas/platforms/1f916` → 308 `location: /atlas/platforms/1f916/`; `$H/atlas` → 301 `/atlas/`.
    - `curl -s -o /dev/null -w '%{http_code}' $H/atlas/nope/` → 404 (Atlas 404 page); `$H/atlas/assets/nope.css` → 404.
+   - `curl -sI $H/api/v1/atlas/page/9.json` → 404 with `content-type: application/json; charset=utf-8` (body `{"error":{"code":"not_found",…}}`);
+     `curl -sI $H/atlas/page/9/index.md` → 404 with `content-type: text/markdown; charset=utf-8` (no HTML in the body).
    - `$H/privacy/`, `/terms/`, `/about/`, `/stats/` → 200 Atlas pages; `$H/llms.txt` ends with the Atlas text;
      `$H/sitemap.xml` is the index; `$H/robots.txt` disallows all (closed staging).
    - Workers Logs (staging has per-request logs until 2026-10-25): opening `/atlas/` in a browser shows **one**
