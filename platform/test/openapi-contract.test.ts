@@ -6,6 +6,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { env, exports } from 'cloudflare:workers';
 import { OPERATIONS, schemaOf } from '../src/openapi';
+import { MAX_COMMENTS_LISTED } from '../src/post-comments';
 import { api, makeAdmin, post, register, resetDb } from './helpers';
 
 beforeEach(resetDb);
@@ -106,6 +107,34 @@ describe('published schemas match real responses', () => {
     expect(movesPage.body.next_after).toBe(movesPage.body.items[0].number);
     await expectContract('GET', '/v1/posts/{number}/moves', movesPage);
     await expectContract('GET', '/v1/posts/{number}/moves', await api(`/v1/posts/${n}/moves?after=${movesPage.body.next_after}`));
+    // comments (#114): both shapes of a comments page, and a post whose comments continue past the embed
+    const commentsPage = await api(`/v1/posts/${n}/comments?limit=1`);
+    expect(commentsPage.body.next_after).toBe(commentsPage.body.items[0].number);
+    await expectContract('GET', '/v1/posts/{number}/comments', commentsPage);
+    const lastComments = await api(`/v1/posts/${n}/comments?after=${commentsPage.body.next_after}`);
+    expect(lastComments.body.next_after).toBeNull();
+    await expectContract('GET', '/v1/posts/{number}/comments', lastComments);
+    await expectContract('GET', '/v1/posts/{number}/comments', await api(`/v1/posts/${n}/comments`, { key: admin.key }));
+    const long = (await post(a.key, 'Long thread', { section: 'general' })).body;
+    const author = await env.DB.prepare('SELECT id FROM accounts WHERE handle = ?').bind(b.handle).first<{ id: string }>();
+    const bulk = Array.from({ length: MAX_COMMENTS_LISTED + 1 }, (_, i) => env.DB.prepare(`INSERT INTO comments (id, post_number, parent_number, author_id, body, depth, status, created_at)
+      VALUES (?, ?, NULL, ?, 'bulk', 1, 'visible', ?)`).bind(`comment_contract_${i}`, long.number, author!.id, new Date(Date.UTC(2026, 9, 1) + i * 1000).toISOString()));
+    for (let i = 0; i < bulk.length; i += 100) await env.DB.batch(bulk.slice(i, i + 100));
+    const longPost = await api(`/v1/posts/${long.number}`);
+    expect(longPost.body.comments_next).toBe(`/v1/posts/${long.number}/comments?after=${longPost.body.comments_next_after}&through=${longPost.body.comments_through}`);
+    await expectContract('GET', '/v1/posts/{number}', longPost);
+    await expectContract('GET', '/v1/posts/{number}/comments', await api(longPost.body.comments_next));
+    await expectContract('GET', '/v1/posts/{number}/comments', await api(`/v1/posts/${long.number}/comments?after=${longPost.body.comments_through}`));
+    // voters (#114): both shapes of a voter page, for a post and a comment
+    const postVoters = await api(`/v1/posts/${n}/voters?limit=1`);
+    expect(postVoters.body.next_voters_after).toBeNull();
+    await expectContract('GET', '/v1/posts/{number}/voters', postVoters);
+    const c3 = await register('contract-c', 'human', 24 * 10);
+    await api(`/v1/comments/${reply.body.number}/upvote`, { key: c3.key, method: 'POST' });
+    const commentVoters = await api(`/v1/comments/${reply.body.number}/voters?limit=1`);
+    expect(typeof commentVoters.body.next_voters_after).toBe('string');
+    await expectContract('GET', '/v1/comments/{number}/voters', commentVoters);
+    await expectContract('GET', '/v1/comments/{number}/voters', await api(`/v1/comments/${reply.body.number}/voters?after=${commentVoters.body.next_voters_after}`));
     await expectContract('GET', '/v1/comments/{number}', await api(`/v1/comments/${reply.body.number}`));
     await expectContract('GET', '/v1/comments/{number}', await api(`/v1/comments/${top.body.number}`));
     const porch = await api('/v1/porch');
