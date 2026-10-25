@@ -19,6 +19,7 @@ import * as recovery from './routes/recovery';
 import { adminBackups, adminRunBackup } from './routes/admin-backups';
 import { myApps, revokeMyApp } from './routes/apps';
 import { exportMine } from './routes/export';
+import * as bounties from './routes/bounties';
 
 /**
  * Public read caching for requests WITHOUT an Authorization key:
@@ -77,6 +78,8 @@ export const ROUTES: ApiRoute[] = [
   r('GET', '/v1/rules', /^\/v1\/rules$/, moderation.rules, { ttl: 300 }),
   r('GET', '/v1/moderation', /^\/v1\/moderation$/, moderation.moderationLog, PUBLIC_30),
   r('POST', '/v1/csp-report', /^\/v1\/csp-report$/, cspReport),
+  r('GET', '/v1/bounties', /^\/v1\/bounties$/, bounties.listBounties, { ttl: 30, edgeParams: ['status', 'before', 'limit'] }),
+  r('GET', '/v1/bounties/{number}', new RegExp(`^/v1/bounties/${N}$`), bounties.getBounty, PUBLIC_30),
   r('GET', '/v1/trust/status', /^\/v1\/trust\/status$/, trustStatus, { ttl: 60 }),
   r('GET', '/v1/admin/settings', /^\/v1\/admin\/settings$/, admin.getAdminSettings),
   r('PATCH', '/v1/admin/settings', /^\/v1\/admin\/settings$/, admin.patchSettings),
@@ -99,6 +102,9 @@ export const ROUTES: ApiRoute[] = [
   r('GET', '/v1/admin/citizens', /^\/v1\/admin\/citizens$/, adminCitizens),
   r('GET', '/v1/admin/recovery', /^\/v1\/admin\/recovery$/, recovery.adminListRecovery),
   r('POST', '/v1/admin/recovery/{number}/{decision}', new RegExp(`^/v1/admin/recovery/${N}/(approve|reject)$`), recovery.adminDecideRecovery),
+  r('POST', '/v1/admin/bounties', /^\/v1\/admin\/bounties$/, bounties.createBounty),
+  r('POST', '/v1/admin/bounties/{number}/status', new RegExp(`^/v1/admin/bounties/${N}/status$`), bounties.setBountyStatus),
+  r('POST', '/v1/admin/bounties/{number}/payouts', new RegExp(`^/v1/admin/bounties/${N}/payouts$`), bounties.recordPayout),
   r('GET', '/v1/admin/actions', /^\/v1\/admin\/actions$/, admin.listActions),
   r('GET', '/v1/admin/ai-bots', /^\/v1\/admin\/ai-bots$/, adminAiBots),
   r('GET', '/v1/admin/backups', /^\/v1\/admin\/backups$/, adminBackups),

@@ -28,6 +28,7 @@ import { type Mentions, MENTION_SRC, type PageCtx, EMPTY_SECTION_TEXT, citizenUr
 import { mcpMarkdown } from '../mcp/docs';
 import { API_PAGE_PATH, apiMarkdown } from './api-page';
 import { exportMarkdown } from './export';
+import { bountiesMarkdown, bountyMarkdown } from './bounties';
 import { MCP_PATH } from '../mcp/server';
 
 export { MD_PAGE_PATTERNS, hasMarkdownTwin, markdownPath } from './layout';
@@ -399,12 +400,14 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/compose') return composeMd(p);
   if (path === '/export') return { markdown: exportMarkdown(p.origin), robots: 'noindex, follow' };
   if (path === '/moderation') return moderationMd(p, env, page);
+  if (path === '/bounties') return bountiesMarkdown(p.origin, env, page);
   if (path === MCP_PATH) return { markdown: mcpMarkdown(p.origin), robots: null };
   if (path === API_PAGE_PATH) return { markdown: apiMarkdown(p.origin), robots: null };
   if ((m = path.match(/^\/s\/([a-z0-9-]{1,64})$/))) return sectionMd(p, env, page, m[1]);
   if ((m = path.match(/^\/t\/([a-z0-9-]{1,64})$/))) return tagMd(p, env, page, m[1]);
   if ((m = path.match(/^\/posts\/(\d{1,15})$/))) return postMd(p, env, m[1]);
   if ((m = path.match(/^\/c\/([^/]{1,96})$/))) return profileMd(p, env, m[1]);
+  if ((m = path.match(/^\/bounties\/(\d{1,15})$/))) return bountyMarkdown(p.origin, env, m[1]);
   throw new HttpError(404, 'page_not_found');
 }
 

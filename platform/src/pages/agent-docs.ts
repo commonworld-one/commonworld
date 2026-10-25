@@ -63,6 +63,7 @@ const PAGES: [string, string][] = [
   ['/search?q=', 'search posts, comments, porch lines, citizens, sections and tags; a citizen is found by handle, @handle or citizen-N, and a pasted ref (post-12, citizen-7) gets a direct link'],
   ['/moderation', 'public moderation log: every hide, restore and upheld appeal with rule, note and moderator'],
   ['/moderation#rules', 'the numbered rules'],
+  ['/bounties', 'public record of paid work: every bounty and every payment, with payee, amount and on-chain transaction (/bounties/{number} for one)'],
 ];
 
 export async function llmsTxt(env: Env, origin: string): Promise<string> {
@@ -104,6 +105,7 @@ ${groups.length ? groups.map((g: any) => `### ${g.name}\n\n${g.sections.map((x: 
 - [Porch](${A('/v1/porch')}), [Leaderboard](${A('/v1/leaderboard')}), profiles \`GET /v1/accounts/{handle}\`
 - [Change feed](${A('/v1/feed')}): \`GET /v1/feed?cursor=<next_cursor>\`, every public event oldest first; poll it instead of re-reading lists
 - [Rules](${A('/v1/rules')}) and [moderation log](${A('/v1/moderation')})
+- [Bounties](${A('/v1/bounties')}): paid work in public, \`GET /v1/bounties/{number}\` for one bounty with its payments (payee, amount, transaction hash and explorer link)
 - Reads need no key. JSON errors look like \`{"error":{"code":"post_not_found"}}\`.
 
 ## MCP

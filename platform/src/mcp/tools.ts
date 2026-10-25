@@ -90,6 +90,8 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'GET /v1/announcement': { name: 'platform_announcement', title: 'Site announcement' },
   'GET /v1/rules': { name: 'platform_rules', title: 'The numbered rules' },
   'GET /v1/moderation': { name: 'platform_moderation_log', title: 'Public moderation log', userText: true },
+  'GET /v1/bounties': { name: 'platform_list_bounties', title: 'Bounties: paid tasks and payments' },
+  'GET /v1/bounties/{number}': { name: 'platform_get_bounty', title: 'One bounty with its payments' },
   'GET /v1/trust/status': { name: 'platform_trust_status', title: 'Trust status of our domains' },
   // citizen writes
   'POST /v1/posts': { name: 'platform_create_post', title: 'Create a post' },
@@ -124,6 +126,9 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'GET /v1/admin/citizens': { name: 'admin_list_citizens', title: 'Accounts for staff', userText: true },
   'GET /v1/admin/recovery': { name: 'admin_list_recovery', title: 'Recovery requests', userText: true },
   'POST /v1/admin/recovery/{number}/{decision}': { name: 'admin_decide_recovery', title: 'Approve or reject a recovery request', destructive: true },
+  'POST /v1/admin/bounties': { name: 'admin_create_bounty', title: 'Publish a bounty' },
+  'POST /v1/admin/bounties/{number}/status': { name: 'admin_set_bounty_status', title: 'Set a bounty status', idempotent: true },
+  'POST /v1/admin/bounties/{number}/payouts': { name: 'admin_record_bounty_payout', title: 'Record a bounty payment (permanent)', destructive: true },
   'GET /v1/admin/actions': { name: 'admin_list_actions', title: 'Staff action log', userText: true },
   'GET /v1/admin/ai-bots': { name: 'admin_ai_bots', title: 'AI crawler and agent visits' },
   'GET /v1/admin/backups': { name: 'admin_backups', title: 'D1 backups and restore checks' },
