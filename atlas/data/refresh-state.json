@@ -1,17 +1,22 @@
 {
  "version": 1,
  "entries": {
-  "vynly": {
+  "agora-burmaster": {
    "failed_weeks": 1,
-   "first_failed_at": "2026-10-18T06:49:28Z",
+   "first_failed_at": "2026-10-25T19:17:56Z",
    "last_error": "HTTP 402"
   },
-  "meta-muse": {
+  "issuehunt": {
    "failed_weeks": 1,
-   "first_failed_at": "2026-10-18T06:49:28Z",
-   "last_error": "refused: too many redirects"
+   "first_failed_at": "2026-10-25T19:17:56Z",
+   "last_error": "HTTP 502"
+  },
+  "clawsino": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-10-25T19:17:56Z",
+   "last_error": "TimeoutError: timed out"
   }
  },
  "moved": {},
- "updated_at": "2026-10-18T06:49:28Z"
+ "updated_at": "2026-10-25T19:17:56Z"
 }

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-19T08:29:56Z",
+ "generated_at": "2026-10-25T19:17:56Z",
  "count": 375,
  "platforms": [
   {
@@ -75,13 +75,13 @@
     {
      "kind": "metric",
      "statement": "Platform totals (operator API)",
-     "value": 3706,
+     "value": 4146,
      "unit": "users",
      "window": "all-time",
      "basis": "operator_claim",
      "source_url": "https://thecolony.ai/api/v1/stats",
-     "quote": "\"total_users\":3706,\"total_agents\":2433,\"total_humans\":1273",
-     "observed_at": "2026-10-18T06:49:28Z",
+     "quote": "\"total_users\":4146,\"total_agents\":2788,\"total_humans\":1358",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://thecolony.ai/api/v1/stats",
       "read total_users"
@@ -125,6 +125,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-10-18T06:49:28Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 3706,
+       "unit": "users",
+       "window": "all-time",
+       "statement": "Platform totals (operator API)",
+       "quote": "\"total_users\":3706,\"total_agents\":2433,\"total_humans\":1273",
+       "source_url": "https://thecolony.ai/api/v1/stats",
+       "observed_at": "2026-10-18T06:49:28Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -610,13 +623,13 @@
     {
      "kind": "metric",
      "statement": "Totals (operator API)",
-     "value": 2923528,
+     "value": 2924898,
      "unit": "agents",
      "window": "all-time",
      "basis": "operator_claim",
      "source_url": "https://www.moltbook.com/api/v1/stats",
-     "quote": "\"totalAgents\":2923528",
-     "observed_at": "2026-10-18T06:49:28Z",
+     "quote": "\"totalAgents\":2924898",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://www.moltbook.com/api/v1/stats",
       "read totalAgents"
@@ -660,6 +673,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-10-18T06:49:28Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 2923528,
+       "unit": "agents",
+       "window": "all-time",
+       "statement": "Totals (operator API)",
+       "quote": "\"totalAgents\":2923528",
+       "source_url": "https://www.moltbook.com/api/v1/stats",
+       "observed_at": "2026-10-18T06:49:28Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -7512,13 +7538,13 @@
     {
      "kind": "metric",
      "statement": "Operator stats endpoint.",
-     "value": 5193,
+     "value": 5234,
      "unit": "registered agents",
      "window": "cumulative as of observation",
      "basis": "operator_claim",
      "source_url": "https://clawk.ai/api/v1/stats",
-     "quote": "\"agents\":5193",
-     "observed_at": "2026-10-18T06:49:28Z",
+     "quote": "\"agents\":5234",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://clawk.ai/api/v1/stats",
       "read agents"
@@ -7549,6 +7575,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-10-18T06:49:28Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 5193,
+       "unit": "registered agents",
+       "window": "cumulative as of observation",
+       "statement": "Operator stats endpoint.",
+       "quote": "\"agents\":5193",
+       "source_url": "https://clawk.ai/api/v1/stats",
+       "observed_at": "2026-10-18T06:49:28Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -12971,14 +13010,14 @@
     },
     {
      "kind": "metric",
-     "statement": "1,019 services, 7,701 endpoints, 35 mainnet networks (stats API)",
-     "value": 1019,
+     "statement": "1,002 services, 7,639 endpoints, 35 mainnet networks (stats API)",
+     "value": 1002,
      "unit": "services",
      "window": "2026-10-15",
      "basis": "direct_observation",
      "source_url": "https://x402-list.com/api/v1/stats",
-     "quote": "\"total_services\":1019,\"total_endpoints\":7701,\"total_networks\":35",
-     "observed_at": "2026-10-19T08:29:56Z",
+     "quote": "\"total_services\":1002,\"total_endpoints\":7639,\"total_networks\":35",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://x402-list.com/api/v1/stats",
       "read data.total_services"
@@ -13009,6 +13048,19 @@
        "basis": "direct_observation",
        "outcome": "supported",
        "superseded_at": "2026-10-19T08:29:56Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 1019,
+       "unit": "services",
+       "window": "2026-10-15",
+       "statement": "1,019 services, 7,701 endpoints, 35 mainnet networks (stats API)",
+       "quote": "\"total_services\":1019,\"total_endpoints\":7701,\"total_networks\":35",
+       "source_url": "https://x402-list.com/api/v1/stats",
+       "observed_at": "2026-10-19T08:29:56Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -14904,14 +14956,14 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 438,100 sats",
-     "value": 438100,
+     "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 458,600 sats",
+     "value": 458600,
      "unit": "sats",
      "window": "all-time",
      "basis": "direct_observation",
      "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-     "quote": "63 items read; 63 with status=paid, paidTxid=*; sum rewardSats = 438100",
-     "observed_at": "2026-10-16T01:55:23Z",
+     "quote": "68 items read; 68 with status=paid, paidTxid=*; sum rewardSats = 458600",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://aibtc.com/api/bounties?status=paid&limit=100",
       "sum over bounties of rewardSats where status=paid, paidTxid=*"
@@ -14921,18 +14973,33 @@
      "verify": {
       "url": "https://aibtc.com/api/bounties?status=paid&limit=10&offset=0",
       "note": "AIBTC publishes no total for paid sats. Re-add it in small pages: about 40 KB per 10 bounties; sum rewardSats, then follow nextOffset until hasMore is false. The paid count alone is one small call: add withCount=true and read total."
-     }
+     },
+     "history": [
+      {
+       "value": 438100,
+       "unit": "sats",
+       "window": "all-time",
+       "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 438,100 sats",
+       "quote": "63 items read; 63 with status=paid, paidTxid=*; sum rewardSats = 438100",
+       "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
+       "observed_at": "2026-10-16T01:55:23Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      }
+     ]
     },
     {
      "kind": "metric",
-     "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 63",
-     "value": 63,
+     "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 68",
+     "value": 68,
      "unit": "paid bounties",
      "window": "all-time",
      "basis": "direct_observation",
      "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-     "quote": "63 items read; 63 with status=paid, paidTxid=*",
-     "observed_at": "2026-10-16T01:55:23Z",
+     "quote": "68 items read; 68 with status=paid, paidTxid=*",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://aibtc.com/api/bounties?status=paid&limit=100",
       "count over bounties where status=paid, paidTxid=*"
@@ -14942,18 +15009,33 @@
      "verify": {
       "url": "https://aibtc.com/api/bounties?status=paid&limit=1&withCount=true",
       "note": "Exact paid count in one small response (about 4 KB): read total (withCount=true makes it exact)."
-     }
+     },
+     "history": [
+      {
+       "value": 63,
+       "unit": "paid bounties",
+       "window": "all-time",
+       "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 63",
+       "quote": "63 items read; 63 with status=paid, paidTxid=*",
+       "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
+       "observed_at": "2026-10-16T01:55:23Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      }
+     ]
     },
     {
      "kind": "metric",
-     "statement": "Bounties with status=open (accepting submissions) in the public API: 2",
-     "value": 2,
+     "statement": "Bounties with status=open (accepting submissions) in the public API: 3",
+     "value": 3,
      "unit": "open bounties",
      "window": "now",
      "basis": "direct_observation",
      "source_url": "https://aibtc.com/api/bounties?status=open&limit=100",
-     "quote": "2 items read; 2 with status=open",
-     "observed_at": "2026-10-19T08:29:56Z",
+     "quote": "3 items read; 3 with status=open",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://aibtc.com/api/bounties?status=open&limit=100",
       "count over bounties where status=open"
@@ -14972,6 +15054,19 @@
        "basis": "direct_observation",
        "outcome": "supported",
        "superseded_at": "2026-10-19T08:29:56Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 2,
+       "unit": "open bounties",
+       "window": "now",
+       "statement": "Bounties with status=open (accepting submissions) in the public API: 2",
+       "quote": "2 items read; 2 with status=open",
+       "source_url": "https://aibtc.com/api/bounties?status=open&limit=100",
+       "observed_at": "2026-10-19T08:29:56Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ]
@@ -15103,14 +15198,14 @@
     },
     {
      "kind": "metric",
-     "statement": "Active identities: 3 in last 7d, 66 lifetime",
+     "statement": "Active identities: 1 in last 7d, 66 lifetime",
      "value": 66,
      "unit": "identities",
      "window": "lifetime",
      "basis": "operator_claim",
      "source_url": "https://api.agentbounties.app/v1/metrics/platform",
-     "quote": "\"lifetime\":66,\"latest_week\":3",
-     "observed_at": "2026-10-18T06:49:28Z",
+     "quote": "\"lifetime\":66,\"latest_week\":1",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://api.agentbounties.app/v1/metrics/platform",
       "read platform_active_identities.lifetime"
@@ -15129,6 +15224,19 @@
        "outcome": "supported",
        "superseded_at": "2026-10-18T06:49:28Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 66,
+       "unit": "identities",
+       "window": "lifetime",
+       "statement": "Active identities: 3 in last 7d, 66 lifetime",
+       "quote": "\"lifetime\":66,\"latest_week\":3",
+       "source_url": "https://api.agentbounties.app/v1/metrics/platform",
+       "observed_at": "2026-10-18T06:49:28Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py): statement regenerated from the same fetch"
       }
      ],
      "refresh_id": "agent-bounties-lifetime-identities"
@@ -40229,6 +40337,24 @@
     "for-agents-only"
    ],
    "credit": "Suggested by ivankalinichev (GitHub Discussion #113)"
+  },
+  {
+   "date": "2026-10-25",
+   "tag": "refresh-2026-10-25",
+   "by": "atlas/refresh.py",
+   "rule": "weekly automated refresh: reachability (2 failed weeks -> closed history), explicit numeric mappings from atlas/refresh-sources.json",
+   "died": [],
+   "revived": [],
+   "number_updates": [
+    "the-colony:the-colony-users",
+    "moltbook:moltbook-agents",
+    "clawk:clawk-agents",
+    "x402-list:x402-list-services",
+    "aibtc-bounty-board:aibtc-paid-sats",
+    "aibtc-bounty-board:aibtc-paid-count",
+    "aibtc-bounty-board:aibtc-open-count",
+    "agent-bounties:agent-bounties-lifetime-identities"
+   ]
   }
  ]
 }

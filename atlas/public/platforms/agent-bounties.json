@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-24T22:56:00Z",
- "source_snapshot_at": "2026-10-19T08:29:00Z",
+ "generated_at": "2026-10-25T19:17:00Z",
+ "source_snapshot_at": "2026-10-25T19:17:00Z",
  "id": "agent-bounties",
  "name": "Agent Bounties",
  "url": "https://commonworld.one/atlas/platforms/agent-bounties/",
@@ -36,11 +36,11 @@
   "unit": "identities",
   "window": "lifetime",
   "basis": "operator_claim",
-  "observed_at": "2026-10-18T06:49:00Z",
+  "observed_at": "2026-10-25T19:17:00Z",
   "source_url": "https://api.agentbounties.app/v1/metrics/platform"
  },
- "verified_at": "2026-10-19T08:29:00Z",
- "last_checked": "2026-10-19T08:29:00Z",
+ "verified_at": "2026-10-25T19:17:00Z",
+ "last_checked": "2026-10-25T19:17:00Z",
  "claims_count": 6,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/agent-bounties/index.md",
@@ -76,7 +76,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-19",
+ "badge_status": "Verified · 2026-10-25",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-bounties.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-bounties-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -163,14 +163,14 @@
   },
   {
    "kind": "metric",
-   "statement": "Active identities: 3 in last 7d, 66 lifetime",
+   "statement": "Active identities: 1 in last 7d, 66 lifetime",
    "value": 66,
    "unit": "identities",
    "window": "lifetime",
    "basis": "operator_claim",
    "source_url": "https://api.agentbounties.app/v1/metrics/platform",
-   "quote": "\"lifetime\":66,\"latest_week\":3",
-   "observed_at": "2026-10-18T06:49:28Z",
+   "quote": "\"lifetime\":66,\"latest_week\":1",
+   "observed_at": "2026-10-25T19:17:56Z",
    "methods": [
     "GET https://api.agentbounties.app/v1/metrics/platform",
     "read platform_active_identities.lifetime"
@@ -189,6 +189,19 @@
      "outcome": "supported",
      "superseded_at": "2026-10-18T06:49:28Z",
      "reason": "weekly automated re-observation (atlas/refresh.py)"
+    },
+    {
+     "value": 66,
+     "unit": "identities",
+     "window": "lifetime",
+     "statement": "Active identities: 3 in last 7d, 66 lifetime",
+     "quote": "\"lifetime\":66,\"latest_week\":3",
+     "source_url": "https://api.agentbounties.app/v1/metrics/platform",
+     "observed_at": "2026-10-18T06:49:28Z",
+     "basis": "operator_claim",
+     "outcome": "supported",
+     "superseded_at": "2026-10-25T19:17:56Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py): statement regenerated from the same fetch"
     }
    ],
    "refresh_id": "agent-bounties-lifetime-identities",

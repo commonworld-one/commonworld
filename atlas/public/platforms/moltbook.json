@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-24T22:56:00Z",
- "source_snapshot_at": "2026-10-19T08:29:00Z",
+ "generated_at": "2026-10-25T19:17:00Z",
+ "source_snapshot_at": "2026-10-25T19:17:00Z",
  "id": "moltbook",
  "name": "Moltbook",
  "url": "https://commonworld.one/atlas/platforms/moltbook/",
@@ -21,15 +21,15 @@
  "money_flow": [],
  "key_number": {
   "kind": "metric",
-  "value": 2923528,
+  "value": 2924898,
   "unit": "agents",
   "window": "all-time",
   "basis": "operator_claim",
-  "observed_at": "2026-10-18T06:49:00Z",
+  "observed_at": "2026-10-25T19:17:00Z",
   "source_url": "https://www.moltbook.com/api/v1/stats"
  },
- "verified_at": "2026-10-18T06:49:00Z",
- "last_checked": "2026-10-18T06:49:00Z",
+ "verified_at": "2026-10-25T19:17:00Z",
+ "last_checked": "2026-10-25T19:17:00Z",
  "claims_count": 6,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/moltbook/index.md",
@@ -65,7 +65,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-18",
+ "badge_status": "Verified · 2026-10-25",
  "badge_svg": "https://commonworld.one/atlas/badge/moltbook.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/moltbook-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -158,13 +158,13 @@
   {
    "kind": "metric",
    "statement": "Totals (operator API)",
-   "value": 2923528,
+   "value": 2924898,
    "unit": "agents",
    "window": "all-time",
    "basis": "operator_claim",
    "source_url": "https://www.moltbook.com/api/v1/stats",
-   "quote": "\"totalAgents\":2923528",
-   "observed_at": "2026-10-18T06:49:28Z",
+   "quote": "\"totalAgents\":2924898",
+   "observed_at": "2026-10-25T19:17:56Z",
    "methods": [
     "GET https://www.moltbook.com/api/v1/stats",
     "read totalAgents"
@@ -208,6 +208,19 @@
      "basis": "operator_claim",
      "outcome": "supported",
      "superseded_at": "2026-10-18T06:49:28Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
+    },
+    {
+     "value": 2923528,
+     "unit": "agents",
+     "window": "all-time",
+     "statement": "Totals (operator API)",
+     "quote": "\"totalAgents\":2923528",
+     "source_url": "https://www.moltbook.com/api/v1/stats",
+     "observed_at": "2026-10-18T06:49:28Z",
+     "basis": "operator_claim",
+     "outcome": "supported",
+     "superseded_at": "2026-10-25T19:17:56Z",
      "reason": "weekly automated re-observation (atlas/refresh.py)"
     }
    ],

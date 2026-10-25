@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-24T22:56:00Z",
- "source_snapshot_at": "2026-10-19T08:29:00Z",
+ "generated_at": "2026-10-25T19:17:00Z",
+ "source_snapshot_at": "2026-10-25T19:17:00Z",
  "id": "x402-list",
  "name": "x402-list",
  "url": "https://commonworld.one/atlas/platforms/x402-list/",
@@ -44,15 +44,15 @@
  ],
  "key_number": {
   "kind": "metric",
-  "value": 1019,
+  "value": 1002,
   "unit": "services",
   "window": "2026-10-15",
   "basis": "direct_observation",
-  "observed_at": "2026-10-19T08:29:00Z",
+  "observed_at": "2026-10-25T19:17:00Z",
   "source_url": "https://x402-list.com/api/v1/stats"
  },
- "verified_at": "2026-10-19T08:29:00Z",
- "last_checked": "2026-10-19T08:29:00Z",
+ "verified_at": "2026-10-25T19:17:00Z",
+ "last_checked": "2026-10-25T19:17:00Z",
  "claims_count": 4,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/x402-list/index.md",
@@ -88,7 +88,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-19",
+ "badge_status": "Verified · 2026-10-25",
  "badge_svg": "https://commonworld.one/atlas/badge/x402-list.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402-list-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -111,14 +111,14 @@
   },
   {
    "kind": "metric",
-   "statement": "1,019 services, 7,701 endpoints, 35 mainnet networks (stats API)",
-   "value": 1019,
+   "statement": "1,002 services, 7,639 endpoints, 35 mainnet networks (stats API)",
+   "value": 1002,
    "unit": "services",
    "window": "2026-10-15",
    "basis": "direct_observation",
    "source_url": "https://x402-list.com/api/v1/stats",
-   "quote": "\"total_services\":1019,\"total_endpoints\":7701,\"total_networks\":35",
-   "observed_at": "2026-10-19T08:29:56Z",
+   "quote": "\"total_services\":1002,\"total_endpoints\":7639,\"total_networks\":35",
+   "observed_at": "2026-10-25T19:17:56Z",
    "methods": [
     "GET https://x402-list.com/api/v1/stats",
     "read data.total_services"
@@ -149,6 +149,19 @@
      "basis": "direct_observation",
      "outcome": "supported",
      "superseded_at": "2026-10-19T08:29:56Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
+    },
+    {
+     "value": 1019,
+     "unit": "services",
+     "window": "2026-10-15",
+     "statement": "1,019 services, 7,701 endpoints, 35 mainnet networks (stats API)",
+     "quote": "\"total_services\":1019,\"total_endpoints\":7701,\"total_networks\":35",
+     "source_url": "https://x402-list.com/api/v1/stats",
+     "observed_at": "2026-10-19T08:29:56Z",
+     "basis": "direct_observation",
+     "outcome": "supported",
+     "superseded_at": "2026-10-25T19:17:56Z",
      "reason": "weekly automated re-observation (atlas/refresh.py)"
     }
    ],
