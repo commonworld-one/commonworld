@@ -7,6 +7,7 @@ import { HttpError, goneError } from '../http';
 import { getSettings } from '../settings';
 import { ASSETS, BOOT_SCRIPT_SHA256 } from './assets.gen';
 import { sectionPage, sectionsPage, tagPage } from './catalog';
+import { livingPageView } from './living';
 import { commentLocation, contentGone, porchVisible, postOgData, siteFacts, sitemapRows } from './data';
 import { ogVersion, renderPostOg } from './og';
 import { homePage } from './home';
@@ -188,6 +189,7 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/compose$/, render: (p, env, url) => composePage(p, env, url) },
   { pattern: /^\/export$/, render: (p) => exportPage(p) },
   { pattern: /^\/sections$/, render: (p, env) => sectionsPage(p, env) },
+  { pattern: /^\/living$/, render: (p, env) => livingPageView(p, env) },
   { pattern: /^\/s\/([a-z0-9-]{1,64})$/, render: (p, env, url, m) => sectionPage(p, env, url, m[1]) },
   { pattern: /^\/t\/([a-z0-9-]{1,64})$/, render: (p, env, url, m) => tagPage(p, env, url, m[1]) },
   { pattern: /^\/posts\/(\d{1,15})$/, render: (p, env, url, m) => postPage(p, env, url, m[1]) },
@@ -344,7 +346,7 @@ async function sitemapXml(env: Env, origin: string, withAtlasRoot = false): Prom
   const d = (iso: string | null | undefined) => (iso ? iso.slice(0, 10) : '');
   const latestPost = rows.posts.reduce((m, r) => (r.lastmod > m ? r.lastmod : m), '');
   const urls: [string, string][] = [
-    ['/', latestPost], ['/porch', ''], ['/sections', latestPost], ['/citizens', ''], ['/moderation', ''], ['/mcp', ''], [API_PAGE_PATH, ''],
+    ['/', latestPost], ['/porch', ''], ['/sections', latestPost], ['/living', latestPost], ['/citizens', ''], ['/moderation', ''], ['/mcp', ''], [API_PAGE_PATH, ''],
     ...rows.sections.map((s): [string, string] => [`/s/${s.slug}`, s.lastmod]),
     ...rows.tags.map((t): [string, string] => [`/t/${t.slug}`, t.lastmod]),
     ...rows.posts.map((p): [string, string] => [`/posts/${p.number}`, p.lastmod]),

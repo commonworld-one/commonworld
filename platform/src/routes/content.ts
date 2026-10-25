@@ -10,6 +10,7 @@ import { bumpContentCacheVersion } from '../cache-version';
 import { APPEAL, RULES_NOTE, ruleText, rulesData } from '../rules';
 import { assertLinksSafe } from '../link-check';
 import { MOVES_PAGE_MAX, postMoves, postMovesPage } from '../post-moves';
+import { livingMark } from '../living-posts';
 import { COMMENT_SELECT, MAX_COMMENT_DEPTH, POST_SELECT, PORCH_SELECT, citizenPath, commentView, bannedSql, countedVoteSql, disabledSql, hiddenAncestorSql, moderationLogUrl, notDisabledSql, porchView, postView, shownPorchSql, shownPostSql } from '../views';
 
 const NEEDS_TOPIC = 'needs-a-topic';
@@ -223,8 +224,8 @@ async function assertPostNotGone(env: Env, number: number) {
   if (await env.DB.prepare(`SELECT 1 FROM posts p WHERE p.number = ? AND ${bannedSql('p.author_id')}`).bind(number).first()) throw goneError('content_gone', { ref: `post-${number}` });
 }
 
-/** POST_SELECT plus `has_moves` (0/1, one index probe on post_section_moves), so a never-moved post costs no extra query. */
-const POST_SELECT_WITH_MOVES = POST_SELECT.replace(/^SELECT p\.\*,/, 'SELECT p.*, EXISTS (SELECT 1 FROM post_section_moves m WHERE m.post_number = p.number) AS has_moves,');
+/** POST_SELECT plus `has_moves` / `has_living` (0/1, one index probe each), so an unmoved, non-living post costs no extra query. */
+const POST_SELECT_WITH_MOVES = POST_SELECT.replace(/^SELECT p\.\*,/, 'SELECT p.*, EXISTS (SELECT 1 FROM post_section_moves m WHERE m.post_number = p.number) AS has_moves, EXISTS (SELECT 1 FROM living_posts l WHERE l.post_number = p.number) AS has_living,');
 
 async function visiblePost(c: ReadCtx, number: number) {
   const row = await c.env.DB.prepare(`${POST_SELECT_WITH_MOVES} WHERE p.number = ? AND p.status = 'visible'`).bind(number).first<any>();
@@ -283,6 +284,9 @@ export async function postData(c: ReadCtx) {
     // public, permanent record of section moves (src/post-moves.ts): the newest MAX_MOVES_LISTED, oldest of them first,
     // and moves_total; the full history is GET /v1/posts/{n}/moves. [] and 0 when never moved.
     ...(post.has_moves ? await postMoves(c.env, post.number) : { moves: [], moves_total: 0 }),
+    // living posts registry (src/living-posts.ts): the post's mark, or null when it is not in the registry;
+    // the registry itself is GET /v1/living and the /living page.
+    living: post.has_living ? await livingMark(c.env, post.number) : null,
     voters: (postVotes.results as any[]).map((v) => ({ handle: v.handle as string, kind: v.kind as string, url: citizenPath(v.handle as string) })),
     comments: (comments.results as any[]).map((row) => ({ ...commentView(row), voters: byComment.get(row.number) ?? [] })),
   };

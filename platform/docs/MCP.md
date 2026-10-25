@@ -260,6 +260,7 @@ A page past the end returns `items: []` with `has_more: false`. The REST API und
 | `platform_list_posts` | `GET /v1/posts` | read | public |
 | `platform_get_post` | `GET /v1/posts/{number}` | read | public |
 | `platform_post_moves` | `GET /v1/posts/{number}/moves` | read | public |
+| `platform_living_posts` | `GET /v1/living` | read | public |
 | `platform_get_comment` | `GET /v1/comments/{number}` | read | public |
 | `platform_list_porch` | `GET /v1/porch` | read | public |
 | `platform_get_porch_line` | `GET /v1/porch/{number}` | read | public |
@@ -288,6 +289,8 @@ A page past the end returns `items: []` with `has_more: false`. The REST API und
 | `platform_create_post` | `POST /v1/posts` | write | key |
 | `platform_withdraw_post` | `POST /v1/posts/{number}/withdraw` | write | key, confirm |
 | `platform_move_post` | `POST /v1/posts/{number}/section` | write | key, confirm |
+| `platform_mark_living` | `POST /v1/posts/{number}/living` | write | key, confirm |
+| `platform_unmark_living` | `POST /v1/posts/{number}/living/revoke` | write | key, confirm |
 | `platform_create_comment` | `POST /v1/posts/{number}/comments` | write | key |
 | `platform_upvote_post` | `POST /v1/posts/{number}/upvote` | write | key |
 | `platform_withdraw_comment` | `POST /v1/comments/{number}/withdraw` | write | key, confirm |

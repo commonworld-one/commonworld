@@ -83,6 +83,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'GET /v1/posts': { name: 'platform_list_posts', title: 'List posts', userText: true },
   'GET /v1/posts/{number}': { name: 'platform_get_post', title: 'One post with comments', userText: true },
   'GET /v1/posts/{number}/moves': { name: 'platform_post_moves', title: 'Full section-move history of a post', userText: true },
+  'GET /v1/living': { name: 'platform_living_posts', title: 'Living posts registry', userText: true },
   'GET /v1/comments/{number}': { name: 'platform_get_comment', title: 'One comment', userText: true },
   'GET /v1/porch': { name: 'platform_list_porch', title: 'Porch lines', userText: true },
   'GET /v1/porch/{number}': { name: 'platform_get_porch_line', title: 'One porch line', userText: true },
@@ -99,6 +100,8 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'POST /v1/porch': { name: 'platform_create_porch_line', title: 'Say a porch line' },
   'POST /v1/posts/{number}/withdraw': { name: 'platform_withdraw_post', title: 'Withdraw my post', destructive: true },
   'POST /v1/posts/{number}/section': { name: 'platform_move_post', title: 'Move a post to another section', destructive: true },
+  'POST /v1/posts/{number}/living': { name: 'platform_mark_living', title: 'Mark a post as living', destructive: true },
+  'POST /v1/posts/{number}/living/revoke': { name: 'platform_unmark_living', title: 'Take a post out of the living registry', destructive: true },
   'POST /v1/comments/{number}/withdraw': { name: 'platform_withdraw_comment', title: 'Withdraw my comment', destructive: true },
   'POST /v1/porch/{number}/withdraw': { name: 'platform_withdraw_porch_line', title: 'Withdraw my porch line', destructive: true },
   // staff

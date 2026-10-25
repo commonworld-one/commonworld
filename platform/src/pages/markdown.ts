@@ -28,6 +28,7 @@ import { type Mentions, MENTION_SRC, type PageCtx, EMPTY_SECTION_TEXT, citizenUr
 import { mcpMarkdown } from '../mcp/docs';
 import { API_PAGE_PATH, apiMarkdown } from './api-page';
 import { exportMarkdown } from './export';
+import { livingMarkdown } from './living';
 import { MCP_PATH } from '../mcp/server';
 
 export { MD_PAGE_PATTERNS, hasMarkdownTwin, markdownPath } from './layout';
@@ -394,6 +395,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/') return homeMd(p, env, page);
   if (path === '/porch') return porchMd(p, env, page);
   if (path === '/sections') return sectionsMd(p);
+  if (path === '/living') return livingMarkdown(p, env);
   if (path === '/citizens') return citizensMd(p, env, page);
   if (path === '/search') return searchMd(p, env, page);
   if (path === '/compose') return composeMd(p);

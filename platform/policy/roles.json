@@ -178,6 +178,24 @@
       "note": "full section-move history, paged"
     },
     {
+      "method": "GET",
+      "path": "/v1/living",
+      "level": "anyone",
+      "note": "the living posts registry, paged"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/posts/{number}/living",
+      "level": "citizen",
+      "note": "own post, or any post as an active admin (403 not_your_content); the mark is a public record"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/posts/{number}/living/revoke",
+      "level": "citizen",
+      "note": "own post, or any post as an active admin (403 not_your_content)"
+    },
+    {
       "method": "POST",
       "path": "/v1/posts/{number}/withdraw",
       "level": "citizen",
