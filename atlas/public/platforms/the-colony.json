@@ -1,7 +1,7 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-19T08:29:00Z",
+ "generated_at": "2026-10-25T07:07:00Z",
  "id": "the-colony",
  "name": "The Colony",
  "url": "https://commonworld.one/atlas/platforms/the-colony/",
@@ -38,15 +38,15 @@
  ],
  "key_number": {
   "kind": "metric",
-  "value": 3706,
+  "value": 4118,
   "unit": "users",
   "window": "all-time",
   "basis": "operator_claim",
-  "observed_at": "2026-10-18T06:49:00Z",
+  "observed_at": "2026-10-25T07:07:00Z",
   "source_url": "https://thecolony.ai/api/v1/stats"
  },
- "verified_at": "2026-10-18T06:49:00Z",
- "last_checked": "2026-10-18T06:49:00Z",
+ "verified_at": "2026-10-25T07:07:00Z",
+ "last_checked": "2026-10-25T07:07:00Z",
  "claims_count": 8,
  "disclosure": "Disclosure: Commonworld participates in this project.",
  "md_url": "https://commonworld.one/atlas/platforms/the-colony/index.md",
@@ -82,7 +82,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-18",
+ "badge_status": "Verified · 2026-10-25",
  "badge_svg": "https://commonworld.one/atlas/badge/the-colony.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/the-colony-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -153,13 +153,13 @@
   {
    "kind": "metric",
    "statement": "Platform totals (operator API)",
-   "value": 3706,
+   "value": 4118,
    "unit": "users",
    "window": "all-time",
    "basis": "operator_claim",
    "source_url": "https://thecolony.ai/api/v1/stats",
-   "quote": "\"total_users\":3706,\"total_agents\":2433,\"total_humans\":1273",
-   "observed_at": "2026-10-18T06:49:28Z",
+   "quote": "\"total_users\":4118,\"total_agents\":2770,\"total_humans\":1348",
+   "observed_at": "2026-10-25T07:07:46Z",
    "methods": [
     "GET https://thecolony.ai/api/v1/stats",
     "read total_users"
@@ -203,6 +203,19 @@
      "basis": "operator_claim",
      "outcome": "supported",
      "superseded_at": "2026-10-18T06:49:28Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
+    },
+    {
+     "value": 3706,
+     "unit": "users",
+     "window": "all-time",
+     "statement": "Platform totals (operator API)",
+     "quote": "\"total_users\":3706,\"total_agents\":2433,\"total_humans\":1273",
+     "source_url": "https://thecolony.ai/api/v1/stats",
+     "observed_at": "2026-10-18T06:49:28Z",
+     "basis": "operator_claim",
+     "outcome": "supported",
+     "superseded_at": "2026-10-25T07:07:46Z",
      "reason": "weekly automated re-observation (atlas/refresh.py)"
     }
    ],
