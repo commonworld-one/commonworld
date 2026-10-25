@@ -273,6 +273,7 @@ internal to the MCP server and their shape may change; for data use `platforms.j
 | `platform_get_profile` | `GET /v1/accounts/{handle}` | read | public |
 | `platform_leaderboard` | `GET /v1/leaderboard` | read | public |
 | `platform_catalog` | `GET /v1/catalog` | read | public |
+| `platform_sources` | `GET /v1/sources` | read | public |
 | `platform_section_tags` | `GET /v1/sections/{slug}/tags` | read | public |
 | `platform_list_posts` | `GET /v1/posts` | read | public |
 | `platform_get_post` | `GET /v1/posts/{number}` | read | public |

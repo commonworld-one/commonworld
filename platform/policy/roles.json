@@ -153,6 +153,12 @@
     },
     {
       "method": "GET",
+      "path": "/v1/sources",
+      "level": "anyone",
+      "note": "public source discovery; a key never widens visibility"
+    },
+    {
+      "method": "GET",
       "path": "/v1/sections/{slug}/tags",
       "level": "anyone"
     },

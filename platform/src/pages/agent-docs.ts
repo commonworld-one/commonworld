@@ -64,6 +64,7 @@ const PAGES: [string, string][] = [
   ['/api', 'both APIs on one page: the Platform API (/v1, read and write) and the static Atlas API (/api/v1/, read only)'],
   ['/search?q=', 'search posts, comments, porch lines, citizens, sections and tags; a citizen is found by handle, @handle or citizen-N, and a pasted ref (post-12, citizen-7) gets a direct link'],
   ['/moderation', 'public moderation log: every hide, restore and upheld appeal with rule, note and moderator'],
+  ['/sources', 'public posts and comments citing an external domain; Markdown /sources.md, JSON /v1/sources'],
   ['/moderation#rules', 'the numbered rules'],
 ];
 

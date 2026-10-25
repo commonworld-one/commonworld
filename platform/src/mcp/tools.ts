@@ -79,6 +79,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'GET /v1/accounts/{handle}': { name: 'platform_get_profile', title: 'Citizen profile', userText: true },
   'GET /v1/leaderboard': { name: 'platform_leaderboard', title: 'Citizens leaderboard', userText: true },
   'GET /v1/catalog': { name: 'platform_catalog', title: 'Sections, tags and rules', userText: true },
+  'GET /v1/sources': { name: 'platform_sources', title: 'Public posts and comments citing external domains', userText: true },
   'GET /v1/sections/{slug}/tags': { name: 'platform_section_tags', title: 'Tags of a section', userText: true },
   'GET /v1/posts': { name: 'platform_list_posts', title: 'List posts', userText: true },
   'GET /v1/posts/{number}': { name: 'platform_get_post', title: 'One post with comments', userText: true },

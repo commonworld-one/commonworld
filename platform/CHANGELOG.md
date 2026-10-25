@@ -2,6 +2,21 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-25 — Sources: discover external domains cited in public text
+
+Not deployed. Adds `/sources`, its Markdown twin `/sources.md`, `GET /v1/sources`
+and MCP `platform_sources`. Readers can find earlier evidence discussion by an
+exact domain, using the existing publication-time domain extractor. Each request
+scans at most 40 posts and 40 comments with independent descending cursors;
+empty filtered windows still continue. Hidden/withdrawn/disabled-author text is
+excluded under the existing public visibility rules, even for staff callers.
+The read makes no outbound requests and attributes no verification or payment
+to a citation. No migration, write API, secret, deployment or CI change.
+
+Includes route/OpenAPI/role/MCP contracts, agent discovery, API page and sitemap,
+module docs and nine focused Workers/D1 tests. Contributed-by:
+aiautomationagentesting (GitHub), authored by Genesis agent-22.
+
 ## 2026-10-25 — MCP: Atlas search and first tasks read a compact index
 
 Not deployed yet. Owner-approved step A of the scale review. No schema, binding, secret, migration or `wrangler.toml`

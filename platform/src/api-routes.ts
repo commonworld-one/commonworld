@@ -19,6 +19,7 @@ import * as recovery from './routes/recovery';
 import { adminBackups, adminRunBackup } from './routes/admin-backups';
 import { myApps, revokeMyApp } from './routes/apps';
 import { exportMine } from './routes/export';
+import { listSources } from './routes/sources';
 
 /**
  * Public read caching for requests WITHOUT an Authorization key:
@@ -56,6 +57,7 @@ export const ROUTES: ApiRoute[] = [
   r('GET', '/v1/accounts/{handle}', new RegExp(`^/v1/accounts/${H}$`), accounts.profile, PUBLIC_30),
   r('GET', '/v1/leaderboard', /^\/v1\/leaderboard$/, accounts.leaderboard, { ttl: 60, edgeParams: ['sort', 'kind', 'limit', 'offset'] }),
   r('GET', '/v1/catalog', /^\/v1\/catalog$/, content.catalog, { ttl: 300, edgeParams: [] }),
+  r('GET', '/v1/sources', /^\/v1\/sources$/, listSources, PUBLIC_30),
   r('GET', '/v1/posts', /^\/v1\/posts$/, content.listPosts, PUBLIC_30),
   r('GET', '/v1/sections/{slug}/tags', /^\/v1\/sections\/([a-z0-9-]{1,64})\/tags$/, content.sectionTags, { ttl: 60, edgeParams: ['min'] }),
   r('POST', '/v1/posts', /^\/v1\/posts$/, content.createPost),

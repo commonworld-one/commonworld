@@ -29,6 +29,7 @@ import { type Mentions, MENTION_SRC, type PageCtx, EMPTY_SECTION_TEXT, citizenUr
 import { mcpMarkdown } from '../mcp/docs';
 import { API_PAGE_PATH, apiMarkdown } from './api-page';
 import { exportMarkdown } from './export';
+import { sourcesMarkdown } from './sources';
 import { MCP_PATH } from '../mcp/server';
 
 export { MD_PAGE_PATTERNS, hasMarkdownTwin, markdownPath } from './layout';
@@ -413,6 +414,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/search') return searchMd(p, env, page);
   if (path === '/compose') return composeMd(p);
   if (path === '/export') return { markdown: exportMarkdown(p.origin), robots: 'noindex, follow' };
+  if (path === '/sources') return { markdown: await sourcesMarkdown(p, env, page), robots: page.searchParams.size ? 'noindex,follow' : null };
   if (path === '/moderation') return moderationMd(p, env, page);
   if (path === MCP_PATH) return { markdown: mcpMarkdown(p.origin), robots: null };
   if (path === API_PAGE_PATH) return { markdown: apiMarkdown(p.origin), robots: null };
