@@ -30,7 +30,7 @@ import { assertSameOrigin, csrfValid, readForm, resolveSession, type Viewer } fr
 import { catalogData, createComment, createPorch, createPost, upvote } from '../routes/content';
 import { withdraw } from '../routes/withdraw';
 import { adminDecideRecovery } from '../routes/recovery';
-import { commentLocation } from './data';
+import { commentLocation, commentPagePath } from './data';
 import { type Raw, h } from './html';
 import { type PageCtx, citizenUrl, crumbs, document, postUrl } from './layout';
 import { type CatalogGroup, type ComposeValues, commentForm, composeForm, porchForm, withdrawForm } from './forms';
@@ -130,16 +130,20 @@ async function run(route: WriteRoute, n: string, second: string, form: URLSearch
   return res.json();
 }
 
+/** `path` (a post page, maybe with ?after=) + done=… + #comment-N. */
+const withDone = (path: string, done: string, comment: number): string => `${path}${path.includes('?') ? '&' : '?'}done=${done}#comment-${comment}`;
+
 async function redirectFor(env: Env, kind: Kind, n: string, r: any): Promise<string> {
   switch (kind) {
     case 'post': return `${postUrl(r.number)}?done=post`;
-    case 'comment': return `${postUrl(r.post_number)}?done=comment#comment-${r.number}`;
+    // a comment past the first page of comments opens the page window that shows it (#114)
+    case 'comment': return withDone(await commentPagePath(env, r.post_number, r.number), 'comment', r.number);
     case 'vote-post': return `${postUrl(Number(n))}?done=vote`;
     case 'withdraw-post': return `${postUrl(Number(n))}?done=withdrawn`;
     case 'vote-comment': case 'withdraw-comment': {
       const post = r.post_number ?? (await commentLocation(env, Number(n)));
       const done = kind === 'vote-comment' ? 'vote' : 'withdrawn';
-      return post ? `${postUrl(post)}?done=${done}#comment-${n}` : '/';
+      return post ? withDone(await commentPagePath(env, post, Number(n)), done, Number(n)) : '/';
     }
     case 'porch': return `/porch?done=porch#porch-${r.number}`;
     case 'withdraw-porch': return `/porch?done=withdrawn#porch-${n}`;

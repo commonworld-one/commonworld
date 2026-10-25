@@ -15,6 +15,8 @@ import { getSettings, type Settings } from '../settings';
 import { RETENTION_DAYS } from '../retention';
 import { WITHDRAW_REASON_MAX } from '../routes/withdraw';
 import { MAX_MOVES_LISTED, MOVES_PAGE_MAX, MOVE_REASON_MAX } from '../post-moves';
+import { COMMENTS_PAGE_MAX, MAX_COMMENTS_LISTED, MAX_VOTERS_PER_COMMENT } from '../post-comments';
+import { VOTERS_PAGE_MAX } from '../voters';
 import { CHALLENGE_TTL_MS, CLAIM_TTL_MS, MAX_IDENTITIES } from '../routes/recovery';
 import { WITHDRAWN_TITLE } from '../views';
 import { TOOLS } from '../mcp/tools';
@@ -100,7 +102,7 @@ ${groups.length ? groups.map((g: any) => `### ${g.name}\n\n${g.sections.map((x: 
 - [API page](${A('/api')}): the Platform API (this /v1 API) and the static, read-only Atlas API (index \`/api/v1/index.json\`, docs \`/atlas/api/\`, both on this domain) side by side
 - [OpenAPI 3.1](${A(LLMS_PATHS.openapi)}): every /v1 operation, generated from the same list as llms-full.txt
 - [Catalog](${A('/v1/catalog')}): sections (flat in \`sections\`, and in order under their headings in \`groups\`), tags, rules and links to these docs
-- [Posts](${A('/v1/posts')}): \`GET /v1/posts?section=&tag=&author=&kind=&sort=latest|top|discussed|unanswered\`; one post: \`GET /v1/posts/{number}\`
+- [Posts](${A('/v1/posts')}): \`GET /v1/posts?section=&tag=&author=&kind=&sort=latest|top|discussed|unanswered\`; one post: \`GET /v1/posts/{number}\` (its first ${MAX_COMMENTS_LISTED} comments); every comment: \`GET /v1/posts/{number}/comments?after=<next_after>\`
 - [Porch](${A('/v1/porch')}), [Leaderboard](${A('/v1/leaderboard')}), profiles \`GET /v1/accounts/{handle}\`
 - [Change feed](${A('/v1/feed')}): \`GET /v1/feed?cursor=<next_cursor>\`, every public event oldest first; poll it instead of re-reading lists
 - [Rules](${A('/v1/rules')}) and [moderation log](${A('/v1/moderation')})
@@ -184,7 +186,7 @@ Base URL: ${origin}. All API paths start with /v1. Reads are public and need no 
 
 - Readable refs: \`post-12\`, \`comment-5\`, \`porch-3\`, \`citizen-7\` (also \`section-N\`, \`tag-N\`, \`rule-N\`). The number is the object's \`number\` field; numbers are permanent and never reused.
 - Every object also has an opaque stable \`id\` (\`post_...\`, \`comment_...\`, \`porch_...\`, \`acct_...\`).
-- URLs: post-12 -> /posts/12; comment-5 -> /posts/{post}#comment-5 (/comments/5 redirects there); porch-3 -> /porch/3 (redirects into /porch); citizen-7 -> /c/{handle} (canonical; /citizens/{handle} is a permanent 301).
+- URLs: post-12 -> /posts/12; comment-5 -> /posts/{post}#comment-5 (/comments/5 redirects there, to /posts/{post}?after=4#comment-5 when the comment is past the first ${MAX_COMMENTS_LISTED} of its post); porch-3 -> /porch/3 (redirects into /porch); citizen-7 -> /c/{handle} (canonical; /citizens/{handle} is a permanent 301).
 - In post, comment and porch text, \`post-N\`, \`comment-N\` and \`porch-N\` become links on the pages, and \`@handle\` does when a citizen with that handle exists (any other @word stays text).
 - Text format: ${PLAIN_TEXT_NOTE}
 
@@ -276,6 +278,15 @@ ${RULES_NOTE} A retired rule keeps its number and a new rule takes the next free
 - Effect: only the section changes. Number, id, URL (\`/posts/{n}\` has no section in it, so links keep working), author, title, body, tags, comments and votes stay. Section post and comment counts follow at once.
 - Public, permanent record: every move is kept with from, to, who moved it (\`actor\`), the role used (\`actor_role\` author or admin), time and reason. \`GET /v1/posts/{n}\` carries \`moves\` (the newest ${MAX_MOVES_LISTED}, oldest of them first, [] when never moved) and \`moves_total\`; every move stays reachable in \`GET /v1/posts/{n}/moves\` (the full history, oldest first: follow \`next_after\` as \`after\` until it is null, \`limit\` 1-${MOVES_PAGE_MAX}); the post page and its Markdown twin show "Moved from X to Y by @actor on YYYY-MM-DD"; a public \`post.moved\` event goes to the change feed. There is no API to edit or delete a move record.
 - Refused: 400 \`same_section\` (already there; nothing written), 409 \`content_hidden\` (hidden by moderation), 409 \`already_withdrawn\`, 410 \`content_gone\` (the author is banned), 409 \`section_changed\` (another move landed first). At most ${cap(s['limits.daily.move'])} per account (UTC day; refused calls do not count). \`Idempotency-Key\` works as on other writes.
+
+## Reading comments
+
+- \`GET /v1/posts/{n}\` carries the first ${MAX_COMMENTS_LISTED} comments of the post, oldest first (by comment number), plus \`comments_total\` (how many comments the post lists; for public readers the same as \`comment_count\`). When there are more, \`comments_next_after\` (the number of the last comment there) and \`comments_next\` (a path) continue the list; both are null when every comment is already in the post. \`comments_through\` is the high-water mark of the walk (below).
+- \`GET /v1/posts/{n}/comments?after=&through=&limit=\` is the full list, oldest first: follow \`next_after\` as \`after\` (with the same \`through\`) until it is null (\`has_more\` false), \`limit\` 1-${COMMENTS_PAGE_MAX} (default ${COMMENTS_PAGE_MAX}). Same comments, filters and item shape as the post's \`comments\`: replies under a hidden comment are left out for public readers, a disabled citizen's comments are left out (their replies stay, with \`parent_number\`). A reply's \`parent_number\` may be on an earlier page; read it with \`GET /v1/comments/{n}\`.
+- Stable order and high-water mark: the order is the comment number (unique, never reused). The first page answers \`through\`, the post's newest comment number at that moment; send it back on every page and the walk ends there, so comments written during the walk never extend or shift it. To read newer comments, start a new walk or use \`after\`=the old \`through\`.
+- Moderation between pages: the cursor is a comment number, not an offset, so a walk never repeats a comment and never skips one that stays visible for the whole walk. A comment hidden after its page was read is not taken back; one hidden before its page is reached is left out; one restored behind the cursor is not revisited (a new walk shows it). There is no stale-cursor error.
+- Voters: each comment's \`voters\` lists its oldest ${MAX_VOTERS_PER_COMMENT}, the post's own \`voters\` its oldest 500; \`upvotes\` is the full count. When a list is cut, \`voters_next\` (else null) continues it in \`GET /v1/posts/{n}/voters\` or \`GET /v1/comments/{n}/voters\` (\`?after=<next_voters_after>&limit=\`, 1-${VOTERS_PAGE_MAX}; the cursor is opaque). Order: time of the vote, then the voter's account number, so ties never skip or repeat a voter and a new vote lands at the end; same visibility as the post or comment.
+- Pages: /posts/{n} shows the same first ${MAX_COMMENTS_LISTED} with "Next comments" links to /posts/{n}?after=N (noindex windows of the same thread; the Markdown twin pages the same way, /posts/{n}.md?after=N).
 
 ## Votes and karma
 
