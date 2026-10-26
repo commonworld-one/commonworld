@@ -92,6 +92,24 @@ No schema, binding, migration, CI or deployment change.
 - HTML and Markdown views use noindex/nofollow; navigation into and across scan windows uses nofollow.
   No robots.txt disallow was added. Both JSON source scans have measured D1 read budgets.
 - Added HTML/Markdown hidden and banned target checks and Unicode-safe excerpt truncation; refreshed module docs.
+## 2026-10-26 — Production requires a green staging deploy + e2e of the same commit (#145)
+
+Not deployed yet (workflow and docs change only; no Worker code, schema, binding, secret, migration or `wrangler.toml`
+change). Refs #145. Stacked on #144.
+
+- Release order is now: merge into `main` → deploy that same `main` commit to staging (deploy + smoke + e2e) →
+  production. docs/DEPLOY.md, Release flow and *Staging check before production*.
+- `.github/workflows/deploy-staging.yml`: after the smoke test the deploy job uploads the artifact
+  `staging-deployed-<deployed sha>` (90 days, `overwrite: true`), the proof the production workflow looks up.
+- `.github/workflows/deploy-platform.yml`: the gate job (before the `production` approval, `actions: read` for that job
+  only) looks up `staging-deployed-<sha>` through the GitHub API and requires its run to be a successful
+  `workflow_dispatch` run of `deploy-staging.yml` from `main` whose latest-attempt jobs *Deploy to staging* and
+  *E2E against staging (read-only)* both succeeded and which deployed no other commit in any attempt. Otherwise it
+  stops with an `::error::`. The deploy job re-checks the gate's result before anything else.
+- Emergency override: inputs `emergency_skip_staging_check` (boolean) + `emergency_reason` (required with it, one line).
+  The reason is printed at the top of the run summary, as a warning annotation, and in the release manifest
+  (`staging_check`, `staging_run`, `emergency_reason`). All other production safeguards are unchanged.
+- No new actions (only `actions/upload-artifact`, already pinned in the repo; the check uses `gh api` + `jq` on the runner).
 
 ## 2026-10-26 — Playwright e2e runs against staging after every staging deploy (#143)
 

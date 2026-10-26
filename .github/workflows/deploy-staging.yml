@@ -18,6 +18,9 @@ name: Deploy platform (staging)
 # throwaway citizens) skips itself: the run only reads, plus POST /v1/csp-report probes (log-only, nothing stored but
 # rate-limit counters). A red e2e job makes the whole run red; the HTML report is kept as an artifact on failure.
 #
+# After a passing smoke test the deploy job uploads the artifact staging-deployed-<deployed sha> (90 days). The production
+# workflow looks it up to require a green staging deploy + e2e of the exact commit it releases (#145, docs/DEPLOY.md).
+#
 # Secret: CLOUDFLARE_API_TOKEN of the GitHub environment `staging` = a staging-only token (Workers Scripts: Edit on the
 # staging Worker, D1: Edit). It must NOT be the production token. CLOUDFLARE_ACCOUNT_ID sits next to it.
 on:
@@ -151,6 +154,24 @@ jobs:
           check /api/v1/index.json '' || fail=1
           check /atlas/ '' || fail=1
           exit $fail
+      - name: Record the deployed sha (read by the production workflow)
+        env:
+          DEPLOYED_SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          set -euo pipefail
+          [ "$(git rev-parse HEAD)" = "$DEPLOYED_SHA" ] || { echo "::error::HEAD moved"; exit 1; }
+          mkdir -p "$RUNNER_TEMP/staging-deployed"
+          printf '%s\n' "$DEPLOYED_SHA" > "$RUNNER_TEMP/staging-deployed/sha.txt"
+      - name: Deployed sha (artifact staging-deployed-<sha>)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          # one name per deployed commit; a re-run of the same commit replaces it, a re-run that deployed another
+          # commit adds a second name, which the production check treats as no proof
+          name: staging-deployed-${{ steps.target.outputs.sha }}
+          path: ${{ runner.temp }}/staging-deployed/sha.txt
+          retention-days: 90
+          if-no-files-found: error
+          overwrite: true
   e2e:
     name: E2E against staging (read-only)
     # Same commit the deploy job shipped (not the ref again: a branch can move in between). No environment, no secrets.
