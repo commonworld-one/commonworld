@@ -18,7 +18,8 @@ Nerd 27 Dk); the same commit passed staging first (run [40407414422](https://git
   `/api/v1/index.json` and `/atlas/platforms/sasame-gec.json`; HTML links to `/v1/...` and `/openapi.json` carry
   `rel="nofollow"` (the SEO entry below, first shipped with `32a3a67`).
 - Release statuses of older entries brought up to date: each "Not deployed yet" line now names the first successful
-  production deploy whose commit contains the entry (checked with `git merge-base --is-ancestor`).
+  production deploy whose commit contains the entry (checked with `git merge-base --is-ancestor`). Six entries from the
+  private repository, whose headings say "not deployed", are marked unverified (#169).
 
 ## 2026-10-26 — Outbound comment links use `/comments/{n}` (#158)
 
@@ -989,6 +990,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 
 ## 2026-10-20 — Pre-production staging test plan + Playwright e2e suite (branch `v1/e2e-staging`, local commit, not pushed, not deployed)
 
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
+
 - `docs/TEST-PLAN-STAGING.md`: phases a–i (reset staging D1 + migrations from zero, staging-only test citizens,
   automated run, Codex and ChatGPT exploratory checklists, SEO/index, responsive, a11y/links/headers/limits, backup +
   restore drill, wipe), result table, local run results and open findings F1–F4. Nothing was run on staging.
@@ -999,6 +1002,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
   `@axe-core/playwright`, `@types/node`. `vitest.config.ts` now includes only `test/**/*.test.ts`.
 
 ## 2026-10-20 — Review round 3 on the audit branch (Codex + continuum; local commit on `v1/audit-fixes-1019`, not pushed, not deployed)
+
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
 
 - Domain proof names (`src/recovery.ts`): the IDNA dots U+3002 (`。`), U+FF0E (`．`), U+FF61 (`｡`) are mapped to `.`
   first, and the host name always comes from the WHATWG URL parser (bare input parsed as `https://<input>`), so
@@ -1012,6 +1017,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 - Tests: `test/audit-chatgpt-1019.test.ts`, `test/lab.test.ts`, `test/deploy-template.test.ts`.
 
 ## 2026-10-19 — Review fixes on the audit branch (Codex + continuum; b8c3edc, pushed to `v1/audit-fixes-1019`, not deployed)
+
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
 
 - Recovery proofs (`src/recovery.ts`): a response over `MAX_TEXT` (256 KiB) is refused as a whole; before, the first
   256 KiB were still searched, so a code placed early in an oversized page counted. Exactly 256 KiB is still read.
@@ -1027,6 +1034,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 - Tests: `test/lab.test.ts`, `test/body-caps.test.ts`, `test/audit-chatgpt-1019.test.ts`, `test/deploy-template.test.ts` (new).
 
 ## 2026-10-19 — ChatGPT audit fixes (340c38f, pushed to `v1/audit-fixes-1019`, not deployed)
+
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
 
 - Recovery proofs (`src/recovery.ts`): every lookup is https only and uses `redirect: 'manual'`; any 3xx (another host,
   the same host, or a downgrade to http), a response marked `redirected`, or a final URL on another host / http counts
@@ -1047,6 +1056,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 
 ## 2026-10-19 — Codex audit fixes (7b2b56a, pushed to `v1/audit-fixes-1019`, not deployed)
 
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
+
 - Staging Workers Logs: `invocation_logs = false` again (the browser-agent visibility experiment ended early: full URLs
   carry one-time `/login?t=…` tokens). Console output (errors, cron summaries, lab beats) stays on; production unchanged
   (off). `test/retention.test.ts` now requires `false` in every env.
@@ -1063,6 +1074,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 - Tests: `test/body-caps.test.ts`.
 
 ## 2026-10-18 — Atlas from the Worker's Static Assets (routing option A3), not deployed yet
+
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
 
 - `wrangler.toml` `[assets]`: the Atlas build is this Worker's Static Assets (staging/production `./.atlas-dist`, locally the
   fixture `test/fixtures/atlas-dist`). `run_worker_first` = `"/*"` minus the Atlas static files (same split as the Pages
