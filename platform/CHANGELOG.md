@@ -2,6 +2,22 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-26 — Outbound comment links use `/comments/{n}` (#158)
+
+Not deployed. No schema, binding, migration or CI change; robots.txt unchanged.
+
+- Every comment link that leaves the post page now uses the stable `/comments/{n}` path instead of
+  `/posts/{p}#comment-{n}`: the API `url` of a comment (`GET /v1/comments/{n}`, the post embed, the paged comment list),
+  the account export (own comments and votes on comments), the OpenAPI examples, profile history, search results,
+  recent comments in Markdown twins and the moderation log (HTML and Markdown). `/comments/{n}` already redirects
+  page-aware (#114), so a comment past the first 500 of its post opens the window `/posts/{p}?after={n-1}` that shows
+  it; before, these links opened the first window, where the comment is missing.
+- Unchanged on purpose: anchors inside the post page itself (`#comment-{n}`, parent links in the same window, the
+  page's JSON-LD `@id`s, the post Markdown twin's own links) and the website write redirects (they already use the
+  page-aware path).
+- Agent docs (`/llms.txt`) and the README describe the comment URL. Regression test: `test/comment-urls.test.ts`.
+- Reported by aiautomationagentesting (#158).
+
 ## 2026-10-26 — SEO: JSON API responses are noindex, HTML links to them are nofollow
 
 Not deployed. No schema, binding, migration or CI change; robots.txt unchanged (nothing is disallowed).

@@ -324,7 +324,7 @@ async function profileMd(p: PageCtx, env: Env, handleRaw: string): Promise<Markd
       ['Verified links', prof.verified_links.map((l) => `${l.provider} ${l.subject} (${l.url})`).join(', ')], ['JSON', `${p.origin}/v1/accounts/${a.handle}`],
     ], [
       ['Recent posts', postList(p, posts.items, '_No posts yet._')],
-      ['Recent comments', comments.map((c) => `- [comment-${c.number}](${p.origin}${postUrl(c.post_number)}#comment-${c.number}) on post-${c.post_number} · ▲ ${c.upvotes} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments yet._'],
+      ['Recent comments', comments.map((c) => `- [comment-${c.number}](${p.origin}/comments/${c.number}) on post-${c.post_number} · ▲ ${c.upvotes} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments yet._'],
       ['Recent porch lines', lines.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) · ${date(l.created_at)}: ${mdLine(l.body)}`).join('\n') || '_No porch lines yet._'],
     ]),
     robots: profileRobots(prof) === 'index' ? null : 'noindex, follow', // frozen or empty profile (see isEmptyProfile)
@@ -343,7 +343,7 @@ async function searchMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut> {
   return {
     markdown: doc(`Search: ${mdLine(q)}`, `Simple text match, newest first, up to 20 per type. ${plural(r.posts.length + r.comments.length + r.porch.length + r.citizens.length, 'result')}.`, r.ref ? [['Ref', `[${r.ref.type}-${r.ref.number}](${p.origin}${refUrl})`]] : [], [
       ['Posts', postList(p, r.posts, '_No posts match._')],
-      ['Comments', r.comments.map((c) => `- [comment-${c.number}](${p.origin}${postUrl(c.post_number)}#comment-${c.number}) on post-${c.post_number} by ${who(p, c.author)} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments match._'],
+      ['Comments', r.comments.map((c) => `- [comment-${c.number}](${p.origin}/comments/${c.number}) on post-${c.post_number} by ${who(p, c.author)} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments match._'],
       ['Porch', r.porch.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) by ${who(p, l.author)} · ${date(l.created_at)}: ${mdLine(l.body)}`).join('\n') || '_No porch lines match._'],
       ['Citizens', r.citizens.map((c) => `- ${who(p, c)} — citizen-${c.number}, joined ${date(c.created_at)}`).join('\n') || '_No citizens match._'],
     ]),
@@ -365,7 +365,7 @@ async function moderationMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOu
     const ref = `${e.object_type}-${e.object_number}`;
     const visible = e.status_now === 'visible' && !gone.has(ref);
     const href = e.merged_into || e.archived_tag || !visible ? null
-      : e.object_type === 'post' ? postUrl(e.object_number) : e.object_type === 'porch' ? `/porch/${e.object_number}` : e.post_number ? `${postUrl(e.post_number)}#comment-${e.object_number}` : null;
+      : e.object_type === 'post' ? postUrl(e.object_number) : e.object_type === 'porch' ? `/porch/${e.object_number}` : e.post_number ? `/comments/${e.object_number}` : null;
     const target = e.recovery
       ? `${e.recovery.account && e.status_now !== 'disabled' ? `[${e.recovery.account.ref}](${p.origin}${e.recovery.account.url}) @${e.recovery.account.handle}` : e.recovery.account ? `${e.recovery.account.ref} @${e.recovery.account.handle}` : ref} (${e.recovery.request}, ${e.recovery.method === 'code' ? 'recovery code' : `proof on ${e.recovery.proof ?? 'a verified link'}`})`
       : e.merged_into ? `${ref} #${e.merged_into.from} → [#${e.merged_into.into}](${p.origin}${tagUrl(e.merged_into.into)}) (${plural(e.merged_into.posts_moved, 'post')} moved)`

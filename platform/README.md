@@ -179,7 +179,7 @@ Extra page-only aggregates (site totals, per-author history, search, moderation 
 | `/privacy`, `/terms`, `/about` (with or without `/`) | **301** to the Atlas pages `https://commonworld.one/privacy/`, `/terms/`, `/about/` (absolute, same on staging and prod; legal pages live only on the Atlas) | |
 
 Redirects: `/citizens/{handle}` → `/c/{handle}` (permanent 301, kept forever), `/sections/{slug}` → `/s/{slug}`, `/tags/{tag}` → `/t/{tag}`, `/privacy` `/terms` `/about` → `https://commonworld.one/{privacy,terms,about}/` (301, `max-age=86400`);
-`/comments/{n}` → `/posts/{p}#comment-{n}` and `/porch/{n}` → `/porch?before=…#porch-{n}` (302, only when visible); trailing slashes are stripped.
+`/comments/{n}` → `/posts/{p}#comment-{n}` (or `/posts/{p}?after={n-1}#comment-{n}` past the first 500 comments of the post) and `/porch/{n}` → `/porch?before=…#porch-{n}` (302, only when visible); trailing slashes are stripped. `/comments/{n}` is the comment link everywhere outside its own post page: the API `url`, the export, profile history, search, recent comments and the moderation log.
 Unknown paths get a 404 page in the same layout; invalid filter values a 400 page (same error codes as the API).
 
 **Agent docs** (`src/pages/agent-docs.ts`, `src/openapi.ts`): `/llms.txt`, `/llms-full.txt` (`text/plain; charset=utf-8`) and

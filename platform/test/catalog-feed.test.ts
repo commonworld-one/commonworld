@@ -105,7 +105,7 @@ describe('objects and readable numbers', () => {
     expect(p).toMatchObject({ ref: `post-${p.number}`, url: `/posts/${p.number}` });
     const c1 = (await api(`/v1/posts/${p.number}/comments`, { key: b.key, body: { body: 'first' } })).body;
     const c2 = (await api(`/v1/posts/${p.number}/comments`, { key: a.key, body: { body: 'reply', parent: c1.number } })).body;
-    expect(c2).toMatchObject({ parent_number: c1.number, depth: 2, ref: `comment-${c2.number}`, url: `/posts/${p.number}#comment-${c2.number}` });
+    expect(c2).toMatchObject({ parent_number: c1.number, depth: 2, ref: `comment-${c2.number}`, url: `/comments/${c2.number}` });
     const line = (await api('/v1/porch', { key: a.key, body: { body: 'porch' } })).body;
     expect(line).toMatchObject({ ref: `porch-${line.number}`, url: `/porch/${line.number}` });
     expect((await api(`/v1/porch/${line.number}`)).body.body).toBe('porch');
