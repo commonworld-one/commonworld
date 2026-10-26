@@ -21,7 +21,8 @@ name: Deploy platform (production)
 # e2e) shipped exactly this commit. The staging deploy job uploads the artifact staging-deployed-<sha>; the gate finds
 # it through the GitHub API (actions: read, gate job only) and checks that its run is a successful workflow_dispatch run
 # of deploy-staging.yml on main, that its jobs "Deploy to staging" and "E2E against staging (read-only)" both succeeded
-# in the latest attempt, and that no attempt of that run deployed another commit. Emergency only:
+# in the latest attempt, that no attempt of that run deployed another commit, and that the run finished at most 7 days
+# ago (older: deploy the sha to staging again). Emergency only:
 # emergency_skip_staging_check = true with a written emergency_reason; the reason goes into the run summary and the
 # release manifest.
 on:
@@ -103,6 +104,7 @@ jobs:
           repo="$GITHUB_REPOSITORY"
           wf=.github/workflows/deploy-staging.yml
           art="staging-deployed-$SHA"
+          MAX_AGE_DAYS=7  # a green staging run counts only if it finished at most 7 days ago (docs/DEPLOY.md)
           reason=$(printf '%s' "$REASON_INPUT" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
           case "$reason" in *[[:cntrl:]]*) echo "::error::emergency_reason must be one line of plain text"; exit 1 ;; esac
           if [ "$OVERRIDE" = true ] && [ -z "$reason" ]; then
@@ -142,6 +144,15 @@ jobs:
                 | jq -r '[.artifacts[].name | select(startswith("staging-deployed-"))] | unique | join(" ")') \
                 || { why="$why; run $id: GitHub API error (artifacts)"; continue; }
               if [ "$names" != "$art" ]; then why="$why; run $id: its attempts deployed more than one commit ($names)"; continue; fi
+              # freshness: the run must have finished at most MAX_AGE_DAYS ago (updated_at = completion of its last attempt)
+              done_at=$(jq -r '.updated_at // empty' <<<"$run")
+              done_s=$(jq -rn --arg t "$done_at" '$t | fromdateiso8601' 2>/dev/null) \
+                || { why="$why; run $id: no readable completion time ('$done_at')"; continue; }
+              age=$(( $(date -u +%s) - done_s ))
+              if [ "$age" -gt $(( MAX_AGE_DAYS * 86400 )) ]; then
+                why="$why; run $id: green but too old, finished $done_at, $(( age / 86400 )) d $(( age % 86400 / 3600 )) h ago (limit $MAX_AGE_DAYS days): deploy this sha to staging again"
+                continue
+              fi
               found=$(jq -r .html_url <<<"$run")
               return 0
             done

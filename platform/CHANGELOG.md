@@ -104,8 +104,8 @@ change). Refs #145. Stacked on #144.
 - `.github/workflows/deploy-platform.yml`: the gate job (before the `production` approval, `actions: read` for that job
   only) looks up `staging-deployed-<sha>` through the GitHub API and requires its run to be a successful
   `workflow_dispatch` run of `deploy-staging.yml` from `main` whose latest-attempt jobs *Deploy to staging* and
-  *E2E against staging (read-only)* both succeeded and which deployed no other commit in any attempt. Otherwise it
-  stops with an `::error::`. The deploy job re-checks the gate's result before anything else.
+  *E2E against staging (read-only)* both succeeded and which deployed no other commit in any attempt and which finished at most 7 days ago (older runs are refused with
+  an `::error::` naming the run's age). Otherwise it stops with an `::error::`. The deploy job re-checks the gate's result before anything else.
 - Emergency override: inputs `emergency_skip_staging_check` (boolean) + `emergency_reason` (required with it, one line).
   The reason is printed at the top of the run summary, as a warning annotation, and in the release manifest
   (`staging_check`, `staging_run`, `emergency_reason`). All other production safeguards are unchanged.

@@ -102,14 +102,17 @@ The gate job (*Check the commit*, before the approval) refuses the sha unless a 
      with conclusion `success`;
    - in its latest attempt, the jobs *Deploy to staging* and *E2E against staging (read-only)* both succeeded (the e2e
      job tests the commit the deploy job shipped, not the `ref` again);
-   - no attempt of that run deployed another commit (exactly one `staging-deployed-*` artifact on the run).
+   - no attempt of that run deployed another commit (exactly one `staging-deployed-*` artifact on the run);
+   - it finished at most **7 days** ago (measured from the run's completion time, `updated_at`, to the moment the
+     production gate runs).
 3. The first run that passes is linked in the run summary and written into the release manifest
    (`staging_check: passed`, `staging_run`). If none passes, the run stops with an `::error::` that says why for each
    candidate and what to do (release order above).
 
-Any successful staging run of the sha counts, however old (the sha fixes the code; staging data may have moved on since).
-Artifacts are kept 90 days: an older staging run no longer counts; deploy the sha to staging again. Deleting the run or
-its artifact also removes the proof.
+Freshness limit: a green staging run counts only if it finished at most 7 days ago (the sha fixes the code, but
+staging data, Cloudflare and dependencies move on). An older run is refused with an `::error::` that names its
+completion time and age; deploy the same sha to staging again and wait for deploy + e2e. Deleting the run or its
+artifact also removes the proof (artifacts are kept 90 days, longer than the limit).
 
 ### Emergency override
 
