@@ -245,7 +245,25 @@ domain) and R2 encrypts every object at rest.
 
 ---
 
-## 4. Launch-day setup - checklist
+## 4. Current state and launch-day history
+
+### Current state (checked 2026-10-27)
+
+- **Backup cron and R2 binding are deployed in production** since the first successful production deploy,
+  2026-10-20 (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)): its deploy log lists `env.BACKUPS (commonworld-backups)`
+  and the four schedules `17 3 * * *`, `7 * * * *`, `0 3 * * *`, `30 4 * * 1`. Every later production deploy carries
+  them; the latest, 2026-10-26 (`26c6754`, run [40407942748](https://github.com/commonworld-one/commonworld/actions/runs/40407942748)), lists the same binding and schedules.
+- **Archives in `commonworld-backups`:** not recorded in this repository or in public CI. The status is behind admin
+  sign-in (`GET /v1/admin/backups` answers 401 without it), so check it there and write the result here.
+- **Restore drill:** not yet recorded for production backups. What is recorded: the manual drill of 2026-10-18 and the
+  staging rehearsal of 2026-10-19 (the drill note in section 2 and section 5, both before the Worker was deployed).
+- **Staging:** the staging Worker config binds `commonworld-backups-staging` with the same schedules (`wrangler.toml`
+  `[env.staging]`); a staging run is not recorded here.
+
+### History: launch-day checklist (as written on 2026-10-20, kept unchanged)
+
+The open items below were the plan before the first production deploy. The production deploy item is done (see Current
+state); the others are not recorded as done.
 
 - [x] Retention decided 2026-10-18: 35 days; Privacy N = 35.
 - [x] R2 bucket `commonworld-backups` (WEUR, private) + lifecycle `expire-35d` - created 2026-10-19. Production only from
