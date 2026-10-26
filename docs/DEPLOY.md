@@ -34,7 +34,11 @@ How: Actions → *Deploy platform (staging)* → *Run workflow*, "Use workflow f
 commit to try. The job checks that `env.staging` in that commit's `wrangler.toml` points only at
 `commonworld-api-staging` / `commonworld-staging` / `staging.commonworld.one`, runs typecheck + tests, builds the
 Atlas, lists and applies pending staging migrations (scanner in report-only mode), deploys with `--env staging` and
-smoke-tests `staging.commonworld.one`.
+smoke-tests `staging.commonworld.one`. A second job, *E2E against staging (read-only)*, then runs the Playwright suite
+(`platform/e2e`, projects `api`, `phone`, `tablet`, `desktop`) from the same commit against `staging.commonworld.one`.
+It gets no secrets and no test-citizen keys and sets `CW_E2E_ALLOW_REGISTER=0`, so every spec that writes skips itself;
+what runs only reads (plus log-only `POST /v1/csp-report` probes). A failing e2e job turns the whole run red and keeps
+the Playwright report as the artifact `staging-e2e-report-<sha>` (14 days).
 
 One-time setup (owner): GitHub → Settings → Environments → New environment `staging`; deployment branches: `main`
 only; environment secrets `CLOUDFLARE_API_TOKEN` (a staging-only token, never the production one) and
@@ -59,7 +63,9 @@ workflow run on a pull request, a fork or any other branch never gets it.
 2. **Pull request.** Open a PR into `main`. CI (`ci`, `quality` and the other checks) runs on it.
 3. **Reviews.** At least one independent review besides the author (a person or a separate review agent). The
    code owner (`.github/CODEOWNERS`) is asked automatically for `/platform/` and `/.github/`.
-4. **Staging.** The change is deployed to staging and checked there.
+4. **Staging.** The change is deployed to staging and checked there. The staging run, including its e2e job, must be
+   green before the merge. The production workflow does not check this itself: the sha released to production (a
+   commit on `main`) is usually not the one tried on staging (a branch), so there is no run to look up by sha.
 5. **Merge** into `main`.
 6. **Start the deploy.** The owner opens Actions → *Deploy platform (production)* → *Run workflow*, keeps the branch
    on `main` and pastes the full 40-character sha of the commit to release. The field

@@ -2,6 +2,24 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-26 — Playwright e2e runs against staging after every staging deploy (#143)
+
+Not deployed yet (workflow and test change only; no Worker code, schema, binding, secret, migration or `wrangler.toml`
+change). Refs #143.
+
+- The e2e suite (`platform/e2e`) was only typechecked in CI and never run, so it went stale: `seo-docs.spec.ts` still
+  expected `GET /moderation.md` → 404 although `/moderation` has a Markdown twin (`MD_PAGE_PATTERNS`,
+  `test/markdown.test.ts`). The 404 check now uses `/inbox.md` (a page without a twin, as in vitest), and `/moderation`
+  is checked with its twin like the other core pages. No other stale expectation found.
+- `.github/workflows/deploy-staging.yml`: new job *E2E against staging (read-only)* after the deploy job. It checks out
+  the commit that was deployed, installs Chromium and runs `npm run test:e2e` (projects `api`, `phone`, `tablet`,
+  `desktop`) against `https://staging.commonworld.one` with `CW_E2E_EXPECT_NOINDEX=1` and `CW_E2E_ALLOW_REGISTER=0`.
+  No environment, no secrets, no test-citizen keys (the job stops if one is set), so all writing specs skip; the run
+  reads, plus log-only `POST /v1/csp-report` probes. Red e2e = red run; the Playwright report is kept 14 days on
+  failure. The production workflow is unchanged (docs/DEPLOY.md, Release flow step 4, says why).
+- Local run against staging on 2026-10-26: `api` 18 passed, 31 skipped (write specs); `phone`, `tablet`, `desktop`
+  41 passed, 4 skipped; 0 failed.
+
 ## 2026-10-25 — MCP: Atlas search and first tasks read a compact index
 
 Not deployed yet. Owner-approved step A of the scale review. No schema, binding, secret, migration or `wrangler.toml`

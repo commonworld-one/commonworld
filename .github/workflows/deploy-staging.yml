@@ -12,6 +12,12 @@ name: Deploy platform (staging)
 # the input ref. Every wrangler call is pinned to --env staging; the job stops if wrangler.toml at that ref does not
 # map env.staging to commonworld-api-staging / commonworld-staging. Never runs on pull_request, push or schedule.
 #
+# After the deploy and its smoke test, the job `e2e` runs the Playwright suite (platform/e2e, projects api, phone, tablet,
+# desktop) against https://staging.commonworld.one with the specs of the same commit. It gets no secrets and no
+# test-citizen keys, and CW_E2E_ALLOW_REGISTER=0, so every spec that would write (posts, comments, votes, moderation,
+# throwaway citizens) skips itself: the run only reads, plus POST /v1/csp-report probes (log-only, nothing stored but
+# rate-limit counters). A red e2e job makes the whole run red; the HTML report is kept as an artifact on failure.
+#
 # Secret: CLOUDFLARE_API_TOKEN of the GitHub environment `staging` = a staging-only token (Workers Scripts: Edit on the
 # staging Worker, D1: Edit). It must NOT be the production token. CLOUDFLARE_ACCOUNT_ID sits next to it.
 on:
@@ -40,6 +46,8 @@ jobs:
     environment:
       name: staging
       url: https://staging.commonworld.one/
+    outputs:
+      sha: ${{ steps.target.outputs.sha }}
     env:
       REF: ${{ inputs.ref }}
     steps:
@@ -51,6 +59,7 @@ jobs:
           ref: ${{ inputs.ref }}
           persist-credentials: false
       - name: wrangler.toml maps env.staging to the staging Worker and database only
+        id: target
         run: |
           set -euo pipefail
           [ -f platform/wrangler.toml ] || { echo "::error::no platform/wrangler.toml at $REF"; exit 1; }
@@ -66,6 +75,7 @@ jobs:
           sys.exit(0 if ok else 'env.staging must be commonworld-api-staging / commonworld-staging / staging.commonworld.one only')
           PY
           echo "deploying $(git rev-parse HEAD) ($REF) to staging"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "## Staging deploy of \`$(git rev-parse HEAD)\` ($REF)" >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -141,3 +151,48 @@ jobs:
           check /api/v1/index.json '' || fail=1
           check /atlas/ '' || fail=1
           exit $fail
+  e2e:
+    name: E2E against staging (read-only)
+    # Same commit the deploy job shipped (not the ref again: a branch can move in between). No environment, no secrets.
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BASE_URL: https://staging.commonworld.one
+      CW_E2E_EXPECT_NOINDEX: '1'
+      CW_E2E_ALLOW_REGISTER: '0'
+      SHA: ${{ needs.deploy.outputs.sha }}
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.deploy.outputs.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+      - name: Install
+        run: npm ci --no-audit --no-fund
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Playwright e2e (api, phone, tablet, desktop) against staging
+        run: |
+          set -euo pipefail
+          # read-only guard: no test-citizen key may reach this job (they would turn the write specs on)
+          for v in CW_E2E_HUMAN_KEY CW_E2E_AGENT_KEY CW_E2E_MODERATOR_KEY CW_E2E_ADMIN_KEY; do
+            [ -z "${!v:-}" ] || { echo "::error::$v is set: the staging e2e job must run without test-citizen keys"; exit 1; }
+          done
+          echo "## Staging e2e of \`$SHA\`" >> "$GITHUB_STEP_SUMMARY"
+          npm run test:e2e
+      - name: Playwright report (on failure)
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: staging-e2e-report-${{ needs.deploy.outputs.sha }}
+          path: |
+            platform/e2e/playwright-report/
+            platform/e2e/test-results/
+          retention-days: 14
+          if-no-files-found: ignore
