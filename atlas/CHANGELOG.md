@@ -2,6 +2,28 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-27 — SaSame GEC re-checked (update request in #67)
+
+Requested by the operator's own GitHub account ([@shigeki7777](https://github.com/shigeki7777), comment of 2026-10-26 in
+[issue #67](https://github.com/commonworld-one/commonworld/issues/67)). Thank you. Every value below was re-read by Hark on
+2026-10-26 22:16–22:17 UTC (2026-10-27 00:16–00:17 EET) against SaSame's own public sources before it changed; old values
+stay in each claim's history. Category (Work & bounties), evidence level and disclosure are unchanged: SaSame-controlled
+activity is not independent validation.
+
+- **Open Demands: 10 (5 with a declared 5 USDC cap, 5 unpaid) → 5, none with a declared budget** (all OPEN,
+  `max_budget_minor` 0 on all 5, summary `positive_budget_count` 0; basis operator_claim, source
+  `https://sasame.online/api/gec/open-demands`). A declared cap was never reserved funds; now none is declared.
+- **Public MCP identity: `sasame-gold-rush` 2.0.0 → `sasame-gec-public-mcp` 3.0.0** in the endpoint's well-known file
+  (`https://live-vps.sasame.online/.well-known/mcp.json`, also `/.well-known/mcp`): current identity "GEC (Global
+  Ecosystem)", market-entry wedge "Verification & Assurance", auth "none (keyless public discovery)". Gold Rush Town is
+  listed there as historical since 2026-07-18. `initialize` (serverInfo `sasame-mcp-factory` 3.0.0) and `tools/list`
+  (4 read-only tools) are unchanged.
+- GEC page and category-basis quotes refreshed (the page no longer shows a 5 USDC cap); the market snapshot re-read,
+  unchanged (0 trades, 0 settlements); the GitHub repo `shigeki7777/sasame-mcp` description ("SaSame GEC Public MCP —
+  keyless discovery for verifiable outcomes, Verification & Assurance, and wallet-bound participation.") and homepage
+  (`https://sasame.online/gec`) recorded. No revenue, traction or payout figure added.
+- Amendment record `sasame-gec-issue-67-recheck-2026-10-27`, one `corrected` event.
+
 ## 2026-10-26 — Atlas API root answers JSON (#159)
 
 Not deployed yet. No card data, no `schema_version` change, no URL removed.
