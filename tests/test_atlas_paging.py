@@ -556,3 +556,38 @@ class GeneratedAt(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class ApiRoot(unittest.TestCase):
+    """Issue #159: the bare Atlas API root (/api/v1/atlas and /api/v1/atlas/) answered the JSON 404 body typed text/html.
+    build.py now writes a 200 rewrite to the module index in _redirects and JSON + noindex rules for both paths in _headers."""
+
+    def test_redirects_and_headers_lines(self):
+        self.assertEqual(build.api_root_redirects(), '/api/v1/atlas /api/v1/atlas/index.json 200\n'
+                                                     '/api/v1/atlas/ /api/v1/atlas/index.json 200\n')
+        hdr = build.api_root_headers()
+        for p in ('/api/v1/atlas', '/api/v1/atlas/'):
+            self.assertIn(f'{p}\n  Content-Type: application/json; charset=utf-8\n  X-Robots-Tag: noindex\n', hdr)
+
+    def test_local_server_answers_the_index_as_json(self):
+        with tempfile.TemporaryDirectory() as d:
+            index = {'name': 'Commonworld Atlas', 'counts': {'pages': 1}}
+            Path(d, 'api', 'v1', 'atlas').mkdir(parents=True)
+            Path(d, 'api', 'v1', 'atlas', 'index.json').write_text(json.dumps(index))
+            Path(d, 'api', '404.html').write_text(json.dumps(api_v1.not_found_doc('https://commonworld.one')) + '\n')
+            Path(d, '404.html').write_text('<!doctype html><title>404</title>')
+            Path(d, '_redirects').write_text(build.api_root_redirects())
+            Path(d, '_headers').write_text(build.api_root_headers())
+            srv = LocalServer(d)
+            try:
+                for p in ('/api/v1/atlas', '/api/v1/atlas/'):
+                    status, headers, body, final = srv.get(p, follow=False)
+                    self.assertEqual(status, 200, p)
+                    self.assertTrue(headers['Content-Type'].startswith('application/json'), (p, headers['Content-Type']))
+                    self.assertEqual(json.loads(body), index, p)
+                    self.assertEqual(final, p)  # a rewrite, not a redirect
+                status, headers, body, _ = srv.get('/api/v1/atlas/nope.json', follow=False)
+                self.assertEqual(status, 404)
+                self.assertEqual(json.loads(body)['error']['code'], 'not_found')
+            finally:
+                srv.close()

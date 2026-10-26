@@ -3023,6 +3023,24 @@ def typed_404_files(site):
     return out
 
 
+# The bare root of the Atlas API module (/api/v1/atlas and /api/v1/atlas/, issue #159) is not a file: Static Assets answered it
+# with the nearest 404.html, the JSON /api/404.html, but typed text/html because no _headers rule matched a path without .json.
+# Both now answer 200 with the module index (a 200 rewrite in _redirects, no second copy of the file); _headers types the two
+# exact paths like every /api/*.json file (JSON, noindex). The documented root stays /api/v1/atlas/index.json.
+API_ROOT_REWRITES = (('/api/v1/atlas', '/api/v1/atlas/index.json'), ('/api/v1/atlas/', '/api/v1/atlas/index.json'))
+
+
+def api_root_redirects():
+    """_redirects lines of API_ROOT_REWRITES (status 200 = rewrite: the URL stays, the body is the target file)."""
+    return ''.join(f'{old} {new} 200\n' for old, new in API_ROOT_REWRITES)
+
+
+def api_root_headers():
+    """_headers rules for API_ROOT_REWRITES: the same content type and noindex as /api/*.json (Access-Control-Allow-Origin
+    comes from the /api/* rule)."""
+    return ''.join(f'{old}\n  Content-Type: application/json; charset=utf-8\n  X-Robots-Tag: noindex\n' for old, _ in API_ROOT_REWRITES)
+
+
 def vanished_page_headers(redirects_text):
     """_headers rules for the static vanished-page 302s of paged_redirects() (Markdown twins and JSON pages; the HTML 302s
     run the Worker, which sets the same header): Cache-Control: no-store on each exact path."""
@@ -3670,7 +3688,7 @@ def main():
     red_path = os.path.join(HERE, '..', 'data', 'redirects.json')  # moved pages: old path -> new path (check.py growth guard)
     moved = (json.load(open(red_path)).get('redirects') or {}) if os.path.exists(red_path) else {}
     write('/_redirects', ''.join(f'{old} {new} 301\n{old.rstrip("/")} {new} 301\n' for old, new, _ in old_legal if old != new)
-          + ''.join(f'{old} {new} 301\n' for old, new in moved.items()) + paged_redirects(site))
+          + ''.join(f'{old} {new} 301\n' for old, new in moved.items()) + paged_redirects(site) + api_root_redirects())
     write('/_headers', vanished_page_headers(paged_redirects(site)) + f"""{b}/assets/*
   Cache-Control: public, max-age=604800
 {b}/og/*
@@ -3756,7 +3774,7 @@ def main():
 /api/404
   Content-Type: application/json; charset=utf-8
   X-Robots-Tag: noindex
-/api/v1/CHANGELOG.md
+{api_root_headers()}/api/v1/CHANGELOG.md
   Content-Type: text/markdown; charset=utf-8
 {b}/llms.txt
   Access-Control-Allow-Origin: *

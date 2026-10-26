@@ -2,6 +2,17 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-26 — Atlas API root answers JSON (#159)
+
+Not deployed yet. No card data, no `schema_version` change, no URL removed.
+
+- **`/api/v1/atlas` and `/api/v1/atlas/` answer 200 with the module index** (the body of `/api/v1/atlas/index.json`),
+  `Content-Type: application/json; charset=utf-8` and `X-Robots-Tag: noindex`. Before, both were a 404 whose body was the
+  JSON error of `/api/404.html` but typed `text/html`: no `_headers` rule matched a path without `.json`. `site/build.py`
+  now writes a 200 rewrite for both paths into `_redirects` (`api_root_redirects`, no second copy of the file) and two
+  exact-path JSON rules into `_headers` (`api_root_headers`); `site/check.py` fails a build without them; `site/serve.py`
+  answers 200 rewrites like Cloudflare. The documented root stays `/api/v1/atlas/index.json`.
+
 ## 2026-10-25 — MCP search and first tasks read a compact index (scale review, step A)
 
 Owner-approved step A of the scale review. Not deployed yet. No card data, no `schema_version` change, no URL removed:

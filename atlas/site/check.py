@@ -358,6 +358,12 @@ def typed_404_checks():
                  '/atlas/platforms/*/index.md\n  Access-Control-Allow-Origin: *\n  Content-Type: text/markdown; charset=utf-8\n',
                  '/atlas/categories/*/index.md\n  Access-Control-Allow-Origin: *\n  Content-Type: text/markdown; charset=utf-8\n'):
         if rule not in hdr: fails.append(f'_headers lacks {rule.splitlines()[0]} with its content type (typed 404s)')
+    # issue #159: the bare Atlas API root (/api/v1/atlas, /api/v1/atlas/) answers the module index as JSON, not a text/html 404
+    import build
+    red = open(os.path.join(DIST, '_redirects'), encoding='utf-8').read().splitlines() if os.path.exists(os.path.join(DIST, '_redirects')) else []
+    for l in build.api_root_redirects().splitlines():
+        if l not in red: fails.append(f'_redirects lacks the API root rewrite {l} (#159)')
+    if build.api_root_headers() not in hdr: fails.append('_headers lacks the JSON rules for /api/v1/atlas and /api/v1/atlas/ (#159)')
     print(f'typed 404s: /api/404.html (JSON) + {len(want) - 1} Markdown list-page 404s')
     return fails
 

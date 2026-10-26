@@ -256,6 +256,30 @@ describe('A3: the Atlas from Static Assets (ATLAS_SOURCE=assets)', () => {
     expect(atlasNotFoundKind('/atlas/page/9/')).toBe('html');
   });
 
+  it('the bare Atlas API root (/api/v1/atlas, /api/v1/atlas/) answers the module index as JSON, not a text/html 404 (#159)', async () => {
+    noNetwork();
+    const index = await (env as any).ASSETS.fetch(new Request(`${PROD}/api/v1/atlas/index.json`, { redirect: 'manual' }));
+    const want = JSON.parse(await index.text());
+    for (const p of ['/api/v1/atlas', '/api/v1/atlas/']) {
+      // static (run_worker_first negative): a 200 rewrite in _redirects, typed by the exact-path _headers rules
+      expect(runsWorkerFirst(p), p).toBe(false);
+      for (const method of ['GET', 'HEAD']) {
+        const r = await (env as any).ASSETS.fetch(new Request(`${PROD}${p}`, { method, redirect: 'manual' }));
+        const text = await r.text();
+        expect(r.status, `${method} ${p}`).toBe(200);
+        expect(r.headers.get('location'), `${method} ${p}`).toBeNull();
+        expect(r.headers.get('content-type'), `${method} ${p}`).toBe('application/json; charset=utf-8');
+        expect(r.headers.get('x-robots-tag'), `${method} ${p}`).toBe('noindex');
+        expect(r.headers.get('access-control-allow-origin'), `${method} ${p}`).toBe('*');
+        if (method === 'GET') expect(JSON.parse(text), p).toEqual(want);
+      }
+    }
+    // other misses under /api/ keep the typed JSON 404
+    const miss = await (env as any).ASSETS.fetch(new Request(`${PROD}/api/v1/atlas/nope.json`, { redirect: 'manual' }));
+    expect([miss.status, miss.headers.get('content-type')]).toEqual([404, 'application/json; charset=utf-8']);
+    await miss.text();
+  });
+
   it('page 1 of a list is the list itself in HTML and Markdown (301); JSON page 1 is a real file (200)', async () => {
     noNetwork();
     const html = await call('/atlas/page/1/');
