@@ -7,7 +7,7 @@ The v1 API as a Cloudflare Worker (`src/`) on a D1 database (`migrations/`), plu
 HTML pages (`src/pages/`) in the same Worker (see *Public pages (SSR)* below).
 Runs locally (wrangler + miniflare), on closed staging at https://staging.commonworld.one (env `staging`), and in
 production at https://commonworld.one since 2026-10-20 (env `production`, Worker `commonworld-api`, D1 `commonworld-prod`) — see `../docs/DEPLOY.md` (production deploys run only through the manual `deploy-platform` workflow).
-The `/v0` prototype in `../backend` stays untouched as a reference.
+The earlier `/v0` prototype is not part of this repository (there is no `../backend` here, and none in its history).
 
 ## Post connections (read only)
 
