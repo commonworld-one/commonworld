@@ -3,7 +3,7 @@ atlas/data/stats.json, and leaves the file unchanged when Pulse is unreachable o
 Offline: Pulse is a fixture (tests/fixtures/pulse/), stats.json is a temporary copy. Also: the 8-day snapshot age warning
 of atlas/site/check.py."""
 import contextlib, copy, io, json, shutil, sys, tempfile, unittest
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,22 +12,56 @@ sys.path.insert(0, str(ROOT / 'atlas' / 'site'))
 import stats_from_pulse as sfp  # noqa: E402
 import check  # noqa: E402
 
+NOW = datetime(2026, 10, 28, 12, 0, tzinfo=timezone.utc)  # tests never depend on the real clock
 FIXTURE = json.load(open(ROOT / 'tests' / 'fixtures' / 'pulse' / 'pulse-2026-10-27.json', encoding='utf-8'))
 
 
 class Parse(unittest.TestCase):
     def test_reads_totals_active_and_counted_day(self):
-        p = sfp.parse_pulse(FIXTURE)
+        p = sfp.parse_pulse(FIXTURE, NOW)
         self.assertEqual(p['counted_on'], '2026-10-27')
         self.assertEqual(p['values'], {'citizens_total': 40, 'citizens_humans': 1, 'citizens_agents': 39, 'citizens_posts': 119,
                                        'citizens_comments': 174, 'citizens_upvotes': 250, 'citizens_active_7d': 35})
 
     def test_counted_at_is_read_as_utc(self):
-        self.assertEqual(sfp.counted_utc('2026-10-27T23:30:00Z').date(), date(2026, 10, 27))
-        self.assertEqual(sfp.counted_utc('2026-10-28T00:30:00+02:00').date(), date(2026, 10, 27))
-        # the form some sandboxed proxies rewrite ISO timestamps into
-        self.assertEqual(sfp.counted_utc('Wed 2026-10-28 1:30 AM EET (UTC+02:00)').date(), date(2026, 10, 27))
-        self.assertEqual(sfp.counted_utc('Tue 2026-10-27 6:07 PM EET (UTC+02:00)').isoformat(), '2026-10-27T16:07:00+00:00')
+        self.assertEqual(sfp.counted_utc('2026-10-27T23:30:00+02:00', NOW).isoformat(), '2026-10-27T21:30:00+00:00')
+        self.assertEqual(sfp.counted_utc('2026-10-28T00:30:00+02:00', NOW).date(), date(2026, 10, 27))
+        self.assertEqual(sfp.counted_utc('2026-10-27T16:07:00.000Z', NOW).isoformat(), '2026-10-27T16:07:00+00:00')
+        self.assertEqual(sfp.counted_utc('2026-10-27T16:07Z', NOW).isoformat(), '2026-10-27T16:07:00+00:00')
+        self.assertEqual(sfp.counted_utc('2026-10-27T10:37:00-05:30', NOW).isoformat(), '2026-10-27T16:07:00+00:00')
+        self.assertEqual(sfp.counted_utc('2026-10-28T06:07:00+14:00', NOW).isoformat(), '2026-10-27T16:07:00+00:00')
+        # the form some sandboxed proxies rewrite ISO timestamps into (explicit (UTC+HH:MM) offset required)
+        self.assertEqual(sfp.counted_utc('Wed 2026-10-28 ' + '1:30 AM EET (UTC+02:00)', NOW).date(), date(2026, 10, 27))
+        self.assertEqual(sfp.counted_utc('Tue 2026-10-27 ' + '6:07 PM EET (UTC+02:00)', NOW).isoformat(), '2026-10-27T16:07:00+00:00')
+        self.assertEqual(sfp.parse_pulse(FIXTURE, NOW)['counted_at'], '2026-10-27T16:07:00.000Z')
+
+    def test_rejects_bad_zones_and_strings(self):
+        now = datetime(2026, 10, 28, 12, 0, tzinfo=timezone.utc)
+        for v in ('Tue 2026-10-27 ' + '6:07 PM EET (UTC-99:99)',   # impossible offset (was read as a future as_of)
+                  'Tue 2026-10-27 ' + '6:07 PM EET (UTC+15:00)',
+                  'Tue 2026-10-27 ' + '6:07 PM EET (UTC+02:07)',   # minutes not 00/15/30/45
+                  'Tue 2026-10-27 ' + '6:07 PM EET',               # no explicit offset: never guessed to be UTC
+                  'Tue 2026-10-27 ' + '6:07 PM',
+                  'Tue 2026-10-27 ' + '6:07 PM EET (UTC+2)',
+                  'Wed 2026-10-27 ' + '6:07 PM EET (UTC+02:00)',   # weekday does not match the date
+                  'Tue 2026-10-27 ' + '13:07 PM EET (UTC+02:00)',
+                  '2026-10-27T16:07:00',                           # ISO without a zone
+                  '2026-10-27T16:07:00+99:99', '2026-10-27T16:07:00+14:30', '2026-10-27T16:07:00+0200',
+                  '2026-10-27 16:07:00Z', '2026-13-27T16:07:00Z', '2026-10-27T25:07:00Z',
+                  '2026-10-27T16:07:00Z\n', ' 2026-10-27T16:07:00Z', '2026-10-27T16:07:00\x00Z',
+                  'Tue 2026-10-27\t' + '6:07 PM EET (UTC+02:00)', '2026-10-27T16:07:00Z\x85'):
+            with self.subTest(v=v), self.assertRaises(sfp.PulseShapeError):
+                sfp.counted_utc(v, now)
+
+    def test_rejects_future_counted_at(self):
+        now = datetime(2026, 10, 27, 16, 0, tzinfo=timezone.utc)
+        self.assertEqual(sfp.counted_utc('2026-10-27T16:10:00Z', now).minute, 10)   # within 10 minutes of clock skew
+        with self.assertRaises(sfp.PulseShapeError):
+            sfp.counted_utc('2026-10-27T16:10:01Z', now)
+        with self.assertRaises(sfp.PulseShapeError):
+            sfp.counted_utc('Sat 2026-10-31 ' + '6:07 PM EET (UTC+02:00)', now)
+        with self.assertRaises(sfp.PulseShapeError):
+            sfp.parse_pulse(FIXTURE, now=datetime(2026, 10, 27, 15, 0, tzinfo=timezone.utc))
 
 
 class ShapeGuard(unittest.TestCase):
@@ -35,7 +69,7 @@ class ShapeGuard(unittest.TestCase):
         doc = copy.deepcopy(FIXTURE)
         mutate(doc)
         with self.assertRaises(sfp.PulseShapeError):
-            sfp.parse_pulse(doc)
+            sfp.parse_pulse(doc, NOW)
 
     def test_rejects_unexpected_shapes(self):
         self.bad(lambda d: d.pop('totals'))
@@ -66,6 +100,8 @@ class Run(unittest.TestCase):
             for m in s['metrics']:
                 if s['id'] == 'citizens':
                     m['as_of'] = '2026-10-22'
+            if s['id'] == 'citizens':
+                s['counted_at'] = '2026-10-22T09:00:00Z'
         doc['updated_at'] = '2026-10-22'
         self.path.write_text(json.dumps(doc, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
         self.before = self.path.read_bytes()
@@ -76,7 +112,7 @@ class Run(unittest.TestCase):
     def run_with(self, fetcher, **kw):
         err, out = io.StringIO(), io.StringIO()
         with contextlib.redirect_stderr(err), contextlib.redirect_stdout(out):
-            res = sfp.run(str(self.path), fetcher=fetcher, **kw)
+            res = sfp.run(str(self.path), fetcher=fetcher, now=NOW, **kw)
         return res, err.getvalue()
 
     def test_updates_only_citizens_rows(self):
@@ -111,13 +147,78 @@ class Run(unittest.TestCase):
         self.assertIn('shape', err)
         self.assertEqual(self.path.read_bytes(), self.before)
 
+    def with_pulse_at(self, counted_at):
+        doc = copy.deepcopy(FIXTURE)
+        doc['counted_at'] = counted_at
+        return self.run_with(lambda url: doc)
+
+    def set_file_counted_at(self, as_of, counted_at):
+        doc = json.load(open(self.path, encoding='utf-8'))
+        cit = doc['sections'][0]
+        for m in cit['metrics']:
+            m['as_of'] = as_of
+        if counted_at is None:
+            cit.pop('counted_at', None)
+        else:
+            cit['counted_at'] = counted_at
+        self.path.write_text(json.dumps(doc, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+        self.before = self.path.read_bytes()
+
     def test_older_count_than_the_file_is_not_written(self):
-        old = copy.deepcopy(FIXTURE)
-        old['counted_at'] = '2026-10-20T10:00:00Z'
-        res, err = self.run_with(lambda url: old)
+        res, err = self.with_pulse_at('2026-10-20T10:00:00Z')
         self.assertEqual(res, 'skipped')
         self.assertIn('older', err)
         self.assertEqual(self.path.read_bytes(), self.before)
+
+    def test_earlier_count_of_the_same_day_is_not_written(self):
+        self.set_file_counted_at('2026-10-27', '2026-10-27T16:07:00.000Z')
+        res, err = self.with_pulse_at('2026-10-27T00:00:00Z')
+        self.assertEqual(res, 'skipped')
+        self.assertIn('older', err)
+        self.assertEqual(self.path.read_bytes(), self.before)
+
+    def test_count_at_the_same_time_is_a_no_op(self):
+        self.set_file_counted_at('2026-10-27', '2026-10-27T16:07:00.000Z')
+        for same in ('2026-10-27T16:07:00Z', '2026-10-27T18:07:00+02:00'):
+            res, err = self.with_pulse_at(same)
+            self.assertEqual((res, err), ('unchanged', ''))
+            self.assertEqual(self.path.read_bytes(), self.before)
+
+    def test_later_count_of_the_same_day_is_written(self):
+        self.set_file_counted_at('2026-10-27', '2026-10-27T16:07:00.000Z')
+        res, err = self.with_pulse_at('2026-10-27T17:07:00Z')
+        self.assertEqual((res, err), ('updated', ''))
+        new = json.load(open(self.path, encoding='utf-8'))
+        self.assertEqual(new['sections'][0]['counted_at'], '2026-10-27T17:07:00.000Z')
+        self.assertEqual({m['as_of'] for m in new['sections'][0]['metrics']}, {'2026-10-27'})   # as_of stays the date
+
+    def test_written_counted_at_is_exact_utc(self):
+        res, _ = self.run_with(lambda url: copy.deepcopy(FIXTURE))
+        self.assertEqual(res, 'updated')
+        self.assertEqual(json.load(open(self.path, encoding='utf-8'))['sections'][0]['counted_at'], '2026-10-27T16:07:00.000Z')
+
+    def test_file_without_counted_at_takes_only_a_later_day(self):
+        self.set_file_counted_at('2026-10-27', None)
+        res, err = self.with_pulse_at('2026-10-27T20:00:00Z')
+        self.assertEqual(res, 'skipped')
+        self.assertIn('same day', err)
+        self.assertEqual(self.path.read_bytes(), self.before)
+        res, _ = self.with_pulse_at('2026-10-28T08:00:00Z')
+        self.assertEqual(res, 'updated')
+
+    def test_unreadable_counted_at_in_the_file_is_not_overwritten(self):
+        self.set_file_counted_at('2026-10-22', 'Tue 2026-10-27 ' + '6:07 PM EET (UTC-99:99)')
+        res, err = self.run_with(lambda url: copy.deepcopy(FIXTURE))
+        self.assertEqual(res, 'skipped')
+        self.assertIn('not readable', err)
+        self.assertEqual(self.path.read_bytes(), self.before)
+
+    def test_bad_zone_or_future_pulse_leaves_file_unchanged(self):
+        for v in ('Tue 2026-10-27 ' + '6:07 PM EET (UTC-99:99)', 'Tue 2026-10-27 ' + '6:07 PM EET', '2026-10-31T16:07:00Z'):
+            res, err = self.with_pulse_at(v)
+            self.assertEqual(res, 'skipped', v)
+            self.assertIn('shape', err)
+            self.assertEqual(self.path.read_bytes(), self.before)
 
     def test_dry_run_writes_nothing(self):
         res, _ = self.run_with(lambda url: copy.deepcopy(FIXTURE), dry_run=True)

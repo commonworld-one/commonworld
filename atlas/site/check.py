@@ -1446,6 +1446,8 @@ def stats_checks(parsed, pages, locs):
     lv = cit_src.get('live') or {}
     for k in ('url', 'markdown', 'json'):
         if not str(lv.get(k) or '').startswith(ORIGIN + '/'): fails.append(f'atlas/data/stats.json: citizens.live.{k} must link Pulse on {ORIGIN}')
+    if 'counted_at' in cit_src and not re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z', str(cit_src.get('counted_at') or '')):
+        fails.append('atlas/data/stats.json: citizens.counted_at must be an exact UTC time (ISO 8601 with Z), the freshness guard of stats_from_pulse.py')
     for _, m in metrics_of(src, 'atlas/data/stats.json'):
         check_metric(m, 'atlas/data/stats.json', True)
     fp = os.path.join(DIST, 'stats.json')

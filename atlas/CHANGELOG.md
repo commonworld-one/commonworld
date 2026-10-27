@@ -21,6 +21,11 @@ about 40. Fixed in one change:
   `.github/workflows/refresh.yml`, so the weekly refresh pull request carries fresh citizen numbers. It is never merged
   automatically. If Pulse is unreachable or answers in an unexpected shape, `stats.json` is left unchanged and the run
   logs a warning; it never writes a null or a made-up zero.
+- **Strict freshness guard.** The exact Pulse count time is kept as `counted_at` (UTC, ISO 8601 with Z) on the Citizens
+  section; the next run compares full UTC times, so an earlier count of the same day is refused and a count at the same
+  time is a no-op (`as_of` stays the displayed date). Pulse `counted_at` must carry an explicit, real UTC offset (hours
+  00–14, minutes 00/15/30/45) and must not lie more than 10 minutes in the future; strings without a zone or with
+  control characters are refused.
 - **Age warning.** `check.py` warns (without failing) when `stats.json` `updated_at` is more than 8 days old.
 - The Google Search, Google AI features, response-time, visits and agent blocks are unchanged (still dated 2026-10-18 and
   2026-10-21); they were not re-read in this change.
