@@ -288,6 +288,19 @@
    "height": 750,
    "bytes": 32988
   },
+  "agent-commons-dooza": {
+   "file": "agent-commons-dooza.webp",
+   "sha256": "97d3029e2ddf8e1370eef1ccb3c3804f237beb488d8fbc568f214463c9d262c8",
+   "dhash": "c4393d041d252506",
+   "website": "https://commons.dooza.ai",
+   "source_url": "https://commons.dooza.ai/",
+   "http_status": 200,
+   "title": "Agent Commons — the agent coordination layer",
+   "captured_at": "2026-10-27T18:31:03Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 59790
+  },
   "agent-communication-platform": {
    "file": "agent-communication-platform.webp",
    "sha256": "a6c01688f322f8635bb6a87c609225ad703cb7bcb81e62e35efaff97d03fa43c",
@@ -339,6 +352,32 @@
    "width": 1200,
    "height": 750,
    "bytes": 28720
+  },
+  "agent-relay-greenwave": {
+   "file": "agent-relay-greenwave.webp",
+   "sha256": "047ce5f25418152a19589bd2013ace3f1d12693ed0cef4b72d7940219c8c2fe5",
+   "dhash": "47c34f7f794d6d65",
+   "website": "https://wall.greenwave.ch/",
+   "source_url": "https://wall.greenwave.ch/",
+   "http_status": 200,
+   "title": "Agent Relay at Greenwave — a public commons for LLM agents",
+   "captured_at": "2026-10-27T18:31:02Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 61288
+  },
+  "agent-room-agentmessageboards": {
+   "file": "agent-room-agentmessageboards.webp",
+   "sha256": "56ba4ec03686ca035ce4de63127ee30c9ffecabee72e4bd51384f22190bf0bfc",
+   "dhash": "2561112963414d41",
+   "website": "https://agentmessageboards.com/",
+   "source_url": "https://agentmessageboards.com/",
+   "http_status": 200,
+   "title": "Agent Room — Message board and MCP server for AI agents",
+   "captured_at": "2026-10-27T18:31:03Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 60038
   },
   "agent-tavern": {
    "file": "agent-tavern.webp",
@@ -2199,6 +2238,19 @@
    "height": 750,
    "bytes": 45676
   },
+  "fork-zone": {
+   "file": "fork-zone.webp",
+   "sha256": "ce45c339635dbc508ba1ef26889f516c031f9e5412df1d5e47323b33fb05fa9d",
+   "dhash": "9b8e9b9c8c9a9e18",
+   "website": "https://fork.zone",
+   "source_url": "https://fork.zone/",
+   "http_status": 200,
+   "title": "Fork",
+   "captured_at": "2026-10-27T18:31:05Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 31848
+  },
   "frantic": {
    "file": "frantic.webp",
    "sha256": "1ddd8cdcd5985ca090f4bde63a780fdf4a0762e2500f79a35f89e5da4ec6851b",
@@ -2954,6 +3006,19 @@
    "height": 750,
    "bytes": 22784
   },
+  "mos-aisley-cantina": {
+   "file": "mos-aisley-cantina.webp",
+   "sha256": "c418cfd84ef859de8597376d5368dccac5fee0d82d586d0de480f414eb3c854a",
+   "dhash": "6311412925272609",
+   "website": "https://mosaisley.com/",
+   "source_url": "https://mosaisley.com/",
+   "http_status": 200,
+   "title": "MOS AISLEY // a bar for AI agents — mosaisley.com",
+   "captured_at": "2026-10-27T18:31:18Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 36898
+  },
   "msgboard-dev": {
    "file": "msgboard-dev.webp",
    "sha256": "fc2494b7495ace69a54de036090bc69a765ad16593ac5861f7dd6ab6ce39ef33",
@@ -3501,6 +3566,19 @@
    "height": 750,
    "bytes": 46914
   },
+  "public-agent-lounge": {
+   "file": "public-agent-lounge.webp",
+   "sha256": "19b86ab74ae25d4d339a32ed99a7f39571ee2c7e174d939909a5941b52b60f4a",
+   "dhash": "0f0f3335371f3f3d",
+   "website": "https://kevinlukelewis.com/agents",
+   "source_url": "https://kevinlukelewis.com/agents",
+   "http_status": 200,
+   "title": "Public Agent Lounge - Kevin Luke Lewis",
+   "captured_at": "2026-10-27T18:31:25Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 60524
+  },
   "ramp-agent-cards": {
    "file": "ramp-agent-cards.webp",
    "sha256": "fb3af03a9d85e4fa65bb1f9a807cefbdb068c4dc971ffc2e3980f07304272c5b",
@@ -3565,6 +3643,19 @@
    "width": 1200,
    "height": 750,
    "bytes": 36890
+  },
+  "rooms-by-aurmada": {
+   "file": "rooms-by-aurmada.webp",
+   "sha256": "ee363398ab299ee035857977293e97debf7b5fcbfff982da52d3de7da2e280cf",
+   "dhash": "1bd8999bd9b9b998",
+   "website": "https://rooms.aurmada.com/",
+   "source_url": "https://rooms.aurmada.com/",
+   "http_status": 200,
+   "title": "Rooms by Aurmada · One shared room for your team and its AIs",
+   "captured_at": "2026-10-27T18:31:26Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 47116
   },
   "rstation": {
    "file": "rstation.webp",
@@ -4151,6 +4242,19 @@
    "height": 750,
    "bytes": 54784
   },
+  "thebotique": {
+   "file": "thebotique.webp",
+   "sha256": "c6d484fbfb118c550723f53b68ca3adca5f9be80ac0add38072e84a5be65f997",
+   "dhash": "82c4c6c2d2d1e4d4",
+   "website": "https://www.thebotique.ai",
+   "source_url": "https://www.thebotique.ai/",
+   "http_status": 200,
+   "title": "TheBotique — a board where every AI agent post is signed",
+   "captured_at": "2026-10-27T18:31:27Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 45652
+  },
   "thirdweb-x402": {
    "file": "thirdweb-x402.webp",
    "sha256": "78ec6f5ed5976d6a27336ac17766b1a4f8b94874e44d58d9080b7a4e5196286d",
@@ -4594,5 +4698,5 @@
    "bytes": 44740
   }
  },
- "updated_at": "2026-10-25T20:18:14Z"
+ "updated_at": "2026-10-27T18:34:52Z"
 }
