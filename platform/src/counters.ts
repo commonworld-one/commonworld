@@ -67,6 +67,13 @@ export const PULSE_MOD_TYPES = ['content.hidden', 'content.restored', 'content.u
 const PULSE_WINDOW_KEYS: [string, string][] = [
   ['posts', 'post.created'], ['comments', 'comment.created'], ['porch_lines', 'porch.created'], ['upvotes', 'vote.created'], ['withdrawn', 'content.withdrawn'],
 ];
+/** Per-day keys of the week chart (`pulse.day<i>.<key>`, i = 0 today … 6); new citizens per day come from `accounts`. */
+const PULSE_DAY_KEYS: [string, string][] = PULSE_WINDOW_KEYS.filter(([k]) => k !== 'withdrawn');
+/** Number of UTC days in `activity_7d.days`. */
+export const PULSE_DAYS = 7;
+/** The UTC dates (YYYY-MM-DD) of the per-day counts: index 0 is the UTC day of `at`, index 6 six days before. */
+export const pulseDayDates = (at: number): string[] =>
+  Array.from({ length: PULSE_DAYS }, (_, i) => new Date(at - i * 86_400_000).toISOString().slice(0, 10));
 const sqlList = (xs: readonly string[]): string => xs.map((t) => `'${t}'`).join(', ');
 /** First event seq inside the 7-day window (watermark, only moves forward). */
 const PULSE_SEQ7 = 'pulse.seq7';
@@ -83,15 +90,25 @@ export const PULSE_AT = 'pulse.at';
  *     disabled citizen's content, or written by a disabled citizen are not counted;
  *   - new citizens in 24 h are counted from `accounts` (created_at index) with the same rule as `new7` (active accounts), so
  *     the 7-day "new citizens" is `new7` itself: one source;
+ *   - per-UTC-day counts for the week chart (`pulse.day<i>.*`, posts / comments / porch lines / upvotes from the same pass,
+ *     new citizens from the same `accounts` read as the 24-hour count) are columns of the same two statements: no extra scan;
  *   - moderation totals are added incrementally past `pulse.mod_seq` (moderation events are never deleted);
  *     `pulseResetStatements` drops them so the nightly recount starts them from zero.
  */
 export function pulseStatements(db: D1Database, now: number = Date.now()): D1PreparedStatement[] {
   const since7 = new Date(now - 7 * 86_400_000).toISOString(), since24 = new Date(now - 86_400_000).toISOString();
-  const win = PULSE_WINDOW_KEYS.flatMap(([k, t]) => [
-    `'d1.${k}', COUNT(*) FILTER (WHERE e.type = '${t}' AND e.created_at >= ?2)`,
-    `'d7.${k}', COUNT(*) FILTER (WHERE e.type = '${t}')`,
-  ]).join(', ');
+  const days = pulseDayDates(now);
+  const win = [
+    ...PULSE_WINDOW_KEYS.flatMap(([k, t]) => [
+      `'d1.${k}', COUNT(*) FILTER (WHERE e.type = '${t}' AND e.created_at >= ?2)`,
+      `'d7.${k}', COUNT(*) FILTER (WHERE e.type = '${t}')`,
+    ]),
+    // per UTC day (day0 = today, day6 = six days ago): same pass, same rows, same visibility rule. The oldest day starts at
+    // its UTC midnight, which is always inside the rolling 7-day window, so every day is complete. Dates come from
+    // toISOString (digits and dashes only), so inlining them is safe.
+    ...days.flatMap((date, i) => PULSE_DAY_KEYS.map(([k, t]) => `'day${i}.${k}', COUNT(*) FILTER (WHERE e.type = '${t}' AND substr(e.created_at, 1, 10) = '${date}')`)),
+  ].join(', ');
+  const dayCitizens = days.map((date, i) => `'day${i}.citizens', COUNT(*) FILTER (WHERE substr(created_at, 1, 10) = '${date}')`).join(', ');
   const mod = `json_object('hidden', COUNT(*) FILTER (WHERE type = 'content.hidden'), 'restored', COUNT(*) FILTER (WHERE type = 'content.restored'),
     'upheld', COUNT(*) FILTER (WHERE type = 'content.upheld'), 'merged', COUNT(*) FILTER (WHERE type = 'tag.merged'),
     'archived', COUNT(*) FILTER (WHERE type = 'tag.archived'), 'recoveries', COUNT(*) FILTER (WHERE type IN ('account.recovered', 'account.recovery_rejected')))`;
@@ -105,7 +122,10 @@ export function pulseStatements(db: D1Database, now: number = Date.now()): D1Pre
         WHERE e.seq >= (SELECT value FROM site_counters WHERE name = '${PULSE_SEQ7}') AND e.created_at >= ?1
           AND e.type IN (${sqlList(PULSE_ACTIVE_TYPES)})
           AND a.status IS NOT 'disabled' AND NOT (${EVENT_OBJECT_HIDDEN}) AND NOT (${EVENT_OBJECT_GONE})))`).bind(since7, since24),
-    db.prepare(`INSERT OR REPLACE INTO site_counters (name, value) VALUES ('pulse.d1.citizens', (SELECT COUNT(*) FROM accounts WHERE created_at >= ?1 AND status = 'active'))`).bind(since24),
+    // new citizens in 24 h and per UTC day: one read of the recent accounts (created_at index), the same rule as new7
+    db.prepare(`INSERT OR REPLACE INTO site_counters (name, value)
+      SELECT 'pulse.' || key, value FROM json_each((SELECT json_object('d1.citizens', COUNT(*) FILTER (WHERE created_at >= ?2), ${dayCitizens})
+        FROM accounts WHERE created_at >= ?1 AND status = 'active'))`).bind(`${days[PULSE_DAYS - 1]}T00:00:00.000Z`, since24),
     db.prepare(`INSERT INTO site_counters (name, value)
       SELECT 'pulse.mod.' || key, value FROM json_each((SELECT ${mod} FROM events
         WHERE seq > COALESCE((SELECT value FROM site_counters WHERE name = '${PULSE_MOD_SEQ}'), 0) AND type IN (${sqlList(PULSE_MOD_TYPES)})))

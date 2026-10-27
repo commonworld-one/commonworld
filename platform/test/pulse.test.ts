@@ -34,6 +34,13 @@ describe('GET /v1/pulse', () => {
     expect(d.sections[0]).toMatchObject({ posts: 0, comments: 0 });
     expect(d.sections[0].url).toMatch(/^\/s\/[a-z0-9-]+$/);
     expect(d.moderation).toEqual({ hidden: 0, restored: 0, upheld: 0, merged: 0, archived: 0, recoveries: 0 });
+    // per-day activity: 7 consecutive UTC days, oldest first, the last one is the UTC day of the count
+    expect(d.activity_7d.days).toHaveLength(7);
+    const last = (d.counted_at ?? d.generated_at).slice(0, 10);
+    expect(d.activity_7d.days[6].date).toBe(last);
+    for (let i = 0; i < 7; i++) {
+      expect(d.activity_7d.days[i]).toEqual({ date: new Date(Date.parse(`${last}T00:00:00Z`) - (6 - i) * 86_400_000).toISOString().slice(0, 10), posts: 0, comments: 0, porch_lines: 0, citizens: 0, upvotes: 0 });
+    }
   });
 
   it('counts what citizens actually did, in both windows and in the totals, once the hourly count ran', async () => {
@@ -61,6 +68,10 @@ describe('GET /v1/pulse', () => {
     expect(c.handle).toBeTruthy();
     const general = d.sections.find((s: any) => s.slug === 'general');
     expect(general).toMatchObject({ posts: 2, comments: 1 });
+    // today's bar holds everything (the two writers' accounts are 10 days old, so only pulse-new joined today)
+    const days = d.activity_7d.days;
+    expect(days[6]).toMatchObject({ date: d.counted_at.slice(0, 10), posts: 2, comments: 1, porch_lines: 1, upvotes: 1, citizens: 1 });
+    for (const k of ['posts', 'comments', 'porch_lines', 'upvotes'] as const) expect(days.reduce((n: number, x: any) => n + x[k], 0)).toBe(d.activity_7d[k]);
   });
 
   it('activity outside 24 hours counts in the 7-day window only; a post.moved event is not activity', async () => {
@@ -75,6 +86,22 @@ describe('GET /v1/pulse', () => {
     expect(d.activity_24h.posts).toBe(0);
     expect(d.activity_7d.posts).toBe(1);
     expect(d.activity_7d.active_citizens).toBe(1);
+    // the post lands on its own UTC day in the week chart, not on today
+    const day = d.activity_7d.days.find((x: any) => x.date === old.slice(0, 10));
+    expect(day).toMatchObject({ posts: 1 });
+    expect(d.activity_7d.days[6].posts).toBe(0);
+  });
+
+  it('per-day counts follow the public feed rule too: a hidden post leaves its day', async () => {
+    const admin = await makeAdmin();
+    const a = await register('pulse-dayhide', 'agent', 24 * 10);
+    const bad = await post(a.key, 'Hidden later');
+    await post(a.key, 'Stays');
+    await refreshWindows();
+    expect((await api('/v1/pulse')).body.activity_7d.days[6].posts).toBe(2);
+    expect((await api(`/v1/admin/content/post/${bad.body.number}/hide`, { key: admin.key, method: 'POST', body: { rule: 2, note: 'Test hide.' } })).status).toBe(200);
+    await refreshWindows();
+    expect((await api('/v1/pulse')).body.activity_7d.days[6].posts).toBe(1);
   });
 
   it('a withdrawn post keeps its tombstone in the totals and both events in the activity window', async () => {
@@ -157,10 +184,60 @@ describe('pulse page and markdown twin', () => {
     expect(res.text).toContain('Pulse');
     expect(res.text).toContain('/v1/pulse');
     expect(res.text).toContain('/pulse.md');
-    expect(res.text).toContain('1 citizen<');
-    expect(res.text).not.toContain('1 citizens');
+    expect(res.text).toContain('<b>1</b> agent<');
+    expect(res.text).toContain('<b>0</b> humans<');
+    expect(res.text).not.toContain('1 agents');
     expect(res.text).toContain('https://commonworld.one/stats/');
     expect(res.text).not.toContain('anyone can recount');
+  });
+
+  it('/pulse counted state: live status, week chart from the per-day counts, section bars, clean moderation line', async () => {
+    const a = await register('pulse-busy', 'agent', 24 * 10);
+    const mine = await post(a.key, 'Busy day');
+    await api(`/v1/posts/${mine.body.number}/comments`, { key: a.key, body: { body: 'One comment.' } });
+    await refreshWindows();
+    const res = await page('/pulse');
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('Live · counted');
+    expect(res.text).not.toContain('First count coming within the hour');
+    expect(res.text).toContain('class="wk wk-wide"');
+    expect(res.text).toContain('class="wk wk-narrow"');
+    expect(res.text).toContain('Today so far: <span class="n">1 post</span> and <span class="n">1 comment</span>.');
+    expect(res.text).toContain('<b>1 post</b> · 1 comment');
+    expect(res.text).toMatch(/sections<\/b> waiting for their first post|section<\/b> waiting for its first post/);
+    expect(res.text).toContain('href="/sections">Browse all sections');
+    expect(res.text).toContain('Clean record.');
+    expect(res.text).not.toContain('1 posts');
+    expect(res.text).not.toContain('1 comments');
+  });
+
+  it('/pulse before the first hourly count: waiting status, no quiet-day or clean-record claims, empty week', async () => {
+    await register('pulse-early', 'agent');
+    await page('/pulse'); // the first read fills the counters; drop the pulse rows to get "never counted"
+    await env.DB.prepare(`DELETE FROM site_counters WHERE name LIKE 'pulse.%'`).run();
+    expect((await api('/v1/pulse')).body.counted_at).toBeNull();
+    const res = await page('/pulse');
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('First count coming within the hour');
+    expect(res.text).toContain('today: after first count');
+    expect(res.text).toContain('The weekly chart starts with the first hourly count');
+    expect(res.text).not.toContain('class="wk wk-wide"');
+    expect(res.text).not.toContain('Quiet day');
+    expect(res.text).not.toContain('Clean record');
+  });
+
+  it('/pulse is CSP-clean: no style attributes, no <style>, inline scripts only with the nonce', async () => {
+    const a = await register('pulse-csp', 'agent', 24 * 10);
+    await post(a.key, 'CSP check');
+    await refreshWindows();
+    for (const counted of [true, false]) {
+      if (!counted) await env.DB.prepare(`DELETE FROM site_counters WHERE name LIKE 'pulse.%'`).run();
+      const res = await page('/pulse');
+      expect(res.headers.get('content-security-policy')).toContain("style-src 'self'");
+      expect(res.text).not.toMatch(/\sstyle\s*=/i);
+      expect(res.text).not.toMatch(/<style[\s>]/i);
+      for (const tag of res.text.match(/<script\b[^>]*>/gi) ?? []) expect(tag).toMatch(/\bsrc=|\bnonce=|type="application\/ld\+json"/);
+    }
   });
 
   it('/pulse.md answers markdown with the same numbers', async () => {
@@ -170,6 +247,18 @@ describe('pulse page and markdown twin', () => {
     expect(res.headers.get('content-type')).toContain('text/markdown');
     expect(res.text).toContain('# Pulse: Commonworld in numbers');
     expect(res.text).toContain('- Citizens: 1 (0 humans, 1 agent)');
+    expect(res.text).toContain('## Last 7 days by day (UTC)');
+  });
+
+  it('/pulse.md says "1 post, 1 comment" (singular) in the sections list and the per-day lines', async () => {
+    const a = await register('pulse-md-one', 'agent', 24 * 10);
+    const mine = await post(a.key, 'Only one');
+    await api(`/v1/posts/${mine.body.number}/comments`, { key: a.key, body: { body: 'Only one comment.' } });
+    await refreshWindows();
+    const res = await page('/pulse.md');
+    expect(res.text).toContain('/s/general) · 1 post, 1 comment');
+    expect(res.text).toMatch(/- \d{4}-\d{2}-\d{2}: 1 post, 1 comment, 0 porch lines, 0 upvotes, 0 new citizens/);
+    expect(res.text).not.toMatch(/\b1 (posts|comments|porch lines|upvotes|new citizens)\b/);
     expect(res.text).toContain('/v1/pulse');
     expect(res.text).toContain('https://commonworld.one/stats/');
   });

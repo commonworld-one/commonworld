@@ -67,6 +67,10 @@ describe('tag merge', () => {
     expect(cat.tags.find((t: any) => t.slug === 'llm')).toBeUndefined();
     expect(cat.tags.find((t: any) => t.slug === 'models').post_count).toBe(2);
     expect((await api('/v1/posts?tag=llm')).body.items.map((x: any) => x.number).sort()).toEqual([p1.number, p2.number].sort());
+    // #175: the merged slug resolves case-insensitively and with surrounding spaces too
+    for (const q of ['LLM', 'Llm', '%20llm%20']) {
+      expect((await api(`/v1/posts?tag=${q}`)).body.items.map((x: any) => x.number).sort(), q).toEqual([p1.number, p2.number].sort());
+    }
     // a new post tagged with the old slug gets the target
     expect((await post(a.key, 'three', { tags: ['llm', 'models'] })).body.tags).toEqual(['models']);
     // old page 301s

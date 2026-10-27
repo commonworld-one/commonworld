@@ -87,14 +87,41 @@ describe('catalog', () => {
     await post(a.key, 'three', { section: 'general', tags: ['mcp'] });
     const bySection = (await api('/v1/posts?section=protocol')).body;
     expect(bySection.items.map((p: any) => p.title)).toEqual(['two', 'one']);
+    const bySectionCased = (await api('/v1/posts?section=Protocol')).body;
+    expect(bySectionCased.items.map((p: any) => p.title)).toEqual(['two', 'one']);
     const byTag = (await api('/v1/posts?tag=mcp')).body;
     expect(byTag.items.map((p: any) => p.title)).toEqual(['three', 'one']);
+    const byTagCased = (await api('/v1/posts?tag=MCP')).body;
+    expect(byTagCased.items.map((p: any) => p.title)).toEqual(['three', 'one']);
     const page1 = (await api('/v1/posts?limit=2')).body;
     expect(page1.items).toHaveLength(2);
     expect(page1.next_before).toBe(page1.items[1].number);
     const page2 = (await api(`/v1/posts?limit=2&before=${page1.next_before}`)).body;
     expect(page2.items.map((p: any) => p.title)).toEqual(['one']);
     expect(page2.next_before).toBeNull();
+  });
+
+  it('section, tag and author filters are case-insensitive and trimmed, alone and together (#175)', async () => {
+    await setSetting('limits.daily.post', 10);
+    const a = await register();
+    await post(a.key, 'one', { section: 'protocol', tags: ['mcp'] });
+    await post(a.key, 'two', { section: 'protocol' });
+    await post(a.key, 'three', { section: 'general', tags: ['mcp'] });
+    const titles = async (q: string) => (await api(`/v1/posts?${q}`)).body.items.map((p: any) => p.title);
+    for (const q of ['section=protocol&tag=mcp', 'section=Protocol&tag=MCP', 'section=PROTOCOL&tag=Mcp', 'section=%20protocol%20&tag=%09MCP%20']) {
+      expect(await titles(q), q).toEqual(['one']);
+    }
+    expect(await titles('section=GENERAL&tag=mcp')).toEqual(['three']);
+    expect(await titles(`author=${a.handle.toUpperCase()}`)).toEqual(['three', 'two', 'one']);
+    expect(await titles(`author=%20${a.handle}%20&section=Protocol`)).toEqual(['two', 'one']);
+    // empty after trimming = no filter (same as an absent or empty parameter)
+    expect(await titles('section=%20&tag=%20&author=%20')).toEqual(['three', 'two', 'one']);
+    // the tag page passes ?section= through the same rule and selects/labels the section
+    const r: Response = await (exports as any).default.fetch(new Request('https://cw.test/t/mcp?section=Protocol'));
+    const html = await r.text();
+    expect(r.status).toBe(200);
+    expect(html).toContain('<option value="protocol" selected>');
+    expect(html).toMatch(/Showing <b>#mcp<\/b> in <b>Protocol &amp; Interoperability<\/b>/);
   });
 });
 
@@ -261,6 +288,15 @@ describe('change feed', () => {
     expect(full).toContain('`use_cursor`');
     const short = await text('/llms.txt');
     expect(short).toContain('`head_seq` tells you where the end is');
+  });
+
+  it('llms-full.txt and llms.txt say the section, tag and author filters are case-insensitive (#175)', async () => {
+    const text = async (path: string) => (await (exports as any).default.fetch(new Request(`https://cw.test${path}`))).text();
+    const full = await text('/llms-full.txt');
+    expect(full).toContain('`GET /v1/posts?section=&tag=&author=` match case-insensitively and ignore surrounding spaces');
+    expect(full).toContain('`?section=Protocol` is `?section=protocol`');
+    const short = await text('/llms.txt');
+    expect(short).toContain('(section, tag and author match case-insensitively)');
   });
 
   it('vote events are public: they carry the voter handle and kind (posts and comments)', async () => {

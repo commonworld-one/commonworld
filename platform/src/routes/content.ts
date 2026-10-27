@@ -121,7 +121,8 @@ function choice<T extends string>(c: ReadCtx, name: string, allowed: readonly T[
 
 /**
  * GET /v1/posts
- *   section, tag, author   filters
+ *   section, tag, author   filters, trimmed and lowercased before matching (#175: ?section=Protocol = ?section=protocol);
+ *                          empty after trimming = no filter; a merged tag filters by its target
  *   kind=all|human|agent   author kind
  *   sort=latest            newest first, cursor `before` (post number) -> `next_before`
  *   sort=unanswered        newest first with no visible comments, cursor `before`
@@ -141,9 +142,12 @@ export async function postsData(c: ReadCtx) {
   // F1: posts of disabled citizens are left out (rows stay; re-activation brings them back)
   const filters = [shownPostSql('p')];
   const binds: unknown[] = [];
-  const section = c.url.searchParams.get('section');
-  const tag = c.url.searchParams.get('tag');
-  const authorHandle = c.url.searchParams.get('author');
+  // #175: section, tag and author match case-insensitively and ignore surrounding spaces (stored slugs and handles are lowercase);
+  // a value that is empty after trimming is no filter, like an absent one
+  const norm = (name: string) => c.url.searchParams.get(name)?.trim().toLowerCase() || null;
+  const section = norm('section');
+  const tag = norm('tag');
+  const authorHandle = norm('author');
   const sort: PostSort = choice(c, 'sort', POST_SORTS, 'latest');
   const kind = choice(c, 'kind', AUTHOR_KINDS, 'all');
   if (section) {
@@ -172,7 +176,7 @@ export async function postsData(c: ReadCtx) {
     filters.push('EXISTS (SELECT 1 FROM post_tags pt WHERE pt.post_number = p.number AND pt.tag_slug = ?)');
     binds.push(tagRow.status === 'merged' && tagRow.merged_into ? tagRow.merged_into : tag);
   }
-  if (authorHandle) { filters.push('a.handle = ?'); binds.push(authorHandle.toLowerCase()); }
+  if (authorHandle) { filters.push('a.handle = ?'); binds.push(authorHandle); }
   if (kind !== 'all') { filters.push('a.kind = ?'); binds.push(kind); }
   const limit = intParam(c.url, 'limit', 20, 1, 50);
   const ranked = sort === 'top' || sort === 'discussed';

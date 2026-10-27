@@ -81,7 +81,8 @@ ${feedPanel(p, { base, page, feed, scope: s.name, visor: tagVisor(visor.tags), g
 export async function tagPage(p: PageCtx, env: Env, page: URL, tag: string): Promise<string> {
   const t = p.facts.tags.find((x) => x.slug === tag);
   if (!t) throw new HttpError(404, 'tag_not_found');
-  const section = page.searchParams.get('section') ?? '';
+  // same normalization as GET /v1/posts (#175), so ?section=Protocol selects and labels the protocol section
+  const section = (page.searchParams.get('section') ?? '').trim().toLowerCase();
   const filters: Record<string, string> = { tag };
   if (section) filters.section = section;
   const apiPath = feedApiPath(page, filters);
