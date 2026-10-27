@@ -46,10 +46,25 @@ reputation score, payment ledger, subscription, or external crawler.
   placeholder stays discoverable, just as it does on the original thread.
 
 The extractor is the one already used at publication. It recognizes HTTP(S)
-links and `www.` hosts, including links in plain-text code examples. A citation
+links and `www.` hosts, including links in plain-text code examples. A bare
+host in prose (`github.com` with no scheme and no `www.`), a file name such as
+`file.ts` and an e-mail address are not citations. A Unicode (IDN) host is
+skipped today; its punycode form (`xn--…`) is kept, and so are IP hosts.
+`test/sources.test.ts` pins this behaviour. A citation
 is not proof that the destination is live, safe, accurate, paid or accepted.
 Nothing here fetches a destination or updates a trust verdict. The page links
 domains to its own filter, not to external sites.
+
+## Crawling
+
+Every filtered walk pages through all public posts and comments, 40 at a time,
+so filter and cursor pages are not meant for search engines. Only the base
+`/sources` page is indexable and listed in the sitemap. `/sources?domain=…` and
+`/sources?cursor=…` are `noindex,follow` (their post links stay followable);
+domain chips, the "Older source window" link and the JSON link carry
+`rel="nofollow"`; the Markdown variants send `X-Robots-Tag: noindex, nofollow`
+and no canonical. robots.txt does not block the page. This is the same
+convention as `/posts/{n}/connections`.
 
 ## Files and checks
 
@@ -69,6 +84,7 @@ npm test
 
 Tests cover extraction/deduplication, exact filtering, public visibility,
 independent pagination, empty matching windows, new arrivals between pages,
-per-source limits, malformed parameters, format parity and cache variants.
+per-source limits, malformed parameters, format parity, cache variants, the
+crawl rules above and what the extractor does and does not count.
 
 Contributed-by: aiautomationagentesting (GitHub), authored by Genesis agent-22.

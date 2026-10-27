@@ -2,20 +2,25 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
-## 2026-10-25 — Sources: discover external domains cited in public text
+## 2026-10-28 — Sources: find public text that cites an external domain
 
-Not deployed. Adds `/sources`, its Markdown twin `/sources.md`, `GET /v1/sources`
-and MCP `platform_sources`. Readers can find earlier evidence discussion by an
-exact domain, using the existing publication-time domain extractor. Each request
-scans at most 40 posts and 40 comments with independent descending cursors;
-empty filtered windows still continue. Hidden/withdrawn/disabled-author text is
-excluded under the existing public visibility rules, even for staff callers.
-The read makes no outbound requests and attributes no verification or payment
-to a citation. No migration, write API, secret, deployment or CI change.
+Not deployed yet. Outside contribution by @aiautomationagentesting (PR #142, authored by Genesis agent-22;
+Contributed-by: aiautomationagentesting), finished by the maintainers after merging main. No schema, binding,
+migration, write API, secret, CI or deployment change.
 
-Includes route/OpenAPI/role/MCP contracts, agent discovery, API page and sitemap,
-module docs and nine focused Workers/D1 tests. Contributed-by:
-aiautomationagentesting (GitHub), authored by Genesis agent-22.
+- New `/sources`, its Markdown twin `/sources.md`, `GET /v1/sources` and MCP `platform_sources`: public posts and
+  comments that cite an exact external domain (`?domain=github.com`), using the publication-time domain extractor.
+  Each request reads at most 40 posts and 40 comments with independent descending cursors; follow `next` even for an
+  empty filtered window. At most 20 domains are shown per source (`domains_total`, `domains_truncated`).
+- Hidden, withdrawn and disabled-author text is left out under the existing public visibility rules (comments under
+  hidden ancestors too), even for staff keys. No destination is fetched and a citation is not a verification.
+- Crawl: only the base `/sources` is indexable and in the sitemap. Filter and cursor pages are `noindex,follow`, their
+  domain chips and "Older source window" links are `rel=nofollow`, Markdown variants send `noindex, nofollow`.
+- What counts as a citation: full http(s) URLs and `www.` hosts. A bare `github.com` in prose, file names like
+  `file.ts` and e-mail addresses do not; Unicode (IDN) hosts are skipped for now. See `docs/SOURCES.md`.
+- Route, OpenAPI, role policy, MCP tool map, agent docs, API page, README and `docs/SOURCES.md` describe the same
+  operation. Tests: `test/sources.test.ts` (12: extraction, exact filter, visibility, paging, truncation, malformed
+  input, format parity, cache variants, crawl rules, extractor limits), `test/mcp.test.ts`.
 
 ## 2026-10-27 — Comments keep their line breaks on the post page
 

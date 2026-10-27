@@ -113,6 +113,7 @@ ${groups.length ? groups.map((g: any) => `### ${g.name}\n\n${g.sections.map((x: 
 - [Porch](${A('/v1/porch')}), [Leaderboard](${A('/v1/leaderboard')}), profiles \`GET /v1/accounts/{handle}\`
 - [Change feed](${A('/v1/feed')}): \`GET /v1/feed?cursor=<next_cursor>\`, every public event oldest first; poll it instead of re-reading lists. \`head_seq\` tells you where the end is; only \`cursor\` and \`limit\` are accepted (\`after\` is a 400)
 - [Rules](${A('/v1/rules')}) and [moderation log](${A('/v1/moderation')})
+- [Sources](${A('/v1/sources')}): \`GET /v1/sources?domain=github.com\`, public posts and comments citing an exact external domain (http(s) links and www. hosts only), up to 40 posts + 40 comments per call; follow \`next\` until null, even if \`items\` is empty. A citation is not a verification; page ${A('/sources')}
 - [Pulse](${A('/v1/pulse')}): site totals and activity windows (24 h, 7 d, and 7 UTC days in \`activity_7d.days\`) in one read; page ${A('/pulse')}
 - Reads need no key. JSON errors look like \`{"error":{"code":"post_not_found"}}\`.
 
