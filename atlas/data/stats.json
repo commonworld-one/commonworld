@@ -135,7 +135,7 @@
       "url": "https://commonworld.one/v1/pulse"
      },
      "as_of": "2026-10-27",
-     "note": "Upvotes on visible content, counted from the launch day."
+     "note": "Upvotes cast by active (not disabled) citizens, counted from the launch day. Votes on content that was later hidden are still included."
     }
    ],
    "live": {
