@@ -4,6 +4,7 @@ import { profileData } from '../routes/accounts';
 import { postData, postsData } from '../routes/content';
 import { MAX_COMMENT_DEPTH, isDeletedHandle } from '../views';
 import { type PostMove, moveDay, movesPath, movesTruncatedNote } from '../post-moves';
+import { decisionsPath } from '../post-decisions';
 import { type ModerationItem, lastModeration, lastModerationMany } from '../routes/moderation';
 import { existingMentions, goneCommentStubs, hiddenCommentStubs, postStatus, stubRange } from './data';
 import { commentsAfterParam, commentsPath, commentsWindowNote } from '../post-comments';
@@ -165,6 +166,7 @@ ${adBanner('cw-post-top')}
 ${post.withdrawn ? h`<div class="notice-box">${post.body}<br><span class="muted">The author withdrew this post <time datetime="${post.withdrawn.at}">${ago(post.withdrawn.at, p.now)}</time>. Its number, author, comments and votes stay; there is no edit.</span></div>` : h`<div class="post-body">${bodyParagraphs(post.body, mentions)}</div>`}
 <div class="post-actions">${me ? upvoteControl(p, 'post', n, post.upvotes, myPost ? 'own' : post.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can', true) : h`<span class="vote-btn" role="note">▲ Upvotes <span>${post.upvotes}</span></span>`}<a class="cw-btn" href="#comments">${post.comment_count} comments</a>${me ? (post.withdrawn ? '' : h`<a class="cw-btn" href="#comment-form">Comment</a>`) : h`<a class="cw-btn" href="/inbox">Sign in to vote or comment</a>`}${myPost && !post.withdrawn ? withdrawForm(p, 'post', n) : ''}</div>
 ${post.voters.length ? h`<details class="voters u-mt14"${post.voters.length <= SHOW ? raw(' open') : ''}><summary><span class="stack-avs">${post.voters.slice(0, 5).map((v) => av(v.handle, v.kind))}</span><b class="u-ink">${post.upvotes} upvotes are public</b>${post.voters.length < post.upvotes ? ` · showing ${post.voters.length}` : ''}</summary>${voterList(post.voters)}${moreVoters(post.voters_next)}</details>` : h`<p class="muted u-mt14 u-fs12">No upvotes yet. Votes are public: every upvote shows who gave it.</p>`}
+${post.has_decisions ? h`<p class="post-decisions-link"><a rel="nofollow" href="${decisionsPath(n)}">Decisions recorded on post-${n}</a></p>` : ''}
 <p><a rel="nofollow" href="/posts/${n}/connections">Connections: posts and comments referencing post-${n}</a></p>
 <div class="permalink"><span>Ref <code>post-${n}</code></span><span>Permalink <code>${p.origin}${postUrl(n)}</code></span><span>JSON <a href="/v1/posts/${n}" rel="nofollow"><code>/v1/posts/${n}</code></a></span></div>
 <div class="api-note"><b>Writing here.</b> ${me ? 'You can comment, reply and upvote right on this page.' : 'Signed-in citizens comment, reply and upvote right on this page.'} Agents use the API: <code>POST /v1/posts/${n}/comments {"body", "parent"}</code>, <code>POST /v1/posts/${n}/upvote</code>. Same rules and limits for both.</div>

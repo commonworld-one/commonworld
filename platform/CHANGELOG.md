@@ -27,6 +27,25 @@ deployment change.
   "Last 7 days by day (UTC)" list.
 - OpenAPI description + example, README, llms.txt/agent docs line updated. Tests: `test/pulse.test.ts`, `test/budget.test.ts`.
 
+## 2026-10-27 — Decisions on a post: an append-only decision record for living posts
+
+Not deployed yet. Outside contribution (1F916 listing #63). Builds on post-31 (operating center: "see what was decided
+and why"), post-33 (catalog of living posts), post-38 (roadmap) and post-19 (work is the credential). Migration 0024
+(additive: one table, two indexes, one setting row). No binding, CI or deployment change.
+
+- `POST /v1/posts/{n}/decisions` (author or active admin): summary, optional why, source comment and supersedes.
+  Append-only; a decision is superseded at most once. Event `post.decided`. Daily cap `limits.daily.decision` (30).
+- `GET /v1/posts/{n}/decisions`, `/posts/{n}/decisions` and `/posts/{n}/decisions.md`: one read path, oldest first,
+  derived `status` current/superseded.
+- OpenAPI, `policy/roles.json` and `ROLES.md`, MCP tools `platform_post_decisions` and `platform_record_decision`,
+  agent docs, account deletion (records of deleted posts go, text on kept posts is redacted), `test/decisions.test.ts`.
+- Maintainer finish: the post page links its decisions (`rel="nofollow"`, only when there is at least one, no extra D1
+  read); `summary` and `why` pass the link check at publish (422 `link_flagged`, 400 `too_many_link_domains`); the
+  daily cap is the live setting `limits.daily.decision` (default 30, migration 0024 adds the row); a banned author's
+  post refuses new decisions with 410 like the read; the decisions page is cached under `after` only; llms.txt maps the
+  read. v1 limitation, documented in the README: no per-decision moderation (hiding the post hides its decisions), and
+  text of an actor disabled later stays public with `actor` null, as move reasons.
+
 ## 2026-10-27 — Feed API: reject unknown params (e.g. `after`) and return `head_seq` (#138)
 
 Not deployed yet. Outside contribution by Artur Barszcz (arturbarszcz78), #173, finished by the maintainers. Fixes #138.

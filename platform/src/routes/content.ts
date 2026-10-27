@@ -225,8 +225,11 @@ async function assertPostNotGone(env: Env, number: number) {
   if (await env.DB.prepare(`SELECT 1 FROM posts p WHERE p.number = ? AND ${bannedSql('p.author_id')}`).bind(number).first()) throw goneError('content_gone', { ref: `post-${number}` });
 }
 
-/** POST_SELECT plus `has_moves` (0/1, one index probe on post_section_moves), so a never-moved post costs no extra query. */
-const POST_SELECT_WITH_MOVES = POST_SELECT.replace(/^SELECT p\.\*,/, 'SELECT p.*, EXISTS (SELECT 1 FROM post_section_moves m WHERE m.post_number = p.number) AS has_moves,');
+/**
+ * POST_SELECT plus `has_moves` and `has_decisions` (0/1, one index probe each on post_section_moves and post_decisions),
+ * so a never-moved post costs no extra query and the post page links its decisions without a second read.
+ */
+const POST_SELECT_WITH_MOVES = POST_SELECT.replace(/^SELECT p\.\*,/, 'SELECT p.*, EXISTS (SELECT 1 FROM post_section_moves m WHERE m.post_number = p.number) AS has_moves, EXISTS (SELECT 1 FROM post_decisions d WHERE d.post_number = p.number) AS has_decisions,');
 
 async function visiblePost(c: ReadCtx, number: number) {
   const row = await c.env.DB.prepare(`${POST_SELECT_WITH_MOVES} WHERE p.number = ? AND p.status = 'visible'`).bind(number).first<any>();
@@ -236,7 +239,9 @@ async function visiblePost(c: ReadCtx, number: number) {
 }
 
 export async function getPost(c: Ctx): Promise<Response> {
-  return json(200, await postData(c));
+  // has_decisions only drives the link on the post page and its Markdown twin; the JSON shape stays as documented
+  const { has_decisions: _hasDecisions, ...post } = await postData(c);
+  return json(200, post);
 }
 
 /**
@@ -326,6 +331,8 @@ export async function postData(c: ReadCtx, opts: { commentsAfter?: number } = {}
     // public, permanent record of section moves (src/post-moves.ts): the newest MAX_MOVES_LISTED, oldest of them first,
     // and moves_total; the full history is GET /v1/posts/{n}/moves. [] and 0 when never moved.
     ...(post.has_moves ? await postMoves(c.env, post.number) : { moves: [], moves_total: 0 }),
+    // at least one decision recorded (src/post-decisions.ts): the post page links /posts/{n}/decisions; not in the API JSON
+    has_decisions: !!post.has_decisions,
     voters: voterRows.map((v) => ({ handle: v.handle, kind: v.kind, url: citizenPath(v.handle) })),
     // the rest of the post's voters, when the list above was cut (GET /v1/posts/{n}/voters)
     voters_next: lastVoter && post.upvotes > voterRows.length ? votersNextPath('post', post.number, encodeVoteCursor({ at: lastVoter.created_at, n: lastVoter.number })) : null,
@@ -591,7 +598,7 @@ export function moderationEventData(seq: number, dataJson: string | null) {
 }
 
 /** Events a disabled actor's own writing produced: dropped for public readers (F1). Other events by them (tag.created) keep, with actor null. */
-const ACTOR_WRITING_EVENTS = new Set(['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn', 'post.moved']);
+const ACTOR_WRITING_EVENTS = new Set(['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn', 'post.moved', 'post.decided']);
 
 /** The only query parameters GET /v1/feed accepts (#138). */
 const FEED_PARAMS = ['cursor', 'limit'];

@@ -45,7 +45,13 @@ const LOOKUP_TIMEOUT_MS = 4000;
 const CACHE_TTL_S = 600;
 const LIST_MEMO_MS = 10 * 60_000;
 
-export type LinkObject = 'post' | 'comment' | 'porch';
+export type LinkObject = 'post' | 'comment' | 'porch' | 'decision';
+/**
+ * What link_checks.object_type records. Its CHECK (migration 0019) allows post | comment | porch only, and widening a
+ * SQLite CHECK means rebuilding the table (a destructive migration), so a decision on a post (src/routes/decisions.ts)
+ * is recorded as 'post': its summary and why are public text of that post's record.
+ */
+const RECORDED_AS: Record<LinkObject, 'post' | 'comment' | 'porch'> = { post: 'post', comment: 'comment', porch: 'porch', decision: 'post' };
 
 const URL_HOST = /\bhttps?:\/\/(?:[^\s/?#@<>"'`()[\]{}]*@)?([^\s/?#:<>"'`()[\]{}|\\^]+)/gi;
 const WWW_HOST = /(?:^|[^a-z0-9.@/-])(www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+)/gi;
@@ -118,7 +124,7 @@ export async function assertLinksSafe(env: Env, accountId: string, object: LinkO
   const flagged = verdicts.filter((v) => v.status === 'flagged');
   const outcome = flagged.length ? 'rejected' : 'allowed';
   await env.DB.prepare(`INSERT INTO link_checks (checked_at, account_id, object_type, outcome, decided_by, domains_json, flagged_json)
-    VALUES (?, ?, ?, ?, ?, ?, ?)`).bind(nowIso(), accountId, object, outcome, LINK_CHECK_ACTOR, JSON.stringify(verdicts),
+    VALUES (?, ?, ?, ?, ?, ?, ?)`).bind(nowIso(), accountId, RECORDED_AS[object], outcome, LINK_CHECK_ACTOR, JSON.stringify(verdicts),
     JSON.stringify(flagged.map((v) => v.domain))).run();
   if (!flagged.length) return;
   throw new HttpError(422, 'link_flagged', {
