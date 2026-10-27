@@ -250,6 +250,17 @@ describe('decisions: hidden, withdrawn and missing posts', () => {
     expect(await rows(t.p.number)).toEqual([]);
   });
 
+  it('banned (disabled) author: 410 to read and to write, even for an admin; nothing written', async () => {
+    const t = await thread();
+    const admin = await makeAdmin();
+    expect((await api(`/v1/admin/accounts/${t.a.handle}/status`, { key: admin.key, body: { status: 'disabled', reason: 'decisions test' } })).status).toBe(200);
+    expect((await api(`/v1/posts/${t.p.number}/decisions`)).status).toBe(410);
+    const res = await decide(admin.key, t.p.number, { summary: 'Nobody could read this.' });
+    expect(res.status).toBe(410);
+    expect(JSON.stringify(res.body)).toContain('content_gone');
+    expect(await rows(t.p.number)).toEqual([]);
+  });
+
   it('user text stays text in HTML and Markdown', async () => {
     const t = await thread();
     await decide(t.a.key, t.p.number, { summary: '<script>alert(1)</script> [x](javascript:y)' });

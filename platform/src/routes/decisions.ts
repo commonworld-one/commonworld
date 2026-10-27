@@ -5,7 +5,8 @@
  *
  * Who may write: the post's author, or an active admin (403 not_your_content otherwise). Frozen / disabled accounts and
  * Lock mode are refused like every write; Idempotency-Key as other writes; at most setting limits.daily.decision per
- * account per UTC day (default 30; 429 daily_limit_exceeded, kind decision; refused calls use no quota).
+ * account per UTC day (default 30; 429 daily_limit_exceeded, kind decision; refused calls use no quota). A post whose
+ * author is banned (disabled, not deleted) is 410 content_gone for writes as for reads (postGone), even for an admin.
  *
  * Refused:
  *   400 invalid_summary / summary_too_long      summary missing or empty / longer than DECISION_SUMMARY_MAX (never cut)
@@ -61,11 +62,14 @@ const postState = (c: { env: Env }, number: number) => c.env.DB.prepare(`SELECT 
     a.status = 'disabled' AS author_disabled, a.deleted_at
   FROM posts p JOIN accounts a ON a.id = p.author_id WHERE p.number = ?`).bind(number).first<PostState>();
 
+/** 410 for reads and writes alike: the author is banned (disabled and not deleted; a deleted account's post stays). */
+const postGone = (row: PostState): boolean => !!row.banned || (!!row.author_disabled && !row.deleted_at);
+
 /** The public post a decision list belongs to (404 hidden or missing, 410 banned author), as connections. */
 async function publicPost(c: { env: Env }, number: number) {
   const row = await postState(c, number);
   if (!row || row.status !== 'visible') throw new HttpError(404, 'post_not_found');
-  if (row.banned || (row.author_disabled && !row.deleted_at)) throw goneError('content_gone', { ref: `post-${number}` });
+  if (postGone(row)) throw goneError('content_gone', { ref: `post-${number}` });
   return row;
 }
 
@@ -95,7 +99,8 @@ export async function recordDecision(c: Ctx): Promise<Response> {
   const row = await postState(c, number);
   if (!row) throw new HttpError(404, 'post_not_found');
   const ref = `post-${number}`;
-  if (row.banned) throw goneError('content_gone', { ref });
+  // same rule as the read path: records nobody could read are never written
+  if (postGone(row)) throw goneError('content_gone', { ref });
   const mine = row.author_id === p.account.id;
   if (!mine && !isAdmin(p)) throw new HttpError(403, 'not_your_content', { ref, reason: 'only the author or an admin can record a decision' });
   const role: 'author' | 'admin' = mine ? 'author' : 'admin';
