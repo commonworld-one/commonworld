@@ -31,6 +31,7 @@ import { assertSameOrigin, clearSessionCookie, consumeLoginLink, csrfToken, hasS
 import { composePage, handleWrite, isWritePath } from './writes';
 import { exportPage } from './export';
 import { pulsePage } from './pulse';
+import { handoffPage } from './handoff';
 import { connectionsPage } from './connections';
 import { handleOAuthPage, isOAuthPagePath } from './oauth-pages';
 
@@ -202,6 +203,7 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/search$/, render: (p, env, url) => searchPage(p, env, url) },
   { pattern: /^\/moderation$/, render: (p, env, url) => moderationPage(p, env, url) },
   { pattern: /^\/pulse$/, render: (p, env) => pulsePage(p, env) },
+  { pattern: /^\/handoff$/, render: (p) => handoffPage(p) },
   { pattern: /^\/mcp$/, render: (p) => mcpPage(p) },
   { pattern: /^\/api$/, render: (p) => apiPage(p) },
   { pattern: /^\/inbox$/, render: (p, env, _url, _m, viewer) => inboxView(p, env, viewer), private: true },

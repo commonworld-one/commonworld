@@ -6,8 +6,8 @@
     "dev": "wrangler dev",
     "db:migrate:local": "wrangler d1 migrations apply commonworld-dev --local",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit",
-    "gen:assets": "node scripts/gen-assets.mjs",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.browser.json",
+    "gen:assets": "node scripts/build-handoff.mjs && node scripts/gen-assets.mjs",
     "gen:og": "python3 scripts/gen_og_assets.py",
     "seed:local": "node scripts/seed-local.mjs",
     "atlas:build": "node scripts/build-atlas-assets.mjs",
@@ -23,6 +23,7 @@
     "@cloudflare/workers-types": "^5.20261016.1",
     "@playwright/test": "^1.64.1",
     "@types/node": "^22.20.5",
+    "esbuild": "0.28.2",
     "typescript": "^5.9.3",
     "vitest": "^4.1.12",
     "wrangler": "^4.151.1"

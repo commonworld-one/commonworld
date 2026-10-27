@@ -174,7 +174,7 @@ function announce(p: PageCtx): Raw {
   return h`<div class="cw-announce" role="region" aria-label="Announcement" data-ann-id="${p.announcement.updated_at}"><p>${p.announcement.text}</p><button type="button" class="cw-announce-x" aria-label="Dismiss announcement">${ICON.x}</button></div>`;
 }
 
-const footer = (p: PageCtx): Raw => h`<footer class="cw-foot"><span>Commonworld · a shared world for humans and agents</span><span class="cw-foot-links"><a href="/sections">Sections &amp; tags</a><a href="/citizens">Citizens</a><a href="/moderation">Moderation log</a><a href="/pulse">Pulse</a><a href="/moderation#rules">Rules</a><a href="/api">API</a><a href="/v1/catalog" rel="nofollow">Catalog (JSON)</a><a href="/v1/feed" rel="nofollow">Change feed (JSON)</a><a href="/llms.txt">llms.txt</a><a href="/openapi.json" rel="nofollow">OpenAPI</a><a href="/sitemap.xml">Sitemap</a><a href="${ATLAS_URL}">Atlas</a><a href="${ABOUT_URL}">About</a><a href="${PRIVACY_URL}">Privacy</a><a href="${TERMS_URL}">Terms</a>${p.analytics.ga4 ? raw('<button type="button" class="cw-linkbtn" data-cookie-settings>Cookie settings</button>') : ''}</span></footer>`;
+const footer = (p: PageCtx): Raw => h`<footer class="cw-foot"><span>Commonworld · a shared world for humans and agents</span><span class="cw-foot-links"><a href="/sections">Sections &amp; tags</a><a href="/citizens">Citizens</a><a href="/moderation">Moderation log</a><a href="/pulse">Pulse</a><a href="/handoff">Task handoff</a><a href="/moderation#rules">Rules</a><a href="/api">API</a><a href="/v1/catalog" rel="nofollow">Catalog (JSON)</a><a href="/v1/feed" rel="nofollow">Change feed (JSON)</a><a href="/llms.txt">llms.txt</a><a href="/openapi.json" rel="nofollow">OpenAPI</a><a href="/sitemap.xml">Sitemap</a><a href="${ATLAS_URL}">Atlas</a><a href="${ABOUT_URL}">About</a><a href="${PRIVACY_URL}">Privacy</a><a href="${TERMS_URL}">Terms</a>${p.analytics.ga4 ? raw('<button type="button" class="cw-linkbtn" data-cookie-settings>Cookie settings</button>') : ''}</span></footer>`;
 
 export const PRIVACY_URL = 'https://commonworld.one/privacy/';
 
@@ -306,7 +306,7 @@ export const INDEX = 'index,follow,max-image-preview:large';
 /** Paths that have a markdown twin (src/pages/markdown.ts), in HTML path form. */
 export const MD_PAGE_PATTERNS: RegExp[] = [
   /^\/$/, /^\/porch$/, /^\/sections$/, /^\/s\/[a-z0-9-]{1,64}$/, /^\/t\/[a-z0-9-]{1,64}$/, /^\/posts\/\d{1,15}$/,
-  /^\/posts\/\d{1,15}\/connections$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/, /^\/pulse$/,
+  /^\/posts\/\d{1,15}\/connections$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/, /^\/pulse$/, /^\/handoff$/,
 ];
 export const hasMarkdownTwin = (path: string): boolean => MD_PAGE_PATTERNS.some((re) => re.test(path));
 /** HTML path -> its .md URL path (home is /index.md). */

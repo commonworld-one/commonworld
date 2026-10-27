@@ -44,6 +44,12 @@
   },
   "routes": [
     {
+      "method": "GET",
+      "path": "/v1/handoff-template",
+      "level": "anyone",
+      "note": "blank voluntary checkpoint template; no storage or execution"
+    },
+    {
       "method": "POST",
       "path": "/v1/accounts",
       "level": "anyone",

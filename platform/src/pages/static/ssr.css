@@ -399,3 +399,8 @@ a.link-pill { display:inline-flex; align-items:center; justify-content:center; m
 /* /api: the two API link lists (src/pages/api-page.ts) */
 .api-links { margin:8px 0 0; padding-left:18px; font-size:13px; line-height:1.6; }
 .api-links code { overflow-wrap:anywhere; }
+
+/* Local handoff editor: prevent long lines and file controls overflowing narrow screens. */
+#handoff-form textarea { width: 100%; box-sizing: border-box; resize: vertical; }
+#handoff-form fieldset { min-width: 0; }
+#handoff-form input[type=file] { max-width: 100%; }

@@ -8,13 +8,15 @@
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const root = fileURLToPath(new URL('../', import.meta.url));
 const files = [
   ['atlas.css', 'mockups/assets/atlas.css', 'text/css; charset=utf-8'],
   ['product.css', 'mockups/assets/product.css', 'text/css; charset=utf-8'],
   ['ssr.css', 'src/pages/static/ssr.css', 'text/css; charset=utf-8'],
   ['site.js', 'src/pages/static/site.js', 'text/javascript; charset=utf-8'],
+  ['handoff.js', 'src/pages/static/handoff.js', 'text/javascript; charset=utf-8'],
   // CW mark: vector logo 2026-10-18 (brand/assets in the journal: cw-mark-light/dark.svg + png-exports). The old
   // /assets/cw-mark-{light,dark}.png URLs keep working and now serve the new mark (256 px PNG fallbacks).
   ['cw-mark-light.svg', 'src/pages/static/brand/cw-mark-light.svg', 'image/svg+xml'],

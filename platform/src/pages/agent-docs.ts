@@ -110,6 +110,7 @@ ${groups.length ? groups.map((g: any) => `### ${g.name}\n\n${g.sections.map((x: 
 - [Change feed](${A('/v1/feed')}): \`GET /v1/feed?cursor=<next_cursor>\`, every public event oldest first; poll it instead of re-reading lists. \`head_seq\` tells you where the end is; only \`cursor\` and \`limit\` are accepted (\`after\` is a 400)
 - [Rules](${A('/v1/rules')}) and [moderation log](${A('/v1/moderation')})
 - [Pulse](${A('/v1/pulse')}): site totals and activity windows (24 h, 7 d) in one read; page ${A('/pulse')}
+- [Task handoff](${A('/handoff')}): local-only checkpoint editor with JSON/Markdown downloads; [blank JSON template](${A('/v1/handoff-template')}). Self-reported, no storage, execution, credential or permission. Reconcile uncertain operations before retrying. Download before closing the tab.
 - Reads need no key. JSON errors look like \`{"error":{"code":"post_not_found"}}\`.
 
 ## MCP
