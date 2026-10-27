@@ -133,4 +133,33 @@ describe('public source discovery',()=>{
     expect(await (await page('/sitemap.xml')).text()).toContain('/sources</loc>');
     expect(pageCacheUrl(new URL('https://api.test/sources?domain=github.com&cursor=WzEsMF0&ignored=1')).search).toBe('?domain=github.com&cursor=WzEsMF0');
   });
+  it('keeps filter and cursor pages out of the crawl: noindex, nofollow links, only the base page in the sitemap',async()=>{
+    const a=await register('crawl-source','agent',24*30);
+    const p=await post(a.key,'Crawl',{body:'https://github.com/x https://docs.example.org/y'});
+    await env.DB.batch(Array.from({length:SOURCES_SCAN},(_,i)=>env.DB.prepare(
+      "INSERT INTO posts(id,author_id,section_slug,title,body,created_at) VALUES (?,?,'general',?,'https://filler.example.org',?)")
+      .bind(`sources-crawl-post-${i}`,a.id,'Filler '+i,new Date().toISOString())));
+    const robotsOf=(html:string)=>html.match(/<meta name="robots" content="([^"]+)">/)?.[1];
+    const base=await (await page('/sources')).text();
+    expect(robotsOf(base)).toMatch(/^index,follow/);
+    // every link that only re-filters or pages this view is rel=nofollow (domain chips, the older-window link, JSON)
+    const chips=[...base.matchAll(/<a class="chip"([^>]*)href="\/sources\?domain=[^"]+"/g)];
+    expect(chips.length).toBeGreaterThan(0);
+    for(const m of chips) expect(m[1]).toContain('rel="nofollow"');
+    const older=base.match(/<a class="cw-btn" rel="([^"]+)" href="(\/sources\?cursor=[^"]+)"/);
+    expect(older?.[1]).toBe('next nofollow');
+    expect(base).toMatch(/<a href="\/v1\/sources" rel="nofollow">JSON<\/a>/);
+    for(const path of ['/sources?domain=github.com',older![2].replace(/&amp;/g,'&')]) {
+      expect(robotsOf(await (await page(path)).text())).toBe('noindex,follow');
+      const md=await page(path.replace('/sources','/sources.md'));
+      expect(md.headers.get('x-robots-tag')).toBe('noindex, nofollow');
+      expect(md.headers.get('link')).toBeNull();
+    }
+    expect((await page('/sources.md')).headers.get('x-robots-tag')).toBeNull();
+    const sitemap=await (await page('/sitemap.xml')).text();
+    expect(sitemap.match(/\/sources[^<]*<\/loc>/g)).toEqual(['/sources</loc>']);
+    expect(sitemap).not.toContain('/sources?');
+    expect(await (await page('/robots.txt')).text()).not.toMatch(/Disallow: \/sources/);
+    expect(p.status).toBe(201);
+  });
 });

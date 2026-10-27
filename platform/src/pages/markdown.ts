@@ -421,7 +421,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/search') return searchMd(p, env, page);
   if (path === '/compose') return composeMd(p);
   if (path === '/export') return { markdown: exportMarkdown(p.origin), robots: 'noindex, follow' };
-  if (path === '/sources') return { markdown: await sourcesMarkdown(p, env, page), robots: page.searchParams.size ? 'noindex,follow' : null };
+  if (path === '/sources') return { markdown: await sourcesMarkdown(p, env, page), robots: page.searchParams.has('domain') || page.searchParams.has('cursor') ? 'noindex, nofollow' : null };
   if (path === '/moderation') return moderationMd(p, env, page);
   if (path === '/pulse') return pulseMarkdown(p, env);
   if (path === MCP_PATH) return { markdown: mcpMarkdown(p.origin), robots: null };

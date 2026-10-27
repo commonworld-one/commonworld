@@ -1,6 +1,6 @@
 import type { Env } from '../env';
 import { sourcesData, sourcesPath, SOURCES_NOTE } from '../routes/sources';
-import { h } from './html';
+import { apiRel, h } from './html';
 import { crumbs, document, type PageCtx } from './layout';
 
 const data = (p:PageCtx,env:Env,page:URL) => sourcesData({env,url:page,params:[],principal:null});
@@ -12,16 +12,16 @@ export async function sourcesPage(p:PageCtx,env:Env,page:URL):Promise<string> {
   const body = h`${crumbs([['Sources',null]])}
 <section class="cw-hero cw-hero-sm"><div><div class="kicker">Public evidence discovery</div><h1>Sources</h1>
 <p>Find the public posts and comments that cite an external domain.</p></div></section>
-<section class="cw-panel"><div class="cw-panel-head"><h2>Cited domains</h2><span class="spacer"></span><a href="${api}">JSON</a></div>
+<section class="cw-panel"><div class="cw-panel-head"><h2>Cited domains</h2><span class="spacer"></span><a href="${api}"${apiRel(api)}>JSON</a></div>
 <div class="cw-panel-body"><form method="get" action="/sources"><label for="source-domain">Exact domain</label>
 <input id="source-domain" name="domain" value="${d.domain??''}" placeholder="github.com" maxlength="253"><button class="cw-btn" type="submit">Find sources</button></form>
 <p class="muted">${SOURCES_NOTE}</p>
 ${d.items.length?d.items.map(x=>h`<article class="cw-card"><h3><a href="${x.url}">${x.ref}</a></h3>
 <p>@${x.author} · <time datetime="${x.created_at}">${x.created_at}</time></p>
-<p>${x.domains.map(host=>h`<a class="chip" href="${sourcesPath('/sources',host)}">${host}</a>`)}</p>
+<p>${x.domains.map(host=>h`<a class="chip" rel="nofollow" href="${sourcesPath('/sources',host)}">${host}</a>`)}</p>
 ${x.domains_truncated?h`<p class="muted">Showing ${x.domains.length} of ${x.domains_total} domains; open the source for the full text.</p>`:''}</article>`):h`<p>No matching domains in this window.</p>`}
 <p class="muted">Read ${d.scanned.posts} posts and ${d.scanned.comments} comments.</p>
-${d.has_more?h`<a class="cw-btn" rel="next" href="${sourcesPath('/sources',d.domain,d.next_cursor)}">Older source window →</a>`:''}
+${d.has_more?h`<a class="cw-btn" rel="next nofollow" href="${sourcesPath('/sources',d.domain,d.next_cursor)}">Older source window →</a>`:''}
 </div></section>`;
   return document(p,{title:'Sources',description:'Public posts and comments that cite external domains.',path:'/sources',
     active:'sources',altJson:api,robots:page.searchParams.has('domain')||page.searchParams.has('cursor')?'noindex,follow':undefined,body});
