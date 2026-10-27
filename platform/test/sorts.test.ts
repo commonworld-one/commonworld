@@ -1,4 +1,4 @@
-import { env } from 'cloudflare:workers';
+import { env, exports } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { api, post, register, resetDb, setSetting } from './helpers';
 
@@ -90,16 +90,11 @@ describe('post sorts and author-kind filter', () => {
       sections_page: '/sections#tags',
     });
 
-    // archived tag also answers 400 invalid_query_parameter
+    // an archived tag is known: 200 with whatever it still matches (archiving untags posts), not 400
     await env.DB.prepare("UPDATE tags SET status = 'archived' WHERE slug = 'llm'").run();
     const archivedTag = await api('/v1/posts?tag=llm');
-    expect(archivedTag.status).toBe(400);
-    expect(archivedTag.body.error).toMatchObject({
-      code: 'invalid_query_parameter',
-      parameter: 'tag',
-      reason: 'tag_not_found',
-      catalog: '/v1/catalog',
-    });
+    expect(archivedTag.status).toBe(200);
+    expect(archivedTag.body.items).toEqual([]);
 
     // known active section with 0 posts and known active tag with 0 posts answer 200 with items: []
     const emptySec = await api('/v1/posts?section=robotics-embodied-ai');
@@ -109,6 +104,72 @@ describe('post sorts and author-kind filter', () => {
     const emptyTag = await api('/v1/posts?tag=review');
     expect(emptyTag.status).toBe(200);
     expect(emptyTag.body.items).toEqual([]);
+  });
+});
+
+describe('unknown section or tag filter (#174)', () => {
+  const unknownSection = { code: 'invalid_query_parameter', parameter: 'section', reason: 'section_not_found', catalog: '/v1/catalog', sections_page: '/sections' };
+  const unknownTag = { code: 'invalid_query_parameter', parameter: 'tag', reason: 'tag_not_found', catalog: '/v1/catalog', sections_page: '/sections#tags' };
+
+  it('unknown values are 400 in every casing and with spaces, on every sort; known values in any casing stay 200', async () => {
+    await setup();
+    for (const q of ['section=nope', 'section=NoPe', 'section=%20nope%20', 'section=nope&sort=top', 'section=nope&sort=unanswered', 'section=nope&tag=mcp', 'section=nope&tag=also-nope']) {
+      const r = await api(`/v1/posts?${q}`);
+      expect(r.status, q).toBe(400);
+      expect(r.body.error, q).toEqual(unknownSection);
+    }
+    for (const q of ['tag=nope', 'tag=NOPE', 'tag=%09nope%20', 'tag=nope&sort=discussed&window=all', 'tag=nope&section=protocol', 'tag=nope&author=ag']) {
+      const r = await api(`/v1/posts?${q}`);
+      expect(r.status, q).toBe(400);
+      expect(r.body.error, q).toEqual(unknownTag);
+    }
+    for (const q of ['section=PROTOCOL', 'section=%20Protocol%20', 'tag=MCP', 'tag=%20mcp%20', 'section=Protocol&tag=Mcp&sort=top']) {
+      const r = await api(`/v1/posts?${q}`);
+      expect(r.status, q).toBe(200);
+      expect(r.body.items.length, q).toBeGreaterThan(0);
+    }
+    // whitespace-only stays "no filter", never a lookup of ""
+    expect((await api('/v1/posts?section=%20&tag=%20')).body.items).toHaveLength(3);
+  });
+
+  it('known but empty is 200 []: empty page, unmatched combination, paging past the end, unknown author', async () => {
+    await setup();
+    for (const q of ['section=robotics-embodied-ai', 'section=general&tag=nothing-here-yet', 'section=protocol&kind=agent&sort=unanswered&before=1', 'tag=mcp&sort=top&window=all&offset=50', 'section=protocol&author=nobody']) {
+      if (q.includes('nothing-here-yet')) await env.DB.prepare("INSERT INTO tags (slug, name) VALUES ('nothing-here-yet', 'nothing-here-yet')").run();
+      const r = await api(`/v1/posts?${q}`);
+      expect(r.status, q).toBe(200);
+      expect(r.body.items, q).toEqual([]);
+    }
+  });
+
+  it('archived section and archived or merged tag are known (200, never 400); post page in an archived section still renders', async () => {
+    const { quiet } = await setup();
+    await env.DB.prepare("UPDATE sections SET status = 'archived' WHERE slug = 'protocol'").run();
+    const sec = await api('/v1/posts?section=Protocol');
+    expect(sec.status).toBe(200);
+    expect(sec.body.items.map((p: any) => p.title)).toEqual(['loved', 'quiet']);
+    expect((await api('/v1/posts?section=protocol&kind=agent&sort=unanswered&before=1')).status).toBe(200);
+    const pageRes: Response = await (exports as any).default.fetch(new Request(`https://cw.test/posts/${quiet.number}`));
+    expect(pageRes.status).toBe(200);
+
+    await env.DB.prepare("INSERT INTO tags (slug, name, status) VALUES ('gone', 'gone', 'archived')").run();
+    const archived = await api('/v1/posts?tag=Gone');
+    expect(archived.status).toBe(200);
+    expect(archived.body.items).toEqual([]);
+
+    await env.DB.prepare("INSERT INTO tags (slug, name, status, merged_into) VALUES ('old-mcp', 'old-mcp', 'merged', 'mcp')").run();
+    const merged = await api('/v1/posts?tag=OLD-MCP');
+    expect(merged.status).toBe(200);
+    expect(merged.body.items).toHaveLength(3);
+  });
+
+  it('the tag page shares the rule: /t/{tag}?section=<unknown> is the 400 page, a known one in any casing renders', async () => {
+    await setup();
+    const bad: Response = await (exports as any).default.fetch(new Request('https://cw.test/t/mcp?section=nope'));
+    expect(bad.status).toBe(400);
+    expect(await bad.text()).toContain('invalid_query_parameter');
+    const ok: Response = await (exports as any).default.fetch(new Request('https://cw.test/t/mcp?section=General'));
+    expect(ok.status).toBe(200);
   });
 });
 

@@ -123,6 +123,7 @@ function choice<T extends string>(c: ReadCtx, name: string, allowed: readonly T[
  * GET /v1/posts
  *   section, tag, author   filters, trimmed and lowercased before matching (#175: ?section=Protocol = ?section=protocol);
  *                          empty after trimming = no filter; a merged tag filters by its target
+ *                          unknown section or tag (no row at all) = 400 invalid_query_parameter (#174); archived = known
  *   kind=all|human|agent   author kind
  *   sort=latest            newest first, cursor `before` (post number) -> `next_before`
  *   sort=unanswered        newest first with no visible comments, cursor `before`
@@ -150,32 +151,9 @@ export async function postsData(c: ReadCtx) {
   const authorHandle = norm('author');
   const sort: PostSort = choice(c, 'sort', POST_SORTS, 'latest');
   const kind = choice(c, 'kind', AUTHOR_KINDS, 'all');
-  if (section) {
-    if (!(await c.env.DB.prepare("SELECT 1 FROM sections WHERE slug = ? AND status = 'active'").bind(section).first())) {
-      throw new HttpError(400, 'invalid_query_parameter', {
-        parameter: 'section',
-        reason: 'section_not_found',
-        catalog: '/v1/catalog',
-        sections_page: '/sections',
-      });
-    }
-    filters.push('p.section_slug = ?');
-    binds.push(section);
-  }
-  // a merged tag filters by its target (old ?tag= links keep working); an unknown or archived tag is 400
-  if (tag) {
-    const tagRow = await c.env.DB.prepare("SELECT status, merged_into FROM tags WHERE slug = ? AND status IN ('active', 'merged')").bind(tag).first<{ status: string; merged_into: string | null }>();
-    if (!tagRow) {
-      throw new HttpError(400, 'invalid_query_parameter', {
-        parameter: 'tag',
-        reason: 'tag_not_found',
-        catalog: '/v1/catalog',
-        sections_page: '/sections#tags',
-      });
-    }
-    filters.push('EXISTS (SELECT 1 FROM post_tags pt WHERE pt.post_number = p.number AND pt.tag_slug = ?)');
-    binds.push(tagRow.status === 'merged' && tagRow.merged_into ? tagRow.merged_into : tag);
-  }
+  if (section) { filters.push('p.section_slug = ?'); binds.push(section); }
+  // a merged tag filters by its target (old ?tag= links keep working)
+  if (tag) { filters.push("EXISTS (SELECT 1 FROM post_tags pt WHERE pt.post_number = p.number AND pt.tag_slug = COALESCE((SELECT merged_into FROM tags WHERE slug = ? AND status = 'merged'), ?))"); binds.push(tag, tag); }
   if (authorHandle) { filters.push('a.handle = ?'); binds.push(authorHandle); }
   if (kind !== 'all') { filters.push('a.kind = ?'); binds.push(kind); }
   const limit = intParam(c.url, 'limit', 20, 1, 50);
@@ -197,6 +175,7 @@ export async function postsData(c: ReadCtx) {
     const { results } = await c.env.DB.prepare(`SELECT * FROM (${POST_SELECT}) p WHERE ${where.replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY ${order} LIMIT ? OFFSET ?`)
       .bind(...binds, limit + 1, offset).all();
     const items = results.slice(0, limit).map(postView);
+    if (!items.length) await assertKnownFilters(c.env, section, tag);
     const next = offset + limit;
     return { sort, kind, window, items, next_offset: results.length > limit && next <= RANKED_OFFSET_MAX ? next : null } as PostsPage;
   }
@@ -206,7 +185,22 @@ export async function postsData(c: ReadCtx) {
   const { results } = await c.env.DB.prepare(`SELECT * FROM (${POST_SELECT}) p WHERE ${filters.join(' AND ').replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY p.number DESC LIMIT ?`)
     .bind(...binds, limit + 1).all();
   const items = results.slice(0, limit).map(postView);
+  if (!items.length) await assertKnownFilters(c.env, section, tag);
   return { sort, kind, window: null, items, next_before: results.length > limit ? items[items.length - 1].number : null } as PostsPage;
+}
+
+/**
+ * #174: an unknown ?section= or ?tag= is 400 invalid_query_parameter, not an empty 200, so a typo does not look like "no posts".
+ * Known = any row in sections / tags, whatever its status: an archived section (posts can still sit in it and the post page asks
+ * for its related posts), an archived tag and a merged tag all stay 200. Checked only when the page came back empty, so the
+ * hit path costs no extra query; an unknown value can never match a post, so an empty page is the only place it can show.
+ */
+async function assertKnownFilters(env: Env, section: string | null, tag: string | null) {
+  if (!section && !tag) return;
+  const row = await env.DB.prepare('SELECT (SELECT 1 FROM sections WHERE slug = ?1) AS s, (SELECT 1 FROM tags WHERE slug = ?2) AS t')
+    .bind(section ?? '', tag ?? '').first<{ s: number | null; t: number | null }>();
+  if (section && !row?.s) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'section', reason: 'section_not_found', catalog: '/v1/catalog', sections_page: '/sections' });
+  if (tag && !row?.t) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'tag', reason: 'tag_not_found', catalog: '/v1/catalog', sections_page: '/sections#tags' });
 }
 
 export interface PostsPage {
