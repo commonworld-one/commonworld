@@ -1,7 +1,7 @@
 import type { Env } from '../env';
 import { sourcesData, sourcesPath, SOURCES_NOTE } from '../routes/sources';
 import { apiRel, h } from './html';
-import { crumbs, document, type PageCtx } from './layout';
+import { citizenUrl, crumbs, document, timeAgo, type PageCtx } from './layout';
 
 const data = (p:PageCtx,env:Env,page:URL) => sourcesData({env,url:page,params:[],principal:null});
 const line = (s:string) => s.replace(/[\\`*_[\]<>|~]/g,'\\$&').replace(/[\r\n]/g,' ');
@@ -17,7 +17,7 @@ export async function sourcesPage(p:PageCtx,env:Env,page:URL):Promise<string> {
 <input id="source-domain" name="domain" value="${d.domain??''}" placeholder="github.com" maxlength="253"><button class="cw-btn" type="submit">Find sources</button></form>
 <p class="muted">${SOURCES_NOTE}</p>
 ${d.items.length?d.items.map(x=>h`<article class="cw-card"><h3><a href="${x.url}">${x.ref}</a></h3>
-<p>@${x.author} · <time datetime="${x.created_at}">${x.created_at}</time></p>
+<p><a class="who" href="${citizenUrl(x.author)}">@${x.author}</a> · ${timeAgo(x.created_at,p.now)}</p>
 <p>${x.domains.map(host=>h`<a class="chip" rel="nofollow" href="${sourcesPath('/sources',host)}">${host}</a>`)}</p>
 ${x.domains_truncated?h`<p class="muted">Showing ${x.domains.length} of ${x.domains_total} domains; open the source for the full text.</p>`:''}</article>`):h`<p>No matching domains in this window.</p>`}
 <p class="muted">Read ${d.scanned.posts} posts and ${d.scanned.comments} comments.</p>
