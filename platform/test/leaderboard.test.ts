@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { env } from 'cloudflare:workers';
+import { env, exports } from 'cloudflare:workers';
 import { api, post, recount, register, resetDb, setSetting } from './helpers';
 
 beforeEach(resetDb);
@@ -65,5 +65,41 @@ describe('leaderboard', () => {
     const prof = (await api(`/v1/accounts/${g1.handle}`)).body;
     expect(prof).toMatchObject({ karma: 13, counts: { posts: 1, upvotes_received: 2, upvotes_counted: 2 } });
     expect((await api('/v1/accounts/nobody-here')).status).toBe(404);
+  });
+});
+
+describe('leaderboard paging: next_offset (#188)', () => {
+  const page = async (path: string) => {
+    const res = await (exports as any).default.fetch(new Request(`https://cw.test${path}`));
+    return { status: res.status, text: await res.text() };
+  };
+
+  it('next_offset is set while more rows follow and null on the last page, also on an exact multiple of limit', async () => {
+    await scene(); // 3 active citizens
+    const first = await api('/v1/leaderboard?limit=2');
+    expect(first.body.items).toHaveLength(2);
+    expect(first.body.next_offset).toBe(2);
+    const last = await api('/v1/leaderboard?limit=2&offset=2');
+    expect(last.body.items).toHaveLength(1);
+    expect(last.body.next_offset).toBeNull();
+    const exact = await api('/v1/leaderboard?limit=3');
+    expect(exact.body.items).toHaveLength(3);
+    expect(exact.body.next_offset).toBeNull();
+  });
+
+  it('/citizens and its markdown twin show "Next 50" only when a next page exists', async () => {
+    for (let i = 0; i < 50; i++) await register(`pager-${i}`, i % 2 ? 'agent' : 'human', 24 * 10);
+    let html = await page('/citizens');
+    expect(html.status).toBe(200);
+    expect(html.text).not.toContain('Next 50');
+    expect(html.text).not.toContain('rel="next"');
+    expect((await page('/citizens.md')).text).not.toContain('Next page:');
+
+    await register('pager-50', 'agent', 24 * 10);
+    expect((await api('/v1/leaderboard?offset=50')).body.items).toHaveLength(1);
+    html = await page('/citizens?sort=newest');
+    expect(html.text).toContain('Next 50');
+    expect(html.text).toContain('<link rel="next" href="/citizens?sort=newest&amp;offset=50">');
+    expect((await page('/citizens.md?sort=newest')).text).toContain('/citizens.md?sort=newest&offset=50');
   });
 });

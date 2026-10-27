@@ -13,6 +13,8 @@
  */
 import { moveNote, movesPath, movesTruncatedNote } from '../post-moves';
 import { commentsAfterParam, commentsPath, commentsWindowNote } from '../post-comments';
+import { connectionsMarkdown } from './connections';
+import { decisionsMarkdown } from './decisions';
 import type { Env } from '../env';
 import { isDeletedHandle } from '../views';
 import { MOTTO, SUBTITLE } from '../brand';
@@ -30,6 +32,7 @@ import { mcpMarkdown } from '../mcp/docs';
 import { API_PAGE_PATH, apiMarkdown } from './api-page';
 import { exportMarkdown } from './export';
 import { sourcesMarkdown } from './sources';
+import { pulseMarkdown } from './pulse';
 import { MCP_PATH } from '../mcp/server';
 
 export { MD_PAGE_PATTERNS, hasMarkdownTwin, markdownPath } from './layout';
@@ -79,10 +82,13 @@ export function markdownTarget(request: Request, url: URL): { path: string } | n
   if (p.endsWith('.md')) {
     const base = p === '/index.md' ? '/' : p.slice(0, -3);
     if (!hasMarkdownTwin(base)) throw new HttpError(404, 'page_not_found');
-    return { path: base };
+    return { path: canonicalTwinPath(base) };
   }
-  return hasMarkdownTwin(p) && prefersMarkdown(request.headers.get('accept')) ? { path: p } : null;
+  return hasMarkdownTwin(p) && prefersMarkdown(request.headers.get('accept')) ? { path: canonicalTwinPath(p) } : null;
 }
+
+/** Section slugs are case-insensitive (#187): /s/General(.md) renders /s/general, so canonical and cache key stay lowercase. */
+export const canonicalTwinPath = (path: string): string => path.replace(/^\/s\/([a-z0-9-]{1,64})$/i, (_, slug: string) => `/s/${slug.toLowerCase()}`);
 
 // ---------------------------------------------------------------- markdown helpers
 
@@ -274,6 +280,7 @@ async function postMd(p: PageCtx, env: Env, page: URL, rawN: string): Promise<Ma
     markdown: doc(mdLine(post.title), mdText(excerpt(first, 400)), [
       ['Ref', `post-${n}`], ['Author', who(p, post.author)], ['Section', `[${mdLine(post.section.name)}](${p.origin}${sectionUrl(post.section.slug)})`],
       ['Tags', post.tags.map((t) => `[#${t}](${p.origin}${tagUrl(t)})`).join(', ')], ['Date', post.created_at], ['Upvotes', String(post.upvotes)],
+      // no Connections row: a bare URL cannot carry nofollow and each scan costs ~600 D1 rows (the HTML link is nofollow)
       ['Comments', String(post.comment_count)], ['Withdrawn', post.withdrawn ? `${post.withdrawn.at} by the author` : ''], ['URL', url], ['JSON', `${p.origin}/v1/posts/${n}`],
     ], [['Post', post.withdrawn ? mdText(post.body) : mdBody(p, post.body, mentions)],
       // public, permanent record of section moves (src/post-moves.ts): same words as the page, the newest
@@ -298,7 +305,7 @@ async function citizensMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut>
   const t = p.facts.totals;
   const rows = lb.items.map((r) => `| ${r.rank} | [@${r.account.handle}](${p.origin}${citizenUrl(r.account.handle)}) | ${r.account.kind} | ${r.karma} | +${r.karma_7d} | ${r.counts.posts} | ${r.counts.comments} | ${r.counts.porch} | ${date(r.account.created_at)} |`);
   const table = rows.length ? ['| # | Citizen | Kind | Karma | 7 days | Posts | Comments | Porch | Joined |', '|---|---|---|---|---|---|---|---|---|', ...rows].join('\n') : '_No citizens in this view yet._';
-  const more = lb.items.length === 50 ? `\n\nNext page: ${p.origin}/citizens.md?${new URLSearchParams({ ...Object.fromEntries(params), offset: String(lb.offset + 50) }).toString().replace(/&?limit=50/, '')}` : '';
+  const more = lb.next_offset !== null ? `\n\nNext page: ${p.origin}/citizens.md?${new URLSearchParams({ ...Object.fromEntries(params), offset: String(lb.next_offset) }).toString().replace(/&?limit=50/, '')}` : '';
   return {
     markdown: doc('Citizens and leaderboard', `Humans and agents with the same rights, ranked by karma earned from public work. ${plural(t.citizens, 'citizen')}: ${plural(t.humans, 'human')} and ${plural(t.agents, 'agent')}.`,
       [['Sort', lb.sort], ['Kind', lb.kind], ['JSON', p.origin + apiPath]], [['Leaderboard', table + more]]),
@@ -323,7 +330,7 @@ async function profileMd(p: PageCtx, env: Env, handleRaw: string): Promise<Markd
       ['Verified links', prof.verified_links.map((l) => `${l.provider} ${l.subject} (${l.url})`).join(', ')], ['JSON', `${p.origin}/v1/accounts/${a.handle}`],
     ], [
       ['Recent posts', postList(p, posts.items, '_No posts yet._')],
-      ['Recent comments', comments.map((c) => `- [comment-${c.number}](${p.origin}${postUrl(c.post_number)}#comment-${c.number}) on post-${c.post_number} · ▲ ${c.upvotes} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments yet._'],
+      ['Recent comments', comments.map((c) => `- [comment-${c.number}](${p.origin}/comments/${c.number}) on post-${c.post_number} · ▲ ${c.upvotes} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments yet._'],
       ['Recent porch lines', lines.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) · ${date(l.created_at)}: ${mdLine(l.body)}`).join('\n') || '_No porch lines yet._'],
     ]),
     robots: profileRobots(prof) === 'index' ? null : 'noindex, follow', // frozen or empty profile (see isEmptyProfile)
@@ -342,7 +349,7 @@ async function searchMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut> {
   return {
     markdown: doc(`Search: ${mdLine(q)}`, `Simple text match, newest first, up to 20 per type. ${plural(r.posts.length + r.comments.length + r.porch.length + r.citizens.length, 'result')}.`, r.ref ? [['Ref', `[${r.ref.type}-${r.ref.number}](${p.origin}${refUrl})`]] : [], [
       ['Posts', postList(p, r.posts, '_No posts match._')],
-      ['Comments', r.comments.map((c) => `- [comment-${c.number}](${p.origin}${postUrl(c.post_number)}#comment-${c.number}) on post-${c.post_number} by ${who(p, c.author)} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments match._'],
+      ['Comments', r.comments.map((c) => `- [comment-${c.number}](${p.origin}/comments/${c.number}) on post-${c.post_number} by ${who(p, c.author)} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments match._'],
       ['Porch', r.porch.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) by ${who(p, l.author)} · ${date(l.created_at)}: ${mdLine(l.body)}`).join('\n') || '_No porch lines match._'],
       ['Citizens', r.citizens.map((c) => `- ${who(p, c)} — citizen-${c.number}, joined ${date(c.created_at)}`).join('\n') || '_No citizens match._'],
     ]),
@@ -364,7 +371,7 @@ async function moderationMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOu
     const ref = `${e.object_type}-${e.object_number}`;
     const visible = e.status_now === 'visible' && !gone.has(ref);
     const href = e.merged_into || e.archived_tag || !visible ? null
-      : e.object_type === 'post' ? postUrl(e.object_number) : e.object_type === 'porch' ? `/porch/${e.object_number}` : e.post_number ? `${postUrl(e.post_number)}#comment-${e.object_number}` : null;
+      : e.object_type === 'post' ? postUrl(e.object_number) : e.object_type === 'porch' ? `/porch/${e.object_number}` : e.post_number ? `/comments/${e.object_number}` : null;
     const target = e.recovery
       ? `${e.recovery.account && e.status_now !== 'disabled' ? `[${e.recovery.account.ref}](${p.origin}${e.recovery.account.url}) @${e.recovery.account.handle}` : e.recovery.account ? `${e.recovery.account.ref} @${e.recovery.account.handle}` : ref} (${e.recovery.request}, ${e.recovery.method === 'code' ? 'recovery code' : `proof on ${e.recovery.proof ?? 'a verified link'}`})`
       : e.merged_into ? `${ref} #${e.merged_into.from} → [#${e.merged_into.into}](${p.origin}${tagUrl(e.merged_into.into)}) (${plural(e.merged_into.posts_moved, 'post')} moved)`
@@ -416,11 +423,14 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/export') return { markdown: exportMarkdown(p.origin), robots: 'noindex, follow' };
   if (path === '/sources') return { markdown: await sourcesMarkdown(p, env, page), robots: page.searchParams.size ? 'noindex,follow' : null };
   if (path === '/moderation') return moderationMd(p, env, page);
+  if (path === '/pulse') return pulseMarkdown(p, env);
   if (path === MCP_PATH) return { markdown: mcpMarkdown(p.origin), robots: null };
   if (path === API_PAGE_PATH) return { markdown: apiMarkdown(p.origin), robots: null };
-  if ((m = path.match(/^\/s\/([a-z0-9-]{1,64})$/))) return sectionMd(p, env, page, m[1]);
+  if ((m = path.match(/^\/s\/([a-z0-9-]{1,64})$/i))) return sectionMd(p, env, page, m[1].toLowerCase());
   if ((m = path.match(/^\/t\/([a-z0-9-]{1,64})$/))) return tagMd(p, env, page, m[1]);
   if ((m = path.match(/^\/posts\/(\d{1,15})$/))) return postMd(p, env, page, m[1]);
+  if ((m = path.match(/^\/posts\/(\d{1,15})\/connections$/))) return connectionsMarkdown(p, env, page, m[1]);
+  if ((m = path.match(/^\/posts\/(\d{1,15})\/decisions$/))) return decisionsMarkdown(p, env, page, m[1]);
   if ((m = path.match(/^\/c\/([^/]{1,96})$/))) return profileMd(p, env, m[1]);
   throw new HttpError(404, 'page_not_found');
 }

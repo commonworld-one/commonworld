@@ -1,3 +1,4 @@
+import { env, exports } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { api, makeAdmin, post, register, resetDb, setSetting } from './helpers';
 import { APPEAL } from '../src/rules';
@@ -86,14 +87,41 @@ describe('catalog', () => {
     await post(a.key, 'three', { section: 'general', tags: ['mcp'] });
     const bySection = (await api('/v1/posts?section=protocol')).body;
     expect(bySection.items.map((p: any) => p.title)).toEqual(['two', 'one']);
+    const bySectionCased = (await api('/v1/posts?section=Protocol')).body;
+    expect(bySectionCased.items.map((p: any) => p.title)).toEqual(['two', 'one']);
     const byTag = (await api('/v1/posts?tag=mcp')).body;
     expect(byTag.items.map((p: any) => p.title)).toEqual(['three', 'one']);
+    const byTagCased = (await api('/v1/posts?tag=MCP')).body;
+    expect(byTagCased.items.map((p: any) => p.title)).toEqual(['three', 'one']);
     const page1 = (await api('/v1/posts?limit=2')).body;
     expect(page1.items).toHaveLength(2);
     expect(page1.next_before).toBe(page1.items[1].number);
     const page2 = (await api(`/v1/posts?limit=2&before=${page1.next_before}`)).body;
     expect(page2.items.map((p: any) => p.title)).toEqual(['one']);
     expect(page2.next_before).toBeNull();
+  });
+
+  it('section, tag and author filters are case-insensitive and trimmed, alone and together (#175)', async () => {
+    await setSetting('limits.daily.post', 10);
+    const a = await register();
+    await post(a.key, 'one', { section: 'protocol', tags: ['mcp'] });
+    await post(a.key, 'two', { section: 'protocol' });
+    await post(a.key, 'three', { section: 'general', tags: ['mcp'] });
+    const titles = async (q: string) => (await api(`/v1/posts?${q}`)).body.items.map((p: any) => p.title);
+    for (const q of ['section=protocol&tag=mcp', 'section=Protocol&tag=MCP', 'section=PROTOCOL&tag=Mcp', 'section=%20protocol%20&tag=%09MCP%20']) {
+      expect(await titles(q), q).toEqual(['one']);
+    }
+    expect(await titles('section=GENERAL&tag=mcp')).toEqual(['three']);
+    expect(await titles(`author=${a.handle.toUpperCase()}`)).toEqual(['three', 'two', 'one']);
+    expect(await titles(`author=%20${a.handle}%20&section=Protocol`)).toEqual(['two', 'one']);
+    // empty after trimming = no filter (same as an absent or empty parameter)
+    expect(await titles('section=%20&tag=%20&author=%20')).toEqual(['three', 'two', 'one']);
+    // the tag page passes ?section= through the same rule and selects/labels the section
+    const r: Response = await (exports as any).default.fetch(new Request('https://cw.test/t/mcp?section=Protocol'));
+    const html = await r.text();
+    expect(r.status).toBe(200);
+    expect(html).toContain('<option value="protocol" selected>');
+    expect(html).toMatch(/Showing <b>#mcp<\/b> in <b>Protocol &amp; Interoperability<\/b>/);
   });
 });
 
@@ -105,7 +133,7 @@ describe('objects and readable numbers', () => {
     expect(p).toMatchObject({ ref: `post-${p.number}`, url: `/posts/${p.number}` });
     const c1 = (await api(`/v1/posts/${p.number}/comments`, { key: b.key, body: { body: 'first' } })).body;
     const c2 = (await api(`/v1/posts/${p.number}/comments`, { key: a.key, body: { body: 'reply', parent: c1.number } })).body;
-    expect(c2).toMatchObject({ parent_number: c1.number, depth: 2, ref: `comment-${c2.number}`, url: `/posts/${p.number}#comment-${c2.number}` });
+    expect(c2).toMatchObject({ parent_number: c1.number, depth: 2, ref: `comment-${c2.number}`, url: `/comments/${c2.number}` });
     const line = (await api('/v1/porch', { key: a.key, body: { body: 'porch' } })).body;
     expect(line).toMatchObject({ ref: `porch-${line.number}`, url: `/porch/${line.number}` });
     expect((await api(`/v1/porch/${line.number}`)).body.body).toBe('porch');
@@ -131,24 +159,144 @@ describe('change feed', () => {
   it('returns events after a cursor, oldest first, with has_more paging', async () => {
     const start = (await api('/v1/feed')).body;
     expect(start.items).toEqual([]);
-    expect(start.next_cursor).toBe('0');
+    // an exhausted scan hands back head_seq as next_cursor (resetDb keeps the sequence, so it may be above 0)
+    expect(start.next_cursor).toBe(String(start.head_seq));
+    // head_seq is the events AUTOINCREMENT high-water mark: 0 on a database that never had an event; resetDb empties
+    // the table but keeps the sequence, so here it is only >= 0 and never below next_cursor
+    expect(start.head_seq).toBeGreaterThanOrEqual(0);
     const a = await register('feeder');
     const p = (await post(a.key, 'feed post')).body;
     await api('/v1/porch', { key: a.key, body: { body: 'line' } });
     const all = (await api('/v1/feed?cursor=0')).body;
     expect(all.items.map((e: any) => e.type)).toEqual(['account.created', 'post.created', 'porch.created']);
+    expect(all.head_seq).toBe(all.items[all.items.length - 1].seq);
+    expect(all.head_seq).toBeGreaterThan(0);
     expect(all.items[1]).toMatchObject({ object: { type: 'post', number: p.number, ref: `post-${p.number}` }, actor: { handle: a.handle } });
 
     const firstPage = (await api('/v1/feed?cursor=0&limit=2')).body;
     expect(firstPage.items).toHaveLength(2);
     expect(firstPage.has_more).toBe(true);
+    expect(firstPage.head_seq).toBe(all.head_seq);
     const rest = (await api(`/v1/feed?cursor=${firstPage.next_cursor}`)).body;
     expect(rest.items.map((e: any) => e.type)).toEqual(['porch.created']);
     expect(rest.has_more).toBe(false);
+    expect(rest.head_seq).toBe(all.head_seq);
     const idle = (await api(`/v1/feed?cursor=${rest.next_cursor}`)).body;
     expect(idle.items).toEqual([]);
     expect(idle.next_cursor).toBe(rest.next_cursor);
+    expect(idle.head_seq).toBe(all.head_seq);
     expect((await api('/v1/feed?cursor=abc')).body.error.code).toBe('invalid_cursor');
+  });
+
+  it('head_seq is 0 on an events table with no sequence row and no events (#173 review P2)', async () => {
+    await env.DB.prepare('DELETE FROM events').run();
+    await env.DB.prepare("DELETE FROM sqlite_sequence WHERE name = 'events'").run();
+    const empty = (await api('/v1/feed')).body;
+    expect(empty.items).toEqual([]);
+    expect(empty.head_seq).toBe(0);
+    expect(empty.next_cursor).toBe('0');
+  });
+
+  it('head_seq never goes down when the newest events are deleted (#173 review P2-1)', async () => {
+    const a = await register('feeder');
+    await post(a.key, 'first');
+    await post(a.key, 'newest');
+    const before = (await api('/v1/feed')).body;
+    expect(before.head_seq).toBe(Number(before.next_cursor));
+    // remove the newest events, as account deletion does for a deleted citizen's writing
+    await env.DB.prepare("DELETE FROM events WHERE seq > (SELECT MIN(seq) FROM events)").run();
+    const after = (await api('/v1/feed')).body;
+    expect(after.items).toHaveLength(1);
+    expect(after.head_seq).toBe(before.head_seq);
+    // a client that stored the old next_cursor is caught up, not "past the end"
+    const stored = (await api(`/v1/feed?cursor=${before.next_cursor}`)).body;
+    expect(stored.items).toEqual([]);
+    expect(Number(stored.next_cursor)).toBeLessThanOrEqual(stored.head_seq);
+    expect(stored.head_seq).toBe(before.head_seq);
+  });
+
+  it('pulls a future cursor and a cursor behind a deleted tail back to head_seq (#173 review P1)', async () => {
+    const a = await register('feeder');
+    await post(a.key, 'first');
+    await post(a.key, 'second');
+    const head = (await api('/v1/feed')).body.head_seq;
+    const future = (await api('/v1/feed?cursor=999999999')).body;
+    expect(future.items).toEqual([]);
+    expect(future.has_more).toBe(false);
+    expect(future.next_cursor).toBe(String(head));
+    expect(future.head_seq).toBe(head);
+    // the poll from the returned cursor picks up the next real event
+    await post(a.key, 'after the future poll');
+    const next = (await api(`/v1/feed?cursor=${future.next_cursor}`)).body;
+    expect(next.items.map((e: any) => e.type)).toEqual(['post.created']);
+    // a cursor that points into a deleted tail
+    const min = (await env.DB.prepare('SELECT MIN(seq) AS s FROM events').first<{ s: number }>())!.s;
+    await env.DB.prepare('DELETE FROM events WHERE seq > ?').bind(min).run();
+    const behind = (await api(`/v1/feed?cursor=${min}`)).body;
+    expect(behind.items).toEqual([]);
+    expect(behind.next_cursor).toBe(String(behind.head_seq));
+    expect(behind.head_seq).toBeGreaterThan(min);
+  });
+
+  it('head_seq stays >= every stored cursor across a real account deletion', async () => {
+    const admin = await makeAdmin();
+    const gone = await register('leaver', 'human', 24 * 10);
+    await post(gone.key, 'soon gone');
+    const before = (await api('/v1/feed')).body;
+    await api('/v1/me/deletion-request', { method: 'POST', key: gone.key });
+    const del = await api(`/v1/admin/accounts/${gone.handle}/delete`, { key: admin.key, body: { confirm_handle: gone.handle } });
+    expect(del.status, JSON.stringify(del.body)).toBe(200);
+    const after = (await api(`/v1/feed?cursor=${before.next_cursor}`)).body;
+    expect(after.head_seq).toBeGreaterThanOrEqual(before.head_seq);
+    expect(after.head_seq).toBeGreaterThanOrEqual(Number(before.next_cursor));
+    expect(Number(after.next_cursor)).toBeLessThanOrEqual(after.head_seq);
+  });
+
+  it('rejects unknown query parameters: use_cursor for paging names, unknown_parameter otherwise', async () => {
+    const allowed = ['cursor', 'limit'];
+    for (const name of ['after', 'since', 'offset', 'before', 'page']) {
+      const res = await api(`/v1/feed?${name}=999999`);
+      expect(res.status).toBe(400);
+      expect(res.body.error).toEqual({ code: 'invalid_query_parameter', parameter: name, reason: 'use_cursor', allowed });
+    }
+
+    const res2 = await api('/v1/feed?cursor=0&limit=10&foo=bar');
+    expect(res2.status).toBe(400);
+    expect(res2.body.error).toEqual({ code: 'invalid_query_parameter', parameter: 'foo', reason: 'unknown_parameter', allowed });
+    // cache-buster and empty key are unknown too
+    expect((await api('/v1/feed?_=1698000000000')).body.error).toMatchObject({ parameter: '_', reason: 'unknown_parameter' });
+    expect((await api('/v1/feed?=x')).body.error).toMatchObject({ parameter: '', reason: 'unknown_parameter' });
+
+    // the echoed name is capped at 64 characters
+    const long = 'x'.repeat(300);
+    const res3 = await api(`/v1/feed?${long}=1`);
+    expect(res3.status).toBe(400);
+    expect(res3.body.error.parameter).toBe('x'.repeat(64));
+    expect(res3.body.error.reason).toBe('unknown_parameter');
+
+    // a duplicate cursor is still a known parameter: the first value is used
+    const dup = await api('/v1/feed?cursor=0&cursor=9');
+    expect(dup.status).toBe(200);
+  });
+
+  it('llms-full.txt and llms.txt document head_seq and the 400 for unknown parameters', async () => {
+    const text = async (path: string) => (await (exports as any).default.fetch(new Request(`https://cw.test${path}`))).text();
+    const full = await text('/llms-full.txt');
+    expect(full).toContain('`head_seq` (a number)');
+    expect(full).toContain('`invalid_query_parameter`');
+    expect(full).toContain('`unknown_parameter`');
+    expect(full).toContain('`use_cursor`');
+    const short = await text('/llms.txt');
+    expect(short).toContain('`head_seq` tells you where the end is');
+  });
+
+  it('llms-full.txt and llms.txt say the section, tag and author filters are case-insensitive (#175)', async () => {
+    const text = async (path: string) => (await (exports as any).default.fetch(new Request(`https://cw.test${path}`))).text();
+    const full = await text('/llms-full.txt');
+    expect(full).toContain('`GET /v1/posts?section=&tag=&author=` match case-insensitively and ignore surrounding spaces');
+    expect(full).toContain('`?section=Protocol` is `?section=protocol`');
+    const short = await text('/llms.txt');
+    expect(short).toContain('(section, tag and author match case-insensitively)');
   });
 
   it('vote events are public: they carry the voter handle and kind (posts and comments)', async () => {

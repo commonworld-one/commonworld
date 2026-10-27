@@ -16,11 +16,13 @@
  *     that hour's traffic), then refreshes the stored ranks (rank_all / rank_kind: one ordered pass, changed rows only).
  * The two windowed site numbers (new citizens in 7 days, porch lines in 24 h) work the same way: added to on write,
  * recounted hourly over the recent rows only (created_at indexes).
+ * Pulse (src/pulse.ts) keeps its activity windows and moderation totals here too, as `pulse.*` rows, so GET /v1/pulse
+ * and /pulse read stored rows only (`pulseStatements`): recounted hourly, by every recount, and reset nightly.
  */
 import type { Env } from './env';
 import { getSettings, type KarmaWeights } from './settings';
 import { karma7Sql, statsSelect } from './stats';
-import { countedVoteSql, hiddenAncestorSql, notDisabledSql, shownCommentSql, shownPorchSql, shownPostSql } from './views';
+import { EVENT_OBJECT_GONE, EVENT_OBJECT_HIDDEN, countedVoteSql, hiddenAncestorSql, notDisabledSql, shownCommentSql, shownPorchSql, shownPostSql } from './views';
 import type { BatchGuard } from './batch-guard';
 
 const RECONCILED = 'reconciled_at';
@@ -52,7 +54,97 @@ export function windowCountStatements(db: D1Database, now: number = Date.now()):
   return [
     db.prepare(`INSERT OR REPLACE INTO site_counters (name, value) VALUES ('new7', (SELECT COUNT(*) FROM accounts WHERE created_at >= ?1 AND status = 'active'))`).bind(since7),
     db.prepare(`INSERT OR REPLACE INTO site_counters (name, value) VALUES ('porch24', (SELECT COUNT(*) FROM porch_lines l WHERE l.created_at >= ?1 AND ${shownPorchSql('l')}))`).bind(since24),
+    ...pulseStatements(db, now),
   ];
+}
+
+// ---------------------------------------------------------------- Pulse (src/pulse.ts)
+
+/** Event types that count as a citizen doing something public (the change feed's writing events, moves excluded). */
+export const PULSE_ACTIVE_TYPES = ['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn'] as const;
+/** The moderation log's event types (src/routes/moderation.ts MODERATION_LOG_TYPES; kept here to avoid an import cycle). */
+export const PULSE_MOD_TYPES = ['content.hidden', 'content.restored', 'content.upheld', 'tag.merged', 'tag.archived', 'account.recovered', 'account.recovery_rejected'] as const;
+const PULSE_WINDOW_KEYS: [string, string][] = [
+  ['posts', 'post.created'], ['comments', 'comment.created'], ['porch_lines', 'porch.created'], ['upvotes', 'vote.created'], ['withdrawn', 'content.withdrawn'],
+];
+/** Per-day keys of the week chart (`pulse.day<i>.<key>`, i = 0 today … 6); new citizens per day come from `accounts`. */
+const PULSE_DAY_KEYS: [string, string][] = PULSE_WINDOW_KEYS.filter(([k]) => k !== 'withdrawn');
+/** Number of UTC days in `activity_7d.days`. */
+export const PULSE_DAYS = 7;
+/** The UTC dates (YYYY-MM-DD) of the per-day counts: index 0 is the UTC day of `at`, index 6 six days before. */
+export const pulseDayDates = (at: number): string[] =>
+  Array.from({ length: PULSE_DAYS }, (_, i) => new Date(at - i * 86_400_000).toISOString().slice(0, 10));
+const sqlList = (xs: readonly string[]): string => xs.map((t) => `'${t}'`).join(', ');
+/** First event seq inside the 7-day window (watermark, only moves forward). */
+const PULSE_SEQ7 = 'pulse.seq7';
+/** Highest event seq already added to the moderation totals. */
+const PULSE_MOD_SEQ = 'pulse.mod_seq';
+export const PULSE_AT = 'pulse.at';
+
+/**
+ * Pulse activity windows and moderation totals, stored as `pulse.*` site_counters rows. `events` has no created_at or type
+ * index, so nothing here scans it whole:
+ *   - the 7-day window starts at a stored seq watermark (`pulse.seq7`) that only moves forward (seq follows created_at), so
+ *     the window counts read the last 7 days of events by primary key;
+ *   - public visibility is the rule GET /v1/feed applies to public readers: events about objects hidden right now, about a
+ *     disabled citizen's content, or written by a disabled citizen are not counted;
+ *   - new citizens in 24 h are counted from `accounts` (created_at index) with the same rule as `new7` (active accounts), so
+ *     the 7-day "new citizens" is `new7` itself: one source;
+ *   - per-UTC-day counts for the week chart (`pulse.day<i>.*`, posts / comments / porch lines / upvotes from the same pass,
+ *     new citizens from the same `accounts` read as the 24-hour count) are columns of the same two statements: no extra scan;
+ *   - moderation totals are added incrementally past `pulse.mod_seq` (moderation events are never deleted);
+ *     `pulseResetStatements` drops them so the nightly recount starts them from zero.
+ */
+export function pulseStatements(db: D1Database, now: number = Date.now()): D1PreparedStatement[] {
+  const since7 = new Date(now - 7 * 86_400_000).toISOString(), since24 = new Date(now - 86_400_000).toISOString();
+  const days = pulseDayDates(now);
+  const win = [
+    ...PULSE_WINDOW_KEYS.flatMap(([k, t]) => [
+      `'d1.${k}', COUNT(*) FILTER (WHERE e.type = '${t}' AND e.created_at >= ?2)`,
+      `'d7.${k}', COUNT(*) FILTER (WHERE e.type = '${t}')`,
+    ]),
+    // per UTC day (day0 = today, day6 = six days ago): same pass, same rows, same visibility rule. The oldest day starts at
+    // its UTC midnight, which is always inside the rolling 7-day window, so every day is complete. Dates come from
+    // toISOString (digits and dashes only), so inlining them is safe.
+    ...days.flatMap((date, i) => PULSE_DAY_KEYS.map(([k, t]) => `'day${i}.${k}', COUNT(*) FILTER (WHERE e.type = '${t}' AND substr(e.created_at, 1, 10) = '${date}')`)),
+  ].join(', ');
+  const dayCitizens = days.map((date, i) => `'day${i}.citizens', COUNT(*) FILTER (WHERE substr(created_at, 1, 10) = '${date}')`).join(', ');
+  const mod = `json_object('hidden', COUNT(*) FILTER (WHERE type = 'content.hidden'), 'restored', COUNT(*) FILTER (WHERE type = 'content.restored'),
+    'upheld', COUNT(*) FILTER (WHERE type = 'content.upheld'), 'merged', COUNT(*) FILTER (WHERE type = 'tag.merged'),
+    'archived', COUNT(*) FILTER (WHERE type = 'tag.archived'), 'recoveries', COUNT(*) FILTER (WHERE type IN ('account.recovered', 'account.recovery_rejected')))`;
+  return [
+    db.prepare(`INSERT OR REPLACE INTO site_counters (name, value) VALUES ('${PULSE_SEQ7}', COALESCE(
+        (SELECT seq FROM events WHERE seq >= COALESCE((SELECT value FROM site_counters WHERE name = '${PULSE_SEQ7}'), 0) AND created_at >= ?1 ORDER BY seq LIMIT 1),
+        (SELECT COALESCE(MAX(seq), 0) + 1 FROM events)))`).bind(since7),
+    db.prepare(`INSERT OR REPLACE INTO site_counters (name, value)
+      SELECT 'pulse.' || key, value FROM json_each((SELECT json_object(${win}, 'd7.active', COUNT(DISTINCT e.actor_id))
+        FROM events e LEFT JOIN accounts a ON a.id = e.actor_id
+        WHERE e.seq >= (SELECT value FROM site_counters WHERE name = '${PULSE_SEQ7}') AND e.created_at >= ?1
+          AND e.type IN (${sqlList(PULSE_ACTIVE_TYPES)})
+          AND a.status IS NOT 'disabled' AND NOT (${EVENT_OBJECT_HIDDEN}) AND NOT (${EVENT_OBJECT_GONE})))`).bind(since7, since24),
+    // new citizens in 24 h and per UTC day: one read of the recent accounts (created_at index), the same rule as new7
+    db.prepare(`INSERT OR REPLACE INTO site_counters (name, value)
+      SELECT 'pulse.' || key, value FROM json_each((SELECT json_object('d1.citizens', COUNT(*) FILTER (WHERE created_at >= ?2), ${dayCitizens})
+        FROM accounts WHERE created_at >= ?1 AND status = 'active'))`).bind(`${days[PULSE_DAYS - 1]}T00:00:00.000Z`, since24),
+    db.prepare(`INSERT INTO site_counters (name, value)
+      SELECT 'pulse.mod.' || key, value FROM json_each((SELECT ${mod} FROM events
+        WHERE seq > COALESCE((SELECT value FROM site_counters WHERE name = '${PULSE_MOD_SEQ}'), 0) AND type IN (${sqlList(PULSE_MOD_TYPES)})))
+      WHERE 1 ON CONFLICT(name) DO UPDATE SET value = value + excluded.value`),
+    db.prepare(`INSERT OR REPLACE INTO site_counters (name, value) VALUES ('${PULSE_MOD_SEQ}', (SELECT COALESCE(MAX(seq), 0) FROM events))`),
+    db.prepare('INSERT OR REPLACE INTO site_counters (name, value) VALUES (?1, ?2)').bind(PULSE_AT, now),
+  ];
+}
+
+/** Drops the incremental moderation totals so the next `pulseStatements` recounts them from the whole log (nightly). */
+export const pulseResetStatements = (db: D1Database): D1PreparedStatement[] => [
+  db.prepare(`DELETE FROM site_counters WHERE name LIKE 'pulse.mod.%' OR name = '${PULSE_MOD_SEQ}'`),
+];
+
+/** Every stored counter row (site totals and `pulse.*`) in one read of the small site_counters table. */
+export async function readCounterRows(env: Env): Promise<Map<string, number>> {
+  await ensureCounters(env);
+  const { results } = await env.DB.prepare('SELECT name, value FROM site_counters').all<{ name: string; value: number }>();
+  return new Map(results.map((r) => [r.name, r.value]));
 }
 
 /** Reference post_count / comment_count of a section (same SQL as the full recount), for `sections.slug = <slug>`. */
@@ -140,7 +232,7 @@ export async function recountStatements(env: Env, weights?: KarmaWeights): Promi
 
 /** Full recount now (nightly reconcile, first read after the migration, tests after raw SQL inserts). */
 export async function recountAll(env: Env): Promise<void> {
-  await env.DB.batch(await recountStatements(env));
+  await env.DB.batch([...pulseResetStatements(env.DB), ...await recountStatements(env)]);
   filled = true;
 }
 

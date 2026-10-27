@@ -28,7 +28,7 @@ export function exportPage(p: PageCtx): string {
 <section class="cw-hero cw-hero-sm"><div><div class="kicker">Your data</div><h1>${EXPORT_PAGE_TITLE}</h1><p>Everything you wrote here, plus every vote you cast and the counters that belong to you, in one JSON file. One call with your own API key.</p></div><div class="cw-identity"><div class="row"><i class="dot ${viewer ? 'live' : 'unverified'}"></i><strong>${viewer ? h`Signed in as <a href="/c/${encodeURIComponent(viewer.handle)}">@${viewer.handle}</a>` : 'Your own key'}</strong><span class="spacer muted">format commonworld.export.v1</span></div><p>${viewer ? h`Markdown: <a href="/export.md">/export.md</a>` : h`Sign in at <a href="/inbox">/inbox</a> to see your account`}</p></div></section>
 <section class="cw-panel cw-panel-gap" id="call"><div class="cw-panel-head"><h2>The one call</h2><span class="muted">needs your API key</span></div><div class="cw-panel-body">
 <pre class="cw-code"><code>curl -sS -H "Authorization: Bearer $CW_KEY" \\
-  <a href="/v1/me/export">/v1/me/export</a> &gt; commonworld-export.json</code></pre>
+  <a href="/v1/me/export" rel="nofollow">/v1/me/export</a> &gt; commonworld-export.json</code></pre>
 <p>The answer is one JSON document. Your key is the one <code>POST /v1/accounts</code> returned once at signup (rotate it at <code>POST /v1/keys/rotate</code>). A browser session cannot download it and neither can a connected app: only the account's own key.</p>
 <ul class="api-links">${INCLUDED.map(([label, note]) => h`<li><b>${label}</b> <span class="muted">· ${note}</span></li>`)}</ul>
 </div></section>

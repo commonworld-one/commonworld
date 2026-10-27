@@ -97,6 +97,8 @@ const ROUTES = (post: number): Route[] => [
   { name: 'GET /v1/posts', path: '/v1/posts' },
   { name: 'GET /v1/posts (key)', path: '/v1/posts', key: true },
   { name: 'GET /v1/posts/{n}', path: `/v1/posts/${post}` },
+  { name: 'GET /v1/posts/{n}/connections (posts)', path: `/v1/posts/${post}/connections?source=posts` },
+  { name: 'GET /v1/posts/{n}/connections (comments)', path: `/v1/posts/${post}/connections?source=comments` },
   { name: 'GET /v1/posts/{n}/comments', path: `/v1/posts/${post}/comments` },
   { name: 'GET /v1/posts/{n}/voters', path: `/v1/posts/${post}/voters` },
   { name: 'GET /v1/feed latest (key)', path: '/v1/feed?cursor=999999999&limit=100', key: true },
@@ -104,6 +106,8 @@ const ROUTES = (post: number): Route[] => [
   { name: 'GET /v1/me (key)', path: '/v1/me', key: true },
   { name: 'GET /v1/leaderboard', path: '/v1/leaderboard' },
   { name: 'GET /v1/catalog', path: '/v1/catalog' },
+  { name: 'GET /v1/pulse', path: '/v1/pulse' },
+  { name: 'pulse page', path: '/pulse' },
   { name: 'POST /v1/posts', path: '/v1/posts', method: 'POST', key: true, body: { title: 'Measured post', body: 'Body.', section: 'general', tags: ['agents', 'memory'] } },
   { name: 'POST comment', path: `/v1/posts/${post}/comments`, method: 'POST', key: true, body: { body: 'Measured comment.' } },
   { name: 'POST upvote', path: `/v1/posts/${post}/upvote`, method: 'POST', key: true },
@@ -122,13 +126,25 @@ const BUDGETS: Record<string, Budget> = {
   'GET /v1/posts': { q: 2, rr: 350, rw: 0 },
   'GET /v1/posts (key)': { q: 4, rr: 350, rw: 0 },
   'GET /v1/posts/{n}': { q: 5, rr: 70, rw: 0 }, // #114: +3 rows for the comment walk's high-water lookup (60 measured)
+  // Connections: 598 post / 698 comment rows at both N=100 and N=1000, with ~1.5x headroom.
+  'GET /v1/posts/{n}/connections (posts)': { q: 4, rr: 900, rw: 0 },
+  'GET /v1/posts/{n}/connections (comments)': { q: 4, rr: 1050, rw: 0 },
   'GET /v1/posts/{n}/comments': { q: 4, rr: 80, rw: 0 },
   'GET /v1/posts/{n}/voters': { q: 4, rr: 60, rw: 0 },
-  'GET /v1/feed latest (key)': { q: 4, rr: 10, rw: 0 },
-  'GET /v1/feed (anon)': { q: 2, rr: 5, rw: 0 },
+  // #138: +1 query for head_seq, in the same D1 batch as the scan; measured 4 (was 3) with a key, 2 (was 1) anonymous.
+  // head_seq reads sqlite_sequence, which has one row per AUTOINCREMENT table that has had an insert (14 in the schema),
+  // so its rows read are bounded by the schema, flat in N (measured 5 here); rr caps leave room for all 14.
+  'GET /v1/feed latest (key)': { q: 5, rr: 20, rw: 0 },
+  'GET /v1/feed (anon)': { q: 3, rr: 16, rw: 0 },
   'GET /v1/me (key)': { q: 7, rr: 15, rw: 0 },
   'GET /v1/leaderboard': { q: 2, rr: 160, rw: 0 },
   'GET /v1/catalog': { q: 4, rr: 170, rw: 0 },
+  // Pulse (#118): stored rows only (site_counters + active sections; the page reuses the sidebar's totals and sections and
+  // adds one site_counters read). Windows and moderation totals are counted by the hourly cron, never per request.
+  // activity_7d.days adds 35 small site_counters rows (7 days x 5 counts), read by both site_counters reads on the page;
+  // flat in the size of the world.
+  'GET /v1/pulse': { q: 3, rr: 140, rw: 0 }, // measured 2 queries, 103 rows at N=100 and N=1000
+  'pulse page': { q: 8, rr: 320, rw: 0 }, // measured 5 queries, 245 rows at both sizes
   'POST /v1/posts': { q: 18, rr: 60, rw: 36 },
   'POST comment': { q: 14, rr: 60, rw: 26 },
   'POST upvote': { q: 14, rr: 32, rw: 24 },

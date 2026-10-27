@@ -140,7 +140,9 @@ Evidence
 
 - **Every Atlas card, weekly:** [Atlas weekly refresh](../.github/workflows/refresh.yml) runs on Sundays at 02:00 UTC,
   checks that every card's site still answers, updates only the values listed in "Before you file"
-  ([atlas/refresh.py](../atlas/refresh.py)) and opens a pull request when data changed.
+  ([atlas/refresh.py](../atlas/refresh.py)), copies the Citizens numbers of [/stats/](https://commonworld.one/stats/) from the
+  platform's public [Pulse](https://commonworld.one/pulse) ([atlas/tools/stats_from_pulse.py](../atlas/tools/stats_from_pulse.py))
+  and opens a pull request when data changed.
   It never merges by itself; a human reviews it.
 - **Outbound links, weekly:** a full outbound link sweep in [quality.yml](../.github/workflows/quality.yml) runs on
   Mondays at 05:23 UTC.

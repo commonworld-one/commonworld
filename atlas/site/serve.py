@@ -46,13 +46,22 @@ GZ_EXT = ('.html', '.css', '.js', '.json', '.svg', '.xml', '.txt', '.md')
 FILTER_PARAMS = ('q', 'category', 'status', 'type', 'feature', 'tag', 'sort')  # same list as platform/src/atlas-assets.ts ATLAS_FILTER_PARAMS
 
 
+def _redirect_lines():
+    try:
+        return [l.split() for l in _read(os.path.join(DIST, '_redirects'), 'r').splitlines()]
+    except OSError:
+        return []
+
+
 def redirects():
     """{path: (target, status)} from the 301 and 302 lines of dist/_redirects."""
-    try:
-        lines = _read(os.path.join(DIST, '_redirects'), 'r').splitlines()
-    except OSError:
-        return {}
-    return {p[0]: (p[1], int(p[2])) for p in (l.split() for l in lines) if len(p) == 3 and p[2] in ('301', '302')}
+    return {p[0]: (p[1], int(p[2])) for p in _redirect_lines() if len(p) == 3 and p[2] in ('301', '302')}
+
+
+def rewrites():
+    """{path: target} from the 200 lines of dist/_redirects (a rewrite: the URL stays, the body is the target file; build.py
+    api_root_redirects, issue #159)."""
+    return {p[0]: p[1] for p in _redirect_lines() if len(p) == 3 and p[2] == '200'}
 
 
 def not_found_body(path):
@@ -86,6 +95,11 @@ class H(http.server.SimpleHTTPRequestHandler):
         red = redirects()
         if not os.path.exists(fs) and path in red:
             return self._redirect(*red[path])
+        rew = rewrites()
+        if path in rew and not os.path.isfile(fs):  # same order as Cloudflare: _redirects before files that do not exist
+            self.path = rew[path] + self.path[len(path):]  # the base handler serves self.path: the target file, query kept
+            path = rew[path]
+            fs = self.translate_path(path)
         query = self.path[len(path):].lstrip('?')
         if query and any(kv.split('=', 1)[0] in FILTER_PARAMS for kv in query.split('&')):
             self._noindex = True

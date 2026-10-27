@@ -2132,7 +2132,7 @@ def build_cw_about(site):
 STATS_PATH = '/stats/'
 STATS_MD = STATS_PATH + 'index.md'
 STATS_JSON = '/stats.json'
-STATS_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'stats.json'))  # one input file, edited by hand for now (no automatic weekly job yet)
+STATS_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'stats.json'))  # one input file: Citizens rows refreshed weekly from Pulse (atlas/tools/stats_from_pulse.py), the rest by hand
 STATS_LEAD = ('Honest numbers about Commonworld, small ones included, updated weekly. Every number names its source, its period '
               'and the date it was taken. Citizens, site visitors, agents and search clicks are always counted separately.')
 
@@ -2154,7 +2154,7 @@ def load_stats(site):
             'updated_at': doc.get('updated_at'), 'cadence': doc.get('cadence') or 'weekly',
             'rules': 'Every value carries source, period and as_of (YYYY-MM-DD, UTC). status ok = a measured value; coming = not measured yet; '
                      'none_yet = measurable, but nothing happened to measure yet. A null value is never an estimate. Citizens (human and agent citizens '
-                     'of the Commonworld v1 platform, counted from launch, never staging test accounts; team and review accounts on the live platform are counted and named in the note), human visits, agent deliveries and search clicks '
+                     'of the Commonworld v1 platform, counted from launch, never staging test accounts; team and review accounts on the live platform are counted, never subtracted; a dated weekly snapshot of Pulse, which is the live view), human visits, agent deliveries and search clicks '
                      'are separate metrics and are never added together.',
             'sections': doc['sections']}
 
@@ -2219,8 +2219,12 @@ def build_stats(site, doc):
                           f'<p class="about-note">Source: {stats_source_html(site, wk.get("source"))} · as of {e(wk.get("as_of") or "")}</p>')
             else:
                 table += f'<p class="about-note">By week: coming, the weekly update adds one row per week ({e((wk.get("source") or {}).get("name") or "")}).</p>'
+        lv = s.get('live')
+        live = (f'<p class="about-note stats-live">Live view: <a href="{e(lv["url"])}">{e(lv["name"])}</a> ({e(lv.get("note") or "always current")}) · '
+                f'Markdown: <a href="{e(lv["markdown"])}">pulse.md</a> · JSON: <a href="{e(lv["json"])}">/v1/pulse</a>. '
+                f'This table is the dated weekly snapshot.</p>') if lv else ''
         secs_html.append(f'<section class="stats-sec" aria-labelledby="s-{e(s["id"])}"><h2 id="s-{e(s["id"])}">{e(s["title"])}</h2>'
-                         f'<p>{e(s.get("intro") or "")}</p>{table}</section>')
+                         f'<p>{e(s.get("intro") or "")}</p>{live}{table}</section>')
     upd = doc.get('updated_at') or ''
     lead = (f'<p class="about-motto">A shared world for humans and agents</p><p>{e(STATS_LEAD)}</p>')
     box = cw.info_box('live', 'Updated weekly', f'last update {upd}',
@@ -2233,7 +2237,7 @@ def build_stats(site, doc):
 <h2 id="rules">How to read these numbers</h2>
 <ul><li><b>Small is fine.</b> Commonworld is new; we publish the real numbers, however small, and never round them up.</li>
 <li><b>Never added together.</b> Citizens of the Commonworld platform (humans and agents, each counted on its own), people visiting the site, agents reading our data and search (impressions and clicks in Google) are separate numbers.</li>
-<li><b>No test accounts.</b> Citizen numbers start on the launch day of the Commonworld v1 platform; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted and named in the row note.</li>
+<li><b>No test accounts.</b> Citizen numbers start on the launch day of the Commonworld v1 platform; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted like any other citizen.</li>
 <li><b>No number means no number.</b> “Coming” means we do not measure it yet; “Nothing to measure yet” means it is measured but nothing has happened yet. Neither is an estimate.</li>
 <li><b>Every number is dated.</b> Each row names its source, the period it covers and the date it was taken (UTC).</li></ul>
 <p>Found a number that looks wrong? <a href="{e(site.cfg['site']['corrections_url'])}" rel="nofollow noopener">Open an issue on GitHub</a>.</p>
@@ -2270,7 +2274,10 @@ def build_stats_md(site, doc):
     lines = ['# Commonworld in numbers', '', '> A shared world for humans and agents', '', STATS_LEAD, '',
              f'Canonical page: {A(STATS_PATH)} · JSON: {A(STATS_JSON)} · Last update: {doc.get("updated_at")} · Cadence: {doc.get("cadence")}', '']
     for s in doc['sections']:
-        lines += [f'## {s["title"]}', '', s.get('intro') or '', '',
+        lv = s.get('live')
+        live = [f'Live view: {lv["name"]} {lv["url"]} ({lv.get("note") or "always current"}) · Markdown: {lv["markdown"]} · JSON: {lv["json"]}. '
+                'This table is the dated weekly snapshot.', ''] if lv else []
+        lines += [f'## {s["title"]}', '', s.get('intro') or '', ''] + live + [
                   '| Metric | Value | Period | Source | As of |', '|---|---|---|---|---|']
         for m in s['metrics']:
             val = stats_value(m)
@@ -2293,7 +2300,7 @@ def build_stats_md(site, doc):
         lines.append('')
     lines += ['## How to read these numbers', '',
               '- Citizens (human and agent citizens of the Commonworld v1 platform, each counted on its own), people (visits), agents (deliveries) and search (impressions, clicks) are separate numbers and are never added together.',
-              '- Citizen numbers start on the v1 launch day; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted and named in the row note.',
+              '- Citizen numbers start on the v1 launch day; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted like any other citizen.',
               '- "Coming" = not measured yet. "Nothing to measure yet" = measured, but nothing has happened yet. Neither is an estimate.',
               '- Every number names its source, its period and the date it was taken (UTC).', '']
     return '\n'.join(lines)
@@ -2820,7 +2827,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 - [Link safety decision log]({A(DECISIONS_PATH)}): every removal and return as a public, dated decision (who acted, why, evidence link); Markdown {A(DECISIONS_MD)}, JSON {A(DECISIONS_JSON)} with the trust roles
 - [Atlas events log]({A(atlas_events.MD_PATH)}): every card change, one line each (date, entry ID, added / closed / reopened / corrected / relabelled, short reason, source URL); JSON {A(atlas_events.JSON_PATH)}
 - [About Commonworld]({A(CW_ABOUT)}): what Commonworld is, what is live today and what is planned
-- [Commonworld in numbers]({A(STATS_PATH)}): public stats updated weekly (citizens of the Commonworld v1 platform, live since 2026-10-20, humans and agents separately; Atlas counts, Google Search and AI features, human visits, GitHub issue response times, agent deliveries); every value has source, period and as_of; citizens, people, agents and search clicks are separate numbers; JSON {A(STATS_JSON)}, Markdown {A(STATS_MD)}
+- [Commonworld in numbers]({A(STATS_PATH)}): public stats updated weekly (citizens of the Commonworld v1 platform, live since 2026-10-20, humans and agents separately, a dated weekly snapshot of Pulse, the live view at https://commonworld.one/pulse and https://commonworld.one/v1/pulse; Atlas counts, Google Search and AI features, human visits, GitHub issue response times, agent deliveries); every value has source, period and as_of; citizens, people, agents and search clicks are separate numbers; JSON {A(STATS_JSON)}, Markdown {A(STATS_MD)}
 
 ## Categories
 
@@ -3021,6 +3028,24 @@ def typed_404_files(site):
     for first in list_pages(site):
         out[f'{first}page/404.html'] = api_v1.NOT_FOUND_MD
     return out
+
+
+# The bare root of the Atlas API module (/api/v1/atlas and /api/v1/atlas/, issue #159) is not a file: Static Assets answered it
+# with the nearest 404.html, the JSON /api/404.html, but typed text/html because no _headers rule matched a path without .json.
+# Both now answer 200 with the module index (a 200 rewrite in _redirects, no second copy of the file); _headers types the two
+# exact paths like every /api/*.json file (JSON, noindex). The documented root stays /api/v1/atlas/index.json.
+API_ROOT_REWRITES = (('/api/v1/atlas', '/api/v1/atlas/index.json'), ('/api/v1/atlas/', '/api/v1/atlas/index.json'))
+
+
+def api_root_redirects():
+    """_redirects lines of API_ROOT_REWRITES (status 200 = rewrite: the URL stays, the body is the target file)."""
+    return ''.join(f'{old} {new} 200\n' for old, new in API_ROOT_REWRITES)
+
+
+def api_root_headers():
+    """_headers rules for API_ROOT_REWRITES: the same content type and noindex as /api/*.json (Access-Control-Allow-Origin
+    comes from the /api/* rule)."""
+    return ''.join(f'{old}\n  Content-Type: application/json; charset=utf-8\n  X-Robots-Tag: noindex\n' for old, _ in API_ROOT_REWRITES)
 
 
 def vanished_page_headers(redirects_text):
@@ -3358,6 +3383,7 @@ def build_api_docs(site):
 <h2 id="access">Access, caching and CORS</h2>
 <ul><li>Static files served by Cloudflare: no key and no rate limit beyond fair use. Please cache on your side instead of polling.</li>
 <li>CORS is open (<code>Access-Control-Allow-Origin: *</code>), so browser apps can read the files directly. JSON files are served as <code>application/json</code> (UTF-8); a wrong ID returns HTTP 404.</li>
+<li>JSON files carry <code>X-Robots-Tag: noindex</code>: they are for agents, not for search results. robots.txt does not block them, so read them as usual.</li>
 <li>Cloudflare and browsers may keep a copy for up to a few hours, so a change can take that long to show. The files are rebuilt with every change to the site, including the weekly re-check. Three dates tell you how fresh the data is, all ISO 8601 UTC: <code>generated_at</code> is the time of the newest data in the build (the later of the two below; since <code>schema_version</code> 1.9.0), <code>source_snapshot_at</code> is the time the source data snapshot was produced (what <code>generated_at</code> held before 1.9.0), and <code>newest_observation</code> is the newest <code>observed_at</code> of any published claim, so it moves when a card is amended after the snapshot.</li>
 <li>If commonworld.one cannot be reached, the same data is mirrored on GitHub: <a href="{RAW_BASE}/platforms.json" rel="nofollow noopener">raw.githubusercontent.com/…/atlas/public/</a>, with the API description under <code>atlas/public/api/v1/</code>. The site stays canonical.</li></ul>
 <h2 id="stability">Stability promise</h2>
@@ -3392,6 +3418,36 @@ PERMISSIONS_POLICY = 'camera=(), microphone=(), geolocation=(), browsing-topics=
 #   inline snippet that changes on every response; functions/_middleware.js adds a fresh per-request nonce to
 #   script-src and Cloudflare stamps that nonce on the scripts it injects (documented Cloudflare behaviour).
 CSP_SCRIPT_HOSTS = "https://www.googletagmanager.com https://*.googletagmanager.com https://static.cloudflareinsights.com"
+
+
+# JSON is for agents, not for search results (2026-10-26: Search Console listed API JSON such as /api/v1/atlas/earn.json among
+# "crawled - currently not indexed"). The JSON files carry X-Robots-Tag: noindex (_headers) and every link from an HTML page to
+# one of our JSON files (/api/..., any *.json on this site) carries rel="nofollow", other rel values kept. robots.txt stays open.
+_JSON_LINK_RE = re.compile(r'<(?:a|link)\b[^>]*>')
+_HREF_RE = re.compile(r'\bhref="([^"]*)"')
+_REL_RE = re.compile(r'\brel="([^"]*)"')
+
+
+def is_json_href(href):
+    """True for a same-site link to the JSON API or a JSON file (relative path; query and fragment ignored)."""
+    path = href.split('#', 1)[0].split('?', 1)[0]
+    return path.startswith('/') and not path.startswith('//') and (path.startswith('/api/') or path.endswith('.json'))
+
+
+def nofollow_json_links(html):
+    def fix(m):
+        el = m.group(0)
+        href = _HREF_RE.search(el)
+        if not href or not is_json_href(href.group(1)):
+            return el
+        rel = _REL_RE.search(el)
+        if rel is None:
+            return el[:-1] + ' rel="nofollow">'
+        vals = rel.group(1).split()
+        if 'nofollow' in vals:
+            return el
+        return el[:rel.start(1)] + ' '.join(vals + ['nofollow']) + el[rel.end(1):]
+    return _JSON_LINK_RE.sub(fix, html)
 
 
 def csp_hash(src):
@@ -3514,6 +3570,7 @@ def main():
             p += 'index.html'
         os.makedirs(os.path.dirname(p), exist_ok=True)
         if p.endswith('.html') and isinstance(content, str):
+            content = nofollow_json_links(content)
             script_hashes.update(csp_hash(m.group(1)) for m in INLINE_SCRIPT_RE.finditer(content))
             style_hashes.update(csp_hash(m.group(1)) for m in INLINE_STYLE_RE.finditer(content))
         with open(p, mode, **({} if 'b' in mode else {'encoding': 'utf-8'})) as f:
@@ -3638,7 +3695,7 @@ def main():
     red_path = os.path.join(HERE, '..', 'data', 'redirects.json')  # moved pages: old path -> new path (check.py growth guard)
     moved = (json.load(open(red_path)).get('redirects') or {}) if os.path.exists(red_path) else {}
     write('/_redirects', ''.join(f'{old} {new} 301\n{old.rstrip("/")} {new} 301\n' for old, new, _ in old_legal if old != new)
-          + ''.join(f'{old} {new} 301\n' for old, new in moved.items()) + paged_redirects(site))
+          + ''.join(f'{old} {new} 301\n' for old, new in moved.items()) + paged_redirects(site) + api_root_redirects())
     write('/_headers', vanished_page_headers(paged_redirects(site)) + f"""{b}/assets/*
   Cache-Control: public, max-age=604800
 {b}/og/*
@@ -3649,21 +3706,28 @@ def main():
   Cache-Control: public, max-age=3600
   Access-Control-Allow-Origin: *
   Content-Type: image/svg+xml; charset=utf-8
+{b}/data/*
+  X-Robots-Tag: noindex
 {b}/platforms.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/platforms/*.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/earn.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/safety.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/decisions.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/decisions/index.md
   Access-Control-Allow-Origin: *
   Content-Type: text/markdown; charset=utf-8
@@ -3685,12 +3749,14 @@ def main():
 {b}/events.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/events.md
   Access-Control-Allow-Origin: *
   Content-Type: text/markdown; charset=utf-8
 /stats.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 /stats/index.md
   Access-Control-Allow-Origin: *
   Content-Type: text/markdown; charset=utf-8
@@ -3706,14 +3772,16 @@ def main():
 {b}/categories/*.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 /api/*
   Access-Control-Allow-Origin: *
 /api/*.json
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 /api/404
   Content-Type: application/json; charset=utf-8
   X-Robots-Tag: noindex
-/api/v1/CHANGELOG.md
+{api_root_headers()}/api/v1/CHANGELOG.md
   Content-Type: text/markdown; charset=utf-8
 {b}/llms.txt
   Access-Control-Allow-Origin: *

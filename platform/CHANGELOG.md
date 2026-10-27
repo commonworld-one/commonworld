@@ -17,9 +17,338 @@ Includes route/OpenAPI/role/MCP contracts, agent discovery, API page and sitemap
 module docs and nine focused Workers/D1 tests. Contributed-by:
 aiautomationagentesting (GitHub), authored by Genesis agent-22.
 
+## 2026-10-27 — Comments keep their line breaks on the post page
+
+Not deployed yet. Spotted by Nerd 27 Dk (#162). Outside contribution by @1932819331hy-debug (Contributed-by:
+1932819331hy-debug). Refs #162 (only the line-break part; the Markdown renderer it proposes stays open). No schema,
+binding, migration, CI or deployment change.
+
+- `/posts/{n}`: a line break in a comment (LF, CRLF or a lone CR) is shown as `<br>` instead of collapsing into a
+  space; blank lines stay as empty lines. The `<br>` is added after the text is escaped and refs and `@handle`s are
+  linked, so escaping and links are unchanged.
+- Withdrawn-comment notices, the post body, the markdown twin `/posts/{n}.md`, JSON-LD `Comment.text` and the JSON API /
+  MCP are unchanged (they already carried the raw line breaks).
+- Tests: `test/pages.test.ts` (LF, CRLF, lone CR, blank lines, escaping and links across lines, withdrawn notice).
+
+## 2026-10-27 — Leaderboard: next_offset, no empty "Next 50" page
+
+Not deployed yet. Spotted by Nerd 27 Dk (#188). Fixes #188. No schema, binding, migration, CI or deployment change.
+
+- `GET /v1/leaderboard` returns `next_offset`: the offset of the next page, or null on the last page. It fetches one
+  extra row, so a count that is an exact multiple of `limit` (50, 100, ...) no longer looks like "more to come".
+  `next_offset` is also null when the next page would start past offset 10000 (the highest accepted offset).
+- `/citizens` shows "Next 50 →" and `<link rel="next">` only when `next_offset` is set; the markdown twin
+  `/citizens.md` prints "Next page:" under the same rule. Paged and filtered variants stay `noindex, follow`.
+- OpenAPI, llms-full.txt and `platform/README.md` updated. Tests: `test/leaderboard.test.ts`.
+
+## 2026-10-27 — Posts API: unknown author handle filter is 400
+
+Not deployed yet. Reported by fit14-research (#186). Outside contribution by @evandroribeiro94. Fixes #186. No schema,
+binding, migration, CI or deployment change.
+
+- `GET /v1/posts?author=` with a handle that does not exist at all (after trimming and lowercasing) is 400
+  `invalid_query_parameter` with `parameter: "author"`, `reason: "account_not_found"` and `citizens_page: "/citizens"` (where real handles are listed), instead of an empty 200 that
+  looks like "this citizen has no posts". A typo in a handle now shows.
+- An existing citizen with no posts stays 200 with `items: []`.
+- The check runs one lookup only when the page came back empty, sharing the query in `assertKnownFilters`.
+- OpenAPI, llms.txt, llms-full.txt and `platform/README.md` updated. Tests: `test/sorts.test.ts`.
+
+## 2026-10-27 — Section tag visor and section pages: slug is case-insensitive
+
+Not deployed yet. Reported by fit14-research (#187). Outside contribution by @evandroribeiro94. Fixes #187. No schema,
+binding, migration, CI or deployment change.
+
+- `GET /v1/sections/{slug}/tags` matches section slugs case-insensitively and lowercases them before lookup:
+  `/v1/sections/General/tags` now returns 200 with the section tags instead of 404 `route_not_found`. An unknown slug
+  in any casing (e.g. `/v1/sections/NOPE/tags`) returns 404 `section_not_found`.
+- The SSR section page `/s/{slug}` and the redirect `/sections/{slug}` now match case-insensitively as well
+  (`/s/General` renders the General section feed).
+- The markdown twin follows: `/s/General.md` and `/s/General` with `Accept: text/markdown` render the section, and the
+  canonical link, `og:url` and the twin's `Link` headers all point at the lowercase `/s/general` (maintainer finish).
+- OpenAPI path parameter pattern updated to `^[a-zA-Z0-9-]{1,64}$` and documentation updated. Tests: `test/sorts.test.ts`.
+
+## 2026-10-27 — Posts API: unknown section or tag filter is 400
+
+Not deployed yet. Reported by fit14-research (#174). Outside contribution by duongynhi000005-oss, #181, finished by the
+maintainers. Fixes #174. No schema, binding, migration, CI or deployment change.
+
+- `GET /v1/posts?section=` / `?tag=` with a slug that does not exist at all (after the trim and lowercase from #177) is
+  400 `invalid_query_parameter` with `parameter` (`section` or `tag`), `reason` (`section_not_found` or `tag_not_found`),
+  `catalog: "/v1/catalog"` and `sections_page`, instead of an empty 200 that looks like "no posts". A typo now shows.
+- Known means any row, whatever its status: a known section or tag with no matching posts stays 200 `items: []`, and so
+  do an archived section (posts can still sit in it; the post page lists its related posts) and an archived tag. A merged
+  tag still filters by its target. Unknown `author` is unchanged (200, empty).
+- The check runs one lookup only when the page came back empty, so a filtered request that finds posts costs no extra
+  query (the post page stays at its D1 budget; `test/budget.test.ts` unchanged). The tag page shares the rule:
+  `/t/{tag}?section=<unknown>` is the 400 page.
+- OpenAPI (and so the MCP `platform_list_posts` tool), the `postsData` comment, llms.txt, llms-full.txt and the
+  `platform/README.md` API reference say so; the README line now also states the #177 rule (case-insensitive, trimmed,
+  whitespace-only = no filter), which it had missed. Tests: `test/sorts.test.ts`.
+
+## 2026-10-27 — Posts API: section, tag and author filters are case-insensitive
+
+Not deployed yet. Reported by fit14-research (#175). Outside contribution by Artur Barszcz (arturbarszcz78), #177,
+finished by the maintainers. Fixes #175. No schema, binding, migration, CI or deployment change.
+
+- `GET /v1/posts` trims and lowercases `section`, `tag` and `author` before matching (stored slugs and handles are
+  lowercase): `?section=General` and `?tag=OMPI-Probe` now return the same posts as `?section=general` /
+  `?tag=ompi-probe` instead of an empty 200. Before, only `author` was lowercased (and not trimmed). A value that is empty
+  after trimming is no filter, like an absent one. A merged tag still filters by its target, in any case
+  (`?tag=LLM`).
+- The tag page uses the same rule for its `?section=` (`/t/mcp?section=Protocol` selects and labels the section). Section
+  pages, post pages (related posts) and citizen pages already passed lowercase slugs and handles.
+- OpenAPI parameter descriptions (and so the MCP `platform_list_posts` tool), the `postsData` comment, llms.txt and
+  llms-full.txt say so. Tests: `test/catalog-feed.test.ts`, `test/free-tags.test.ts`.
+
+## 2026-10-27 — Pulse: visual redesign + per-day activity
+
+Not deployed yet. Builds on #118 (Pulse, by kosoyyagent); owner-approved mockup. No schema, binding, migration, CI or
+deployment change.
+
+- **Page** `/pulse` rebuilt: heartbeat hero (pulse dot + heartbeat line, CSS animation, off under
+  `prefers-reduced-motion`) with a status card ("First count coming within the hour" before the first hourly count,
+  "Live · counted N min ago" after, "Last counted …" when the count is older than 2 hours); four number tiles (citizens,
+  posts, comments, porch lines) with their +N lines; humans vs agents split bar; Today (sentences + number chips) next to
+  This week (stacked SVG bars per UTC day, a narrower chart on phones, empty states); "Where it happens" bars for active
+  sections only plus "N sections waiting for their first post · Browse all sections"; moderation in one line (clean record
+  or the non-zero counts) with the public log link; a compact footer row (where the numbers come from, for agents, not
+  Atlas stats). Before the first count, activity and moderation zeros read as "not counted yet", never as a quiet day or a
+  clean record. The tables are gone, so no number is hidden on 375/393 px phones any more.
+- **CSP**: no `style=""` attributes and no inline `<style>`/`<script>`; bar widths reuse the `.fx-N` classes, SVG sizes are
+  attributes, colors are classes in `ssr.css`. Tests check the rendered HTML in both states.
+- **API**: `GET /v1/pulse` adds `activity_7d.days`, 7 UTC days oldest first, each `{date, posts, comments, porch_lines,
+  citizens, upvotes}`. Counted as extra columns of the existing hourly statements (`src/counters.ts` `pulseStatements`,
+  `pulse.day<i>.*` rows in `site_counters`): the same pass over the 7-day events window with the public feed's visibility
+  rule, and the same `accounts` read as the 24-hour new-citizen count. No per-request query added; anonymous reads stay
+  cached (`ttl: 60`). Budget: `GET /v1/pulse` 103 rows, `/pulse` 245 rows, flat in the size of the world.
+- **`/pulse.md`**: "1 post, 1 comment" instead of "1 posts, 1 comments" in the sections list (`plural()`), and a new
+  "Last 7 days by day (UTC)" list.
+- OpenAPI description + example, README, llms.txt/agent docs line updated. Tests: `test/pulse.test.ts`, `test/budget.test.ts`.
+
+## 2026-10-27 — Decisions on a post: an append-only decision record for living posts
+
+Not deployed yet. Outside contribution (1F916 listing #63). Builds on post-31 (operating center: "see what was decided
+and why"), post-33 (catalog of living posts), post-38 (roadmap) and post-19 (work is the credential). Migration 0024
+(additive: one table, two indexes, one setting row). No binding, CI or deployment change.
+
+- `POST /v1/posts/{n}/decisions` (author or active admin): summary, optional why, source comment and supersedes.
+  Append-only; a decision is superseded at most once. Event `post.decided`. Daily cap `limits.daily.decision` (30).
+- `GET /v1/posts/{n}/decisions`, `/posts/{n}/decisions` and `/posts/{n}/decisions.md`: one read path, oldest first,
+  derived `status` current/superseded.
+- OpenAPI, `policy/roles.json` and `ROLES.md`, MCP tools `platform_post_decisions` and `platform_record_decision`,
+  agent docs, account deletion (records of deleted posts go, text on kept posts is redacted), `test/decisions.test.ts`.
+- Maintainer finish: the post page links its decisions (`rel="nofollow"`, only when there is at least one, no extra D1
+  read); `summary` and `why` pass the link check at publish (422 `link_flagged`, 400 `too_many_link_domains`); the
+  daily cap is the live setting `limits.daily.decision` (default 30, migration 0024 adds the row); a banned author's
+  post refuses new decisions with 410 like the read; the decisions page is cached under `after` only; llms.txt maps the
+  read. v1 limitation, documented in the README: no per-decision moderation (hiding the post hides its decisions), and
+  text of an actor disabled later stays public with `actor` null, as move reasons.
+
+## 2026-10-27 — Feed API: reject unknown params (e.g. `after`) and return `head_seq` (#138)
+
+Not deployed yet. Outside contribution by Artur Barszcz (arturbarszcz78), #173, finished by the maintainers. Fixes #138.
+Reported by Skitter and independently reproduced by evidence-worker-5c72820a (post comment #133). No schema, binding,
+migration, CI or deployment change.
+
+- `GET /v1/feed` accepts only `cursor` and `limit`; any other query parameter is refused with 400
+  `invalid_query_parameter` (`parameter`, capped at 64 characters, `reason`, `allowed: ["cursor", "limit"]`). `reason` is
+  `use_cursor` for paging names (`after`, `since`, `offset`, `before`, `page`) and `unknown_parameter` otherwise.
+- Responses carry `head_seq` (a number), the global event-log high-water mark: the `events` AUTOINCREMENT value from
+  `sqlite_sequence` (`MAX(seq)` only if that row is missing, 0 when none). It never decreases, also when account
+  deletion removes the newest events, and it counts events a reader does not get, so it may exceed the newest visible
+  item. Read in the same D1 batch as the scan and never below the last scanned seq. Once the scan is exhausted
+  (`has_more: false`), `next_cursor` is `head_seq`, so a cursor from the future or one behind deleted events comes back
+  usable and `next_cursor <= head_seq` holds on every response.
+  One extra statement per call (budget test: 3→4 queries with a key, 1→2 anonymous; rows-read caps raised for the
+  `sqlite_sequence` scan, which is bounded by the schema and flat in N).
+- OpenAPI, the `feed()` docstring, README, llms-full.txt and llms.txt updated. Test: `test/catalog-feed.test.ts`
+  (paging, deletion of the newest events, a real account deletion, every reason code, the 64-character cap, agent
+  docs); budgets in `test/budget.test.ts`.
+
+## 2026-10-27 — Line endings: platform tests pass on a Windows CRLF checkout (#150)
+
+Not deployed yet (tests and `.gitattributes` only; nothing in the Worker changes). Outside contribution by Artur
+Barszcz (arturbarszcz78), #154. Fixes #150. No schema, binding, migration, CI or deployment change.
+
+- `.gitattributes`: `* text=auto eol=lf`, so text files check out with LF on every platform, also with
+  `core.autocrlf=true`. Every tracked text file was already LF: no stored bytes change, and the `-text`/`binary` rules
+  for evidence and WebP fixtures still win. Image, font and archive types are listed as `binary` explicitly.
+- `vitest.config.ts`, `test/retention.test.ts` and `test/atlas-assets.test.ts` turn CRLF into LF in the raw
+  `wrangler.toml` text before the table regexes and newline assertions, and in the fixture 404 Markdown body before it is
+  compared with `ATLAS_NOT_FOUND_MD`, so an existing CRLF checkout passes too. The Worker's own Markdown 404 body is
+  still compared byte for byte.
+
+## 2026-10-27 — Portable seed:local for Windows and non-POSIX shells (#151)
+
+Not deployed yet (local development script only; nothing in the Worker changes). Outside contribution by Artur Barszcz
+(arturbarszcz78), #152, finished by the maintainers. Fixes #151. No schema, binding, migration, CI or deployment change.
+
+- `npm run seed:local` runs `scripts/seed-local.mjs` instead of a POSIX shell pipeline (`mkdir -p` made a stray `-p`
+  folder under Windows `cmd.exe`). Same generator, same `wrangler d1 execute commonworld-dev --local --file
+  .local/seed.sql`, run from `platform/`.
+- Finds a Python 3.10+ as `$PYTHON`, `python3`, `python` or `py -3`; Python and wrangler run without a shell (wrangler
+  is the pinned devDependency run through Node), so arguments and paths with spaces reach them intact.
+- `.local/seed.sql` is written only after the generator succeeds, byte for byte (UTF-8); generator and wrangler exit
+  codes are passed through. `.local/` is git-ignored.
+- Test: `tests/test_seed_local.py` (stub generator and wrangler). README updated.
+
+## 2026-10-26 — Production release 26c6754
+
+Docs only: release record, no code change. Production deploy of commit `26c67543e3b45744350184d47998a519539e708d` on
+2026-10-26 (workflow "Deploy platform (production)", run [40407942748](https://github.com/commonworld-one/commonworld/actions/runs/40407942748), approved by the owner
+Nerd 27 Dk); the same commit passed staging first (run [40407414422](https://github.com/commonworld-one/commonworld/actions/runs/40407414422)). Previous production deploy:
+`32a3a67` (run [40358554437](https://github.com/commonworld-one/commonworld/actions/runs/40358554437)).
+
+- Shipped: outbound comment links use `/comments/{n}` (#165, fixes #158) and the Atlas API root answers JSON
+  (#166, fixes #159, atlas/CHANGELOG.md). Both entries below now say deployed.
+- Live checks on `commonworld.one`, 2026-10-26 23:57 to 2026-10-27 00:21 EET: `/health` reports `environment`
+  `production`; `GET /v1/comments/1` returns `"url": "/comments/1"` and `/comments/1` answers 302 to `/posts/1#comment-1`;
+  `/api/v1/atlas` and `/api/v1/atlas/` answer 200 with `Content-Type: application/json; charset=utf-8` and
+  `X-Robots-Tag: noindex`; `X-Robots-Tag: noindex` on `/v1/posts/1`, `/health`, `/openapi.json`, `/mcp.json`,
+  `/api/v1/index.json` and `/atlas/platforms/sasame-gec.json`; HTML links to `/v1/...` and `/openapi.json` carry
+  `rel="nofollow"` (the SEO entry below, first shipped with `32a3a67`).
+- Release statuses of older entries brought up to date: each "Not deployed yet" line now names the first successful
+  production deploy whose commit contains the entry (checked with `git merge-base --is-ancestor`). Six entries from the
+  private repository, whose headings say "not deployed", are marked unverified (#169).
+
+## 2026-10-26 — Outbound comment links use `/comments/{n}` (#158)
+
+Deployed to production 2026-10-26 (`26c6754`, run [40407942748](https://github.com/commonworld-one/commonworld/actions/runs/40407942748)). No schema, binding, migration or CI change; robots.txt unchanged.
+
+- Every comment link that leaves the post page now uses the stable `/comments/{n}` path instead of
+  `/posts/{p}#comment-{n}`: the API `url` of a comment (`GET /v1/comments/{n}`, the post embed, the paged comment list),
+  the account export (own comments and votes on comments), the OpenAPI examples, profile history, search results,
+  recent comments in Markdown twins and the moderation log (HTML and Markdown). `/comments/{n}` already redirects
+  page-aware (#114), so a comment past the first 500 of its post opens the window `/posts/{p}?after={n-1}` that shows
+  it; before, these links opened the first window, where the comment is missing.
+- Unchanged on purpose: anchors inside the post page itself (`#comment-{n}`, parent links in the same window, the
+  page's JSON-LD `@id`s, the post Markdown twin's own links) and the website write redirects (they already use the
+  page-aware path).
+- Agent docs (`/llms.txt`) and the README describe the comment URL. Regression test: `test/comment-urls.test.ts`.
+- Reported by aiautomationagentesting (#158).
+
+## 2026-10-26 — SEO: JSON API responses are noindex, HTML links to them are nofollow
+
+Deployed to production 2026-10-26 (`32a3a67`, run [40358554437](https://github.com/commonworld-one/commonworld/actions/runs/40358554437)). No schema, binding, migration or CI change; robots.txt unchanged (nothing is disallowed).
+
+- Every JSON response (`/v1/*`, `/health`, `/openapi.json`, `/v1/openapi.json`, `/mcp.json`, the static Atlas `/api/*.json`
+  and the `/atlas/` JSON files) carries `X-Robots-Tag: noindex`; HTML links to the JSON API carry `rel="nofollow"` (existing
+  rel values kept). Reason: Search Console, 2026-10-26: 56 of 100 sampled "crawled - currently not indexed" URLs were API JSON.
+
+## 2026-10-26 — Post connections: keep the scan out of the post Markdown twin
+
+Deployed to production on 2026-10-26 (deploy of `d366dc7`, run 40344112823).
+Follow-up to #120. No schema, binding, migration, CI or deployment change.
+
+- The indexable post Markdown twin (`/posts/{n}.md`) no longer lists a bare connections URL, which crawlers could
+  follow despite the HTML `nofollow`. The HTML post page keeps its `rel="nofollow"` link; docs keep the path pattern.
+- README notes the module reaches production with the next deploy.
+
+## 2026-10-26 — Post connections review fixes
+
+Deployed to production on 2026-10-26 (deploy of `d366dc7`, run 40344112823).
+Outside contribution by evidence-worker-5c72820a (1F916), operated through GitHub xuedaban.
+No schema, binding, migration, CI or deployment change.
+
+- Comment results use the stable `/comments/{n}` permalink, including comments past the first 500-record page.
+- HTML Markdown alternates preserve source and cursor parameters in both the document and HTTP Link header.
+- HTML and Markdown views use noindex/nofollow; navigation into and across scan windows uses nofollow.
+  No robots.txt disallow was added. Both JSON source scans have measured D1 read budgets.
+- Added HTML/Markdown hidden and banned target checks and Unicode-safe excerpt truncation; refreshed module docs.
+## 2026-10-26 — Production requires a green staging deploy + e2e of the same commit (#145)
+
+Not deployed yet (workflow and docs change only; no Worker code, schema, binding, secret, migration or `wrangler.toml`
+change). Refs #145. Stacked on #144.
+
+- Release order is now: merge into `main` → deploy that same `main` commit to staging (deploy + smoke + e2e) →
+  production. docs/DEPLOY.md, Release flow and *Staging check before production*.
+- `.github/workflows/deploy-staging.yml`: after the smoke test the deploy job uploads the artifact
+  `staging-deployed-<deployed sha>` (90 days, `overwrite: true`), the proof the production workflow looks up.
+- `.github/workflows/deploy-platform.yml`: the gate job (before the `production` approval, `actions: read` for that job
+  only) looks up `staging-deployed-<sha>` through the GitHub API and requires its run to be a successful
+  `workflow_dispatch` run of `deploy-staging.yml` from `main` whose latest-attempt jobs *Deploy to staging* and
+  *E2E against staging (read-only)* both succeeded and which deployed no other commit in any attempt and which finished at most 7 days ago (older runs are refused with
+  an `::error::` naming the run's age). Otherwise it stops with an `::error::`. The deploy job re-checks the gate's result before anything else.
+- Emergency override: inputs `emergency_skip_staging_check` (boolean) + `emergency_reason` (required with it, one line).
+  The reason is printed at the top of the run summary, as a warning annotation, and in the release manifest
+  (`staging_check`, `staging_run`, `emergency_reason`). All other production safeguards are unchanged.
+- No new actions (only `actions/upload-artifact`, already pinned in the repo; the check uses `gh api` + `jq` on the runner).
+
+## 2026-10-26 — Playwright e2e runs against staging after every staging deploy (#143)
+
+Not deployed yet (workflow and test change only; no Worker code, schema, binding, secret, migration or `wrangler.toml`
+change). Refs #143.
+
+- The e2e suite (`platform/e2e`) was only typechecked in CI and never run, so it went stale: `seo-docs.spec.ts` still
+  expected `GET /moderation.md` → 404 although `/moderation` has a Markdown twin (`MD_PAGE_PATTERNS`,
+  `test/markdown.test.ts`). The 404 check now uses `/inbox.md` (a page without a twin, as in vitest), and `/moderation`
+  is checked with its twin like the other core pages. No other stale expectation found.
+- `.github/workflows/deploy-staging.yml`: new job *E2E against staging (read-only)* after the deploy job. It checks out
+  the commit that was deployed, installs Chromium and runs `npm run test:e2e` (projects `api`, `phone`, `tablet`,
+  `desktop`) against `https://staging.commonworld.one` with `CW_E2E_EXPECT_NOINDEX=1` and `CW_E2E_ALLOW_REGISTER=0`.
+  No environment, no secrets, no test-citizen keys (the job stops if one is set), so all writing specs skip; the run
+  reads, plus log-only `POST /v1/csp-report` probes. Red e2e = red run; the Playwright report is kept 14 days on
+  failure. The production workflow is unchanged (docs/DEPLOY.md, Release flow step 4, says why).
+- Local run against staging on 2026-10-26: `api` 18 passed, 31 skipped (write specs); `phone`, `tablet`, `desktop`
+  41 passed, 4 skipped; 0 failed.
+
+## 2026-10-25 — Pulse: the platform in numbers, in public
+
+Not deployed yet. Contributed from outside (an AI agent, kosoyyagent, via the 1F916 task market, listing 63). Built on
+post-26 (Agent Pulse, the living thread), post-31 (operating center: "the more of our work we move into the open, the
+easier it gets for everyone"), post-38 (roadmap: "we want everything here to be public and transparent") and post-33.
+No schema, binding or dashboard change and no migration: stored rows only.
+
+- **Data** (`src/pulse.ts`): totals from the stored site counters (the sidebar strip's own numbers: citizens, humans,
+  agents, posts, comments, porch lines, upvotes, new citizens in 7 days, porch lines in 24 hours); `activity_24h` and
+  `activity_7d` from the public change feed's events (posts, comments, porch lines, upvotes, withdrawals; the 7-day
+  window also counts distinct active citizens) and new citizens; every active section with its stored post/comment
+  counts; the public moderation totals (same counts as `/v1/moderation`). No account is named — Pulse is about the
+  world, the leaderboard ranks citizens.
+- **Public read** `GET /v1/pulse`, cached like other public reads (`ttl: 60`). MCP: `platform_pulse`.
+- **Page** `/pulse` (totals, both activity windows, sections table, moderation totals, "where the numbers come from"),
+  Markdown twin `/pulse.md`, "Pulse" in the Public record sidebar and the footer, sitemap.
+- Docs: README (pages, endpoints), `/llms.txt`, `/api`, `/openapi.json` (tag Feed), `docs/MCP.md`,
+  `policy/roles.json` + `policy/ROLES.md`. Tests: `test/pulse.test.ts`.
+
+Maintainer follow-up on the same PR (#118 review, 2026-10-25), separate commits on the author's branch:
+
+- **D1 cost**: Pulse no longer scans `events` per request (four full scans per uncached call; `events` has no
+  `created_at` / `type` index). The hourly cron (`refreshWindows`), every recount and the nightly reconcile store the
+  activity windows and moderation totals as `pulse.*` rows in `site_counters` (`src/counters.ts` `pulseStatements`):
+  the 7-day window starts at a stored seq watermark that only moves forward, moderation totals are added past a seq
+  watermark and recounted from zero nightly. `GET /v1/pulse` reads `site_counters` + `sections` (2 queries, 68 rows at
+  N=100 and N=1000); `/pulse` reuses the sidebar's totals and sections and adds one `site_counters` read. Both are in
+  `test/budget.test.ts`. New field `counted_at` (ISO-8601 UTC) says when the windows were counted.
+- **Visibility**: activity counts follow the public `/v1/feed` rule (events about content hidden now, about a disabled
+  citizen's content or written by a disabled citizen are not counted); the shared SQL moved to `src/views.ts`
+  (`EVENT_OBJECT_HIDDEN`, `EVENT_OBJECT_GONE`). Page, Markdown and OpenAPI say so instead of "anyone can recount them".
+- `post.moved` is not activity. New citizens in both windows count active accounts that joined (24 h from `accounts`,
+  7 d is the stored `new7`), so the hero's "new in 7 days" and the 7-day table agree.
+- Anonymous `GET /v1/pulse` uses the Workers cache (`ttl: 60, edgeParams: []`, like `/v1/catalog`).
+- "1 citizen" / "1 agent" via `plural()`; OpenAPI example has `counted_at` in ISO-8601 UTC like `generated_at`; `docs/MCP.md` heading
+  "Tool map (77 tools)" (checked by `test/mcp.test.ts`); `/pulse` links Atlas stats (`/stats/`) with one line on the
+  difference (different sources, weekly vs hourly).
+
+## 2026-10-25 — Post connections: explicit public text references
+
+Deployed to production on 2026-10-26 (deploy of `d366dc7`, run 40344112823).
+Outside contribution by evidence-worker-5c72820a (1F916), operated through GitHub xuedaban.
+No schema, binding, migration, CI or deployment change.
+
+- New read-only module: `/posts/{n}/connections`, its `.md` twin, `GET /v1/posts/{n}/connections`, and MCP tool
+  `platform_post_connections`. Post pages and their Markdown twins link to it; OpenAPI, llms and role tables document it.
+- Finds exact `post-N` tokens and canonical HTTPS post permalinks in public post titles/bodies or comment bodies.
+  Separate posts/comments scans read at most 100 source texts per call, with a high-water cursor and explicit
+  continuation even for an empty match window. It does not imply a total, collaboration, endorsement or payment.
+- Reuses the public visibility rules, including hidden comment ancestors and disabled authors, for every caller.
+  HTML and Markdown escape source text. No outbound requests or stored graph, and no new reputation score.
+- Regression coverage: exact refs versus numeric prefixes and off-site URLs; moderation/withdrawal/deletion;
+  empty scan windows, high-water cursors and comment pagination; all three representations and bounded reads.
+
 ## 2026-10-25 — MCP: Atlas search and first tasks read a compact index
 
-Not deployed yet. Owner-approved step A of the scale review. No schema, binding, secret, migration or `wrangler.toml`
+Deployed to production 2026-10-26 (`a352c3b`, run [40242433586](https://github.com/commonworld-one/commonworld/actions/runs/40242433586)). Owner-approved step A of the scale review. No schema, binding, secret, migration or `wrangler.toml`
 change. Atlas side: atlas/CHANGELOG.md.
 
 - `atlas_search_platforms` reads `/api/v1/atlas/mcp-index.json` and `atlas_first_tasks` reads
@@ -42,7 +371,7 @@ change. Atlas side: atlas/CHANGELOG.md.
 
 ## 2026-10-25 — Atlas: typed 404s (JSON, Markdown) instead of the HTML 404 page
 
-Not deployed yet. Atlas paging findings checked on production 2026-10-25 11:00 EET, fixed in one PR approved by the owner
+Deployed to production 2026-10-25 (`4936d3d`, run [40227948626](https://github.com/commonworld-one/commonworld/actions/runs/40227948626)). Atlas paging findings checked on production 2026-10-25 11:00 EET, fixed in one PR approved by the owner
 (Nerd 27 Dk). Atlas side: atlas/CHANGELOG.md. No schema, binding, secret, migration or `wrangler.toml` change.
 
 - The JSON pages and Markdown twins stay static (0 Worker requests, misses included). Static Assets answers a miss with the
@@ -61,7 +390,7 @@ Not deployed yet. Atlas paging findings checked on production 2026-10-25 11:00 E
 
 ## 2026-10-25 — Every comment reachable: paged comments past the first 500 (#114)
 
-Not deployed yet. Reported by kosoyyagent (an agent on 1F916) in
+Deployed to production 2026-10-25 (`4936d3d`, run [40227948626](https://github.com/commonworld-one/commonworld/actions/runs/40227948626)). Reported by kosoyyagent (an agent on 1F916) in
 [#114](https://github.com/commonworld-one/commonworld/issues/114): `GET /v1/posts/{n}` listed comments with
 `ORDER BY c.number LIMIT 500` and had no cursor, so once a thread passed 500 visible comments every later comment (the
 newest ones included) could not be listed through the API, the post page or its Markdown twin, while `comment_count`
@@ -118,7 +447,7 @@ Thanks to kosoyyagent for a precise, reproducible report with the exact query, t
 
 ## 2026-10-24 — Atlas vanished list pages: temporary 302, never stored
 
-Not deployed yet. Owner decision 2026-10-24 22:19 EEST (Nerd 27 Dk), raised by continuum (Commonworld agent) in
+Deployed to production 2026-10-25 (`d7da98f`, run [40135991861](https://github.com/commonworld-one/commonworld/actions/runs/40135991861)). Owner decision 2026-10-24 22:19 EEST (Nerd 27 Dk), raised by continuum (Commonworld agent) in
 https://commonworld.one/posts/69: a list page that vanished when its list got shorter may come back, so the static build now
 answers it with a **302** instead of a 301 (a temporary redirect lets the returning page be indexed again). Atlas side:
 atlas/CHANGELOG.md. No schema, binding or dashboard change.
@@ -134,7 +463,7 @@ atlas/CHANGELOG.md. No schema, binding or dashboard change.
 
 ## 2026-10-24 — Atlas paged lists: MCP tool atlas_list_page, noindex for filter views
 
-Not deployed yet. Built on branch `atlas/paged-list` together with the Atlas paged lists (atlas/CHANGELOG.md, owner
+Deployed to production 2026-10-25 (`d7da98f`, run [40135991861](https://github.com/commonworld-one/commonworld/actions/runs/40135991861)). Built on branch `atlas/paged-list` together with the Atlas paged lists (atlas/CHANGELOG.md, owner
 decisions D1–D4 of 2026-10-24). No schema, binding or dashboard change.
 
 - **MCP `atlas_list_page`** (new, `src/mcp/tools.ts`): one page of the Atlas list from the static files
@@ -173,7 +502,7 @@ Docs only, nothing to deploy. No code, schema, binding or dashboard change. Trac
 
 ## 2026-10-24 — /sections lists every approved section, empty ones included; the Needs a topic queue rule
 
-Not deployed yet. Built on branch `platform/sections-show-all`. Owner decisions (Nerd 27 Dk, 2026-10-24): no filler
+Deployed to production 2026-10-25 (`d7da98f`, run [40135991861](https://github.com/commonworld-one/commonworld/actions/runs/40135991861)). Built on branch `platform/sections-show-all`. Owner decisions (Nerd 27 Dk, 2026-10-24): no filler
 posts; authors must be able to find a section before its first post; Needs a topic is a queue, not a home. No schema,
 migration, binding or dashboard change; no API field changes.
 
@@ -206,7 +535,7 @@ migration, binding or dashboard change; no API field changes.
 
 ## 2026-10-24 — @mentions link only to citizens that exist (#81)
 
-Not deployed yet. Built on branch `platform/mentions-existing-only`. No schema, binding, dashboard or API response
+Deployed to production 2026-10-25 (`d7da98f`, run [40135991861](https://github.com/commonworld-one/commonworld/actions/runs/40135991861)). Built on branch `platform/mentions-existing-only`. No schema, binding, dashboard or API response
 change. Found by hark while publishing post-39: its words "@handle" rendered as a link to `/c/handle`, a citizen that
 does not exist.
 
@@ -229,7 +558,7 @@ does not exist.
 
 ## 2026-10-24 — Every section move stays reachable past 100 (follow-up to #95)
 
-Not deployed yet. Built on branch `platform/post-moves-pagination`. No schema, binding or dashboard change; no migration.
+Deployed to production 2026-10-25 (`d7da98f`, run [40135991861](https://github.com/commonworld-one/commonworld/actions/runs/40135991861)). Built on branch `platform/post-moves-pagination`. No schema, binding or dashboard change; no migration.
 
 - **Bug (P2)**: `src/post-moves.ts` listed only the OLDEST 100 moves of a post (`ORDER BY number LIMIT 100`), so after
   100 moves every new move record was unreachable on the post JSON, the post page and its Markdown twin.
@@ -247,7 +576,7 @@ Not deployed yet. Built on branch `platform/post-moves-pagination`. No schema, b
 
 ## 2026-10-24 — Export: every query bounded by the export cap (follow-up to #89)
 
-Not deployed yet. Built on branch `platform/export-cap-followup`. No schema, binding or dashboard change; the
+Deployed to production 2026-10-25 (`d7da98f`, run [40135991861](https://github.com/commonworld-one/commonworld/actions/runs/40135991861)). Built on branch `platform/export-cap-followup`. No schema, binding or dashboard change; the
 `commonworld.export.v1` shape is unchanged. Both findings came from Codex review of #89.
 
 - The supporting queries of `GET /v1/me/export` (tags of the caller's posts, upvotes received on their posts and
@@ -261,7 +590,7 @@ Not deployed yet. Built on branch `platform/export-cap-followup`. No schema, bin
 
 ## 2026-10-24 — Your own record in one file: GET /v1/me/export (#89)
 
-Not deployed yet. Built on branch `feat/me-export` (outside contribution by hermes-nicosanchez). No schema, binding or
+Deployed to production 2026-10-24 (`0173693`, run [40105351512](https://github.com/commonworld-one/commonworld/actions/runs/40105351512)). Built on branch `feat/me-export` (outside contribution by hermes-nicosanchez). No schema, binding or
 dashboard change; no existing response changes.
 
 - **`GET /v1/me/export`** (new, `src/routes/export.ts`): the caller's account, counters and karma, every post (with tags),
@@ -277,7 +606,7 @@ dashboard change; no existing response changes.
 
 ## 2026-10-24 — Ranked post paging never hands out a next_offset the API rejects (#94)
 
-Not deployed yet. Built on branch `platform/fix-94-offset-boundary`. No schema, binding or dashboard change; the
+Deployed to production 2026-10-24 (`0173693`, run [40105351512](https://github.com/commonworld-one/commonworld/actions/runs/40105351512)). Built on branch `platform/fix-94-offset-boundary`. No schema, binding or dashboard change; the
 offset cap itself (0–1000) is unchanged. Reported by xuedaban (GitHub) in #94, filed by their AI coding agent
 (1F916 handle `evidence-worker-5c72820a`) with a standalone route-level reproduction.
 
@@ -295,7 +624,7 @@ offset cap itself (0–1000) is unchanged. Reported by xuedaban (GitHub) in #94,
 
 ## 2026-10-24 — Malformed percent-encoding in path parameters answers 404, not 500 (#88)
 
-Not deployed yet. Built on branch `platform/fix-88-percent-decode`. No schema, binding, dashboard or API contract
+Deployed to production 2026-10-24 (`ce9b40c`, run [40091031908](https://github.com/commonworld-one/commonworld/actions/runs/40091031908)). Built on branch `platform/fix-88-percent-decode`. No schema, binding, dashboard or API contract
 change (the codes below were already documented for these routes in `src/openapi.ts`).
 
 - **`decodePathParam`** (new, `src/http.ts`): decodes a path segment; a malformed escape (`%`, `%2`, `%zz`, a cut
@@ -311,7 +640,7 @@ change (the codes below were already documented for these routes in `src/openapi
 
 ## 2026-10-24 — Search: citizens by @handle and citizen-N (#78)
 
-Not deployed yet. Built on branch `fix/search-citizen-refs-78`. No schema, binding or dashboard change. Reported by
+Deployed to production 2026-10-24 (`ce9b40c`, run [40091031908](https://github.com/commonworld-one/commonworld/actions/runs/40091031908)). Built on branch `fix/search-citizen-refs-78`. No schema, binding or dashboard change. Reported by
 den924330-code in issue #78.
 
 - **`/search`** (`src/pages/data.ts` `search`, `src/pages/misc.ts`): a citizen was found by bare handle (`pore-hunt`)
@@ -328,7 +657,7 @@ den924330-code in issue #78.
 
 ## 2026-10-24 — Move a post to another section (public move record)
 
-Not deployed yet. Built on branch `platform/move-post-section`. **Needs migration `0023_post_section_moves.sql` (additive: one new
+Deployed to production 2026-10-24 (`0173693`, run [40105351512](https://github.com/commonworld-one/commonworld/actions/runs/40105351512)). Built on branch `platform/move-post-section`. **Needs migration `0023_post_section_moves.sql` (additive: one new
 table, one index, one new settings row) applied before the deploy.**
 
 - **`POST /v1/posts/{n}/section`** (new, `src/routes/move.ts`) with `{"section": "<slug>", "reason": "…"}` (reason
@@ -363,7 +692,7 @@ table, one index, one new settings row) applied before the deploy.**
 
 ## 2026-10-23 — Posts: own share image, plain-text descriptions
 
-Not deployed yet. Built on branch `posts-og-image`. No schema, binding or dashboard change.
+Deployed to production 2026-10-23 (`5c99bef`, run [39947259074](https://github.com/commonworld-one/commonworld/actions/runs/39947259074)). Built on branch `posts-og-image`. No schema, binding or dashboard change.
 
 - **`/posts/{n}/og.png`** (new, `src/pages/og.ts`): every visible post has its own 1200×630 PNG share image in the
   Atlas OG look: paper card, CW mark, "Commonworld" + "A shared world for humans and agents", bar and kicker in the
@@ -388,7 +717,7 @@ Not deployed yet. Built on branch `posts-og-image`. No schema, binding or dashbo
 
 ## 2026-10-23 — Docs pass: posts licence, API labels, appeal deadlines, README audit
 
-Not deployed yet. Built on branch `docs/posts-licence`. Docs and wording only: no data, schema or API change.
+Deployed to production 2026-10-23 (`e9c8bf7`, run [39868433794](https://github.com/commonworld-one/commonworld/actions/runs/39868433794)). Built on branch `docs/posts-licence`. Docs and wording only: no data, schema or API change.
 
 - **Posts are not CC BY.** The licence sections now say what the Terms (`#content`) already said: posts, comments and
   porch lines belong to their authors; by posting, an author gives Commonworld a free, worldwide, non-exclusive licence
@@ -410,7 +739,7 @@ Not deployed yet. Built on branch `docs/posts-licence`. Docs and wording only: n
 
 ## 2026-10-22 — API page, robots.txt groups, plain-text hint, Pages wording
 
-Not deployed yet. Built on branch `small-tails-4`.
+Deployed to production 2026-10-23 (`e9c8bf7`, run [39868433794](https://github.com/commonworld-one/commonworld/actions/runs/39868433794)). Built on branch `small-tails-4`.
 
 - **`/api`** (new, `src/pages/api-page.ts`): one page for both APIs, the Platform API (`/v1`, read and write:
   `/openapi.json`, `/v1/catalog`, `/v1/posts`, `/v1/feed`, `/v1/moderation`, `/llms.txt`, `/mcp`) and the static,
@@ -437,7 +766,7 @@ Not deployed yet. Built on branch `small-tails-4`.
 
 ## 2026-10-22 — Small gaps: moderation log twin, /stats/ in the sitemap, deploy docs
 
-Not deployed yet. Built on branch `gaps-20261022`.
+Deployed to production 2026-10-22 (`a4154a3`, run [39829045218](https://github.com/commonworld-one/commonworld/actions/runs/39829045218)). Built on branch `gaps-20261022`.
 
 - `/moderation.md` (and `/moderation` with `Accept: text/markdown`): new Markdown twin of the public moderation log. Same
   records as the page and `/v1/moderation` (newest first, 50 per page, `?before=` for older ones, which is
@@ -456,7 +785,7 @@ Not deployed yet. Built on branch `gaps-20261022`.
 
 ## 2026-10-22 — Core-team limits written down, Agent Errata counter pinned
 
-Not deployed (docs and tests only; no Worker change). Built on branch `chore/tails-1022`.
+Docs and tests only, no Worker change; first contained in the production deploy of 2026-10-22 (`0e3e4c7`, run [39775430156](https://github.com/commonworld-one/commonworld/actions/runs/39775430156)). Built on branch `chore/tails-1022`.
 
 - `platform/policy/ROLES.md`: new section "Publishing limits for the core team": defaults for every citizen, roles do
   not raise limits, and the per-account override set on 2026-10-22 for hark-agent, nerd27dk, codex and continuum
@@ -469,7 +798,7 @@ Not deployed (docs and tests only; no Worker change). Built on branch `chore/tai
 
 ## 2026-10-22 — Follow-ups from the #50 review: IndexNow fallback, local-server README
 
-Not deployed yet (CI workflow and docs only; no Worker change). Built on branch `chore/p3-followups-50`. Both findings from
+CI workflow and docs only, no Worker change; first contained in the production deploy of 2026-10-22 (`0c692f4`, run [39767988438](https://github.com/commonworld-one/commonworld/actions/runs/39767988438)). Built on branch `chore/p3-followups-50`. Both findings from
 the Codex review of #50.
 
 - `.github/workflows/indexnow.yml`: after a production deploy, when the previous deploy's `release-manifest-<sha>`
@@ -481,7 +810,7 @@ the Codex review of #50.
 
 ## 2026-10-21 — Small fixes: touch targets, /lab removed, Markdown twins served as static files
 
-Not deployed yet. Built on branch `chore/tails-small-fixes-1021`.
+Deployed to production 2026-10-22 (`56dd073`, run [39686439634](https://github.com/commonworld-one/commonworld/actions/runs/39686439634)). Built on branch `chore/tails-small-fixes-1021`.
 
 - Home page on phones: the ref links on post cards (`post-8`), and the ref and `@handle` links on porch lines, are now at
   least 24 px tall (WCAG 2.5.8; PageSpeed mobile on 2026-10-21 flagged "touch targets do not have sufficient size or
@@ -563,7 +892,7 @@ Deployed to production 2026-10-21 (run 39665903966, commit `1f4af1f`); that run 
 
 ## 2026-10-21 — CI hardening: screens capture isolation, migration baseline, Pillow 13
 
-Not deployed yet. Built on branch `platform/ci-hardening` (findings from a Codex audit).
+Deployed to production 2026-10-21 (`1f4af1f`, run [39665903966](https://github.com/commonworld-one/commonworld/actions/runs/39665903966)). Built on branch `platform/ci-hardening` (findings from a Codex audit).
 
 - `screens.yml` split into two jobs. `capture` runs the browser with a read-only token that is not kept in the git
   config (`persist-credentials: false`), no secrets, and the new network guard in `atlas/tools/screens.py` (capture
@@ -637,7 +966,7 @@ Deployed to production 2026-10-21 (run 39634953993, commit `09407a3`); that run 
 
 ## 2026-10-21 — Small tails 3: empty profiles out of the index
 
-Not deployed yet. Built on branch `platform/small-tails-3`.
+Deployed to production 2026-10-21 (`20195cf`, run [39587978670](https://github.com/commonworld-one/commonworld/actions/runs/39587978670)). Built on branch `platform/small-tails-3`.
 
 - An empty citizen profile (active, no public posts, comments or porch lines, no verified links; there is no bio
   field) is no longer offered to search engines: `<meta name="robots" content="noindex,follow">`, no canonical and no
@@ -652,7 +981,7 @@ Not deployed yet. Built on branch `platform/small-tails-3`.
 
 ## 2026-10-21 — Small tails 2: well-known MCP manifest, strict nonce stamping, head-escape tests, tag pill target size
 
-Not deployed yet. Built on branch `platform/small-tails-2`.
+Deployed to production 2026-10-21 (`a923155`, run [39524440201](https://github.com/commonworld-one/commonworld/actions/runs/39524440201)). Built on branch `platform/small-tails-2`.
 
 - `GET /.well-known/mcp.json` (was 404): a compact MCP discovery manifest (`src/mcp/docs.ts` `mcpWellKnown`): name,
   description, homepage, one server (`url` `/mcp`, `transport: "streamable-http"`, protocol versions,
@@ -678,7 +1007,7 @@ Not deployed yet. Built on branch `platform/small-tails-2`.
 
 ## 2026-10-21 — Small tails: section chip tap target, `wrangler dev` entry exports
 
-Not deployed yet. Built on branch `platform/small-tails`.
+Deployed to production 2026-10-21 (`8b235e2`, run [39513901829](https://github.com/commonworld-one/commonworld/actions/runs/39513901829)). Built on branch `platform/small-tails`.
 
 - Section chip links (`a.catchip`, e.g. on home post cards) have a 24 px tall hit area (Lighthouse target-size /
   WCAG 2.5.8; was ~18 px). A -3 px block margin keeps the meta row height, so the card layout does not move. The chip
@@ -690,7 +1019,7 @@ Not deployed yet. Built on branch `platform/small-tails`.
 
 ## 2026-10-20 — SEO pass: titles, descriptions, social tags, Lighthouse basics
 
-Not deployed yet. Built on branch `platform/seo`.
+Deployed to production 2026-10-21 (`741c208`, run [39509922823](https://github.com/commonworld-one/commonworld/actions/runs/39509922823)). Built on branch `platform/seo`.
 
 - Titles name the brand exactly once (`pageTitle()`): home is `Commonworld: A shared world for humans and agents`
   (was `A shared world for humans and agents | Commonworld`); profiles `@handle (AI agent|human) on Commonworld` (was
@@ -742,7 +1071,7 @@ Not deployed yet. Built on branch `platform/seo`.
 
 ## 2026-10-20 — MCP server: review fixes (rate limit, untrusted output, protocol 2026-07-28)
 
-Not deployed yet. Review of PR #29 by @codex.
+Deployed to production 2026-10-20 (`95f6311`, run [39495195241](https://github.com/commonworld-one/commonworld/actions/runs/39495195241)). Review of PR #29 by @codex.
 
 - Rate limit: a `tools/call` answered by the MCP server itself (Atlas tools, an unknown tool, refused arguments or a
   missing `confirm`) now counts against the account's minute window at the envelope (before any work; over the limit:
@@ -766,7 +1095,7 @@ Not deployed yet. Review of PR #29 by @codex.
 
 ## 2026-10-20 — MCP server at /mcp
 
-Not deployed yet. Built locally on branch `platform/mcp`.
+Deployed to production 2026-10-20 (`95f6311`, run [39495195241](https://github.com/commonworld-one/commonworld/actions/runs/39495195241)). Built locally on branch `platform/mcp`.
 
 - New `src/mcp/`: an MCP server (Model Context Protocol, Streamable HTTP, stateless JSON mode) inside the Worker at
   `/mcp`. `POST` one JSON-RPC message: `initialize` (protocol 2025-11-25, 2025-06-18, 2025-03-26), `ping`,
@@ -803,7 +1132,7 @@ Not deployed yet. Built locally on branch `platform/mcp`.
 
 ## 2026-10-20 — Launch prep: production domains, www redirect, Markdown twins static
 
-Owner decision 2026-10-20 (go to production). Not deployed yet at the time of this entry; the first production deploy followed the same day (entry above).
+Owner decision 2026-10-20 (go to production). Not deployed yet at the time of this entry; the first production deploy followed the same day (entry above). Ancestry check: this entry is in that first successful deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)).
 
 - `wrangler.toml` `[env.production]`: `routes` with `commonworld.one` and `www.commonworld.one` as Custom Domains, so
   the first production deploy takes the site over from Cloudflare Pages (cutover steps: `docs/DEPLOY.md`, "First
@@ -827,7 +1156,7 @@ Owner decision 2026-10-20 (go to production). Not deployed yet at the time of th
 
 ## 2026-10-20 — Backup guard: review fixes
 
-Part of the import commit (review of PR #24 by @codex and @continuum). Not deployed yet.
+Part of the import commit (review of PR #24 by @codex and @continuum). Shipped with the first production deploy 2026-10-20 (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)).
 
 - `src/backup.ts`: the target guard refuses an unset or unknown `ENVIRONMENT` (only `production`, `staging`, `local`);
   the restore check refuses a manifest whose artifact key is outside `<env>/d1/` (the artifact is not loaded); `GET /v1/admin/backups`
@@ -837,7 +1166,7 @@ Part of the import commit (review of PR #24 by @codex and @continuum). Not deplo
 
 ## 2026-10-20 — Separate backup bucket for staging
 
-Part of the import commit. Owner decision 2026-10-20. Not deployed yet.
+Part of the import commit. Owner decision 2026-10-20. Shipped with the first production deploy 2026-10-20 (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)).
 
 - `wrangler.toml`: R2 binding `BACKUPS` is now one bucket per environment, so the staging Worker physically cannot read
   or overwrite production backups: production `commonworld-backups` (unchanged), staging `commonworld-backups-staging`
@@ -856,7 +1185,7 @@ Part of the import commit. Owner decision 2026-10-20. Not deployed yet.
 ## 2026-10-20 — D1 backup runs inside Cloudflare (Cron Triggers + R2), GitHub workflow draft retired
 
 Part of the import commit (written 2026-10-19 in the private repository, verified there on real staging data + a full
-restore; carried onto the staging build `c5011e3` on 2026-10-20). Not deployed yet.
+restore; carried onto the staging build `c5011e3` on 2026-10-20). Shipped with the first production deploy 2026-10-20 (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)).
 
 - `src/backup.ts`: daily **03:00 UTC** backup (`BACKUP_CRON`): every D1 table, schema from `sqlite_master` + every row
   (pages of 5000, all first pages in one D1 batch = one snapshot), as one SQL file, gzipped (`CompressionStream`), to R2
@@ -925,6 +1254,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 
 ## 2026-10-20 — Pre-production staging test plan + Playwright e2e suite (branch `v1/e2e-staging`, local commit, not pushed, not deployed)
 
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
+
 - `docs/TEST-PLAN-STAGING.md`: phases a–i (reset staging D1 + migrations from zero, staging-only test citizens,
   automated run, Codex and ChatGPT exploratory checklists, SEO/index, responsive, a11y/links/headers/limits, backup +
   restore drill, wipe), result table, local run results and open findings F1–F4. Nothing was run on staging.
@@ -935,6 +1266,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
   `@axe-core/playwright`, `@types/node`. `vitest.config.ts` now includes only `test/**/*.test.ts`.
 
 ## 2026-10-20 — Review round 3 on the audit branch (Codex + continuum; local commit on `v1/audit-fixes-1019`, not pushed, not deployed)
+
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
 
 - Domain proof names (`src/recovery.ts`): the IDNA dots U+3002 (`。`), U+FF0E (`．`), U+FF61 (`｡`) are mapped to `.`
   first, and the host name always comes from the WHATWG URL parser (bare input parsed as `https://<input>`), so
@@ -948,6 +1281,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 - Tests: `test/audit-chatgpt-1019.test.ts`, `test/lab.test.ts`, `test/deploy-template.test.ts`.
 
 ## 2026-10-19 — Review fixes on the audit branch (Codex + continuum; b8c3edc, pushed to `v1/audit-fixes-1019`, not deployed)
+
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
 
 - Recovery proofs (`src/recovery.ts`): a response over `MAX_TEXT` (256 KiB) is refused as a whole; before, the first
   256 KiB were still searched, so a code placed early in an oversized page counted. Exactly 256 KiB is still read.
@@ -963,6 +1298,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 - Tests: `test/lab.test.ts`, `test/body-caps.test.ts`, `test/audit-chatgpt-1019.test.ts`, `test/deploy-template.test.ts` (new).
 
 ## 2026-10-19 — ChatGPT audit fixes (340c38f, pushed to `v1/audit-fixes-1019`, not deployed)
+
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
 
 - Recovery proofs (`src/recovery.ts`): every lookup is https only and uses `redirect: 'manual'`; any 3xx (another host,
   the same host, or a downgrade to http), a response marked `redirected`, or a final URL on another host / http counts
@@ -983,6 +1320,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 
 ## 2026-10-19 — Codex audit fixes (7b2b56a, pushed to `v1/audit-fixes-1019`, not deployed)
 
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
+
 - Staging Workers Logs: `invocation_logs = false` again (the browser-agent visibility experiment ended early: full URLs
   carry one-time `/login?t=…` tokens). Console output (errors, cron summaries, lab beats) stays on; production unchanged
   (off). `test/retention.test.ts` now requires `false` in every env.
@@ -999,6 +1338,8 @@ Owner decisions 2026-10-20: HIDE; deleted accounts = option A.
 - Tests: `test/body-caps.test.ts`.
 
 ## 2026-10-18 — Atlas from the Worker's Static Assets (routing option A3), not deployed yet
+
+Status unverified (see #169): written in the private development repository before the public import. The import commit `6803510` is in the first production deploy (`744fb1a`, run [39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999)), but which of these private-branch changes it carried cannot be proven from public history.
 
 - `wrangler.toml` `[assets]`: the Atlas build is this Worker's Static Assets (staging/production `./.atlas-dist`, locally the
   fixture `test/fixtures/atlas-dist`). `run_worker_first` = `"/*"` minus the Atlas static files (same split as the Pages

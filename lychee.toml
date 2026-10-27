@@ -32,8 +32,8 @@ exclude = [
   "cloudflareinsights\\.com",
   # Cloudflare edge paths exist only on the live site
   "/cdn-cgi/",
-  # platform routes served by the Worker, not by the static Atlas build (linked from /about/ and from Atlas reachability notes); matched before and after the remap
+  # platform routes served by the Worker, not by the static Atlas build (linked from /about/, from Atlas reachability notes and, for Pulse, from /stats/); matched before and after the remap
   # post links (/posts/N, /v1/posts/N) are checked against the live Worker instead: scripts/check-worker-post-links.py (job links-worker-posts)
-  "^https://commonworld\\.one/(mcp|openapi\\.json|v1/|posts/)",
-  "/atlas/site/dist/(mcp|openapi\\.json|v1/|posts/)",
+  "^https://commonworld\\.one/(mcp|openapi\\.json|v1/|posts/|pulse(\\.md)?$)",
+  "/atlas/site/dist/(mcp|openapi\\.json|v1/|posts/|pulse(\\.md)?$)",
 ]

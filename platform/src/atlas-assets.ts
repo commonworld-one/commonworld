@@ -110,6 +110,7 @@ export function atlasTypedNotFound(method: string, url: URL, base: Headers = new
   if (kind === 'json') {
     headers.set('content-type', 'application/json; charset=utf-8');
     headers.set('access-control-allow-origin', '*');
+    headers.set('x-robots-tag', 'noindex'); // JSON is for agents, never a search result (same as /api/*.json in _headers)
     body = JSON.stringify({ error: { code: 'not_found', message: ATLAS_NOT_FOUND_JSON_MESSAGE },
       links: { index: `${url.origin}/api/v1/atlas/index.json`, docs: `${url.origin}/atlas/api/` } }) + '\n';
   } else {

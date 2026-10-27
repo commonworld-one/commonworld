@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
     "gen:assets": "node scripts/gen-assets.mjs",
     "gen:og": "python3 scripts/gen_og_assets.py",
-    "seed:local": "mkdir -p .local && python3 scripts/seed_from_mockups.py > .local/seed.sql && wrangler d1 execute commonworld-dev --local --file .local/seed.sql",
+    "seed:local": "node scripts/seed-local.mjs",
     "atlas:build": "node scripts/build-atlas-assets.mjs",
     "deploy:staging": "node scripts/build-atlas-assets.mjs --build && wrangler deploy --env staging",
     "deploy:production": "node scripts/build-atlas-assets.mjs --build && wrangler deploy --env production",

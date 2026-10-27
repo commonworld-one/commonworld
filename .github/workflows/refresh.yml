@@ -1,5 +1,6 @@
 name: Atlas weekly refresh
-# Re-checks every Atlas entry (atlas/refresh.py), rebuilds and validates the site, and opens a PR when data changed.
+# Re-checks every Atlas entry (atlas/refresh.py), copies the Citizens numbers of /stats/ from the platform's Pulse (atlas/tools/stats_from_pulse.py),
+# rebuilds and validates the site, and opens a PR when data changed.
 # Never auto-merges. PRs opened with GITHUB_TOKEN do not trigger ci.yml normally, so this job runs build + check + smoke itself and then dispatches ci.yml on the PR branch (workflow_dispatch is allowed from GITHUB_TOKEN), which shows as the PR's check.
 on:
   schedule:
@@ -53,6 +54,10 @@ jobs:
           python atlas/refresh.py --state-from "$RUNNER_TEMP/prev-state.json" \
             --summary "$RUNNER_TEMP/summary.md" --report "$RUNNER_TEMP/report.json"
           cat "$RUNNER_TEMP/summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Stats from Pulse
+        # Citizens rows of atlas/data/stats.json from https://commonworld.one/v1/pulse. Fail-safe: when Pulse is unreachable or
+        # its shape is unexpected the script leaves the file unchanged, prints a ::warning:: and exits 0.
+        run: python atlas/tools/stats_from_pulse.py --summary "$RUNNER_TEMP/summary.md"
       - name: Changed?
         id: diff
         run: |

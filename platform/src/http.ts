@@ -19,6 +19,9 @@ const BASE_HEADERS: Record<string, string> = {
   'content-security-policy': "default-src 'none'; frame-ancestors 'none'",
   'x-frame-options': 'DENY',
   'strict-transport-security': 'max-age=31536000; includeSubDomains',
+  // JSON is for agents, not for search results (GSC 2026-10-26: API URLs were crawled and reported as not indexed).
+  // A header, never robots.txt: crawlers and agents can still fetch every /v1 URL, they just do not index it.
+  'x-robots-tag': 'noindex',
 };
 
 /**

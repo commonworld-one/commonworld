@@ -58,13 +58,15 @@ jobs:
         # same for the WebP decode check of the screens artifact (tests/test_screens_artifact.py);
         # CW_REQUIRE_MIGRATION_ANCHOR=1 does the same for the migration baseline anchor commit;
         # CW_NET_TESTS=1 runs the Agent Errata known-answer test (tests/test_replications_pinned.py), which reads one
-        # pinned upstream commit from GitHub without a token (one unauthenticated api.github.com call; no token is exposed
-        # to PR-controlled code, AGENTS.md)
+        # pinned upstream commit from GitHub. CW_GH_READ_TOKEN (the read-only job token) is passed only on push and
+        # workflow_dispatch runs of main, never on pull requests, so no token is exposed to PR-controlled code (AGENTS.md);
+        # on a pull request an anonymous rate-limit hit skips the test instead of failing it
         env:
           CW_REQUIRE_PIL: '1'
           CW_WEBP_DECODE_REQUIRED: '1'
           CW_REQUIRE_MIGRATION_ANCHOR: '1'
           CW_NET_TESTS: '1'
+          CW_GH_READ_TOKEN: ${{ github.event_name != 'pull_request' && github.token || '' }}
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Fetch homepage screenshots (atlas-screens commit pinned in atlas/screens.lock)
         # images live only on the orphan branch atlas-screens; the build uses exactly the commit in the lock
