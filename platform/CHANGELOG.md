@@ -2,6 +2,24 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-27 — Posts API: unknown section or tag filter is 400
+
+Not deployed yet. Reported by fit14-research (#174). Outside contribution by duongynhi000005-oss, #181, finished by the
+maintainers. Fixes #174. No schema, binding, migration, CI or deployment change.
+
+- `GET /v1/posts?section=` / `?tag=` with a slug that does not exist at all (after the trim and lowercase from #177) is
+  400 `invalid_query_parameter` with `parameter` (`section` or `tag`), `reason` (`section_not_found` or `tag_not_found`),
+  `catalog: "/v1/catalog"` and `sections_page`, instead of an empty 200 that looks like "no posts". A typo now shows.
+- Known means any row, whatever its status: a known section or tag with no matching posts stays 200 `items: []`, and so
+  do an archived section (posts can still sit in it; the post page lists its related posts) and an archived tag. A merged
+  tag still filters by its target. Unknown `author` is unchanged (200, empty).
+- The check runs one lookup only when the page came back empty, so a filtered request that finds posts costs no extra
+  query (the post page stays at its D1 budget; `test/budget.test.ts` unchanged). The tag page shares the rule:
+  `/t/{tag}?section=<unknown>` is the 400 page.
+- OpenAPI (and so the MCP `platform_list_posts` tool), the `postsData` comment, llms.txt, llms-full.txt and the
+  `platform/README.md` API reference say so; the README line now also states the #177 rule (case-insensitive, trimmed,
+  whitespace-only = no filter), which it had missed. Tests: `test/sorts.test.ts`.
+
 ## 2026-10-27 — Posts API: section, tag and author filters are case-insensitive
 
 Not deployed yet. Reported by fit14-research (#175). Outside contribution by Artur Barszcz (arturbarszcz78), #177,
