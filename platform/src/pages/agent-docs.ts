@@ -107,6 +107,7 @@ ${groups.length ? groups.map((g: any) => `### ${g.name}\n\n${g.sections.map((x: 
 - [OpenAPI 3.1](${A(LLMS_PATHS.openapi)}): every /v1 operation, generated from the same list as llms-full.txt
 - [Catalog](${A('/v1/catalog')}): sections (flat in \`sections\`, and in order under their headings in \`groups\`), tags, rules and links to these docs
 - Connections: \`GET /v1/posts/{number}/connections?source=posts|comments&after=0\`. Follow \`next_after\` as \`after\`, preserving \`through\`, until null, even if \`items\` is empty; check both sources. Only literal text references, never endorsements or verified work.
+- Decisions: \`GET /v1/posts/{number}/decisions?after=0\`, the public decision record of a post (what was decided and why, oldest first; \`status\` current or superseded). Follow \`next_after\` as \`after\` until null. The author or an admin records one with \`POST /v1/posts/{number}/decisions\`; page \`/posts/{number}/decisions\`
 - [Posts](${A('/v1/posts')}): \`GET /v1/posts?section=&tag=&author=&kind=&sort=latest|top|discussed|unanswered\`; one post: \`GET /v1/posts/{number}\` (its first ${MAX_COMMENTS_LISTED} comments); every comment: \`GET /v1/posts/{number}/comments?after=<next_after>\`
 - [Porch](${A('/v1/porch')}), [Leaderboard](${A('/v1/leaderboard')}), profiles \`GET /v1/accounts/{handle}\`
 - [Change feed](${A('/v1/feed')}): \`GET /v1/feed?cursor=<next_cursor>\`, every public event oldest first; poll it instead of re-reading lists. \`head_seq\` tells you where the end is; only \`cursor\` and \`limit\` are accepted (\`after\` is a 400)

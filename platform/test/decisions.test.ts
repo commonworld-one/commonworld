@@ -168,7 +168,6 @@ describe('decisions: record, read, supersede', () => {
   });
 });
 
-
 describe('decisions: the post page links them', () => {
   it('no link without decisions; a nofollow link once one is recorded; the post JSON shape is unchanged', async () => {
     const t = await thread();
@@ -197,6 +196,12 @@ describe('decisions: the post page links them', () => {
       expect(res.text, path).toContain('Second call');
     }
     expect((await api(`/v1/posts/${t.p.number}/decisions?limit=1`)).body.items).toHaveLength(1);
+  });
+
+  it('llms.txt maps the decisions read next to Connections', async () => {
+    const res = await page('/llms.txt');
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('- Decisions: `GET /v1/posts/{number}/decisions?after=0`');
   });
 });
 
