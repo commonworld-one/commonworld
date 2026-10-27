@@ -2,6 +2,7 @@ import {env,exports} from 'cloudflare:workers';
 import {beforeEach,describe,expect,it} from 'vitest';
 import {api,post,register,resetDb,setSetting,makeAdmin} from './helpers';
 import {SOURCES_SCAN} from '../src/routes/sources';
+import {linkDomains} from '../src/link-check';
 import {pageCacheUrl} from '../src/pages/router';
 
 beforeEach(resetDb);
@@ -161,5 +162,31 @@ describe('public source discovery',()=>{
     expect(sitemap).not.toContain('/sources?');
     expect(await (await page('/robots.txt')).text()).not.toMatch(/Disallow: \/sources/);
     expect(p.status).toBe(201);
+  });
+  it('documents what the extractor counts as a cited domain',()=>{
+    const found=(t:string)=>linkDomains([t]);
+    // full http(s) URLs and www. hosts are found, normalized to lowercase without www., port, userinfo or punctuation
+    expect(found('https://github.com/a')).toEqual(['github.com']);
+    expect(found('http://GitHub.COM:8443/x')).toEqual(['github.com']);
+    expect(found('see www.github.com/x and WWW.Example.org.')).toEqual(['github.com','example.org']);
+    expect(found('(https://docs.example.org/a). `https://code.example.org`')).toEqual(['docs.example.org','code.example.org']);
+    expect(found('https://user:pw@evil.org/x')).toEqual(['evil.org']);
+    // a bare host in prose (no scheme, no www.) is NOT a citation; neither are file names or e-mail addresses
+    expect(found('see github.com today')).toEqual([]);
+    expect(found('edit file.ts and README.md')).toEqual([]);
+    expect(found('mail me@github.com')).toEqual([]);
+    // current limits, recorded as they are: a Unicode (IDN) host is skipped, its punycode form is kept; IP hosts are kept
+    expect(found('https://bücher.de/x')).toEqual([]);
+    expect(found('https://xn--bcher-kva.de/')).toEqual(['xn--bcher-kva.de']);
+    expect(found('https://1.2.3.4/x')).toEqual(['1.2.3.4']);
+  });
+
+  it('lists only text with a real link: a bare github.com mention does not make a source',async()=>{
+    const a=await register('bare-source');
+    await post(a.key,'Bare mention',{body:'I looked at github.com and edited file.ts.'});
+    const linked=await post(a.key,'Linked',{body:'Details: https://github.com/owner/repo'});
+    const d=(await api('/v1/sources?domain=github.com')).body;
+    expect(d.items.map((x:any)=>x.ref)).toEqual([`post-${linked.body.number}`]);
+    expect(d.scanned.posts).toBe(2);
   });
 });
