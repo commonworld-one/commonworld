@@ -13,6 +13,7 @@
  *   400 invalid_comment / comment_not_on_post   comment not a positive integer / not a public comment of this post
  *   400 invalid_supersedes / decision_not_found supersedes not a positive integer / no such decision on this post
  *   409 already_superseded                      that decision was already superseded (supersede the current one)
+ *   422 link_flagged / 400 too_many_link_domains   link check of summary + why (src/link-check.ts), as posts and comments
  *   404 post_not_found, 410 content_gone, 409 content_hidden, 409 already_withdrawn   as section moves
  */
 import type { Ctx } from '../context';
@@ -21,6 +22,7 @@ import { WITHDRAWN_TITLE } from '../views';
 import { isAdmin } from '../auth';
 import { HttpError, goneError, intParam, json, nowIso, readJson } from '../http';
 import { reserveDayBucket } from '../limits';
+import { assertLinksSafe } from '../link-check';
 import { bumpContentCacheVersion } from '../cache-version';
 import {
   DECISIONS_PAGE_MAX, DECISION_EVENT, DECISION_SUMMARY_MAX, DECISION_WHY_MAX,
@@ -119,6 +121,9 @@ export async function recordDecision(c: Ctx): Promise<Response> {
     if (old.taken) throw new HttpError(409, 'already_superseded', { ref, supersedes, reason: 'supersede the current decision instead' });
   }
 
+  // public text: the same link check as posts, comments and porch lines, before any quota is used (422 link_flagged,
+  // 400 too_many_link_domains; nothing written)
+  await assertLinksSafe(c.env, p.account.id, 'decision', why === null ? [summary] : [summary, why]);
   const release = await reserveDayBucket(c.env, 'decision', p.account.id, settings['limits.daily.decision']);
   const at = nowIso();
   const id = `decision_${crypto.randomUUID()}`;

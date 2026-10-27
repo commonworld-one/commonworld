@@ -3,14 +3,22 @@
  * only, append-only, supersede chains stay unambiguous, the record is public in JSON, HTML, Markdown and the change
  * feed, refusals write nothing, account deletion redacts or removes what the account wrote.
  */
+import { createExecutionContext, waitOnExecutionContext } from 'cloudflare:test';
 import { env, exports } from 'cloudflare:workers';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import worker from '../src/index';
+import { MAX_LINK_DOMAINS, resetLinkCheckMemo } from '../src/link-check';
 import { DECISION_SUMMARY_MAX, DECISION_WHY_MAX } from '../src/post-decisions';
 import { DEFAULTS } from '../src/settings';
+import { metamask } from '../src/trust-engine/index.ts';
 import { api, makeAdmin, post, register, resetDb, setSetting } from './helpers';
 
+afterEach(() => vi.restoreAllMocks());
+
 beforeEach(async () => {
+  resetLinkCheckMemo();
   await resetDb();
+  await env.DB.prepare('DELETE FROM link_checks').run();
   await setSetting('limits.daily.post', 100);
   await setSetting('limits.daily.comment', 100);
 });
@@ -176,6 +184,51 @@ describe('decisions: the post page links them', () => {
     // another post without decisions still shows no link
     const other = (await post(t.a.key, 'Quiet post')).body;
     expect((await page(`/posts/${other.number}`)).text).not.toContain(`/posts/${other.number}/decisions`);
+  });
+});
+
+describe('decisions: link check (src/link-check.ts)', () => {
+  function sources() {
+    vi.spyOn(globalThis, 'fetch').mockImplementation((async (input: RequestInfo | URL) => {
+      const u = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+      if (u === metamask.url) return new Response(JSON.stringify({ version: 2, fuzzylist: [], whitelist: [], blacklist: ['drainer.example'] }));
+      return new Response('not found', { status: 404 });
+    }) as typeof fetch);
+  }
+  async function decideOnline(key: string, n: number, body: Record<string, unknown>) {
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(new Request(`https://api.test/v1/posts/${n}/decisions`, { method: 'POST',
+      headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' }, body: JSON.stringify(body) }), { ...env, LINK_CHECK_OFFLINE: '0' } as any, ctx);
+    await waitOnExecutionContext(ctx);
+    return { status: res.status, body: await res.json<any>() };
+  }
+
+  it('a flagged link in why or summary refuses the decision (422); nothing written, no quota used; rejection recorded', async () => {
+    const t = await thread();
+    await setSetting('limits.daily.decision', 1);
+    sources();
+    const r = await decideOnline(t.a.key, t.p.number, { summary: 'Ship it.', why: 'Details at https://app.drainer.example/claim' });
+    expect(r.status).toBe(422);
+    expect(r.body.error.code).toBe('link_flagged');
+    expect(r.body.error.domains[0].domain).toBe('app.drainer.example');
+    expect((await decideOnline(t.a.key, t.p.number, { summary: 'see www.drainer.example' })).status).toBe(422);
+    expect(await rows(t.p.number)).toEqual([]);
+    const checks = (await env.DB.prepare('SELECT object_type, outcome FROM link_checks ORDER BY id').all()).results;
+    expect(checks).toEqual([{ object_type: 'post', outcome: 'rejected' }, { object_type: 'post', outcome: 'rejected' }]);
+    // the cap of 1 is still free: refusals used no quota; a clean link goes through and is recorded as allowed
+    const ok = await decideOnline(t.a.key, t.p.number, { summary: 'Ship it.', why: 'Patch: https://good.example/pr/1' });
+    expect(ok.status).toBe(201);
+    expect((await env.DB.prepare("SELECT outcome FROM link_checks ORDER BY id DESC").first<any>()).outcome).toBe('allowed');
+  });
+
+  it(`more than ${MAX_LINK_DOMAINS} different domains: 400 too_many_link_domains, nothing written`, async () => {
+    const t = await thread();
+    sources();
+    const why = Array.from({ length: MAX_LINK_DOMAINS + 1 }, (_, i) => `https://d${i}.example`).join(' ');
+    const r = await decideOnline(t.a.key, t.p.number, { summary: 'Links.', why });
+    expect(r.status).toBe(400);
+    expect(r.body.error.code).toBe('too_many_link_domains');
+    expect(await rows(t.p.number)).toEqual([]);
   });
 });
 
