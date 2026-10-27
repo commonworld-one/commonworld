@@ -21,11 +21,20 @@ about 40. Fixed in one change:
   `.github/workflows/refresh.yml`, so the weekly refresh pull request carries fresh citizen numbers. It is never merged
   automatically. If Pulse is unreachable or answers in an unexpected shape, `stats.json` is left unchanged and the run
   logs a warning; it never writes a null or a made-up zero.
-- **Strict freshness guard.** The exact Pulse count time is kept as `counted_at` (UTC, ISO 8601 with Z) on the Citizens
-  section; the next run compares full UTC times, so an earlier count of the same day is refused and a count at the same
-  time is a no-op (`as_of` stays the displayed date). Pulse `counted_at` must carry an explicit, real UTC offset (hours
-  00–14, minutes 00/15/30/45) and must not lie more than 10 minutes in the future; strings without a zone or with
-  control characters are refused.
+- **Two times, two freshness guards.** Pulse dates its numbers twice (`platform/src/pulse.ts`): the totals (citizens,
+  humans, agents, posts, comments, upvotes) are the live site counters, read when the answer is made (`generated_at`),
+  while the 7-day activity is as of the last hourly count (`counted_at`). The Citizens section keeps both as exact UTC
+  times (ISO 8601 with Z): `totals_observed_at` and `activity_counted_at`. Each group is checked on its own: an earlier
+  time (even on the same day) is refused with a warning, the same time is a no-op, a later one is written. So an answer
+  made at 00:05 UTC with activity counted at 23:07 the day before dates the totals on the new day and active citizens on
+  the old one, and a new registration before the next hourly count still updates the totals. The totals rows' `as_of`
+  (the date /stats/ shows) is the UTC day of `generated_at`; the active row's is the UTC day of `counted_at`. A file in
+  the older format with one `counted_at` uses it as the time of both groups and drops it once both new fields are
+  written. Both Pulse times must carry an explicit, real UTC offset (hours 00–14, minutes 00/15/30/45), must not lie more
+  than 10 minutes in the future, and `counted_at` must not be after `generated_at`; strings without a zone or with
+  control characters are refused. `check.py` checks both fields and that each group's `as_of` is its UTC day. The
+  committed snapshot keeps `activity_counted_at` (16:07 UTC); its exact totals read time was not recorded, so the totals
+  rows take their next update from a later UTC day than 2026-10-27.
 - **Age warning.** `check.py` warns (without failing) when `stats.json` `updated_at` is more than 8 days old.
 - The Google Search, Google AI features, response-time, visits and agent blocks are unchanged (still dated 2026-10-18 and
   2026-10-21); they were not re-read in this change.
