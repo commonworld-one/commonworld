@@ -253,6 +253,7 @@ describe('transport and routing', () => {
       expect(MCP_DOC, t.name).toContain(`\`${t.name}\``);
       if (t.source.type === 'rest') expect(MCP_DOC, t.name).toContain(`${t.source.method} ${t.source.path}`);
     }
+    expect(MCP_DOC).toContain(`## Tool map (${TOOLS.length} tools)`);
     const llms = await raw({ method: 'GET', path: '/llms.txt' });
     expect(llms.text).toContain('/mcp');
     const oa = await raw({ method: 'GET', path: '/openapi.json' });
