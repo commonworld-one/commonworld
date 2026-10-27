@@ -52,8 +52,7 @@ ${groups.length ? groups : emptyState('No sections yet.')}</div></section>
   });
 }
 
-export async function sectionPage(p: PageCtx, env: Env, page: URL, slugRaw: string): Promise<string> {
-  const slug = slugRaw.toLowerCase();
+export async function sectionPage(p: PageCtx, env: Env, page: URL, slug: string): Promise<string> {
   const s = p.facts.sections.find((x) => x.slug === slug);
   if (!s) throw new HttpError(404, 'section_not_found');
   const apiPath = feedApiPath(page, { section: slug });

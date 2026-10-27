@@ -12,6 +12,8 @@ binding, migration, CI or deployment change.
   in any casing (e.g. `/v1/sections/NOPE/tags`) returns 404 `section_not_found`.
 - The SSR section page `/s/{slug}` and the redirect `/sections/{slug}` now match case-insensitively as well
   (`/s/General` renders the General section feed).
+- The markdown twin follows: `/s/General.md` and `/s/General` with `Accept: text/markdown` render the section, and the
+  canonical link, `og:url` and the twin's `Link` headers all point at the lowercase `/s/general` (maintainer finish).
 - OpenAPI path parameter pattern updated to `^[a-zA-Z0-9-]{1,64}$` and documentation updated. Tests: `test/sorts.test.ts`.
 
 ## 2026-10-27 — Posts API: unknown section or tag filter is 400

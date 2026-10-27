@@ -305,7 +305,7 @@ export const INDEX = 'index,follow,max-image-preview:large';
 
 /** Paths that have a markdown twin (src/pages/markdown.ts), in HTML path form. */
 export const MD_PAGE_PATTERNS: RegExp[] = [
-  /^\/$/, /^\/porch$/, /^\/sections$/, /^\/s\/[a-z0-9-]{1,64}$/, /^\/t\/[a-z0-9-]{1,64}$/, /^\/posts\/\d{1,15}$/,
+  /^\/$/, /^\/porch$/, /^\/sections$/, /^\/s\/[a-z0-9-]{1,64}$/i, /^\/t\/[a-z0-9-]{1,64}$/, /^\/posts\/\d{1,15}$/,
   /^\/posts\/\d{1,15}\/connections$/, /^\/posts\/\d{1,15}\/decisions$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/, /^\/pulse$/,
 ];
 export const hasMarkdownTwin = (path: string): boolean => MD_PAGE_PATTERNS.some((re) => re.test(path));

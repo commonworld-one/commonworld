@@ -12,7 +12,7 @@ import { ogVersion, renderPostOg } from './og';
 import { homePage } from './home';
 import { esc } from './html';
 import { ABOUT_URL, NONCE_PLACEHOLDER, PRIVACY_URL, TERMS_URL, type PageCtx, hasMarkdownTwin, markdownPath } from './layout';
-import { markdownError, markdownTarget, prefersMarkdown, renderMarkdown } from './markdown';
+import { canonicalTwinPath, markdownError, markdownTarget, prefersMarkdown, renderMarkdown } from './markdown';
 import { adminAccess, adminPageHtml, adminPageMd } from './admin';
 import { errorPage, inboxPage, loginPage, moderationPage, searchPage, type LoginView } from './misc';
 import { citizensPage, porchPage, profilePage } from './people';
@@ -561,7 +561,7 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
     const html = typeof out === 'string' ? out : out.html;
     const extra = typeof out === 'string' ? {} : out.headers;
     // pages with a markdown twin: the same URL answers text/markdown to `Accept: text/markdown`, so caches must key on Accept
-    const twin: Record<string, string> = hasMarkdownTwin(path) ? { vary: 'Accept', link: `<${p.origin}${markdownPath(path)}>; rel="alternate"; type="text/markdown"` } : {};
+    const twin: Record<string, string> = hasMarkdownTwin(path) ? { vary: 'Accept', link: `<${p.origin}${markdownPath(canonicalTwinPath(path))}>; rel="alternate"; type="text/markdown"` } : {};
     return withSession(done(respond(method, 200, html, { ...htmlHeaders(env, url, route.private || signedIn ? 'private, no-store' : PUBLIC_PAGE_CACHE), ...twin, ...extra })));
   } catch (error) {
     const status = error instanceof HttpError ? error.status : 500;
