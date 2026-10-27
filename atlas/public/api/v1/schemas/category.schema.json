@@ -36,7 +36,16 @@
    ],
    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
    "format": "date-time",
-   "description": "Time the source data snapshot was produced."
+   "description": "Time of the newest data in this build, ISO 8601 UTC: the later of source_snapshot_at and newest_observation, so it moves when a card is amended (since schema_version 1.9.0; before, it was the source snapshot time alone)."
+  },
+  "source_snapshot_at": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
+   "format": "date-time",
+   "description": "Time the source data snapshot file was produced, ISO 8601 UTC (what generated_at held before schema_version 1.9.0)."
   },
   "newest_observation": {
    "type": [
@@ -45,7 +54,7 @@
    ],
    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
    "format": "date-time",
-   "description": "Newest observed_at of any published claim; can be later than generated_at when claims were amended after the snapshot."
+   "description": "Newest observed_at of any published claim, ISO 8601 UTC; never later than generated_at."
   },
   "licence": {
    "type": "string"

@@ -7,7 +7,7 @@ import { HttpError, goneError } from '../http';
 import { getSettings } from '../settings';
 import { ASSETS, BOOT_SCRIPT_SHA256 } from './assets.gen';
 import { sectionPage, sectionsPage, tagPage } from './catalog';
-import { commentLocation, contentGone, porchVisible, postOgData, siteFacts, sitemapRows } from './data';
+import { commentLocation, commentPagePath, contentGone, porchVisible, postOgData, siteFacts, sitemapRows } from './data';
 import { ogVersion, renderPostOg } from './og';
 import { homePage } from './home';
 import { esc } from './html';
@@ -31,6 +31,7 @@ import { assertSameOrigin, clearSessionCookie, consumeLoginLink, csrfToken, hasS
 import { composePage, handleWrite, isWritePath } from './writes';
 import { exportPage } from './export';
 import { pulsePage } from './pulse';
+import { connectionsPage } from './connections';
 import { handleOAuthPage, isOAuthPagePath } from './oauth-pages';
 
 /** Validated analytics config from env: an invalid value is ignored (no tag, no CSP host), never echoed. */
@@ -141,6 +142,8 @@ function docHeaders(env: Env, contentType: string): Record<string, string> {
   return {
     'content-type': contentType, 'cache-control': DOC_CACHE, 'access-control-allow-origin': '*',
     'content-security-policy': "default-src 'none'; frame-ancestors 'none'",
+    // JSON documents (openapi.json, mcp.json) are for agents, not search results: noindex, like every /v1 JSON response
+    ...(contentType.startsWith('application/json') ? { 'x-robots-tag': 'noindex' } : {}),
     ...noindexHeader(env),
   };
 }
@@ -158,7 +161,8 @@ export const PAGE_CACHE_PARAMS: [RegExp, string[]][] = [
   [/^\/t\/[^/]+$/, [...FEED_KEYS, 'section']],
   [/^\/porch$/, ['before']],
   [/^\/citizens$/, ['sort', 'kind', 'offset']],
-  [/^\/posts\/\d+$/, ['order']],
+  [/^\/posts\/\d+$/, ['order', 'after']],
+  [/^\/posts\/\d+\/connections$/, ['source', 'after', 'through']],
   [/^\/search$/, ['q', 'type']],
   [/^\/moderation$/, ['before']],
 ];
@@ -192,6 +196,7 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/s\/([a-z0-9-]{1,64})$/, render: (p, env, url, m) => sectionPage(p, env, url, m[1]) },
   { pattern: /^\/t\/([a-z0-9-]{1,64})$/, render: (p, env, url, m) => tagPage(p, env, url, m[1]) },
   { pattern: /^\/posts\/(\d{1,15})$/, render: (p, env, url, m) => postPage(p, env, url, m[1]) },
+  { pattern: /^\/posts\/(\d{1,15})\/connections$/, render: (p, env, url, m) => connectionsPage(p, env, url, m[1]) },
   { pattern: /^\/citizens$/, render: (p, env, url) => citizensPage(p, env, url) },
   { pattern: /^\/c\/([^/]{1,96})$/, render: (p, env, _url, m) => profilePage(p, env, m[1]) },
   { pattern: /^\/search$/, render: (p, env, url) => searchPage(p, env, url) },
@@ -220,7 +225,8 @@ async function redirectFor(env: Env, path: string): Promise<string | null> {
   if ((m = path.match(/^\/citizens\/([^/]{1,96})\/?$/))) return `/c/${m[1]}`;
   if ((m = path.match(/^\/comments\/(\d{1,15})$/))) {
     const post = await commentLocation(env, Number(m[1]));
-    return post === null ? null : `/posts/${post}#comment-${m[1]}`;
+    // past the first page of comments (#114) the redirect opens the page window that starts with it
+    return post === null ? null : `${await commentPagePath(env, post, Number(m[1]))}#comment-${m[1]}`;
   }
   if ((m = path.match(/^\/porch\/(\d{1,15})$/))) {
     const n = Number(m[1]);

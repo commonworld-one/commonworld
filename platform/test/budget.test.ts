@@ -97,6 +97,10 @@ const ROUTES = (post: number): Route[] => [
   { name: 'GET /v1/posts', path: '/v1/posts' },
   { name: 'GET /v1/posts (key)', path: '/v1/posts', key: true },
   { name: 'GET /v1/posts/{n}', path: `/v1/posts/${post}` },
+  { name: 'GET /v1/posts/{n}/connections (posts)', path: `/v1/posts/${post}/connections?source=posts` },
+  { name: 'GET /v1/posts/{n}/connections (comments)', path: `/v1/posts/${post}/connections?source=comments` },
+  { name: 'GET /v1/posts/{n}/comments', path: `/v1/posts/${post}/comments` },
+  { name: 'GET /v1/posts/{n}/voters', path: `/v1/posts/${post}/voters` },
   { name: 'GET /v1/feed latest (key)', path: '/v1/feed?cursor=999999999&limit=100', key: true },
   { name: 'GET /v1/feed (anon)', path: '/v1/feed?cursor=999999999' },
   { name: 'GET /v1/me (key)', path: '/v1/me', key: true },
@@ -119,9 +123,17 @@ const BUDGETS: Record<string, Budget> = {
   'citizens': { q: 8, rr: 350, rw: 0 },
   'GET /v1/posts': { q: 2, rr: 350, rw: 0 },
   'GET /v1/posts (key)': { q: 4, rr: 350, rw: 0 },
-  'GET /v1/posts/{n}': { q: 5, rr: 60, rw: 0 },
-  'GET /v1/feed latest (key)': { q: 4, rr: 10, rw: 0 },
-  'GET /v1/feed (anon)': { q: 2, rr: 5, rw: 0 },
+  'GET /v1/posts/{n}': { q: 5, rr: 70, rw: 0 }, // #114: +3 rows for the comment walk's high-water lookup (60 measured)
+  // Connections: 598 post / 698 comment rows at both N=100 and N=1000, with ~1.5x headroom.
+  'GET /v1/posts/{n}/connections (posts)': { q: 4, rr: 900, rw: 0 },
+  'GET /v1/posts/{n}/connections (comments)': { q: 4, rr: 1050, rw: 0 },
+  'GET /v1/posts/{n}/comments': { q: 4, rr: 80, rw: 0 },
+  'GET /v1/posts/{n}/voters': { q: 4, rr: 60, rw: 0 },
+  // #138: +1 query for head_seq, in the same D1 batch as the scan; measured 4 (was 3) with a key, 2 (was 1) anonymous.
+  // head_seq reads sqlite_sequence, which has one row per AUTOINCREMENT table that has had an insert (14 in the schema),
+  // so its rows read are bounded by the schema, flat in N (measured 5 here); rr caps leave room for all 14.
+  'GET /v1/feed latest (key)': { q: 5, rr: 20, rw: 0 },
+  'GET /v1/feed (anon)': { q: 3, rr: 16, rw: 0 },
   'GET /v1/me (key)': { q: 7, rr: 15, rw: 0 },
   'GET /v1/leaderboard': { q: 2, rr: 160, rw: 0 },
   'GET /v1/catalog': { q: 4, rr: 170, rw: 0 },

@@ -7,6 +7,7 @@
 import type { Env } from '../env';
 import { ensureCounters, readSiteCounters } from '../counters';
 import { catalogData } from '../routes/content';
+import { MAX_COMMENTS_LISTED, listedBefore } from '../post-comments';
 import { type PostOg, postOgOf } from './og';
 import { mentionCandidates } from './layout';
 import { COMMENT_SELECT, PORCH_SELECT, POST_SELECT, bannedSql, commentView, disabledSql, hiddenAncestorSql, notDisabledSql, porchView, postView, shownCommentSql, shownPorchSql, shownPostSql } from '../views';
@@ -70,12 +71,23 @@ export async function porchActive(env: Env, limit = 5) {
 }
 
 /**
+ * The comment-number range a post page shows (#114): comments with after < number <= upTo (upTo null = to the end).
+ * The page lists one window of the post's comments (src/post-comments.ts), so its placeholders come from the same range.
+ */
+export interface StubRange { after: number; upTo: number | null }
+const ALL_STUBS: StubRange = { after: 0, upTo: null };
+
+/** The range of a window of comments: after its cursor, up to its last comment when more follow. */
+export const stubRange = (after: number, comments: { number: number }[], nextAfter: number | null): StubRange =>
+  ({ after, upTo: nextAfter === null ? null : comments[comments.length - 1]?.number ?? null });
+
+/**
  * Comments on a post that are hidden by moderation and whose ancestors are visible: the page shows
  * a "hidden comment" notice with the ref only (no author, no text), the same marker the public feed keeps.
  */
-export async function hiddenCommentStubs(env: Env, postNumber: number) {
+export async function hiddenCommentStubs(env: Env, postNumber: number, range: StubRange = ALL_STUBS) {
   const { results } = await env.DB.prepare(`SELECT c.number, c.parent_number, c.depth FROM comments c
-    WHERE c.post_number = ? AND c.status = 'hidden' AND NOT ${hiddenAncestorSql('c')} ORDER BY c.number LIMIT 200`).bind(postNumber).all<{ number: number; parent_number: number | null; depth: number }>();
+    WHERE c.post_number = ? AND c.number > ? AND c.number <= ? AND c.status = 'hidden' AND NOT ${hiddenAncestorSql('c')} ORDER BY c.number LIMIT 200`).bind(postNumber, range.after, range.upTo ?? Number.MAX_SAFE_INTEGER).all<{ number: number; parent_number: number | null; depth: number }>();
   return results;
 }
 
@@ -83,9 +95,9 @@ export async function hiddenCommentStubs(env: Env, postNumber: number) {
  * Comments by a disabled citizen on a post (F1) whose ancestors are not hidden by moderation: the thread shows a neutral
  * "comment hidden" placeholder (ref only, no author, no text) so the replies under it keep their context.
  */
-export async function goneCommentStubs(env: Env, postNumber: number) {
+export async function goneCommentStubs(env: Env, postNumber: number, range: StubRange = ALL_STUBS) {
   const { results } = await env.DB.prepare(`SELECT c.number, c.parent_number, c.depth FROM comments c
-    WHERE c.post_number = ? AND c.status = 'visible' AND ${disabledSql('c.author_id')} AND NOT ${hiddenAncestorSql('c')} ORDER BY c.number LIMIT 500`).bind(postNumber).all<{ number: number; parent_number: number | null; depth: number }>();
+    WHERE c.post_number = ? AND c.number > ? AND c.number <= ? AND c.status = 'visible' AND ${disabledSql('c.author_id')} AND NOT ${hiddenAncestorSql('c')} ORDER BY c.number LIMIT 500`).bind(postNumber, range.after, range.upTo ?? Number.MAX_SAFE_INTEGER).all<{ number: number; parent_number: number | null; depth: number }>();
   return results;
 }
 
@@ -202,6 +214,16 @@ export async function sitemapRows(env: Env) {
 export async function commentLocation(env: Env, number: number): Promise<number | null> {
   const row = await env.DB.prepare(`SELECT c.post_number FROM comments c WHERE c.number = ? AND ${VISIBLE_COMMENT('c')}`).bind(number).first<{ post_number: number }>();
   return row?.post_number ?? null;
+}
+
+/**
+ * The post page that shows comment `number` of post `postNumber` (#114), without the #anchor: `/posts/{post}` while the
+ * comment is among the first MAX_COMMENTS_LISTED listed comments, else `/posts/{post}?after={number - 1}`, the window
+ * that starts with it. Used by /comments/{n} and the website write redirects.
+ */
+export async function commentPagePath(env: Env, postNumber: number, number: number): Promise<string> {
+  const before = await listedBefore(env, postNumber, number);
+  return before >= MAX_COMMENTS_LISTED ? `/posts/${postNumber}?after=${number - 1}` : `/posts/${postNumber}`;
 }
 
 export async function porchVisible(env: Env, number: number): Promise<boolean> {

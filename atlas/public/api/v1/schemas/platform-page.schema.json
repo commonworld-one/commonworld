@@ -2,7 +2,7 @@
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://commonworld.one/api/v1/schemas/platform-page.schema.json",
  "title": "Commonworld Atlas list page",
- "description": "One page of 50 published entries (/api/v1/atlas/page/{page}.json, /api/v1/atlas/categories/{category}/page/{page}.json, /api/v1/atlas/platforms/page/{page}.json for the A-Z list). Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. A page number past the last page returns HTTP 404. Added in schema_version 1.8.0.",
+ "description": "One page of 50 published entries (/api/v1/atlas/page/{page}.json, /api/v1/atlas/categories/{category}/page/{page}.json, /api/v1/atlas/platforms/page/{page}.json for the A-Z list). Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. When a list gets shorter, a page number that existed before and is now past the last page answers HTTP 302 (temporary, never cached) to that list's last page, for example page 8 -> page 7 after the list shrank from 8 pages to 7; the page you land on has a different `page` than you asked for and a new `snapshot_id`, so start again from page 1. The redirect goes away when the list grows back and the page exists again (plain HTTP 200). A page number that never existed (0, not a number, or above the highest page ever built) returns HTTP 404 with a JSON error body (application/json). Added in schema_version 1.8.0.",
  "type": "object",
  "required": [
   "schema_version",
@@ -45,7 +45,16 @@
    ],
    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
    "format": "date-time",
-   "description": "Time the source data snapshot was produced."
+   "description": "Time of the newest data in this build, ISO 8601 UTC: the later of source_snapshot_at and newest_observation, so it moves when a card is amended (since schema_version 1.9.0; before, it was the source snapshot time alone)."
+  },
+  "source_snapshot_at": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
+   "format": "date-time",
+   "description": "Time the source data snapshot file was produced, ISO 8601 UTC (what generated_at held before schema_version 1.9.0)."
   },
   "newest_observation": {
    "type": [
@@ -54,7 +63,7 @@
    ],
    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
    "format": "date-time",
-   "description": "Newest observed_at of any published claim; can be later than generated_at when claims were amended after the snapshot."
+   "description": "Newest observed_at of any published claim, ISO 8601 UTC; never later than generated_at."
   },
   "licence": {
    "type": "string"

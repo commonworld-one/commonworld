@@ -1,7 +1,17 @@
 {
- "schema_version": "1.8.0",
+ "schema_version": "1.9.0",
  "versioning": "Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) ships as /api/v2/, and /api/v1/ keeps working.",
  "releases": [
+  {
+   "schema_version": "1.9.0",
+   "date": "2026-10-25",
+   "changes": [
+    "`generated_at` now gives the time of the newest data in the build (the later of the source snapshot time and newest_observation), still ISO 8601 UTC. Before, it was the time of the source snapshot file alone, which stayed at 2026-10-19 while cards were amended until 2026-10-24 (the sitemap and newest_observation already showed the later date). Same type, same format; only the value moves forward. Clients that need the old value read the new optional field `source_snapshot_at` (in every file that carries generated_at next to the Atlas data: platforms.json, platforms/{id}.json, categories/{category}.json, the list pages, earn.json, atlas/index.json, index.json).",
+    "Paging walk_rule (list pages, atlas/index.json paging.walk_rule, schema description) now states the temporary 302 for a page that existed before and is past the end after the list got shorter (page 8 -> page 7), and that a page number that never existed is a 404 with a JSON error body. The behaviour itself shipped in 1.8.0 (302 since 2026-10-24); the JSON 404 body is new.",
+    "A missing .json file under /api/ (for example /api/v1/atlas/page/9.json, page/0.json, page/abc.json) answers HTTP 404 with Content-Type application/json and a body {error: {code: not_found, message}, links: {index, docs}} instead of the HTML 404 page; a missing Markdown twin of a list page (/atlas/page/9/index.md) answers 404 as text/markdown. Status codes are unchanged.",
+    "Page 1 of a list: /page/1/index.md (Markdown) now answers 301 to the list's own index.md, like /page/1/ (HTML) already answers 301 to the list; JSON page 1 stays /api/v1/atlas/.../page/1.json (200), the `first` link of every page."
+   ]
+  },
   {
    "schema_version": "1.8.0",
    "date": "2026-10-24",

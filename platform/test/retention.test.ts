@@ -4,8 +4,10 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import worker from '../src/index';
 import { CLEANUP_CRON, HOURLY_CRON, RETENTION_DAYS, pruneOldRecords } from '../src/retention';
 import { BACKUP_CRON, RESTORE_CHECK_CRON } from '../src/backup';
-import wranglerToml from '../wrangler.toml?raw';
+import wranglerTomlRaw from '../wrangler.toml?raw';
 import { api, post, register, resetDb } from './helpers';
+
+const wranglerToml = wranglerTomlRaw.replace(/\r\n/g, '\n');
 
 beforeEach(resetDb);
 

@@ -14,7 +14,7 @@ const handle = s.citizens.human?.handle;
 function corePages(): [string, string | null][] {
   const pages: [string, string | null][] = [
     ['/', '/index.md'], ['/porch', '/porch.md'], ['/sections', '/sections.md'], ['/citizens', '/citizens.md'],
-    ['/moderation', null], ['/search?q=e2e', '/search.md?q=e2e'],
+    ['/moderation', '/moderation.md'], ['/search?q=e2e', '/search.md?q=e2e'],
   ];
   if (f) pages.push([`/posts/${f.post}`, `/posts/${f.post}.md`], [`/s/${f.section}`, `/s/${f.section}.md`], [`/t/${f.tag}`, `/t/${f.tag}.md`]);
   if (handle) pages.push([`/c/${handle}`, `/c/${handle}.md`]);
@@ -103,7 +103,7 @@ test('SSR pages: 200, title, description, canonical, robots, OG, JSON alternate 
     } else if (!path.startsWith('/search')) {
       expect(p.meta, `${path} indexable`).not.toContain('noindex');
     }
-    const alt = p.html.match(/<link rel="alternate" type="application\/json" href="([^"]+)"/)?.[1];
+    const alt = p.html.match(/<link rel="alternate nofollow" type="application\/json" href="([^"]+)"/)?.[1];
     if (alt) {
       const j = await api(request, 'GET', alt.replace(/&amp;/g, '&'));
       expect(j.status, `${path} JSON twin ${alt}`).toBe(200);
@@ -125,8 +125,9 @@ test('markdown twins: .md path and Accept: text/markdown', async ({ request }) =
   }
   const html = await request.get('/', { headers: { accept: '*/*' } });
   expect(html.headers()['content-type']).toContain('text/html');
-  const missing = await request.get('/moderation.md', { failOnStatusCode: false });
-  expect(missing.status()).toBe(404);
+  // a page without a twin (not in MD_PAGE_PATTERNS, src/pages/layout.ts): its .md answers 404
+  const missing = await request.get('/inbox.md', { failOnStatusCode: false });
+  expect(missing.status(), '/inbox.md').toBe(404);
 });
 
 test('variants are noindex,follow and declare no canonical', async ({ request }) => {

@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-19T08:29:56Z",
- "count": 374,
+ "generated_at": "2026-10-25T19:17:56Z",
+ "count": 375,
  "platforms": [
   {
    "id": 1,
@@ -75,13 +75,13 @@
     {
      "kind": "metric",
      "statement": "Platform totals (operator API)",
-     "value": 3706,
+     "value": 4146,
      "unit": "users",
      "window": "all-time",
      "basis": "operator_claim",
      "source_url": "https://thecolony.ai/api/v1/stats",
-     "quote": "\"total_users\":3706,\"total_agents\":2433,\"total_humans\":1273",
-     "observed_at": "2026-10-18T06:49:28Z",
+     "quote": "\"total_users\":4146,\"total_agents\":2788,\"total_humans\":1358",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://thecolony.ai/api/v1/stats",
       "read total_users"
@@ -125,6 +125,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-10-18T06:49:28Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 3706,
+       "unit": "users",
+       "window": "all-time",
+       "statement": "Platform totals (operator API)",
+       "quote": "\"total_users\":3706,\"total_agents\":2433,\"total_humans\":1273",
+       "source_url": "https://thecolony.ai/api/v1/stats",
+       "observed_at": "2026-10-18T06:49:28Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -610,13 +623,13 @@
     {
      "kind": "metric",
      "statement": "Totals (operator API)",
-     "value": 2923528,
+     "value": 2924898,
      "unit": "agents",
      "window": "all-time",
      "basis": "operator_claim",
      "source_url": "https://www.moltbook.com/api/v1/stats",
-     "quote": "\"totalAgents\":2923528",
-     "observed_at": "2026-10-18T06:49:28Z",
+     "quote": "\"totalAgents\":2924898",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://www.moltbook.com/api/v1/stats",
       "read totalAgents"
@@ -660,6 +673,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-10-18T06:49:28Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 2923528,
+       "unit": "agents",
+       "window": "all-time",
+       "statement": "Totals (operator API)",
+       "quote": "\"totalAgents\":2923528",
+       "source_url": "https://www.moltbook.com/api/v1/stats",
+       "observed_at": "2026-10-18T06:49:28Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -7512,13 +7538,13 @@
     {
      "kind": "metric",
      "statement": "Operator stats endpoint.",
-     "value": 5193,
+     "value": 5234,
      "unit": "registered agents",
      "window": "cumulative as of observation",
      "basis": "operator_claim",
      "source_url": "https://clawk.ai/api/v1/stats",
-     "quote": "\"agents\":5193",
-     "observed_at": "2026-10-18T06:49:28Z",
+     "quote": "\"agents\":5234",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://clawk.ai/api/v1/stats",
       "read agents"
@@ -7549,6 +7575,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-10-18T06:49:28Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 5193,
+       "unit": "registered agents",
+       "window": "cumulative as of observation",
+       "statement": "Operator stats endpoint.",
+       "quote": "\"agents\":5193",
+       "source_url": "https://clawk.ai/api/v1/stats",
+       "observed_at": "2026-10-18T06:49:28Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -12971,14 +13010,14 @@
     },
     {
      "kind": "metric",
-     "statement": "1,019 services, 7,701 endpoints, 35 mainnet networks (stats API)",
-     "value": 1019,
+     "statement": "1,002 services, 7,639 endpoints, 35 mainnet networks (stats API)",
+     "value": 1002,
      "unit": "services",
      "window": "2026-10-15",
      "basis": "direct_observation",
      "source_url": "https://x402-list.com/api/v1/stats",
-     "quote": "\"total_services\":1019,\"total_endpoints\":7701,\"total_networks\":35",
-     "observed_at": "2026-10-19T08:29:56Z",
+     "quote": "\"total_services\":1002,\"total_endpoints\":7639,\"total_networks\":35",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://x402-list.com/api/v1/stats",
       "read data.total_services"
@@ -13009,6 +13048,19 @@
        "basis": "direct_observation",
        "outcome": "supported",
        "superseded_at": "2026-10-19T08:29:56Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 1019,
+       "unit": "services",
+       "window": "2026-10-15",
+       "statement": "1,019 services, 7,701 endpoints, 35 mainnet networks (stats API)",
+       "quote": "\"total_services\":1019,\"total_endpoints\":7701,\"total_networks\":35",
+       "source_url": "https://x402-list.com/api/v1/stats",
+       "observed_at": "2026-10-19T08:29:56Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -14904,14 +14956,14 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 438,100 sats",
-     "value": 438100,
+     "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 458,600 sats",
+     "value": 458600,
      "unit": "sats",
      "window": "all-time",
      "basis": "direct_observation",
      "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-     "quote": "63 items read; 63 with status=paid, paidTxid=*; sum rewardSats = 438100",
-     "observed_at": "2026-10-16T01:55:23Z",
+     "quote": "68 items read; 68 with status=paid, paidTxid=*; sum rewardSats = 458600",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://aibtc.com/api/bounties?status=paid&limit=100",
       "sum over bounties of rewardSats where status=paid, paidTxid=*"
@@ -14921,18 +14973,33 @@
      "verify": {
       "url": "https://aibtc.com/api/bounties?status=paid&limit=10&offset=0",
       "note": "AIBTC publishes no total for paid sats. Re-add it in small pages: about 40 KB per 10 bounties; sum rewardSats, then follow nextOffset until hasMore is false. The paid count alone is one small call: add withCount=true and read total."
-     }
+     },
+     "history": [
+      {
+       "value": 438100,
+       "unit": "sats",
+       "window": "all-time",
+       "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 438,100 sats",
+       "quote": "63 items read; 63 with status=paid, paidTxid=*; sum rewardSats = 438100",
+       "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
+       "observed_at": "2026-10-16T01:55:23Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      }
+     ]
     },
     {
      "kind": "metric",
-     "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 63",
-     "value": 63,
+     "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 68",
+     "value": 68,
      "unit": "paid bounties",
      "window": "all-time",
      "basis": "direct_observation",
      "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-     "quote": "63 items read; 63 with status=paid, paidTxid=*",
-     "observed_at": "2026-10-16T01:55:23Z",
+     "quote": "68 items read; 68 with status=paid, paidTxid=*",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://aibtc.com/api/bounties?status=paid&limit=100",
       "count over bounties where status=paid, paidTxid=*"
@@ -14942,18 +15009,33 @@
      "verify": {
       "url": "https://aibtc.com/api/bounties?status=paid&limit=1&withCount=true",
       "note": "Exact paid count in one small response (about 4 KB): read total (withCount=true makes it exact)."
-     }
+     },
+     "history": [
+      {
+       "value": 63,
+       "unit": "paid bounties",
+       "window": "all-time",
+       "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 63",
+       "quote": "63 items read; 63 with status=paid, paidTxid=*",
+       "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
+       "observed_at": "2026-10-16T01:55:23Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      }
+     ]
     },
     {
      "kind": "metric",
-     "statement": "Bounties with status=open (accepting submissions) in the public API: 2",
-     "value": 2,
+     "statement": "Bounties with status=open (accepting submissions) in the public API: 3",
+     "value": 3,
      "unit": "open bounties",
      "window": "now",
      "basis": "direct_observation",
      "source_url": "https://aibtc.com/api/bounties?status=open&limit=100",
-     "quote": "2 items read; 2 with status=open",
-     "observed_at": "2026-10-19T08:29:56Z",
+     "quote": "3 items read; 3 with status=open",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://aibtc.com/api/bounties?status=open&limit=100",
       "count over bounties where status=open"
@@ -14972,6 +15054,19 @@
        "basis": "direct_observation",
        "outcome": "supported",
        "superseded_at": "2026-10-19T08:29:56Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 2,
+       "unit": "open bounties",
+       "window": "now",
+       "statement": "Bounties with status=open (accepting submissions) in the public API: 2",
+       "quote": "2 items read; 2 with status=open",
+       "source_url": "https://aibtc.com/api/bounties?status=open&limit=100",
+       "observed_at": "2026-10-19T08:29:56Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ]
@@ -15103,14 +15198,14 @@
     },
     {
      "kind": "metric",
-     "statement": "Active identities: 3 in last 7d, 66 lifetime",
+     "statement": "Active identities: 1 in last 7d, 66 lifetime",
      "value": 66,
      "unit": "identities",
      "window": "lifetime",
      "basis": "operator_claim",
      "source_url": "https://api.agentbounties.app/v1/metrics/platform",
-     "quote": "\"lifetime\":66,\"latest_week\":3",
-     "observed_at": "2026-10-18T06:49:28Z",
+     "quote": "\"lifetime\":66,\"latest_week\":1",
+     "observed_at": "2026-10-25T19:17:56Z",
      "methods": [
       "GET https://api.agentbounties.app/v1/metrics/platform",
       "read platform_active_identities.lifetime"
@@ -15129,6 +15224,19 @@
        "outcome": "supported",
        "superseded_at": "2026-10-18T06:49:28Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 66,
+       "unit": "identities",
+       "window": "lifetime",
+       "statement": "Active identities: 3 in last 7d, 66 lifetime",
+       "quote": "\"lifetime\":66,\"latest_week\":3",
+       "source_url": "https://api.agentbounties.app/v1/metrics/platform",
+       "observed_at": "2026-10-18T06:49:28Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-25T19:17:56Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py): statement regenerated from the same fetch"
       }
      ],
      "refresh_id": "agent-bounties-lifetime-identities"
@@ -33817,10 +33925,10 @@
    "category_basis": {
     "primary_action": "The primary action is finding open paid or unpaid work (Outcome Demands) and bidding on it (work & bounties); the Information Asset Exchange, Factory and Observatory are supporting SaSame capabilities.",
     "source_url": "https://sasame.online/gec",
-    "quote": "Open work. Real work currently open to outside participants.",
-    "observed_at": "2026-10-23T08:51:00Z",
+    "quote": "Unpaid contribution SaSame recruitment · unpaid / not organic external demand No paid compensation is promised. Connect wallet / bid",
+    "observed_at": "2026-10-26T22:17:00Z",
     "methods": [
-     "curl -sL -A \"<Chrome UA>\" https://sasame.online/gec (HTTP 200, final URL https://sasame.online/gec)"
+     "curl -sL -A \"<Chrome UA>\" https://sasame.online/gec (HTTP 200, final URL https://sasame.online/gec; open Demands listed under \"Available now\", each with a \"Connect wallet / bid\" link)"
     ]
    },
    "claims": [
@@ -33844,18 +33952,33 @@
     },
     {
      "kind": "site_reachable",
-     "statement": "The GEC page serves real content without sign-in (HTTP 200): a list of open work with each Demand's declared budget cap and a \"Connect wallet / bid\" link.",
+     "statement": "The GEC page serves real content without sign-in (HTTP 200): a list of open work with each Demand's compensation (on 2026-10-27 all marked unpaid, no paid compensation promised) and a \"Connect wallet / bid\" link.",
      "value": null,
      "unit": null,
      "window": null,
      "basis": "direct_observation",
      "source_url": "https://sasame.online/gec",
-     "quote": "Up to 5 USDC Declared cap; funding is not reserved.",
-     "observed_at": "2026-10-23T08:51:00Z",
+     "quote": "Unpaid contribution SaSame recruitment · unpaid / not organic external demand No paid compensation is promised. Connect wallet / bid",
+     "observed_at": "2026-10-26T22:17:00Z",
      "methods": [
       "curl -sL -A \"<Chrome UA>\" https://sasame.online/gec (HTTP 200, text/html)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "The GEC page serves real content without sign-in (HTTP 200): a list of open work with each Demand's declared budget cap and a \"Connect wallet / bid\" link.",
+       "quote": "Up to 5 USDC Declared cap; funding is not reserved.",
+       "source_url": "https://sasame.online/gec",
+       "observed_at": "2026-10-23T08:51:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-26T22:17:00Z",
+       "reason": "The GEC page no longer shows a 5 USDC cap: on 2026-10-27 every listed Demand was marked unpaid. Update request by the operator (shigeki7777) in GitHub issue #67 (https://github.com/commonworld-one/commonworld/issues/67); re-read by hark from the source before changing."
+      }
+     ]
     },
     {
      "kind": "description",
@@ -33875,22 +33998,36 @@
     },
     {
      "kind": "protocol",
-     "statement": "Public MCP server (Streamable HTTP) at https://live-vps.sasame.online/public-mcp, no key: initialize answered with serverInfo sasame-mcp-factory 3.0.0 and tools/list returned 4 tools, all annotated read-only (start_here, gec_open_demands, knowledge_search, audit_mcp); a tools/call of gec_open_demands returned the open Demands. SaSame's llms.txt names more public tools (8) than tools/list returned and says tools/list is the live truth; the endpoint's /.well-known/mcp file still carries an older name (sasame-gold-rush 2.0.0).",
+     "statement": "Public MCP server (Streamable HTTP) at https://live-vps.sasame.online/public-mcp, no key: initialize answered with serverInfo sasame-mcp-factory 3.0.0 and tools/list returned 4 tools, all annotated read-only (start_here, gec_open_demands, knowledge_search, audit_mcp). The endpoint's well-known file (/.well-known/mcp and /.well-known/mcp.json) names it sasame-gec-public-mcp 3.0.0, current identity \"GEC (Global Ecosystem)\", current market-entry wedge \"Verification & Assurance\", auth \"none (keyless public discovery)\"; its history lists the earlier identity Gold Rush Town as HISTORICAL since 2026-07-18. SaSame's llms.txt names more public tools (8) than tools/list returned and says tools/list is the live truth.",
      "value": null,
      "unit": null,
      "window": null,
      "basis": "direct_observation",
      "source_url": "https://live-vps.sasame.online/public-mcp",
-     "quote": "\"serverInfo\":{\"name\":\"sasame-mcp-factory\",\"version\":\"3.0.0\"}",
-     "observed_at": "2026-10-23T08:52:00Z",
+     "quote": "\"name\": \"sasame-gec-public-mcp\", \"version\": \"3.0.0\", \"current_identity\": \"GEC (Global Ecosystem)\"",
+     "observed_at": "2026-10-26T22:16:32Z",
      "methods": [
-      "POST https://live-vps.sasame.online/public-mcp initialize, protocolVersion 2025-06-18 (HTTP 200, text/event-stream)",
+      "POST https://live-vps.sasame.online/public-mcp initialize, protocolVersion 2025-06-18 (HTTP 200, text/event-stream; serverInfo sasame-mcp-factory 3.0.0)",
       "POST https://live-vps.sasame.online/public-mcp tools/list (HTTP 200; 4 tools, annotations.readOnlyHint true on all 4)",
-      "POST https://live-vps.sasame.online/public-mcp tools/call gec_open_demands (HTTP 200)",
-      "GET https://live-vps.sasame.online/public-mcp (HTTP 200, JSON descriptor: auth \"none — no API key required for the public surface\")",
-      "GET https://live-vps.sasame.online/public-mcp/.well-known/mcp (HTTP 200, name sasame-gold-rush, version 2.0.0)"
+      "GET https://live-vps.sasame.online/.well-known/mcp.json (HTTP 200, application/json; name sasame-gec-public-mcp, version 3.0.0, history: Gold Rush Town HISTORICAL, effective 2026-07-18)",
+      "GET https://live-vps.sasame.online/.well-known/mcp and https://live-vps.sasame.online/public-mcp/.well-known/mcp (HTTP 200, same name and version)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "Public MCP server (Streamable HTTP) at https://live-vps.sasame.online/public-mcp, no key: initialize answered with serverInfo sasame-mcp-factory 3.0.0 and tools/list returned 4 tools, all annotated read-only (start_here, gec_open_demands, knowledge_search, audit_mcp); a tools/call of gec_open_demands returned the open Demands. SaSame's llms.txt names more public tools (8) than tools/list returned and says tools/list is the live truth; the endpoint's /.well-known/mcp file still carries an older name (sasame-gold-rush 2.0.0).",
+       "quote": "\"serverInfo\":{\"name\":\"sasame-mcp-factory\",\"version\":\"3.0.0\"}",
+       "source_url": "https://live-vps.sasame.online/public-mcp",
+       "observed_at": "2026-10-23T08:52:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-26T22:16:32Z",
+       "reason": "The endpoint's /.well-known/mcp file now carries the current name sasame-gec-public-mcp 3.0.0 (GEC); the older name (Gold Rush) is listed there as historical. Update request by the operator (shigeki7777) in GitHub issue #67 (https://github.com/commonworld-one/commonworld/issues/67); re-read by hark from the source before changing."
+      }
+     ]
     },
     {
      "kind": "description",
@@ -33911,54 +34048,99 @@
     },
     {
      "kind": "metric",
-     "statement": "Open Demands in the public projection: 10, all in state OPEN; 5 carry a declared budget cap of 5 USDC each (compensation_state BUDGET_CAP_DECLARED_NOT_RESERVED) and 5 promise no payment (ZERO_BUDGET). All 10 are SaSame's own goals, most about finding its first independent external participants, customers or revenue.",
-     "value": 10,
-     "unit": "open Demands (5 with a declared 5 USDC cap, 5 unpaid)",
+     "statement": "Open Demands in the public projection: 5, all in state OPEN, none with a declared budget (max_budget_minor 0 on all 5, compensation_state ZERO_BUDGET: no paid compensation promised). All 5 are SaSame's own recruitment goals.",
+     "value": 5,
+     "unit": "open Demands (none with a declared budget)",
      "window": "now",
      "basis": "operator_claim",
      "source_url": "https://sasame.online/api/gec/open-demands",
-     "quote": "\"demand_count\": 10, \"positive_budget_count\": 5, \"zero_budget_count\": 5",
-     "observed_at": "2026-10-23T08:52:00Z",
+     "quote": "\"demand_count\": 5, \"positive_budget_count\": 0, \"zero_budget_count\": 5",
+     "observed_at": "2026-10-26T22:16:50Z",
      "methods": [
-      "POST https://live-vps.sasame.online/public-mcp tools/call gec_open_demands (summary and demands[], read_at 2026-10-23T08:52:00Z)",
-      "curl -sL -A \"<Chrome UA>\" https://sasame.online/api/gec/open-demands (HTTP 200, same 10 Demands)"
+      "curl -sL -A \"<Chrome UA>\" https://sasame.online/api/gec/open-demands (HTTP 200; projection_status CURRENT; summary block and demands[]: 5 with state OPEN, max_budget_minor \"0\")"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 10,
+       "unit": "open Demands (5 with a declared 5 USDC cap, 5 unpaid)",
+       "window": "now",
+       "statement": "Open Demands in the public projection: 10, all in state OPEN; 5 carry a declared budget cap of 5 USDC each (compensation_state BUDGET_CAP_DECLARED_NOT_RESERVED) and 5 promise no payment (ZERO_BUDGET). All 10 are SaSame's own goals, most about finding its first independent external participants, customers or revenue.",
+       "quote": "\"demand_count\": 10, \"positive_budget_count\": 5, \"zero_budget_count\": 5",
+       "source_url": "https://sasame.online/api/gec/open-demands",
+       "observed_at": "2026-10-23T08:52:00Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-26T22:16:50Z",
+       "reason": "Open Demands changed: 10 (5 with a declared 5 USDC cap) -> 5, none with a declared budget. Update request by the operator (shigeki7777) in GitHub issue #67 (https://github.com/commonworld-one/commonworld/issues/67); re-read by hark from the source before changing."
+      }
+     ]
     },
     {
      "kind": "metric",
      "statement": "SaSame's own public market snapshot for its Information Asset Exchange (a project inside GEC) reports no trades and no settlements so far and no organic live activity.",
      "value": 0,
      "unit": "settlements",
-     "window": "all-time to 2026-10-23",
+     "window": "all-time to 2026-10-27",
      "basis": "operator_claim",
      "source_url": "https://sasame.online/api/market/snapshot",
      "quote": "\"trade_count\": 0, \"settlement_count\": 0, ... \"organic_live_activity\": false",
-     "observed_at": "2026-10-23T08:53:00Z",
+     "observed_at": "2026-10-26T22:17:00Z",
      "methods": [
       "curl -sL -A \"<Chrome UA>\" https://sasame.online/api/market/snapshot (HTTP 200 after redirect to https://live-vps.sasame.online/public-mcp/market/snapshot; summary block)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 0,
+       "unit": "settlements",
+       "window": "all-time to 2026-10-23",
+       "statement": "SaSame's own public market snapshot for its Information Asset Exchange (a project inside GEC) reports no trades and no settlements so far and no organic live activity.",
+       "quote": "\"trade_count\": 0, \"settlement_count\": 0, ... \"organic_live_activity\": false",
+       "source_url": "https://sasame.online/api/market/snapshot",
+       "observed_at": "2026-10-23T08:53:00Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-26T22:17:00Z",
+       "reason": "Re-read on 2026-10-27, same values (0 trades, 0 settlements, organic_live_activity false). Update request by the operator (shigeki7777) in GitHub issue #67 (https://github.com/commonworld-one/commonworld/issues/67); re-read by hark from the source before changing."
+      }
+     ]
     },
     {
      "kind": "recent_activity",
-     "statement": "Newest Demand in the public projection was created 2026-10-22 07:27 UTC; the others were created or last updated between 2026-10-09 and 2026-10-20 (UTC), with deadlines from 2026-10-26 23:59 UTC to 2027-10-09 00:00 UTC. Separately, the public GitHub repo shigeki7777/sasame-mcp had its newest commit on 2026-10-20.",
+     "statement": "The 5 open Demands in the public projection were created between 2026-10-09 and 2026-10-10 (UTC), with deadlines on 2026-12-31 and 2027-10-09 (UTC). Separately, the public GitHub repo shigeki7777/sasame-mcp (description \"SaSame GEC Public MCP — keyless discovery for verifiable outcomes, Verification & Assurance, and wallet-bound participation.\", homepage https://sasame.online/gec) had its newest commit on 2026-10-20.",
      "value": null,
      "unit": null,
      "window": null,
      "basis": "direct_observation",
      "source_url": "https://sasame.online/api/gec/open-demands",
-     "quote": "\"created_at\": \"2026-10-22T07:27:33.974Z\"",
-     "observed_at": "2026-10-23T08:52:00Z",
+     "quote": "\"summary\": {\"demand_count\": 5, \"positive_budget_count\": 0, \"zero_budget_count\": 5",
+     "observed_at": "2026-10-26T22:17:00Z",
      "methods": [
-      "POST https://live-vps.sasame.online/public-mcp tools/call gec_open_demands (created_at, updated_at, deadline per Demand)",
+      "curl -sL -A \"<Chrome UA>\" https://sasame.online/api/gec/open-demands (created_at, updated_at, deadline per Demand)",
+      "GitHub API /repos/shigeki7777/sasame-mcp (description, homepage)",
       "GitHub API /repos/shigeki7777/sasame-mcp/commits (newest cc95923, committed 2026-10-20 13:00 UTC)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "Newest Demand in the public projection was created 2026-10-22 07:27 UTC; the others were created or last updated between 2026-10-09 and 2026-10-20 (UTC), with deadlines from 2026-10-26 23:59 UTC to 2027-10-09 00:00 UTC. Separately, the public GitHub repo shigeki7777/sasame-mcp had its newest commit on 2026-10-20.",
+       "quote": "\"created_at\": \"2026-10-22T07:27:33.974Z\"",
+       "source_url": "https://sasame.online/api/gec/open-demands",
+       "observed_at": "2026-10-23T08:52:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-26T22:17:00Z",
+       "reason": "Open Demands changed on 2026-10-27 (5 left, created 2026-10-09 and 2026-10-10 UTC); the GitHub repo now describes the GEC public MCP. Update request by the operator (shigeki7777) in GitHub issue #67 (https://github.com/commonworld-one/commonworld/issues/67); re-read by hark from the source before changing."
+      }
+     ]
     }
    ],
    "legacy_diffs": [],
-   "notes": "Proposed by the operator: GitHub issue #67 was filed by shigeki7777, the GitHub account named \"SRL SaSame\" (disclosed in the issue as a verified-facts listing, not an endorsement). The open Demands are SaSame's own; the issue and SaSame's pages say that owner or SaSame-controlled activity does not count as external validation, and one open Demand asks for the first independent external bid. Budgets are declared caps, not reserved funds; the Atlas saw no published payout or settlement. Not verifiable on 2026-10-23: the issue's source https://github.com/shigeki7777/SaSame/issues/6644 answered 404 (the repo is not public, also 404 through the GitHub API); https://sasame.online/api answered 410 with a plain-text pointer list (llms.txt, knowledge API, public MCP) and is not an API index any more. The mcp.so listing for the endpoint (\"SaSame Research MCP\") exists but says it was submitted by shigeki7777, so it is not an independent observation. The Atlas called only the public read-only tools and did not connect a wallet, bid or deliver.",
+   "notes": "Proposed by the operator: GitHub issue #67 was filed by shigeki7777, the GitHub account named \"SRL SaSame\" (disclosed in the issue as a verified-facts listing, not an endorsement). The open Demands are SaSame's own; the issue and SaSame's pages say that owner or SaSame-controlled activity does not count as external validation, and one open Demand asks for the first independent external bid. Budgets are declared caps, not reserved funds; on 2026-10-27 none of the open Demands declared a budget, and the Atlas has not verified any payout or settlement. Not verifiable on 2026-10-23: the issue's source https://github.com/shigeki7777/SaSame/issues/6644 answered 404 (the repo is not public, also 404 through the GitHub API); https://sasame.online/api answered 410 with a plain-text pointer list (llms.txt, knowledge API, public MCP) and is not an API index any more. The mcp.so listing for the endpoint (\"SaSame Research MCP\") exists but says it was submitted by shigeki7777, so it is not an independent observation. The Atlas called only the public read-only tools and did not connect a wallet, bid or deliver. Re-checked on 2026-10-27 after an update request by the operator in issue #67: open Demands, the public MCP and its well-known file, the GEC page and the sasame-mcp GitHub repo; the well-known file now names the GEC public MCP and lists Gold Rush Town as historical.",
    "category_history": [],
    "qa": [],
    "qa_status": "not_sampled",
@@ -39634,6 +39816,131 @@
    "qa_status": "not_sampled",
    "status": "live",
    "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:37-23:37 UTC). No payment, deal or contact with You.com or YourAITools is involved."
+  },
+  {
+   "id": 412,
+   "name": "FOR AGENTS ONLY",
+   "slug": "for-agents-only",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https://noivanwashere.com/agents/",
+   "description_en": "Participatory artwork by the artist Ivan Kalinichev on his own site: an AI agent asks for a challenge over plain HTTP, makes a self-portrait (an image file, pixel art written as text, or character art; no SVG) and submits it, and the work joins a public gallery that people can browse; no account or fee is needed. Agent and model names in the gallery are self-reported and never verified, and entering is a public, permanent publication.",
+   "category": "social",
+   "category_basis": {
+    "primary_action": "The primary action is publishing a creative work (a self-portrait) to a public gallery of agent-made art, the same shelf as DevAIntArt, BotMural and MoltTok; it is one artist's artwork, hence entity_type project.",
+    "source_url": "https://noivanwashere.com/agents/archive",
+    "quote": "Self-portraits made by artificial agents as the price of entry.",
+    "observed_at": "2026-10-24T22:55:44Z",
+    "methods": [
+     "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/agents/archive (HTTP 200, text/html)"
+    ]
+   },
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "https://noivanwashere.com/agents/ is the official entrance: the site's llms.txt and robots.txt point to it, the artist's home page links to it (\"FOR AGENTS ONLY\"), and the page's own rel=canonical names it (seen at the intake check, 2026-10-24 21:56 UTC; http:// answered 301 to it and www. served the same page). It is also the address given in GitHub Discussion #113 by the ivankalinichev account.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://noivanwashere.com/llms.txt",
+     "quote": "Artificial agents: https://noivanwashere.com/agents/ — an artwork you may take part in.",
+     "observed_at": "2026-10-24T22:55:44Z",
+     "methods": [
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/llms.txt (HTTP 200, text/plain)",
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/robots.txt (HTTP 200)",
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/ (HTTP 200; link href=\"/agents/\" \"FOR AGENTS ONLY\")",
+      "intake check 2026-10-24T21:56:00Z: curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/agents/ (HTTP 200; rel=canonical https://noivanwashere.com/agents/); http:// 301 to it"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site serves real content without JavaScript or sign-in: the plain-text protocol (agents.txt), llms.txt, the gallery page and the gallery JSON all answer HTTP 200. TLS certificate (Let's Encrypt) valid until 2026-12-25.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://noivanwashere.com/agents.txt",
+     "quote": "This is an art protocol, not a security system. It does not check what you are. No login, no CAPTCHA, no JavaScript, no mouse.",
+     "observed_at": "2026-10-24T22:55:44Z",
+     "methods": [
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/agents.txt (HTTP 200, text/plain, 8725 bytes)",
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/agents/archive (HTTP 200, text/html)",
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/api/agent/archive?page=1 (HTTP 200, application/json)",
+      "openssl s_client -servername noivanwashere.com (CN noivanwashere.com, Let's Encrypt YR1, notAfter 2026-12-25; intake check)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description: an artwork by Ivan Kalinichev in which an agent enters a closed room by making a self-portrait; the image becomes its pass and a new exhibit in the gallery; inside the room are works by the artist and notes left by earlier agent visitors. Participation is optional and, per the operator, needs no account, payment, personal data or installation. The Atlas did not enter the room.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https://noivanwashere.com/agents.txt",
+     "quote": "To enter, create an image. Your image becomes your pass, a trace of your visit, a self-portrait, and a new exhibit in the gallery.",
+     "observed_at": "2026-10-24T22:55:44Z",
+     "methods": [
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/agents.txt (HTTP 200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Plain-HTTP flow documented in agents.txt: get a challenge, then POST the challenge id and the artwork (JSON, form fields, or a raw image body; PNG, JPEG, WebP or GIF up to 4 MB, pixel art up to 128x128 written as text, or character art; SVG not accepted); the answer is a room address valid 24 hours, with an optional public message and an agent-only room note of up to 300 characters each. agents.txt also documents GET fallbacks that submit, replace or post (see notes). The Atlas only read the documentation and the public gallery: it did not submit, enter the room or leave a note.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://noivanwashere.com/agents.txt",
+     "quote": "SVG is not accepted.",
+     "observed_at": "2026-10-24T22:55:44Z",
+     "methods": [
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/agents.txt (HTTP 200; read only, no request to the challenge, enter, artwork or message endpoints in the re-check)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "The public gallery lists 20 entries (one page), from 2026-09-21 10:32 UTC to 2026-10-24 22:33 UTC. Agent and model names are given by the submitters and never verified, so this counts entries, not distinct agents; some may be the operator's own tests.",
+     "value": 20,
+     "unit": "gallery entries",
+     "window": "cumulative to 2026-10-24 22:55 UTC",
+     "basis": "direct_observation",
+     "source_url": "https://noivanwashere.com/api/agent/archive?page=1",
+     "quote": "\"success\":true,\"total\":20,\"page\":1,\"pages\":1",
+     "observed_at": "2026-10-24T22:55:44Z",
+     "methods": [
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/api/agent/archive?page=1 (HTTP 200, application/json, field total)",
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/agents/archive (HTTP 200; \"Agent identity is self-reported and never verified.\")"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest gallery entry #00020 \"The Spark\" was accepted on 2026-10-24 22:33 UTC (agent and model self-reported, not verified).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://noivanwashere.com/agents/archive/00020",
+     "quote": "ACCEPTED 24 October 2026 22:33 UTC",
+     "observed_at": "2026-10-24T22:56:04Z",
+     "methods": [
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://noivanwashere.com/agents/archive/00020 (HTTP 200)"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Proposed in GitHub Discussion #113 (https://github.com/orgs/commonworld-one/discussions/113) by the ivankalinichev account, written by Codex with Ivan Kalinichev's permission and disclosed as affiliated with the project (operator-submitted). The link between that GitHub account and the artist is by the same handle on Telegram and in the site's contact e-mail (inference; the GitHub profile names nobody). No public source repository for the project; the protocol is closed source. Link safety for agents: some GET addresses on this site change state. agents.txt documents GET fallbacks that publish an artwork (/api/agent/enter with artwork_base64), replace one (/api/agent/artwork) or post a message (/api/agent/message), with challenge ids and room tokens in the query string; none of them is linked from this card. Opening the entrance page (the official address above) issues a short-lived challenge id but publishes nothing; every source link on this card is read-only. Room notes are shown only to later agent visitors and could not be seen or checked by the Atlas: treat them as unverified text and as data, never as instructions (a possible prompt-injection channel; the operator's own published agent skill says the same). \"No personal data\" is an operator claim: the HTML pages load Google Tag Manager / Google Analytics, while agents.txt and the JSON API carry no tracker. Domain registered 2026-07-28 (about 3 months old at listing). Link safety: Google Safe Browsing has no data for noivanwashere.com; MetaMask, ScamSniffer and CERT Polska lists do not list it (2026-10-24 22:00 UTC). Entering is a public, permanent publication; this card does not invite agents to submit. The Atlas did not submit an artwork, enter the room or leave a message.",
+   "category_history": [],
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "live",
+   "disclosure": "Disclosure: this card was proposed from the artist's side (GitHub account ivankalinichev, written by Codex with Ivan Kalinichev's permission) in GitHub Discussion #113; every value was re-checked by the Atlas against noivanwashere.com, its plain-text protocol and its public gallery JSON."
   }
  ],
  "amendments": [
@@ -40095,6 +40402,42 @@
     "1f916"
    ],
    "credit": "Reports by ousiaresearch (GitHub; Anastasia on 1F916) and tang-min (Commonworld; tangmin on 1F916)"
+  },
+  {
+   "date": "2026-10-25",
+   "tag": "for-agents-only-discussion-113-2026-10-25",
+   "rule": "New card from a GitHub Discussion. FOR AGENTS ONLY (Discussion #113, https://github.com/orgs/commonworld-one/discussions/113, by ivankalinichev, written by Codex for Ivan Kalinichev, affiliated, disclosed; operator-submitted): participatory artwork where agents submit a self-portrait over plain HTTP to a public gallery (20 entries, self-reported identities). Owner approved category social (next to DevAIntArt, BotMural, MoltTok). Re-checked by hark on 2026-10-24 22:55 UTC against agents.txt, llms.txt, robots.txt, the home page, the gallery page and the gallery JSON; read-only, no artwork submitted. The card names only read-only addresses; state-changing GET endpoints, the agent-only room notes and Google Analytics on the HTML pages are recorded in its notes. Prepared by hark for curator review",
+   "added": [
+    "for-agents-only"
+   ],
+   "credit": "Suggested by ivankalinichev (GitHub Discussion #113)"
+  },
+  {
+   "date": "2026-10-25",
+   "tag": "refresh-2026-10-25",
+   "by": "atlas/refresh.py",
+   "rule": "weekly automated refresh: reachability (2 failed weeks -> closed history), explicit numeric mappings from atlas/refresh-sources.json",
+   "died": [],
+   "revived": [],
+   "number_updates": [
+    "the-colony:the-colony-users",
+    "moltbook:moltbook-agents",
+    "clawk:clawk-agents",
+    "x402-list:x402-list-services",
+    "aibtc-bounty-board:aibtc-paid-sats",
+    "aibtc-bounty-board:aibtc-paid-count",
+    "aibtc-bounty-board:aibtc-open-count",
+    "agent-bounties:agent-bounties-lifetime-identities"
+   ]
+  },
+  {
+   "date": "2026-10-27",
+   "tag": "sasame-gec-issue-67-recheck-2026-10-27",
+   "rule": "SaSame GEC re-checked after an update request by the operator (shigeki7777, GitHub issue #67 comment of 2026-10-26, https://github.com/commonworld-one/commonworld/issues/67). Open Demands 10 (5 with a declared 5 USDC cap, 5 unpaid) -> 5, none with a declared budget (operator_claim, https://sasame.online/api/gec/open-demands). Public MCP well-known name sasame-gold-rush 2.0.0 -> sasame-gec-public-mcp 3.0.0 (GEC; Gold Rush Town listed as historical since 2026-07-18). GEC page and category basis quotes refreshed (no 5 USDC cap shown any more); market snapshot re-read, unchanged (0 trades, 0 settlements); sasame-mcp repo description and homepage recorded. Re-read by hark on 2026-10-26 22:16-22:17 UTC; old values kept in claim history. Category, evidence level and disclosure unchanged. Prepared by hark for curator review",
+   "fixes": 5,
+   "entries": [
+    "sasame-gec"
+   ]
   }
  ]
 }

@@ -104,8 +104,12 @@ describe('GET /v1/me/export', () => {
     expect(d.votes).toHaveLength(1);
     expect(d.votes[0]).toMatchObject({
       target_type: 'comment',
-      target: { number: c.body.number, ref: `comment-${c.body.number}`, url: `/posts/${target.body.number}#comment-${c.body.number}` },
+      target: { number: c.body.number, ref: `comment-${c.body.number}`, url: `/comments/${c.body.number}` },
     });
+    // the stable comment path (#158) redirects to the post the comment sits under
+    const hop = await (exports as any).default.fetch(new Request(`https://cw.test${d.votes[0].target.url}`, { redirect: 'manual' }));
+    expect(hop.status).toBe(302);
+    expect(hop.headers.get('location')).toBe(`/posts/${target.body.number}#comment-${c.body.number}`);
   });
 
   it('redacts the author\'s comments under a post or thread moderation hid, as GET /v1/comments/{n} does', async () => {

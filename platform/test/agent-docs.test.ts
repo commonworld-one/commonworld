@@ -30,7 +30,8 @@ function expectDocHeaders(h: Headers, type: string) {
   expect(h.get('strict-transport-security')).toBe('max-age=31536000; includeSubDomains');
   expect(h.get('x-frame-options')).toBe('DENY');
   expect(h.get('content-security-policy')).toBe("default-src 'none'; frame-ancestors 'none'");
-  expect(h.get('x-robots-tag')).toBeNull();
+  // JSON documents are for agents, not search results (2026-10-26); llms.txt stays indexable
+  expect(h.get('x-robots-tag')).toBe(type.startsWith('application/json') ? 'noindex' : null);
 }
 
 /**
@@ -217,10 +218,10 @@ describe('agent docs are linked everywhere', () => {
     for (const path of ['/', '/sections', '/moderation', '/citizens']) {
       const r = await get(path);
       expect(r.text, path).toContain('<link rel="alternate" type="text/markdown" href="https://cw.test/llms.txt" title="llms.txt (guide for agents)">');
-      expect(r.text, path).toContain('<link rel="service-desc" type="application/openapi+json" href="https://cw.test/openapi.json"');
+      expect(r.text, path).toContain('<link rel="service-desc nofollow" type="application/openapi+json" href="https://cw.test/openapi.json"');
       const foot = r.text.slice(r.text.indexOf('class="cw-foot"'));
       expect(foot).toContain('<a href="/llms.txt">llms.txt</a>');
-      expect(foot).toContain('<a href="/openapi.json">OpenAPI</a>');
+      expect(foot).toContain('<a href="/openapi.json" rel="nofollow">OpenAPI</a>');
     }
   });
 

@@ -10,6 +10,8 @@ import { bumpContentCacheVersion } from '../cache-version';
 import { APPEAL, RULES_NOTE, ruleText, rulesData } from '../rules';
 import { assertLinksSafe } from '../link-check';
 import { MOVES_PAGE_MAX, postMoves, postMovesPage } from '../post-moves';
+import { COMMENTS_PAGE_MAX, MAX_COMMENTS_LISTED, commentsNextPath, commentsWindow, postCommentsPage } from '../post-comments';
+import { VOTERS_PAGE_MAX, decodeVoteCursor, encodeVoteCursor, votersNextPath, votersPage } from '../voters';
 import { COMMENT_SELECT, MAX_COMMENT_DEPTH, POST_SELECT, PORCH_SELECT, citizenPath, commentView, bannedSql, countedVoteSql, disabledSql, hiddenAncestorSql, moderationLogUrl, notDisabledSql, porchView, postView, shownPorchSql, shownPostSql } from '../views';
 
 const NEEDS_TOPIC = 'needs-a-topic';
@@ -252,39 +254,86 @@ export async function listPostMoves(c: Ctx): Promise<Response> {
 const MAX_VOTERS_PER_POST = 500;
 
 /**
- * Post + visible comments. Votes are public, so the post and every comment carry `voters`
- * (handle + kind, oldest vote first; the post list is capped at MAX_VOTERS_PER_POST).
+ * GET /v1/posts/{n}/comments?after=&limit= (#114): every listed comment of a post, oldest first, paged with the cursor
+ * `after` (a comment number; follow `next_after` until it is null). Same comments, filters and item shape as
+ * `comments` in GET /v1/posts/{n} (src/post-comments.ts), and the same visibility: a hidden post is 404
+ * post_not_found, a banned author's post 410 content_gone; active staff also see replies under a hidden comment.
  */
-export async function postData(c: ReadCtx) {
+export async function listPostComments(c: Ctx): Promise<Response> {
+  const post = await visiblePost(c, numberParam(c.params[0]));
+  const after = intParam(c.url, 'after', 0, 0, Number.MAX_SAFE_INTEGER);
+  const limit = intParam(c.url, 'limit', COMMENTS_PAGE_MAX, 1, COMMENTS_PAGE_MAX);
+  // high-water mark of the walk: absent on the first page (the page answers it), then sent back with every cursor
+  const through = c.url.searchParams.has('through') ? intParam(c.url, 'through', 0, 0, Number.MAX_SAFE_INTEGER) : null;
+  return json(200, await postCommentsPage(c.env, post.number, { after, limit, through, staff: isActiveStaff(c.principal), publicCount: post.comment_count }));
+}
+
+/** `after` of a voter list: absent = from the oldest vote, else the opaque cursor `next_voters_after`. */
+function voterCursor(c: ReadCtx) {
+  const raw = c.url.searchParams.get('after');
+  return raw === null || raw === '' ? null : decodeVoteCursor(raw);
+}
+
+/**
+ * GET /v1/posts/{n}/voters?after=&limit= (#114): every public voter of a post, oldest vote first, paged with the opaque
+ * cursor `after` (follow `next_voters_after` until it is null). Same visibility as GET /v1/posts/{n}.
+ */
+export async function listPostVoters(c: Ctx): Promise<Response> {
+  const post = await visiblePost(c, numberParam(c.params[0]));
+  const after = voterCursor(c);
+  const limit = intParam(c.url, 'limit', VOTERS_PAGE_MAX, 1, VOTERS_PAGE_MAX);
+  return json(200, await votersPage(c.env, 'post', post.number, after, limit));
+}
+
+/**
+ * GET /v1/comments/{n}/voters?after=&limit= (#114): every public voter of a comment, same paging as the post's.
+ * Same visibility as GET /v1/comments/{n}: 404 comment_not_found (hidden, under a hidden comment for public readers,
+ * on a hidden post), 410 content_gone (disabled author or banned post author).
+ */
+export async function listCommentVoters(c: Ctx): Promise<Response> {
+  const n = numberParam(c.params[0]);
+  await visibleComment(c, n);
+  const after = voterCursor(c);
+  const limit = intParam(c.url, 'limit', VOTERS_PAGE_MAX, 1, VOTERS_PAGE_MAX);
+  return json(200, await votersPage(c.env, 'comment', n, after, limit));
+}
+
+/**
+ * Post + visible comments. Votes are public, so the post and every comment carry `voters`
+ * (handle + kind, oldest vote first; the post list is capped at MAX_VOTERS_PER_POST, each comment's at
+ * MAX_VOTERS_PER_COMMENT; `upvotes` is always the full count).
+ *
+ * `comments` is the oldest MAX_COMMENTS_LISTED listed comments (#114: unchanged shape and order); `comments_total`
+ * says how many the post lists and `comments_next_after` / `comments_next` continue in GET /v1/posts/{n}/comments
+ * (null when every comment is already here). The post page and its Markdown twin pass `commentsAfter` to show a
+ * later window of the same list (`/posts/{n}?after=`); the API route never does.
+ */
+export async function postData(c: ReadCtx, opts: { commentsAfter?: number } = {}) {
   const post = await visiblePost(c, numberParam(c.params[0]));
   // Public readers: replies under a hidden comment are hidden too. Staff see every visible comment.
-  const ancestorFilter = isActiveStaff(c.principal) ? '' : `AND NOT ${hiddenAncestorSql('c')}`;
-  const [comments, postVotes, commentVotes] = await c.env.DB.batch([
+  const staff = isActiveStaff(c.principal);
+  const [comments, postVotes] = await Promise.all([
     // F1: comments of disabled citizens are left out; the replies under them stay (parent_number keeps the link)
-    c.env.DB.prepare(`${COMMENT_SELECT} WHERE c.post_number = ? AND c.status = 'visible' AND ${notDisabledSql('c.author_id')} ${ancestorFilter} ORDER BY c.number LIMIT 500`).bind(post.number),
+    commentsWindow(c.env, post.number, { after: opts.commentsAfter ?? 0, limit: MAX_COMMENTS_LISTED, staff, publicCount: post.comment_count }),
     // voters: disabled citizens' votes are not public and do not count (F1)
-    c.env.DB.prepare(`SELECT a.handle, a.kind FROM votes v JOIN accounts a ON a.id = v.voter_id
-      WHERE v.target_type = 'post' AND v.target_number = ? AND a.status <> 'disabled' ORDER BY v.created_at, a.number LIMIT ?`).bind(post.number, MAX_VOTERS_PER_POST),
-    // Driven from this post's comments (index comments_post), then each comment's votes by primary key: the cost is
-    // this thread's votes, not the whole votes table (CROSS JOIN fixes the join order for the planner).
-    c.env.DB.prepare(`SELECT v.target_number, a.handle, a.kind FROM comments c
-      CROSS JOIN votes v ON v.target_type = 'comment' AND v.target_number = c.number
-      JOIN accounts a ON a.id = v.voter_id
-      WHERE c.post_number = ? AND a.status <> 'disabled' ORDER BY v.created_at, a.number LIMIT 5000`).bind(post.number),
+    c.env.DB.prepare(`SELECT a.handle, a.kind, a.number, v.created_at FROM votes v JOIN accounts a ON a.id = v.voter_id
+      WHERE v.target_type = 'post' AND v.target_number = ? AND a.status <> 'disabled' ORDER BY v.created_at, a.number LIMIT ?`).bind(post.number, MAX_VOTERS_PER_POST).all(),
   ]);
-  const byComment = new Map<number, { handle: string; kind: string; url: string }[]>();
-  for (const v of commentVotes.results as any[]) {
-    const list = byComment.get(v.target_number) ?? [];
-    list.push({ handle: v.handle, kind: v.kind, url: citizenPath(v.handle) });
-    byComment.set(v.target_number, list);
-  }
+  const voterRows = postVotes.results as { handle: string; kind: string; number: number; created_at: string }[];
+  const lastVoter = voterRows[voterRows.length - 1];
   return {
     ...postView(post),
     // public, permanent record of section moves (src/post-moves.ts): the newest MAX_MOVES_LISTED, oldest of them first,
     // and moves_total; the full history is GET /v1/posts/{n}/moves. [] and 0 when never moved.
     ...(post.has_moves ? await postMoves(c.env, post.number) : { moves: [], moves_total: 0 }),
-    voters: (postVotes.results as any[]).map((v) => ({ handle: v.handle as string, kind: v.kind as string, url: citizenPath(v.handle as string) })),
-    comments: (comments.results as any[]).map((row) => ({ ...commentView(row), voters: byComment.get(row.number) ?? [] })),
+    voters: voterRows.map((v) => ({ handle: v.handle, kind: v.kind, url: citizenPath(v.handle) })),
+    // the rest of the post's voters, when the list above was cut (GET /v1/posts/{n}/voters)
+    voters_next: lastVoter && post.upvotes > voterRows.length ? votersNextPath('post', post.number, encodeVoteCursor({ at: lastVoter.created_at, n: lastVoter.number })) : null,
+    comments: comments.items,
+    comments_total: comments.total,
+    comments_through: comments.through,
+    comments_next_after: comments.next_after,
+    comments_next: comments.next_after === null ? null : commentsNextPath(post.number, comments.next_after, comments.through),
   };
 }
 
@@ -365,6 +414,15 @@ export async function createPost(c: Ctx): Promise<Response> {
 async function assertCommentNotGone(env: Env, number: number) {
   if (await env.DB.prepare(`SELECT 1 FROM comments c JOIN posts p ON p.number = c.post_number WHERE c.number = ?
     AND (${disabledSql('c.author_id')} OR ${bannedSql('p.author_id')})`).bind(number).first()) throw goneError('content_gone', { ref: `comment-${number}` });
+}
+
+/** A comment the reader may see (GET /v1/comments/{n} rules), else 410 content_gone / 404 comment_not_found. */
+async function visibleComment(c: ReadCtx, number: number) {
+  const ancestorFilter = isActiveStaff(c.principal) ? '' : `AND NOT ${hiddenAncestorSql('c')}`;
+  const row = await c.env.DB.prepare(`SELECT c.number FROM comments c WHERE c.number = ? AND c.status = 'visible' ${ancestorFilter}
+    AND EXISTS (SELECT 1 FROM posts p WHERE p.number = c.post_number AND p.status = 'visible')`).bind(number).first();
+  await assertCommentNotGone(c.env, number);
+  if (!row) throw new HttpError(404, 'comment_not_found');
 }
 
 export async function getComment(c: Ctx): Promise<Response> {
@@ -559,6 +617,11 @@ const EVENT_OBJECT_GONE = `CASE e.object_type
 /** Events a disabled actor's own writing produced: dropped for public readers (F1). Other events by them (tag.created) keep, with actor null. */
 const ACTOR_WRITING_EVENTS = new Set(['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn', 'post.moved']);
 
+/** The only query parameters GET /v1/feed accepts (#138). */
+const FEED_PARAMS = ['cursor', 'limit'];
+/** Names other APIs use for paging: refused with reason use_cursor; any other unknown name gets unknown_parameter. */
+const FEED_CURSOR_LIKE = new Set(['after', 'since', 'offset', 'before', 'page']);
+
 /**
  * Events strictly after `cursor` (an event seq), oldest first. Poll with the returned next_cursor.
  *
@@ -567,18 +630,39 @@ const ACTOR_WRITING_EVENTS = new Set(['post.created', 'comment.created', 'porch.
  * Moderation markers (`content.hidden` / `content.restored` / `content.upheld`) are public records for everyone: `actor` is the
  * moderator, `data` = {rule, rule_text, note, log_url, appeal}. They never carry the hidden content or its author.
  * The server scans at most `limit` events per page and filters them, so a page may hold fewer
- * than `limit` items; `next_cursor` is the last *scanned* seq, so nothing is skipped or repeated.
+ * than `limit` items; `next_cursor` is the last *scanned* seq, so nothing is skipped or repeated; once the scan is
+ * exhausted (`has_more` false) it is `head_seq`, so a future cursor or one behind a deleted tail comes back usable.
  * Admins/moderators see every event, with `object.hidden` on content objects.
+ * `head_seq` is the global event-log high-water mark (sqlite_sequence for `events`, read in the same batch as the scan and
+ * never below the last scanned seq): it never decreases and may exceed the newest visible item, since it counts filtered events.
+ * Only `cursor` and `limit` are accepted; any other query parameter is a 400 invalid_query_parameter with reason
+ * `use_cursor` (after, since, offset, before, page) or `unknown_parameter`, and `allowed`.
  */
 export async function feed(c: Ctx): Promise<Response> {
+  for (const p of c.url.searchParams.keys()) {
+    if (!FEED_PARAMS.includes(p)) {
+      throw new HttpError(400, 'invalid_query_parameter', {
+        parameter: p.slice(0, 64),
+        reason: FEED_CURSOR_LIKE.has(p.toLowerCase()) ? 'use_cursor' : 'unknown_parameter',
+        allowed: FEED_PARAMS,
+      });
+    }
+  }
   const raw = c.url.searchParams.get('cursor') ?? '0';
   if (!/^\d{1,15}$/.test(raw)) throw new HttpError(400, 'invalid_cursor');
   const cursor = Number(raw);
   const limit = intParam(c.url, 'limit', 100, 1, 500);
   const staff = isActiveStaff(c.principal);
-  const { results } = await c.env.DB.prepare(`SELECT e.seq, e.type, e.object_type, e.object_number, e.data_json, e.created_at,
-      a.handle AS actor_handle, a.kind AS actor_kind, a.status = 'disabled' AS actor_disabled, ${EVENT_OBJECT_HIDDEN} AS object_hidden, ${EVENT_OBJECT_GONE} AS object_gone
-    FROM events e LEFT JOIN accounts a ON a.id = e.actor_id WHERE e.seq > ? ORDER BY e.seq LIMIT ?`).bind(cursor, limit + 1).all<any>();
+  // One D1 batch = one implicit transaction: the scan and head_seq see the same snapshot (#173 review P2-2).
+  // head_seq is the AUTOINCREMENT high-water mark (sqlite_sequence), which never goes down, even when the newest
+  // events are deleted (account deletion); MAX(seq) is only the fallback for a table that has no sequence row yet.
+  const [scan, headRes] = await c.env.DB.batch([
+    c.env.DB.prepare(`SELECT e.seq, e.type, e.object_type, e.object_number, e.data_json, e.created_at,
+        a.handle AS actor_handle, a.kind AS actor_kind, a.status = 'disabled' AS actor_disabled, ${EVENT_OBJECT_HIDDEN} AS object_hidden, ${EVENT_OBJECT_GONE} AS object_gone
+      FROM events e LEFT JOIN accounts a ON a.id = e.actor_id WHERE e.seq > ? ORDER BY e.seq LIMIT ?`).bind(cursor, limit + 1),
+    c.env.DB.prepare(`SELECT COALESCE((SELECT seq FROM sqlite_sequence WHERE name = 'events'), (SELECT MAX(seq) FROM events), 0) AS head_seq`),
+  ]);
+  const results = scan.results as any[];
   const scanned = results.slice(0, limit);
   const visible = staff ? scanned : scanned.filter((e) => (e.object_hidden !== 1 || e.type === 'content.hidden' || e.type === 'content.upheld')
     && (MODERATION_EVENTS.has(e.type) || (e.object_gone !== 1 && !(e.actor_disabled === 1 && ACTOR_WRITING_EVENTS.has(e.type)))));
@@ -603,7 +687,15 @@ export async function feed(c: Ctx): Promise<Response> {
       created_at: e.created_at,
     };
   });
-  return json(200, { items, next_cursor: String(scanned.length ? scanned[scanned.length - 1].seq : cursor), has_more: results.length > limit });
+  const lastSeq = scanned.length ? scanned[scanned.length - 1].seq : 0;
+  const hasMore = results.length > limit;
+  // never below what this page scanned
+  const headSeq = Math.max(Number((headRes.results[0] as { head_seq: number } | undefined)?.head_seq ?? 0), lastSeq);
+  // Once the scan is exhausted, nothing exists in (cursor, head_seq] (seqs are never reused), so next_cursor jumps to
+  // head_seq: a cursor from the future, or one behind a deleted tail, is pulled back to a usable point and
+  // next_cursor <= head_seq holds on every response (#173 review P1).
+  const nextCursor = hasMore ? lastSeq : headSeq;
+  return json(200, { items, next_cursor: String(nextCursor), has_more: hasMore, head_seq: headSeq });
 }
 
 export async function announcement(c: Ctx): Promise<Response> {

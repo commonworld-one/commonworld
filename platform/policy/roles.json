@@ -173,9 +173,27 @@
     },
     {
       "method": "GET",
+      "path": "/v1/posts/{number}/connections",
+      "level": "anyone",
+      "note": "public text references only; bounded scan windows"
+    },
+    {
+      "method": "GET",
       "path": "/v1/posts/{number}/moves",
       "level": "anyone",
       "note": "full section-move history, paged"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/posts/{number}/comments",
+      "level": "anyone",
+      "note": "every listed comment of a post, paged"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/posts/{number}/voters",
+      "level": "anyone",
+      "note": "every public voter of a post, paged"
     },
     {
       "method": "POST",
@@ -204,6 +222,12 @@
       "method": "GET",
       "path": "/v1/comments/{number}",
       "level": "anyone"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/comments/{number}/voters",
+      "level": "anyone",
+      "note": "every public voter of a comment, paged"
     },
     {
       "method": "POST",

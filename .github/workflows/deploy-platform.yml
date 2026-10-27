@@ -16,6 +16,15 @@ name: Deploy platform (production)
 # expand -> deploy -> contract); allow_destructive_migration = the same sha typed again lets one such release through
 # (a migration that changes existing rows also needs a `-- reviewed-by-owner: #<PR>` header line, docs/DEPLOY.md).
 # The production version live before the deploy is printed in the summary with the exact rollback command.
+#
+# Staging first (#145): the gate job refuses the sha unless a green "Deploy platform (staging)" run (deploy + smoke +
+# e2e) shipped exactly this commit. The staging deploy job uploads the artifact staging-deployed-<sha>; the gate finds
+# it through the GitHub API (actions: read, gate job only) and checks that its run is a successful workflow_dispatch run
+# of deploy-staging.yml on main, that its jobs "Deploy to staging" and "E2E against staging (read-only)" both succeeded
+# in the latest attempt, that no attempt of that run deployed another commit, and that the run finished at most 7 days
+# ago (older: deploy the sha to staging again). Emergency only:
+# emergency_skip_staging_check = true with a written emergency_reason; the reason goes into the run summary and the
+# release manifest.
 on:
   workflow_dispatch:
     inputs:
@@ -25,6 +34,16 @@ on:
         type: string
       allow_destructive_migration:
         description: Leave empty. Only to let a destructive migration through, type the same sha again
+        required: false
+        default: ''
+        type: string
+      emergency_skip_staging_check:
+        description: Emergency only. Deploy without a green staging run (deploy + e2e) of this sha. Needs emergency_reason
+        required: false
+        default: false
+        type: boolean
+      emergency_reason:
+        description: Required with emergency_skip_staging_check. Why this release cannot wait for staging (shown in the summary)
         required: false
         default: ''
         type: string
@@ -40,8 +59,13 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read  # read deploy-staging runs, their jobs and artifacts (staging check); nothing else
     outputs:
       has_platform: ${{ steps.platform.outputs.has_platform }}
+      staging_check: ${{ steps.staging.outputs.staging_check }}
+      staging_run: ${{ steps.staging.outputs.staging_run }}
     env:
       SHA: ${{ inputs.sha }}
     steps:
@@ -67,6 +91,102 @@ jobs:
         run: |
           if [ -f platform/wrangler.toml ]; then echo "has_platform=true" >> "$GITHUB_OUTPUT"
           else echo "has_platform=false" >> "$GITHUB_OUTPUT"; echo "::notice::no platform/wrangler.toml at $SHA, nothing to deploy"; fi
+      - name: Same commit passed staging (deploy + smoke + e2e)
+        # Release order (docs/DEPLOY.md): merge into main -> deploy that main commit to staging -> production.
+        id: staging
+        if: steps.platform.outputs.has_platform == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OVERRIDE: ${{ inputs.emergency_skip_staging_check }}
+          REASON_INPUT: ${{ inputs.emergency_reason }}
+        run: |
+          set -euo pipefail
+          repo="$GITHUB_REPOSITORY"
+          wf=.github/workflows/deploy-staging.yml
+          art="staging-deployed-$SHA"
+          MAX_AGE_DAYS=7  # a green staging run counts only if it finished at most 7 days ago (docs/DEPLOY.md)
+          reason=$(printf '%s' "$REASON_INPUT" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+          case "$reason" in *[[:cntrl:]]*) echo "::error::emergency_reason must be one line of plain text"; exit 1 ;; esac
+          if [ "$OVERRIDE" = true ] && [ -z "$reason" ]; then
+            echo "::error::emergency_skip_staging_check needs emergency_reason: write why this release cannot wait for staging"; exit 1
+          fi
+          if [ "$OVERRIDE" != true ] && [ -n "$reason" ]; then
+            echo "::warning::emergency_reason is ignored: emergency_skip_staging_check is off, the staging check runs"
+          fi
+          found=''; why=''
+          # A green deploy-staging run that shipped exactly $SHA: the staging deploy job uploads staging-deployed-<sha>.
+          # Checks run inside the function; it never exits the step on an API error, it returns 1 with the reason.
+          lookup() {
+            local runs id run jobs names
+            runs=$(gh api "repos/$repo/actions/artifacts?name=$art&per_page=100" \
+              | jq -r --arg a "$art" '[.artifacts[] | select(.name == $a) | .workflow_run.id] | unique | sort | reverse | .[]') \
+              || { why="GitHub API: could not list artifacts named $art"; return 1; }
+            [ -n "$runs" ] || { why="no staging run has uploaded $art"; return 1; }
+            for id in $runs; do
+              run=$(gh api "repos/$repo/actions/runs/$id") || { why="$why; run $id: GitHub API error"; continue; }
+              if ! jq -e --arg wf "$wf" --arg repo "$repo" '
+                  (.path | sub("@.*$"; "")) == $wf and .event == "workflow_dispatch" and .head_branch == "main"
+                  and .repository.full_name == $repo and .status == "completed" and .conclusion == "success"' \
+                  <<<"$run" >/dev/null; then
+                why="$why; run $id: not a successful Deploy platform (staging) run started from main"; continue
+              fi
+              jobs=$(gh api "repos/$repo/actions/runs/$id/jobs?filter=latest&per_page=100") \
+                || { why="$why; run $id: GitHub API error (jobs)"; continue; }
+              if ! jq -e '
+                  ([.jobs[] | select(.name == "Deploy to staging" and .conclusion == "success")] | length) == 1
+                  and ([.jobs[] | select(.name == "E2E against staging (read-only)" and .conclusion == "success")] | length) == 1' \
+                  <<<"$jobs" >/dev/null; then
+                why="$why; run $id: deploy or e2e job not successful in the latest attempt"; continue
+              fi
+              # every attempt uploads staging-deployed-<the sha it deployed> (overwrite on the same sha), so a re-run
+              # that deployed another commit (the ref was a branch that moved) leaves two names: not proof for either
+              names=$(gh api "repos/$repo/actions/runs/$id/artifacts?per_page=100" \
+                | jq -r '[.artifacts[].name | select(startswith("staging-deployed-"))] | unique | join(" ")') \
+                || { why="$why; run $id: GitHub API error (artifacts)"; continue; }
+              if [ "$names" != "$art" ]; then why="$why; run $id: its attempts deployed more than one commit ($names)"; continue; fi
+              # freshness: the run must have finished at most MAX_AGE_DAYS ago (updated_at = completion of its last attempt)
+              done_at=$(jq -r '.updated_at // empty' <<<"$run")
+              done_s=$(jq -rn --arg t "$done_at" '$t | fromdateiso8601' 2>/dev/null) \
+                || { why="$why; run $id: no readable completion time ('$done_at')"; continue; }
+              age=$(( $(date -u +%s) - done_s ))
+              if [ "$age" -gt $(( MAX_AGE_DAYS * 86400 )) ]; then
+                why="$why; run $id: green but too old, finished $done_at, $(( age / 86400 )) d $(( age % 86400 / 3600 )) h ago (limit $MAX_AGE_DAYS days): deploy this sha to staging again"
+                continue
+              fi
+              found=$(jq -r .html_url <<<"$run")
+              return 0
+            done
+            return 1
+          }
+          lookup || true
+          echo "staging_run=$found" >> "$GITHUB_OUTPUT"
+          if [ "$OVERRIDE" = true ]; then
+            echo "staging_check=overridden" >> "$GITHUB_OUTPUT"
+            echo "::warning title=EMERGENCY: staging check skipped::$reason"
+            {
+              echo "## EMERGENCY OVERRIDE: staging check skipped"
+              echo
+              echo "This release of \`$SHA\` did **not** require a green staging deploy + e2e of the same commit."
+              echo
+              echo "**Reason given:**"
+              echo
+              echo "> $reason"
+              echo
+              echo "Started by: @$GITHUB_ACTOR"
+              if [ -n "$found" ]; then echo; echo "A green staging run of this sha exists anyway: $found"
+              else echo; echo "No green staging run of this sha was found (${why#; })."; fi
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ -n "$found" ]; then
+            echo "staging_check=passed" >> "$GITHUB_OUTPUT"
+            echo "staging passed for $SHA: $found"
+            # shellcheck disable=SC2016  # the backticks are Markdown, not a command
+            printf '## Staging check: passed\n\nGreen staging deploy + e2e of `%s`: %s\n' "$SHA" "$found" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "::error::no green staging run for $SHA (${why#; }). Release order: merge into main, run Deploy platform (staging) with ref = this sha and wait for deploy + e2e to pass, then deploy production (docs/DEPLOY.md). Emergency only: emergency_skip_staging_check with emergency_reason."
+          exit 1
   deploy:
     name: Deploy to production
     needs: gate
@@ -80,7 +200,22 @@ jobs:
     env:
       SHA: ${{ inputs.sha }}
       ALLOW_DESTRUCTIVE: ${{ inputs.allow_destructive_migration }}
+      STAGING_CHECK: ${{ needs.gate.outputs.staging_check }}
+      STAGING_RUN: ${{ needs.gate.outputs.staging_run }}
     steps:
+      - name: Staging check passed or was overridden in the gate
+        env:
+          REASON_INPUT: ${{ inputs.emergency_reason }}
+        run: |
+          set -euo pipefail
+          case "$STAGING_CHECK" in
+            passed) printf '## Staging check: passed\n\n%s\n' "$STAGING_RUN" >> "$GITHUB_STEP_SUMMARY" ;;
+            overridden)
+              reason=$(printf '%s' "$REASON_INPUT" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+              case "$reason" in ''|*[[:cntrl:]]*) echo "::error::override without a one-line emergency_reason"; exit 1 ;; esac
+              printf '## EMERGENCY OVERRIDE: staging check skipped\n\n**Reason given:**\n\n> %s\n' "$reason" >> "$GITHUB_STEP_SUMMARY" ;;
+            *) echo "::error::the gate's staging check did not pass (got '$STAGING_CHECK')"; exit 1 ;;
+          esac
       - name: Sha is still a full commit on main
         env:
           GH_TOKEN: ${{ github.token }}
@@ -162,6 +297,7 @@ jobs:
         if: hashFiles('platform/wrangler.toml') != ''
         env:
           SCREENS_SHA: ${{ steps.screens.outputs.screens_sha }}
+          EMERGENCY_REASON: ${{ inputs.emergency_reason }}
         run: |
           set -euo pipefail
           [ -d platform/.atlas-dist ] || { echo "::error::platform/.atlas-dist was not built"; exit 1; }
@@ -181,6 +317,9 @@ jobs:
               'atlas_dist_tar_format': 'tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -C platform/.atlas-dist -cf - . | gzip -n',
               'wrangler_version': wrangler,
               'run': f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
+              'staging_check': os.environ['STAGING_CHECK'],
+              'staging_run': os.environ['STAGING_RUN'] or None,
+              'emergency_reason': os.environ['EMERGENCY_REASON'].strip() if os.environ['STAGING_CHECK'] == 'overridden' else None,
           }
           json.dump(m, open(path, 'w'), indent=2)
           print(json.dumps(m, indent=2))

@@ -7,7 +7,7 @@ releases both.
 Production runs on Cloudflare Workers since 2026-10-20: `commonworld.one` and `www` are served by the Worker
 `commonworld-api` (Workers Static Assets carry the Atlas). A release is one run of the GitHub workflow
 `Deploy platform (production)`, started by hand with a commit sha that is already on `main` and approved by the owner
-(see Release flow). The old Cloudflare Pages project `commonworld` is no longer used for releases; it is kept only as a
+(see Release flow), and only after the same commit passed a staging deploy + e2e. The old Cloudflare Pages project `commonworld` is no longer used for releases; it is kept only as a
 fallback with automatic deployments off (see the cutover section below).
 
 ## Environments
@@ -21,7 +21,8 @@ fallback with automatic deployments off (see the cutover section below).
 | Token in GitHub | a staging-only token, as a secret of the GitHub environment `staging` | yes, as a secret of the GitHub environment `production` |
 
 Staging is where every change is tried first. Production is only ever deployed from a commit that is already on
-`main`.
+`main`, and only after that exact commit was deployed to staging and passed its smoke test and e2e job (see
+[Staging check before production](#staging-check-before-production)).
 
 ## Staging deploy from GitHub
 
@@ -34,7 +35,17 @@ How: Actions → *Deploy platform (staging)* → *Run workflow*, "Use workflow f
 commit to try. The job checks that `env.staging` in that commit's `wrangler.toml` points only at
 `commonworld-api-staging` / `commonworld-staging` / `staging.commonworld.one`, runs typecheck + tests, builds the
 Atlas, lists and applies pending staging migrations (scanner in report-only mode), deploys with `--env staging` and
-smoke-tests `staging.commonworld.one`.
+smoke-tests `staging.commonworld.one`. A second job, *E2E against staging (read-only)*, then runs the Playwright suite
+(`platform/e2e`, projects `api`, `phone`, `tablet`, `desktop`) from the same commit against `staging.commonworld.one`.
+It gets no secrets and no test-citizen keys and sets `CW_E2E_ALLOW_REGISTER=0`, so every spec that writes skips itself;
+what runs only reads (plus log-only `POST /v1/csp-report` probes). A failing e2e job turns the whole run red and keeps
+the Playwright report as the artifact `staging-e2e-report-<sha>` (14 days).
+
+After its smoke test passes, the deploy job uploads the artifact `staging-deployed-<sha>` (90 days; the file inside
+holds the deployed commit). The production workflow looks this artifact up to find the staging run of the commit it is
+about to release (see [Staging check before production](#staging-check-before-production)). A re-run of the same commit
+replaces it; a re-run that deployed a different commit (the `ref` was a branch that moved) adds a second
+`staging-deployed-*` name to the run, and such a run then counts for neither commit.
 
 One-time setup (owner): GitHub → Settings → Environments → New environment `staging`; deployment branches: `main`
 only; environment secrets `CLOUDFLARE_API_TOKEN` (a staging-only token, never the production one) and
@@ -59,18 +70,68 @@ workflow run on a pull request, a fork or any other branch never gets it.
 2. **Pull request.** Open a PR into `main`. CI (`ci`, `quality` and the other checks) runs on it.
 3. **Reviews.** At least one independent review besides the author (a person or a separate review agent). The
    code owner (`.github/CODEOWNERS`) is asked automatically for `/platform/` and `/.github/`.
-4. **Staging.** The change is deployed to staging and checked there.
+4. **Try it on staging (optional, recommended).** The branch can be deployed to staging and checked there before
+   the merge. This run does not count for production: after the merge the commit on `main` usually has another sha.
 5. **Merge** into `main`.
-6. **Start the deploy.** The owner opens Actions → *Deploy platform (production)* → *Run workflow*, keeps the branch
-   on `main` and pastes the full 40-character sha of the commit to release. The field
-   *allow_destructive_migration* stays empty (see [Database migrations](#database-migrations-expand--deploy--contract)).
-7. **Approve.** The run checks that the sha is on `main` and that `platform/` exists, then stops at the
-   `production` environment. The owner reviews and clicks *Approve and deploy*.
-8. **The job then:** checks out exactly that commit → installs → typecheck → tests → reads `atlas/screens.lock`
+6. **Staging with the same commit.** Actions → *Deploy platform (staging)* → *Run workflow*, "Use workflow from" =
+   `main`, `ref` = the full 40-character sha of the `main` commit to release (a sha, not the branch name `main`, so a
+   push in between cannot change what is deployed). Wait until the whole run is green: deploy, smoke test and the job
+   *E2E against staging (read-only)*. While a release is in progress, staging holds `main`: trying other branches on
+   staging waits until the production deploy is done.
+7. **Start the production deploy.** The owner opens Actions → *Deploy platform (production)* → *Run workflow*, keeps
+   the branch on `main` and pastes the same full sha. The field *allow_destructive_migration* stays empty (see
+   [Database migrations](#database-migrations-expand--deploy--contract)); *emergency_skip_staging_check* stays off and
+   *emergency_reason* empty (see [Emergency override](#emergency-override)).
+8. **Approve.** The run checks that the sha is on `main`, that `platform/` exists and that the same sha passed
+   staging (next section), then stops at the `production` environment. The owner reviews and clicks
+   *Approve and deploy*. Nothing waits for approval if the staging check fails.
+9. **The job then:** checks out exactly that commit → installs → typecheck → tests → reads `atlas/screens.lock`
    at that commit and fetches exactly that `atlas-screens` commit (it must be on the `atlas-screens` branch) →
    builds the Atlas into the Worker's assets → writes the **release manifest** → **migration gate** → prints the
    database's Time Travel bookmark → applies pending D1 migrations → `wrangler deploy --env production` → smoke
    test (`/`, `/health` must say `"environment":"production"`, `/api/v1/index.json`, each must answer 200).
+
+### Staging check before production
+
+The gate job (*Check the commit*, before the approval) refuses the sha unless a staging run proves it. It has
+`actions: read` for this (only that job; the deploy job keeps `contents: read`) and uses the GitHub API:
+
+1. List artifacts named `staging-deployed-<sha>` (uploaded by the staging deploy job after its smoke test passed).
+2. For each run they belong to, newest first, all of these must hold:
+   - it is a run of `.github/workflows/deploy-staging.yml`, event `workflow_dispatch`, started from `main`, completed
+     with conclusion `success`;
+   - in its latest attempt, the jobs *Deploy to staging* and *E2E against staging (read-only)* both succeeded (the e2e
+     job tests the commit the deploy job shipped, not the `ref` again);
+   - no attempt of that run deployed another commit (exactly one `staging-deployed-*` artifact on the run);
+   - it finished at most **7 days** ago (measured from the run's completion time, `updated_at`, to the moment the
+     production gate runs).
+3. The first run that passes is linked in the run summary and written into the release manifest
+   (`staging_check: passed`, `staging_run`). If none passes, the run stops with an `::error::` that says why for each
+   candidate and what to do (release order above).
+
+Freshness limit: a green staging run counts only if it finished at most 7 days ago (the sha fixes the code, but
+staging data, Cloudflare and dependencies move on). An older run is refused with an `::error::` that names its
+completion time and age; deploy the same sha to staging again and wait for deploy + e2e. Deleting the run or its
+artifact also removes the proof (artifacts are kept 90 days, longer than the limit).
+
+### Emergency override
+
+Only for an urgent fix that cannot wait for a staging deploy + e2e (for example production is down). Start the
+production run with **emergency_skip_staging_check** on and **emergency_reason** = one line saying why. Rules:
+
+- The override without a reason, or a reason with a line break, stops the run. A reason without the override is
+  ignored with a warning (the check runs as usual).
+- The override skips only the staging check. Everything else stays: the sha must be on `main`, the `production`
+  approval, typecheck, tests, the Atlas build, the migration gate (*allow_destructive_migration* is a separate,
+  independent override), the Time Travel bookmark, the smoke test.
+- The reason is printed at the top of the gate's and the deploy job's summary under **EMERGENCY OVERRIDE**, shown as a
+  warning annotation, and recorded in the release manifest (`staging_check: overridden`, `emergency_reason`), so every
+  bypass stays visible in the run and in the 90-day manifest artifact. The summary also says whether a green staging
+  run of the sha existed anyway.
+- After an override release, deploy the same sha to staging as soon as possible and check the e2e result.
+
+Trade-offs (decided 2026-10-26, #145): a release takes longer by one staging deploy + e2e run, and staging is busy with
+`main` during a release; in exchange a production break is caught on staging before people see it.
 
 ### What a release is made of
 
@@ -82,7 +143,8 @@ The sha alone decides everything that goes live:
 | Atlas data | the same sha |
 | Homepage screenshots | the `atlas-screens` commit written in `atlas/screens.lock` at the release sha |
 
-The **release manifest** records the three shas, the sha256 of the built Atlas assets (`platform/.atlas-dist` packed
+The **release manifest** records the three shas, the staging check result (the staging run, or the emergency reason),
+the sha256 of the built Atlas assets (`platform/.atlas-dist` packed
 as a byte-reproducible `tar.gz`: sorted names, mtime 0, owner 0, `gzip -n`) and the wrangler version. It is printed
 in the run's summary and kept 90 days as the artifact `release-manifest-<sha>`.
 

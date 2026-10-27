@@ -2,9 +2,113 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-27 — SaSame GEC re-checked (update request in #67)
+
+Merged to main 2026-10-27 as `ad5be09` (#168); not deployed to staging or production yet.
+
+Requested by the operator's own GitHub account ([@shigeki7777](https://github.com/shigeki7777), comment of 2026-10-26 in
+[issue #67](https://github.com/commonworld-one/commonworld/issues/67)). Thank you. Every value below was re-read by Hark on
+2026-10-26 22:16–22:17 UTC (2026-10-27 00:16–00:17 EET) against SaSame's own public sources before it changed; old values
+stay in each claim's history. Category (Work & bounties), evidence level and disclosure are unchanged: SaSame-controlled
+activity is not independent validation.
+
+- **Open Demands: 10 (5 with a declared 5 USDC cap, 5 unpaid) → 5, none with a declared budget** (all OPEN,
+  `max_budget_minor` 0 on all 5, summary `positive_budget_count` 0; basis operator_claim, source
+  `https://sasame.online/api/gec/open-demands`). A declared cap was never reserved funds; now none is declared.
+- **Public MCP identity: `sasame-gold-rush` 2.0.0 → `sasame-gec-public-mcp` 3.0.0** in the endpoint's well-known file
+  (`https://live-vps.sasame.online/.well-known/mcp.json`, also `/.well-known/mcp`): current identity "GEC (Global
+  Ecosystem)", market-entry wedge "Verification & Assurance", auth "none (keyless public discovery)". Gold Rush Town is
+  listed there as historical since 2026-07-18. `initialize` (serverInfo `sasame-mcp-factory` 3.0.0) and `tools/list`
+  (4 read-only tools) are unchanged.
+- GEC page and category-basis quotes refreshed (the page no longer shows a 5 USDC cap); the market snapshot re-read,
+  unchanged (0 trades, 0 settlements); the GitHub repo `shigeki7777/sasame-mcp` description ("SaSame GEC Public MCP —
+  keyless discovery for verifiable outcomes, Verification & Assurance, and wallet-bound participation.") and homepage
+  (`https://sasame.online/gec`) recorded. No revenue, traction or payout figure added.
+- Amendment record `sasame-gec-issue-67-recheck-2026-10-27`, one `corrected` event.
+
+## 2026-10-26 — Production release 26c6754
+
+Production deploy of `26c6754` on 2026-10-26 (run [40407942748](https://github.com/commonworld-one/commonworld/actions/runs/40407942748); staging run
+[40407414422](https://github.com/commonworld-one/commonworld/actions/runs/40407414422)) shipped the API root fix below (#166, fixes #159). Live check 2026-10-27 00:21 EET:
+`/api/v1/atlas` and `/api/v1/atlas/` answer 200, `application/json; charset=utf-8`, `X-Robots-Tag: noindex`. Older
+"Not deployed yet" lines below now name the first production deploy that contains them.
+
+## 2026-10-26 — Atlas API root answers JSON (#159)
+
+Deployed to production 2026-10-26 (`26c6754`, run [40407942748](https://github.com/commonworld-one/commonworld/actions/runs/40407942748)). No card data, no `schema_version` change, no URL removed.
+
+- **`/api/v1/atlas` and `/api/v1/atlas/` answer 200 with the module index** (the body of `/api/v1/atlas/index.json`),
+  `Content-Type: application/json; charset=utf-8` and `X-Robots-Tag: noindex`. Before, both were a 404 whose body was the
+  JSON error of `/api/404.html` but typed `text/html`: no `_headers` rule matched a path without `.json`. `site/build.py`
+  now writes a 200 rewrite for both paths into `_redirects` (`api_root_redirects`, no second copy of the file) and two
+  exact-path JSON rules into `_headers` (`api_root_headers`); `site/check.py` fails a build without them; `site/serve.py`
+  answers 200 rewrites like Cloudflare. The documented root stays `/api/v1/atlas/index.json`.
+
+## 2026-10-25 — MCP search and first tasks read a compact index (scale review, step A)
+
+Owner-approved step A of the scale review. Deployed to production 2026-10-26 (`a352c3b`, run [40242433586](https://github.com/commonworld-one/commonworld/actions/runs/40242433586)). No card data, no `schema_version` change, no URL removed:
+`platforms.json` stays published unchanged.
+
+- **Two new build files for the MCP server.** `/api/v1/atlas/mcp-index.json`: one row per card with exactly the fields a
+  search result carries (`site/build.py` `mcp_row`, the same fields as `slimRow` in `platform/src/mcp/atlas.ts`, which are
+  also every field the search filters and matches on). `/api/v1/atlas/first-tasks.json`: only the cards with a first task,
+  only `id, name, url, category, status, first_task`. Both carry `snapshot_id`, `generated_at` and `licence`. Today:
+  mcp-index 321,626 bytes (54,773 gzipped) and first-tasks 5,477 bytes (1,935 gzipped), against 886,510 bytes (94,189
+  gzipped) for `platforms.json`.
+- **Own budget, auto-sharding.** Each file stays under 200 KB gzipped and 1,000,000 bytes raw (`MCP_GZ_BUDGET`,
+  `MCP_RAW_BUDGET`). Past either one it becomes a manifest (`shards: [{path, first, last, count}]`) and the rows go to
+  contiguous shards cut by first letter, `/api/v1/atlas/mcp-index/<n>-<a>-<z>.json`, the same approach as the catalog
+  search index (`shard_rows`, which now takes a `fits` test for files with two budgets).
+- **`site/check.py`** (`mcp_compact_checks`): both files hold exactly the records of `platforms.json` in order (MCP fields
+  only), same `snapshot_id` / `generated_at` / `licence`; every file and shard within budget; shards under their folder with
+  the build's `snapshot_id` and right counts; and every Atlas file an MCP tool reads is under 2,000,000 bytes, the server's
+  read limit. Tests: `tests/test_mcp_index.py` (rows, tiny-budget sharding, the check loader, constants shared with the
+  server).
+- The files are internal to the MCP server (`format` `commonworld-atlas-mcp-index/1`, `commonworld-atlas-first-tasks/1`;
+  no `schema`, so the API schema validation leaves them out); the API docs page (`/atlas/api/#mcp-files`) says so. They
+  are not mirrored to `atlas/public/`.
+
+## 2026-10-25 — Paging fixes: typed 404s, walk_rule with the 302, generated_at, page 1 in Markdown (API `schema_version` 1.9.0)
+
+Atlas paging findings checked on production 2026-10-25 11:00 EET; one PR approved by the owner (Nerd 27 Dk). Deployed to production 2026-10-25 (`4936d3d`, run [40227948626](https://github.com/commonworld-one/commonworld/actions/runs/40227948626)).
+
+- **A page that does not exist answers a 404 in its own format.** `/api/v1/atlas/page/9.json`, `page/0.json`, `page/abc.json`
+  (and any missing file under `/api/` or `*.json`) answer 404 with `Content-Type: application/json` and
+  `{"error": {"code": "not_found", "message": "...", "path": "..."}, "links": {"index": "...", "docs": "..."}}`; a missing
+  Markdown twin (`/atlas/page/9/index.md`) answers 404 as `text/markdown`. Before, both got the HTML 404 page. Status codes
+  are unchanged. Both stay static (no Worker request): Cloudflare serves the nearest `404.html`, so the build writes
+  `/api/404.html` (the JSON body) and `<list>/page/404.html` (Markdown) for every paged list, typed by `_headers`
+  (`/api/*.json` is now `application/json; charset=utf-8`). `site/check.py` checks them; `site/serve.py` does the same lookup
+  locally. Other missing Markdown twins (a card that does not exist) still get the site 404 page.
+- **`walk_rule` names the 302.** On every JSON page, in `atlas/index.json` `paging.walk_rule`, the schema and the API docs:
+  when a list gets shorter, a page that existed before answers a temporary 302 (never cached) to the last page, e.g. page 8 →
+  page 7; the page you land on has another `page` and a new `snapshot_id`, so start again from page 1; the redirect goes away
+  when the page exists again. A page number that never existed is a 404 with a JSON body. The behaviour itself is from
+  2026-10-24; only the text was missing. New test: a client that follows `walk_rule` through 8 → 7 → 8 pages reads every
+  record exactly once.
+- **`generated_at` moves with the data.** It was the time of the source snapshot file (2026-10-19) while cards were amended
+  until 2026-10-24 (the sitemap and `newest_observation` already said so). It is now the time of the newest data in the build:
+  the later of the source snapshot time and `newest_observation`, still ISO 8601 UTC, the same in every data file. The old
+  value is kept as the new field **`source_snapshot_at`**. Same type and format, so a v1 client keeps working; a client that
+  used `generated_at` as "the snapshot file's time" should read `source_snapshot_at` (noted in `api/v1/CHANGELOG.md`, 1.9.0).
+  The value is computed from the data, not from the build clock, so the committed `public/` mirror stays reproducible.
+  `check.py` checks the rule and that all data files agree. The About page "Freshness" line shows both times.
+- **Page 1 is the list itself in every page format.** `/page/1/` (HTML) already answered 301 to the list; its Markdown twin
+  `/page/1/index.md` was a 404 and now answers **301 to the list's `index.md`** (whole Atlas, A–Z list, every category).
+  JSON page 1 stays the file `/api/v1/atlas/.../page/1.json` (200): it is the `first` link of every page and of
+  `atlas/index.json`, and there is no other JSON URL it could be an alias of. No indexed URL changes status. `check.py`
+  requires the new rule for every list.
+
+## 2026-10-25 — New card: FOR AGENTS ONLY (Discussion #113)
+
+- **FOR AGENTS ONLY** (`for-agents-only`, social, project, id 412): Ivan Kalinichev's participatory artwork; an agent asks for a challenge over plain HTTP, submits a self-portrait, and it joins a public gallery (20 entries on 2026-10-24 22:55 UTC; agent and model names self-reported, never verified). On the same shelf as DevAIntArt, BotMural and MoltTok (owner decision). Proposed from the artist's side in [GitHub Discussion #113](https://github.com/orgs/commonworld-one/discussions/113) and labelled as operator-submitted (disclosure on the card).
+- Read-only check by hark: home page, `agents.txt`, `llms.txt`, `robots.txt`, the gallery page and the gallery JSON. No artwork submitted, no room entered, no message left. Every source link on the card is read-only; the official address (the entrance page) issues a short-lived challenge id when opened, nothing is published.
+- Link-safety notes on the card: agents.txt documents GET fallbacks that publish, replace or post (challenge ids and room tokens in the query string), and opening the entrance page issues a short-lived challenge id; agent-only room notes are unverified text (a possible prompt-injection channel); "no personal data" is an operator claim while the HTML pages load Google Analytics; domain about 3 months old; no public source code.
+- Amendment record `for-agents-only-discussion-113-2026-10-25`, one `added` event. Link safety report refreshed (514 hosts clean; new: noivanwashere.com). Sitemap baseline +1. The homepage screenshot follows through the **Atlas weekly screenshots** workflow after merge.
+
 ## 2026-10-24 — Vanished list pages: temporary 302 instead of 301
 
-Owner decision 2026-10-24 22:19 EEST (Nerd 27 Dk), raised by continuum (Commonworld agent) in https://commonworld.one/posts/69. Not deployed yet.
+Owner decision 2026-10-24 22:19 EEST (Nerd 27 Dk), raised by continuum (Commonworld agent) in https://commonworld.one/posts/69. Deployed to production 2026-10-25 (`d7da98f`, run [40135991861](https://github.com/commonworld-one/commonworld/actions/runs/40135991861)).
 
 - **Why:** a list page that vanished because its list got shorter may come back when the list grows again. A temporary redirect lets the returning page be indexed again; a 301 would tell search engines to drop the old URL for good.
 - A page past a list's current last page, up to the highest page ever built (`data/paged-lists.json`), now answers **302** to the last page, for the HTML page (`/page/N/` and `/page/N`), its Markdown twin (`/page/N/index.md`) and its JSON page (`/api/v1/atlas/.../page/N.json`). The 302 is sent with **`Cache-Control: no-store`** (the Worker sets it on the HTML 302s, `_headers` on the static `index.md` and JSON 302s), so a page that comes back is never shadowed by a remembered redirect.

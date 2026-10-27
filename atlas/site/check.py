@@ -328,6 +328,46 @@ VANISHED_PAGE_CACHE = 'no-store'  # same as build.py: that 302 is never stored, 
 HEADERS_MAX_RULES = 100  # Cloudflare Static Assets / Pages limit for _headers
 
 
+TYPED_404_RE = re.compile(r'^(?:api/404\.html|atlas/(?:.+/)?page/404\.html)$')
+
+
+def typed_404_checks():
+    """Atlas paging findings (2026-10-25): a missing JSON page answers a JSON 404 body and a missing Markdown twin of a list page
+    a Markdown 404, not the HTML 404 page. Static Assets serves the nearest 404.html, so: /api/404.html is the JSON error body
+    (api_v1.not_found_doc), every paged list has <list>/page/404.html with api_v1.NOT_FOUND_MD, and _headers types them by the
+    requested path (/api/*.json JSON; the list-page */index.md rules Markdown); no other 404.html below the root."""
+    sys.path.insert(0, HERE)
+    import api_v1
+    fails = []
+    fp = os.path.join(DIST, 'api', '404.html')
+    try:
+        doc = json.load(open(fp, encoding='utf-8'))
+        if doc != api_v1.not_found_doc(ORIGIN): fails.append(f'/api/404.html is not api_v1.not_found_doc: {doc}')
+    except (OSError, ValueError) as ex:
+        fails.append(f'/api/404.html missing or not JSON: {ex}')
+    ai = json.load(open(os.path.join(DIST, 'api', 'v1', 'atlas', 'index.json'), encoding='utf-8'))
+    lists = ['/atlas/', '/atlas/platforms/'] + [f"/atlas/categories/{c['id']}/" for c in ai['categories']]
+    want = {f'{first.lstrip("/")}page/404.html' for first in lists} | {'api/404.html'}
+    for rel in sorted(want - {'api/404.html'}):
+        p = os.path.join(DIST, rel)
+        if not os.path.isfile(p) or open(p, encoding='utf-8').read() != api_v1.NOT_FOUND_MD: fails.append(f'/{rel}: Markdown 404 missing or not api_v1.NOT_FOUND_MD')
+    found = {os.path.relpath(os.path.join(r, f), DIST).replace(os.sep, '/') for r, _, fs in os.walk(DIST) for f in fs if f == '404.html'} - {'404.html'}
+    if found - want: fails.append(f'unexpected 404.html files (they would answer misses below them): {sorted(found - want)}')
+    hdr = open(os.path.join(DIST, '_headers'), encoding='utf-8').read()
+    for rule in ('/api/*.json\n  Content-Type: application/json; charset=utf-8\n', '/atlas/page/*/index.md\n  Access-Control-Allow-Origin: *\n  Content-Type: text/markdown; charset=utf-8\n',
+                 '/atlas/platforms/*/index.md\n  Access-Control-Allow-Origin: *\n  Content-Type: text/markdown; charset=utf-8\n',
+                 '/atlas/categories/*/index.md\n  Access-Control-Allow-Origin: *\n  Content-Type: text/markdown; charset=utf-8\n'):
+        if rule not in hdr: fails.append(f'_headers lacks {rule.splitlines()[0]} with its content type (typed 404s)')
+    # issue #159: the bare Atlas API root (/api/v1/atlas, /api/v1/atlas/) answers the module index as JSON, not a text/html 404
+    import build
+    red = open(os.path.join(DIST, '_redirects'), encoding='utf-8').read().splitlines() if os.path.exists(os.path.join(DIST, '_redirects')) else []
+    for l in build.api_root_redirects().splitlines():
+        if l not in red: fails.append(f'_redirects lacks the API root rewrite {l} (#159)')
+    if build.api_root_headers() not in hdr: fails.append('_headers lacks the JSON rules for /api/v1/atlas and /api/v1/atlas/ (#159)')
+    print(f'typed 404s: /api/404.html (JSON) + {len(want) - 1} Markdown list-page 404s')
+    return fails
+
+
 def paged_record_checks(update=False):
     """Q8 (owner decision 2026-10-24): a page number that ever existed never 404s. atlas/data/paged-lists.json records the
     highest page ever built per list (whole Atlas, A-Z, each category); it must cover every list as built now (else run
@@ -584,6 +624,86 @@ def load_search_index():
     return si, fails
 
 
+MCP_GZ_BUDGET = 200 * 1024    # same as build.MCP_GZ_BUDGET: every compact MCP file under 200 KB gzipped (build.py shards past it)
+MCP_RAW_BUDGET = 1_000_000    # same as build.MCP_RAW_BUDGET: and under 1,000,000 bytes raw
+MCP_MAX_BYTES = 2_000_000     # same as MAX_ATLAS_BYTES in platform/src/mcp/atlas.ts: the MCP server refuses a bigger Atlas file
+MCP_COMPACT = {'/api/v1/atlas/mcp-index.json': 'commonworld-atlas-mcp-index/1', '/api/v1/atlas/first-tasks.json': 'commonworld-atlas-first-tasks/1'}
+
+
+def load_compact(path, fmt):
+    """One compact MCP file (platform/src/mcp/tools.ts) as one document, rows joined from its shards when it is sharded, plus
+    failures: the manifest and every shard in budget (gzipped and raw), shards under <path>/ with the build's snapshot_id,
+    counts right. Returns (doc, files, fails)."""
+    fails, fp = [], os.path.join(DIST, path.lstrip('/'))
+    if not os.path.isfile(fp):
+        return {}, [], [f'{path} missing (the MCP tools atlas_search_platforms / atlas_first_tasks read it)']
+    doc, files = json.load(open(fp, encoding='utf-8')), [fp]
+    if doc.get('format') != fmt: fails.append(f'{path}: format {doc.get("format")!r}, expected {fmt!r}')
+    if doc.get('shards'):
+        rows, shard_dir = [], path[:-len('.json')] + '/'
+        for sh in doc['shards']:
+            sp = str(sh.get('path') or '')
+            if not sp.startswith(shard_dir) or not re.fullmatch(r'[0-9]+-[a-z0]-[a-z0]\.json', sp[len(shard_dir):]):
+                fails.append(f'{path}: shard path {sp!r} is not under {shard_dir}'); continue
+            sfp = os.path.join(DIST, sp.lstrip('/'))
+            files.append(sfp)
+            if not os.path.isfile(sfp): fails.append(f'{path}: shard {sp} missing'); continue
+            d = json.load(open(sfp, encoding='utf-8'))
+            if d.get('format') != fmt + '-shard' or d.get('snapshot_id') != doc.get('snapshot_id') or d.get('count') != len(d.get('rows') or []) or sh.get('count') != d.get('count'):
+                fails.append(f'{path}: shard {sp}: format, snapshot_id or count wrong')
+            rows += d.get('rows') or []
+        doc = doc | {'rows': rows}
+    elif not isinstance(doc.get('rows'), list):
+        fails.append(f'{path}: neither rows nor shards')
+    if doc.get('total') != len(doc.get('rows') or []): fails.append(f'{path}: total {doc.get("total")} != {len(doc.get("rows") or [])} rows')
+    for f in files:
+        if not os.path.isfile(f): continue
+        raw = open(f, 'rb').read()
+        gz = len(gzip.compress(raw, 6))
+        if gz > MCP_GZ_BUDGET: fails.append(f'{os.path.relpath(f, DIST)}: {gz} bytes gzipped > {MCP_GZ_BUDGET // 1024} KB MCP budget')
+        if len(raw) > MCP_RAW_BUDGET: fails.append(f'{os.path.relpath(f, DIST)}: {len(raw)} bytes > {MCP_RAW_BUDGET} bytes MCP raw budget')
+    return doc, files, fails
+
+
+def mcp_compact_checks():
+    """The compact files of the MCP server (scale review 2026-10-25): mcp-index.json holds exactly the search row of every
+    record of platforms.json in its order (build.mcp_row: the fields slimRow returns, which are also every field the search
+    filters on), first-tasks.json exactly the records with a first task; same snapshot_id, generated_at and licence as the
+    published list; every file in budget. platforms.json itself stays published. Every Atlas JSON file an MCP tool reads is
+    under MCP_MAX_BYTES, the limit the server enforces."""
+    sys.path.insert(0, HERE)
+    import build
+    fails = []
+    for k, v in (('MCP_GZ_BUDGET', MCP_GZ_BUDGET), ('MCP_RAW_BUDGET', MCP_RAW_BUDGET), ('MCP_MAX_BYTES', MCP_MAX_BYTES)):
+        if getattr(build, k) != v: fails.append(f'check.py {k} {v} != build.py {getattr(build, k)}')
+    lst = json.load(open(os.path.join(DIST, 'api', 'v1', 'atlas', 'platforms.json'), encoding='utf-8'))
+    snap = (json.load(open(os.path.join(DIST, 'api', 'v1', 'atlas', 'index.json'), encoding='utf-8')).get('paging') or {}).get('snapshot_id')
+    recs = lst.get('platforms') or []
+    want = {'/api/v1/atlas/mcp-index.json': [build.mcp_row(r) for r in recs],
+            '/api/v1/atlas/first-tasks.json': [{k: r.get(k) for k in build.MCP_FIRST_TASK_FIELDS} for r in recs if r.get('first_task') is not None]}
+    sizes = []
+    for path, fmt in MCP_COMPACT.items():
+        doc, files, f = load_compact(path, fmt)
+        fails += f
+        if not doc: continue
+        if doc.get('rows') != want[path]: fails.append(f'{path}: rows are not the records of platforms.json (in order, MCP fields only)')
+        for k, v in (('snapshot_id', snap), ('generated_at', lst.get('generated_at')), ('licence', lst.get('licence'))):
+            if doc.get(k) != v: fails.append(f'{path}: {k} {doc.get(k)!r} != {v!r}')
+        sizes.append(f"{path.rsplit('/', 1)[-1]} {len(doc.get('rows') or [])} rows in {len(files)} file(s)")
+    # every file an MCP Atlas tool reads (src/mcp/atlas.ts ATLAS_FILES) stays under the server's limit
+    read = [os.path.join(DIST, 'api', 'v1', 'atlas', n) for n in ('index.json', 'earn.json')] + [os.path.join(DIST, 'stats.json')]
+    for root, _, fs in os.walk(os.path.join(DIST, 'api', 'v1', 'atlas')):
+        rel = os.path.relpath(root, os.path.join(DIST, 'api', 'v1', 'atlas')).replace(os.sep, '/')
+        if rel in ('platforms', 'mcp-index', 'first-tasks') or rel.endswith('page'):
+            read += [os.path.join(root, f) for f in fs if f.endswith('.json')]
+    read += [os.path.join(DIST, p.lstrip('/')) for p in MCP_COMPACT]
+    big = [(os.path.getsize(f), os.path.relpath(f, DIST)) for f in read if os.path.isfile(f) and os.path.getsize(f) > MCP_MAX_BYTES]
+    if big: fails.append(f'MCP: Atlas files over {MCP_MAX_BYTES} bytes (the server would refuse them): {sorted(big)[-3:]}')
+    largest = max((os.path.getsize(f), os.path.relpath(f, DIST)) for f in read if os.path.isfile(f))
+    print(f'mcp compact files: {"; ".join(sizes)}; largest file an MCP tool reads {largest[0]} bytes ({largest[1]}, limit {MCP_MAX_BYTES})')
+    return fails
+
+
 def paged_list_checks(parsed, pages, locs):
     """HTML list pages (D1, D3, D4): /atlas/ and every category page 1, then /page/N/ up to the last page and nothing
     after it; each page shows at most PAGE_SIZE cards, exactly its slice of the list in order (so every card is
@@ -604,6 +724,7 @@ def paged_list_checks(parsed, pages, locs):
     for first, slugs in lists.items():
         m = max(1, -(-len(slugs) // PAGE_SIZE))
         if f'{first}page/1/ {first} 301' not in red: fails.append(f'_redirects lacks {first}page/1/ -> {first} 301')
+        if f'{first}page/1/index.md {first}index.md 301' not in red: fails.append(f'_redirects lacks {first}page/1/index.md -> {first}index.md 301')
         if os.path.exists(os.path.join(DIST, first.lstrip('/'), 'page', '1')): fails.append(f'{first}page/1/ is built (page 1 is {first})')
         if os.path.exists(os.path.join(DIST, first.lstrip('/'), 'page', str(m + 1))): fails.append(f'{first}page/{m + 1}/ is built past the last page')
         for n in range(1, m + 1):
@@ -629,7 +750,7 @@ def paged_list_checks(parsed, pages, locs):
             if n > 1 and f'page {n} of {m}' not in (pp.meta.get('description') or '').lower(): fails.append(f'{u}: description lacks "page {n} of {m}"')
             if ORIGIN + u not in locs: fails.append(f'{u}: not in the sitemap')
             if 'noindex' in (pp.meta.get('robots') or ''): fails.append(f'{u}: list page is noindex (D1: paged pages are indexable)')
-            alts = [(hr, r) for t, hr, r in pp.links if t == 'link' and r == 'alternate']
+            alts = [(hr, 'alternate') for t, hr, r in pp.links if t == 'link' and 'alternate' in r.split()]  # JSON alternates are 'alternate nofollow'
             cat = None if first == '/atlas/' else first.rstrip('/').rsplit('/', 1)[1]
             want_json = '/api/v1' + (f'/atlas/page/{n}.json' if cat is None else f'/atlas/categories/{cat}/page/{n}.json')
             if (want_json, 'alternate') not in alts: fails.append(f'{u}: no <link rel=alternate> to its JSON page {want_json}')
@@ -682,6 +803,7 @@ def az_list_checks(parsed, pages, locs):
         starts.setdefault(az_letter(c['name']), (i // PAGE_SIZE + 1, c['slug']))
     red = open(os.path.join(DIST, '_redirects')).read() if os.path.exists(os.path.join(DIST, '_redirects')) else ''
     if f'{first}page/1/ {first} 301' not in red: fails.append(f'_redirects lacks {first}page/1/ -> {first} 301')
+    if f'{first}page/1/index.md {first}index.md 301' not in red: fails.append(f'_redirects lacks {first}page/1/index.md -> {first}index.md 301')
     for n_bad in (1, m + 1):
         if os.path.exists(os.path.join(DIST, 'atlas', 'platforms', 'page', str(n_bad))): fails.append(f'{first}page/{n_bad}/ is built')
     row_re = re.compile(r'<tr(?: id="(az-[0-9a-z])")?><td><a href="/atlas/platforms/([a-z0-9-]+)/">')
@@ -723,7 +845,7 @@ def az_list_checks(parsed, pages, locs):
         if pp.canon != ORIGIN + u: fails.append(f'{u}: canonical {pp.canon} is not self')
         if 'noindex' in (pp.meta.get('robots') or ''): fails.append(f'{u}: A-Z list page is noindex')
         if ORIGIN + u not in locs: fails.append(f'{u}: not in the sitemap')
-        alts = [(hr, r) for t, hr, r in pp.links if t == 'link' and r == 'alternate']
+        alts = [(hr, 'alternate') for t, hr, r in pp.links if t == 'link' and 'alternate' in r.split()]  # JSON alternates are 'alternate nofollow'
         if (f'/api/v1/atlas/platforms/page/{n}.json', 'alternate') not in alts: fails.append(f'{u}: no <link rel=alternate> to its JSON page')
         if (u + 'index.md', 'alternate') not in alts: fails.append(f'{u}: no <link rel=alternate> to its Markdown twin')
         lds = [json.loads(x) for x in pp.ld]
@@ -862,6 +984,21 @@ def api_checks(parsed, locs):
     if (ai.get('counts') or {}).get('earn_rows') != (docs.get('/atlas/earn.json') or {}).get('count'): fails.append('api: earn row counts differ')
     if root.get('schema_version') != api_v1.SCHEMA_VERSION or root.get('version') != 'v1': fails.append('api: index.json version/schema_version')
     if not api_v1.pattern_ok(api_v1.UTC_PATTERN, str(root.get('generated_at'))): fails.append('api: index.json generated_at not ISO UTC')
+    # generated_at = the newest data in the build (schema_version 1.9.0): the later of source_snapshot_at and newest_observation,
+    # the same value in every data file (ISO strings of one format compare in time order)
+    gens = set()
+    gen_paths = ['/index.json', '/atlas/index.json', '/atlas/platforms.json', '/atlas/earn.json', '/atlas/page/1.json', '/atlas/platforms/page/1.json']
+    gen_paths += [f'/atlas/categories/{k}.json' for k in cats[:1]] + [f'/atlas/platforms/{i}.json' for i in ids[:1]]
+    for path in gen_paths:
+        d = docs.get(path) or {}
+        g, src = d.get('generated_at'), d.get('source_snapshot_at')
+        if not (api_v1.pattern_ok(api_v1.UTC_PATTERN, str(g)) and api_v1.pattern_ok(api_v1.UTC_PATTERN, str(src))):
+            fails.append(f'api: {path} generated_at / source_snapshot_at not ISO 8601 UTC ({g!r}, {src!r})'); continue
+        if g < src: fails.append(f'api: {path} generated_at {g} is earlier than source_snapshot_at {src}')
+        newest = d.get('newest_observation') or (docs.get('/atlas/index.json') or {}).get('newest_observation')
+        if newest and g != max(src, newest): fails.append(f'api: {path} generated_at {g} != later of source_snapshot_at {src} and newest_observation {newest}')
+        gens.add(g)
+    if len(gens) > 1: fails.append(f'api: generated_at differs between data files: {sorted(gens)}')
     for k in ('openapi', 'docs', 'llms_txt', 'license', 'github_mirror', 'changelog'):
         if not (root.get('links') or {}).get(k): fails.append(f'api: index.json links.{k} missing')
     if not os.path.isfile(os.path.join(V, 'CHANGELOG.md')): fails.append('api: CHANGELOG.md missing')
@@ -1666,6 +1803,8 @@ def main():
         for f in files:
             if f.endswith('.html'):
                 rel = os.path.relpath(os.path.join(root, f), DIST)
+                if TYPED_404_RE.match(rel.replace(os.sep, '/')):
+                    continue  # typed 404 bodies (JSON / Markdown, typed_404_checks), not pages
                 pages[url_of(rel)] = os.path.join(root, f)
     for u, fp in pages.items():
         size = os.path.getsize(fp)
@@ -1977,6 +2116,7 @@ def main():
     if f'Sitemap: {ORIGIN}/sitemap.xml' not in robots: fails.append('robots.txt lacks the site-level sitemap')
     fails += growth_guard(locs, update='--update-baseline' in sys.argv)
     fails += paged_record_checks(update='--update-baseline' in sys.argv)
+    fails += typed_404_checks()
     try:
         json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))
     except Exception as ex:
@@ -2004,6 +2144,7 @@ def main():
     fails += stats_checks(parsed, pages, locs)
     fails += badge_checks(parsed, pages, locs)
     fails += api_checks(parsed, locs)
+    fails += mcp_compact_checks()
     fails += paged_list_checks(parsed, pages, locs)
     fails += az_list_checks(parsed, pages, locs)
     fails += a11y_checks(pages)

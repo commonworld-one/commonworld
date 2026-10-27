@@ -110,3 +110,11 @@ export function excerpt(text: string, max: number): string {
   const sp = cut.lastIndexOf(' ');
   return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,.;:–-]+$/, '') + '…';
 }
+
+/**
+ * A link to the JSON API (/v1/..., /api/v1/..., /openapi.json): JSON is for agents, not for search results, so links
+ * from HTML pages to it carry rel="nofollow" (2026-10-26; the responses themselves say X-Robots-Tag: noindex).
+ */
+export const isApiHref = (href: string): boolean => /^\/(?:v1(?:[/?]|$)|api\/v1\/|openapi\.json$)/.test(href);
+/** ` rel="nofollow"` for a link to the JSON API, nothing for any other link. */
+export const apiRel = (href: string): Raw => raw(isApiHref(href) ? ' rel="nofollow"' : '');
