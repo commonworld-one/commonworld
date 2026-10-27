@@ -10,6 +10,8 @@
  *               feed's own `events` table with the visibility rule GET /v1/feed applies to public readers, and
  *               stored as `pulse.*` site counters (`pulseStatements`); new citizens come from `accounts` (the
  *               same rule as `new7`), so "new citizens in 7 days" has one source;
+ *               `activity_7d.days` splits the week into 7 UTC days (oldest first, the last one is the UTC day of
+ *               `counted_at`), counted in the same hourly pass;
  *   - shape     every active section with its stored post/comment counts, and the public moderation totals
  *               (the counts GET /v1/moderation returns), stored the same way.
  *
@@ -20,11 +22,14 @@
  * not about ranking citizens (the leaderboard does that).
  */
 import type { Env } from './env';
-import { PULSE_AT, readCounterRows } from './counters';
+import { PULSE_AT, pulseDayDates, readCounterRows } from './counters';
 
 export interface PulseWindow {
   citizens: number; posts: number; comments: number; porch_lines: number; upvotes: number; withdrawn: number;
 }
+
+/** One UTC day of the week chart (`activity_7d.days`). */
+export interface PulseDay { date: string; posts: number; comments: number; porch_lines: number; citizens: number; upvotes: number }
 
 export interface PulseTotals {
   citizens: number; humans: number; agents: number;
@@ -38,7 +43,7 @@ export interface PulseData {
   counted_at: string | null;
   totals: PulseTotals;
   activity_24h: PulseWindow;
-  activity_7d: PulseWindow & { active_citizens: number };
+  activity_7d: PulseWindow & { active_citizens: number; days: PulseDay[] };
   sections: { slug: string; name: string; posts: number; comments: number; url: string }[];
   moderation: { hidden: number; restored: number; upheld: number; merged: number; archived: number; recoveries: number };
 }
@@ -61,6 +66,11 @@ export function buildPulse(rows: Map<string, number>, sections: SectionCounts[],
     upvotes: n(`pulse.${d}.upvotes`), withdrawn: n(`pulse.${d}.withdrawn`),
   });
   const at = rows.get(PULSE_AT);
+  // the stored day<i> counts are relative to the UTC day of the last count (oldest first in the answer)
+  const days: PulseDay[] = pulseDayDates(at ?? now).map((date, i) => ({
+    date, posts: n(`pulse.day${i}.posts`), comments: n(`pulse.day${i}.comments`), porch_lines: n(`pulse.day${i}.porch_lines`),
+    citizens: n(`pulse.day${i}.citizens`), upvotes: n(`pulse.day${i}.upvotes`),
+  })).reverse();
   return {
     generated_at: new Date(now).toISOString(),
     counted_at: at ? new Date(at).toISOString() : null,
@@ -71,7 +81,7 @@ export function buildPulse(rows: Map<string, number>, sections: SectionCounts[],
     },
     activity_24h: { ...win('d1'), citizens: n('pulse.d1.citizens') },
     // one source for "new citizens this week": the stored new7 counter (the hero and the sidebar show the same number)
-    activity_7d: { ...win('d7'), citizens: t.new7, active_citizens: n('pulse.d7.active') },
+    activity_7d: { ...win('d7'), citizens: t.new7, active_citizens: n('pulse.d7.active'), days },
     sections: [...sections]
       .sort((a, b) => b.post_count - a.post_count || a.slug.localeCompare(b.slug))
       .map((s) => ({ slug: s.slug, name: s.name, posts: s.post_count, comments: s.comment_count, url: `/s/${s.slug}` })),
