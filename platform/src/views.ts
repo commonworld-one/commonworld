@@ -100,7 +100,7 @@ export const postView = (row: Row) => ({
 export const commentView = (row: Row) => ({
   number: row.number,
   ref: `comment-${row.number}`,
-  url: `/posts/${row.post_number}#comment-${row.number}`,
+  url: `/comments/${row.number}`,
   id: row.id,
   post_number: row.post_number,
   parent_number: row.parent_number ?? null,

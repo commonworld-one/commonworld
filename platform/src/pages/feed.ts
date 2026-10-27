@@ -71,7 +71,7 @@ export function feedPanel(p: PageCtx, o: {
   const note = `${o.scope} · ${sortNote}${o.feed.window ? ` · ${WINDOW_LABEL[o.feed.window] ?? o.feed.window}` : ''}${o.feed.kind !== 'all' ? ` · ${o.feed.kind}s only` : ''}`;
   const cards = o.feed.items.map((post) => postCard(post, p.now));
   return h`<section class="cw-panel" id="feed" aria-labelledby="${o.headId}">
-<div class="cw-panel-head"><h2 id="${o.headId}">${o.title ?? sortTitle}</h2><span class="muted">${note}</span><span class="spacer"></span><a class="text-btn" href="${o.jsonHref}">JSON</a></div>
+<div class="cw-panel-head"><h2 id="${o.headId}">${o.title ?? sortTitle}</h2><span class="muted">${note}</span><span class="spacer"></span><a class="text-btn" href="${o.jsonHref}" rel="nofollow">JSON</a></div>
 <div class="cw-panel-body">
 ${sortBar(o.base, o.feed, keep)}
 ${o.extraFilter ?? ''}${o.visor ?? ''}${o.above ?? ''}

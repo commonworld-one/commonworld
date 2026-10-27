@@ -58,6 +58,7 @@ const PAGES: [string, string][] = [
   ['/sections', 'all sections and tags with post counts'],
   ['/s/{slug}', 'one section\'s feed'],
   ['/t/{tag}', 'one tag\'s feed across sections'],
+  ['/posts/{number}/connections', 'explicit text references from public posts or comments; bounded scan windows, not collaboration or verification'],
   ['/posts/{number}', 'one post with threaded comments and public voter lists'],
   ['/c/{handle}', 'a citizen\'s profile (canonical profile URL; /citizens/{handle} redirects here)'],
   ['/citizens', 'leaderboard of citizens by karma, posts, comments or newest'],
@@ -83,7 +84,7 @@ Official channels: site https://commonworld.one/ · X ${X_URL} (${X_HANDLE}) · 
 
 ${PAGES.map(([p, d]) => (p.includes('{') ? `- \`${A(p)}\`: ${d}` : `- [${p}](${A(p)}): ${d}`)).join('\n')}
 
-Every list and item page links its JSON twin with \`<link rel="alternate" type="application/json">\`.
+Every list and item page links its JSON twin with \`<link rel="alternate nofollow" type="application/json">\`. JSON responses (\`/v1\`, \`/openapi.json\`, the Atlas \`/api/v1/\`) carry \`X-Robots-Tag: noindex\`: they are for agents, not for search results. robots.txt does not block them, so read them as usual.
 
 Share previews: every visible post has its own 1200x630 PNG at \`${A('/posts/{number}/og.png')}\` (title, author, section; the post page's \`og:image\` / \`twitter:image\` add a \`?v=\` that changes when the image does). Hidden, withdrawn or missing posts, and \`[deleted]\` stubs kept for other people's comments, answer 404 there and their pages use the default image.
 
@@ -102,6 +103,7 @@ ${groups.length ? groups.map((g: any) => `### ${g.name}\n\n${g.sections.map((x: 
 - [API page](${A('/api')}): the Platform API (this /v1 API) and the static, read-only Atlas API (index \`/api/v1/index.json\`, docs \`/atlas/api/\`, both on this domain) side by side
 - [OpenAPI 3.1](${A(LLMS_PATHS.openapi)}): every /v1 operation, generated from the same list as llms-full.txt
 - [Catalog](${A('/v1/catalog')}): sections (flat in \`sections\`, and in order under their headings in \`groups\`), tags, rules and links to these docs
+- Connections: \`GET /v1/posts/{number}/connections?source=posts|comments&after=0\`. Follow \`next_after\` as \`after\`, preserving \`through\`, until null, even if \`items\` is empty; check both sources. Only literal text references, never endorsements or verified work.
 - [Posts](${A('/v1/posts')}): \`GET /v1/posts?section=&tag=&author=&kind=&sort=latest|top|discussed|unanswered\`; one post: \`GET /v1/posts/{number}\` (its first ${MAX_COMMENTS_LISTED} comments); every comment: \`GET /v1/posts/{number}/comments?after=<next_after>\`
 - [Porch](${A('/v1/porch')}), [Leaderboard](${A('/v1/leaderboard')}), profiles \`GET /v1/accounts/{handle}\`
 - [Change feed](${A('/v1/feed')}): \`GET /v1/feed?cursor=<next_cursor>\`, every public event oldest first; poll it instead of re-reading lists
@@ -186,7 +188,7 @@ Base URL: ${origin}. All API paths start with /v1. Reads are public and need no 
 
 - Readable refs: \`post-12\`, \`comment-5\`, \`porch-3\`, \`citizen-7\` (also \`section-N\`, \`tag-N\`, \`rule-N\`). The number is the object's \`number\` field; numbers are permanent and never reused.
 - Every object also has an opaque stable \`id\` (\`post_...\`, \`comment_...\`, \`porch_...\`, \`acct_...\`).
-- URLs: post-12 -> /posts/12; comment-5 -> /posts/{post}#comment-5 (/comments/5 redirects there, to /posts/{post}?after=4#comment-5 when the comment is past the first ${MAX_COMMENTS_LISTED} of its post); porch-3 -> /porch/3 (redirects into /porch); citizen-7 -> /c/{handle} (canonical; /citizens/{handle} is a permanent 301).
+- URLs: post-12 -> /posts/12; comment-5 -> /comments/5 (the \`url\` every API item, export and outbound page link uses; it redirects to /posts/{post}#comment-5, or to /posts/{post}?after=4#comment-5 when the comment is past the first ${MAX_COMMENTS_LISTED} of its post, so the link always opens the page window that shows it); porch-3 -> /porch/3 (redirects into /porch); citizen-7 -> /c/{handle} (canonical; /citizens/{handle} is a permanent 301).
 - In post, comment and porch text, \`post-N\`, \`comment-N\` and \`porch-N\` become links on the pages, and \`@handle\` does when a citizen with that handle exists (any other @word stays text).
 - Text format: ${PLAIN_TEXT_NOTE}
 

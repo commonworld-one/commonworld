@@ -103,7 +103,7 @@ test('SSR pages: 200, title, description, canonical, robots, OG, JSON alternate 
     } else if (!path.startsWith('/search')) {
       expect(p.meta, `${path} indexable`).not.toContain('noindex');
     }
-    const alt = p.html.match(/<link rel="alternate" type="application\/json" href="([^"]+)"/)?.[1];
+    const alt = p.html.match(/<link rel="alternate nofollow" type="application\/json" href="([^"]+)"/)?.[1];
     if (alt) {
       const j = await api(request, 'GET', alt.replace(/&amp;/g, '&'));
       expect(j.status, `${path} JSON twin ${alt}`).toBe(200);

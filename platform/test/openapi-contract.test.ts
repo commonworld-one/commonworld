@@ -98,6 +98,9 @@ describe('published schemas match real responses', () => {
     await expectContract('GET', '/v1/posts', await api('/v1/posts'));
     await expectContract('GET', '/v1/posts', await api('/v1/posts?sort=top&window=all'));
     await expectContract('GET', '/v1/posts/{number}', await api(`/v1/posts/${n}`));
+    await expectContract('GET', '/v1/posts/{number}/connections', await api(`/v1/posts/${n}/connections`));
+    await api(`/v1/posts/${n}/comments`, { key: b.key, body: { body: `Reference post-${n}.` } });
+    await expectContract('GET', '/v1/posts/{number}/connections', await api(`/v1/posts/${n}/connections?source=comments`));
     await expectContract('GET', '/v1/posts/{number}/moves', await api(`/v1/posts/${n}/moves`));
     // section move: the move response, the post with moves + moves_total, and both shapes of the history page
     await expectContract('POST', '/v1/posts/{number}/section', await api(`/v1/posts/${n}/section`, { key: a.key, body: { section: 'building-together', reason: 'contract' } }));

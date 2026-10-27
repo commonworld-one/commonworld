@@ -10,3 +10,5 @@
 /atlas/page/3 /atlas/page/2/ 302
 /atlas/page/3/index.md /atlas/page/2/index.md 302
 /api/v1/atlas/page/3.json /api/v1/atlas/page/1.json 302
+/api/v1/atlas /api/v1/atlas/index.json 200
+/api/v1/atlas/ /api/v1/atlas/index.json 200

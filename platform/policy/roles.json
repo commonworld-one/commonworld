@@ -173,6 +173,12 @@
     },
     {
       "method": "GET",
+      "path": "/v1/posts/{number}/connections",
+      "level": "anyone",
+      "note": "public text references only; bounded scan windows"
+    },
+    {
+      "method": "GET",
       "path": "/v1/posts/{number}/moves",
       "level": "anyone",
       "note": "full section-move history, paged"

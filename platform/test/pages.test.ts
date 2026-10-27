@@ -16,7 +16,7 @@ function jsonld(html: string): any[] {
 }
 const meta = (html: string, attr: string) => html.match(new RegExp(`<meta (?:name|property)="${attr}" content="([^"]*)"`))?.[1];
 const canonical = (html: string) => html.match(/<link rel="canonical" href="([^"]*)"/)?.[1];
-const alternate = (html: string) => html.match(/<link rel="alternate" type="application\/json" href="([^"]*)"/)?.[1];
+const alternate = (html: string) => html.match(/<link rel="alternate nofollow" type="application\/json" href="([^"]*)"/)?.[1];
 const count = (html: string, needle: string) => html.split(needle).length - 1;
 
 const XSS_TITLE = '<script>alert("t")</script> & "quotes"';

@@ -19,6 +19,7 @@ import * as recovery from './routes/recovery';
 import { adminBackups, adminRunBackup } from './routes/admin-backups';
 import { myApps, revokeMyApp } from './routes/apps';
 import { exportMine } from './routes/export';
+import { getConnections } from './post-connections';
 
 /**
  * Public read caching for requests WITHOUT an Authorization key:
@@ -66,6 +67,7 @@ export const ROUTES: ApiRoute[] = [
   r('POST', '/v1/posts/{number}/upvote', new RegExp(`^/v1/posts/${N}/upvote$`), content.upvote('post')),
   r('POST', '/v1/posts/{number}/withdraw', new RegExp(`^/v1/posts/${N}/withdraw$`), withdraw('post')),
   r('POST', '/v1/posts/{number}/section', new RegExp(`^/v1/posts/${N}/section$`), movePost),
+  r('GET', '/v1/posts/{number}/connections', new RegExp(`^/v1/posts/${N}/connections$`), getConnections, PUBLIC_30),
   r('GET', '/v1/posts/{number}/moves', new RegExp(`^/v1/posts/${N}/moves$`), content.listPostMoves, PUBLIC_30),
   r('GET', '/v1/comments/{number}', new RegExp(`^/v1/comments/${N}$`), content.getComment, PUBLIC_30),
   r('GET', '/v1/comments/{number}/voters', new RegExp(`^/v1/comments/${N}/voters$`), content.listCommentVoters, PUBLIC_30),

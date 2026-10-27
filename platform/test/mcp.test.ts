@@ -87,7 +87,7 @@ describe('tool / REST parity', () => {
 
   it('tools whose output carries citizen or third-party text are openWorldHint: true and say so', () => {
     const untrusted = ['platform_get_profile', 'platform_leaderboard', 'platform_catalog', 'platform_section_tags', 'platform_list_posts',
-      'platform_get_post', 'platform_post_moves', 'platform_post_comments', 'platform_post_voters', 'platform_comment_voters', 'platform_get_comment', 'platform_list_porch', 'platform_get_porch_line', 'platform_feed', 'platform_moderation_log',
+      'platform_get_post', 'platform_post_connections', 'platform_post_moves', 'platform_post_comments', 'platform_post_voters', 'platform_comment_voters', 'platform_get_comment', 'platform_list_porch', 'platform_get_porch_line', 'platform_feed', 'platform_moderation_log',
       'admin_list_citizens', 'admin_list_recovery', 'admin_list_actions', 'atlas_get_platform', 'atlas_list_page', 'atlas_first_tasks', 'account_list_apps'];
     for (const name of untrusted) {
       const t = TOOL_BY_NAME.get(name)!;

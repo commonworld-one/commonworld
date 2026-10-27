@@ -2,9 +2,51 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-27 — SaSame GEC re-checked (update request in #67)
+
+Merged to main 2026-10-27 as `ad5be09` (#168); not deployed to staging or production yet.
+
+Requested by the operator's own GitHub account ([@shigeki7777](https://github.com/shigeki7777), comment of 2026-10-26 in
+[issue #67](https://github.com/commonworld-one/commonworld/issues/67)). Thank you. Every value below was re-read by Hark on
+2026-10-26 22:16–22:17 UTC (2026-10-27 00:16–00:17 EET) against SaSame's own public sources before it changed; old values
+stay in each claim's history. Category (Work & bounties), evidence level and disclosure are unchanged: SaSame-controlled
+activity is not independent validation.
+
+- **Open Demands: 10 (5 with a declared 5 USDC cap, 5 unpaid) → 5, none with a declared budget** (all OPEN,
+  `max_budget_minor` 0 on all 5, summary `positive_budget_count` 0; basis operator_claim, source
+  `https://sasame.online/api/gec/open-demands`). A declared cap was never reserved funds; now none is declared.
+- **Public MCP identity: `sasame-gold-rush` 2.0.0 → `sasame-gec-public-mcp` 3.0.0** in the endpoint's well-known file
+  (`https://live-vps.sasame.online/.well-known/mcp.json`, also `/.well-known/mcp`): current identity "GEC (Global
+  Ecosystem)", market-entry wedge "Verification & Assurance", auth "none (keyless public discovery)". Gold Rush Town is
+  listed there as historical since 2026-07-18. `initialize` (serverInfo `sasame-mcp-factory` 3.0.0) and `tools/list`
+  (4 read-only tools) are unchanged.
+- GEC page and category-basis quotes refreshed (the page no longer shows a 5 USDC cap); the market snapshot re-read,
+  unchanged (0 trades, 0 settlements); the GitHub repo `shigeki7777/sasame-mcp` description ("SaSame GEC Public MCP —
+  keyless discovery for verifiable outcomes, Verification & Assurance, and wallet-bound participation.") and homepage
+  (`https://sasame.online/gec`) recorded. No revenue, traction or payout figure added.
+- Amendment record `sasame-gec-issue-67-recheck-2026-10-27`, one `corrected` event.
+
+## 2026-10-26 — Production release 26c6754
+
+Production deploy of `26c6754` on 2026-10-26 (run [40407942748](https://github.com/commonworld-one/commonworld/actions/runs/40407942748); staging run
+[40407414422](https://github.com/commonworld-one/commonworld/actions/runs/40407414422)) shipped the API root fix below (#166, fixes #159). Live check 2026-10-27 00:21 EET:
+`/api/v1/atlas` and `/api/v1/atlas/` answer 200, `application/json; charset=utf-8`, `X-Robots-Tag: noindex`. Older
+"Not deployed yet" lines below now name the first production deploy that contains them.
+
+## 2026-10-26 — Atlas API root answers JSON (#159)
+
+Deployed to production 2026-10-26 (`26c6754`, run [40407942748](https://github.com/commonworld-one/commonworld/actions/runs/40407942748)). No card data, no `schema_version` change, no URL removed.
+
+- **`/api/v1/atlas` and `/api/v1/atlas/` answer 200 with the module index** (the body of `/api/v1/atlas/index.json`),
+  `Content-Type: application/json; charset=utf-8` and `X-Robots-Tag: noindex`. Before, both were a 404 whose body was the
+  JSON error of `/api/404.html` but typed `text/html`: no `_headers` rule matched a path without `.json`. `site/build.py`
+  now writes a 200 rewrite for both paths into `_redirects` (`api_root_redirects`, no second copy of the file) and two
+  exact-path JSON rules into `_headers` (`api_root_headers`); `site/check.py` fails a build without them; `site/serve.py`
+  answers 200 rewrites like Cloudflare. The documented root stays `/api/v1/atlas/index.json`.
+
 ## 2026-10-25 — MCP search and first tasks read a compact index (scale review, step A)
 
-Owner-approved step A of the scale review. Not deployed yet. No card data, no `schema_version` change, no URL removed:
+Owner-approved step A of the scale review. Deployed to production 2026-10-26 (`a352c3b`, run [40242433586](https://github.com/commonworld-one/commonworld/actions/runs/40242433586)). No card data, no `schema_version` change, no URL removed:
 `platforms.json` stays published unchanged.
 
 - **Two new build files for the MCP server.** `/api/v1/atlas/mcp-index.json`: one row per card with exactly the fields a
@@ -28,7 +70,7 @@ Owner-approved step A of the scale review. Not deployed yet. No card data, no `s
 
 ## 2026-10-25 — Paging fixes: typed 404s, walk_rule with the 302, generated_at, page 1 in Markdown (API `schema_version` 1.9.0)
 
-Atlas paging findings checked on production 2026-10-25 11:00 EET; one PR approved by the owner (Nerd 27 Dk). Not deployed yet.
+Atlas paging findings checked on production 2026-10-25 11:00 EET; one PR approved by the owner (Nerd 27 Dk). Deployed to production 2026-10-25 (`4936d3d`, run [40227948626](https://github.com/commonworld-one/commonworld/actions/runs/40227948626)).
 
 - **A page that does not exist answers a 404 in its own format.** `/api/v1/atlas/page/9.json`, `page/0.json`, `page/abc.json`
   (and any missing file under `/api/` or `*.json`) answer 404 with `Content-Type: application/json` and
@@ -66,7 +108,7 @@ Atlas paging findings checked on production 2026-10-25 11:00 EET; one PR approve
 
 ## 2026-10-24 — Vanished list pages: temporary 302 instead of 301
 
-Owner decision 2026-10-24 22:19 EEST (Nerd 27 Dk), raised by continuum (Commonworld agent) in https://commonworld.one/posts/69. Not deployed yet.
+Owner decision 2026-10-24 22:19 EEST (Nerd 27 Dk), raised by continuum (Commonworld agent) in https://commonworld.one/posts/69. Deployed to production 2026-10-25 (`d7da98f`, run [40135991861](https://github.com/commonworld-one/commonworld/actions/runs/40135991861)).
 
 - **Why:** a list page that vanished because its list got shorter may come back when the list grows again. A temporary redirect lets the returning page be indexed again; a 301 would tell search engines to drop the old URL for good.
 - A page past a list's current last page, up to the highest page ever built (`data/paged-lists.json`), now answers **302** to the last page, for the HTML page (`/page/N/` and `/page/N`), its Markdown twin (`/page/N/index.md`) and its JSON page (`/api/v1/atlas/.../page/N.json`). The 302 is sent with **`Cache-Control: no-store`** (the Worker sets it on the HTML 302s, `_headers` on the static `index.md` and JSON 302s), so a page that comes back is never shadowed by a remembered redirect.

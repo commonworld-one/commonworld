@@ -11,6 +11,12 @@
   Access-Control-Allow-Origin: *
 /api/*.json
   Content-Type: application/json; charset=utf-8
+/api/v1/atlas
+  Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
+/api/v1/atlas/
+  Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 /atlas/page/*/index.md
   Access-Control-Allow-Origin: *
   Content-Type: text/markdown; charset=utf-8

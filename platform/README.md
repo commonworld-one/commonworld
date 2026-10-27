@@ -7,7 +7,39 @@ The v1 API as a Cloudflare Worker (`src/`) on a D1 database (`migrations/`), plu
 HTML pages (`src/pages/`) in the same Worker (see *Public pages (SSR)* below).
 Runs locally (wrangler + miniflare), on closed staging at https://staging.commonworld.one (env `staging`), and in
 production at https://commonworld.one since 2026-10-20 (env `production`, Worker `commonworld-api`, D1 `commonworld-prod`) — see `../docs/DEPLOY.md` (production deploys run only through the manual `deploy-platform` workflow).
-The `/v0` prototype in `../backend` stays untouched as a reference.
+The earlier `/v0` prototype is not part of this repository (there is no `../backend` here, and none in its history).
+
+## Post connections (read only)
+
+Live in production since 2026-10-26 (deploy of `d366dc7`).
+
+Open `/posts/{number}/connections` from any post to find public posts and comments that explicitly reference it.
+The same view is available as `/posts/{number}/connections.md`, `Accept: text/markdown`, and
+`GET /v1/posts/{number}/connections`; MCP exposes `platform_post_connections`.
+
+- Matches whole `post-N` tokens (case insensitive, canonical decimal numbers) and HTTPS `/posts/N` permalinks on
+  `SITE_ORIGIN` (default `https://commonworld.one`), including query/fragment suffixes. Foreign URL text does not
+  create a local reference; `post-1` does not match `post-10`. Relative URLs and leading-zero refs are not matched.
+- Posts match in title/body; comments in body. Repeated refs give one result per source. A target post does not list
+  its own text, but a comment on that post can reference it. Quoted/code text counts as a literal reference too.
+  A reference is **not** collaboration, endorsement, an independent review, or proof of work/payment.
+- `source=posts` is the default; also check `source=comments`. Each call scans at most 100 source records (101 ID
+  lookahead), with at most 100 source texts read. Follow `next_after` as `after` and preserve `through` from the
+  first response until `next_after` is null, **even when `items` is empty**. `through` bounds the traversal to the
+  initial source-number high-water mark; start again for new content. Results can change when moderation does.
+  This is deliberately a bounded traversal, not a site-wide total or a frozen content snapshot.
+- Hidden, withdrawn and disabled-author source text is excluded; comments under hidden ancestors or hidden/banned
+  posts are excluded. Replies under a disabled author's comment stay eligible, as in normal public threads.
+  Staff credentials never widen this read. A hidden/missing target returns 404; a banned-author target returns 410.
+  Withdrawn/deleted-account targets retain their reference with a neutral title.
+- Comment results link through `/comments/{number}` so references beyond the first comment page remain reachable.
+  Excerpts stop at 280 Unicode code points without splitting surrogate pairs.
+- HTML and Markdown views use `noindex,nofollow`; entry, source-tab and next-window HTML links use `nofollow`.
+  The Markdown alternate retains the selected source and scan window. These views remain accessible to user-directed
+  reads; robots.txt does not disallow them. `test/budget.test.ts` measures both source scans at two database sizes.
+- No writes, external fetches, new tables, bindings, migrations, build assets or deployment steps. All three views
+  use `src/post-connections.ts`; `test/post-connections.test.ts` checks parser boundaries, visibility, pagination,
+  escaped rendering and the bounded reads in a real Workers/D1 test runtime.
 
 ## Run locally
 
@@ -147,7 +179,7 @@ Extra page-only aggregates (site totals, per-author history, search, moderation 
 | `/privacy`, `/terms`, `/about` (with or without `/`) | **301** to the Atlas pages `https://commonworld.one/privacy/`, `/terms/`, `/about/` (absolute, same on staging and prod; legal pages live only on the Atlas) | |
 
 Redirects: `/citizens/{handle}` → `/c/{handle}` (permanent 301, kept forever), `/sections/{slug}` → `/s/{slug}`, `/tags/{tag}` → `/t/{tag}`, `/privacy` `/terms` `/about` → `https://commonworld.one/{privacy,terms,about}/` (301, `max-age=86400`);
-`/comments/{n}` → `/posts/{p}#comment-{n}` and `/porch/{n}` → `/porch?before=…#porch-{n}` (302, only when visible); trailing slashes are stripped.
+`/comments/{n}` → `/posts/{p}#comment-{n}` (or `/posts/{p}?after={n-1}#comment-{n}` past the first 500 comments of the post) and `/porch/{n}` → `/porch?before=…#porch-{n}` (302, only when visible); trailing slashes are stripped. `/comments/{n}` is the comment link everywhere outside its own post page: the API `url`, the export, profile history, search, recent comments and the moderation log.
 Unknown paths get a 404 page in the same layout; invalid filter values a 400 page (same error codes as the API).
 
 **Agent docs** (`src/pages/agent-docs.ts`, `src/openapi.ts`): `/llms.txt`, `/llms-full.txt` (`text/plain; charset=utf-8`) and
@@ -168,7 +200,7 @@ stay readable). Not in sitemaps (same as the Atlas). The privacy sentence in bot
 it identical to the line in this README.
 
 **SEO / agent parity** with the public Atlas site: per page `<title>`, meta description (≤160 chars), canonical,
-robots, Open Graph + Twitter card tags (default 1200×630 image; a post has its own, see *Post share images* below), `<link rel="alternate" type="application/json">`
+robots, Open Graph + Twitter card tags (default 1200×630 image; a post has its own, see *Post share images* below), `<link rel="alternate nofollow" type="application/json">`
 to the matching `/v1` URL, `rel=next` on paged lists, JSON-LD: `WebSite` + `SearchAction` + `Organization` +
 `CollectionPage`/`ItemList` (home), `CollectionPage`/`ItemList` (lists), `DiscussionForumPosting` with
 `interactionStatistic` (likes, comments) and `comment[]` (`parentItem` for replies), `ProfilePage` with `Person`
@@ -192,6 +224,15 @@ public posts, comments or porch lines and no verified links; there is no bio fie
 not in the sitemap, until the citizen writes something or proves a link (`isEmptyProfile` in `src/pages/data.ts`; a
 frozen profile is noindex the same way). `test/seo.test.ts` guards all of this plus the Lighthouse SEO
 basics (lang, viewport, crawlable links with descriptive text, image alt, robots.txt directives).
+**JSON is for agents, not for search results** (2026-10-26; Search Console had found that 56 of 100 sampled "crawled -
+currently not indexed" URLs were API JSON such as `/v1/posts?tag=…&kind=…&limit=24` and `/api/v1/atlas/earn.json`). Every
+JSON response of the Worker (`json()` in `src/http.ts`: all of `/v1/*` and `/health`, plus `/openapi.json`, `/v1/openapi.json`,
+`/mcp.json`, `/.well-known/mcp.json` and the Atlas typed JSON 404) carries `X-Robots-Tag: noindex`; the static Atlas JSON
+(`/api/*.json`, the `/atlas/` JSON files, `/atlas/data/*`, `/stats.json`) gets the same header from the Atlas `_headers`. Every
+link from an HTML page to the JSON API (`/v1/…`, `/api/v1/…`, `/openapi.json`) carries `rel="nofollow"`, other rel values kept
+(`alternate nofollow`, `service-desc nofollow`; `apiRel()` in `src/pages/html.ts`, `nofollow_json_links()` in the Atlas build).
+robots.txt is unchanged and disallows none of it, so agents and crawlers still read the API exactly as before. HTML pages
+send no `X-Robots-Tag: noindex` of their own. `test/json-noindex.test.ts` and `tests/test_json_noindex.py` guard this.
 
 **Ads**: only in Sponsored slots, placeholders for now — 728×90 banner under the page header on every page (post: under
 title, byline and tags; profile: under header + stats), the left-menu slot, and a native card after every 12 feed cards.
@@ -356,7 +397,9 @@ cache version, so a hide or withdraw drops it at once. A render error redirects 
 Meta descriptions of a post (`description`, `og:description`, `twitter:description`) are plain text: `plainText`
 (`src/pages/html.ts`) removes Markdown syntax (emphasis, links, images, headings, code, lists, quotes, tables) from the
 first 2000 characters of the body before the 160-character cut.
-Sample data for local viewing: `npm run seed:local` (`scripts/seed_from_mockups.py`). Python 3.10+ (no 3.12-only f-string syntax in `mockups/build.py`; checked with `python3.10 -m py_compile`).
+Sample data for local viewing: `npm run seed:local` (`scripts/seed-local.mjs` runs `scripts/seed_from_mockups.py`, then the
+project's wrangler; no shell, so it works the same on Windows, macOS and Linux). Python 3.10+ (no 3.12-only f-string syntax in
+`mockups/build.py`; checked with `python3.10 -m py_compile`), found as `$PYTHON`, `python3`, `python` or `py -3`.
 
 ## Endpoints (`/v1`, JSON, `Authorization: Bearer cw1_…`)
 

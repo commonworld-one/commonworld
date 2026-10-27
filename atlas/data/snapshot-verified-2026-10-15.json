@@ -33925,10 +33925,10 @@
    "category_basis": {
     "primary_action": "The primary action is finding open paid or unpaid work (Outcome Demands) and bidding on it (work & bounties); the Information Asset Exchange, Factory and Observatory are supporting SaSame capabilities.",
     "source_url": "https://sasame.online/gec",
-    "quote": "Open work. Real work currently open to outside participants.",
-    "observed_at": "2026-10-23T08:51:00Z",
+    "quote": "Unpaid contribution SaSame recruitment · unpaid / not organic external demand No paid compensation is promised. Connect wallet / bid",
+    "observed_at": "2026-10-26T22:17:00Z",
     "methods": [
-     "curl -sL -A \"<Chrome UA>\" https://sasame.online/gec (HTTP 200, final URL https://sasame.online/gec)"
+     "curl -sL -A \"<Chrome UA>\" https://sasame.online/gec (HTTP 200, final URL https://sasame.online/gec; open Demands listed under \"Available now\", each with a \"Connect wallet / bid\" link)"
     ]
    },
    "claims": [
@@ -33952,18 +33952,33 @@
     },
     {
      "kind": "site_reachable",
-     "statement": "The GEC page serves real content without sign-in (HTTP 200): a list of open work with each Demand's declared budget cap and a \"Connect wallet / bid\" link.",
+     "statement": "The GEC page serves real content without sign-in (HTTP 200): a list of open work with each Demand's compensation (on 2026-10-27 all marked unpaid, no paid compensation promised) and a \"Connect wallet / bid\" link.",
      "value": null,
      "unit": null,
      "window": null,
      "basis": "direct_observation",
      "source_url": "https://sasame.online/gec",
-     "quote": "Up to 5 USDC Declared cap; funding is not reserved.",
-     "observed_at": "2026-10-23T08:51:00Z",
+     "quote": "Unpaid contribution SaSame recruitment · unpaid / not organic external demand No paid compensation is promised. Connect wallet / bid",
+     "observed_at": "2026-10-26T22:17:00Z",
      "methods": [
       "curl -sL -A \"<Chrome UA>\" https://sasame.online/gec (HTTP 200, text/html)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "The GEC page serves real content without sign-in (HTTP 200): a list of open work with each Demand's declared budget cap and a \"Connect wallet / bid\" link.",
+       "quote": "Up to 5 USDC Declared cap; funding is not reserved.",
+       "source_url": "https://sasame.online/gec",
+       "observed_at": "2026-10-23T08:51:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-26T22:17:00Z",
+       "reason": "The GEC page no longer shows a 5 USDC cap: on 2026-10-27 every listed Demand was marked unpaid. Update request by the operator (shigeki7777) in GitHub issue #67 (https://github.com/commonworld-one/commonworld/issues/67); re-read by hark from the source before changing."
+      }
+     ]
     },
     {
      "kind": "description",
@@ -33983,22 +33998,36 @@
     },
     {
      "kind": "protocol",
-     "statement": "Public MCP server (Streamable HTTP) at https://live-vps.sasame.online/public-mcp, no key: initialize answered with serverInfo sasame-mcp-factory 3.0.0 and tools/list returned 4 tools, all annotated read-only (start_here, gec_open_demands, knowledge_search, audit_mcp); a tools/call of gec_open_demands returned the open Demands. SaSame's llms.txt names more public tools (8) than tools/list returned and says tools/list is the live truth; the endpoint's /.well-known/mcp file still carries an older name (sasame-gold-rush 2.0.0).",
+     "statement": "Public MCP server (Streamable HTTP) at https://live-vps.sasame.online/public-mcp, no key: initialize answered with serverInfo sasame-mcp-factory 3.0.0 and tools/list returned 4 tools, all annotated read-only (start_here, gec_open_demands, knowledge_search, audit_mcp). The endpoint's well-known file (/.well-known/mcp and /.well-known/mcp.json) names it sasame-gec-public-mcp 3.0.0, current identity \"GEC (Global Ecosystem)\", current market-entry wedge \"Verification & Assurance\", auth \"none (keyless public discovery)\"; its history lists the earlier identity Gold Rush Town as HISTORICAL since 2026-07-18. SaSame's llms.txt names more public tools (8) than tools/list returned and says tools/list is the live truth.",
      "value": null,
      "unit": null,
      "window": null,
      "basis": "direct_observation",
      "source_url": "https://live-vps.sasame.online/public-mcp",
-     "quote": "\"serverInfo\":{\"name\":\"sasame-mcp-factory\",\"version\":\"3.0.0\"}",
-     "observed_at": "2026-10-23T08:52:00Z",
+     "quote": "\"name\": \"sasame-gec-public-mcp\", \"version\": \"3.0.0\", \"current_identity\": \"GEC (Global Ecosystem)\"",
+     "observed_at": "2026-10-26T22:16:32Z",
      "methods": [
-      "POST https://live-vps.sasame.online/public-mcp initialize, protocolVersion 2025-06-18 (HTTP 200, text/event-stream)",
+      "POST https://live-vps.sasame.online/public-mcp initialize, protocolVersion 2025-06-18 (HTTP 200, text/event-stream; serverInfo sasame-mcp-factory 3.0.0)",
       "POST https://live-vps.sasame.online/public-mcp tools/list (HTTP 200; 4 tools, annotations.readOnlyHint true on all 4)",
-      "POST https://live-vps.sasame.online/public-mcp tools/call gec_open_demands (HTTP 200)",
-      "GET https://live-vps.sasame.online/public-mcp (HTTP 200, JSON descriptor: auth \"none — no API key required for the public surface\")",
-      "GET https://live-vps.sasame.online/public-mcp/.well-known/mcp (HTTP 200, name sasame-gold-rush, version 2.0.0)"
+      "GET https://live-vps.sasame.online/.well-known/mcp.json (HTTP 200, application/json; name sasame-gec-public-mcp, version 3.0.0, history: Gold Rush Town HISTORICAL, effective 2026-07-18)",
+      "GET https://live-vps.sasame.online/.well-known/mcp and https://live-vps.sasame.online/public-mcp/.well-known/mcp (HTTP 200, same name and version)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "Public MCP server (Streamable HTTP) at https://live-vps.sasame.online/public-mcp, no key: initialize answered with serverInfo sasame-mcp-factory 3.0.0 and tools/list returned 4 tools, all annotated read-only (start_here, gec_open_demands, knowledge_search, audit_mcp); a tools/call of gec_open_demands returned the open Demands. SaSame's llms.txt names more public tools (8) than tools/list returned and says tools/list is the live truth; the endpoint's /.well-known/mcp file still carries an older name (sasame-gold-rush 2.0.0).",
+       "quote": "\"serverInfo\":{\"name\":\"sasame-mcp-factory\",\"version\":\"3.0.0\"}",
+       "source_url": "https://live-vps.sasame.online/public-mcp",
+       "observed_at": "2026-10-23T08:52:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-26T22:16:32Z",
+       "reason": "The endpoint's /.well-known/mcp file now carries the current name sasame-gec-public-mcp 3.0.0 (GEC); the older name (Gold Rush) is listed there as historical. Update request by the operator (shigeki7777) in GitHub issue #67 (https://github.com/commonworld-one/commonworld/issues/67); re-read by hark from the source before changing."
+      }
+     ]
     },
     {
      "kind": "description",
@@ -34019,54 +34048,99 @@
     },
     {
      "kind": "metric",
-     "statement": "Open Demands in the public projection: 10, all in state OPEN; 5 carry a declared budget cap of 5 USDC each (compensation_state BUDGET_CAP_DECLARED_NOT_RESERVED) and 5 promise no payment (ZERO_BUDGET). All 10 are SaSame's own goals, most about finding its first independent external participants, customers or revenue.",
-     "value": 10,
-     "unit": "open Demands (5 with a declared 5 USDC cap, 5 unpaid)",
+     "statement": "Open Demands in the public projection: 5, all in state OPEN, none with a declared budget (max_budget_minor 0 on all 5, compensation_state ZERO_BUDGET: no paid compensation promised). All 5 are SaSame's own recruitment goals.",
+     "value": 5,
+     "unit": "open Demands (none with a declared budget)",
      "window": "now",
      "basis": "operator_claim",
      "source_url": "https://sasame.online/api/gec/open-demands",
-     "quote": "\"demand_count\": 10, \"positive_budget_count\": 5, \"zero_budget_count\": 5",
-     "observed_at": "2026-10-23T08:52:00Z",
+     "quote": "\"demand_count\": 5, \"positive_budget_count\": 0, \"zero_budget_count\": 5",
+     "observed_at": "2026-10-26T22:16:50Z",
      "methods": [
-      "POST https://live-vps.sasame.online/public-mcp tools/call gec_open_demands (summary and demands[], read_at 2026-10-23T08:52:00Z)",
-      "curl -sL -A \"<Chrome UA>\" https://sasame.online/api/gec/open-demands (HTTP 200, same 10 Demands)"
+      "curl -sL -A \"<Chrome UA>\" https://sasame.online/api/gec/open-demands (HTTP 200; projection_status CURRENT; summary block and demands[]: 5 with state OPEN, max_budget_minor \"0\")"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 10,
+       "unit": "open Demands (5 with a declared 5 USDC cap, 5 unpaid)",
+       "window": "now",
+       "statement": "Open Demands in the public projection: 10, all in state OPEN; 5 carry a declared budget cap of 5 USDC each (compensation_state BUDGET_CAP_DECLARED_NOT_RESERVED) and 5 promise no payment (ZERO_BUDGET). All 10 are SaSame's own goals, most about finding its first independent external participants, customers or revenue.",
+       "quote": "\"demand_count\": 10, \"positive_budget_count\": 5, \"zero_budget_count\": 5",
+       "source_url": "https://sasame.online/api/gec/open-demands",
+       "observed_at": "2026-10-23T08:52:00Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-26T22:16:50Z",
+       "reason": "Open Demands changed: 10 (5 with a declared 5 USDC cap) -> 5, none with a declared budget. Update request by the operator (shigeki7777) in GitHub issue #67 (https://github.com/commonworld-one/commonworld/issues/67); re-read by hark from the source before changing."
+      }
+     ]
     },
     {
      "kind": "metric",
      "statement": "SaSame's own public market snapshot for its Information Asset Exchange (a project inside GEC) reports no trades and no settlements so far and no organic live activity.",
      "value": 0,
      "unit": "settlements",
-     "window": "all-time to 2026-10-23",
+     "window": "all-time to 2026-10-27",
      "basis": "operator_claim",
      "source_url": "https://sasame.online/api/market/snapshot",
      "quote": "\"trade_count\": 0, \"settlement_count\": 0, ... \"organic_live_activity\": false",
-     "observed_at": "2026-10-23T08:53:00Z",
+     "observed_at": "2026-10-26T22:17:00Z",
      "methods": [
       "curl -sL -A \"<Chrome UA>\" https://sasame.online/api/market/snapshot (HTTP 200 after redirect to https://live-vps.sasame.online/public-mcp/market/snapshot; summary block)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 0,
+       "unit": "settlements",
+       "window": "all-time to 2026-10-23",
+       "statement": "SaSame's own public market snapshot for its Information Asset Exchange (a project inside GEC) reports no trades and no settlements so far and no organic live activity.",
+       "quote": "\"trade_count\": 0, \"settlement_count\": 0, ... \"organic_live_activity\": false",
+       "source_url": "https://sasame.online/api/market/snapshot",
+       "observed_at": "2026-10-23T08:53:00Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-26T22:17:00Z",
+       "reason": "Re-read on 2026-10-27, same values (0 trades, 0 settlements, organic_live_activity false). Update request by the operator (shigeki7777) in GitHub issue #67 (https://github.com/commonworld-one/commonworld/issues/67); re-read by hark from the source before changing."
+      }
+     ]
     },
     {
      "kind": "recent_activity",
-     "statement": "Newest Demand in the public projection was created 2026-10-22 07:27 UTC; the others were created or last updated between 2026-10-09 and 2026-10-20 (UTC), with deadlines from 2026-10-26 23:59 UTC to 2027-10-09 00:00 UTC. Separately, the public GitHub repo shigeki7777/sasame-mcp had its newest commit on 2026-10-20.",
+     "statement": "The 5 open Demands in the public projection were created between 2026-10-09 and 2026-10-10 (UTC), with deadlines on 2026-12-31 and 2027-10-09 (UTC). Separately, the public GitHub repo shigeki7777/sasame-mcp (description \"SaSame GEC Public MCP — keyless discovery for verifiable outcomes, Verification & Assurance, and wallet-bound participation.\", homepage https://sasame.online/gec) had its newest commit on 2026-10-20.",
      "value": null,
      "unit": null,
      "window": null,
      "basis": "direct_observation",
      "source_url": "https://sasame.online/api/gec/open-demands",
-     "quote": "\"created_at\": \"2026-10-22T07:27:33.974Z\"",
-     "observed_at": "2026-10-23T08:52:00Z",
+     "quote": "\"summary\": {\"demand_count\": 5, \"positive_budget_count\": 0, \"zero_budget_count\": 5",
+     "observed_at": "2026-10-26T22:17:00Z",
      "methods": [
-      "POST https://live-vps.sasame.online/public-mcp tools/call gec_open_demands (created_at, updated_at, deadline per Demand)",
+      "curl -sL -A \"<Chrome UA>\" https://sasame.online/api/gec/open-demands (created_at, updated_at, deadline per Demand)",
+      "GitHub API /repos/shigeki7777/sasame-mcp (description, homepage)",
       "GitHub API /repos/shigeki7777/sasame-mcp/commits (newest cc95923, committed 2026-10-20 13:00 UTC)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "Newest Demand in the public projection was created 2026-10-22 07:27 UTC; the others were created or last updated between 2026-10-09 and 2026-10-20 (UTC), with deadlines from 2026-10-26 23:59 UTC to 2027-10-09 00:00 UTC. Separately, the public GitHub repo shigeki7777/sasame-mcp had its newest commit on 2026-10-20.",
+       "quote": "\"created_at\": \"2026-10-22T07:27:33.974Z\"",
+       "source_url": "https://sasame.online/api/gec/open-demands",
+       "observed_at": "2026-10-23T08:52:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-26T22:17:00Z",
+       "reason": "Open Demands changed on 2026-10-27 (5 left, created 2026-10-09 and 2026-10-10 UTC); the GitHub repo now describes the GEC public MCP. Update request by the operator (shigeki7777) in GitHub issue #67 (https://github.com/commonworld-one/commonworld/issues/67); re-read by hark from the source before changing."
+      }
+     ]
     }
    ],
    "legacy_diffs": [],
-   "notes": "Proposed by the operator: GitHub issue #67 was filed by shigeki7777, the GitHub account named \"SRL SaSame\" (disclosed in the issue as a verified-facts listing, not an endorsement). The open Demands are SaSame's own; the issue and SaSame's pages say that owner or SaSame-controlled activity does not count as external validation, and one open Demand asks for the first independent external bid. Budgets are declared caps, not reserved funds; the Atlas saw no published payout or settlement. Not verifiable on 2026-10-23: the issue's source https://github.com/shigeki7777/SaSame/issues/6644 answered 404 (the repo is not public, also 404 through the GitHub API); https://sasame.online/api answered 410 with a plain-text pointer list (llms.txt, knowledge API, public MCP) and is not an API index any more. The mcp.so listing for the endpoint (\"SaSame Research MCP\") exists but says it was submitted by shigeki7777, so it is not an independent observation. The Atlas called only the public read-only tools and did not connect a wallet, bid or deliver.",
+   "notes": "Proposed by the operator: GitHub issue #67 was filed by shigeki7777, the GitHub account named \"SRL SaSame\" (disclosed in the issue as a verified-facts listing, not an endorsement). The open Demands are SaSame's own; the issue and SaSame's pages say that owner or SaSame-controlled activity does not count as external validation, and one open Demand asks for the first independent external bid. Budgets are declared caps, not reserved funds; on 2026-10-27 none of the open Demands declared a budget, and the Atlas has not verified any payout or settlement. Not verifiable on 2026-10-23: the issue's source https://github.com/shigeki7777/SaSame/issues/6644 answered 404 (the repo is not public, also 404 through the GitHub API); https://sasame.online/api answered 410 with a plain-text pointer list (llms.txt, knowledge API, public MCP) and is not an API index any more. The mcp.so listing for the endpoint (\"SaSame Research MCP\") exists but says it was submitted by shigeki7777, so it is not an independent observation. The Atlas called only the public read-only tools and did not connect a wallet, bid or deliver. Re-checked on 2026-10-27 after an update request by the operator in issue #67: open Demands, the public MCP and its well-known file, the GEC page and the sasame-mcp GitHub repo; the well-known file now names the GEC public MCP and lists Gold Rush Town as historical.",
    "category_history": [],
    "qa": [],
    "qa_status": "not_sampled",
@@ -40354,6 +40428,15 @@
     "aibtc-bounty-board:aibtc-paid-count",
     "aibtc-bounty-board:aibtc-open-count",
     "agent-bounties:agent-bounties-lifetime-identities"
+   ]
+  },
+  {
+   "date": "2026-10-27",
+   "tag": "sasame-gec-issue-67-recheck-2026-10-27",
+   "rule": "SaSame GEC re-checked after an update request by the operator (shigeki7777, GitHub issue #67 comment of 2026-10-26, https://github.com/commonworld-one/commonworld/issues/67). Open Demands 10 (5 with a declared 5 USDC cap, 5 unpaid) -> 5, none with a declared budget (operator_claim, https://sasame.online/api/gec/open-demands). Public MCP well-known name sasame-gold-rush 2.0.0 -> sasame-gec-public-mcp 3.0.0 (GEC; Gold Rush Town listed as historical since 2026-07-18). GEC page and category basis quotes refreshed (no 5 USDC cap shown any more); market snapshot re-read, unchanged (0 trades, 0 settlements); sasame-mcp repo description and homepage recorded. Re-read by hark on 2026-10-26 22:16-22:17 UTC; old values kept in claim history. Category, evidence level and disclosure unchanged. Prepared by hark for curator review",
+   "fixes": 5,
+   "entries": [
+    "sasame-gec"
    ]
   }
  ]

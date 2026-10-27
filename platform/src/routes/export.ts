@@ -157,7 +157,7 @@ export async function buildExport(env: Env, account: AccountRow, maxRows: number
   const comments = commentRows.map((r) => ({
     number: r.number,
     ref: `comment-${r.number}`,
-    url: `/posts/${r.post_number}#comment-${r.number}`,
+    url: `/comments/${r.number}`,
     post: { number: r.post_number, ref: `post-${r.post_number}` },
     parent: r.parent_number ? { number: r.parent_number, ref: `comment-${r.parent_number}` } : null,
     body: textOf(r, 'body'),
@@ -178,10 +178,10 @@ export async function buildExport(env: Env, account: AccountRow, maxRows: number
     withdrawn: withdrawnOf(r),
   }));
 
-  /** A vote's link: a post's page, or the comment's anchor on the page of the post it sits under. */
+  /** A vote's link: a post's page, or the comment's stable /comments/{n} path (it redirects to the post page window that shows it, #158). */
   const voteUrl = (r: VoteRow): string | null => {
     if (r.target_type === 'post') return `/posts/${r.target_number}`;
-    return r.comment_post_number ? `/posts/${r.comment_post_number}#comment-${r.target_number}` : null;
+    return r.comment_post_number ? `/comments/${r.target_number}` : null;
   };
   const votes = voteRows.map((r) => ({
     target_type: r.target_type,

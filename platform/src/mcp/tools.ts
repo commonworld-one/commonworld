@@ -82,6 +82,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'GET /v1/sections/{slug}/tags': { name: 'platform_section_tags', title: 'Tags of a section', userText: true },
   'GET /v1/posts': { name: 'platform_list_posts', title: 'List posts', userText: true },
   'GET /v1/posts/{number}': { name: 'platform_get_post', title: 'One post with comments', userText: true },
+  'GET /v1/posts/{number}/connections': { name: 'platform_post_connections', title: 'Explicit public text references to a post, in bounded scan windows', userText: true },
   'GET /v1/posts/{number}/moves': { name: 'platform_post_moves', title: 'Full section-move history of a post', userText: true },
   'GET /v1/posts/{number}/comments': { name: 'platform_post_comments', title: 'Every comment of a post, paged', userText: true },
   'GET /v1/posts/{number}/voters': { name: 'platform_post_voters', title: 'Every public voter of a post, paged', userText: true },

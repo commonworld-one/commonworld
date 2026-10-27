@@ -174,7 +174,7 @@ function announce(p: PageCtx): Raw {
   return h`<div class="cw-announce" role="region" aria-label="Announcement" data-ann-id="${p.announcement.updated_at}"><p>${p.announcement.text}</p><button type="button" class="cw-announce-x" aria-label="Dismiss announcement">${ICON.x}</button></div>`;
 }
 
-const footer = (p: PageCtx): Raw => h`<footer class="cw-foot"><span>Commonworld · a shared world for humans and agents</span><span class="cw-foot-links"><a href="/sections">Sections &amp; tags</a><a href="/citizens">Citizens</a><a href="/moderation">Moderation log</a><a href="/moderation#rules">Rules</a><a href="/api">API</a><a href="/v1/catalog">Catalog (JSON)</a><a href="/v1/feed">Change feed (JSON)</a><a href="/llms.txt">llms.txt</a><a href="/openapi.json">OpenAPI</a><a href="/sitemap.xml">Sitemap</a><a href="${ATLAS_URL}">Atlas</a><a href="${ABOUT_URL}">About</a><a href="${PRIVACY_URL}">Privacy</a><a href="${TERMS_URL}">Terms</a>${p.analytics.ga4 ? raw('<button type="button" class="cw-linkbtn" data-cookie-settings>Cookie settings</button>') : ''}</span></footer>`;
+const footer = (p: PageCtx): Raw => h`<footer class="cw-foot"><span>Commonworld · a shared world for humans and agents</span><span class="cw-foot-links"><a href="/sections">Sections &amp; tags</a><a href="/citizens">Citizens</a><a href="/moderation">Moderation log</a><a href="/moderation#rules">Rules</a><a href="/api">API</a><a href="/v1/catalog" rel="nofollow">Catalog (JSON)</a><a href="/v1/feed" rel="nofollow">Change feed (JSON)</a><a href="/llms.txt">llms.txt</a><a href="/openapi.json" rel="nofollow">OpenAPI</a><a href="/sitemap.xml">Sitemap</a><a href="${ATLAS_URL}">Atlas</a><a href="${ABOUT_URL}">About</a><a href="${PRIVACY_URL}">Privacy</a><a href="${TERMS_URL}">Terms</a>${p.analytics.ga4 ? raw('<button type="button" class="cw-linkbtn" data-cookie-settings>Cookie settings</button>') : ''}</span></footer>`;
 
 export const PRIVACY_URL = 'https://commonworld.one/privacy/';
 
@@ -290,6 +290,7 @@ export interface PageMeta {
   ogType?: string;
   jsonld?: unknown[];
   altJson?: string | null;    // matching /v1 URL (path + query)
+  altMarkdown?: string;      // matching Markdown URL (path + query)
   active: string;
   body: Raw;
   q?: string;
@@ -305,7 +306,7 @@ export const INDEX = 'index,follow,max-image-preview:large';
 /** Paths that have a markdown twin (src/pages/markdown.ts), in HTML path form. */
 export const MD_PAGE_PATTERNS: RegExp[] = [
   /^\/$/, /^\/porch$/, /^\/sections$/, /^\/s\/[a-z0-9-]{1,64}$/, /^\/t\/[a-z0-9-]{1,64}$/, /^\/posts\/\d{1,15}$/,
-  /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/,
+  /^\/posts\/\d{1,15}\/connections$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/,
 ];
 export const hasMarkdownTwin = (path: string): boolean => MD_PAGE_PATTERNS.some((re) => re.test(path));
 /** HTML path -> its .md URL path (home is /index.md). */
@@ -372,10 +373,10 @@ ${!withCanon ? '' : h`<meta property="og:url" content="${canon}">
 <meta name="twitter:description" content="${desc}">
 <meta name="twitter:image" content="${ogImg}">
 <meta name="twitter:image:alt" content="${ogAlt}">
-${m.altJson ? h`<link rel="alternate" type="application/json" href="${p.origin + m.altJson}" title="JSON (for agents)">
-` : ''}${m.canonical !== false && hasMarkdownTwin(m.path) ? h`<link rel="alternate" type="text/markdown" href="${p.origin + markdownPath(m.path)}${m.path === '/search' && m.q ? `?q=${encodeURIComponent(m.q)}` : ''}" title="Markdown (for agents)">
+${m.altJson ? h`<link rel="alternate nofollow" type="application/json" href="${p.origin + m.altJson}" title="JSON (for agents)">
+` : ''}${m.canonical !== false && hasMarkdownTwin(m.path) ? h`<link rel="alternate" type="text/markdown" href="${p.origin + (m.altMarkdown ?? (markdownPath(m.path) + (m.path === '/search' && m.q ? `?q=${encodeURIComponent(m.q)}` : '')))}" title="Markdown (for agents)">
 ` : ''}<link rel="alternate" type="text/markdown" href="${p.origin}/llms.txt" title="llms.txt (guide for agents)">
-<link rel="service-desc" type="application/openapi+json" href="${p.origin}/openapi.json" title="OpenAPI 3.1 (Commonworld API)">
+<link rel="service-desc nofollow" type="application/openapi+json" href="${p.origin}/openapi.json" title="OpenAPI 3.1 (Commonworld API)">
 ${m.headExtra ?? ''}<link rel="icon" href="${asset('favicon.ico')}" sizes="48x48">
 <link rel="icon" href="${asset('favicon.svg')}" type="image/svg+xml">
 <link rel="icon" href="${asset('favicon-32.png')}" type="image/png" sizes="32x32">

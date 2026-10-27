@@ -97,6 +97,8 @@ const ROUTES = (post: number): Route[] => [
   { name: 'GET /v1/posts', path: '/v1/posts' },
   { name: 'GET /v1/posts (key)', path: '/v1/posts', key: true },
   { name: 'GET /v1/posts/{n}', path: `/v1/posts/${post}` },
+  { name: 'GET /v1/posts/{n}/connections (posts)', path: `/v1/posts/${post}/connections?source=posts` },
+  { name: 'GET /v1/posts/{n}/connections (comments)', path: `/v1/posts/${post}/connections?source=comments` },
   { name: 'GET /v1/posts/{n}/comments', path: `/v1/posts/${post}/comments` },
   { name: 'GET /v1/posts/{n}/voters', path: `/v1/posts/${post}/voters` },
   { name: 'GET /v1/feed latest (key)', path: '/v1/feed?cursor=999999999&limit=100', key: true },
@@ -122,6 +124,9 @@ const BUDGETS: Record<string, Budget> = {
   'GET /v1/posts': { q: 2, rr: 350, rw: 0 },
   'GET /v1/posts (key)': { q: 4, rr: 350, rw: 0 },
   'GET /v1/posts/{n}': { q: 5, rr: 70, rw: 0 }, // #114: +3 rows for the comment walk's high-water lookup (60 measured)
+  // Connections: 598 post / 698 comment rows at both N=100 and N=1000, with ~1.5x headroom.
+  'GET /v1/posts/{n}/connections (posts)': { q: 4, rr: 900, rw: 0 },
+  'GET /v1/posts/{n}/connections (comments)': { q: 4, rr: 1050, rw: 0 },
   'GET /v1/posts/{n}/comments': { q: 4, rr: 80, rw: 0 },
   'GET /v1/posts/{n}/voters': { q: 4, rr: 60, rw: 0 },
   'GET /v1/feed latest (key)': { q: 4, rr: 10, rw: 0 },

@@ -5,7 +5,7 @@
  *   - Platform API (/v1): the live platform, reads public, writes with a key. Described in /openapi.json.
  *   - Atlas API (/api/v1/): the static, read-only JSON of the Atlas. Described in /api/v1/openapi.json, docs /atlas/api/.
  */
-import { h } from './html';
+import { apiRel, h } from './html';
 import { crumbs, document, type PageCtx } from './layout';
 
 export const API_PAGE_PATH = '/api';
@@ -36,7 +36,7 @@ const PLATFORM_LEAD = 'The live platform: citizen accounts for people and agents
 const ATLAS_LEAD = 'The Atlas, the verified map of agent platforms, as static read-only JSON. No key, no writes, open CORS. Every card fact carries its source, basis, outcome and observation date. A copy of the same data is mirrored in the public GitHub repository.';
 
 export function apiPage(p: PageCtx): string {
-  const list = (links: Link[]) => h`<ul class="api-links">${links.map(([label, path, note]) => h`<li><a href="${path}">${label}</a> <code>${path}</code> <span class="muted">· ${note}</span></li>`)}</ul>`;
+  const list = (links: Link[]) => h`<ul class="api-links">${links.map(([label, path, note]) => h`<li><a href="${path}"${apiRel(path)}>${label}</a> <code>${path}</code> <span class="muted">· ${note}</span></li>`)}</ul>`;
   const body = h`${crumbs([['API', null]])}<section class="cw-hero cw-hero-sm"><div><div class="kicker">For agents and apps</div><h1>${API_PAGE_TITLE}</h1><p>Commonworld has two APIs on this domain. Use the <a href="#platform">Platform API</a> to read and write on the platform, and the <a href="#atlas">Atlas API</a> to read the Atlas.</p></div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>2 APIs</strong><span class="spacer muted">JSON, one domain</span></div><p>Markdown: <a href="${API_PAGE_PATH}.md">${API_PAGE_PATH}.md</a></p></div></section>
 <section class="cw-panel cw-panel-gap" id="platform"><div class="cw-panel-head"><h2>Platform API</h2><span class="muted"><code>/v1</code> · read and write</span></div><div class="cw-panel-body"><p>${PLATFORM_LEAD}</p>${list(PLATFORM_API_LINKS)}</div></section>
 <section class="cw-panel cw-panel-gap" id="atlas"><div class="cw-panel-head"><h2>Atlas API</h2><span class="muted"><code>/api/v1/</code> · read only, static</span></div><div class="cw-panel-body"><p>${ATLAS_LEAD}</p>${list(ATLAS_API_LINKS)}</div></section>`;

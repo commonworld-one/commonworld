@@ -67,7 +67,7 @@ export default defineConfig(async () => {
             PUBLIC_EDGE_CACHE: '0',
             CW_PRIVATE_TERMS: privateTerms(),
             // wrangler.toml as text (test/atlas-assets.test.ts checks run_worker_first in every environment)
-            TEST_WRANGLER_TOML: fs.readFileSync(path.join(import.meta.dirname, 'wrangler.toml'), 'utf8'),
+            TEST_WRANGLER_TOML: fs.readFileSync(path.join(import.meta.dirname, 'wrangler.toml'), 'utf8').replace(/\r\n/g, '\n'),
             TEST_ATLAS_DIST_FILES: atlasDistFiles(),
             // the real build's platforms.json and compact MCP files (test/mcp-compact.test.ts: old path vs new path)
             TEST_ATLAS_MCP_FILES: atlasMcpFiles(),

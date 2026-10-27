@@ -39,7 +39,7 @@ const nonceOf = (csp: string | null) => csp?.match(/'nonce-([A-Za-z0-9+/=]+)'/)?
 
 /** run_worker_first arrays of each [assets] table in wrangler.toml, in file order: top-level, staging, production. */
 function tomlRunWorkerFirst(): { table: string; list: string[] }[] {
-  const toml = env.TEST_WRANGLER_TOML;
+  const toml = env.TEST_WRANGLER_TOML.replace(/\r\n/g, '\n');
   const out: { table: string; list: string[] }[] = [];
   const re = /^\[((?:env\.\w+\.)?assets)\]\n([\s\S]*?)(?=^\[)/gm;
   let m: RegExpExecArray | null;
@@ -56,14 +56,14 @@ describe('A3 routing contract (wrangler.toml run_worker_first)', () => {
     expect(tables.map((t) => t.table)).toEqual(['assets', 'env.staging.assets', 'env.production.assets']);
     for (const t of tables) expect(t.list, t.table).toEqual([...ATLAS_RUN_WORKER_FIRST]);
     expect(ATLAS_RUN_WORKER_FIRST.length).toBeLessThanOrEqual(100);
-    const toml = env.TEST_WRANGLER_TOML;
+    const toml = env.TEST_WRANGLER_TOML.replace(/\r\n/g, '\n');
     expect(toml).toMatch(/\[env\.staging\.assets\]\ndirectory = "\.\/\.atlas-dist"/);
     expect(toml).toMatch(/\[env\.production\.assets\]\ndirectory = "\.\/\.atlas-dist"/);
     expect(toml.match(/^ATLAS_SOURCE = "assets"$/gm)?.length).toBe(2);
   });
 
   it('a miss keeps not_found_handling = "404-page" in every environment (the nearest 404.html: typed 404 bodies of the build)', () => {
-    const toml = env.TEST_WRANGLER_TOML;
+    const toml = env.TEST_WRANGLER_TOML.replace(/\r\n/g, '\n');
     const tables = [...toml.matchAll(/^\[((?:env\.\w+\.)?assets)\]\n([\s\S]*?)(?=^\[)/gm)];
     expect(tables.map((m) => m[1])).toEqual(['assets', 'env.staging.assets', 'env.production.assets']);
     for (const m of tables) expect(m[2], m[1]).toMatch(/^not_found_handling = "404-page"$/m);
@@ -228,7 +228,8 @@ describe('A3: the Atlas from Static Assets (ATLAS_SOURCE=assets)', () => {
       const r = await assets(p);
       expect(r.status, p).toBe(404);
       expect(r.headers.get('content-type'), p).toBe('text/markdown; charset=utf-8');
-      expect(r.text, p).toBe(ATLAS_NOT_FOUND_MD);
+      // the fixture 404.html is a checked-out file (CRLF in an older Windows autocrlf checkout); the Worker body below is the constant itself
+      expect(r.text.replace(/\r\n/g, '\n'), p).toBe(ATLAS_NOT_FOUND_MD);
     }
     // the same bodies when a JSON or Markdown path reaches the Worker (HEAD: no body)
     const w = await call('/api/v1/atlas/page/9.json');
@@ -254,6 +255,30 @@ describe('A3: the Atlas from Static Assets (ATLAS_SOURCE=assets)', () => {
     expect(atlasNotFoundKind('/api/v1/CHANGELOG.md')).toBe('json');
     expect(atlasNotFoundKind('/atlas/events.md')).toBe('markdown');
     expect(atlasNotFoundKind('/atlas/page/9/')).toBe('html');
+  });
+
+  it('the bare Atlas API root (/api/v1/atlas, /api/v1/atlas/) answers the module index as JSON, not a text/html 404 (#159)', async () => {
+    noNetwork();
+    const index = await (env as any).ASSETS.fetch(new Request(`${PROD}/api/v1/atlas/index.json`, { redirect: 'manual' }));
+    const want = JSON.parse(await index.text());
+    for (const p of ['/api/v1/atlas', '/api/v1/atlas/']) {
+      // static (run_worker_first negative): a 200 rewrite in _redirects, typed by the exact-path _headers rules
+      expect(runsWorkerFirst(p), p).toBe(false);
+      for (const method of ['GET', 'HEAD']) {
+        const r = await (env as any).ASSETS.fetch(new Request(`${PROD}${p}`, { method, redirect: 'manual' }));
+        const text = await r.text();
+        expect(r.status, `${method} ${p}`).toBe(200);
+        expect(r.headers.get('location'), `${method} ${p}`).toBeNull();
+        expect(r.headers.get('content-type'), `${method} ${p}`).toBe('application/json; charset=utf-8');
+        expect(r.headers.get('x-robots-tag'), `${method} ${p}`).toBe('noindex');
+        expect(r.headers.get('access-control-allow-origin'), `${method} ${p}`).toBe('*');
+        if (method === 'GET') expect(JSON.parse(text), p).toEqual(want);
+      }
+    }
+    // other misses under /api/ keep the typed JSON 404
+    const miss = await (env as any).ASSETS.fetch(new Request(`${PROD}/api/v1/atlas/nope.json`, { redirect: 'manual' }));
+    expect([miss.status, miss.headers.get('content-type')]).toEqual([404, 'application/json; charset=utf-8']);
+    await miss.text();
   });
 
   it('page 1 of a list is the list itself in HTML and Markdown (301); JSON page 1 is a real file (200)', async () => {
