@@ -2303,6 +2303,20 @@
    "height": 750,
    "bytes": 61278
   },
+  "gittensor": {
+   "file": "gittensor.webp",
+   "sha256": "73942206716586ce87d2f338f7ec58772ed5c75c7bfa4dd1b56ef57a24e7d213",
+   "dhash": "8264701555550000",
+   "website": "https://gittensor.io",
+   "source_url": "https://docs.gittensor.io/",
+   "http_status": 200,
+   "title": "Gittensor",
+   "captured_at": "2026-10-27T18:57:37Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 28626,
+   "shot_url": "https://docs.gittensor.io/"
+  },
   "glim-sh": {
    "file": "glim-sh.webp",
    "sha256": "dbc89dfcfc0c4cac018408cfcfe949b96ad6968407b1c21a4f5904e1eaf29025",
@@ -2380,6 +2394,20 @@
    "width": 1200,
    "height": 750,
    "bytes": 50970
+  },
+  "grift-san-verano": {
+   "file": "grift-san-verano.webp",
+   "sha256": "3641167a045b76d6029121d06ae99299665379c19c6fa13af7701648566dfe17",
+   "dhash": "e4585c2c58581858",
+   "website": "https://www.grift.world",
+   "source_url": "https://www.grift.world/agents.html",
+   "http_status": 200,
+   "title": "OUTSIDE RESIDENTS — GRIFT",
+   "captured_at": "2026-10-27T18:57:36Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 51152,
+   "shot_url": "https://www.grift.world/agents.html"
   },
   "hal-holistic-agent-leaderboard": {
    "file": "hal-holistic-agent-leaderboard.webp",
@@ -2654,6 +2682,20 @@
    "height": 750,
    "bytes": 33680
   },
+  "lockzone-qevrulan": {
+   "file": "lockzone-qevrulan.webp",
+   "sha256": "c54284313cdf9bdffbe28b6e6ba922a60fc93997f7175906f080a2c8fa089c6a",
+   "dhash": "0002080080200000",
+   "website": "https://qevrulan.com/.well-known/lockzone-recipe",
+   "source_url": "https://qevrulan.com/",
+   "http_status": 200,
+   "title": "Lockzone — Cold Trials for AI agents (qevrulan.com)",
+   "captured_at": "2026-10-27T18:57:36Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 39152,
+   "shot_url": "https://qevrulan.com/"
+  },
   "locus": {
    "file": "locus.webp",
    "sha256": "40288f0f65702d91c35d7ac080c61d688a5ab0852ae83696a6c9b68e2002b7d1",
@@ -2836,6 +2878,20 @@
    "width": 1200,
    "height": 750,
    "bytes": 16056
+  },
+  "metaculus-futureeval-bot-tournament": {
+   "file": "metaculus-futureeval-bot-tournament.webp",
+   "sha256": "57e3c0f3ca3374953bab7347ada8062fb1352bd0752b05ac343610fb1f06470c",
+   "dhash": "98121c2c24242436",
+   "website": "https://www.metaculus.com/aib/",
+   "source_url": "https://github.com/Metaculus/metac-bot-template",
+   "http_status": 200,
+   "title": "GitHub - Metaculus/metac-bot-template: A simple bot template that you can use to forecast a Metaculus tournament · GitHub",
+   "captured_at": "2026-10-27T18:57:38Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 55446,
+   "shot_url": "https://github.com/Metaculus/metac-bot-template"
   },
   "microlancer": {
    "file": "microlancer.webp",
@@ -4698,5 +4754,5 @@
    "bytes": 44740
   }
  },
- "updated_at": "2026-10-27T18:34:52Z"
+ "updated_at": "2026-10-27T18:57:39Z"
 }
