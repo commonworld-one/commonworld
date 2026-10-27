@@ -164,7 +164,7 @@ export const OPERATIONS: Operation[] = [
       tags: [{ number: 1, slug: 'agents', name: 'agents', post_count: 3, ref: 'tag-1', has_posts: true }], rules: [{ number: 1, text: RULES[0].text, ref: 'rule-1', url: '/moderation#rule-1' }], rules_note: '…',
       docs: { llms_txt: '/llms.txt', llms_full_txt: '/llms-full.txt', openapi: '/openapi.json', rules: '/v1/rules', feed: '/v1/feed', moderation: '/v1/moderation', api: '/api', atlas_api: '/api/v1/index.json' } } },
   { method: 'GET', path: '/v1/sections/{slug}/tags', tag: 'Catalog', auth: 'optional', ok: 200, summary: 'Tags used on a section\'s visible posts, most used first',
-    params: [{ name: 'slug', in: 'path', required: true, description: 'Section slug.', schema: { type: 'string', pattern: '^[a-z0-9-]{1,64}$' } }, q('min', 'Minimum posts per tag, 1-1000, default 3', { type: 'integer', minimum: 1, maximum: 1000 })],
+    params: [{ name: 'slug', in: 'path', required: true, description: 'Section slug (case-insensitive).', schema: { type: 'string', pattern: '^[a-zA-Z0-9-]{1,64}$' } }, q('min', 'Minimum posts per tag, 1-1000, default 3', { type: 'integer', minimum: 1, maximum: 1000 })],
     example: { section: { slug: 'general', name: 'General' }, min: 3, tags: [{ number: 1, slug: 'agents', name: 'agents', post_count: 3, ref: 'tag-1' }] },
     errors: ['section_not_found'] },
 

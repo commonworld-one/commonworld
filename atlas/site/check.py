@@ -49,7 +49,8 @@ report) is valid, in the Dataset distribution and /atlas/llms.txt; every exporte
 Decision log: /atlas/decisions/ (+ index.md twin, /atlas/decisions.json) lists every decision of removed.json, newest first,
 hosts as defanged plain text, evidence links rel nofollow noopener. Markdown twins: every index.md is linked from its HTML page.
 Public stats: /stats/ (+ /stats/index.md, /stats.json) from atlas/data/stats.json: every metric has source, period and as_of; value null
-exactly when status is coming/none_yet; people, agents and search are separate sections; Atlas counts equal the snapshot; footer + sidebar + llms.txt link it.
+exactly when status is coming/none_yet; people, agents and search are separate sections; Atlas counts equal the snapshot; footer + sidebar + llms.txt link it;
+the Citizens section links Pulse (the live view); a warning (not a failure) when stats.json updated_at is more than 8 days old.
 Trust decisions (atlas/tools/trust_check.py): every removed entry has a remove decision and every decision names an actor from
 atlas/data/trust-roles.json, a date, a reason and an https evidence link; a restored host must be clean in the latest safety report.
 Refreshed numbers: the text of every claim the weekly refresh manages agrees with its number and quote (refresh_note_checks).
@@ -1377,24 +1378,68 @@ def markdown_twin_checks(pages):
 
 STATS_SRC = os.path.join(DATA_DIR, 'stats.json')
 STATS_STATUSES = {'ok', 'coming', 'none_yet'}
-CITIZEN_METRICS = ('citizens_total', 'citizens_humans', 'citizens_agents', 'citizens_active_7d', 'citizens_posts')
+CITIZEN_METRICS = ('citizens_total', 'citizens_humans', 'citizens_agents', 'citizens_active_7d', 'citizens_posts', 'citizens_comments', 'citizens_upvotes')
+STATS_MAX_AGE_DAYS = 8  # weekly cadence + one day of slack; older = warning (not a failure): the weekly refresh PR is probably unmerged
 V1_LAUNCHED = True  # Commonworld v1 is live in production since 2026-10-20; citizen rows may carry real numbers (staging test citizens are never shown)
 DATE_RE = re.compile(r'\d{4}-\d{2}-\d{2}')
 
 
+UTC_Z_RE = re.compile(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z')
+# Citizens section times written by atlas/tools/stats_from_pulse.py (#182), each the freshness guard of its own rows:
+# totals_observed_at = Pulse generated_at (the live totals were read then), activity_counted_at = Pulse counted_at (the
+# hourly count of the 7-day activity). counted_at = the older format, one time for both groups.
+CITIZENS_TIMES = {'totals_observed_at': ('citizens_total', 'citizens_humans', 'citizens_agents', 'citizens_posts',
+                                         'citizens_comments', 'citizens_upvotes'),
+                  'activity_counted_at': ('citizens_active_7d',)}
+
+
+def citizens_times_fails(sec):
+    """Failures for the observation times of the Citizens section of atlas/data/stats.json: each present time is an exact
+    UTC time (ISO 8601 with Z), and the rows it guards are dated (as_of) on its UTC day."""
+    fails, by_id = [], {m.get('id'): m for m in sec.get('metrics') or []}
+    for field in list(CITIZENS_TIMES) + ['counted_at']:
+        if field in sec and not UTC_Z_RE.fullmatch(str(sec.get(field) or '')):
+            fails.append(f'atlas/data/stats.json: citizens.{field} must be an exact UTC time (ISO 8601 with Z), the freshness guard of stats_from_pulse.py')
+    for field, ids in CITIZENS_TIMES.items():
+        at = str(sec.get(field) or '')
+        if not UTC_Z_RE.fullmatch(at):
+            continue
+        for mid in ids:
+            if mid in by_id and str(by_id[mid].get('as_of') or '') != at[:10]:
+                fails.append(f'atlas/data/stats.json: citizens metric {mid} as_of {by_id[mid].get("as_of")!r} is not the UTC day of citizens.{field} ({at})')
+    if 'counted_at' in sec and all(f in sec for f in CITIZENS_TIMES):
+        fails.append('atlas/data/stats.json: citizens.counted_at (older format) must go once totals_observed_at and activity_counted_at are both set')
+    return fails
+
+
+def stats_age_warning(updated_at, today=None, max_days=STATS_MAX_AGE_DAYS):
+    """Text of a warning when stats.json updated_at (YYYY-MM-DD) is more than max_days before today (UTC), else None.
+    A warning, never a failure: a stale snapshot is still honest (every row is dated), it only means the weekly refresh PR waits."""
+    import datetime as _dt
+    today = today or _dt.datetime.now(_dt.timezone.utc).date()
+    try:
+        age = (today - _dt.date.fromisoformat(str(updated_at))).days
+    except ValueError:
+        return None
+    if age > max_days:
+        return (f'atlas/data/stats.json updated_at {updated_at} is {age} days old (more than {max_days}); '
+                'merge the weekly refresh PR or run atlas/tools/stats_from_pulse.py')
+    return None
+
+
 def stats_checks(parsed, pages, locs):
-    """Public stats: atlas/data/stats.json (input, edited by hand for now; its _about must not claim an automatic job) and dist /stats.json (published) give every metric an id,
+    """Public stats: atlas/data/stats.json (input; Citizens rows refreshed weekly from Pulse by atlas/tools/stats_from_pulse.py, the rest by hand; its _about says so) and dist /stats.json (published) give every metric an id,
     label, source.name, period and as_of date (input: as_of may be null only for 'derive' metrics, filled at build); status is ok /
     coming / none_yet, value is null exactly when status is not ok (no estimates); /stats/ shows one row per metric with its as_of,
     names the source and period, links stats.json + index.md, is in the root sitemap, linked from every footer and sidebar and from
     /llms.txt; the derived Atlas counts equal the published snapshot."""
     fails = []
-    # honest provenance (2026-10-22): the values are edited by hand, there is no automatic weekly job yet
+    # honest provenance (2026-10-27, #182): Citizens come from Pulse via the weekly refresh PR (never auto-merged), the rest by hand
     about = str(json.load(open(os.path.join(HERE, '..', 'data', 'stats.json'), encoding='utf-8')).get('_about') or '')
-    if 'by hand' not in about or 'no automatic weekly job yet' not in about:
-        fails.append('stats.json _about must say the values are updated by hand and that there is no automatic weekly job yet')
-    if re.search(r'\bA weekly job edits\b', about):
-        fails.append('stats.json _about claims a weekly job; the values are updated by hand')
+    for need in ('stats_from_pulse.py', 'never merged automatically', 'by hand'):
+        if need not in about: fails.append(f'stats.json _about must say how the values are updated (lacks {need!r})')
+    if 'no automatic weekly job' in about:
+        fails.append('stats.json _about still says there is no automatic weekly job (the Citizens rows are refreshed weekly from Pulse)')
     def metrics_of(doc, where):
         out = []
         for s in doc.get('sections') or []:
@@ -1422,6 +1467,14 @@ def stats_checks(parsed, pages, locs):
         return [f'missing {STATS_SRC}']
     src = json.load(open(STATS_SRC, encoding='utf-8'))
     if not DATE_RE.fullmatch(str(src.get('updated_at') or '')): fails.append('atlas/data/stats.json: updated_at not YYYY-MM-DD')
+    else:
+        old = stats_age_warning(src['updated_at'])
+        if old: print(f'warning: {old}', file=sys.stderr)
+    cit_src = next((s for s in src.get('sections') or [] if s.get('id') == 'citizens'), {})
+    lv = cit_src.get('live') or {}
+    for k in ('url', 'markdown', 'json'):
+        if not str(lv.get(k) or '').startswith(ORIGIN + '/'): fails.append(f'atlas/data/stats.json: citizens.live.{k} must link Pulse on {ORIGIN}')
+    fails += citizens_times_fails(cit_src)
     for _, m in metrics_of(src, 'atlas/data/stats.json'):
         check_metric(m, 'atlas/data/stats.json', True)
     fp = os.path.join(DIST, 'stats.json')
@@ -1467,7 +1520,7 @@ def stats_checks(parsed, pages, locs):
     first = re.search(r'<section class="stats-sec" aria-labelledby="s-([a-z_]+)"', h)
     if not first or first.group(1) != 'citizens': fails.append('/stats/: the Citizens section must come first')
     for need in ('<h1>Commonworld in numbers</h1>', 'A shared world for humans and agents', 'href="/stats.json"', 'href="/stats/index.md"',
-                 '<link rel="alternate" type="text/markdown" href="/stats/index.md"', '"Dataset"'):
+                 '<link rel="alternate" type="text/markdown" href="/stats/index.md"', '"Dataset"', f'href="{ORIGIN}/pulse"', f'href="{ORIGIN}/v1/pulse"'):
         if need not in h: fails.append(f'/stats/: lacks {need!r}')
     for s, m in pm:
         row = re.search(rf'<tr id="{re.escape(m["id"])}">(.*?)</tr>', h, re.S)

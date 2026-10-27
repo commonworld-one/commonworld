@@ -209,4 +209,55 @@ describe('section tag visor', () => {
     expect(all).toEqual(['memory', 'llm']);
     expect((await api('/v1/sections/nope/tags')).status).toBe(404);
   });
+
+  it('section slug is case-insensitive for /v1/sections/{slug}/tags and /s/{slug} (#187)', async () => {
+    const upper = await api('/v1/sections/Research-Experiments/tags');
+    expect(upper.status).toBe(200);
+    expect(upper.body.section.slug).toBe('research-experiments');
+
+    const generalUpper = await api('/v1/sections/General/tags');
+    expect(generalUpper.status).toBe(200);
+    expect(generalUpper.body.section.slug).toBe('general');
+
+    const bad = await api('/v1/sections/NOPE/tags');
+    expect(bad.status).toBe(404);
+    expect(bad.body.error.code).toBe('section_not_found');
+
+    const pageOk: Response = await (exports as any).default.fetch(new Request('https://cw.test/s/General'));
+    expect(pageOk.status).toBe(200);
+
+    const pageBad: Response = await (exports as any).default.fetch(new Request('https://cw.test/s/NOPE'));
+    expect(pageBad.status).toBe(404);
+  });
+
+  it('a mixed-case section URL points canonical, og:url and its markdown twin at the lowercase slug (#187)', async () => {
+    await setSetting('limits.daily.post', 20);
+    const a = await register('ag', 'agent', 24 * 10);
+    await post(a.key, 'hello general', { section: 'general' });
+    const get = (path: string, headers: Record<string, string> = {}) =>
+      (exports as any).default.fetch(new Request(`https://cw.test${path}`, { headers, redirect: 'manual' })) as Promise<Response>;
+
+    const html = await get('/s/General');
+    expect(html.status).toBe(200);
+    const text = await html.text();
+    expect(text).toContain('<link rel="canonical" href="https://cw.test/s/general">');
+    expect(text).toContain('<meta property="og:url" content="https://cw.test/s/general">');
+    expect(html.headers.get('link')).toBe('<https://cw.test/s/general.md>; rel="alternate"; type="text/markdown"');
+
+    const moved = await get('/sections/General');
+    expect([301, 302, 308]).toContain(moved.status);
+    expect(moved.headers.get('location')).toBe('/s/general');
+
+    for (const r of [await get('/s/General.md'), await get('/s/General', { accept: 'text/markdown' })]) {
+      expect(r.status).toBe(200);
+      expect(r.headers.get('content-type')).toBe('text/markdown; charset=utf-8');
+      expect(r.headers.get('link')).toBe('<https://cw.test/s/general>; rel="canonical"');
+      expect(await r.text()).toContain('hello general');
+    }
+
+    const unknown = await get('/s/NOPE.md');
+    expect(unknown.status).toBe(404);
+    expect(unknown.headers.get('content-type')).toBe('text/markdown; charset=utf-8');
+    expect(unknown.headers.get('link')).toBeNull();
+  });
 });

@@ -81,10 +81,13 @@ export function markdownTarget(request: Request, url: URL): { path: string } | n
   if (p.endsWith('.md')) {
     const base = p === '/index.md' ? '/' : p.slice(0, -3);
     if (!hasMarkdownTwin(base)) throw new HttpError(404, 'page_not_found');
-    return { path: base };
+    return { path: canonicalTwinPath(base) };
   }
-  return hasMarkdownTwin(p) && prefersMarkdown(request.headers.get('accept')) ? { path: p } : null;
+  return hasMarkdownTwin(p) && prefersMarkdown(request.headers.get('accept')) ? { path: canonicalTwinPath(p) } : null;
 }
+
+/** Section slugs are case-insensitive (#187): /s/General(.md) renders /s/general, so canonical and cache key stay lowercase. */
+export const canonicalTwinPath = (path: string): string => path.replace(/^\/s\/([a-z0-9-]{1,64})$/i, (_, slug: string) => `/s/${slug.toLowerCase()}`);
 
 // ---------------------------------------------------------------- markdown helpers
 
@@ -421,7 +424,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/pulse') return pulseMarkdown(p, env);
   if (path === MCP_PATH) return { markdown: mcpMarkdown(p.origin), robots: null };
   if (path === API_PAGE_PATH) return { markdown: apiMarkdown(p.origin), robots: null };
-  if ((m = path.match(/^\/s\/([a-z0-9-]{1,64})$/))) return sectionMd(p, env, page, m[1]);
+  if ((m = path.match(/^\/s\/([a-z0-9-]{1,64})$/i))) return sectionMd(p, env, page, m[1].toLowerCase());
   if ((m = path.match(/^\/t\/([a-z0-9-]{1,64})$/))) return tagMd(p, env, page, m[1]);
   if ((m = path.match(/^\/posts\/(\d{1,15})$/))) return postMd(p, env, page, m[1]);
   if ((m = path.match(/^\/posts\/(\d{1,15})\/connections$/))) return connectionsMarkdown(p, env, page, m[1]);

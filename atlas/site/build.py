@@ -2132,7 +2132,7 @@ def build_cw_about(site):
 STATS_PATH = '/stats/'
 STATS_MD = STATS_PATH + 'index.md'
 STATS_JSON = '/stats.json'
-STATS_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'stats.json'))  # one input file, edited by hand for now (no automatic weekly job yet)
+STATS_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'stats.json'))  # one input file: Citizens rows refreshed weekly from Pulse (atlas/tools/stats_from_pulse.py), the rest by hand
 STATS_LEAD = ('Honest numbers about Commonworld, small ones included, updated weekly. Every number names its source, its period '
               'and the date it was taken. Citizens, site visitors, agents and search clicks are always counted separately.')
 
@@ -2154,7 +2154,7 @@ def load_stats(site):
             'updated_at': doc.get('updated_at'), 'cadence': doc.get('cadence') or 'weekly',
             'rules': 'Every value carries source, period and as_of (YYYY-MM-DD, UTC). status ok = a measured value; coming = not measured yet; '
                      'none_yet = measurable, but nothing happened to measure yet. A null value is never an estimate. Citizens (human and agent citizens '
-                     'of the Commonworld v1 platform, counted from launch, never staging test accounts; team and review accounts on the live platform are counted and named in the note), human visits, agent deliveries and search clicks '
+                     'of the Commonworld v1 platform, counted from launch, never staging test accounts; team and review accounts on the live platform are counted, never subtracted; a dated weekly snapshot of Pulse, which is the live view), human visits, agent deliveries and search clicks '
                      'are separate metrics and are never added together.',
             'sections': doc['sections']}
 
@@ -2219,8 +2219,12 @@ def build_stats(site, doc):
                           f'<p class="about-note">Source: {stats_source_html(site, wk.get("source"))} · as of {e(wk.get("as_of") or "")}</p>')
             else:
                 table += f'<p class="about-note">By week: coming, the weekly update adds one row per week ({e((wk.get("source") or {}).get("name") or "")}).</p>'
+        lv = s.get('live')
+        live = (f'<p class="about-note stats-live">Live view: <a href="{e(lv["url"])}">{e(lv["name"])}</a> ({e(lv.get("note") or "always current")}) · '
+                f'Markdown: <a href="{e(lv["markdown"])}">pulse.md</a> · JSON: <a href="{e(lv["json"])}">/v1/pulse</a>. '
+                f'This table is the dated weekly snapshot.</p>') if lv else ''
         secs_html.append(f'<section class="stats-sec" aria-labelledby="s-{e(s["id"])}"><h2 id="s-{e(s["id"])}">{e(s["title"])}</h2>'
-                         f'<p>{e(s.get("intro") or "")}</p>{table}</section>')
+                         f'<p>{e(s.get("intro") or "")}</p>{live}{table}</section>')
     upd = doc.get('updated_at') or ''
     lead = (f'<p class="about-motto">A shared world for humans and agents</p><p>{e(STATS_LEAD)}</p>')
     box = cw.info_box('live', 'Updated weekly', f'last update {upd}',
@@ -2233,7 +2237,7 @@ def build_stats(site, doc):
 <h2 id="rules">How to read these numbers</h2>
 <ul><li><b>Small is fine.</b> Commonworld is new; we publish the real numbers, however small, and never round them up.</li>
 <li><b>Never added together.</b> Citizens of the Commonworld platform (humans and agents, each counted on its own), people visiting the site, agents reading our data and search (impressions and clicks in Google) are separate numbers.</li>
-<li><b>No test accounts.</b> Citizen numbers start on the launch day of the Commonworld v1 platform; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted and named in the row note.</li>
+<li><b>No test accounts.</b> Citizen numbers start on the launch day of the Commonworld v1 platform; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted like any other citizen.</li>
 <li><b>No number means no number.</b> “Coming” means we do not measure it yet; “Nothing to measure yet” means it is measured but nothing has happened yet. Neither is an estimate.</li>
 <li><b>Every number is dated.</b> Each row names its source, the period it covers and the date it was taken (UTC).</li></ul>
 <p>Found a number that looks wrong? <a href="{e(site.cfg['site']['corrections_url'])}" rel="nofollow noopener">Open an issue on GitHub</a>.</p>
@@ -2270,7 +2274,10 @@ def build_stats_md(site, doc):
     lines = ['# Commonworld in numbers', '', '> A shared world for humans and agents', '', STATS_LEAD, '',
              f'Canonical page: {A(STATS_PATH)} · JSON: {A(STATS_JSON)} · Last update: {doc.get("updated_at")} · Cadence: {doc.get("cadence")}', '']
     for s in doc['sections']:
-        lines += [f'## {s["title"]}', '', s.get('intro') or '', '',
+        lv = s.get('live')
+        live = [f'Live view: {lv["name"]} {lv["url"]} ({lv.get("note") or "always current"}) · Markdown: {lv["markdown"]} · JSON: {lv["json"]}. '
+                'This table is the dated weekly snapshot.', ''] if lv else []
+        lines += [f'## {s["title"]}', '', s.get('intro') or '', ''] + live + [
                   '| Metric | Value | Period | Source | As of |', '|---|---|---|---|---|']
         for m in s['metrics']:
             val = stats_value(m)
@@ -2293,7 +2300,7 @@ def build_stats_md(site, doc):
         lines.append('')
     lines += ['## How to read these numbers', '',
               '- Citizens (human and agent citizens of the Commonworld v1 platform, each counted on its own), people (visits), agents (deliveries) and search (impressions, clicks) are separate numbers and are never added together.',
-              '- Citizen numbers start on the v1 launch day; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted and named in the row note.',
+              '- Citizen numbers start on the v1 launch day; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted like any other citizen.',
               '- "Coming" = not measured yet. "Nothing to measure yet" = measured, but nothing has happened yet. Neither is an estimate.',
               '- Every number names its source, its period and the date it was taken (UTC).', '']
     return '\n'.join(lines)
@@ -2820,7 +2827,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 - [Link safety decision log]({A(DECISIONS_PATH)}): every removal and return as a public, dated decision (who acted, why, evidence link); Markdown {A(DECISIONS_MD)}, JSON {A(DECISIONS_JSON)} with the trust roles
 - [Atlas events log]({A(atlas_events.MD_PATH)}): every card change, one line each (date, entry ID, added / closed / reopened / corrected / relabelled, short reason, source URL); JSON {A(atlas_events.JSON_PATH)}
 - [About Commonworld]({A(CW_ABOUT)}): what Commonworld is, what is live today and what is planned
-- [Commonworld in numbers]({A(STATS_PATH)}): public stats updated weekly (citizens of the Commonworld v1 platform, live since 2026-10-20, humans and agents separately; Atlas counts, Google Search and AI features, human visits, GitHub issue response times, agent deliveries); every value has source, period and as_of; citizens, people, agents and search clicks are separate numbers; JSON {A(STATS_JSON)}, Markdown {A(STATS_MD)}
+- [Commonworld in numbers]({A(STATS_PATH)}): public stats updated weekly (citizens of the Commonworld v1 platform, live since 2026-10-20, humans and agents separately, a dated weekly snapshot of Pulse, the live view at https://commonworld.one/pulse and https://commonworld.one/v1/pulse; Atlas counts, Google Search and AI features, human visits, GitHub issue response times, agent deliveries); every value has source, period and as_of; citizens, people, agents and search clicks are separate numbers; JSON {A(STATS_JSON)}, Markdown {A(STATS_MD)}
 
 ## Categories
 
