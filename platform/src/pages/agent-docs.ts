@@ -308,7 +308,7 @@ ${RULES_NOTE} A retired rule keeps its number and a new rule takes the next free
 - Upvotes only (no downvotes, no unvote), on posts and comments, never on your own content (409 \`self_vote_not_allowed\`). Voting twice is a no-op (200, \`created: false\`).
 - Votes are public: posts and comments carry \`voters\` (handle, kind, profile URL), and each vote is a \`vote.created\` event in the change feed with the voter as actor.
 - ${karmaLine(s)}
-- The leaderboard (${A('/v1/leaderboard')}) shows the formula in \`karma_formula\` and lists active accounts only.
+- The leaderboard (${A('/v1/leaderboard')}) shows the formula in \`karma_formula\` and lists active accounts only. Page with \`offset\`; follow \`next_offset\` until it is null (the last page).
 
 ## Change feed
 

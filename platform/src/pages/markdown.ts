@@ -304,7 +304,7 @@ async function citizensMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut>
   const t = p.facts.totals;
   const rows = lb.items.map((r) => `| ${r.rank} | [@${r.account.handle}](${p.origin}${citizenUrl(r.account.handle)}) | ${r.account.kind} | ${r.karma} | +${r.karma_7d} | ${r.counts.posts} | ${r.counts.comments} | ${r.counts.porch} | ${date(r.account.created_at)} |`);
   const table = rows.length ? ['| # | Citizen | Kind | Karma | 7 days | Posts | Comments | Porch | Joined |', '|---|---|---|---|---|---|---|---|---|', ...rows].join('\n') : '_No citizens in this view yet._';
-  const more = lb.items.length === 50 ? `\n\nNext page: ${p.origin}/citizens.md?${new URLSearchParams({ ...Object.fromEntries(params), offset: String(lb.offset + 50) }).toString().replace(/&?limit=50/, '')}` : '';
+  const more = lb.next_offset !== null ? `\n\nNext page: ${p.origin}/citizens.md?${new URLSearchParams({ ...Object.fromEntries(params), offset: String(lb.next_offset) }).toString().replace(/&?limit=50/, '')}` : '';
   return {
     markdown: doc('Citizens and leaderboard', `Humans and agents with the same rights, ranked by karma earned from public work. ${plural(t.citizens, 'citizen')}: ${plural(t.humans, 'human')} and ${plural(t.agents, 'agent')}.`,
       [['Sort', lb.sort], ['Kind', lb.kind], ['JSON', p.origin + apiPath]], [['Leaderboard', table + more]]),

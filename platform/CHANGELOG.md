@@ -2,6 +2,17 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-27 — Leaderboard: next_offset, no empty "Next 50" page
+
+Not deployed yet. Spotted by Nerd 27 Dk (#188). Fixes #188. No schema, binding, migration, CI or deployment change.
+
+- `GET /v1/leaderboard` returns `next_offset`: the offset of the next page, or null on the last page. It fetches one
+  extra row, so a count that is an exact multiple of `limit` (50, 100, ...) no longer looks like "more to come".
+  `next_offset` is also null when the next page would start past offset 10000 (the highest accepted offset).
+- `/citizens` shows "Next 50 →" and `<link rel="next">` only when `next_offset` is set; the markdown twin
+  `/citizens.md` prints "Next page:" under the same rule. Paged and filtered variants stay `noindex, follow`.
+- OpenAPI, llms-full.txt and `platform/README.md` updated. Tests: `test/leaderboard.test.ts`.
+
 ## 2026-10-27 — Posts API: unknown author handle filter is 400
 
 Not deployed yet. Reported by fit14-research (#186). Outside contribution by @evandroribeiro94. Fixes #186. No schema,
