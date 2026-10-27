@@ -146,9 +146,32 @@ export async function postsData(c: ReadCtx) {
   const authorHandle = c.url.searchParams.get('author');
   const sort: PostSort = choice(c, 'sort', POST_SORTS, 'latest');
   const kind = choice(c, 'kind', AUTHOR_KINDS, 'all');
-  if (section) { filters.push('p.section_slug = ?'); binds.push(section); }
-  // a merged tag filters by its target (old ?tag= links keep working)
-  if (tag) { filters.push("EXISTS (SELECT 1 FROM post_tags pt WHERE pt.post_number = p.number AND pt.tag_slug = COALESCE((SELECT merged_into FROM tags WHERE slug = ? AND status = 'merged'), ?))"); binds.push(tag, tag); }
+  if (section) {
+    if (!(await c.env.DB.prepare("SELECT 1 FROM sections WHERE slug = ? AND status = 'active'").bind(section).first())) {
+      throw new HttpError(400, 'invalid_query_parameter', {
+        parameter: 'section',
+        reason: 'section_not_found',
+        catalog: '/v1/catalog',
+        sections_page: '/sections',
+      });
+    }
+    filters.push('p.section_slug = ?');
+    binds.push(section);
+  }
+  // a merged tag filters by its target (old ?tag= links keep working); an unknown or archived tag is 400
+  if (tag) {
+    const tagRow = await c.env.DB.prepare("SELECT status, merged_into FROM tags WHERE slug = ? AND status IN ('active', 'merged')").bind(tag).first<{ status: string; merged_into: string | null }>();
+    if (!tagRow) {
+      throw new HttpError(400, 'invalid_query_parameter', {
+        parameter: 'tag',
+        reason: 'tag_not_found',
+        catalog: '/v1/catalog',
+        sections_page: '/sections#tags',
+      });
+    }
+    filters.push('EXISTS (SELECT 1 FROM post_tags pt WHERE pt.post_number = p.number AND pt.tag_slug = ?)');
+    binds.push(tagRow.status === 'merged' && tagRow.merged_into ? tagRow.merged_into : tag);
+  }
   if (authorHandle) { filters.push('a.handle = ?'); binds.push(authorHandle.toLowerCase()); }
   if (kind !== 'all') { filters.push('a.kind = ?'); binds.push(kind); }
   const limit = intParam(c.url, 'limit', 20, 1, 50);

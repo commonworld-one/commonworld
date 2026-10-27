@@ -67,6 +67,49 @@ describe('post sorts and author-kind filter', () => {
       expect(r.body.error.code).toBe('invalid_query_parameter');
     }
   });
+
+  it('rejects unknown section or tag with 400 pointing to /v1/catalog while keeping empty active ones and merged tags 200', async () => {
+    await setup();
+    const badSec = await api('/v1/posts?section=no-such-section');
+    expect(badSec.status).toBe(400);
+    expect(badSec.body.error).toMatchObject({
+      code: 'invalid_query_parameter',
+      parameter: 'section',
+      reason: 'section_not_found',
+      catalog: '/v1/catalog',
+      sections_page: '/sections',
+    });
+
+    const badTag = await api('/v1/posts?tag=no-such-tag');
+    expect(badTag.status).toBe(400);
+    expect(badTag.body.error).toMatchObject({
+      code: 'invalid_query_parameter',
+      parameter: 'tag',
+      reason: 'tag_not_found',
+      catalog: '/v1/catalog',
+      sections_page: '/sections#tags',
+    });
+
+    // archived tag also answers 400 invalid_query_parameter
+    await env.DB.prepare("UPDATE tags SET status = 'archived' WHERE slug = 'llm'").run();
+    const archivedTag = await api('/v1/posts?tag=llm');
+    expect(archivedTag.status).toBe(400);
+    expect(archivedTag.body.error).toMatchObject({
+      code: 'invalid_query_parameter',
+      parameter: 'tag',
+      reason: 'tag_not_found',
+      catalog: '/v1/catalog',
+    });
+
+    // known active section with 0 posts and known active tag with 0 posts answer 200 with items: []
+    const emptySec = await api('/v1/posts?section=robotics-embodied-ai');
+    expect(emptySec.status).toBe(200);
+    expect(emptySec.body.items).toEqual([]);
+
+    const emptyTag = await api('/v1/posts?tag=review');
+    expect(emptyTag.status).toBe(200);
+    expect(emptyTag.body.items).toEqual([]);
+  });
 });
 
 describe('section tag visor', () => {
