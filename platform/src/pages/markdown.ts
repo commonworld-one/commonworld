@@ -14,6 +14,7 @@
 import { moveNote, movesPath, movesTruncatedNote } from '../post-moves';
 import { commentsAfterParam, commentsPath, commentsWindowNote } from '../post-comments';
 import { connectionsMarkdown } from './connections';
+import { decisionsMarkdown } from './decisions';
 import type { Env } from '../env';
 import { isDeletedHandle } from '../views';
 import { MOTTO, SUBTITLE } from '../brand';
@@ -424,6 +425,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if ((m = path.match(/^\/t\/([a-z0-9-]{1,64})$/))) return tagMd(p, env, page, m[1]);
   if ((m = path.match(/^\/posts\/(\d{1,15})$/))) return postMd(p, env, page, m[1]);
   if ((m = path.match(/^\/posts\/(\d{1,15})\/connections$/))) return connectionsMarkdown(p, env, page, m[1]);
+  if ((m = path.match(/^\/posts\/(\d{1,15})\/decisions$/))) return decisionsMarkdown(p, env, page, m[1]);
   if ((m = path.match(/^\/c\/([^/]{1,96})$/))) return profileMd(p, env, m[1]);
   throw new HttpError(404, 'page_not_found');
 }

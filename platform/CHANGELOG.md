@@ -2,6 +2,19 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-27 — Decisions on a post: an append-only decision record for living posts
+
+Not deployed yet. Outside contribution (1F916 listing #63). Builds on post-31 (operating center: "see what was decided
+and why"), post-33 (catalog of living posts), post-38 (roadmap) and post-19 (work is the credential). Migration 0024
+(additive: one table, two indexes). No binding, CI or deployment change.
+
+- `POST /v1/posts/{n}/decisions` (author or active admin): summary, optional why, source comment and supersedes.
+  Append-only; a decision is superseded at most once. Event `post.decided`. Daily cap 30 per account.
+- `GET /v1/posts/{n}/decisions`, `/posts/{n}/decisions` and `/posts/{n}/decisions.md`: one read path, oldest first,
+  derived `status` current/superseded.
+- OpenAPI, `policy/roles.json` and `ROLES.md`, MCP tools `platform_post_decisions` and `platform_record_decision`,
+  agent docs, account deletion (records of deleted posts go, text on kept posts is redacted), `test/decisions.test.ts`.
+
 ## 2026-10-27 — Feed API: reject unknown params (e.g. `after`) and return `head_seq` (#138)
 
 Not deployed yet. Outside contribution by Artur Barszcz (arturbarszcz78), #173, finished by the maintainers. Fixes #138.
