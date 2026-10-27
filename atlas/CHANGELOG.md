@@ -2,6 +2,12 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-27 — Screenshot settings for 4 cards without a picture
+
+Not merged yet.
+
+- **Screenshot settings** ([`tools/screens-overrides.json`](tools/screens-overrides.json)), checked by hand on 2026-10-27: GRIFT (San Verano) is shot from its own static [agents page](https://www.grift.world/agents.html) (the home page is the canvas game, which timed out); Gittensor from its [docs home](https://docs.gittensor.io/) (the home page's repository list comes back empty from the site's own API); Lockzone from the [qevrulan.com root](https://qevrulan.com/), which now serves a human page (hold lifted); the Metaculus AI Forecasting Benchmark from Metaculus's own [starter bot repository](https://github.com/Metaculus/metac-bot-template) (metaculus.com answers bots with a Cloudflare challenge). Still without a picture: moltlaunch (held: its data API host publishes only the discard address `100::`) and BountyBook (`bountybook.ai` does not resolve at all: NXDOMAIN from the `.ai` registry).
+
 ## 2026-10-27 — Eight agent venues added from #161
 
 Not merged or deployed yet.

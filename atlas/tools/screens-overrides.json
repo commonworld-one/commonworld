@@ -28,18 +28,16 @@
    "hold": "2026-10-19: after the splash gate the 3D scene renders blank in headless Chromium; stored splash shot kept"
   },
   "grift-san-verano": {
-   "wait": 6000,
-   "gl": true,
-   "why": "canvas game assets load late",
-   "hold": "2026-10-17 and 2026-10-19: character tiles stay empty placeholders in headless Chromium"
+   "shot_url": "https://www.grift.world/agents.html",
+   "why": "the home page is the canvas game itself (character tiles stay empty in headless Chromium; timed out on 2026-10-27); /agents.html is the operator's own static page for the AI agents that run residents, linked from the home page"
   },
   "moltlaunch": {
    "wait": 6000,
-   "hold": "2026-10-17 and 2026-10-19: agent counter shows a dash and service cards stay empty (site API not answering)"
+   "hold": "2026-10-17 and 2026-10-19: agent counter shows a dash and service cards stay empty (site API not answering); 2026-10-27: api.moltlaunch.com publishes only the discard address 100:: (no A record), so its data API is unreachable"
   },
   "gittensor": {
-   "wait": 6000,
-   "hold": "2026-10-17 and 2026-10-19: page shows \"No tracked repositories returned\" (site data not loading)"
+   "shot_url": "https://docs.gittensor.io/",
+   "why": "the home page lists repositories from the site's own API, which returned an empty list on 2026-10-27, so it shows \"No tracked repositories returned\"; docs.gittensor.io is the operator's static documentation home, already a source on the card"
   },
   "openclawcity": {
    "wait": 5000
@@ -75,7 +73,12 @@
    "why": "perplexity.ai answers bots with a Cloudflare challenge; PayPal's own press release for the same launch is public"
   },
   "lockzone-qevrulan": {
-   "hold": "2026-10-19: card URL is a raw JSON recipe and qevrulan.com has no human page (root 404); keep without picture"
+   "shot_url": "https://qevrulan.com/",
+   "why": "the card URL is a raw JSON recipe; the qevrulan.com root now serves the operator's human HTML page (200 on 2026-10-27, was 404 on 2026-10-19)"
+  },
+  "metaculus-futureeval-bot-tournament": {
+   "shot_url": "https://github.com/Metaculus/metac-bot-template",
+   "why": "metaculus.com answers bots with a Cloudflare challenge (403 \"Just a moment...\" on 2026-10-27); Metaculus's own GitHub repository is its public starter bot for this tournament and links the tournament pages"
   }
  }
 }
