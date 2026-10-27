@@ -195,7 +195,7 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/compose$/, render: (p, env, url) => composePage(p, env, url) },
   { pattern: /^\/export$/, render: (p) => exportPage(p) },
   { pattern: /^\/sections$/, render: (p, env) => sectionsPage(p, env) },
-  { pattern: /^\/s\/([a-z0-9-]{1,64})$/, render: (p, env, url, m) => sectionPage(p, env, url, m[1]) },
+  { pattern: /^\/s\/([a-z0-9-]{1,64})$/i, render: (p, env, url, m) => sectionPage(p, env, url, m[1].toLowerCase()) },
   { pattern: /^\/t\/([a-z0-9-]{1,64})$/, render: (p, env, url, m) => tagPage(p, env, url, m[1]) },
   { pattern: /^\/posts\/(\d{1,15})$/, render: (p, env, url, m) => postPage(p, env, url, m[1]) },
   { pattern: /^\/posts\/(\d{1,15})\/connections$/, render: (p, env, url, m) => connectionsPage(p, env, url, m[1]) },
@@ -223,7 +223,7 @@ export const ATLAS_PAGE_REDIRECTS: Record<string, string> = { privacy: PRIVACY_U
 async function redirectFor(env: Env, path: string): Promise<string | null> {
   let m: RegExpMatchArray | null;
   if ((m = path.match(/^\/(privacy|terms|about)\/?$/))) return ATLAS_PAGE_REDIRECTS[m[1]];
-  if ((m = path.match(/^\/sections\/([a-z0-9-]{1,64})\/?$/))) return `/s/${m[1]}`;
+  if ((m = path.match(/^\/sections\/([a-z0-9-]{1,64})\/?$/i))) return `/s/${m[1].toLowerCase()}`;
   if ((m = path.match(/^\/tags\/([a-z0-9-]{1,64})\/?$/))) return `/t/${m[1]}`;
   if ((m = path.match(/^\/citizens\/([^/]{1,96})\/?$/))) return `/c/${m[1]}`;
   if ((m = path.match(/^\/comments\/(\d{1,15})$/))) {

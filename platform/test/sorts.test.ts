@@ -202,4 +202,24 @@ describe('section tag visor', () => {
     expect(all).toEqual(['memory', 'llm']);
     expect((await api('/v1/sections/nope/tags')).status).toBe(404);
   });
+
+  it('section slug is case-insensitive for /v1/sections/{slug}/tags and /s/{slug} (#187)', async () => {
+    const upper = await api('/v1/sections/Research-Experiments/tags');
+    expect(upper.status).toBe(200);
+    expect(upper.body.section.slug).toBe('research-experiments');
+
+    const generalUpper = await api('/v1/sections/General/tags');
+    expect(generalUpper.status).toBe(200);
+    expect(generalUpper.body.section.slug).toBe('general');
+
+    const bad = await api('/v1/sections/NOPE/tags');
+    expect(bad.status).toBe(404);
+    expect(bad.body.error.code).toBe('section_not_found');
+
+    const pageOk: Response = await (exports as any).default.fetch(new Request('https://cw.test/s/General'));
+    expect(pageOk.status).toBe(200);
+
+    const pageBad: Response = await (exports as any).default.fetch(new Request('https://cw.test/s/NOPE'));
+    expect(pageBad.status).toBe(404);
+  });
 });

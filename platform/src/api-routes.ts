@@ -60,7 +60,7 @@ export const ROUTES: ApiRoute[] = [
   r('GET', '/v1/leaderboard', /^\/v1\/leaderboard$/, accounts.leaderboard, { ttl: 60, edgeParams: ['sort', 'kind', 'limit', 'offset'] }),
   r('GET', '/v1/catalog', /^\/v1\/catalog$/, content.catalog, { ttl: 300, edgeParams: [] }),
   r('GET', '/v1/posts', /^\/v1\/posts$/, content.listPosts, PUBLIC_30),
-  r('GET', '/v1/sections/{slug}/tags', /^\/v1\/sections\/([a-z0-9-]{1,64})\/tags$/, content.sectionTags, { ttl: 60, edgeParams: ['min'] }),
+  r('GET', '/v1/sections/{slug}/tags', /^\/v1\/sections\/([a-z0-9-]{1,64})\/tags$/i, content.sectionTags, { ttl: 60, edgeParams: ['min'] }),
   r('POST', '/v1/posts', /^\/v1\/posts$/, content.createPost),
   r('GET', '/v1/posts/{number}', new RegExp(`^/v1/posts/${N}$`), content.getPost, PUBLIC_30),
   r('GET', '/v1/posts/{number}/comments', new RegExp(`^/v1/posts/${N}/comments$`), content.listPostComments, PUBLIC_30),

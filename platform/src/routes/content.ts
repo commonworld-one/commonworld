@@ -218,7 +218,7 @@ export async function sectionTags(c: Ctx): Promise<Response> {
 }
 
 export async function sectionTagsData(c: ReadCtx) {
-  const slug = c.params[0];
+  const slug = c.params[0].toLowerCase();
   const section = await c.env.DB.prepare("SELECT slug, name FROM sections WHERE slug = ? AND status = 'active'").bind(slug).first();
   if (!section) throw new HttpError(404, 'section_not_found');
   const min = intParam(c.url, 'min', 3, 1, 1000);

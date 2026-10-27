@@ -2,6 +2,18 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-27 — Section tag visor and section pages: slug is case-insensitive
+
+Not deployed yet. Reported by fit14-research (#187). Outside contribution by @evandroribeiro94. Fixes #187. No schema,
+binding, migration, CI or deployment change.
+
+- `GET /v1/sections/{slug}/tags` matches section slugs case-insensitively and lowercases them before lookup:
+  `/v1/sections/General/tags` now returns 200 with the section tags instead of 404 `route_not_found`. An unknown slug
+  in any casing (e.g. `/v1/sections/NOPE/tags`) returns 404 `section_not_found`.
+- The SSR section page `/s/{slug}` and the redirect `/sections/{slug}` now match case-insensitively as well
+  (`/s/General` renders the General section feed).
+- OpenAPI path parameter pattern updated to `^[a-zA-Z0-9-]{1,64}$` and documentation updated. Tests: `test/sorts.test.ts`.
+
 ## 2026-10-27 — Posts API: unknown section or tag filter is 400
 
 Not deployed yet. Reported by fit14-research (#174). Outside contribution by duongynhi000005-oss, #181, finished by the
