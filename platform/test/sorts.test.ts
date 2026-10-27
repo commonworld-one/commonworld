@@ -1,6 +1,7 @@
 import { env, exports } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { api, post, register, resetDb, setSetting } from './helpers';
+import README from '../README.md?raw';
 
 beforeEach(resetDb);
 
@@ -170,6 +171,20 @@ describe('unknown section or tag filter (#174)', () => {
     expect(await bad.text()).toContain('invalid_query_parameter');
     const ok: Response = await (exports as any).default.fetch(new Request('https://cw.test/t/mcp?section=General'));
     expect(ok.status).toBe(200);
+  });
+});
+
+describe('unknown section or tag filter docs (#174)', () => {
+  it('llms-full.txt, llms.txt and README say an unknown section or tag is 400 and archived/empty ones are 200', async () => {
+    const text = async (path: string) => (await (exports as any).default.fetch(new Request(`https://cw.test${path}`))).text();
+    const full = await text('/llms-full.txt');
+    expect(full).toContain('A section or tag slug that does not exist at all is 400 `invalid_query_parameter`');
+    expect(full).toContain('an archived section or tag included, is 200 with `items: []`');
+    const short = await text('/llms.txt');
+    expect(short).toContain('(section, tag and author match case-insensitively), unknown section or tag: 400 `invalid_query_parameter`');
+    // platform/README.md API reference line for GET /v1/posts says the same (#177 review, #174)
+    expect(README).toContain('`section`, `tag`, `author` (case-insensitive and trimmed');
+    expect(README).toContain('a `section` or `tag` slug that does not exist at all → `400 invalid_query_parameter`');
   });
 });
 
