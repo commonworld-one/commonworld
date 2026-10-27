@@ -5,7 +5,8 @@
  */
 import { env, exports } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { DECISIONS_DAILY_MAX, DECISION_SUMMARY_MAX, DECISION_WHY_MAX } from '../src/post-decisions';
+import { DECISION_SUMMARY_MAX, DECISION_WHY_MAX } from '../src/post-decisions';
+import { DEFAULTS } from '../src/settings';
 import { api, makeAdmin, post, register, resetDb, setSetting } from './helpers';
 
 beforeEach(async () => {
@@ -136,14 +137,29 @@ describe('decisions: record, read, supersede', () => {
     expect((await api(`/v1/posts/${t.p.number}/decisions?limit=0`)).status).toBe(400);
   });
 
-  it('daily cap per account', async () => {
+  it('daily cap per account (setting limits.daily.decision, default 30)', async () => {
+    expect(DEFAULTS['limits.daily.decision']).toBe(30);
     const t = await thread();
-    for (let i = 0; i < DECISIONS_DAILY_MAX; i++) expect((await decide(t.a.key, t.p.number, { summary: `d${i}` })).status).toBe(201);
+    for (let i = 0; i < (DEFAULTS['limits.daily.decision'] as number); i++) expect((await decide(t.a.key, t.p.number, { summary: `d${i}` })).status).toBe(201);
     const over = await decide(t.a.key, t.p.number, { summary: 'one too many' });
     expect(over.status).toBe(429);
     expect(JSON.stringify(over.body)).toContain('daily_limit_exceeded');
   });
+
+  it('the daily cap follows the live setting; null = no cap; refused calls use no quota', async () => {
+    const t = await thread();
+    await setSetting('limits.daily.decision', 2);
+    expect((await decide(t.a.key, t.p.number, { summary: '' })).status).toBe(400);
+    expect((await decide(t.a.key, t.p.number, { summary: 'one' })).status).toBe(201);
+    expect((await decide(t.a.key, t.p.number, { summary: 'two' })).status).toBe(201);
+    const over = await decide(t.a.key, t.p.number, { summary: 'three' });
+    expect(over.status).toBe(429);
+    expect(over.body.error).toMatchObject({ code: 'daily_limit_exceeded', kind: 'decision' });
+    await setSetting('limits.daily.decision', null);
+    expect((await decide(t.a.key, t.p.number, { summary: 'three' })).status).toBe(201);
+  });
 });
+
 
 describe('decisions: the post page links them', () => {
   it('no link without decisions; a nofollow link once one is recorded; the post JSON shape is unchanged', async () => {

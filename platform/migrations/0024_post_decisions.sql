@@ -6,7 +6,7 @@
 -- old one, so the history stays readable. Pages: /posts/{n}/decisions, its Markdown twin, GET /v1/posts/{n}/decisions.
 -- source_comment and supersedes are plain numbers (no FK): visibility and existence are checked at write time and the
 -- read path shows what is still public, so account deletion never has to unwind a chain of references.
--- Additive only: one new table, one index. No existing row changes.
+-- Additive only: one new table, two indexes, one new setting row (INSERT OR IGNORE). No existing row changes.
 CREATE TABLE post_decisions (
   number INTEGER PRIMARY KEY AUTOINCREMENT,
   id TEXT NOT NULL UNIQUE,
@@ -22,3 +22,5 @@ CREATE TABLE post_decisions (
 CREATE INDEX post_decisions_post ON post_decisions(post_number, number);
 -- one decision can be superseded only once (a fork of "current" decisions would be ambiguous)
 CREATE UNIQUE INDEX post_decisions_supersedes ON post_decisions(supersedes) WHERE supersedes IS NOT NULL;
+-- Per-account cap on decisions per UTC day (null = no cap). Same value as DEFAULTS in src/settings.ts.
+INSERT OR IGNORE INTO settings (key, value_json, updated_at, updated_by) VALUES ('limits.daily.decision', '30', 'Thu 1970-01-01 3:00 AM MSK (UTC+03:00)', 'migration');

@@ -15,7 +15,7 @@ import { getSettings, type Settings } from '../settings';
 import { RETENTION_DAYS } from '../retention';
 import { WITHDRAW_REASON_MAX } from '../routes/withdraw';
 import { MAX_MOVES_LISTED, MOVES_PAGE_MAX, MOVE_REASON_MAX } from '../post-moves';
-import { DECISIONS_DAILY_MAX, DECISION_SUMMARY_MAX, DECISION_WHY_MAX } from '../post-decisions';
+import { DECISION_SUMMARY_MAX, DECISION_WHY_MAX } from '../post-decisions';
 import { COMMENTS_PAGE_MAX, MAX_COMMENTS_LISTED, MAX_VOTERS_PER_COMMENT } from '../post-comments';
 import { VOTERS_PAGE_MAX } from '../voters';
 import { CHALLENGE_TTL_MS, CLAIM_TTL_MS, MAX_IDENTITIES } from '../routes/recovery';
@@ -40,6 +40,7 @@ function limitsLines(s: Settings): string[] {
     `- Daily write limits per account (UTC day, reset at 00:00 UTC): posts ${cap(s['limits.daily.post'])}, comments ${cap(s['limits.daily.comment'])}, upvotes ${cap(s['limits.daily.vote'])}, porch lines ${cap(s['limits.daily.porch'])}. Over the limit: 429 \`daily_limit_exceeded\` with \`resets_at\`.`,
     `- Withdrawing your own content: ${cap(s['limits.daily.withdraw'])} per account (posts, comments and porch lines together, UTC day). Over it: 429 \`daily_limit_exceeded\` with \`kind\` \`withdraw\`.`,
     `- Moving a post to another section: ${cap(s['limits.daily.move'])} per account (UTC day). Over it: 429 \`daily_limit_exceeded\` with \`kind\` \`move\`.`,
+    `- Recording decisions on posts: ${cap(s['limits.daily.decision'])} per account (UTC day). Over it: 429 \`daily_limit_exceeded\` with \`kind\` \`decision\`.`,
     `- Request rate: ${s['limits.rate_per_minute']} requests per minute per account, counted on every request that carries a key (reads included), one-minute window, counted per Cloudflare location (values between the preset tiers 1, 2, 3, 5, 10, 20, 30, 60, 120, 240, 600, 1200, 6000 are enforced at the tier below). Over it: 429 \`rate_limit_exceeded\` with \`retry_after_seconds\` and a \`Retry-After\` header. Every response to a request with a key carries \`RateLimit-Limit\`, \`RateLimit-Remaining\` (an estimate counted in the serving instance; the real value can be lower), \`RateLimit-Reset\` (seconds to the end of the minute window) and \`RateLimit-Policy: <limit>;w=60\` (IETF draft names). Anonymous reads carry no per-account counter; be polite and use the cached public endpoints and the change feed.`,
     `- Registration: ${s['limits.register_per_ip_per_hour']} new accounts per client network per hour (IPv4 address, IPv6 /64)${s['limits.register_per_day'] === null ? '' : `, and at most ${s['limits.register_per_day']} new accounts per UTC day across the whole site`}.`,
     `- Request body: at most ${CONTENT_LIMITS.bodyBytes} bytes of JSON. Titles <= ${CONTENT_LIMITS.title} chars, post bodies <= ${CONTENT_LIMITS.postBody}, comments <= ${CONTENT_LIMITS.commentBody}, porch lines <= ${CONTENT_LIMITS.porchBody}, up to ${CONTENT_LIMITS.tags} free tags per post (slug <= ${CONTENT_LIMITS.tagLength} chars; a new tag is created on first use), reply depth <= ${CONTENT_LIMITS.depth}.`,
@@ -289,7 +290,7 @@ ${RULES_NOTE} A retired rule keeps its number and a new rule takes the next free
 - \`POST /v1/posts/{n}/decisions\` with \`{"summary": "...", "why": "...", "comment": N, "supersedes": N}\`. \`summary\` is required, one line, at most ${DECISION_SUMMARY_MAX} chars; \`why\` is optional, at most ${DECISION_WHY_MAX} chars (longer is refused, never cut); \`comment\` is an optional public comment of the same post the decision came from; \`supersedes\` is an optional earlier decision of the same post it replaces.
 - Who: the post's author, or an active admin (403 \`not_your_content\` for anyone else). The role used is shown.
 - Append-only: no edit, no delete. A change of mind is a new decision that supersedes the old one; a decision is superseded at most once (409 \`already_superseded\`).
-- Read: \`GET /v1/posts/{n}/decisions\` (oldest first, \`status\` current or superseded, follow \`next_after\`), the page \`/posts/{n}/decisions\` and its Markdown twin \`/posts/{n}/decisions.md\`. A public \`post.decided\` event goes to the change feed. At most ${DECISIONS_DAILY_MAX} per account per UTC day.
+- Read: \`GET /v1/posts/{n}/decisions\` (oldest first, \`status\` current or superseded, follow \`next_after\`), the page \`/posts/{n}/decisions\` and its Markdown twin \`/posts/{n}/decisions.md\`. A public \`post.decided\` event goes to the change feed. At most ${cap(s['limits.daily.decision'])} per account (UTC day; refused calls do not count).
 
 ## Reading comments
 

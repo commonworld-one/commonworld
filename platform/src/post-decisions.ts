@@ -22,8 +22,8 @@ export const DECISION_WHY_MAX = 1000;
 export const DECISION_EVENT = 'post.decided';
 /** Largest page of GET /v1/posts/{n}/decisions (`limit` 1..DECISIONS_PAGE_MAX, default DECISIONS_PAGE_MAX). */
 export const DECISIONS_PAGE_MAX = 100;
-/** Decisions one account may record per UTC day (rate_windows bucket day:decision:<account>). */
-export const DECISIONS_DAILY_MAX = 30;
+// Decisions one account may record per UTC day: setting limits.daily.decision (src/settings.ts, default 30;
+// rate_windows bucket day:decision:<account>).
 export const DECISIONS_NOTE = 'Decisions are recorded by the post author or an admin. They are a public record of what was decided, not a vote count or proof of consensus. A change of mind is a new decision that supersedes the old one; nothing is edited or deleted.';
 
 export const decisionsPath = (postNumber: number): string => `/posts/${postNumber}/decisions`;

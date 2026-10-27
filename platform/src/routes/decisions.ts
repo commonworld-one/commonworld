@@ -4,8 +4,8 @@
  *   POST /v1/posts/{n}/decisions                 {"summary": "...", "why"?: "...", "comment"?: N, "supersedes"?: N}
  *
  * Who may write: the post's author, or an active admin (403 not_your_content otherwise). Frozen / disabled accounts and
- * Lock mode are refused like every write; Idempotency-Key as other writes; at most DECISIONS_DAILY_MAX per account per
- * UTC day (429 daily_limit_exceeded, kind decision; refused calls use no quota).
+ * Lock mode are refused like every write; Idempotency-Key as other writes; at most setting limits.daily.decision per
+ * account per UTC day (default 30; 429 daily_limit_exceeded, kind decision; refused calls use no quota).
  *
  * Refused:
  *   400 invalid_summary / summary_too_long      summary missing or empty / longer than DECISION_SUMMARY_MAX (never cut)
@@ -23,7 +23,7 @@ import { HttpError, goneError, intParam, json, nowIso, readJson } from '../http'
 import { reserveDayBucket } from '../limits';
 import { bumpContentCacheVersion } from '../cache-version';
 import {
-  DECISIONS_DAILY_MAX, DECISIONS_PAGE_MAX, DECISION_EVENT, DECISION_SUMMARY_MAX, DECISION_WHY_MAX,
+  DECISIONS_PAGE_MAX, DECISION_EVENT, DECISION_SUMMARY_MAX, DECISION_WHY_MAX,
   decisionByNumber, decisionsPage,
 } from '../post-decisions';
 import { bannedSql } from '../views';
@@ -83,7 +83,7 @@ export async function listDecisions(c: Ctx): Promise<Response> {
 }
 
 export async function recordDecision(c: Ctx): Promise<Response> {
-  const { p } = await writer(c);
+  const { p, settings } = await writer(c);
   const number = numberParam(c.params[0]);
   const body = await readJson(c.request);
   const summary = summaryField(body);
@@ -119,7 +119,7 @@ export async function recordDecision(c: Ctx): Promise<Response> {
     if (old.taken) throw new HttpError(409, 'already_superseded', { ref, supersedes, reason: 'supersede the current decision instead' });
   }
 
-  const release = await reserveDayBucket(c.env, 'decision', p.account.id, DECISIONS_DAILY_MAX);
+  const release = await reserveDayBucket(c.env, 'decision', p.account.id, settings['limits.daily.decision']);
   const at = nowIso();
   const id = `decision_${crypto.randomUUID()}`;
   const written = 'EXISTS (SELECT 1 FROM post_decisions WHERE id = ?1)';
