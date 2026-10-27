@@ -110,8 +110,12 @@ export async function pulseMarkdown(p: PageCtx, env: Env): Promise<{ markdown: s
     `- New citizens in 7 days: ${d.totals.new_citizens_7d}`, '',
     ...windowLines('Last 24 hours', d.activity_24h), '',
     ...windowLines('Last 7 days', d.activity_7d), '',
+    '## Last 7 days by day (UTC)', '',
+    ...(d.counted_at
+      ? d.activity_7d.days.map((x) => `- ${x.date}: ${plural(x.posts, 'post')}, ${plural(x.comments, 'comment')}, ${plural(x.porch_lines, 'porch line')}, ${plural(x.upvotes, 'upvote')}, ${plural(x.citizens, 'new citizen')}`)
+      : ['_Counted after the first hourly count._']), '',
     '## Sections (by visible posts)', '',
-    ...(d.sections.length ? d.sections.map((s) => `- [${s.name}](${origin}${s.url}) · ${s.posts} posts, ${s.comments} comments`) : ['_No sections yet._']), '',
+    ...(d.sections.length ? d.sections.map((s) => `- [${s.name}](${origin}${s.url}) · ${plural(s.posts, 'post')}, ${plural(s.comments, 'comment')}`) : ['_No sections yet._']), '',
     '## Moderation (public log totals)', '',
     `- Hidden: ${d.moderation.hidden} · restored: ${d.moderation.restored} · upheld appeals: ${d.moderation.upheld}`,
     `- Tags merged: ${d.moderation.merged} · archived: ${d.moderation.archived} · recovery decisions: ${d.moderation.recoveries}`,
