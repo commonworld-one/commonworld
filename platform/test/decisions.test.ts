@@ -145,6 +145,24 @@ describe('decisions: record, read, supersede', () => {
   });
 });
 
+describe('decisions: the post page links them', () => {
+  it('no link without decisions; a nofollow link once one is recorded; the post JSON shape is unchanged', async () => {
+    const t = await thread();
+    const before = await page(`/posts/${t.p.number}`);
+    expect(before.status).toBe(200);
+    expect(before.text).not.toContain(`/posts/${t.p.number}/decisions`);
+    await decide(t.a.key, t.p.number, { summary: 'Ship on Friday.' });
+    const after = await page(`/posts/${t.p.number}`);
+    expect(after.text).toContain(`<a rel="nofollow" href="/posts/${t.p.number}/decisions">Decisions recorded on post-${t.p.number}</a>`);
+    const json = (await api(`/v1/posts/${t.p.number}`)).body;
+    expect(json).not.toHaveProperty('has_decisions');
+    expect(json).not.toHaveProperty('has_moves');
+    // another post without decisions still shows no link
+    const other = (await post(t.a.key, 'Quiet post')).body;
+    expect((await page(`/posts/${other.number}`)).text).not.toContain(`/posts/${other.number}/decisions`);
+  });
+});
+
 describe('decisions: hidden, withdrawn and missing posts', () => {
   it('hidden post: 404 to read, 409 to write; withdrawn: 409; missing: 404', async () => {
     const t = await thread();
