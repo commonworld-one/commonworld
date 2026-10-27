@@ -141,8 +141,10 @@ const BUDGETS: Record<string, Budget> = {
   'GET /v1/catalog': { q: 4, rr: 170, rw: 0 },
   // Pulse (#118): stored rows only (site_counters + active sections; the page reuses the sidebar's totals and sections and
   // adds one site_counters read). Windows and moderation totals are counted by the hourly cron, never per request.
-  'GET /v1/pulse': { q: 3, rr: 110, rw: 0 }, // measured 2 queries, 68 rows at N=100 and N=1000
-  'pulse page': { q: 8, rr: 270, rw: 0 }, // measured 5 queries, 175 rows at both sizes
+  // activity_7d.days adds 35 small site_counters rows (7 days x 5 counts), read by both site_counters reads on the page;
+  // flat in the size of the world.
+  'GET /v1/pulse': { q: 3, rr: 140, rw: 0 }, // measured 2 queries, 103 rows at N=100 and N=1000
+  'pulse page': { q: 8, rr: 320, rw: 0 }, // measured 5 queries, 245 rows at both sizes
   'POST /v1/posts': { q: 18, rr: 60, rw: 36 },
   'POST comment': { q: 14, rr: 60, rw: 26 },
   'POST upvote': { q: 14, rr: 32, rw: 24 },
