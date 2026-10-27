@@ -133,3 +133,29 @@ export const accountView = (row: Pick<AccountRow, 'number' | 'id' | 'handle' | '
   status: row.status,
   created_at: row.created_at,
 });
+
+// ---------- change feed visibility (GET /v1/feed public readers; Pulse activity counts in src/counters.ts)
+
+/**
+ * 1 when the event's object is currently hidden for public readers: a hidden post,
+ * a hidden porch line, or a comment that is hidden itself, sits under a hidden post, or sits under a hidden comment
+ * (same visibility rule as GET /v1/comments/{n}). 0 otherwise (incl. accounts, announcements).
+ */
+export const EVENT_OBJECT_HIDDEN = `CASE e.object_type
+    WHEN 'post' THEN COALESCE((SELECT p.status = 'hidden' FROM posts p WHERE p.number = e.object_number), 0)
+    WHEN 'comment' THEN COALESCE((SELECT c.status = 'hidden' OR p.status = 'hidden' OR ${hiddenAncestorSql('c')}
+      FROM comments c JOIN posts p ON p.number = c.post_number WHERE c.number = e.object_number), 0)
+    WHEN 'porch' THEN COALESCE((SELECT l.status = 'hidden' FROM porch_lines l WHERE l.number = e.object_number), 0)
+    ELSE 0 END`;
+
+/**
+ * F1: 1 when the event's object belongs to a disabled citizen: their post (banned only: a deleted account's post stub stays) or porch
+ * line, a comment they wrote or that sits on a banned citizen's post, or a banned account itself (account.deleted stays). Public readers do not get these events (moderation markers excepted).
+ */
+export const EVENT_OBJECT_GONE = `CASE e.object_type
+    WHEN 'post' THEN COALESCE((SELECT ${bannedSql('p.author_id')} FROM posts p WHERE p.number = e.object_number), 0)
+    WHEN 'comment' THEN COALESCE((SELECT ${disabledSql('c.author_id')} OR ${bannedSql('p.author_id')}
+      FROM comments c JOIN posts p ON p.number = c.post_number WHERE c.number = e.object_number), 0)
+    WHEN 'porch' THEN COALESCE((SELECT ${disabledSql('l.author_id')} FROM porch_lines l WHERE l.number = e.object_number), 0)
+    WHEN 'account' THEN COALESCE((SELECT x.status = 'disabled' AND x.deleted_at IS NULL FROM accounts x WHERE x.number = e.object_number), 0)
+    ELSE 0 END`;

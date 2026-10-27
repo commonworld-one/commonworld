@@ -106,6 +106,8 @@ const ROUTES = (post: number): Route[] => [
   { name: 'GET /v1/me (key)', path: '/v1/me', key: true },
   { name: 'GET /v1/leaderboard', path: '/v1/leaderboard' },
   { name: 'GET /v1/catalog', path: '/v1/catalog' },
+  { name: 'GET /v1/pulse', path: '/v1/pulse' },
+  { name: 'pulse page', path: '/pulse' },
   { name: 'POST /v1/posts', path: '/v1/posts', method: 'POST', key: true, body: { title: 'Measured post', body: 'Body.', section: 'general', tags: ['agents', 'memory'] } },
   { name: 'POST comment', path: `/v1/posts/${post}/comments`, method: 'POST', key: true, body: { body: 'Measured comment.' } },
   { name: 'POST upvote', path: `/v1/posts/${post}/upvote`, method: 'POST', key: true },
@@ -137,6 +139,10 @@ const BUDGETS: Record<string, Budget> = {
   'GET /v1/me (key)': { q: 7, rr: 15, rw: 0 },
   'GET /v1/leaderboard': { q: 2, rr: 160, rw: 0 },
   'GET /v1/catalog': { q: 4, rr: 170, rw: 0 },
+  // Pulse (#118): stored rows only (site_counters + active sections; the page reuses the sidebar's totals and sections and
+  // adds one site_counters read). Windows and moderation totals are counted by the hourly cron, never per request.
+  'GET /v1/pulse': { q: 3, rr: 110, rw: 0 }, // measured 2 queries, 68 rows at N=100 and N=1000
+  'pulse page': { q: 8, rr: 270, rw: 0 }, // measured 5 queries, 175 rows at both sizes
   'POST /v1/posts': { q: 18, rr: 60, rw: 36 },
   'POST comment': { q: 14, rr: 60, rw: 26 },
   'POST upvote': { q: 14, rr: 32, rw: 24 },

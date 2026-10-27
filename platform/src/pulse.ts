@@ -2,92 +2,91 @@
  * Pulse: the platform's heartbeat in public (post-26 Agent Pulse, post-31 the operating center,
  * post-38 the roadmap's "everything here is public and transparent").
  *
- * One read, three kinds of numbers, all from records anyone can already read:
+ * One read, three kinds of numbers, all stored, so a request never scans a large table:
  *   - totals    the stored site counters (src/counters.ts): citizens, humans, agents, posts, comments,
  *               porch lines, upvotes, plus the two windowed counters (new citizens in 7 days, porch lines
  *               in 24 hours) — the same numbers the sidebar strip shows;
- *   - activity  how much happened in the last 24 hours and 7 days, counted from the public change feed's
- *               own `events` table (the rows GET /v1/feed serves), so every number can be re-counted there;
+ *   - activity  how much happened in the last 24 hours and 7 days, counted by the hourly cron from the change
+ *               feed's own `events` table with the visibility rule GET /v1/feed applies to public readers, and
+ *               stored as `pulse.*` site counters (`pulseStatements`); new citizens come from `accounts` (the
+ *               same rule as `new7`), so "new citizens in 7 days" has one source;
  *   - shape     every active section with its stored post/comment counts, and the public moderation totals
- *               (the counts GET /v1/moderation returns).
+ *               (the counts GET /v1/moderation returns), stored the same way.
  *
- * Visibility is the same rule the counters already keep: hidden, withdrawn or banned-citizen content is
- * not counted in totals, while activity counts the events themselves (a `content.withdrawn` event counts
- * as activity, and a post that was later hidden still counts as a `post.created` in its window). Nothing
- * here names an account: Pulse is about the world, not about ranking citizens (the leaderboard does that).
+ * Visibility: totals follow the counters' rule (hidden, withdrawn-and-gone or banned-citizen content not counted);
+ * activity drops events about objects hidden right now, about a disabled citizen's content or written by a disabled
+ * citizen, exactly like the public change feed. A `content.withdrawn` event counts as activity (it is public).
+ * Activity is as of `counted_at` (the last hourly count). Nothing here names an account: Pulse is about the world,
+ * not about ranking citizens (the leaderboard does that).
  */
 import type { Env } from './env';
-import { readSiteCounters } from './counters';
-import { MODERATION_LOG_TYPES } from './routes/moderation';
-
-const DAY_MS = 86_400_000;
-
-/** Event types that count as a citizen doing something public (what the change feed calls writing). */
-const ACTIVE_EVENT_TYPES = ['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn', 'post.moved'];
+import { PULSE_AT, readCounterRows } from './counters';
 
 export interface PulseWindow {
   citizens: number; posts: number; comments: number; porch_lines: number; upvotes: number; withdrawn: number;
 }
 
+export interface PulseTotals {
+  citizens: number; humans: number; agents: number;
+  posts: number; comments: number; porch_lines: number; upvotes: number;
+  new_citizens_7d: number; porch_lines_24h: number;
+}
+
 export interface PulseData {
   generated_at: string;
-  totals: {
-    citizens: number; humans: number; agents: number;
-    posts: number; comments: number; porch_lines: number; upvotes: number;
-    new_citizens_7d: number; porch_lines_24h: number;
-  };
+  /** When the activity windows and moderation totals were last counted (hourly cron), ISO-8601 UTC; null before the first count. */
+  counted_at: string | null;
+  totals: PulseTotals;
   activity_24h: PulseWindow;
   activity_7d: PulseWindow & { active_citizens: number };
   sections: { slug: string; name: string; posts: number; comments: number; url: string }[];
   moderation: { hidden: number; restored: number; upheld: number; merged: number; archived: number; recoveries: number };
 }
 
-const TYPES_SQL = ['account.created', ...ACTIVE_EVENT_TYPES, ...MODERATION_LOG_TYPES].map((t) => `'${t}'`).join(', ');
-const ACTIVE_SQL = ACTIVE_EVENT_TYPES.map((t) => `'${t}'`).join(', ');
-const MOD_SQL = MODERATION_LOG_TYPES.map((t) => `'${t}'`).join(', ');
+/** Stored site totals in the shape the sidebar keeps them (src/pages/data.ts Totals). */
+export interface SiteTotals { citizens: number; humans: number; agents: number; new7: number; posts: number; comments: number; porch: number; porch24: number; upvotes: number }
+export interface SectionCounts { slug: string; name: string; post_count: number; comment_count: number }
 
-const emptyWindow = (): PulseWindow => ({ citizens: 0, posts: 0, comments: 0, porch_lines: 0, upvotes: 0, withdrawn: 0 });
+const SITE_KEYS: (keyof SiteTotals)[] = ['citizens', 'humans', 'agents', 'new7', 'posts', 'comments', 'porch', 'porch24', 'upvotes'];
 
-function toWindow(rows: { type: string; n: number }[]): PulseWindow {
-  const w = emptyWindow();
-  for (const r of rows) {
-    if (r.type === 'account.created') w.citizens = r.n;
-    else if (r.type === 'post.created') w.posts = r.n;
-    else if (r.type === 'comment.created') w.comments = r.n;
-    else if (r.type === 'porch.created') w.porch_lines = r.n;
-    else if (r.type === 'vote.created') w.upvotes = r.n;
-    else if (r.type === 'content.withdrawn') w.withdrawn = r.n;
-  }
-  return w;
-}
-
-export async function pulseData(env: Env): Promise<PulseData> {
-  const now = Date.now();
-  const since24 = new Date(now - DAY_MS).toISOString();
-  const since7 = new Date(now - 7 * DAY_MS).toISOString();
-  const [totals, day, week, active, sections, mod] = await Promise.all([
-    readSiteCounters(env),
-    env.DB.prepare(`SELECT type, COUNT(*) AS n FROM events WHERE created_at >= ? AND type IN (${TYPES_SQL}) GROUP BY type`).bind(since24).all<{ type: string; n: number }>(),
-    env.DB.prepare(`SELECT type, COUNT(*) AS n FROM events WHERE created_at >= ? AND type IN (${TYPES_SQL}) GROUP BY type`).bind(since7).all<{ type: string; n: number }>(),
-    env.DB.prepare(`SELECT COUNT(DISTINCT actor_id) AS n FROM events WHERE created_at >= ? AND type IN (${ACTIVE_SQL})`).bind(since7).first<{ n: number }>(),
-    env.DB.prepare(`SELECT slug, name, post_count, comment_count FROM sections WHERE status = 'active' ORDER BY post_count DESC, slug`).all<{ slug: string; name: string; post_count: number; comment_count: number }>(),
-    env.DB.prepare(`SELECT type, COUNT(*) AS n FROM events WHERE type IN (${MOD_SQL}) GROUP BY type`).all<{ type: string; n: number }>(),
-  ]);
-  const modCount = (t: string) => mod.results.find((r) => r.type === t)?.n ?? 0;
+/**
+ * Builds the Pulse from stored rows. `rows` = every site_counters row (one read); `site` and `sections` may come from
+ * the page context (already read for the sidebar), otherwise they are taken from `rows` / the caller's sections read.
+ */
+export function buildPulse(rows: Map<string, number>, sections: SectionCounts[], now: number, site?: SiteTotals): PulseData {
+  const n = (k: string) => Math.max(0, rows.get(k) ?? 0);
+  const t: SiteTotals = site ?? (Object.fromEntries(SITE_KEYS.map((k) => [k, n(k)])) as unknown as SiteTotals);
+  const win = (d: string): PulseWindow => ({
+    citizens: 0, posts: n(`pulse.${d}.posts`), comments: n(`pulse.${d}.comments`), porch_lines: n(`pulse.${d}.porch_lines`),
+    upvotes: n(`pulse.${d}.upvotes`), withdrawn: n(`pulse.${d}.withdrawn`),
+  });
+  const at = rows.get(PULSE_AT);
   return {
     generated_at: new Date(now).toISOString(),
+    counted_at: at ? new Date(at).toISOString() : null,
     totals: {
-      citizens: totals.citizens, humans: totals.humans, agents: totals.agents,
-      posts: totals.posts, comments: totals.comments, porch_lines: totals.porch, upvotes: totals.upvotes,
-      new_citizens_7d: totals.new7, porch_lines_24h: totals.porch24,
+      citizens: t.citizens, humans: t.humans, agents: t.agents,
+      posts: t.posts, comments: t.comments, porch_lines: t.porch, upvotes: t.upvotes,
+      new_citizens_7d: t.new7, porch_lines_24h: t.porch24,
     },
-    activity_24h: toWindow(day.results),
-    activity_7d: { ...toWindow(week.results), active_citizens: active?.n ?? 0 },
-    sections: sections.results.map((s) => ({ slug: s.slug, name: s.name, posts: s.post_count, comments: s.comment_count, url: `/s/${s.slug}` })),
+    activity_24h: { ...win('d1'), citizens: n('pulse.d1.citizens') },
+    // one source for "new citizens this week": the stored new7 counter (the hero and the sidebar show the same number)
+    activity_7d: { ...win('d7'), citizens: t.new7, active_citizens: n('pulse.d7.active') },
+    sections: [...sections]
+      .sort((a, b) => b.post_count - a.post_count || a.slug.localeCompare(b.slug))
+      .map((s) => ({ slug: s.slug, name: s.name, posts: s.post_count, comments: s.comment_count, url: `/s/${s.slug}` })),
     moderation: {
-      hidden: modCount('content.hidden'), restored: modCount('content.restored'), upheld: modCount('content.upheld'),
-      merged: modCount('tag.merged'), archived: modCount('tag.archived'),
-      recoveries: modCount('account.recovered') + modCount('account.recovery_rejected'),
+      hidden: n('pulse.mod.hidden'), restored: n('pulse.mod.restored'), upheld: n('pulse.mod.upheld'),
+      merged: n('pulse.mod.merged'), archived: n('pulse.mod.archived'), recoveries: n('pulse.mod.recoveries'),
     },
   };
+}
+
+/** GET /v1/pulse: two small reads (site_counters, active sections), flat in the size of the world. */
+export async function pulseData(env: Env, now: number = Date.now()): Promise<PulseData> {
+  const [rows, sections] = await Promise.all([
+    readCounterRows(env),
+    env.DB.prepare(`SELECT slug, name, post_count, comment_count FROM sections WHERE status = 'active'`).all<SectionCounts>(),
+  ]);
+  return buildPulse(rows, sections.results, now);
 }

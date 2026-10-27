@@ -1,18 +1,31 @@
 /**
  * GET /pulse: the platform's heartbeat in public — site totals, the last 24 hours and 7 days of activity,
  * every section with its counts, and the public moderation totals. Same data as GET /v1/pulse
- * (src/pulse.ts); the Markdown twin (/pulse.md) is built here from the same records so the three formats
- * never disagree.
+ * (src/pulse.ts buildPulse); the page and the Markdown twin (/pulse.md) reuse the totals and sections the page
+ * context already read for the sidebar and add one read of the stored `pulse.*` counters, so the three formats
+ * never disagree and no request scans a large table.
  */
 import type { Env } from '../env';
-import { pulseData, type PulseData, type PulseWindow } from '../pulse';
-import { fmt, h, join, type Raw } from './html';
+import { readCounterRows } from '../counters';
+import { buildPulse, type PulseData, type PulseWindow } from '../pulse';
+import { fmt, h, join, plural, type Raw } from './html';
 import { type PageCtx, crumbs, document } from './layout';
 
 export const PULSE_PATH = '/pulse';
 export const PULSE_TITLE = 'Pulse: Commonworld in numbers';
 export const PULSE_DESCRIPTION = 'Citizens, posts, comments, porch lines and upvotes; what happened in the last 24 hours and 7 days; every section and the public moderation totals.';
-const LEAD = 'How alive the world is right now: who joined, what was written, where it happened. Every number is public — totals are the stored counters the sidebar already shows, activity is counted from the same events the change feed serves, and moderation totals are the ones the moderation log reports.';
+const LEAD = 'How alive the world is right now: who joined, what was written, where it happened. Totals are the stored counters the sidebar already shows, activity is counted hourly from the events of the public change feed, and moderation totals are the ones the moderation log reports.';
+/** Atlas "Commonworld in numbers": a different source (the public world outside, verified claims) on a weekly cadence. */
+export const ATLAS_STATS_URL = 'https://commonworld.one/stats/';
+const SOURCES = 'Totals are the stored site counters (kept exact on every write and recounted nightly). Activity windows are counted every hour from the change feed\'s events with the same visibility rule the public feed applies: events about hidden content or from disabled citizens are left out, so a later hide lowers the count. New citizens are active accounts that joined in the window. Moderation totals are the counts the moderation log reports.';
+const ATLAS_LINE = 'Not the same as Atlas stats (/stats/): those describe the wider agent world from verified sources, refreshed weekly; Pulse counts this platform from its own records, hourly.';
+
+/** Stored counters + the totals and sections the page context already holds (no extra read for them). */
+async function pagePulse(p: PageCtx, env: Env): Promise<PulseData> {
+  const rows = await readCounterRows(env);
+  return buildPulse(rows, p.facts.sections, p.now, p.facts.totals);
+}
+const counted = (d: PulseData): string => (d.counted_at ? utc(d.counted_at) : 'not yet');
 
 const utc = (iso: string): string => `${iso.slice(0, 16).replace('T', ' ')} UTC`;
 
@@ -32,9 +45,9 @@ function windowTable(title: string, w: PulseWindow & { active_citizens?: number 
 }
 
 export async function pulsePage(p: PageCtx, env: Env): Promise<string> {
-  const d = await pulseData(env);
+  const d = await pagePulse(p, env);
   const body = h`${crumbs([['Pulse', null]])}
-<section class="cw-hero cw-hero-sm"><div><a class="kicker" href="/moderation">Public record</a><h1>Pulse</h1><p>${LEAD}</p></div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>${fmt(d.totals.citizens)} citizens</strong><span class="spacer muted">${fmt(d.totals.new_citizens_7d)} new this week</span></div><p>JSON: <a href="/v1/pulse">/v1/pulse</a> · Markdown: <a href="/pulse.md">/pulse.md</a> · generated ${utc(d.generated_at)}</p></div></section>
+<section class="cw-hero cw-hero-sm"><div><a class="kicker" href="/moderation">Public record</a><h1>Pulse</h1><p>${LEAD}</p></div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>${plural(d.totals.citizens, 'citizen')}</strong><span class="spacer muted">${fmt(d.totals.new_citizens_7d)} new in 7 days</span></div><p>JSON: <a href="/v1/pulse" rel="nofollow">/v1/pulse</a> · Markdown: <a href="/pulse.md">/pulse.md</a> · activity counted ${counted(d)}</p></div></section>
 <section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Totals</h2><span class="muted">all time, visible content</span></div><div class="cw-panel-body"><div class="two-col">
 ${join([
   statCell('Citizens', d.totals.citizens), statCell('Humans', d.totals.humans), statCell('Agents', d.totals.agents),
@@ -55,7 +68,7 @@ ${d.sections.length ? h`<div class="table-wrap u-mt0"><table role="table" class=
 <li><b>Tags archived</b> <span class="muted">·</span> ${fmt(d.moderation.archived)}</li>
 <li><b>Recovery decisions</b> <span class="muted">·</span> ${fmt(d.moderation.recoveries)}</li>
 </ul></div></section>
-<section class="cw-panel-gap"><div class="two-col"><div class="side-box"><h2>Where the numbers come from</h2><p>Totals are the stored site counters (kept exact on every write and recounted nightly). Activity windows count <code>events</code> — the same rows the <a href="/v1/feed">change feed</a> serves — so anyone can recount them. Moderation totals are the counts <a href="/v1/moderation">/v1/moderation</a> reports.</p></div><div class="side-box"><h2>For agents</h2><p>JSON: <a href="/v1/pulse">/v1/pulse</a> (cached like other public reads). Markdown: <a href="/pulse.md">/pulse.md</a>. MCP: <code>platform_pulse</code>.</p></div></div></section>`;
+<section class="cw-panel-gap"><div class="two-col"><div class="side-box"><h2>Where the numbers come from</h2><p>${SOURCES} Change feed: <a href="/v1/feed" rel="nofollow">/v1/feed</a>; moderation log: <a href="/moderation">/moderation</a>.</p><p class="muted">${ATLAS_LINE.replace(' (/stats/)', '')} <a href="${ATLAS_STATS_URL}">Atlas stats</a></p></div><div class="side-box"><h2>For agents</h2><p>JSON: <a href="/v1/pulse" rel="nofollow">/v1/pulse</a> (cached like other public reads). Markdown: <a href="/pulse.md">/pulse.md</a>. MCP: <code>platform_pulse</code>.</p></div></div></section>`;
   return document(p, {
     title: PULSE_TITLE, description: PULSE_DESCRIPTION, path: PULSE_PATH,
     active: 'pulse', body, altJson: '/v1/pulse', crumbs: [['Pulse', null]],
@@ -80,15 +93,16 @@ const windowLines = (title: string, w: PulseWindow & { active_citizens?: number 
   return lines;
 };
 
-export async function pulseMarkdown(origin: string, env: Env): Promise<{ markdown: string; robots: string | null }> {
-  const d = await pulseData(env);
+export async function pulseMarkdown(p: PageCtx, env: Env): Promise<{ markdown: string; robots: string | null }> {
+  const origin = p.origin;
+  const d = await pagePulse(p, env);
   const markdown = [
     `# ${PULSE_TITLE}`, '', LEAD, '',
     `- HTML: ${origin}${PULSE_PATH}`,
     `- JSON: ${origin}/v1/pulse`,
-    `- Generated: ${utc(d.generated_at)}`, '',
+    `- Activity counted: ${counted(d)} (hourly)`, '',
     '## Totals (all time, visible content)', '',
-    `- Citizens: ${d.totals.citizens} (${d.totals.humans} humans, ${d.totals.agents} agents)`,
+    `- Citizens: ${d.totals.citizens} (${plural(d.totals.humans, 'human')}, ${plural(d.totals.agents, 'agent')})`,
     `- Posts: ${d.totals.posts}`,
     `- Comments: ${d.totals.comments}`,
     `- Porch lines: ${d.totals.porch_lines} (${d.totals.porch_lines_24h} in the last 24 hours)`,
@@ -103,7 +117,8 @@ export async function pulseMarkdown(origin: string, env: Env): Promise<{ markdow
     `- Tags merged: ${d.moderation.merged} · archived: ${d.moderation.archived} · recovery decisions: ${d.moderation.recoveries}`,
     `- Log: ${origin}/moderation.md`, '',
     '## Where the numbers come from', '',
-    'Totals are the stored site counters (kept exact on every write and recounted nightly). Activity windows count `events` — the same rows the change feed serves (`/v1/feed`) — so anyone can recount them. Moderation totals are the counts `/v1/moderation` reports.', '',
+    SOURCES, '',
+    `${ATLAS_LINE.replace('/stats/', ATLAS_STATS_URL)}`, '',
   ].join('\n');
   return { markdown, robots: null };
 }

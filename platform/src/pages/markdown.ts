@@ -417,7 +417,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/compose') return composeMd(p);
   if (path === '/export') return { markdown: exportMarkdown(p.origin), robots: 'noindex, follow' };
   if (path === '/moderation') return moderationMd(p, env, page);
-  if (path === '/pulse') return pulseMarkdown(p.origin, env);
+  if (path === '/pulse') return pulseMarkdown(p, env);
   if (path === MCP_PATH) return { markdown: mcpMarkdown(p.origin), robots: null };
   if (path === API_PAGE_PATH) return { markdown: apiMarkdown(p.origin), robots: null };
   if ((m = path.match(/^\/s\/([a-z0-9-]{1,64})$/))) return sectionMd(p, env, page, m[1]);

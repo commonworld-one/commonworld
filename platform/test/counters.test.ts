@@ -16,7 +16,8 @@ beforeEach(resetDb);
 async function snapshot() {
   const db = env.DB;
   const [site, sections, tags, stats] = await db.batch([
-    db.prepare("SELECT name, value FROM site_counters WHERE name NOT IN ('reconciled_at', 'k7_expired_at') ORDER BY name"),
+    // pulse.* rows are an hourly snapshot (src/counters.ts pulseStatements), not kept exact on write; test/pulse.test.ts covers them
+    db.prepare("SELECT name, value FROM site_counters WHERE name NOT IN ('reconciled_at', 'k7_expired_at') AND name NOT LIKE 'pulse.%' ORDER BY name"),
     db.prepare('SELECT slug, post_count, comment_count FROM sections ORDER BY slug'),
     db.prepare('SELECT slug, post_count FROM tags ORDER BY slug'),
     db.prepare(`SELECT account_id, account_number, posts, comments, porch, upvotes_received, upvotes_counted, karma, karma_7d
