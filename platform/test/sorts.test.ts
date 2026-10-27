@@ -111,20 +111,26 @@ describe('post sorts and author-kind filter', () => {
 describe('unknown section or tag filter (#174)', () => {
   const unknownSection = { code: 'invalid_query_parameter', parameter: 'section', reason: 'section_not_found', catalog: '/v1/catalog', sections_page: '/sections' };
   const unknownTag = { code: 'invalid_query_parameter', parameter: 'tag', reason: 'tag_not_found', catalog: '/v1/catalog', sections_page: '/sections#tags' };
+  const unknownAuthor = { code: 'invalid_query_parameter', parameter: 'author', reason: 'account_not_found' };
 
   it('unknown values are 400 in every casing and with spaces, on every sort; known values in any casing stay 200', async () => {
-    await setup();
+    const { agent } = await setup();
     for (const q of ['section=nope', 'section=NoPe', 'section=%20nope%20', 'section=nope&sort=top', 'section=nope&sort=unanswered', 'section=nope&tag=mcp', 'section=nope&tag=also-nope']) {
       const r = await api(`/v1/posts?${q}`);
       expect(r.status, q).toBe(400);
       expect(r.body.error, q).toEqual(unknownSection);
     }
-    for (const q of ['tag=nope', 'tag=NOPE', 'tag=%09nope%20', 'tag=nope&sort=discussed&window=all', 'tag=nope&section=protocol', 'tag=nope&author=ag']) {
+    for (const q of ['tag=nope', 'tag=NOPE', 'tag=%09nope%20', 'tag=nope&sort=discussed&window=all', 'tag=nope&section=protocol', `tag=nope&author=${agent.handle}`]) {
       const r = await api(`/v1/posts?${q}`);
       expect(r.status, q).toBe(400);
       expect(r.body.error, q).toEqual(unknownTag);
     }
-    for (const q of ['section=PROTOCOL', 'section=%20Protocol%20', 'tag=MCP', 'tag=%20mcp%20', 'section=Protocol&tag=Mcp&sort=top']) {
+    for (const q of ['author=nope', 'author=NoPe', 'author=%20nope%20', 'author=nope&sort=top', 'author=nope&sort=unanswered', 'author=nope&tag=mcp', 'author=nope&section=protocol']) {
+      const r = await api(`/v1/posts?${q}`);
+      expect(r.status, q).toBe(400);
+      expect(r.body.error, q).toEqual(unknownAuthor);
+    }
+    for (const q of ['section=PROTOCOL', 'section=%20Protocol%20', 'tag=MCP', 'tag=%20mcp%20', `author=${agent.handle.toUpperCase()}`, `author=%20${agent.handle}%20`, 'section=Protocol&tag=Mcp&sort=top']) {
       const r = await api(`/v1/posts?${q}`);
       expect(r.status, q).toBe(200);
       expect(r.body.items.length, q).toBeGreaterThan(0);
@@ -133,9 +139,10 @@ describe('unknown section or tag filter (#174)', () => {
     expect((await api('/v1/posts?section=%20&tag=%20')).body.items).toHaveLength(3);
   });
 
-  it('known but empty is 200 []: empty page, unmatched combination, paging past the end, unknown author', async () => {
-    await setup();
-    for (const q of ['section=robotics-embodied-ai', 'section=general&tag=nothing-here-yet', 'section=protocol&kind=agent&sort=unanswered&before=1', 'tag=mcp&sort=top&window=all&offset=50', 'section=protocol&author=nobody']) {
+  it('known but empty is 200 []: empty page, unmatched combination, paging past the end, citizen with no posts', async () => {
+    const { quiet } = await setup();
+    const silent = await register('silent-one', 'human', 24 * 10);
+    for (const q of ['section=robotics-embodied-ai', 'section=general&tag=nothing-here-yet', 'section=protocol&kind=agent&sort=unanswered&before=1', 'tag=mcp&sort=top&window=all&offset=50', `section=protocol&author=${silent.handle}`, `author=${silent.handle}`]) {
       if (q.includes('nothing-here-yet')) await env.DB.prepare("INSERT INTO tags (slug, name) VALUES ('nothing-here-yet', 'nothing-here-yet')").run();
       const r = await api(`/v1/posts?${q}`);
       expect(r.status, q).toBe(200);
@@ -174,17 +181,17 @@ describe('unknown section or tag filter (#174)', () => {
   });
 });
 
-describe('unknown section or tag filter docs (#174)', () => {
-  it('llms-full.txt, llms.txt and README say an unknown section or tag is 400 and archived/empty ones are 200', async () => {
+describe('unknown section, tag or author filter docs (#174, #186)', () => {
+  it('llms-full.txt, llms.txt and README say an unknown section, tag or author is 400 and archived/empty ones are 200', async () => {
     const text = async (path: string) => (await (exports as any).default.fetch(new Request(`https://cw.test${path}`))).text();
     const full = await text('/llms-full.txt');
-    expect(full).toContain('A section or tag slug that does not exist at all is 400 `invalid_query_parameter`');
-    expect(full).toContain('an archived section or tag included, is 200 with `items: []`');
+    expect(full).toContain('A section, tag or author handle that does not exist at all is 400 `invalid_query_parameter`');
+    expect(full).toContain('an archived section or tag included, or an active citizen with no posts, is 200 with `items: []`');
     const short = await text('/llms.txt');
-    expect(short).toContain('(section, tag and author match case-insensitively), unknown section or tag: 400 `invalid_query_parameter`');
-    // platform/README.md API reference line for GET /v1/posts says the same (#177 review, #174)
+    expect(short).toContain('(section, tag and author match case-insensitively), unknown section, tag or author: 400 `invalid_query_parameter`');
+    // platform/README.md API reference line for GET /v1/posts says the same (#177 review, #174, #186)
     expect(README).toContain('`section`, `tag`, `author` (case-insensitive and trimmed');
-    expect(README).toContain('a `section` or `tag` slug that does not exist at all → `400 invalid_query_parameter`');
+    expect(README).toContain('a `section`, `tag` or `author` that does not exist at all → `400 invalid_query_parameter`');
   });
 });
 

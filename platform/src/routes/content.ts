@@ -175,7 +175,7 @@ export async function postsData(c: ReadCtx) {
     const { results } = await c.env.DB.prepare(`SELECT * FROM (${POST_SELECT}) p WHERE ${where.replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY ${order} LIMIT ? OFFSET ?`)
       .bind(...binds, limit + 1, offset).all();
     const items = results.slice(0, limit).map(postView);
-    if (!items.length) await assertKnownFilters(c.env, section, tag);
+    if (!items.length) await assertKnownFilters(c.env, section, tag, authorHandle);
     const next = offset + limit;
     return { sort, kind, window, items, next_offset: results.length > limit && next <= RANKED_OFFSET_MAX ? next : null } as PostsPage;
   }
@@ -185,22 +185,23 @@ export async function postsData(c: ReadCtx) {
   const { results } = await c.env.DB.prepare(`SELECT * FROM (${POST_SELECT}) p WHERE ${filters.join(' AND ').replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY p.number DESC LIMIT ?`)
     .bind(...binds, limit + 1).all();
   const items = results.slice(0, limit).map(postView);
-  if (!items.length) await assertKnownFilters(c.env, section, tag);
+  if (!items.length) await assertKnownFilters(c.env, section, tag, authorHandle);
   return { sort, kind, window: null, items, next_before: results.length > limit ? items[items.length - 1].number : null } as PostsPage;
 }
 
 /**
- * #174: an unknown ?section= or ?tag= is 400 invalid_query_parameter, not an empty 200, so a typo does not look like "no posts".
- * Known = any row in sections / tags, whatever its status: an archived section (posts can still sit in it and the post page asks
- * for its related posts), an archived tag and a merged tag all stay 200. Checked only when the page came back empty, so the
+ * #174, #186: an unknown ?section=, ?tag= or ?author= is 400 invalid_query_parameter, not an empty 200, so a typo does not look like "no posts".
+ * Known = any row in sections / tags / accounts, whatever its status: a known citizen with no posts stays 200 items: [],
+ * as do an archived section and an archived or merged tag. Checked only when the page came back empty, so the
  * hit path costs no extra query; an unknown value can never match a post, so an empty page is the only place it can show.
  */
-async function assertKnownFilters(env: Env, section: string | null, tag: string | null) {
-  if (!section && !tag) return;
-  const row = await env.DB.prepare('SELECT (SELECT 1 FROM sections WHERE slug = ?1) AS s, (SELECT 1 FROM tags WHERE slug = ?2) AS t')
-    .bind(section ?? '', tag ?? '').first<{ s: number | null; t: number | null }>();
+async function assertKnownFilters(env: Env, section: string | null, tag: string | null, author: string | null = null) {
+  if (!section && !tag && !author) return;
+  const row = await env.DB.prepare('SELECT (SELECT 1 FROM sections WHERE slug = ?1) AS s, (SELECT 1 FROM tags WHERE slug = ?2) AS t, (SELECT 1 FROM accounts WHERE handle = ?3) AS a')
+    .bind(section ?? '', tag ?? '', author ?? '').first<{ s: number | null; t: number | null; a: number | null }>();
   if (section && !row?.s) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'section', reason: 'section_not_found', catalog: '/v1/catalog', sections_page: '/sections' });
   if (tag && !row?.t) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'tag', reason: 'tag_not_found', catalog: '/v1/catalog', sections_page: '/sections#tags' });
+  if (author && !row?.a) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'author', reason: 'account_not_found' });
 }
 
 export interface PostsPage {

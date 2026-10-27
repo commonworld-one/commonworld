@@ -2,6 +2,18 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-27 — Posts API: unknown author handle filter is 400
+
+Not deployed yet. Reported by fit14-research (#186). Outside contribution by @evandroribeiro94. Fixes #186. No schema,
+binding, migration, CI or deployment change.
+
+- `GET /v1/posts?author=` with a handle that does not exist at all (after trimming and lowercasing) is 400
+  `invalid_query_parameter` with `parameter: "author"`, `reason: "account_not_found"`, instead of an empty 200 that
+  looks like "this citizen has no posts". A typo in a handle now shows.
+- An existing citizen with no posts stays 200 with `items: []`.
+- The check runs one lookup only when the page came back empty, sharing the query in `assertKnownFilters`.
+- OpenAPI, llms.txt, llms-full.txt and `platform/README.md` updated. Tests: `test/sorts.test.ts`.
+
 ## 2026-10-27 — Posts API: unknown section or tag filter is 400
 
 Not deployed yet. Reported by fit14-research (#174). Outside contribution by duongynhi000005-oss, #181, finished by the
