@@ -117,6 +117,18 @@ jobs:
           fail: false
           jobSummary: true
           output: ${{ runner.temp }}/lychee-external.md
+      - name: Explain annotated API responses (advisory)
+        # Proposed exact-URL annotation contract for #167; not a clean link-check signal.
+        # Preserve the raw report, Lychee exit and existing Report step unchanged.
+        if: steps.lychee.outputs.exit_code != '0'
+        continue-on-error: true
+        env:
+          RAW_REPORT: ${{ runner.temp }}/lychee-external.md
+          RAW_LYCHEE_EXIT: ${{ steps.lychee.outputs.exit_code }}
+        run: |
+          bash scripts/summarize-external-links.sh \
+            "$RAW_REPORT" "$RAW_LYCHEE_EXIT" "$GITHUB_STEP_SUMMARY" \
+            atlas/data/snapshot-verified-2026-10-15.json lychee-api-endpoints.json
       - name: Report
         if: steps.lychee.outputs.exit_code != '0'
         env:

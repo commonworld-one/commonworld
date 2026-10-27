@@ -2,6 +2,15 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## Unreleased — advisory API-endpoint link diagnostics (#167)
+
+Proposed exact-URL annotations for AsterPay and Arkham add an advisory classification
+summary to the external-link check. The original Lychee exit, raw report and issue
+reporting remain unchanged. Unknown report formats or unsupported annotations stay
+unclassified; homepages and unannotated failures are not exempted. This is a partial
+checker-diagnostics change, not completion of #167 or live/paid-service validation.
+See [the diagnostic contract](../docs/external-link-diagnostics.md).
+
 ## 2026-10-27 — SaSame GEC re-checked (update request in #67)
 
 Merged to main 2026-10-27 as `ad5be09` (#168); not deployed to staging or production yet.
