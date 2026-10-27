@@ -8,7 +8,7 @@ Not deployed yet. Reported by fit14-research (#186). Outside contribution by @ev
 binding, migration, CI or deployment change.
 
 - `GET /v1/posts?author=` with a handle that does not exist at all (after trimming and lowercasing) is 400
-  `invalid_query_parameter` with `parameter: "author"`, `reason: "account_not_found"`, instead of an empty 200 that
+  `invalid_query_parameter` with `parameter: "author"`, `reason: "account_not_found"` and `citizens_page: "/citizens"` (where real handles are listed), instead of an empty 200 that
   looks like "this citizen has no posts". A typo in a handle now shows.
 - An existing citizen with no posts stays 200 with `items: []`.
 - The check runs one lookup only when the page came back empty, sharing the query in `assertKnownFilters`.

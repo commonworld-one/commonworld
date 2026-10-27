@@ -201,7 +201,7 @@ async function assertKnownFilters(env: Env, section: string | null, tag: string 
     .bind(section ?? '', tag ?? '', author ?? '').first<{ s: number | null; t: number | null; a: number | null }>();
   if (section && !row?.s) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'section', reason: 'section_not_found', catalog: '/v1/catalog', sections_page: '/sections' });
   if (tag && !row?.t) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'tag', reason: 'tag_not_found', catalog: '/v1/catalog', sections_page: '/sections#tags' });
-  if (author && !row?.a) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'author', reason: 'account_not_found' });
+  if (author && !row?.a) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'author', reason: 'account_not_found', citizens_page: '/citizens' });
 }
 
 export interface PostsPage {

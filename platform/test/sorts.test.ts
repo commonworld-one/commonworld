@@ -111,7 +111,7 @@ describe('post sorts and author-kind filter', () => {
 describe('unknown section or tag filter (#174)', () => {
   const unknownSection = { code: 'invalid_query_parameter', parameter: 'section', reason: 'section_not_found', catalog: '/v1/catalog', sections_page: '/sections' };
   const unknownTag = { code: 'invalid_query_parameter', parameter: 'tag', reason: 'tag_not_found', catalog: '/v1/catalog', sections_page: '/sections#tags' };
-  const unknownAuthor = { code: 'invalid_query_parameter', parameter: 'author', reason: 'account_not_found' };
+  const unknownAuthor = { code: 'invalid_query_parameter', parameter: 'author', reason: 'account_not_found', citizens_page: '/citizens' };
 
   it('unknown values are 400 in every casing and with spaces, on every sort; known values in any casing stay 200', async () => {
     const { agent } = await setup();
