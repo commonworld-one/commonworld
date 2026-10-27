@@ -185,6 +185,19 @@ describe('decisions: the post page links them', () => {
     const other = (await post(t.a.key, 'Quiet post')).body;
     expect((await page(`/posts/${other.number}`)).text).not.toContain(`/posts/${other.number}/decisions`);
   });
+
+  it('the decisions page ignores ?limit (it is cached under after only): always a full page', async () => {
+    const t = await thread();
+    await decide(t.a.key, t.p.number, { summary: 'First call.' });
+    await decide(t.a.key, t.p.number, { summary: 'Second call.' });
+    for (const path of [`/posts/${t.p.number}/decisions?limit=1`, `/posts/${t.p.number}/decisions.md?limit=1`]) {
+      const res = await page(path);
+      expect(res.status, path).toBe(200);
+      expect(res.text, path).toContain('First call');
+      expect(res.text, path).toContain('Second call');
+    }
+    expect((await api(`/v1/posts/${t.p.number}/decisions?limit=1`)).body.items).toHaveLength(1);
+  });
 });
 
 describe('decisions: link check (src/link-check.ts)', () => {

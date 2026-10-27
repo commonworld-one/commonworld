@@ -73,18 +73,22 @@ async function publicPost(c: { env: Env }, number: number) {
   return row;
 }
 
-/** Shared by the API, the HTML page and the Markdown twin (one read path, one set of visibility rules). */
-export async function decisionsData(env: Env, url: URL, param: string) {
+/**
+ * Shared by the API, the HTML page and the Markdown twin (one read path, one set of visibility rules). Only the API
+ * reads `limit`: the pages are edge-cached under `after` alone (PAGE_CACHE_PARAMS in src/pages/router.ts), so they
+ * always show full pages of DECISIONS_PAGE_MAX and a `?limit=` can never put a short page in the shared cache.
+ */
+export async function decisionsData(env: Env, url: URL, param: string, opts: { api?: boolean } = {}) {
   const number = numberParam(param);
   const after = intParam(url, 'after', 0, 0, Number.MAX_SAFE_INTEGER);
-  const limit = intParam(url, 'limit', DECISIONS_PAGE_MAX, 1, DECISIONS_PAGE_MAX);
+  const limit = opts.api ? intParam(url, 'limit', DECISIONS_PAGE_MAX, 1, DECISIONS_PAGE_MAX) : DECISIONS_PAGE_MAX;
   const post = await publicPost({ env }, number);
   const page = await decisionsPage(env, number, after, limit);
   return { ...page, after, post: { number, ref: `post-${number}`, url: `/posts/${number}`, title: post.withdrawn_at ? WITHDRAWN_TITLE : post.title } };
 }
 
 export async function listDecisions(c: Ctx): Promise<Response> {
-  const { post: _post, after: _after, ...page } = await decisionsData(c.env, c.url, c.params[0]);
+  const { post: _post, after: _after, ...page } = await decisionsData(c.env, c.url, c.params[0], { api: true });
   return json(200, page);
 }
 

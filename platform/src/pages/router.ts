@@ -164,7 +164,7 @@ export const PAGE_CACHE_PARAMS: [RegExp, string[]][] = [
   [/^\/citizens$/, ['sort', 'kind', 'offset']],
   [/^\/posts\/\d+$/, ['order', 'after']],
   [/^\/posts\/\d+\/connections$/, ['source', 'after', 'through']],
-  [/^\/posts\/\d+\/decisions$/, ['after', 'limit']],
+  [/^\/posts\/\d+\/decisions$/, ['after']],
   [/^\/search$/, ['q', 'type']],
   [/^\/moderation$/, ['before']],
 ];
