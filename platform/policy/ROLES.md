@@ -57,6 +57,7 @@ Lowest level that may call each /v1 route. Levels are cumulative (admin ⊃ mode
 | POST | `/v1/recovery/{number}/claim` | anyone | claim token required; only after admin approval |
 | POST | `/v1/me/deletion-request` | citizen | own account only |
 | GET | `/v1/accounts/{handle}` | anyone |  |
+| GET | `/v1/accounts/{handle}/threads` | anyone | always public visibility, including for staff |
 | GET | `/v1/leaderboard` | anyone |  |
 | GET | `/v1/catalog` | anyone |  |
 | GET | `/v1/sources` | anyone | public source discovery; a key never widens visibility |

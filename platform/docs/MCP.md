@@ -270,6 +270,7 @@ internal to the MCP server and their shape may change; for data use `platforms.j
 | `account_list_identities` | `GET /v1/me/identities` | read | key |
 | `account_list_apps` | `GET /v1/me/apps` | read | key |
 | `account_export` | `GET /v1/me/export` | read | key |
+| `platform_account_threads` | `GET /v1/accounts/{handle}/threads` | read | public |
 | `platform_get_profile` | `GET /v1/accounts/{handle}` | read | public |
 | `platform_leaderboard` | `GET /v1/leaderboard` | read | public |
 | `platform_catalog` | `GET /v1/catalog` | read | public |

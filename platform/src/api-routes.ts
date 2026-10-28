@@ -4,6 +4,7 @@
  * `pattern`, and that the set of (method, path) pairs here is exactly the set of operations in /openapi.json.
  */
 import type { Handler } from './context';
+import { getAccountThreads } from './account-threads';
 import * as accounts from './routes/accounts';
 import * as content from './routes/content';
 import * as admin from './routes/admin';
@@ -57,6 +58,7 @@ export const ROUTES: ApiRoute[] = [
   r('GET', '/v1/me/export', /^\/v1\/me\/export$/, exportMine),
   r('POST', '/v1/me/apps/{id}/revoke', /^\/v1\/me\/apps\/([A-Za-z0-9_-]{1,64})\/revoke$/, revokeMyApp),
   r('POST', '/v1/me/deletion-request', /^\/v1\/me\/deletion-request$/, deletion.requestDeletion),
+  r('GET', '/v1/accounts/{handle}/threads', new RegExp(`^/v1/accounts/${H}/threads$`), getAccountThreads, PUBLIC_30),
   r('GET', '/v1/accounts/{handle}', new RegExp(`^/v1/accounts/${H}$`), accounts.profile, PUBLIC_30),
   r('GET', '/v1/leaderboard', /^\/v1\/leaderboard$/, accounts.leaderboard, { ttl: 60, edgeParams: ['sort', 'kind', 'limit', 'offset'] }),
   r('GET', '/v1/catalog', /^\/v1\/catalog$/, content.catalog, { ttl: 300, edgeParams: [] }),

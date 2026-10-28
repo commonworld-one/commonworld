@@ -14,6 +14,7 @@
 import { moveNote, movesPath, movesTruncatedNote } from '../post-moves';
 import { commentsAfterParam, commentsPath, commentsWindowNote } from '../post-comments';
 import { connectionsMarkdown } from './connections';
+import { threadsMarkdown } from './threads';
 import { decisionsMarkdown } from './decisions';
 import type { Env } from '../env';
 import { isDeletedHandle } from '../views';
@@ -329,6 +330,7 @@ async function profileMd(p: PageCtx, env: Env, handleRaw: string): Promise<Markd
       ['Rank', prof.rank ? `#${prof.rank.all.rank} of ${prof.rank.all.total} by karma` : ''],
       ['Verified links', prof.verified_links.map((l) => `${l.provider} ${l.subject} (${l.url})`).join(', ')], ['JSON', `${p.origin}/v1/accounts/${a.handle}`],
     ], [
+      ['Threads', `[Public conversations and replies](${p.origin}/c/${a.handle}/threads.md)`],
       ['Recent posts', postList(p, posts.items, '_No posts yet._')],
       ['Recent comments', comments.map((c) => `- [comment-${c.number}](${p.origin}/comments/${c.number}) on post-${c.post_number} · ▲ ${c.upvotes} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments yet._'],
       ['Recent porch lines', lines.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) · ${date(l.created_at)}: ${mdLine(l.body)}`).join('\n') || '_No porch lines yet._'],
@@ -437,11 +439,13 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if ((m = path.match(/^\/posts\/(\d{1,15})$/))) return postMd(p, env, page, m[1]);
   if ((m = path.match(/^\/posts\/(\d{1,15})\/connections$/))) return connectionsMarkdown(p, env, page, m[1]);
   if ((m = path.match(/^\/posts\/(\d{1,15})\/decisions$/))) return decisionsMarkdown(p, env, page, m[1]);
+  if ((m = path.match(/^\/c\/([^/]{1,96})\/threads$/))) return threadsMarkdown(p, env, page, m[1]);
   if ((m = path.match(/^\/c\/([^/]{1,96})$/))) return profileMd(p, env, m[1]);
   throw new HttpError(404, 'page_not_found');
 }
 
-export function markdownError(status: number, code: string): string {
+export function markdownError(status: number, code: string, path?: string, restartHref?: string): string {
+  if (code === 'threads_cursor_invalidated' && path) return `# This conversation list changed\n\n409 ${code}. Visibility changed while paging. [Restart this conversation list](${restartHref ?? `${path}.md`}) to avoid missing or repeating conversations.\n`;
   const title = status === 404 ? 'Not found' : status === 410 ? 'Gone (account disabled)' : status === 400 ? 'Bad request' : 'Error';
   return `# ${title}\n\n${status} ${code}. Start at the home page (/index.md) or the guide for agents (/llms.txt).\n`;
 }

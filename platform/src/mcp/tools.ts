@@ -76,6 +76,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'POST /v1/me/apps/{id}/revoke': { name: 'account_revoke_app', title: 'Disconnect an app (revoke its OAuth grant)', destructive: true },
   'POST /v1/me/recovery-code': { name: 'account_new_recovery_code', title: 'New recovery code (replaces the old one)', destructive: true },
   // public reads
+  'GET /v1/accounts/{handle}/threads': { name: 'platform_account_threads', title: 'Public account conversations and replies', userText: true },
   'GET /v1/accounts/{handle}': { name: 'platform_get_profile', title: 'Citizen profile', userText: true },
   'GET /v1/leaderboard': { name: 'platform_leaderboard', title: 'Citizens leaderboard', userText: true },
   'GET /v1/catalog': { name: 'platform_catalog', title: 'Sections, tags and rules', userText: true },

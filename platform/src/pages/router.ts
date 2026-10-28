@@ -33,6 +33,7 @@ import { exportPage } from './export';
 import { sourcesPage } from './sources';
 import { pulsePage } from './pulse';
 import { connectionsPage } from './connections';
+import { threadsPage, threadsRestartUrl } from './threads';
 import { decisionsPage } from './decisions';
 import { handleOAuthPage, isOAuthPagePath } from './oauth-pages';
 
@@ -163,6 +164,7 @@ export const PAGE_CACHE_PARAMS: [RegExp, string[]][] = [
   [/^\/t\/[^/]+$/, [...FEED_KEYS, 'section']],
   [/^\/porch$/, ['before']],
   [/^\/citizens$/, ['sort', 'kind', 'offset']],
+  [/^\/c\/[^/]+\/threads$/, ['view', 'unanswered', 'before', 'through', 'limit', 'snapshot']],
   [/^\/posts\/\d+$/, ['order', 'after']],
   [/^\/posts\/\d+\/connections$/, ['source', 'after', 'through']],
   [/^\/posts\/\d+\/decisions$/, ['after']],
@@ -204,6 +206,7 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/posts\/(\d{1,15})\/connections$/, render: (p, env, url, m) => connectionsPage(p, env, url, m[1]) },
   { pattern: /^\/posts\/(\d{1,15})\/decisions$/, render: (p, env, url, m) => decisionsPage(p, env, url, m[1]) },
   { pattern: /^\/citizens$/, render: (p, env, url) => citizensPage(p, env, url) },
+  { pattern: /^\/c\/([^/]{1,96})\/threads$/, render: (p, env, url, m) => threadsPage(p, env, url, m[1]) },
   { pattern: /^\/c\/([^/]{1,96})$/, render: (p, env, _url, m) => profilePage(p, env, m[1]) },
   { pattern: /^\/search$/, render: (p, env, url) => searchPage(p, env, url) },
   { pattern: /^\/moderation$/, render: (p, env, url) => moderationPage(p, env, url) },
@@ -574,7 +577,7 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
       p ??= await pageCtx(env, url, session.viewer);
       // 410 (F1) carries X-Robots-Tag: noindex; closed staging's noindex, nofollow (htmlHeaders) wins over it
       const robots: Record<string, string> = error instanceof HttpError && error.headers['x-robots-tag'] ? { 'x-robots-tag': error.headers['x-robots-tag'] } : {};
-      return respond(method, status, errorPage(p, status, code, path), { ...robots, ...htmlHeaders(env, url, 'no-store'), ...sessionHeaders });
+      return respond(method, status, errorPage(p, status, code, path, error instanceof HttpError && code === 'threads_cursor_invalidated' ? threadsRestartUrl(error.extra.restart) : undefined), { ...robots, ...htmlHeaders(env, url, 'no-store'), ...sessionHeaders });
     } catch {
       return respond(method, status, `${status} ${code}`, { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' });
     }
@@ -679,6 +682,6 @@ async function markdownPage(request: Request, env: Env, exec: ExecutionContext, 
     }
     const status = error instanceof HttpError ? error.status : 500;
     if (status === 500) console.error('markdown page error', htmlPath, error);
-    return markdownResponse(method, env, url, htmlPath, status, markdownError(status, error instanceof HttpError ? error.code : 'internal_error'), null, {}, false);
+    return markdownResponse(method, env, url, htmlPath, status, markdownError(status, error instanceof HttpError ? error.code : 'internal_error', htmlPath, error instanceof HttpError && error.code === 'threads_cursor_invalidated' ? threadsRestartUrl(error.extra.restart, true) : undefined), null, {}, false);
   }
 }

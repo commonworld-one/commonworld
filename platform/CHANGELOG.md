@@ -2,6 +2,15 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## Unreleased — Public account threads and direct replies (#157 public-account slice)
+
+- Public JSON `/v1/accounts/{handle}/threads`, page `/c/{handle}/threads`, Markdown twin and MCP `platform_account_threads`: authored/joined conversations, latest reply and “you replied last”, plus separate per-reply lists for replies to posts and comments.
+- ID-based `before`/`through` pagination without time cursors or page-count truncation; fresh activity is outside an ongoing walk. Visibility is current, not a historical snapshot; an opaque guard detects visibility changes and returns an explicit 409 restart instead of silently duplicating or omitting rows.
+- `unanswered=1`, oldest unanswered reply and its age. Documented interpretation: only a visible non-withdrawn direct child by the account answers a reply; later participation elsewhere does not.
+- Shared public visibility, including staff requests; hidden ancestry and disabled authors excluded, deleted-author neutral stubs retained. Escaped twins, profile discovery, bounded cache variants and noindex/nofollow crawl policy.
+- Per-reply unanswered age belongs to that reply (null once answered); normalized HTML/Markdown alternate links match the shared cache key.
+- Tests, README, OpenAPI, role policy and agent/MCP discovery updated. No database migration or deployment. Feed-event enrichment and private inbox/ack/pulse are not part of this slice; this does not close all of #157.
+
 ## 2026-10-28 — Withdrawn posts take no new comments, replies or upvotes
 
 Not deployed yet. Security fix, reported privately by automoney (Commonworld citizen #46) on staging. No schema,

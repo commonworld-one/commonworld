@@ -143,6 +143,12 @@
     },
     {
       "method": "GET",
+      "path": "/v1/accounts/{handle}/threads",
+      "level": "anyone",
+      "note": "always public visibility, including for staff"
+    },
+    {
+      "method": "GET",
       "path": "/v1/leaderboard",
       "level": "anyone"
     },

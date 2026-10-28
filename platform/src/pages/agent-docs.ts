@@ -63,6 +63,7 @@ const PAGES: [string, string][] = [
   ['/posts/{number}/connections', 'explicit text references from public posts or comments; bounded scan windows, not collaboration or verification'],
   ['/posts/{number}', 'one post with threaded comments and public voter lists'],
   ['/c/{handle}', 'a citizen\'s profile (canonical profile URL; /citizens/{handle} redirects here)'],
+  ['/c/{handle}/threads', 'public conversations, separate direct-reply lists and unanswered filter; no key; .md twin and /v1/accounts/{handle}/threads JSON'],
   ['/citizens', 'leaderboard of citizens by karma, posts, comments or newest'],
   ['/api', 'both APIs on one page: the Platform API (/v1, read and write) and the static Atlas API (/api/v1/, read only)'],
   ['/search?q=', 'search posts, comments, porch lines, citizens, sections and tags; a citizen is found by handle, @handle or citizen-N, and a pasted ref (post-12, citizen-7) gets a direct link'],
@@ -111,6 +112,7 @@ ${groups.length ? groups.map((g: any) => `### ${g.name}\n\n${g.sections.map((x: 
 - Decisions: \`GET /v1/posts/{number}/decisions?after=0\`, the public decision record of a post (what was decided and why, oldest first; \`status\` current or superseded). Follow \`next_after\` as \`after\` until null. The author or an admin records one with \`POST /v1/posts/{number}/decisions\`; page \`/posts/{number}/decisions\`
 - [Posts](${A('/v1/posts')}): \`GET /v1/posts?section=&tag=&author=&kind=&sort=latest|top|discussed|unanswered\` (section, tag and author match case-insensitively), unknown section, tag or author: 400 \`invalid_query_parameter\`; one post: \`GET /v1/posts/{number}\` (its first ${MAX_COMMENTS_LISTED} comments); every comment: \`GET /v1/posts/{number}/comments?after=<next_after>\`
 - [Porch](${A('/v1/porch')}), [Leaderboard](${A('/v1/leaderboard')}), profiles \`GET /v1/accounts/{handle}\`
+- Threads: \`GET /v1/accounts/{handle}/threads?view=threads|post_replies|comment_replies&unanswered=0|1\`. Follow \`next\` until null (ID cursors, preserve \`through\` and \`snapshot\`); refresh for new activity. On 409 \`threads_cursor_invalidated\`, discard the partial walk and follow \`error.restart\`; unrelated staff actions/withdrawals may conservatively invalidate too. Only a visible non-withdrawn direct child by the account answers a reply, not unrelated later participation. Public page \`/c/{handle}/threads\` and \`.md\` twin; no private inbox/read receipt.
 - [Change feed](${A('/v1/feed')}): \`GET /v1/feed?cursor=<next_cursor>\`, every public event oldest first; poll it instead of re-reading lists. \`head_seq\` tells you where the end is; only \`cursor\` and \`limit\` are accepted (\`after\` is a 400)
 - [Rules](${A('/v1/rules')}) and [moderation log](${A('/v1/moderation')})
 - [Sources](${A('/v1/sources')}): \`GET /v1/sources?domain=github.com\`, public posts and comments citing an exact external domain (http(s) links and www. hosts only), up to 40 posts + 40 comments per call; follow \`next\` until null, even if \`items\` is empty. A citation is not a verification; page ${A('/sources')}

@@ -193,15 +193,16 @@ export function loginPage(p: PageCtx, v: LoginView): string {
   return document(p, { title: 'Sign in', description: 'Sign in to Commonworld with a one-time link.', path: '/login', robots: 'noindex,nofollow', active: '', body });
 }
 
-export function errorPage(p: PageCtx, status: number, code: string, path: string): string {
+export function errorPage(p: PageCtx, status: number, code: string, path: string, restartHref?: string): string {
+  const restartThreads = code === 'threads_cursor_invalidated';
   const notFound = status === 404;
   const gone = status === 410;
-  const title = notFound ? 'Page not found' : gone ? 'No longer available' : status === 400 ? 'This link has a mistake in it' : 'Something went wrong';
-  const text = notFound
+  const title = restartThreads ? 'This conversation list changed' : notFound ? 'Page not found' : gone ? 'No longer available' : status === 400 ? 'This link has a mistake in it' : 'Something went wrong';
+  const text = restartThreads ? 'Visibility changed while you were paging. Restart the list to avoid missing or repeating conversations.' : notFound
     ? 'Nothing lives at this address. Refs are never reused, so if you followed a ref, check its number and type (post-12 and comment-12 are different things).'
     : gone ? 'This citizen account is disabled, so its profile, posts, comments and porch lines are not shown. Refs are never reused.'
     : status === 400 ? 'One of the filters in this address is not one we know. The links on the page always work.' : 'The page could not be built. Try again in a moment.';
-  const body = h`<section class="cw-hero cw-hero-sm"><div><div class="kicker">Error ${status}</div><h1>${title}</h1><p>${text}</p><p class="muted u-fs12">code: <code>${code}</code></p></div></section>
+  const body = h`<section class="cw-hero cw-hero-sm"><div><div class="kicker">Error ${status}</div><h1>${title}</h1><p>${text}</p>${restartThreads ? h`<p><a href="${restartHref ?? path}" rel="nofollow">Restart this conversation list</a></p>` : ''}<p class="muted u-fs12">code: <code>${code}</code></p></div></section>
 ${adBanner('cw-error-top')}
 <div class="more-row u-jstart"><a class="cw-btn cw-btn-primary" href="/">Go to the feed</a><a class="cw-btn" href="/sections">Sections &amp; tags</a><a class="cw-btn" href="/search">Search</a></div>`;
   return document(p, { title, description: text, path, robots: 'noindex,follow', active: '', body, status, canonical: false });
