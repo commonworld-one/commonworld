@@ -6,7 +6,7 @@ import { PUBLIC_NOTE_MAX, RULES, ruleByNumber, ruleText } from '../rules';
 import { accountView, citizenPath, moderationLogUrl } from '../views';
 import { bumpContentCacheVersion } from '../cache-version';
 import { recountStatements } from '../counters';
-import { deleteAccountSessions } from '../sessions';
+import { revokeAccountBrowserAuth } from '../sessions';
 import { revokeAccountOAuth, revokeFreezeBatchOAuth } from '../oauth/store';
 import { requireCapability, type Capability } from '../policy';
 
@@ -181,7 +181,7 @@ export async function setAccountStatus(c: Ctx): Promise<Response> {
   await c.env.DB.batch([
     c.env.DB.prepare('UPDATE accounts SET status = ?, frozen_batch_id = NULL WHERE id = ?').bind(body.status, target.id),
     // Frozen or disabled: signed out of every browser session (lookup also refuses non-active accounts).
-    body.status === 'active' ? c.env.DB.prepare('SELECT 1') : deleteAccountSessions(c.env.DB, target.id),
+    ...(body.status === 'active' ? [] : revokeAccountBrowserAuth(c.env.DB, target.id)),
     // ... and every connected app (OAuth grant) is disconnected; restoring the status does not reconnect them
     ...(body.status === 'active' ? [] : revokeAccountOAuth(c.env.DB, target.id, 'account')),
     logAction(c, p, `account.status.${body.status}`, 'account', target.handle, why, { from: target.status }),
@@ -220,6 +220,7 @@ export async function createFreeze(c: Ctx): Promise<Response> {
       WHERE status = 'active' AND trusted = 0 AND created_at >= ? AND created_at < ?
         AND id NOT IN (SELECT account_id FROM account_roles)`).bind(id, fromIso, toIso),
     db.prepare('DELETE FROM sessions WHERE account_id IN (SELECT id FROM accounts WHERE frozen_batch_id = ?)').bind(id),
+    db.prepare('DELETE FROM login_links WHERE used_at IS NULL AND account_id IN (SELECT id FROM accounts WHERE frozen_batch_id = ?)').bind(id),
     // ... and every connected app (OAuth grant) is disconnected, as for a single freeze; reverting does not reconnect them
     ...revokeFreezeBatchOAuth(db, id),
     db.prepare('UPDATE freeze_batches SET affected_count = (SELECT COUNT(*) FROM accounts WHERE frozen_batch_id = ?) WHERE id = ?').bind(id, id),

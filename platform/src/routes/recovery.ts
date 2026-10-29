@@ -33,7 +33,7 @@ import { HttpError, intParam, json, nowIso, readJson } from '../http';
 import { DAY_BUCKET_PREFIX, clientNetwork, enforceRate } from '../limits';
 import { requireCapability } from '../policy';
 import { bumpContentCacheVersion } from '../cache-version';
-import { deleteAccountSessions } from '../sessions';
+import { revokeAccountBrowserAuth } from '../sessions';
 import { revokeAccountOAuth } from '../oauth/store';
 import { citizenPath } from '../views';
 import { PROVIDERS, type Provider, findProof, instructions, newChallenge, normalizeSubject, profileUrl } from '../recovery';
@@ -353,7 +353,7 @@ export async function adminDecideRecovery(c: Ctx): Promise<Response> {
       .bind(type, row.account_number, p.account.id, note, `recovery-${number}`, row.method, proof, at),
     ...(decision === 'approve' ? [
       db.prepare('UPDATE api_keys SET revoked_at = ? WHERE account_id = ? AND revoked_at IS NULL').bind(at, row.account_id),
-      deleteAccountSessions(db, row.account_id),
+      ...revokeAccountBrowserAuth(db, row.account_id),
       ...revokeAccountOAuth(db, row.account_id, 'key_rotation'),
     ] : []),
     db.prepare(`INSERT INTO moderation_actions (actor_id, action, target_type, target_ref, reason, created_at) VALUES (?, ?, 'account', ?, ?, ?)`)
