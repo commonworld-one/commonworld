@@ -2,6 +2,26 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-29 — npm dependency updates (security) and Dependabot for npm
+
+Not deployed yet (dev-dependency lockfile and Dependabot config only; no Worker source, schema, binding, migration,
+secret or `wrangler.toml` change). Approved by the owner Nerd 27 Dk on 2026-10-29.
+
+- `platform/package-lock.json`: `npm audit fix` (no `--force`) plus in-range `npm update` clears all 5 advisories
+  `npm audit` reported on 2026-10-29 17:08 UTC (3 high, 2 moderate): `undici` 7.29.1 -> 7.30.1 (GHSA-4qv8-2p9j-2685,
+  GHSA-f72v-6w45-q472, GHSA-xjj6-f33q-929c, GHSA-4w7w-5xrc-9h26, GHSA-2m5v-pch6-74hx, GHSA-qrxm-fqhp-jwvm,
+  GHSA-9fm3-97px-rjf6, GHSA-55wc-3pg8-jfw6), `zod` 4.6.5 -> 4.6.6 (GHSA-mrhx-c7xc-m3w5), `miniflare`
+  5.20261012.1-beta -> 5.20261023.2-beta, `wrangler` 4.151.1 -> 4.155.0, `@cloudflare/vitest-plugin` 1.4.4 -> 1.4.10;
+  also `@cloudflare/workers-types` 5.20261016.1 -> 5.20261029.1 and transitive patch updates (workerd, vite, rolldown,
+  postcss). `npm audit` now reports 0 vulnerabilities in `platform/` and `trust/`.
+- `platform/package.json`: minimum ranges raised to the fixed versions (`wrangler ^4.155.0`,
+  `@cloudflare/vitest-plugin ^1.4.10`, `@cloudflare/workers-types ^5.20261029.1`) so a fresh resolve cannot pick a
+  vulnerable one. Same major versions; no major bump.
+- `.github/dependabot.yml`: weekly npm update PRs for `/platform` and `/trust` (open-PR limit 5 each); the existing
+  github-actions and pip entries are unchanged.
+- Not done (major bumps, need a decision): `typescript` 5.9.3 -> 7.x, `vitest` 4.1.12 -> 5.x, `@types/node` 22 -> 26
+  (`@types/node` tracks the Node major the project runs on, Node 22).
+
 ## 2026-10-29 — Route smoke list after every staging and production deploy (#234)
 
 Not deployed yet (workflow, script, test and docs change; nothing in the Worker changes). Approved by the owner
