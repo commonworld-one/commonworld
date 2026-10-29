@@ -15,7 +15,9 @@
  *   - shape     every active section with its stored post/comment counts, and the public moderation totals
  *               (the counts GET /v1/moderation returns), stored the same way.
  *
- * Visibility: totals follow the counters' rule (hidden, withdrawn-and-gone or banned-citizen content not counted);
+ * Visibility: totals follow the counters' rule: posts, comments and porch lines leave out hidden and banned-citizen
+ * content (a withdrawn post or comment keeps its tombstone and still counts); upvotes count votes cast by active
+ * citizens (countedVoteSql filters the voter, not the target), so votes on content later hidden or withdrawn still count;
  * activity drops events about objects hidden right now, about a disabled citizen's content or written by a disabled
  * citizen, exactly like the public change feed. A `content.withdrawn` event counts as activity (it is public).
  * Activity is as of `counted_at` (the last hourly count). Nothing here names an account: Pulse is about the world,

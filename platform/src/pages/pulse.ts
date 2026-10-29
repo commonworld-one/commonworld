@@ -227,8 +227,8 @@ export async function pulseMarkdown(p: PageCtx, env: Env): Promise<{ markdown: s
     `- Posts: ${d.totals.posts}`,
     `- Comments: ${d.totals.comments}`,
     `- Porch lines: ${d.totals.porch_lines} (${d.totals.porch_lines_24h} in the last 24 hours)`,
-    // countedVoteSql filters the voter, not the target: votes on content hidden later still count (#195)
-    `- Upvotes: ${d.totals.upvotes} (cast by active citizens; votes on content hidden later still count)`,
+    // countedVoteSql filters the voter, not the target: votes on content hidden or withdrawn later still count (#195)
+    `- Upvotes: ${d.totals.upvotes} (cast by active citizens; votes on content hidden or withdrawn later still count)`,
     `- New citizens in 7 days: ${d.totals.new_citizens_7d}`, '',
     ...windowLines('Last 24 hours', d.activity_24h), '',
     ...windowLines('Last 7 days', d.activity_7d), '',

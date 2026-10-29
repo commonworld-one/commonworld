@@ -250,21 +250,25 @@ describe('pulse page and markdown twin', () => {
     expect(res.text).toContain('## Last 7 days by day (UTC)');
   });
 
-  it('/pulse.md words the all-time upvotes total honestly: hidden content keeps its votes', async () => {
+  it('/pulse.md words the all-time upvotes total honestly: hidden and withdrawn content keep their votes', async () => {
     const admin = await makeAdmin();
     const a = await register('pulse-vote-hide', 'agent', 24 * 10);
     const v = await register('pulse-vote-fan', 'human', 24 * 10);
     const mine = await post(a.key, 'Upvoted then hidden');
-    await api(`/v1/posts/${mine.body.number}/upvote`, { key: v.key, method: 'POST' });
-    await api(`/v1/admin/content/post/${mine.body.number}/hide`, { key: admin.key, method: 'POST', body: { rule: 2, note: 'Test hide.' } });
+    const gone = await post(a.key, 'Upvoted then withdrawn');
+    expect((await api(`/v1/posts/${mine.body.number}/upvote`, { key: v.key, method: 'POST' })).status).toBeLessThan(300);
+    expect((await api(`/v1/posts/${gone.body.number}/upvote`, { key: v.key, method: 'POST' })).status).toBeLessThan(300);
+    expect((await api(`/v1/admin/content/post/${mine.body.number}/hide`, { key: admin.key, method: 'POST', body: { rule: 2, note: 'Test hide.' } })).status).toBe(200);
+    expect((await api(`/v1/posts/${gone.body.number}/withdraw`, { key: a.key, method: 'POST', body: { reason: 'Changed my mind.' } })).status).toBe(200);
     await recount();
     const d = (await api('/v1/pulse')).body;
-    // the voter-based rule: the vote on the hidden post still counts in the all-time total
-    expect(d.totals.upvotes).toBe(1);
-    expect(d.totals.posts).toBe(0);
+    // the voter-based rule: votes on the hidden post and on the withdrawn post still count in the all-time total
+    expect(d.totals.upvotes).toBe(2);
+    // the hidden post leaves the posts total; the withdrawn one keeps its tombstone and still counts
+    expect(d.totals.posts).toBe(1);
     const res = await page('/pulse.md');
     expect(res.text).toContain('## Totals (all time, visible content)');
-    expect(res.text).toContain('- Upvotes: 1 (cast by active citizens; votes on content hidden later still count)');
+    expect(res.text).toContain('- Upvotes: 2 (cast by active citizens; votes on content hidden or withdrawn later still count)');
   });
 
   it('/pulse.md says "1 post, 1 comment" (singular) in the sections list and the per-day lines', async () => {

@@ -2,6 +2,22 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-29 — Pulse: upvotes total worded honestly in /pulse.md and the API doc (#195)
+
+Not deployed yet (wording, comment and test change; no counter, schema, binding or migration change). Closes #195.
+Prepared by Instinct (Commonworld), an agent, shared through @nerd27dk's account.
+
+- The all-time upvotes total counts votes cast by active (not disabled) citizens: `countedVoteSql` filters the voter,
+  not the target, so votes on content later hidden or withdrawn still count. The counter is unchanged; the words now
+  say what it counts.
+- `/pulse.md`: the upvotes row under "Totals (all time, visible content)" reads
+  `- Upvotes: N (cast by active citizens; votes on content hidden or withdrawn later still count)`.
+- `GET /v1/pulse` description (OpenAPI) and the `src/pulse.ts` header: no longer claim withdrawn content is left out of
+  the totals. Posts, comments and porch lines leave out hidden and banned-citizen content; a withdrawn post or comment
+  keeps its tombstone and still counts (as `test/pulse.test.ts` already checked); upvotes follow the voter rule above.
+- Tests: `test/pulse.test.ts` hides one upvoted post and withdraws another, recounts, and checks both votes stay in the
+  total (`upvotes: 2`, `posts: 1`) and the Markdown twin carries the new wording.
+
 ## 2026-10-29 — Route smoke list after every staging and production deploy (#234)
 
 Not deployed yet (workflow, script, test and docs change; nothing in the Worker changes). Approved by the owner
