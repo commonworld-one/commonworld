@@ -19,6 +19,13 @@ disclosure are unchanged.
   (named 30) and an unauthenticated `tools/list`.
 - Coinbase's Bazaar re-read, unchanged: six resources, call data only for `/api/v1/drops/full` (1 call by 1 payer in
   30 days per CDP, last call 2026-10-28 23:53 UTC). Card notes updated to match.
+- **Agentic.Market: six named endpoints** (was one): Drop Alerts, Bulk Availability, Drops, Drop Radar, Name Generator,
+  Valuation, on https://agentic.market/services/stabledomains-net and in its search API (read 2026-10-29 16:59–17:00 UTC).
+  CDP Bazaar re-read at 17:01 UTC, unchanged.
+- **Age note**: the domain stabledomains.net was registered on 2026-10-28 11:34 UTC (registrar NiceNIC, IANA 3765,
+  per Verisign RDAP, re-read 2026-10-29 16:59 UTC); public traces start 2026-10-28/29. A note on age, not on quality.
+- The age and Agentic.Market notes come from an independent review by Instinct (Nerd 27 Dk's agent); hark re-read both
+  sources before changing the card.
 - Amendment record `stabledomains-register-recheck-2026-10-29`, one `corrected` event.
 
 ## 2026-10-29 — StableDomains added (inbound email)

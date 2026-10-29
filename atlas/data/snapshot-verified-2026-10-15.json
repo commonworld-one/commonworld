@@ -40829,19 +40829,35 @@
     },
     {
      "kind": "listing",
-     "statement": "Coinbase's x402 Bazaar (CDP discovery) lists all six resources for this payTo address; only /api/v1/drops/full has call data, 1 call by 1 payer in the last 30 days as reported by CDP (last call 2026-10-28 23:53 UTC). At 13:51 UTC the same read listed only drops/full; the other five appeared by 14:53 UTC with no call counts. Agentic.Market lists the service as stabledomains-net with one endpoint. These are the facilitator's counts, not an Atlas observation of settlements.",
+     "statement": "Coinbase's x402 Bazaar (CDP discovery) lists all six resources for this payTo address; only /api/v1/drops/full has call data, 1 call by 1 payer in the last 30 days as reported by CDP (last call 2026-10-28 23:53 UTC). At 13:51 UTC the same read listed only drops/full; the other five appeared by 14:53 UTC with no call counts. Agentic.Market's page for stabledomains-net shows six named endpoints (Drop Alerts, Bulk Availability, Drops, Drop Radar, Name Generator, Valuation; read 2026-10-29 16:59 UTC; earlier the same day it listed one). These are the facilitator's and the marketplace's counts, not an Atlas observation of settlements.",
      "value": null,
      "unit": null,
      "window": null,
      "basis": "independent_source",
      "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xf773ea4A371114f12A4b82B6dE0b5ED3A6e2504B",
      "quote": "\"resource\":\"https://stabledomains.net/api/v1/drops/full\" ... l30DaysTotalCalls 1, l30DaysUniquePayers 1",
-     "observed_at": "2026-10-29T14:53:00Z",
+     "observed_at": "2026-10-29T17:00:00Z",
      "methods": [
-      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xf773ea4A371114f12A4b82B6dE0b5ED3A6e2504B (HTTP 200: 1 resource at 13:51 UTC, 6 resources at 14:53 UTC)",
-      "GET https://api.agentic.market/v1/services/search?q=stabledomains (id stabledomains-net, 1 endpoint)"
+      "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xf773ea4A371114f12A4b82B6dE0b5ED3A6e2504B (HTTP 200: 1 resource at 13:51 UTC, 6 resources at 14:53 UTC and at 17:01 UTC)",
+      "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://agentic.market/services/stabledomains-net (HTTP 200, 16:59 UTC: \"Endpoints 6\", six named GET routes)",
+      "GET https://api.agentic.market/v1/services/search?q=stabledomains (17:00 UTC: id stabledomains-net, 6 endpoints; earlier 1 endpoint)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "Coinbase's x402 Bazaar (CDP discovery) lists all six resources for this payTo address; only /api/v1/drops/full has call data, 1 call by 1 payer in the last 30 days as reported by CDP (last call 2026-10-28 23:53 UTC). At 13:51 UTC the same read listed only drops/full; the other five appeared by 14:53 UTC with no call counts. Agentic.Market lists the service as stabledomains-net with one endpoint. These are the facilitator's counts, not an Atlas observation of settlements.",
+       "quote": "\"resource\":\"https://stabledomains.net/api/v1/drops/full\" ... l30DaysTotalCalls 1, l30DaysUniquePayers 1",
+       "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xf773ea4A371114f12A4b82B6dE0b5ED3A6e2504B",
+       "observed_at": "2026-10-29T14:53:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-10-29T17:00:00Z",
+       "reason": "Agentic.Market now shows six named endpoints for stabledomains-net (was one). From an independent review by Instinct (Nerd 27 Dk's agent); re-read by hark from agentic.market and its search API before changing. CDP Bazaar re-read at the same time, unchanged."
+      }
+     ]
     },
     {
      "kind": "listing",
@@ -40893,7 +40909,7 @@
     }
    ],
    "legacy_diffs": [],
-   "notes": "Very new: RDAP gives the domain's registration as 2026-10-28 11:34 UTC, one day before this check, and the MCP Registry entries date from 2026-10-28 and 2026-10-29. The operator's pages describe x402 at different depth: /.well-known/x402 lists six paid GET resources plus POST /api/v1/register (dynamic price; not called by the Atlas), the /x402 page names four (drops/full, suggest/bulk, register, orders), and Coinbase's Bazaar lists the six GET resources but has call data for only one; the About page, the server card and the server itself all give 37 MCP tools. Not to be confused with a different service of the same name at stabledomains.dev (provider Merit Systems on Agentic.Market); the operator says it is not affiliated. Under the terms an agent acts for a principal (18 or over) who is bound by them and responsible for its orders and payments. Aftermarket results link to Atom.com, an outside marketplace, through affiliate links (the operator says it may earn a commission). The Atlas made no payment, did not sign up, did not place an order and did not use any state-changing endpoint; every source link above is read-only.",
+   "notes": "Young service: the domain stabledomains.net was registered on 2026-10-28 11:34 UTC (registrar NiceNIC, IANA 3765, per Verisign RDAP, re-read 2026-10-29 16:59 UTC); public traces (MCP Registry entries, Coinbase's Bazaar, Agentic.Market) start 2026-10-28/29. This is a note on age, not on the service's quality. The operator's pages describe x402 at different depth: /.well-known/x402 lists six paid GET resources plus POST /api/v1/register (dynamic price; not called by the Atlas), the /x402 page names four (drops/full, suggest/bulk, register, orders), and Coinbase's Bazaar lists the six GET resources but has call data for only one; the About page, the server card and the server itself all give 37 MCP tools. Not to be confused with a different service of the same name at stabledomains.dev (provider Merit Systems on Agentic.Market); the operator says it is not affiliated. Under the terms an agent acts for a principal (18 or over) who is bound by them and responsible for its orders and payments. Aftermarket results link to Atom.com, an outside marketplace, through affiliate links (the operator says it may earn a commission). The Atlas made no payment, did not sign up, did not place an order and did not use any state-changing endpoint; every source link above is read-only.",
    "category_history": [],
    "qa": [],
    "qa_status": "not_sampled",
@@ -41425,8 +41441,8 @@
   {
    "date": "2026-10-29",
    "tag": "stabledomains-register-recheck-2026-10-29",
-   "rule": "StableDomains re-checked after an update suggested by the operator (Tim Johnson, StableDomains, 2026-10-29). Protocol: /.well-known/x402 now lists seven resources, the six paid GET resources (re-probed unpaid, 402 each, prices unchanged) plus POST /api/v1/register (registers a domain at a dynamic USDC price quoted in its 402; per the operator's discovery file; not called: no POST, no payment); the /x402 page now names drops/full, suggest/bulk, register and orders. MCP listing: About page, /.well-known/mcp.json and tools/list all give 37 tools (About said 32, the server card 30). Notes updated to match. Coinbase Bazaar re-read, unchanged (6 resources; only drops/full has call data, 1 call by 1 payer in 30 days, last call 2026-10-28 23:53 UTC). Re-read by hark on 2026-10-29 16:31-16:36 UTC; old values kept in claim history. Category, evidence level and disclosure unchanged. Prepared by hark for curator review",
-   "fixes": 2,
+   "rule": "StableDomains re-checked after an update suggested by the operator (Tim Johnson, StableDomains, 2026-10-29). Protocol: /.well-known/x402 now lists seven resources, the six paid GET resources (re-probed unpaid, 402 each, prices unchanged) plus POST /api/v1/register (registers a domain at a dynamic USDC price quoted in its 402; per the operator's discovery file; not called: no POST, no payment); the /x402 page now names drops/full, suggest/bulk, register and orders. MCP listing: About page, /.well-known/mcp.json and tools/list all give 37 tools (About said 32, the server card 30). Notes updated to match. Coinbase Bazaar re-read, unchanged (6 resources; only drops/full has call data, 1 call by 1 payer in 30 days, last call 2026-10-28 23:53 UTC). Re-read by hark on 2026-10-29 16:31-16:36 UTC; old values kept in claim history. Category, evidence level and disclosure unchanged. Added before merge, from an independent review by Instinct (Nerd 27 Dk's agent), re-read by hark on 2026-10-29 16:59-17:01 UTC: an age note (domain registered 2026-10-28 11:34 UTC per Verisign RDAP, registrar NiceNIC, IANA 3765) and Agentic.Market now showing six named endpoints for stabledomains-net (was one); CDP Bazaar unchanged. Prepared by hark for curator review",
+   "fixes": 3,
    "entries": [
     "stabledomains-net"
    ]
