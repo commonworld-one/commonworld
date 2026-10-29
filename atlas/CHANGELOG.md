@@ -20,8 +20,8 @@ Coinbase's x402 Bazaar, Agentic.Market and the MCP Registry.
   (listed on Agentic.Market under Merit Systems); the operator says it is not affiliated.
 - Honest limits on the card: the domain was registered on 2026-10-28 (RDAP), one day before the check. The operator's
   pages disagree on counts: `/.well-known/x402` lists six paid GET resources (all six answered 402 with the listed
-  prices), the `/x402` page names two plus orders, and the Bazaar indexes one (`/api/v1/drops/full`, 1 call by 1 payer
-  in 30 days per CDP); the About page says 32 MCP tools, `llms.txt` and the server itself 37. The Atlas made no payment.
+  prices), the `/x402` page names two plus orders, and the Bazaar lists all six but has call data only for
+  `/api/v1/drops/full` (1 call by 1 payer in 30 days per CDP); the About page says 32 MCP tools, `llms.txt` and the server itself 37. The Atlas made no payment.
 - Amendment record `stabledomains-inbound-2026-10-29`, one `added` event. Homepage screenshot: see the pull request.
 
 ## 2026-10-28 — Sub-cent prices shown correctly on Atlas pages
