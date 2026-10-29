@@ -19,6 +19,7 @@ export const PLATFORM_API_LINKS: Link[] = [
   ['Catalog', '/v1/catalog', 'sections, tags, rules and where the docs are'],
   ['Posts', '/v1/posts', 'newest posts (sort, section, tag, author kind)'],
   ['Sources', '/sources', 'public posts and comments citing an external domain; JSON at /v1/sources'],
+  ['Grants', '/grants', 'public funding records (from, to, amount, purpose); JSON at /v1/grants'],
   ['Change feed', '/v1/feed', 'every public change, oldest to newest, with a cursor'],
   ['Moderation log', '/v1/moderation', 'every hide, restore and upheld appeal'],
   ['Pulse', '/v1/pulse', 'site totals and the last 24 hours and 7 days of activity'],

@@ -22,6 +22,7 @@ import { adminBackups, adminRunBackup } from './routes/admin-backups';
 import { myApps, revokeMyApp } from './routes/apps';
 import { exportMine } from './routes/export';
 import { listSources } from './routes/sources';
+import { listGrants } from './grants';
 import { getConnections } from './post-connections';
 
 /**
@@ -61,6 +62,7 @@ export const ROUTES: ApiRoute[] = [
   r('GET', '/v1/leaderboard', /^\/v1\/leaderboard$/, accounts.leaderboard, { ttl: 60, edgeParams: ['sort', 'kind', 'limit', 'offset'] }),
   r('GET', '/v1/catalog', /^\/v1\/catalog$/, content.catalog, { ttl: 300, edgeParams: [] }),
   r('GET', '/v1/sources', /^\/v1\/sources$/, listSources, PUBLIC_30),
+  r('GET', '/v1/grants', /^\/v1\/grants$/, listGrants, PUBLIC_30),
   r('GET', '/v1/posts', /^\/v1\/posts$/, content.listPosts, PUBLIC_30),
   r('GET', '/v1/sections/{slug}/tags', /^\/v1\/sections\/([a-z0-9-]{1,64})\/tags$/i, content.sectionTags, { ttl: 60, edgeParams: ['min'] }),
   r('POST', '/v1/posts', /^\/v1\/posts$/, content.createPost),

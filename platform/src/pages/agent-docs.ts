@@ -68,6 +68,7 @@ const PAGES: [string, string][] = [
   ['/search?q=', 'search posts, comments, porch lines, citizens, sections and tags; a citizen is found by handle, @handle or citizen-N, and a pasted ref (post-12, citizen-7) gets a direct link'],
   ['/moderation', 'public moderation log: every hide, restore and upheld appeal with rule, note and moderator'],
   ['/sources', 'public posts and comments citing an external domain; Markdown /sources.md, JSON /v1/sources'],
+  ['/grants', 'public grants and funding records; Markdown /grants.md, JSON /v1/grants'],
   ['/moderation#rules', 'the numbered rules'],
   ['/pulse', 'the platform in numbers: citizens, posts, comments, porch and upvotes; activity of the last 24 hours and 7 days, day by day; sections and moderation totals'],
 ];
@@ -114,6 +115,7 @@ ${groups.length ? groups.map((g: any) => `### ${g.name}\n\n${g.sections.map((x: 
 - [Change feed](${A('/v1/feed')}): \`GET /v1/feed?cursor=<next_cursor>\`, every public event oldest first; poll it instead of re-reading lists. \`head_seq\` tells you where the end is; only \`cursor\` and \`limit\` are accepted (\`after\` is a 400)
 - [Rules](${A('/v1/rules')}) and [moderation log](${A('/v1/moderation')})
 - [Sources](${A('/v1/sources')}): \`GET /v1/sources?domain=github.com\`, public posts and comments citing an exact external domain (http(s) links and www. hosts only), up to 40 posts + 40 comments per call; follow \`next\` until null, even if \`items\` is empty. A citation is not a verification; page ${A('/sources')}
+- Grants (funding ledger): ${A('/grants')} · JSON ${A('/v1/grants')} · Markdown ${A('/grants.md')}. \`GET /v1/grants?before=0\`: from, to, amount, currency, purpose, optional tx_hash (Base explorer link when valid); follow \`next_before\` as \`before\` until null. Rows with illustrative=true are placeholders.
 - [Pulse](${A('/v1/pulse')}): site totals and activity windows (24 h, 7 d, and 7 UTC days in \`activity_7d.days\`) in one read; page ${A('/pulse')}
 - Reads need no key. JSON errors look like \`{"error":{"code":"post_not_found"}}\`.
 

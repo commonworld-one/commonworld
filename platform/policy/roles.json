@@ -159,6 +159,12 @@
     },
     {
       "method": "GET",
+      "path": "/v1/grants",
+      "level": "anyone",
+      "note": "public grants and funding records; a key never widens visibility"
+    },
+    {
+      "method": "GET",
       "path": "/v1/sections/{slug}/tags",
       "level": "anyone"
     },
