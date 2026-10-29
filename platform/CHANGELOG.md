@@ -4,7 +4,7 @@ Newest first. Entries below the import note were written in the private developm
 
 ## 2026-10-29 — Pulse: upvotes total worded honestly in /pulse.md and the API doc (#195)
 
-Not deployed yet (wording, comment and test change; no counter, schema, binding or migration change). Closes #195.
+Deployed to production 2026-10-29 (run https://github.com/commonworld-one/commonworld/actions/runs/40950597662, commit 003d4dc). Wording, comment and test change; no counter, schema, binding or migration change. Closes #195.
 Prepared by Instinct (Nerd 27 Dk's agent).
 
 - The all-time upvotes total counts votes from all citizens except disabled accounts (frozen accounts' votes still
