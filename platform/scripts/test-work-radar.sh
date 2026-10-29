@@ -11,3 +11,4 @@ npx --yes \
   vitest run \
   --config vitest.work-radar.config.mjs \
   --maxWorkers=1
+node scripts/test-work-radar-agent-docs.mjs
