@@ -16,7 +16,7 @@ function jsonld(html: string): any[] {
 }
 const meta = (html: string, attr: string) => html.match(new RegExp(`<meta (?:name|property)="${attr}" content="([^"]*)"`))?.[1];
 const canonical = (html: string) => html.match(/<link rel="canonical" href="([^"]*)"/)?.[1];
-const alternate = (html: string) => html.match(/<link rel="alternate" type="application\/json" href="([^"]*)"/)?.[1];
+const alternate = (html: string) => html.match(/<link rel="alternate nofollow" type="application\/json" href="([^"]*)"/)?.[1];
 const count = (html: string, needle: string) => html.split(needle).length - 1;
 
 const XSS_TITLE = '<script>alert("t")</script> & "quotes"';
@@ -273,6 +273,46 @@ describe('SSR pages: catalog', () => {
 });
 
 describe('SSR pages: post', () => {
+  it.each([
+    ['LF', 'First line\nSecond line', 'First line<br>Second line'],
+    ['CRLF', 'First line\r\nSecond line', 'First line<br>Second line'],
+    ['lone CR', 'First line\rSecond line', 'First line<br>Second line'],
+    ['blank lines', 'First line\n\n\nLast line', 'First line<br><br><br>Last line'],
+    ['CRLF blank line', 'First line\r\n\r\nLast line', 'First line<br><br>Last line'],
+  ])('preserves %s in visible comment HTML', async (_name, body, expected) => {
+    const s = await seed();
+    const comment = await api(`/v1/posts/${s.p1.number}/comments`, { key: s.human.key, body: { body } });
+    expect(comment.status).toBe(201);
+    const r = await page(`/posts/${s.p1.number}`);
+    expect(r.status).toBe(200);
+    expect(r.html).toContain(`<div class="cmt-body">${expected}</div>`);
+  });
+
+  it('keeps comment HTML escaped and mention/ref links intact across line breaks', async () => {
+    const s = await seed();
+    const body = `<img src=x onerror="alert(1)"> & 'quoted'\n@${s.agent.handle} @missing-citizen\npost-${s.p1.number} comment-${s.c1.number} porch-1\n[click](javascript:alert(1))`;
+    const comment = await api(`/v1/posts/${s.p1.number}/comments`, { key: s.human.key, body: { body } });
+    expect(comment.status).toBe(201);
+    const r = await page(`/posts/${s.p1.number}`);
+    expect(r.status).toBe(200);
+    expect(r.html).toContain(`<div class="cmt-body">&lt;img src=x onerror=&quot;alert(1)&quot;&gt; &amp; &#39;quoted&#39;<br><a class="mention" href="/c/${s.agent.handle}">@${s.agent.handle}</a> @missing-citizen<br><a class="ref" href="/posts/${s.p1.number}">post-${s.p1.number}</a> <a class="ref" href="/comments/${s.c1.number}">comment-${s.c1.number}</a> <a class="ref" href="/porch/1">porch-1</a><br>[click](javascript:alert(1))</div>`);
+    expect(r.html).not.toContain('<img src=x');
+    expect(r.html).not.toContain('href="javascript:');
+    const ld = jsonld(r.html).find((x) => x['@type'] === 'DiscussionForumPosting');
+    expect(ld.comment.find((c: any) => c.identifier === `comment-${comment.body.number}`).text).toBe(body);
+  });
+
+  it('leaves withdrawn comment notices escaped and unformatted', async () => {
+    const s = await seed();
+    const reason = `A <b>reason</b>\n@${s.agent.handle} post-${s.p1.number}`;
+    await env.DB.prepare("UPDATE comments SET body = '', withdrawn_at = ?, withdraw_reason = ? WHERE number = ?")
+      .bind(new Date().toISOString(), reason, s.c1.number).run();
+    const r = await page(`/posts/${s.p1.number}`);
+    expect(r.status).toBe(200);
+    expect(r.html).toContain(`<div class="cmt-body"><p class="muted">Withdrawn by author: A &lt;b&gt;reason&lt;/b&gt;\n@${s.agent.handle} post-${s.p1.number}</p></div>`);
+    expect(r.html).not.toContain('Top-level &lt;i&gt;comment&lt;/i&gt;');
+  });
+
   it('renders the comment tree, public voters and DiscussionForumPosting JSON-LD', async () => {
     const s = await seed();
     const html = (await page(`/posts/${s.p1.number}`)).html;
@@ -376,6 +416,12 @@ describe('SSR pages: private, search, moderation', () => {
     expect(html).toContain(`comment-${s.c3.number}`);
     expect(html).toContain('<span class="mod-action mod-hide">hide</span>');
     expect(html).not.toContain('Soon hidden');
+  });
+
+  it('/moderation rejects invalid before parameter with 400 (#216)', async () => {
+    expect((await page('/moderation?before=abc')).status).toBe(400);
+    expect((await page('/moderation?before=-1')).status).toBe(400);
+    expect((await page('/moderation?before=1.5')).status).toBe(400);
   });
 });
 

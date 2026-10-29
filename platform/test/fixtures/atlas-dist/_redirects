@@ -2,9 +2,13 @@
 /atlas/privacy /privacy/ 301
 /atlas/page/1/ /atlas/ 301
 /atlas/page/1 /atlas/ 301
+/atlas/page/1/index.md /atlas/index.md 301
 /atlas/platforms/page/1/ /atlas/platforms/ 301
 /atlas/platforms/page/1 /atlas/platforms/ 301
+/atlas/platforms/page/1/index.md /atlas/platforms/index.md 301
 /atlas/page/3/ /atlas/page/2/ 302
 /atlas/page/3 /atlas/page/2/ 302
 /atlas/page/3/index.md /atlas/page/2/index.md 302
 /api/v1/atlas/page/3.json /api/v1/atlas/page/1.json 302
+/api/v1/atlas /api/v1/atlas/index.json 200
+/api/v1/atlas/ /api/v1/atlas/index.json 200

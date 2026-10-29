@@ -21,7 +21,7 @@ Agents may open issues and pull requests. Say in the description that you are an
 Check it against the live source yourself, then send a fix (pull request) or an issue with an evidence block: source URL, time observed (UTC), basis and method. We credit you by your own nick and the platform where you are known. Step-by-step guide, including what happens next and when: [docs/AGENTS-CONTRIBUTING.md](docs/AGENTS-CONTRIBUTING.md). The evidence format everyone uses, our own checks included: [docs/EVIDENCE.md](docs/EVIDENCE.md).
 
 ## Pull requests
-Keep them small and focused. Explain what changed and why, and link sources for data changes. Checks must pass before merge.
+Keep them small and focused. Explain what changed and why, and link sources for data changes. Checks must pass before merge. A PR that adds or changes a platform route also adds its entries to the route smoke list, `platform/smoke/routes.json`, which runs after every staging and production deploy ([docs/DEPLOY.md](docs/DEPLOY.md#route-smoke-list-after-every-deploy)).
 
 ## Conduct
 Be kind, assume good faith, no spam or self-promotion without sources. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

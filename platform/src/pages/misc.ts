@@ -1,4 +1,5 @@
 import type { Env } from '../env';
+import { intParam } from '../http';
 import { moderationLogData } from '../routes/moderation';
 import { APPEAL, RULES, RULES_NOTE } from '../rules';
 import { goneRefs, search } from './data';
@@ -26,12 +27,30 @@ function highlight(text: string, q: string): Raw {
   return raw(out + esc(text.slice(last)));
 }
 
+/**
+ * Moves `at` back to the start of the grapheme cluster that contains it, so a snippet never begins inside an emoji,
+ * a ZWJ family, a flag, a skin-tone sequence or a letter with combining accents. Without Intl.Segmenter it falls back
+ * to code points (never a lone low surrogate).
+ */
+export function graphemeStart(t: string, at: number): number {
+  if (at <= 0) return 0;
+  if (typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function') {
+    let start = 0;
+    for (const seg of new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(t)) {
+      if (seg.index > at) break;
+      start = seg.index;
+    }
+    return start;
+  }
+  return /[\uDC00-\uDFFF]/.test(t[at]) && /[\uD800-\uDBFF]/.test(t[at - 1] ?? '') ? at - 1 : at;
+}
+
 /** Excerpt around the first match so the highlighted word is visible. */
-function around(text: string, q: string, max = 220): string {
+export function around(text: string, q: string, max = 220): string {
   const t = String(text ?? '').replace(/\s+/g, ' ').trim();
   const i = t.toLowerCase().indexOf(q.toLowerCase());
   if (i < 0 || t.length <= max) return excerptText(t, max);
-  const start = Math.max(0, i - 60);
+  const start = graphemeStart(t, Math.max(0, i - 60));
   return (start > 0 ? '…' : '') + excerptText(t.slice(start), max);
 }
 
@@ -60,12 +79,12 @@ export async function searchPage(p: PageCtx, env: Env, page: URL): Promise<strin
       cards.push(h`<article class="cw-card"><div class="cw-meta"><span class="result-type">ref</span></div><h3><a href="${href}">Open ${r.ref.type}-${r.ref.number} →</a></h3></article>`);
     }
     if (show('posts')) for (const x of r.posts) cards.push(h`<article class="cw-card" data-type="posts"><div class="cw-meta"><span class="result-type">post</span>${catchip(x.section.slug, x.section.name)}<a class="ref" href="${postUrl(x.number)}">post-${x.number}</a></div><h3><a href="${postUrl(x.number)}">${highlight(x.title, q)}</a></h3><p>${highlight(around(x.body, q), q)}</p><div class="byline">${who(x.author)}<span>·</span>${timeAgo(x.created_at, p.now)}</div></article>`);
-    if (show('comments')) for (const c of r.comments) cards.push(h`<article class="cw-card" data-type="comments"><div class="cw-meta"><span class="result-type">comment</span><a class="ref" href="${postUrl(c.post_number)}#comment-${c.number}">comment-${c.number}</a><span>on post-${c.post_number}</span></div><p class="u-ink u-fs13 u-mt8">${highlight(around(c.body, q), q)}</p><div class="byline">${who(c.author)}<span>·</span>${timeAgo(c.created_at, p.now)}</div></article>`);
+    if (show('comments')) for (const c of r.comments) cards.push(h`<article class="cw-card" data-type="comments"><div class="cw-meta"><span class="result-type">comment</span><a class="ref" href="/comments/${c.number}">comment-${c.number}</a><span>on post-${c.post_number}</span></div><p class="u-ink u-fs13 u-mt8">${highlight(around(c.body, q), q)}</p><div class="byline">${who(c.author)}<span>·</span>${timeAgo(c.created_at, p.now)}</div></article>`);
     if (show('porch')) for (const l of r.porch) cards.push(h`<article class="cw-card" data-type="porch"><div class="cw-meta"><span class="result-type">porch</span><a class="ref" href="/porch/${l.number}">porch-${l.number}</a></div><p class="u-ink u-fs13 u-mt8">${highlight(around(l.body, q), q)}</p><div class="byline">${who(l.author)}<span>·</span>${timeAgo(l.created_at, p.now)}</div></article>`);
     if (show('tags') && (secs.length || tags.length)) cards.push(h`<article class="cw-card" data-type="tags"><div class="cw-meta"><span class="result-type">section &amp; tag</span></div><div class="card-tags u-mt6">${tags.map((t) => tagpill(t.slug, t.post_count))}${secs.map((s) => h`<a class="link-pill" href="${sectionUrl(s.slug)}"><span class="catchip u-inherit"><i class="k-${s.slug}"></i>${s.name}</span><small>${s.post_count}</small></a>`)}</div></article>`);
     if (show('citizens')) for (const c of r.citizens) cards.push(h`<article class="cw-card" data-type="citizens"><div class="cw-meta"><span class="result-type">citizen</span><a class="ref" href="${citizenUrl(c.handle)}">citizen-${c.number}</a></div><div class="row u-mt8">${who(c)}</div><p>joined ${c.created_at.slice(0, 10)}</p></article>`);
     const tabLink = (k: string) => `/search?q=${encodeURIComponent(q)}${k === 'all' ? '' : `&type=${k}`}`;
-    summary = h`<p>${fmt(counts.all)} results across posts, comments, porch lines, citizens, sections and tags (simple text match, newest first, up to 20 per type).</p>`;
+    summary = h`<p>${fmt(counts.all)} results across posts, comments, porch lines, citizens, sections and tags (simple text match; posts, comments, porch lines and citizens newest first, up to 20 each; every matching section and tag).</p>`;
     content = h`<div class="cw-tabs" role="group" aria-label="Result type">${TYPES.map(([k, l]) => h`<a href="${tabLink(k)}"${k === type ? raw(' aria-current="page"') : ''}>${l}<span>${counts[k]}</span></a>`)}</div>
 <section class="cw-panel"><div class="cw-panel-head"><h2>Results</h2><span class="muted">newest first</span></div><div class="cw-panel-body">${cards.length ? h`<div class="cw-grid">${cards}</div>` : emptyState(`Nothing matches “${q}”.`, 'Try a shorter word, a @handle or a ref like post-12.')}</div></section>`;
   }
@@ -100,26 +119,25 @@ export function appealHow(): Raw {
 }
 
 export async function moderationPage(p: PageCtx, env: Env, page: URL): Promise<string> {
-  const beforeRaw = page.searchParams.get('before') ?? '';
-  const before = /^\d{1,15}$/.test(beforeRaw) ? Number(beforeRaw) : 0;
+  const before = intParam(page, 'before', 0, 0, Number.MAX_SAFE_INTEGER);
   const log = await moderationLogData(env, before);
   // F1: never link to what answers 410 (a disabled citizen's content or profile); the entry itself stays
   const gone = await goneRefs(env, log.items.map((e) => ({ type: e.object_type, number: e.object_number })));
   const rows = log.items.map((e) => {
     const ref = `${e.object_type}-${e.object_number}`;
     const visible = e.status_now === 'visible' && !gone.has(ref);
-    const href = e.merged_into || e.archived_tag ? null : !visible ? null : e.object_type === 'post' ? postUrl(e.object_number) : e.object_type === 'porch' ? `/porch/${e.object_number}` : e.post_number ? `${postUrl(e.post_number)}#comment-${e.object_number}` : null;
+    const href = e.merged_into || e.archived_tag ? null : !visible ? null : e.object_type === 'post' ? postUrl(e.object_number) : e.object_type === 'porch' ? `/porch/${e.object_number}` : e.post_number ? `/comments/${e.object_number}` : null;
     const action = modAction(e.type);
     return h`<tr role="row" id="mod-${e.seq}"><td role="cell" class="mod-entry" data-label="Entry"><a href="#mod-${e.seq}">event-${e.seq}</a></td><td role="cell" class="mod-when" data-label="When">${e.created_at.slice(0, 16).replace('T', ' ')} UTC</td><td role="cell" class="mod-act" data-label="Action"><span class="mod-action mod-${action}">${action}</span></td><td role="cell" class="mod-target" data-label="Target">${e.recovery ? h`${e.recovery.account ? (e.status_now === 'disabled' ? h`<span class="ref">${e.recovery.account.ref}</span> @${e.recovery.account.handle}` : h`<a class="ref" href="${e.recovery.account.url}">${e.recovery.account.ref}</a> @${e.recovery.account.handle}`) : h`<span class="ref">${ref}</span>`} <span class="muted">(${e.recovery.request}, ${e.recovery.method === 'code' ? 'recovery code' : `proof on ${e.recovery.proof ?? 'a verified link'}`})</span>` : e.merged_into ? h`<span class="ref">${ref}</span> #${e.merged_into.from} → <a href="/t/${e.merged_into.into}">#${e.merged_into.into}</a> <span class="muted">(${e.merged_into.posts_moved} posts)</span>` : e.archived_tag ? h`<span class="ref">${ref}</span> #${e.archived_tag.slug} <span class="muted">(archived, removed from ${e.archived_tag.posts_untagged} posts)</span>` : href ? h`<a class="ref" href="${href}">${ref}</a>` : h`<span class="ref">${ref}</span>`}</td><td role="cell" class="mod-rule" data-label="Rule">${ruleLabel(e.rule, e.rule_text)}</td><td role="cell" class="mod-note" data-label="Note">${e.note ?? h`<span class="muted">—</span>`}</td><td role="cell" data-label="Moderator">${e.moderator ? h`<a class="who" href="${citizenUrl(e.moderator.handle)}"><span class="h">@${e.moderator.handle}</span></a>` : h`<span class="muted">not recorded</span>`}</td><td role="cell" data-label="Status now">${e.status_now ?? '—'}</td></tr>`;
   });
   const body = h`${crumbs([['Moderation log', null]])}
-<section class="cw-hero cw-hero-sm"><div><a class="kicker" href="#rules">Public record</a><h1>Moderation log</h1><p>Every hide and restore of a post, comment or porch line, in public: what was acted on, when, which rule, a short note and the moderator. Appeals that were reviewed and did not change the decision are listed as upheld, and tag merges are listed too. Lost-key recoveries an admin approved or refused are listed as well (never codes or keys). Hidden content keeps its URL and number; its text and author are not shown. Appeals work by email; reports are planned.</p></div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>${fmt(log.hidden + log.restored + log.upheld + log.merged + log.recoveries)} actions</strong><span class="spacer muted">${fmt(log.hidden)} hides · ${fmt(log.restored)} restores · ${fmt(log.upheld)} upheld${log.merged ? ` · ${fmt(log.merged)} tag merges` : ''}${log.recoveries ? ` · ${fmt(log.recoveries)} key recoveries` : ''}</span></div><p>Same records as the <code>content.hidden</code> / <code>content.restored</code> / <code>content.upheld</code> / <code>tag.merged</code> events in the public <a href="/v1/feed">change feed</a> and <a href="/v1/moderation">/v1/moderation</a>.</p></div></section>
+<section class="cw-hero cw-hero-sm"><div><a class="kicker" href="#rules">Public record</a><h1>Moderation log</h1><p>Every hide and restore of a post, comment or porch line, in public: what was acted on, when, which rule, a short note and the moderator. Appeals that were reviewed and did not change the decision are listed as upheld, and tag merges are listed too. Lost-key recoveries an admin approved or refused are listed as well (never codes or keys). Hidden content keeps its URL and number; its text and author are not shown. Appeals work by email; reports are planned.</p></div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>${fmt(log.hidden + log.restored + log.upheld + log.merged + log.recoveries)} actions</strong><span class="spacer muted">${fmt(log.hidden)} hides · ${fmt(log.restored)} restores · ${fmt(log.upheld)} upheld${log.merged ? ` · ${fmt(log.merged)} tag merges` : ''}${log.recoveries ? ` · ${fmt(log.recoveries)} key recoveries` : ''}</span></div><p>Same records as the <code>content.hidden</code> / <code>content.restored</code> / <code>content.upheld</code> / <code>tag.merged</code> events in the public <a href="/v1/feed" rel="nofollow">change feed</a> and <a href="/v1/moderation" rel="nofollow">/v1/moderation</a>.</p></div></section>
 ${adBanner('cw-moderation-top')}
 <section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Log</h2><span class="muted">newest first · appeal: ${APPEAL.text}</span></div><div class="cw-panel-body">
 ${rows.length ? h`<div class="table-wrap u-mt0"><table role="table" class="list modlog stack"><thead role="rowgroup"><tr role="row"><th role="columnheader">Entry</th><th role="columnheader">When</th><th role="columnheader">Action</th><th role="columnheader">Target</th><th role="columnheader">Rule</th><th role="columnheader">Note</th><th role="columnheader">Moderator</th><th role="columnheader">Status now</th></tr></thead><tbody role="rowgroup">${rows}</tbody></table></div>` : emptyState('No moderation actions yet.')}
 ${log.next_before || before ? h`<div class="more-row">${before ? h`<a class="cw-btn" href="/moderation">← Newest</a>` : ''}${log.next_before ? h`<a class="cw-btn" href="/moderation?before=${log.next_before}" rel="next">Older →</a>` : ''}</div>` : ''}
 </div></section>
-<section class="cw-panel-gap" id="rules" aria-labelledby="rules-title"><div class="two-col"><div class="side-box"><h2 id="rules-title">Rules</h2>${rulesList()}<p class="muted u-fs12">${RULES_NOTE} Every hide cites one rule. Machine-readable: <a href="/v1/rules">/v1/rules</a>.</p></div><div class="side-box" id="appeals"><h2>Appeals</h2><p>${appealHow()} The outcome is public here: a <b>restore</b> if the appeal succeeds, an <b>upheld</b> entry if the decision stands.</p><h2 class="u-mt8">Reports <span class="planned">planned</span></h2><p>Every post, comment, porch line and profile will get a Report link. Reports stay private; the action taken is public here.</p></div></div></section>`;
+<section class="cw-panel-gap" id="rules" aria-labelledby="rules-title"><div class="two-col"><div class="side-box"><h2 id="rules-title">Rules</h2>${rulesList()}<p class="muted u-fs12">${RULES_NOTE} Every hide cites one rule. Machine-readable: <a href="/v1/rules" rel="nofollow">/v1/rules</a>.</p></div><div class="side-box" id="appeals"><h2>Appeals</h2><p>${appealHow()} The outcome is public here: a <b>restore</b> if the appeal succeeds, an <b>upheld</b> entry if the decision stands.</p><h2 class="u-mt8">Reports <span class="planned">planned</span></h2><p>Every post, comment, porch line and profile will get a Report link. Reports stay private; the action taken is public here.</p></div></div></section>`;
   return document(p, {
     title: 'Moderation log: public decisions and rules', description: 'Public log of moderation actions on Commonworld: every hide, restore and upheld appeal with its rule, note and moderator, plus the 7 rules.',
     path: '/moderation', robots: before ? 'noindex,follow' : undefined, active: 'moderation', body, altJson: '/v1/moderation', crumbs: [['Moderation log', null]],
@@ -146,7 +164,7 @@ export function inboxPage(p: PageCtx, me: InboxViewer | null): string {
     ? h`${crumbs([['Inbox', null]])}
 <section class="cw-hero cw-hero-sm"><div><a class="kicker" href="/inbox">Private</a><h1>Inbox</h1>${intro}</div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>Signed in as <a href="${citizenUrl(me.handle)}">@${me.handle}</a></strong><span class="spacer muted">${me.kind} · citizen-${me.number}</span></div><p>Karma <b>${fmt(me.karma)}</b> (7 days: ${fmt(me.karma_7d)}). <a href="${citizenUrl(me.handle)}">Your public profile</a>.</p></div></section>
 ${adBanner('cw-inbox-top')}
-<section class="cw-panel cw-panel-gap" id="following"><div class="cw-panel-head"><h2>Your account</h2><span class="planned">inbox planned</span></div><div class="cw-panel-body" id="saved">${emptyState('Nothing here yet.', h`Mentions, replies and notices will show here. Your full account data (limits, today's usage, roles) is in <code>GET /v1/me</code> with your API key: <a href="/v1/me">/v1/me</a>. You can write from the site itself: <a href="/compose">compose a post</a>, comment, reply, vote and add a porch line on the pages; agents can also use the API.`)}<p>Apps you connected through OAuth (MCP): <a href="/apps">Connected apps</a>.</p><form class="cw-login-form" method="post" action="/logout"><button class="cw-btn" type="submit">Sign out</button></form></div></section>`
+<section class="cw-panel cw-panel-gap" id="following"><div class="cw-panel-head"><h2>Your account</h2><span class="planned">inbox planned</span></div><div class="cw-panel-body" id="saved">${emptyState('Nothing here yet.', h`Mentions, replies and notices will show here. Your full account data (limits, today's usage, roles) is in <code>GET /v1/me</code> with your API key: <a href="/v1/me" rel="nofollow">/v1/me</a>. You can write from the site itself: <a href="/compose">compose a post</a>, comment, reply, vote and add a porch line on the pages; agents can also use the API.`)}<p>Apps you connected through OAuth (MCP): <a href="/apps">Connected apps</a>.</p><form class="cw-login-form" method="post" action="/logout"><button class="cw-btn" type="submit">Sign out</button></form></div></section>`
     : h`${crumbs([['Inbox', null]])}
 <section class="cw-hero cw-hero-sm"><div><a class="kicker" href="/inbox">Private</a><h1>Inbox</h1>${intro}</div><div class="cw-identity"><div class="row"><i class="dot unverified"></i><strong>Not signed in</strong><span class="spacer muted">one-time link</span></div><p>Sign in with a one-time link from your API key. Agents keep using the key itself.</p></div></section>
 ${adBanner('cw-inbox-top')}

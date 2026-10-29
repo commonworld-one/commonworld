@@ -5,7 +5,7 @@
  * Two matchers with identical results: for a handful of domains (the hourly own-domain check inside a Worker, where CPU
  * time is capped) a delimited substring search over the raw text, so a multi-megabyte list is never parsed; for many
  * domains (the Atlas) a Set built once. */
-import { candidates } from '../domain.ts';
+import { candidates, normalizeDomain } from '../domain.ts';
 import { getText, iso } from '../http.ts';
 import type { CheckContext, Source, SourceResult } from '../types.ts';
 
@@ -54,21 +54,40 @@ function hostOfLine(line: string, urls: boolean): string {
   try { return new URL(s.includes('://') ? s : 'http://' + s).hostname.replace(/\.$/, ''); } catch { return ''; }
 }
 
+/**
+ * Entries not written as a plain ASCII host name (Unicode labels, percent-escapes, IDNA dots such as U+3002), in the
+ * normalized form the domains we look up are in (domain.ts: punycode, lower case), so both sides of a match are compared
+ * normalized. An entry with a path ('/') is never reduced to its host, so a listing of one page of a shared site never
+ * flags the whole site. The lists in use today hold none of these; this keeps a future one from being missed.
+ */
+export function oddEntries(r: string): Set<string> {
+  const out = new Set<string>();
+  for (const tok of r.match(/[^\s",[\]]*(?:[^\x00-\x7f]|%[0-9a-f]{2})[^\s",[\]]*/gi) ?? []) {
+    if (/[/?#]/.test(tok)) continue;
+    const d = normalizeDomain(tok);
+    if (d) out.add(d);
+  }
+  return out;
+}
+
 export function buildSet(text: string, f: ListFormat): Set<string> {
   const r = region(text, f);
+  let out: Set<string>;
   if (f.kind === 'json-array') {
     const arr = JSON.parse(r);
     if (!Array.isArray(arr)) throw new Error('list is not a JSON array');
-    return new Set(arr.filter((x: unknown) => typeof x === 'string').map((x: string) => x.trim().replace(/\.$/, '')));
+    out = new Set(arr.filter((x: unknown) => typeof x === 'string').map((x: string) => x.trim().replace(/\.$/, '')));
+  } else {
+    out = new Set<string>();
+    for (const line of r.split('\n')) { const h = hostOfLine(line, !!f.urls); if (h) out.add(h); }
   }
-  const out = new Set<string>();
-  for (const line of r.split('\n')) { const h = hostOfLine(line, !!f.urls); if (h) out.add(h); }
+  for (const d of oddEntries(r)) out.add(d);
   return out;
 }
 
 /** Substring matcher: true when `name` appears as a whole entry. */
 export function substringHas(r: string, f: ListFormat, name: string): boolean {
-  if (f.kind === 'json-array') return r.includes(`"${name}"`);
+  if (f.kind === 'json-array') return r.includes(`"${name}"`) || r.includes(`"${name}."`);
   if (!f.urls) return r.includes(`\n${name}\n`) || r.includes(`\n${name}.\n`);
   // URL lines: the host sits between '://' (or line start) and one of / : ? # or end of line
   let i = r.indexOf(name);
@@ -101,7 +120,8 @@ export function listSource(spec: ListSpec): Source {
         if (domains.length <= (spec.substringMax ?? 20)) {
           const r = region(text, spec.format);
           if (r.length < 3) throw new Error('list is empty');
-          has = (n) => substringHas(r, spec.format, n);
+          const odd = oddEntries(r);
+          has = (n) => substringHas(r, spec.format, n) || odd.has(n);
         } else {
           const set = buildSet(text, spec.format);
           if (set.size === 0) throw new Error('list is empty');

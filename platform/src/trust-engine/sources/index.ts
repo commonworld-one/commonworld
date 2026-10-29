@@ -1,4 +1,4 @@
-// Vendored from commonworld-one/commonworld trust/src/sources/index.ts @ 539d06f (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
+// Vendored from commonworld-one/commonworld trust/src/sources/index.ts @ 1780784 (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
 /** The source plugins. DEFAULT_SOURCES run unless a caller picks its own list. Every default source is free and needs no
  * key; each one's terms were read before it was added (see TRUST.md, "Sources"). */
 import type { Source } from '../types.ts';

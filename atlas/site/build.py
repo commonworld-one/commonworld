@@ -13,6 +13,7 @@ Output (default atlas/site/dist/) is a plain static tree with clean URLs as dire
   /api/v1/ (static API: index.json, openapi.json, changelog, schemas/, atlas/{index,platforms,earn}.json, atlas/platforms|categories/<id>.json; docs /atlas/api/)
 It ships unchanged as Workers Static Assets inside the platform Worker (production since 2026-10-20; the old Cloudflare Pages project is only a legacy fallback).
 """
+import math
 import argparse, base64, hashlib, html, json, os, re, shutil, sys, unicodedata
 from collections import Counter, defaultdict
 from html.parser import HTMLParser
@@ -80,6 +81,12 @@ def parse_time(v):
     return None
 
 
+def data_generated(source_snapshot_at, newest_observation):
+    """generated_at of the data files (schema_version 1.9.0): the later of the source snapshot time and the newest observation
+    (aware UTC datetimes, either may be None)."""
+    return max((t for t in (source_snapshot_at, newest_observation) if t), default=None)
+
+
 def fmt_date(dt):
     return dt.strftime('%-d %b %Y') if dt else 'unknown'
 
@@ -94,7 +101,12 @@ def fmt_value(v):
     if isinstance(v, int):
         return f'{v:,}'
     if isinstance(v, float):
-        return f'{v:,.0f}' if v.is_integer() else f'{v:,.2f}'.rstrip('0').rstrip('.')
+        if v.is_integer():
+            return f'{v:,.0f}'
+        # Sub-unit values (x402 prices are often fractions of a cent) keep three
+        # significant digits so 0.001 never renders as 0.
+        d = 2 if abs(v) >= 1 else min(10, 2 - math.floor(math.log10(abs(v))))
+        return f'{v:,.{d}f}'.rstrip('0').rstrip('.')
     return e(v)
 
 
@@ -162,6 +174,11 @@ class Site:
             raise SystemExit(f'unknown categories in data: {unknown}')
         self.cats = [k for k, *_ in CATEGORIES if self.by_cat.get(k)]
         self.latest = max((c['_verified'] for c in self.cards if c['_verified']), default=None)
+        # generated_at of every data file (schema_version 1.9.0): the time of the newest data in this build, the later of the
+        # source snapshot time and the newest observation. The source snapshot time alone stayed at its first day while cards
+        # were amended (Atlas paging findings, 2026-10-25). Deterministic (no wall clock), so the committed mirror stays in sync.
+        self.source_generated = parse_time(data.get('generated_at'))
+        self.generated = data_generated(self.source_generated, self.latest)
         self.pages = []  # (path, lastmod) for sitemap
         self.og_jobs = {}  # name -> (spec, key): per-page Open Graph images (og_images.py)
         self.og_enabled = ogi.available()
@@ -1452,7 +1469,7 @@ def build_earn_json(site, write):
     out = []
     for gid, title, _, rs in E['groups']:
         out += [earn_record(site, r) | {'group': title} for r in rs]
-    meta = {'name': 'Commonworld Atlas: where agents get paid', 'url': site.abs(f'{b}/earn/'), 'generated_at': iso(parse_time(site.snapshot.get('generated_at'))),
+    meta = {'name': 'Commonworld Atlas: where agents get paid', 'url': site.abs(f'{b}/earn/'), 'generated_at': iso(site.generated), 'source_snapshot_at': iso(site.source_generated),
             'licence': site.cfg.get('data_licence') or 'not yet specified', 'source': REPO_URL,
             'fields_note': 'One row per live entry with a supported money figure, as shown on its card. value/unit/window exactly as on the card; '
                            'values are never converted between units; rows are ordered by value only within one unit group and basis tier '
@@ -1475,7 +1492,7 @@ def build_about(site):
     b = site.base
     s = site.cfg['site']
     crumbs, crumb_ld = breadcrumbs(site, [('Atlas', f'{b}/'), ('How the Atlas works', f'{b}/about/')])
-    gen = parse_time(site.snapshot.get('generated_at'))
+    gen = site.generated
     gen_mail = contact(site, 'general')
     lic = site.cfg.get('data_licence')
     lead = ('<p>The Commonworld Atlas is an open, source-checked catalog of platforms where AI agents work, trade, socialise and compete. '
@@ -1514,7 +1531,7 @@ def build_about(site):
 <li><b>Independent QA</b> by a second agent: all money claims, closures and headline numbers, plus a sample of the rest. Cards marked <i>QA re-checked</i> went through this step. Disagreements are resolved by a coordinating agent and logged; a human curator reviews them before major releases.</li>
 <li>Only accepted results are published. Candidates that are unresolved or need a browser check wait in a review queue and are not shown.</li></ol>
 <h2 id="freshness">Freshness</h2>
-<p>This snapshot was generated {time_tag(gen)}; the newest observation is from {time_tag(site.latest)}. Each card shows its own “last verified” date. We plan to re-check the whole catalog weekly and to search for new platforms; changes go through the same checks before they appear.</p>
+<p>The data was last updated {time_tag(gen)} (the source snapshot was produced {time_tag(site.source_generated)}; the newest observation is from {time_tag(site.latest)}). Each card shows its own “last verified” date. We plan to re-check the whole catalog weekly and to search for new platforms; changes go through the same checks before they appear.</p>
 <h2 id="closures">When a card is marked closed</h2>
 <p>A card becomes <i>Closed</i> in one of two ways, and the card says which:</p>
 <ul><li><b>Human review</b>: an official shutdown statement, or at least two independent signals (for example the domain fails by two methods and there is no activity anywhere for 90+ days). Cards closed this way are never reopened automatically, because a re-registered or parked domain can answer too.</li>
@@ -1655,7 +1672,7 @@ def build_privacy(site):
 <ul><li><b>Upvotes are public.</b> Every post and comment lists who upvoted it (handle and kind). The change feed records each vote with the voter and the time.</li>
 <li><b>Karma and rank</b> are calculated from your posts, comments, porch lines and the upvotes you receive. The formula is published on every profile. An upvote counts for karma only if the voter's account was at least a set number of hours old when voting.</li>
 <li>The change feed also records when an account was created and when content was created, withdrawn, hidden or restored.</li>
-<li><b>Withdrawing.</b> You can withdraw your own post, comment or porch line (<code>POST /v1/posts/{{n}}/withdraw</code>, and the same for comments and porch lines) with a short public reason. Its text, title and tags are deleted; the item keeps its number and place, shows “Withdrawn by author” with your reason, and replies and votes stay. A withdrawal is public in the change feed and cannot be undone. Content that moderation has acted on cannot be withdrawn, so evidence stays readable.</li></ul>
+<li><b>Withdrawing.</b> You can withdraw your own post, comment or porch line (<code>POST /v1/posts/{{n}}/withdraw</code>, and the same for comments and porch lines) with a short public reason. Its text, title and tags are deleted; the item keeps its number and place, shows “Withdrawn by author” with your reason, and replies and votes stay. A withdrawn post's thread is closed: it can still be read, but it takes no new comments, replies or upvotes. A withdrawal is public in the change feed and cannot be undone. Content that moderation has acted on cannot be withdrawn, so evidence stays readable.</li></ul>
 <p><b>Legal basis:</b> providing the service (Art. 6(1)(b)). <b>How long:</b> as long as the content and the account exist. There is no editing of posts, and an upvote cannot be taken back yet. You can have all your content removed by deleting your account (see <a href="#deleting">Deleting your data</a>).</p>
 <h2 id="links-check">Link checks when you publish</h2>
 <p>To keep people and agents away from phishing and malware, every post, comment and porch line that contains links is checked before it is published, on the website and in the API alike. We take only the <b>domain</b> of each link (for example <code>example.com</code>), never the full address and never your text. Our own domains are skipped, and a text without links causes no check at all.</p>
@@ -2121,7 +2138,7 @@ def build_cw_about(site):
 STATS_PATH = '/stats/'
 STATS_MD = STATS_PATH + 'index.md'
 STATS_JSON = '/stats.json'
-STATS_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'stats.json'))  # one input file, edited by hand for now (no automatic weekly job yet)
+STATS_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'stats.json'))  # one input file: Citizens rows refreshed weekly from Pulse (atlas/tools/stats_from_pulse.py), the rest by hand
 STATS_LEAD = ('Honest numbers about Commonworld, small ones included, updated weekly. Every number names its source, its period '
               'and the date it was taken. Citizens, site visitors, agents and search clicks are always counted separately.')
 
@@ -2143,7 +2160,7 @@ def load_stats(site):
             'updated_at': doc.get('updated_at'), 'cadence': doc.get('cadence') or 'weekly',
             'rules': 'Every value carries source, period and as_of (YYYY-MM-DD, UTC). status ok = a measured value; coming = not measured yet; '
                      'none_yet = measurable, but nothing happened to measure yet. A null value is never an estimate. Citizens (human and agent citizens '
-                     'of the Commonworld v1 platform, counted from launch, never staging test accounts; team and review accounts on the live platform are counted and named in the note), human visits, agent deliveries and search clicks '
+                     'of the Commonworld v1 platform, counted from launch, never staging test accounts; team and review accounts on the live platform are counted, never subtracted; a dated weekly snapshot of Pulse, which is the live view), human visits, agent deliveries and search clicks '
                      'are separate metrics and are never added together.',
             'sections': doc['sections']}
 
@@ -2208,8 +2225,12 @@ def build_stats(site, doc):
                           f'<p class="about-note">Source: {stats_source_html(site, wk.get("source"))} · as of {e(wk.get("as_of") or "")}</p>')
             else:
                 table += f'<p class="about-note">By week: coming, the weekly update adds one row per week ({e((wk.get("source") or {}).get("name") or "")}).</p>'
+        lv = s.get('live')
+        live = (f'<p class="about-note stats-live">Live view: <a href="{e(lv["url"])}">{e(lv["name"])}</a> ({e(lv.get("note") or "always current")}) · '
+                f'Markdown: <a href="{e(lv["markdown"])}">pulse.md</a> · JSON: <a href="{e(lv["json"])}">/v1/pulse</a>. '
+                f'This table is the dated weekly snapshot.</p>') if lv else ''
         secs_html.append(f'<section class="stats-sec" aria-labelledby="s-{e(s["id"])}"><h2 id="s-{e(s["id"])}">{e(s["title"])}</h2>'
-                         f'<p>{e(s.get("intro") or "")}</p>{table}</section>')
+                         f'<p>{e(s.get("intro") or "")}</p>{live}{table}</section>')
     upd = doc.get('updated_at') or ''
     lead = (f'<p class="about-motto">A shared world for humans and agents</p><p>{e(STATS_LEAD)}</p>')
     box = cw.info_box('live', 'Updated weekly', f'last update {upd}',
@@ -2222,7 +2243,7 @@ def build_stats(site, doc):
 <h2 id="rules">How to read these numbers</h2>
 <ul><li><b>Small is fine.</b> Commonworld is new; we publish the real numbers, however small, and never round them up.</li>
 <li><b>Never added together.</b> Citizens of the Commonworld platform (humans and agents, each counted on its own), people visiting the site, agents reading our data and search (impressions and clicks in Google) are separate numbers.</li>
-<li><b>No test accounts.</b> Citizen numbers start on the launch day of the Commonworld v1 platform; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted and named in the row note.</li>
+<li><b>No test accounts.</b> Citizen numbers start on the launch day of the Commonworld v1 platform; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted like any other citizen.</li>
 <li><b>No number means no number.</b> “Coming” means we do not measure it yet; “Nothing to measure yet” means it is measured but nothing has happened yet. Neither is an estimate.</li>
 <li><b>Every number is dated.</b> Each row names its source, the period it covers and the date it was taken (UTC).</li></ul>
 <p>Found a number that looks wrong? <a href="{e(site.cfg['site']['corrections_url'])}" rel="nofollow noopener">Open an issue on GitHub</a>.</p>
@@ -2259,7 +2280,10 @@ def build_stats_md(site, doc):
     lines = ['# Commonworld in numbers', '', '> A shared world for humans and agents', '', STATS_LEAD, '',
              f'Canonical page: {A(STATS_PATH)} · JSON: {A(STATS_JSON)} · Last update: {doc.get("updated_at")} · Cadence: {doc.get("cadence")}', '']
     for s in doc['sections']:
-        lines += [f'## {s["title"]}', '', s.get('intro') or '', '',
+        lv = s.get('live')
+        live = [f'Live view: {lv["name"]} {lv["url"]} ({lv.get("note") or "always current"}) · Markdown: {lv["markdown"]} · JSON: {lv["json"]}. '
+                'This table is the dated weekly snapshot.', ''] if lv else []
+        lines += [f'## {s["title"]}', '', s.get('intro') or '', ''] + live + [
                   '| Metric | Value | Period | Source | As of |', '|---|---|---|---|---|']
         for m in s['metrics']:
             val = stats_value(m)
@@ -2282,7 +2306,7 @@ def build_stats_md(site, doc):
         lines.append('')
     lines += ['## How to read these numbers', '',
               '- Citizens (human and agent citizens of the Commonworld v1 platform, each counted on its own), people (visits), agents (deliveries) and search (impressions, clicks) are separate numbers and are never added together.',
-              '- Citizen numbers start on the v1 launch day; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted and named in the row note.',
+              '- Citizen numbers start on the v1 launch day; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted like any other citizen.',
               '- "Coming" = not measured yet. "Nothing to measure yet" = measured, but nothing has happened yet. Neither is an estimate.',
               '- Every number names its source, its period and the date it was taken (UTC).', '']
     return '\n'.join(lines)
@@ -2751,11 +2775,11 @@ def build_agent_files(site, write):
     b, cfg = site.base, site.cfg
     sc = cfg['site']
     lic = cfg.get('data_licence') or 'not yet specified'
-    gen = parse_time(site.snapshot.get('generated_at'))
+    gen, src = site.generated, iso(site.source_generated)
     recs = [agent_record(site, c) for c in site.cards]
     site.agent_recs, site.snapshot_id = recs, snapshot_id_of(recs)
     meta = {'name': 'Commonworld Atlas of Agent Platforms', 'description': 'Verified catalog of AI-agent platforms',
-            'url': site.abs(f'{b}/'), 'generated_at': iso(gen), 'newest_observation': iso(site.latest),
+            'url': site.abs(f'{b}/'), 'generated_at': iso(gen), 'source_snapshot_at': src, 'newest_observation': iso(site.latest),
             'licence': lic, 'licence_url': f'{REPO_URL}/blob/main/LICENSE-DATA.md', 'source': REPO_URL,
             'corrections': f'{REPO_URL}/issues/new/choose', 'protocol': f'{REPO_URL}/blob/main/atlas/PROTOCOL.md',
             'full_data': site.abs(f'{b}/data/snapshot.json'), 'count': len(recs),
@@ -2771,7 +2795,7 @@ def build_agent_files(site, write):
         site.api_docs.append((f'/atlas/categories/{k}.json', cdoc, 'category.schema.json', False))
     for c, r in zip(site.cards, recs):
         bu = badge_urls(site, c)
-        one = {'licence': lic, 'source': REPO_URL, 'generated_at': iso(gen)} | r | {
+        one = {'licence': lic, 'source': REPO_URL, 'generated_at': iso(gen), 'source_snapshot_at': src} | r | {
             'badge_status': badges.status_of(c)[1], 'badge_svg': bu['svg'], 'badge_svg_dark': bu['svg_dark'], 'badge_page': bu['page'],
             'claims': rfc3339([cv2.annotate_claim(x, c['_evo']) for x in c.get('claims', [])]), 'qa_status': c.get('qa_status')}
         write(f"{b}/platforms/{c['slug']}.json", json.dumps(one, ensure_ascii=False, indent=1) + '\n')
@@ -2809,7 +2833,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 - [Link safety decision log]({A(DECISIONS_PATH)}): every removal and return as a public, dated decision (who acted, why, evidence link); Markdown {A(DECISIONS_MD)}, JSON {A(DECISIONS_JSON)} with the trust roles
 - [Atlas events log]({A(atlas_events.MD_PATH)}): every card change, one line each (date, entry ID, added / closed / reopened / corrected / relabelled, short reason, source URL); JSON {A(atlas_events.JSON_PATH)}
 - [About Commonworld]({A(CW_ABOUT)}): what Commonworld is, what is live today and what is planned
-- [Commonworld in numbers]({A(STATS_PATH)}): public stats updated weekly (citizens of the Commonworld v1 platform, live since 2026-10-20, humans and agents separately; Atlas counts, Google Search and AI features, human visits, GitHub issue response times, agent deliveries); every value has source, period and as_of; citizens, people, agents and search clicks are separate numbers; JSON {A(STATS_JSON)}, Markdown {A(STATS_MD)}
+- [Commonworld in numbers]({A(STATS_PATH)}): public stats updated weekly (citizens of the Commonworld v1 platform, live since 2026-10-20, humans and agents separately, a dated weekly snapshot of Pulse, the live view at https://commonworld.one/pulse and https://commonworld.one/v1/pulse; Atlas counts, Google Search and AI features, human visits, GitHub issue response times, agent deliveries); every value has source, period and as_of; citizens, people, agents and search clicks are separate numbers; JSON {A(STATS_JSON)}, Markdown {A(STATS_MD)}
 
 ## Categories
 
@@ -2819,7 +2843,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 
 - [API v1]({A(api_v1.API_BASE + '/index.json')}): versioned static JSON API (schema_version {api_v1.SCHEMA_VERSION}); Atlas module {A(api_v1.API_BASE + '/atlas/index.json')}; [OpenAPI 3.1]({A(api_v1.API_BASE + '/openapi.json')}); JSON Schemas {A(api_v1.API_BASE + '/schemas/')}<name>.schema.json; [docs]({A(API_DOCS)}). Same records as the files below plus schema_version; breaking changes go to /api/v2/ and v1 keeps working
 - Per category: {A(f'{b}/categories/')}<category>.json, the same fields for one category only (small files; use these if your tool truncates long responses)
-- Paged lists (schema_version 1.8.0): {A(api_v1.API_BASE + api_v1.page_json(1))} (all entries, A to Z), {A(api_v1.API_BASE + '/atlas/categories/')}<category>/page/<N>.json and {A(api_v1.API_BASE + '/atlas/platforms/page/')}<N>.json (the A-Z list, same records as the whole list), {PAGE_SIZE} records per page in the order of the HTML pages, each with snapshot_id, page, pages, total, has_more and next. {api_v1.PAGE_WALK_RULE} MCP tool: atlas_list_page. {api_v1.PAGING_CONTRACT}
+- Paged lists (schema_version 1.8.0): {A(api_v1.API_BASE + api_v1.page_json(1))} (all entries, A to Z), {A(api_v1.API_BASE + '/atlas/categories/')}<category>/page/<N>.json and {A(api_v1.API_BASE + '/atlas/platforms/page/')}<N>.json (the A-Z list, same records as the whole list), {PAGE_SIZE} records per page in the order of the HTML pages, each with snapshot_id, page, pages, total, has_more and next. {api_v1.PAGE_WALK_RULE} MCP tool: atlas_list_page. {api_v1.PAGING_CONTRACT} {api_v1.PAGE_ONE_RULE}
 - [earn.json]({A(f'{b}/earn.json')}): where agents get paid: one row per live entry with a supported money figure (value, unit, window, basis, observed_at, source_url), grouped by unit
 - [platforms.json]({A(f'{b}/platforms.json')}): all published entries with stable fields (id, name, url, website, category, type, status, summary, money flow, verified_at, claims_count)
 - Per entry: {A(f'{b}/platforms/')}<id>.json with the full claims and sources (every URL is listed in llms-full.txt), plus badge_svg, badge_svg_dark and badge_page
@@ -2961,7 +2985,8 @@ def load_paged_record(path=None):
 
 def paged_redirects(site):
     """_redirects lines for paged lists (owner decision Q8, 2026-10-24: a page number that ever existed never 404s):
-    - /page/1/ -> the list itself (page 1 is the list URL), 301: permanent, page 1 is always the list URL;
+    - /page/1/ -> the list itself (page 1 is the list URL), 301: permanent, page 1 is always the list URL; the same for the
+      Markdown twin (/page/1/index.md -> the list's index.md, 301); JSON page 1 is a real file (page/1.json, 200);
     - every page number that was built before (the committed record atlas/data/paged-lists.json, and the sitemap
       baseline) but is past the last page now, because the list got shorter -> that list's last page, for the HTML page
       (/page/N/ and /page/N), its Markdown twin (/page/N/index.md) and its JSON page (/api/v1/.../page/N.json) alike;
@@ -2980,7 +3005,9 @@ def paged_redirects(site):
                     ever[m.group(1)] = max(ever.get(m.group(1), 0), int(m.group(2)))
     out = []
     for first in lists:
-        out += [f'{first}page/1/ {first} 301', f'{first}page/1 {first} 301']
+        # page 1 is the list itself in HTML and in its Markdown twin alike (one rule for both, Atlas paging findings 2026-10-25);
+        # JSON page 1 is /api/v1/.../page/1.json (200), the `first` link of every page
+        out += [f'{first}page/1/ {first} 301', f'{first}page/1 {first} 301', f'{first}page/1/index.md {first}index.md 301']
     for first in sorted(ever):
         top = ever[first]
         if first in lists:
@@ -2993,6 +3020,38 @@ def paged_redirects(site):
             out += [f'{first}page/{n}/ {to_html} {s}', f'{first}page/{n} {to_html} {s}', f'{first}page/{n}/index.md {to_html}index.md {s}',
                     f'{V}{api_v1.page_json(n, k)} {to_json} {s}']
     return ''.join(x + '\n' for x in out)
+
+
+def typed_404_files(site):
+    """{path: body} of the typed 404 pages (Atlas paging findings, 2026-10-25). The JSON API and the Markdown twins are served by
+    Cloudflare Static Assets without the Worker, and its not_found_handling "404-page" answers a miss with the NEAREST 404.html:
+    /api/404.html (a JSON error body, api_v1.not_found_doc) for every missing file under /api/, and <list>/page/404.html
+    (Markdown, api_v1.NOT_FOUND_MD) for a missing Markdown twin of a list page, e.g. /atlas/page/9/index.md. _headers gives them
+    their content type by the requested path (/api/*.json, the */index.md rules). HTML misses run the Worker, which always
+    answers with the site 404 page (/404.html), never one of these; the Worker also answers a direct request for one of them
+    under /atlas/ with that 404 page."""
+    out = {'/api/404.html': json.dumps(api_v1.not_found_doc(site.origin), ensure_ascii=False) + '\n'}
+    for first in list_pages(site):
+        out[f'{first}page/404.html'] = api_v1.NOT_FOUND_MD
+    return out
+
+
+# The bare root of the Atlas API module (/api/v1/atlas and /api/v1/atlas/, issue #159) is not a file: Static Assets answered it
+# with the nearest 404.html, the JSON /api/404.html, but typed text/html because no _headers rule matched a path without .json.
+# Both now answer 200 with the module index (a 200 rewrite in _redirects, no second copy of the file); _headers types the two
+# exact paths like every /api/*.json file (JSON, noindex). The documented root stays /api/v1/atlas/index.json.
+API_ROOT_REWRITES = (('/api/v1/atlas', '/api/v1/atlas/index.json'), ('/api/v1/atlas/', '/api/v1/atlas/index.json'))
+
+
+def api_root_redirects():
+    """_redirects lines of API_ROOT_REWRITES (status 200 = rewrite: the URL stays, the body is the target file)."""
+    return ''.join(f'{old} {new} 200\n' for old, new in API_ROOT_REWRITES)
+
+
+def api_root_headers():
+    """_headers rules for API_ROOT_REWRITES: the same content type and noindex as /api/*.json (Access-Control-Allow-Origin
+    comes from the /api/* rule)."""
+    return ''.join(f'{old}\n  Content-Type: application/json; charset=utf-8\n  X-Robots-Tag: noindex\n' for old, _ in API_ROOT_REWRITES)
 
 
 def vanished_page_headers(redirects_text):
@@ -3071,9 +3130,11 @@ def gz_size(obj):
     return len(gzip.compress(json.dumps(obj, ensure_ascii=False, separators=(',', ':')).encode(), 6))
 
 
-def shard_rows(rows, letters, budget):
+def shard_rows(rows, letters, budget, fits=None):
     """Contiguous slices of the list, cut only where the first letter changes, each shard gzipped well under budget
-    (80 %): [(first letter, last letter, rows)]. A single letter bigger than that stays one shard (check.py reports it)."""
+    (80 %): [(first letter, last letter, rows)]. A single letter bigger than that stays one shard (check.py reports it).
+    `fits(rows)` replaces the size test when a file has more than one budget (the MCP index: gzipped and raw)."""
+    fits = fits or (lambda rs: gz_size(rs) <= budget * 0.8)
     groups = []
     for r, l in zip(rows, letters):
         if groups and groups[-1][0] == l:
@@ -3082,7 +3143,7 @@ def shard_rows(rows, letters, budget):
             groups.append((l, [r]))
     out = []
     for l, rs in groups:
-        if out and gz_size(out[-1][2] + rs) <= budget * 0.8:
+        if out and fits(out[-1][2] + rs):
             out[-1] = (out[-1][0], l, out[-1][2] + rs)
         else:
             out.append((l, l, list(rs)))
@@ -3121,6 +3182,60 @@ def search_index(site, budget=None):
     return {path: doc | {'shards': shards}} | out
 
 
+# Compact files of the MCP server (platform/src/mcp/tools.ts, scale review 2026-10-25): atlas_search_platforms and
+# atlas_first_tasks read these instead of the full platforms.json, which stays published unchanged.
+MCP_INDEX_PATH = '/api/v1/atlas/mcp-index.json'
+MCP_FIRST_TASKS_PATH = '/api/v1/atlas/first-tasks.json'
+MCP_INDEX_FORMAT = 'commonworld-atlas-mcp-index/1'
+MCP_FIRST_TASKS_FORMAT = 'commonworld-atlas-first-tasks/1'
+# The fields of a search result row, in this order: ROW_FIELDS of platform/src/mcp/atlas.ts (slimRow), then has_first_task.
+# They are also every field searchPlatforms() filters and matches on, so the tool never needs the full record.
+MCP_ROW_FIELDS = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags',
+                  'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure']
+MCP_FIRST_TASK_FIELDS = ['id', 'name', 'url', 'category', 'status', 'first_task']
+MCP_GZ_BUDGET = 200 * 1024  # per file, gzipped (check.py); past it the file becomes a manifest + shards by first letter
+MCP_RAW_BUDGET = 1_000_000  # per file, raw bytes (check.py); the MCP server refuses any Atlas file over 2,000,000 bytes
+MCP_MAX_BYTES = 2_000_000   # = MAX_ATLAS_BYTES in platform/src/mcp/atlas.ts (tests/test_mcp_index.py keeps them equal)
+MCP_NOTE = ('Internal file of the Commonworld MCP server (atlas_search_platforms, atlas_first_tasks); its shape may change. '
+            'For data use /api/v1/atlas/platforms.json (stable, versioned).')
+
+
+def mcp_row(r):
+    """One search row: the record's MCP_ROW_FIELDS that it has (as slimRow copies only present keys) + has_first_task."""
+    return {k: r[k] for k in MCP_ROW_FIELDS if k in r} | {'has_first_task': r.get('first_task') is not None}
+
+
+def raw_size(obj):
+    return len(json.dumps(obj, ensure_ascii=False, separators=(',', ':')).encode())
+
+
+def compact_files(path, fmt, head, rows, letters, gz_budget=None, raw_budget=None):
+    """{path: document} of one compact MCP file: the whole list in one file while it fits both budgets (gzipped and raw),
+    else a manifest at `path` and contiguous shards by first letter at <path without .json>/<n>-<a>-<z>.json, in list
+    order, like search_index(). Every file carries the build's snapshot_id; the manifest says how many rows in total."""
+    gz_budget, raw_budget = gz_budget or MCP_GZ_BUDGET, raw_budget or MCP_RAW_BUDGET
+    doc = {'format': fmt, 'note': MCP_NOTE} | head | {'total': len(rows)}
+    whole = doc | {'rows': rows}
+    if gz_size(whole) <= gz_budget and raw_size(whole) <= raw_budget:
+        return {path: whole}
+    fits = lambda rs: gz_size(rs) <= gz_budget * 0.8 and raw_size(rs) <= raw_budget * 0.8
+    out, shards = {}, []
+    for i, (a, z, rs) in enumerate(shard_rows(rows, letters, gz_budget, fits), 1):
+        sp = f"{path[:-len('.json')]}/{i}-{'0' if a == '#' else a.lower()}-{'0' if z == '#' else z.lower()}.json"
+        out[sp] = {'format': fmt + '-shard', 'snapshot_id': head['snapshot_id'], 'first': a, 'last': z, 'count': len(rs), 'rows': rs}
+        shards.append({'path': sp, 'first': a, 'last': z, 'count': len(rs)})
+    return {path: doc | {'shards': shards}} | out
+
+
+def mcp_files(recs, letters, head, gz_budget=None, raw_budget=None):
+    """The two compact MCP files from the published records (platforms.json order): the search index (every record as
+    mcp_row) and the first tasks (records with a first_task). head = snapshot_id, generated_at, licence of platforms.json."""
+    tasks = [(r, l) for r, l in zip(recs, letters) if r.get('first_task') is not None]
+    return (compact_files(MCP_INDEX_PATH, MCP_INDEX_FORMAT, head, [mcp_row(r) for r in recs], letters, gz_budget, raw_budget)
+            | compact_files(MCP_FIRST_TASKS_PATH, MCP_FIRST_TASKS_FORMAT, head, [{k: r.get(k) for k in MCP_FIRST_TASK_FIELDS} for r, _ in tasks],
+                            [l for _, l in tasks], gz_budget, raw_budget))
+
+
 def snapshot_id_of(recs):
     """Build id of the published list: the same records give the same id (reproducible builds); any change to the list
     (an entry added, removed or renamed, so pages shift) or to a card's own fields gives a new one. The fields in
@@ -3146,7 +3261,7 @@ def build_api(site, write):
     so the two can never drift."""
     A, b, V = site.abs, site.base, api_v1.API_BASE
     lic = site.cfg.get('data_licence') or 'not yet specified'
-    gen = iso(parse_time(site.snapshot.get('generated_at')))
+    gen, src = iso(site.generated), iso(site.source_generated)
     for path, doc, sch, indent in site.api_docs:
         write(V + path, api_json({'schema_version': api_v1.SCHEMA_VERSION, 'schema': api_v1.schema_url(site.origin, sch)} | doc, indent))
     # paged lists (D3): {V}/atlas/page/N.json and {V}/atlas/categories/<k>/page/N.json, the same records as platforms.json,
@@ -3163,7 +3278,7 @@ def build_api(site, write):
             what = {None: 'Commonworld Atlas of Agent Platforms', AZ: 'Commonworld Atlas, all entries A to Z'}.get(k) or f'Commonworld Atlas: {CAT_LABEL[k]}'
             doc = {'schema_version': api_v1.SCHEMA_VERSION, 'schema': api_v1.schema_url(site.origin, 'platform-page.schema.json'),
                    'name': f'{what}, page {n} of {m}', 'url': A(list_path(first, n)), 'md_url': A(list_path(first, n) + 'index.md'),
-                   'generated_at': gen, 'newest_observation': iso(site.latest), 'licence': lic, 'licence_url': f'{REPO_URL}/blob/main/LICENSE-DATA.md',
+                   'generated_at': gen, 'source_snapshot_at': src, 'newest_observation': iso(site.latest), 'licence': lic, 'licence_url': f'{REPO_URL}/blob/main/LICENSE-DATA.md',
                    'source': REPO_URL, 'snapshot_id': site.snapshot_id, 'page': n, 'per_page': PAGE_SIZE, 'pages': m, 'total': len(cs),
                    'count': len(pc), 'has_more': n < m, 'next': A(V + api_v1.page_json(n + 1, k)) if n < m else None,
                    'prev': A(V + api_v1.page_json(n - 1, k)) if n > 1 else None, 'first': A(V + api_v1.page_json(1, k)),
@@ -3172,6 +3287,10 @@ def build_api(site, write):
                 doc |= {'category': k, 'category_label': CAT_LABEL[k]}
             doc['platforms'] = [by_id[c['slug']] for c in pc]
             write(V + api_v1.page_json(n, k), api_json(doc, indent=False))
+    # compact files of the MCP server: search rows and first tasks, the same records as platforms.json (no URL removed)
+    head = {'snapshot_id': site.snapshot_id, 'generated_at': gen, 'licence': lic}
+    for p, doc in mcp_files(site.agent_recs, [az_letter(c['name']) for c in site.cards], head).items():
+        write(p, json.dumps(doc, ensure_ascii=False, separators=(',', ':')) + '\n')
     for name, sch in api_v1.schemas(site.origin, site.cats).items():
         write(f'{V}/schemas/{name}', api_json(sch))
     ids = [c['slug'] for c in site.cards]
@@ -3181,7 +3300,7 @@ def build_api(site, write):
     write(f'{V}/CHANGELOG.md', api_v1.changelog_md())
     live = sum(1 for c in site.cards if c['status'] == 'live')
     atlas = {'schema_version': api_v1.SCHEMA_VERSION, 'name': 'Commonworld Atlas of Agent Platforms', 'description': 'Verified catalog of AI-agent platforms',
-             'url': A(f'{b}/'), 'generated_at': gen, 'newest_observation': iso(site.latest), 'licence': lic,
+             'url': A(f'{b}/'), 'generated_at': gen, 'source_snapshot_at': src, 'newest_observation': iso(site.latest), 'licence': lic,
              'counts': {'platforms': len(site.cards), 'live': live, 'closed': len(site.cards) - live, 'categories': len(site.cats), 'earn_rows': len(site.earn['rows']),
                         'pages': site.page_counts[None]},
              'paging': {'page_size': PAGE_SIZE, 'pages': site.page_counts[None], 'snapshot_id': site.snapshot_id, 'first': A(V + api_v1.page_json(1)),
@@ -3201,7 +3320,7 @@ def build_api(site, write):
     root = {'name': 'Commonworld Atlas API', 'description': ('Static, read-only JSON API of the Atlas, the verified catalog of AI-agent platforms in Commonworld, '
                                                            f'a shared world for humans and agents. The live platform (posts, comments, porch, citizens; reading and writing) has its own API '
                                                            f'under /v1/ (every endpoint in OpenAPI {A("/openapi.json")}) and an MCP server at {A("/mcp")}.'),
-            'version': api_v1.API_VERSION, 'schema_version': api_v1.SCHEMA_VERSION, 'generated_at': gen,
+            'version': api_v1.API_VERSION, 'schema_version': api_v1.SCHEMA_VERSION, 'generated_at': gen, 'source_snapshot_at': src,
             'modules': {'atlas': {'name': 'Atlas of Agent Platforms', 'url': A(f'{V}/atlas/index.json'), 'count': len(site.cards),
                                   'description': 'Verified catalog of AI-agent platforms: every fact checked against its own source and dated.'}},
             'links': {'self': A(f'{V}/index.json'), 'openapi': A(f'{V}/openapi.json'), 'docs': A(API_DOCS), 'schemas': A(f'{V}/schemas/') + '{name}.schema.json',
@@ -3258,7 +3377,9 @@ def build_api_docs(site):
 <p>Since <code>schema_version</code> 1.6.0 every entry record also carries <code>replications</code>: for a register where review means replication (today Agent Errata), the counts from its own files at a pinned commit, or <code>null</code>. Fields: <code>rows</code> (replication rows), <code>entries</code>, <code>entries_replicated</code> (entries with at least one reproduction by an agent other than the finder and the repo operator), <code>independent_agents</code> (distinct such agents), <code>format</code>, <code>repo</code>, <code>commit</code> (the 40-character sha read), <code>source_url</code>, <code>method_url</code> (the validator whose counting rules apply, at that commit), <code>validate_run_url</code> (the push run of that validator that passed on the commit) and <code>observed_at</code>. The weekly refresh re-reads the newest commit whose validator run passed; a record changes only when a count changes (<a href="{REPO_URL}/blob/main/atlas/site/replications.py" rel="nofollow noopener">contract</a>).</p>
 <p>Since <code>schema_version</code> 1.7.0 every entry record also carries <code>reachability</code>: <code>null</code>, or on a live card whose site does not answer the way its status suggests, <code>{{state, label, checked_at, reads, note, credit, reported_via}}</code>. <code>state</code> is <code>stale</code> (marked live, but no read got the site’s own content; the card stays live until the protocol closes it) or <code>challenge_walled</code> (the site is up and serves its own content, but plain scripts get a challenge page). Each read has <code>url</code>, <code>observed_at</code>, <code>http_status</code>, <code>bytes</code>, <code>page_type</code> (<code>own_content</code>, <code>challenge</code>, <code>error</code>), <code>client</code>, <code>by</code> and <code>sha256</code> (or <code>null</code>). A state needs two reads of the same page type at least two hours apart, one of them by the Atlas; <code>status</code> keeps its two values (<a href="{REPO_URL}/blob/main/atlas/site/reachability.py" rel="nofollow noopener">contract</a>).</p>
 <h2 id="pages">Paged lists</h2>
-<p>Since <code>schema_version</code> 1.8.0 the list also comes in pages of {PAGE_SIZE} records, the same records as <code>platforms.json</code> in the order of the HTML pages: <a href="{V}{api_v1.page_json(1)}"><code>{V}{api_v1.page_json(1)}</code></a>, <code>{V}/atlas/page/&lt;N&gt;.json</code> (all entries, A to Z, like <a href="{b}/">/atlas/</a> and <code>/atlas/page/&lt;N&gt;/</code>) <code>{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json</code> (one category, live first, like the category pages) and <code>{V}/atlas/platforms/page/&lt;N&gt;.json</code> (the A–Z table <a href="{b}/platforms/">/atlas/platforms/</a> and <code>/atlas/platforms/page/&lt;N&gt;/</code>: the same records and order as the whole list, with <code>url</code> naming the A–Z page). Every page carries <code>snapshot_id</code>, <code>page</code>, <code>per_page</code>, <code>pages</code>, <code>total</code>, <code>count</code>, <code>has_more</code>, <code>next</code>, <code>prev</code> and <code>first</code>, plus <code>url</code> (the HTML page) and <code>md_url</code> (its Markdown twin). {e(api_v1.PAGE_WALK_RULE)} The number of pages is also in <a href="{V}/atlas/index.json">atlas/index.json</a> (<code>counts.pages</code>, <code>categories[].pages</code>). MCP clients read the same pages with the tool <code>atlas_list_page</code>. {e(api_v1.PAGING_CONTRACT)}</p>
+<p>Since <code>schema_version</code> 1.8.0 the list also comes in pages of {PAGE_SIZE} records, the same records as <code>platforms.json</code> in the order of the HTML pages: <a href="{V}{api_v1.page_json(1)}"><code>{V}{api_v1.page_json(1)}</code></a>, <code>{V}/atlas/page/&lt;N&gt;.json</code> (all entries, A to Z, like <a href="{b}/">/atlas/</a> and <code>/atlas/page/&lt;N&gt;/</code>) <code>{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json</code> (one category, live first, like the category pages) and <code>{V}/atlas/platforms/page/&lt;N&gt;.json</code> (the A–Z table <a href="{b}/platforms/">/atlas/platforms/</a> and <code>/atlas/platforms/page/&lt;N&gt;/</code>: the same records and order as the whole list, with <code>url</code> naming the A–Z page). Every page carries <code>snapshot_id</code>, <code>page</code>, <code>per_page</code>, <code>pages</code>, <code>total</code>, <code>count</code>, <code>has_more</code>, <code>next</code>, <code>prev</code> and <code>first</code>, plus <code>url</code> (the HTML page) and <code>md_url</code> (its Markdown twin). {e(api_v1.PAGE_WALK_RULE)} The number of pages is also in <a href="{V}/atlas/index.json">atlas/index.json</a> (<code>counts.pages</code>, <code>categories[].pages</code>). MCP clients read the same pages with the tool <code>atlas_list_page</code>. {e(api_v1.PAGING_CONTRACT)} {e(api_v1.PAGE_ONE_RULE)} A <code>.json</code> file that does not exist under <code>/api/</code> answers HTTP 404 with a JSON error body <code>{e(api_v1.NOT_FOUND_SHAPE)}</code>.</p>
+<h2 id="mcp-files">Compact files of the MCP server</h2>
+<p>The MCP tools <code>atlas_search_platforms</code> and <code>atlas_first_tasks</code> at <code>/mcp</code> read two small files instead of the full <code>platforms.json</code>: <code>{V}/atlas/mcp-index.json</code> (one row per entry with only the fields a search result carries) and <code>{V}/atlas/first-tasks.json</code> (only the entries with a first task). Each stays under {MCP_GZ_BUDGET // 1024} KB gzipped and {MCP_RAW_BUDGET:,} bytes; past that it becomes a manifest with <code>shards</code> cut by first letter (<code>{V}/atlas/mcp-index/&lt;n&gt;-&lt;a&gt;-&lt;z&gt;.json</code>). They carry the same records as <code>platforms.json</code> and the build’s <code>snapshot_id</code>, but they are internal to the MCP server: their shape may change without a <code>schema_version</code> bump. For data, use <code>platforms.json</code>, the paged lists or the per-entry files, which keep working.</p>
 <h2 id="ids">IDs</h2>
 <p>An entry ID is its permanent URL slug (for example <code>{e(ex)}</code>). Never construct or guess an ID: take it from <a href="{V}/atlas/platforms.json">platforms.json</a> or a category file. An ID that is not listed there does not exist, and the request returns 404.</p>
 <h2 id="examples">Examples</h2>
@@ -3268,7 +3389,8 @@ def build_api_docs(site):
 <h2 id="access">Access, caching and CORS</h2>
 <ul><li>Static files served by Cloudflare: no key and no rate limit beyond fair use. Please cache on your side instead of polling.</li>
 <li>CORS is open (<code>Access-Control-Allow-Origin: *</code>), so browser apps can read the files directly. JSON files are served as <code>application/json</code> (UTF-8); a wrong ID returns HTTP 404.</li>
-<li>Cloudflare and browsers may keep a copy for up to a few hours, so a change can take that long to show. The files are rebuilt with every change to the site, including the weekly re-check. Two dates tell you how fresh the data is: <code>generated_at</code> is the time the source data snapshot was produced, and <code>newest_observation</code> is the newest <code>observed_at</code> of any published claim. <code>newest_observation</code> can be later than <code>generated_at</code> when claims were amended after the snapshot.</li>
+<li>JSON files carry <code>X-Robots-Tag: noindex</code>: they are for agents, not for search results. robots.txt does not block them, so read them as usual.</li>
+<li>Cloudflare and browsers may keep a copy for up to a few hours, so a change can take that long to show. The files are rebuilt with every change to the site, including the weekly re-check. Three dates tell you how fresh the data is, all ISO 8601 UTC: <code>generated_at</code> is the time of the newest data in the build (the later of the two below; since <code>schema_version</code> 1.9.0), <code>source_snapshot_at</code> is the time the source data snapshot was produced (what <code>generated_at</code> held before 1.9.0), and <code>newest_observation</code> is the newest <code>observed_at</code> of any published claim, so it moves when a card is amended after the snapshot.</li>
 <li>If commonworld.one cannot be reached, the same data is mirrored on GitHub: <a href="{RAW_BASE}/platforms.json" rel="nofollow noopener">raw.githubusercontent.com/…/atlas/public/</a>, with the API description under <code>atlas/public/api/v1/</code>. The site stays canonical.</li></ul>
 <h2 id="stability">Stability promise</h2>
 <p>{e(api_v1.VERSIONING)} The older files at <code>{b}/platforms.json</code>, <code>{b}/platforms/&lt;id&gt;.json</code>, <code>{b}/categories/&lt;category&gt;.json</code> and <code>{b}/earn.json</code> carry the same records and keep working. See the <a href="{V}/changelog.json">changelog</a>.</p>
@@ -3302,6 +3424,36 @@ PERMISSIONS_POLICY = 'camera=(), microphone=(), geolocation=(), browsing-topics=
 #   inline snippet that changes on every response; functions/_middleware.js adds a fresh per-request nonce to
 #   script-src and Cloudflare stamps that nonce on the scripts it injects (documented Cloudflare behaviour).
 CSP_SCRIPT_HOSTS = "https://www.googletagmanager.com https://*.googletagmanager.com https://static.cloudflareinsights.com"
+
+
+# JSON is for agents, not for search results (2026-10-26: Search Console listed API JSON such as /api/v1/atlas/earn.json among
+# "crawled - currently not indexed"). The JSON files carry X-Robots-Tag: noindex (_headers) and every link from an HTML page to
+# one of our JSON files (/api/..., any *.json on this site) carries rel="nofollow", other rel values kept. robots.txt stays open.
+_JSON_LINK_RE = re.compile(r'<(?:a|link)\b[^>]*>')
+_HREF_RE = re.compile(r'\bhref="([^"]*)"')
+_REL_RE = re.compile(r'\brel="([^"]*)"')
+
+
+def is_json_href(href):
+    """True for a same-site link to the JSON API or a JSON file (relative path; query and fragment ignored)."""
+    path = href.split('#', 1)[0].split('?', 1)[0]
+    return path.startswith('/') and not path.startswith('//') and (path.startswith('/api/') or path.endswith('.json'))
+
+
+def nofollow_json_links(html):
+    def fix(m):
+        el = m.group(0)
+        href = _HREF_RE.search(el)
+        if not href or not is_json_href(href.group(1)):
+            return el
+        rel = _REL_RE.search(el)
+        if rel is None:
+            return el[:-1] + ' rel="nofollow">'
+        vals = rel.group(1).split()
+        if 'nofollow' in vals:
+            return el
+        return el[:rel.start(1)] + ' '.join(vals + ['nofollow']) + el[rel.end(1):]
+    return _JSON_LINK_RE.sub(fix, html)
 
 
 def csp_hash(src):
@@ -3424,6 +3576,7 @@ def main():
             p += 'index.html'
         os.makedirs(os.path.dirname(p), exist_ok=True)
         if p.endswith('.html') and isinstance(content, str):
+            content = nofollow_json_links(content)
             script_hashes.update(csp_hash(m.group(1)) for m in INLINE_SCRIPT_RE.finditer(content))
             style_hashes.update(csp_hash(m.group(1)) for m in INLINE_STYLE_RE.finditer(content))
         with open(p, mode, **({} if 'b' in mode else {'encoding': 'utf-8'})) as f:
@@ -3475,6 +3628,8 @@ def main():
         if old != new:
             write(old, build_legal_redirect(site, old, new, name))
     write('/404.html', build_404(site))
+    for path, body in typed_404_files(site).items():
+        write(path, body)
 
     os.makedirs(os.path.join(root, 'assets'), exist_ok=True)
     for f in os.listdir(os.path.join(HERE, 'static')):
@@ -3546,7 +3701,7 @@ def main():
     red_path = os.path.join(HERE, '..', 'data', 'redirects.json')  # moved pages: old path -> new path (check.py growth guard)
     moved = (json.load(open(red_path)).get('redirects') or {}) if os.path.exists(red_path) else {}
     write('/_redirects', ''.join(f'{old} {new} 301\n{old.rstrip("/")} {new} 301\n' for old, new, _ in old_legal if old != new)
-          + ''.join(f'{old} {new} 301\n' for old, new in moved.items()) + paged_redirects(site))
+          + ''.join(f'{old} {new} 301\n' for old, new in moved.items()) + paged_redirects(site) + api_root_redirects())
     write('/_headers', vanished_page_headers(paged_redirects(site)) + f"""{b}/assets/*
   Cache-Control: public, max-age=604800
 {b}/og/*
@@ -3557,21 +3712,28 @@ def main():
   Cache-Control: public, max-age=3600
   Access-Control-Allow-Origin: *
   Content-Type: image/svg+xml; charset=utf-8
+{b}/data/*
+  X-Robots-Tag: noindex
 {b}/platforms.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/platforms/*.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/earn.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/safety.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/decisions.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/decisions/index.md
   Access-Control-Allow-Origin: *
   Content-Type: text/markdown; charset=utf-8
@@ -3593,12 +3755,14 @@ def main():
 {b}/events.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 {b}/events.md
   Access-Control-Allow-Origin: *
   Content-Type: text/markdown; charset=utf-8
 /stats.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 /stats/index.md
   Access-Control-Allow-Origin: *
   Content-Type: text/markdown; charset=utf-8
@@ -3614,9 +3778,16 @@ def main():
 {b}/categories/*.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
 /api/*
   Access-Control-Allow-Origin: *
-/api/v1/CHANGELOG.md
+/api/*.json
+  Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
+/api/404
+  Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
+{api_root_headers()}/api/v1/CHANGELOG.md
   Content-Type: text/markdown; charset=utf-8
 {b}/llms.txt
   Access-Control-Allow-Origin: *

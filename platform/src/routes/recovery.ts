@@ -20,8 +20,11 @@
  *   POST /v1/admin/recovery/{number}/approve|reject {"note"} -> public `account.recovered` / `account.recovery_rejected`
  *                                           entry in the moderation log and change feed (no secrets). Approve revokes
  *                                           the old keys and browser sessions at once; the requester then claims a new key.
- * Limits: POST /v1/recovery 5 per client network per hour and 3 per account per UTC day; check 10 per request per hour;
- * claim 10 per request per hour; identity verify 20 per account per hour; recovery code 5 per account per day.
+ * Limits: POST /v1/recovery 5 per client network per hour; a recovery code is checked BEFORE any per-account cap is charged
+ * (a wrong code costs only the sender's network budget), then 3 per account per UTC day; proof requests 3 per account per
+ * client network per UTC day and 20 per account per UTC day. check/claim: the claim token is validated first; a valid
+ * token is charged 10 per request per hour, an invalid one 20 per client network per hour (so strangers guessing tokens
+ * can never use up the owner's budget). Identity verify 20 per account per hour; recovery code 5 per account per day.
  */
 import type { Ctx } from '../context';
 import { requireAuth, requirePepper } from '../auth';
@@ -164,10 +167,16 @@ const requestView = (r: RequestRow, links: { provider: string; subject: string; 
   next: NEXT[r.status],
 });
 
-async function networkBucket(c: Ctx): Promise<string> {
+async function networkId(c: Ctx): Promise<string> {
   const net = clientNetwork(c.request.headers.get('cf-connecting-ip') || 'local');
-  return `recovery-ip:${(await hmacHex(requirePepper(c.env), net)).slice(0, 32)}`;
+  return (await hmacHex(requirePepper(c.env), net)).slice(0, 32);
 }
+async function networkBucket(c: Ctx): Promise<string> {
+  return `recovery-ip:${await networkId(c)}`;
+}
+export const PROOF_PER_ACCOUNT_NETWORK_DAY = 3;
+export const PROOF_PER_ACCOUNT_DAY = 20;
+export const BAD_CLAIM_PER_NETWORK_HOUR = 20;
 
 export async function startRecovery(c: Ctx): Promise<Response> {
   requirePepper(c.env);
@@ -180,7 +189,8 @@ export async function startRecovery(c: Ctx): Promise<Response> {
   const handle = typeof body.handle === 'string' ? body.handle.trim().toLowerCase().replace(/^@/, '') : '';
   const acct = handle ? await c.env.DB.prepare("SELECT id, number, handle, status, deleted_at FROM accounts WHERE handle = ?").bind(handle).first<{ id: string; number: number; handle: string; status: string; deleted_at: string | null }>() : null;
   if (!acct || acct.deleted_at || acct.status === 'disabled') throw new HttpError(404, 'account_not_found');
-  await enforceRate(c.env, `${DAY_BUCKET_PREFIX}recovery:${acct.id}`, 3, 86_400_000, 'recovery_account');
+  // No per-account cap before the caller has shown something only the owner has: otherwise anyone who knows a handle
+  // could use up the owner's daily recovery budget (denial of recovery). See the method branches below.
   const db = c.env.DB;
   const claim = token('cwc_');
   const at = nowIso();
@@ -190,15 +200,25 @@ export async function startRecovery(c: Ctx): Promise<Response> {
   if (method === 'code') {
     const code = typeof body.recovery_code === 'string' ? body.recovery_code.trim() : '';
     if (!RECOVERY_CODE.test(code)) throw new HttpError(403, 'invalid_recovery_code');
+    const codeHash = await hash(c, code);
+    // a wrong code is charged only to the sender's network (above); the account's cap is charged once the code matched,
+    // and before it is used up, so a capped request never burns a valid code
+    const matches = await db.prepare('SELECT 1 FROM recovery_codes WHERE account_id = ? AND code_hash = ? AND used_at IS NULL').bind(acct.id, codeHash).first();
+    if (!matches) throw new HttpError(403, 'invalid_recovery_code');
+    await enforceRate(c.env, `${DAY_BUCKET_PREFIX}recovery:${acct.id}`, 3, 86_400_000, 'recovery_account');
     // atomic: the code works once
     const used = await db.prepare('UPDATE recovery_codes SET used_at = ? WHERE account_id = ? AND code_hash = ? AND used_at IS NULL RETURNING account_id')
-      .bind(at, acct.id, await hash(c, code)).first();
+      .bind(at, acct.id, codeHash).first();
     if (!used) throw new HttpError(403, 'invalid_recovery_code');
     row = await db.prepare(`INSERT INTO recovery_requests (account_id, method, claim_hash, status, created_at, expires_at, verified_at)
       VALUES (?, 'code', ?, 'verified', ?, ?, ?) RETURNING *`).bind(acct.id, await hash(c, claim), at, new Date(Date.now() + CLAIM_TTL_MS).toISOString(), at).first<RequestRow>();
   } else {
     const verified = await db.prepare("SELECT provider, subject FROM linked_identities WHERE account_id = ? AND status = 'verified' ORDER BY id").bind(acct.id).all<{ provider: Provider; subject: string }>();
     if (!verified.results.length) throw new HttpError(409, 'no_verified_links', { hint: 'use method "code" with your recovery code' });
+    // A proof request proves nothing yet (the proof comes later through check), so its cap is per account AND client
+    // network: one network cannot lock the owner out. A higher per-account ceiling bounds the admin queue.
+    await enforceRate(c.env, `${DAY_BUCKET_PREFIX}recovery-net:${acct.id}:${await networkId(c)}`, PROOF_PER_ACCOUNT_NETWORK_DAY, 86_400_000, 'recovery_account_network');
+    await enforceRate(c.env, `${DAY_BUCKET_PREFIX}recovery-proof:${acct.id}`, PROOF_PER_ACCOUNT_DAY, 86_400_000, 'recovery_account');
     links = verified.results.map((l) => ({ provider: l.provider, subject: l.subject, url: profileUrl(l.provider, l.subject) }));
     row = await db.prepare(`INSERT INTO recovery_requests (account_id, method, challenge, claim_hash, status, created_at, expires_at)
       VALUES (?, 'proof', ?, ?, 'pending', ?, ?) RETURNING *`).bind(acct.id, newChallenge(acct.number), await hash(c, claim), at, expires).first<RequestRow>();
@@ -210,10 +230,16 @@ async function claimedRequest(c: Ctx): Promise<RequestRow> {
   const number = Number(c.params[0]);
   const body = await readJson(c.request);
   const claim = typeof body.claim_token === 'string' ? body.claim_token.trim() : '';
-  if (!CLAIM_TOKEN.test(claim)) throw new HttpError(403, 'invalid_claim_token');
+  // The claim token is validated BEFORE the per-request bucket is charged: a stranger with a wrong token is charged to
+  // their own network and can never use up the owner's check/claim budget (denial of recovery).
+  const row = CLAIM_TOKEN.test(claim)
+    ? await c.env.DB.prepare('SELECT * FROM recovery_requests WHERE number = ? AND claim_hash = ?').bind(number, await hash(c, claim)).first<RequestRow>()
+    : null;
+  if (!row) {
+    await enforceRate(c.env, `recovery-claim-ip:${await networkId(c)}`, BAD_CLAIM_PER_NETWORK_HOUR, 3_600_000, 'recovery_claim_ip');
+    throw new HttpError(403, 'invalid_claim_token');
+  }
   await enforceRate(c.env, `recovery-claim:${number}`, 10, 3_600_000, 'recovery_claim');
-  const row = await c.env.DB.prepare('SELECT * FROM recovery_requests WHERE number = ? AND claim_hash = ?').bind(number, await hash(c, claim)).first<RequestRow>();
-  if (!row) throw new HttpError(403, 'invalid_claim_token');
   const expired = Date.parse(row.expires_at) <= Date.now() && ['pending', 'verified', 'approved'].includes(row.status);
   if (expired) {
     await c.env.DB.prepare("UPDATE recovery_requests SET status = 'expired' WHERE number = ?").bind(number).run();

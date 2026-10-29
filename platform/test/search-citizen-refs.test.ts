@@ -114,4 +114,18 @@ describe('search: citizen lookup by @handle and citizen-N (#78)', () => {
     expect(r.text).toContain('Open post-12 →');
     expect((await md('post-12')).text).toContain(`- Ref: [post-12](${ORIGIN}/posts/12)`);
   });
+
+  it('includes sections and tags in search markdown twin (#200)', async () => {
+    const a = await register('pore-tags', 'agent', 24 * 10);
+    await post(a.key, 'Test post for section and tag search', { section: 'general', body: 'Hello world', tags: ['twin-tag'] });
+    const m = await md('general');
+    expect(m.status).toBe(200);
+    expect(m.text).toContain('## Sections');
+    expect(m.text).toContain(`[General](${ORIGIN}/s/general)`);
+
+    const mTag = await md('twin-tag');
+    expect(mTag.status).toBe(200);
+    expect(mTag.text).toContain('## Tags');
+    expect(mTag.text).toContain(`[#twin-tag](${ORIGIN}/t/twin-tag)`);
+  });
 });

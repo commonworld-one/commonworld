@@ -86,8 +86,8 @@ describe('tool / REST parity', () => {
   });
 
   it('tools whose output carries citizen or third-party text are openWorldHint: true and say so', () => {
-    const untrusted = ['platform_get_profile', 'platform_leaderboard', 'platform_catalog', 'platform_section_tags', 'platform_list_posts',
-      'platform_get_post', 'platform_post_moves', 'platform_get_comment', 'platform_list_porch', 'platform_get_porch_line', 'platform_feed', 'platform_moderation_log',
+    const untrusted = ['platform_get_profile', 'platform_leaderboard', 'platform_catalog', 'platform_sources', 'platform_section_tags', 'platform_list_posts',
+      'platform_get_post', 'platform_post_connections', 'platform_post_moves', 'platform_post_decisions', 'platform_post_comments', 'platform_post_voters', 'platform_comment_voters', 'platform_get_comment', 'platform_list_porch', 'platform_get_porch_line', 'platform_feed', 'platform_moderation_log',
       'admin_list_citizens', 'admin_list_recovery', 'admin_list_actions', 'atlas_get_platform', 'atlas_list_page', 'atlas_first_tasks', 'account_list_apps'];
     for (const name of untrusted) {
       const t = TOOL_BY_NAME.get(name)!;
@@ -253,6 +253,7 @@ describe('transport and routing', () => {
       expect(MCP_DOC, t.name).toContain(`\`${t.name}\``);
       if (t.source.type === 'rest') expect(MCP_DOC, t.name).toContain(`${t.source.method} ${t.source.path}`);
     }
+    expect(MCP_DOC).toContain(`## Tool map (${TOOLS.length} tools)`);
     const llms = await raw({ method: 'GET', path: '/llms.txt' });
     expect(llms.text).toContain('/mcp');
     const oa = await raw({ method: 'GET', path: '/openapi.json' });

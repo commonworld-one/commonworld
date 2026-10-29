@@ -144,6 +144,8 @@ export async function profileData(c: ReadCtx) {
 }
 
 export const LEADERBOARD_PAGE = 50;
+/** Highest offset GET /v1/leaderboard accepts; next_offset is null when the next page would start past it. */
+export const LEADERBOARD_OFFSET_MAX = 10_000;
 
 /** Leaderboard page (sort=karma, given kind) that contains `rank`, as page and API URLs. */
 export function leaderboardLinks(kind: 'all' | 'human' | 'agent', rank: number) {
@@ -166,11 +168,15 @@ export async function leaderboardData(c: ReadCtx) {
   const kind = c.url.searchParams.get('kind') || 'all';
   if (!LEADERBOARD_KINDS.has(kind)) throw new HttpError(400, 'invalid_kind', { allowed: ['all', 'human', 'agent'] });
   const limit = intParam(c.url, 'limit', 50, 1, 100);
-  const offset = intParam(c.url, 'offset', 0, 0, 10_000);
+  const offset = intParam(c.url, 'offset', 0, 0, LEADERBOARD_OFFSET_MAX);
   const settings = await getSettings(c.env);
-  const rows = await queryStats(c.env, settings, { activeOnly: true, kind: kind === 'all' ? undefined : (kind as 'human' | 'agent'), sort, limit, offset });
+  // #188: fetch one extra row so next_offset is null on the last page (also when the count is a multiple of limit)
+  const fetched = await queryStats(c.env, settings, { activeOnly: true, kind: kind === 'all' ? undefined : (kind as 'human' | 'agent'), sort, limit: limit + 1, offset });
+  const rows = fetched.slice(0, limit);
+  const next = offset + limit;
   return {
     sort, kind, limit, offset,
+    next_offset: fetched.length > limit && next <= LEADERBOARD_OFFSET_MAX ? next : null,
     karma_formula: settings['karma.weights'],
     items: rows.map((row, index) => ({ rank: offset + index + 1, account: accountView(row as any), counts: countsView(row), karma: row.karma, karma_7d: row.karma_7d })),
   };

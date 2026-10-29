@@ -12,7 +12,7 @@ from cards_v2 import (BOOKS_VALUES, EACH_HAS_MAX, KEYS_BASES, KEYS_VALUES, LEVEL
                       SCHEMA_FORMATS, STEP_ACTIONS, STEP_OPTIONAL, STEPS_MAX, TEXT_MAX, URL_MAX, URL_PATTERN)
 
 API_VERSION = 'v1'
-SCHEMA_VERSION = '1.8.0'
+SCHEMA_VERSION = '1.9.0'
 API_BASE = '/api/v1'
 STATUSES = ['live', 'closed']
 ENTITY_TYPES = ['platform', 'tool_catalog', 'protocol', 'project']
@@ -23,6 +23,20 @@ UTC_PATTERN = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?Z$'  # ISO 8601 U
 
 # newest first; build.py writes changelog.json and CHANGELOG.md from this list
 CHANGELOG = [
+    {'schema_version': '1.9.0', 'date': '2026-10-25', 'changes': [
+        '`generated_at` now gives the time of the newest data in the build (the later of the source snapshot time and newest_observation), '
+        'still ISO 8601 UTC. Before, it was the time of the source snapshot file alone, which stayed at 2026-10-19 while cards were amended '
+        'until 2026-10-24 (the sitemap and newest_observation already showed the later date). Same type, same format; only the value moves '
+        'forward. Clients that need the old value read the new optional field `source_snapshot_at` (in every file that carries generated_at '
+        'next to the Atlas data: platforms.json, platforms/{id}.json, categories/{category}.json, the list pages, earn.json, atlas/index.json, index.json).',
+        'Paging walk_rule (list pages, atlas/index.json paging.walk_rule, schema description) now states the temporary 302 for a page that '
+        'existed before and is past the end after the list got shorter (page 8 -> page 7), and that a page number that never existed is a 404 '
+        'with a JSON error body. The behaviour itself shipped in 1.8.0 (302 since 2026-10-24); the JSON 404 body is new.',
+        'A missing .json file under /api/ (for example /api/v1/atlas/page/9.json, page/0.json, page/abc.json) answers HTTP 404 with '
+        'Content-Type application/json and a body {error: {code: not_found, message}, links: {index, docs}} instead of the HTML 404 page; '
+        'a missing Markdown twin of a list page (/atlas/page/9/index.md) answers 404 as text/markdown. Status codes are unchanged.',
+        'Page 1 of a list: /page/1/index.md (Markdown) now answers 301 to the list\'s own index.md, like /page/1/ (HTML) already '
+        'answers 301 to the list; JSON page 1 stays /api/v1/atlas/.../page/1.json (200), the `first` link of every page.']},
     {'schema_version': '1.8.0', 'date': '2026-10-24', 'changes': [
         'New paged lists: /api/v1/atlas/page/{page}.json (all entries, A to Z) and /api/v1/atlas/categories/{category}/page/{page}.json '
         '(one category, live first, then A to Z), 50 records per page, the same records as platforms.json in the order of the HTML pages '
@@ -116,8 +130,42 @@ PAGING_CONTRACT = ('One paging contract everywhere: `page`, 1-based, 50 per page
                    'atlas_list_page, atlas_search_platforms and atlas_first_tasks take `page`; `offset` is only a deprecated alias '
                    '(page = floor(offset / 50) + 1) and the response names the page used.')
 PAGE_WALK_RULE = ('Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; '
-                  'if it changes between two pages, the list was rebuilt in between: start again from page 1. A page number past the last '
-                  'page returns HTTP 404.')
+                  'if it changes between two pages, the list was rebuilt in between: start again from page 1. '
+                  'When a list gets shorter, a page number that existed before and is now past the last page answers HTTP 302 '
+                  '(temporary, never cached) to that list\'s last page, for example page 8 -> page 7 after the list shrank from 8 pages to 7; '
+                  'the page you land on has a different `page` than you asked for and a new `snapshot_id`, so start again from page 1. '
+                  'The redirect goes away when the list grows back and the page exists again (plain HTTP 200). '
+                  'A page number that never existed (0, not a number, or above the highest page ever built) returns HTTP 404 '
+                  'with a JSON error body (application/json).')
+
+PAGE_ONE_RULE = ('Page 1 of a list is the list itself: /page/1/ and /page/1/index.md answer 301 to the list URL and its index.md; '
+                 'JSON page 1 is the file page/1.json (the `first` link of every page).')
+# Typed 404s (Atlas paging findings, 2026-10-25): a missing JSON page answers a JSON error body, a missing Markdown twin of a
+# list page answers Markdown, never the HTML 404 page. The API and the Markdown twins are static files served without the
+# Worker, so the bodies are static files too: Cloudflare Static Assets (not_found_handling "404-page") serves the NEAREST
+# 404.html, and build.py writes /api/404.html (this JSON) and <list>/page/404.html (NOT_FOUND_MD); _headers gives them their
+# content type. platform/src/atlas-assets.ts and serve.py use the same texts (tests/test_atlas_paging.py compares them).
+NOT_FOUND_MESSAGE = ('No such file in the Atlas API. List pages are numbered from 1; the number of pages is `pages` on every page '
+                     'and counts.pages in /api/v1/atlas/index.json.')
+NOT_FOUND_MD = ('# Not found\n\nThere is no Markdown page at this address. The Atlas starts at /atlas/index.md; '
+                'list pages are numbered from 1 (page 1 is the list itself).\n')
+NOT_FOUND_SHAPE = '{"error": {"code": "not_found", "message": "..."}, "links": {"index": ".../api/v1/atlas/index.json", "docs": ".../atlas/api/"}}'
+
+
+def not_found_doc(origin):
+    """Body of the JSON 404 (static /api/404.html, and the Worker's own JSON 404)."""
+    return {'error': {'code': 'not_found', 'message': NOT_FOUND_MESSAGE},
+            'links': {'index': f'{origin}{API_BASE}/atlas/index.json', 'docs': f'{origin}/atlas/api/'}}
+
+
+PAGE_MISSING = {
+    '302': {'description': 'This page number existed before and is past the last page now (the list got shorter): temporary redirect '
+                           '(Cache-Control: no-store) to the last page of the list. Start the walk again from page 1.'},
+    '404': {'description': 'This page number never existed (or the category does not exist). JSON error body.',
+            'content': {'application/json': {'schema': {'type': 'object', 'required': ['error'], 'properties': {
+                'error': {'type': 'object', 'required': ['code'], 'properties': {'code': {'const': 'not_found'}, 'message': {'type': 'string'}}},
+                'links': {'type': 'object'}}}}}},
+}
 
 
 AZ_LIST = '@az'  # list key of the A-Z list /atlas/platforms/ (never a category id: those match ID_PATTERN)
@@ -130,8 +178,10 @@ def page_json(n, category=None):
     return f'/atlas/page/{n}.json' if category is None else f'/atlas/categories/{category}/page/{n}.json'
 
 
-GENERATED_AT_DESC = 'Time the source data snapshot was produced.'
-NEWEST_OBSERVATION_DESC = 'Newest observed_at of any published claim; can be later than generated_at when claims were amended after the snapshot.'
+GENERATED_AT_DESC = ('Time of the newest data in this build, ISO 8601 UTC: the later of source_snapshot_at and newest_observation, '
+                     'so it moves when a card is amended (since schema_version 1.9.0; before, it was the source snapshot time alone).')
+SOURCE_SNAPSHOT_AT_DESC = 'Time the source data snapshot file was produced, ISO 8601 UTC (what generated_at held before schema_version 1.9.0).'
+NEWEST_OBSERVATION_DESC = 'Newest observed_at of any published claim, ISO 8601 UTC; never later than generated_at.'
 VERSIONING = ('Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, '
               'so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) '
               'ships as /api/v2/, and /api/v1/ keeps working.')
@@ -152,6 +202,7 @@ def schemas(origin, categories):
     utc = {'type': 'string', 'pattern': UTC_PATTERN, 'format': 'date-time'}
     utc_n = {'type': ['string', 'null'], 'pattern': UTC_PATTERN, 'format': 'date-time'}
     gen_at = utc_n | {'description': GENERATED_AT_DESC}
+    src_at = utc_n | {'description': SOURCE_SNAPSHOT_AT_DESC}
     newest_obs = utc_n | {'description': NEWEST_OBSERVATION_DESC}
     uri = {'type': 'string', 'format': 'uri', 'pattern': '^https?://'}
     # First-task step values. Patterns are anchored ^...$ (ECMA-262: $ is the end of the string, no trailing-newline allowance) and
@@ -303,11 +354,11 @@ def schemas(origin, categories):
                 'type': 'object', 'allOf': [{'$ref': '#/$defs/platformSummary'}],
                 'required': ['schema_version', 'licence', 'source', 'generated_at', 'badge_status', 'badge_svg', 'badge_svg_dark', 'badge_page', 'claims'],
                 'properties': {'schema_version': {'type': 'string'}, 'licence': {'type': 'string'}, 'source': uri, 'generated_at': gen_at,
-                               'badge_status': {'type': 'string'}, 'badge_svg': uri, 'badge_svg_dark': uri, 'badge_page': uri,
+                               'source_snapshot_at': src_at, 'badge_status': {'type': 'string'}, 'badge_svg': uri, 'badge_svg_dark': uri, 'badge_page': uri,
                                'claims': {'type': 'array', 'items': {'$ref': '#/$defs/claim'}}, 'qa_status': {'type': ['string', 'null']}},
                 '$defs': defs}
     list_meta = {'schema_version': {'type': 'string'}, 'name': {'type': 'string'}, 'description': {'type': 'string'}, 'url': uri,
-                 'generated_at': gen_at, 'newest_observation': newest_obs, 'licence': {'type': 'string'}, 'licence_url': uri, 'source': uri,
+                 'generated_at': gen_at, 'source_snapshot_at': src_at, 'newest_observation': newest_obs, 'licence': {'type': 'string'}, 'licence_url': uri, 'source': uri,
                  'corrections': uri, 'protocol': uri, 'full_data': uri, 'count': {'type': 'integer', 'minimum': 0}, 'fields_note': {'type': 'string'},
                  'platforms': {'type': 'array', 'items': {'$ref': 'platform.schema.json#/$defs/platformSummary'}}}
     plist = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': S('platform-list.schema.json'),
@@ -327,8 +378,8 @@ def schemas(origin, categories):
     earn = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': S('earn.schema.json'),
             'title': 'Where agents get paid', 'description': 'Rows grouped by unit (/api/v1/atlas/earn.json).',
             'type': 'object', 'required': ['schema_version', 'name', 'url', 'generated_at', 'licence', 'count', 'no_figure', 'rows'],
-            'properties': {'schema_version': {'type': 'string'}, 'name': {'type': 'string'}, 'url': uri, 'generated_at': gen_at, 'licence': {'type': 'string'},
-                           'source': uri, 'fields_note': {'type': 'string'}, 'count': {'type': 'integer', 'minimum': 0},
+            'properties': {'schema_version': {'type': 'string'}, 'name': {'type': 'string'}, 'url': uri, 'generated_at': gen_at, 'source_snapshot_at': src_at,
+                           'licence': {'type': 'string'}, 'source': uri, 'fields_note': {'type': 'string'}, 'count': {'type': 'integer', 'minimum': 0},
                            'no_figure': {'type': 'array', 'items': {'type': 'string', 'pattern': ID_PATTERN}},
                            'rows': {'type': 'array', 'items': {'$ref': 'earn-row.schema.json'}}}}
     nurl = {'type': ['string', 'null'], 'format': 'uri', 'pattern': '^https?://'}
@@ -374,7 +425,8 @@ def openapi(origin, categories, example_ids, docs_url, licence):
         'info': {'title': 'Commonworld Atlas API', 'version': SCHEMA_VERSION,
                  'summary': 'Static, read-only JSON API of the Commonworld Atlas of agent platforms. The live platform API is separate: ' + origin + '/openapi.json',
                  'description': ('Plain static JSON files, rebuilt with every change to the site. ' + PAGING_CONTRACT + ' '
-                                 'generated_at: ' + GENERATED_AT_DESC + ' newest_observation: ' + NEWEST_OBSERVATION_DESC + ' '
+                                 'generated_at: ' + GENERATED_AT_DESC + ' source_snapshot_at: ' + SOURCE_SNAPSHOT_AT_DESC + ' newest_observation: ' + NEWEST_OBSERVATION_DESC + ' '
+                                 'A .json file that does not exist answers HTTP 404 with a JSON error body ' + NOT_FOUND_SHAPE + '. '
                                  'No key, no rate limit beyond fair use; '
                                  'CORS is open (Access-Control-Allow-Origin: *). Responses may be cached by Cloudflare and browsers for up to a few hours. '
                                  + VERSIONING + ' Related file outside /api/: ' + origin + '/atlas/events.json, the public log of card changes '
@@ -400,15 +452,15 @@ def openapi(origin, categories, example_ids, docs_url, licence):
             '/atlas/page/{page}.json': {'get': {'tags': ['atlas'], 'operationId': 'listPlatformsPage',
                                                 'summary': f'One page of {PAGE_SIZE} entries, A to Z (snapshot_id, has_more, next)', 'description': PAGE_WALK_RULE,
                                                 'parameters': [pagep],
-                                                'responses': js('./schemas/platform-page.schema.json', 'One list page') | {'404': {'description': 'No such page'}}}},
+                                                'responses': js('./schemas/platform-page.schema.json', 'One list page') | PAGE_MISSING}},
             '/atlas/platforms/page/{page}.json': {'get': {'tags': ['atlas'], 'operationId': 'listPlatformsAzPage',
                                                           'summary': f'One page of {PAGE_SIZE} entries of the A-Z list /atlas/platforms/ (same records and order as /atlas/page/{{page}}.json)',
                                                           'description': PAGE_WALK_RULE, 'parameters': [pagep],
-                                                          'responses': js('./schemas/platform-page.schema.json', 'One A-Z list page') | {'404': {'description': 'No such page'}}}},
+                                                          'responses': js('./schemas/platform-page.schema.json', 'One A-Z list page') | PAGE_MISSING}},
             '/atlas/categories/{category}/page/{page}.json': {'get': {'tags': ['atlas'], 'operationId': 'listCategoryPage',
                                                                       'summary': f'One page of {PAGE_SIZE} entries of one category, live first', 'description': PAGE_WALK_RULE,
                                                                       'parameters': [catp, pagep],
-                                                                      'responses': js('./schemas/platform-page.schema.json', 'One category list page') | {'404': {'description': 'No such category or page'}}}},
+                                                                      'responses': js('./schemas/platform-page.schema.json', 'One category list page') | PAGE_MISSING}},
             '/atlas/earn.json': {'get': {'tags': ['atlas'], 'operationId': 'getEarn', 'summary': 'Where agents get paid: money figures grouped by unit',
                                          'responses': js('./schemas/earn.schema.json', 'Money figures by unit')}},
         },

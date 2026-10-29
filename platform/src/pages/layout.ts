@@ -3,7 +3,7 @@
  * crumbs, catbar, section tabs, tag visor, post card, porch line, sort bar). All markup goes through h``.
  */
 import { ASSETS, BOOT_SCRIPT } from './assets.gen';
-import { type Part, type Raw, ago, esc, fmt, h, join, jsonForScript, raw } from './html';
+import { type Part, type Raw, ago, cutExcerpt, esc, fmt, h, join, jsonForScript, raw } from './html';
 import type { CatalogSection, SiteFacts } from './data';
 import { isDeletedHandle } from '../views';
 
@@ -154,7 +154,7 @@ function sidebar(p: PageCtx, active: string): Raw {
 ${secs.length ? h`<div class="cw-nav-title">Sections</div>
 <div class="cw-nav-groups" role="group" aria-label="Sections">${secs}</div>` : ''}
 <div class="cw-nav-title">Public record</div>
-<nav class="cw-nav" aria-label="Public record">${a('/moderation', 'Moderation log', 'moderation')}${a('/sections#proposals', 'Catalog proposals', 'proposals', raw('<span>planned</span>'))}${a('/moderation#rules', 'Rules', 'rules')}${a('/api', 'API', 'api')}</nav>
+<nav class="cw-nav" aria-label="Public record">${a('/moderation', 'Moderation log', 'moderation')}${a('/pulse', 'Pulse', 'pulse')}${a('/sections#proposals', 'Catalog proposals', 'proposals', raw('<span>planned</span>'))}${a('/moderation#rules', 'Rules', 'rules')}${a('/api', 'API', 'api')}</nav>
 <div class="cw-side-note"><aside class="cw-ad cw-ad-210x120" data-ad-slot="cw-sidebar" aria-label="Sponsored"><span class="cw-ad-label">Sponsored</span><a class="cw-ad-empty" href="${ABOUT_URL}#advertise" rel="sponsored nofollow">Your ad here</a></aside></div>
 </div></aside><div class="cw-scrim" data-drawer-close hidden></div>`;
 }
@@ -174,7 +174,7 @@ function announce(p: PageCtx): Raw {
   return h`<div class="cw-announce" role="region" aria-label="Announcement" data-ann-id="${p.announcement.updated_at}"><p>${p.announcement.text}</p><button type="button" class="cw-announce-x" aria-label="Dismiss announcement">${ICON.x}</button></div>`;
 }
 
-const footer = (p: PageCtx): Raw => h`<footer class="cw-foot"><span>Commonworld · a shared world for humans and agents</span><span class="cw-foot-links"><a href="/sections">Sections &amp; tags</a><a href="/citizens">Citizens</a><a href="/moderation">Moderation log</a><a href="/moderation#rules">Rules</a><a href="/api">API</a><a href="/v1/catalog">Catalog (JSON)</a><a href="/v1/feed">Change feed (JSON)</a><a href="/llms.txt">llms.txt</a><a href="/openapi.json">OpenAPI</a><a href="/sitemap.xml">Sitemap</a><a href="${ATLAS_URL}">Atlas</a><a href="${ABOUT_URL}">About</a><a href="${PRIVACY_URL}">Privacy</a><a href="${TERMS_URL}">Terms</a>${p.analytics.ga4 ? raw('<button type="button" class="cw-linkbtn" data-cookie-settings>Cookie settings</button>') : ''}</span></footer>`;
+const footer = (p: PageCtx): Raw => h`<footer class="cw-foot"><span>Commonworld · a shared world for humans and agents</span><span class="cw-foot-links"><a href="/sections">Sections &amp; tags</a><a href="/citizens">Citizens</a><a href="/moderation">Moderation log</a><a href="/pulse">Pulse</a><a href="/moderation#rules">Rules</a><a href="/api">API</a><a href="/v1/catalog" rel="nofollow">Catalog (JSON)</a><a href="/v1/feed" rel="nofollow">Change feed (JSON)</a><a href="/llms.txt">llms.txt</a><a href="/openapi.json" rel="nofollow">OpenAPI</a><a href="/sitemap.xml">Sitemap</a><a href="${ATLAS_URL}">Atlas</a><a href="${ABOUT_URL}">About</a><a href="${PRIVACY_URL}">Privacy</a><a href="${TERMS_URL}">Terms</a>${p.analytics.ga4 ? raw('<button type="button" class="cw-linkbtn" data-cookie-settings>Cookie settings</button>') : ''}</span></footer>`;
 
 export const PRIVACY_URL = 'https://commonworld.one/privacy/';
 
@@ -229,12 +229,13 @@ export interface PostItem {
   author: { handle: string; kind: string }; upvotes: number; comment_count: number; created_at: string;
 }
 
+/**
+ * Plain-text excerpt: whitespace collapsed, at most `max` characters including the '…', cut at a word boundary when one
+ * is past 60%. `max` counts grapheme clusters (code points without Intl.Segmenter), so an emoji, flag or accented letter
+ * is never cut in half (reported by Tiny Logic Lab: the old UTF-16 slice left lone surrogates at 160, 110 and 220).
+ */
 export function excerptText(body: string, max = 220): string {
-  const t = String(body ?? '').replace(/\s+/g, ' ').trim();
-  if (t.length <= max) return t;
-  const cut = t.slice(0, max - 1);
-  const sp = cut.lastIndexOf(' ');
-  return (sp > max * 0.6 ? cut.slice(0, sp) : cut) + '…';
+  return cutExcerpt(String(body ?? '').replace(/\s+/g, ' ').trim(), max);
 }
 
 export function postCard(post: PostItem, now: number): Raw {
@@ -290,6 +291,7 @@ export interface PageMeta {
   ogType?: string;
   jsonld?: unknown[];
   altJson?: string | null;    // matching /v1 URL (path + query)
+  altMarkdown?: string;      // matching Markdown URL (path + query)
   active: string;
   body: Raw;
   q?: string;
@@ -304,8 +306,8 @@ export const INDEX = 'index,follow,max-image-preview:large';
 
 /** Paths that have a markdown twin (src/pages/markdown.ts), in HTML path form. */
 export const MD_PAGE_PATTERNS: RegExp[] = [
-  /^\/$/, /^\/porch$/, /^\/sections$/, /^\/s\/[a-z0-9-]{1,64}$/, /^\/t\/[a-z0-9-]{1,64}$/, /^\/posts\/\d{1,15}$/,
-  /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/,
+  /^\/$/, /^\/porch$/, /^\/sections$/, /^\/s\/[a-z0-9-]{1,64}$/i, /^\/t\/[a-z0-9-]{1,64}$/i, /^\/posts\/\d{1,15}$/,
+  /^\/posts\/\d{1,15}\/connections$/, /^\/posts\/\d{1,15}\/decisions$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/, /^\/pulse$/, /^\/sources$/,
 ];
 export const hasMarkdownTwin = (path: string): boolean => MD_PAGE_PATTERNS.some((re) => re.test(path));
 /** HTML path -> its .md URL path (home is /index.md). */
@@ -372,10 +374,10 @@ ${!withCanon ? '' : h`<meta property="og:url" content="${canon}">
 <meta name="twitter:description" content="${desc}">
 <meta name="twitter:image" content="${ogImg}">
 <meta name="twitter:image:alt" content="${ogAlt}">
-${m.altJson ? h`<link rel="alternate" type="application/json" href="${p.origin + m.altJson}" title="JSON (for agents)">
-` : ''}${m.canonical !== false && hasMarkdownTwin(m.path) ? h`<link rel="alternate" type="text/markdown" href="${p.origin + markdownPath(m.path)}${m.path === '/search' && m.q ? `?q=${encodeURIComponent(m.q)}` : ''}" title="Markdown (for agents)">
+${m.altJson ? h`<link rel="alternate nofollow" type="application/json" href="${p.origin + m.altJson}" title="JSON (for agents)">
+` : ''}${m.canonical !== false && hasMarkdownTwin(m.path) ? h`<link rel="alternate" type="text/markdown" href="${p.origin + (m.altMarkdown ?? (markdownPath(m.path) + (m.path === '/search' && m.q ? `?q=${encodeURIComponent(m.q)}` : '')))}" title="Markdown (for agents)">
 ` : ''}<link rel="alternate" type="text/markdown" href="${p.origin}/llms.txt" title="llms.txt (guide for agents)">
-<link rel="service-desc" type="application/openapi+json" href="${p.origin}/openapi.json" title="OpenAPI 3.1 (Commonworld API)">
+<link rel="service-desc nofollow" type="application/openapi+json" href="${p.origin}/openapi.json" title="OpenAPI 3.1 (Commonworld API)">
 ${m.headExtra ?? ''}<link rel="icon" href="${asset('favicon.ico')}" sizes="48x48">
 <link rel="icon" href="${asset('favicon.svg')}" type="image/svg+xml">
 <link rel="icon" href="${asset('favicon-32.png')}" type="image/png" sizes="32x32">

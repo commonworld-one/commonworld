@@ -1,4 +1,4 @@
-// Vendored from commonworld-one/commonworld trust/src/sources/google-safe-browsing.ts @ 539d06f (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
+// Vendored from commonworld-one/commonworld trust/src/sources/google-safe-browsing.ts @ 1780784 (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
 /** Google Safe Browsing site status, read from the public Transparency Report endpoint (no API key; the same lookup as
  * https://transparencyreport.google.com/safe-browsing/search). Polite: at most 4 lookups at a time, timeout, retries. */
 import { getText, iso } from '../http.ts';

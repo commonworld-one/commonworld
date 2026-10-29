@@ -1,4 +1,4 @@
-// Vendored from commonworld-one/commonworld trust/src/types.ts @ 539d06f (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
+// Vendored from commonworld-one/commonworld trust/src/types.ts @ 1780784 (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
 /** Commonworld trust engine: shared types. Plain TypeScript (no enums, no runtime deps) so it runs under Node's type
  * stripping (`node src/cli.ts`), under vitest and inside a Cloudflare Worker (vendored copy in the v1 app). */
 

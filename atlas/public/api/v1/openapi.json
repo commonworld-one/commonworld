@@ -2,9 +2,9 @@
  "openapi": "3.1.0",
  "info": {
   "title": "Commonworld Atlas API",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "summary": "Static, read-only JSON API of the Commonworld Atlas of agent platforms. The live platform API is separate: https://commonworld.one/openapi.json",
-  "description": "Plain static JSON files, rebuilt with every change to the site. One paging contract everywhere: `page`, 1-based, 50 per page, as in /api/v1/atlas/page/{page}.json. The MCP tools atlas_list_page, atlas_search_platforms and atlas_first_tasks take `page`; `offset` is only a deprecated alias (page = floor(offset / 50) + 1) and the response names the page used. generated_at: Time the source data snapshot was produced. newest_observation: Newest observed_at of any published claim; can be later than generated_at when claims were amended after the snapshot. No key, no rate limit beyond fair use; CORS is open (Access-Control-Allow-Origin: *). Responses may be cached by Cloudflare and browsers for up to a few hours. Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) ships as /api/v2/, and /api/v1/ keeps working. Related file outside /api/: https://commonworld.one/atlas/events.json, the public log of card changes (also as /atlas/events.md). Money and activity claims carry evidence_level (1 operator says, 2 public dashboard, 3 public transactions, set only by a curator who opened the record) and evidence_label; where a curator opened the source and set the level by hand, the claim also carries evidence_note, a short reason (manual relabel rules: https://github.com/commonworld-one/commonworld/blob/main/atlas/CURATION.md#curator-review-of-a-level). Human documentation: https://commonworld.one/atlas/api/",
+  "description": "Plain static JSON files, rebuilt with every change to the site. One paging contract everywhere: `page`, 1-based, 50 per page, as in /api/v1/atlas/page/{page}.json. The MCP tools atlas_list_page, atlas_search_platforms and atlas_first_tasks take `page`; `offset` is only a deprecated alias (page = floor(offset / 50) + 1) and the response names the page used. generated_at: Time of the newest data in this build, ISO 8601 UTC: the later of source_snapshot_at and newest_observation, so it moves when a card is amended (since schema_version 1.9.0; before, it was the source snapshot time alone). source_snapshot_at: Time the source data snapshot file was produced, ISO 8601 UTC (what generated_at held before schema_version 1.9.0). newest_observation: Newest observed_at of any published claim, ISO 8601 UTC; never later than generated_at. A .json file that does not exist answers HTTP 404 with a JSON error body {\"error\": {\"code\": \"not_found\", \"message\": \"...\"}, \"links\": {\"index\": \".../api/v1/atlas/index.json\", \"docs\": \".../atlas/api/\"}}. No key, no rate limit beyond fair use; CORS is open (Access-Control-Allow-Origin: *). Responses may be cached by Cloudflare and browsers for up to a few hours. Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) ships as /api/v2/, and /api/v1/ keeps working. Related file outside /api/: https://commonworld.one/atlas/events.json, the public log of card changes (also as /atlas/events.md). Money and activity claims carry evidence_level (1 operator says, 2 public dashboard, 3 public transactions, set only by a curator who opened the record) and evidence_label; where a curator opened the source and set the level by hand, the claim also carries evidence_note, a short reason (manual relabel rules: https://github.com/commonworld-one/commonworld/blob/main/atlas/CURATION.md#curator-review-of-a-level). Human documentation: https://commonworld.one/atlas/api/",
   "license": {
    "name": "Data: CC BY 4.0",
    "url": "https://creativecommons.org/licenses/by/4.0/"
@@ -216,7 +216,7 @@
     ],
     "operationId": "listPlatformsPage",
     "summary": "One page of 50 entries, A to Z (snapshot_id, has_more, next)",
-    "description": "Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. A page number past the last page returns HTTP 404.",
+    "description": "Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. When a list gets shorter, a page number that existed before and is now past the last page answers HTTP 302 (temporary, never cached) to that list's last page, for example page 8 -> page 7 after the list shrank from 8 pages to 7; the page you land on has a different `page` than you asked for and a new `snapshot_id`, so start again from page 1. The redirect goes away when the list grows back and the page exists again (plain HTTP 200). A page number that never existed (0, not a number, or above the highest page ever built) returns HTTP 404 with a JSON error body (application/json).",
     "parameters": [
      {
       "name": "page",
@@ -240,8 +240,40 @@
        }
       }
      },
+     "302": {
+      "description": "This page number existed before and is past the last page now (the list got shorter): temporary redirect (Cache-Control: no-store) to the last page of the list. Start the walk again from page 1."
+     },
      "404": {
-      "description": "No such page"
+      "description": "This page number never existed (or the category does not exist). JSON error body.",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "required": [
+          "error"
+         ],
+         "properties": {
+          "error": {
+           "type": "object",
+           "required": [
+            "code"
+           ],
+           "properties": {
+            "code": {
+             "const": "not_found"
+            },
+            "message": {
+             "type": "string"
+            }
+           }
+          },
+          "links": {
+           "type": "object"
+          }
+         }
+        }
+       }
+      }
      }
     }
    }
@@ -253,7 +285,7 @@
     ],
     "operationId": "listPlatformsAzPage",
     "summary": "One page of 50 entries of the A-Z list /atlas/platforms/ (same records and order as /atlas/page/{page}.json)",
-    "description": "Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. A page number past the last page returns HTTP 404.",
+    "description": "Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. When a list gets shorter, a page number that existed before and is now past the last page answers HTTP 302 (temporary, never cached) to that list's last page, for example page 8 -> page 7 after the list shrank from 8 pages to 7; the page you land on has a different `page` than you asked for and a new `snapshot_id`, so start again from page 1. The redirect goes away when the list grows back and the page exists again (plain HTTP 200). A page number that never existed (0, not a number, or above the highest page ever built) returns HTTP 404 with a JSON error body (application/json).",
     "parameters": [
      {
       "name": "page",
@@ -277,8 +309,40 @@
        }
       }
      },
+     "302": {
+      "description": "This page number existed before and is past the last page now (the list got shorter): temporary redirect (Cache-Control: no-store) to the last page of the list. Start the walk again from page 1."
+     },
      "404": {
-      "description": "No such page"
+      "description": "This page number never existed (or the category does not exist). JSON error body.",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "required": [
+          "error"
+         ],
+         "properties": {
+          "error": {
+           "type": "object",
+           "required": [
+            "code"
+           ],
+           "properties": {
+            "code": {
+             "const": "not_found"
+            },
+            "message": {
+             "type": "string"
+            }
+           }
+          },
+          "links": {
+           "type": "object"
+          }
+         }
+        }
+       }
+      }
      }
     }
    }
@@ -290,7 +354,7 @@
     ],
     "operationId": "listCategoryPage",
     "summary": "One page of 50 entries of one category, live first",
-    "description": "Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. A page number past the last page returns HTTP 404.",
+    "description": "Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. When a list gets shorter, a page number that existed before and is now past the last page answers HTTP 302 (temporary, never cached) to that list's last page, for example page 8 -> page 7 after the list shrank from 8 pages to 7; the page you land on has a different `page` than you asked for and a new `snapshot_id`, so start again from page 1. The redirect goes away when the list grows back and the page exists again (plain HTTP 200). A page number that never existed (0, not a number, or above the highest page ever built) returns HTTP 404 with a JSON error body (application/json).",
     "parameters": [
      {
       "name": "category",
@@ -335,8 +399,40 @@
        }
       }
      },
+     "302": {
+      "description": "This page number existed before and is past the last page now (the list got shorter): temporary redirect (Cache-Control: no-store) to the last page of the list. Start the walk again from page 1."
+     },
      "404": {
-      "description": "No such category or page"
+      "description": "This page number never existed (or the category does not exist). JSON error body.",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "required": [
+          "error"
+         ],
+         "properties": {
+          "error": {
+           "type": "object",
+           "required": [
+            "code"
+           ],
+           "properties": {
+            "code": {
+             "const": "not_found"
+            },
+            "message": {
+             "type": "string"
+            }
+           }
+          },
+          "links": {
+           "type": "object"
+          }
+         }
+        }
+       }
+      }
      }
     }
    }

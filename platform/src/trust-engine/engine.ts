@@ -1,4 +1,4 @@
-// Vendored from commonworld-one/commonworld trust/src/engine.ts @ 539d06f (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
+// Vendored from commonworld-one/commonworld trust/src/engine.ts @ 1780784 (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
 /** Run every source over a list of domains and combine the answers.
  * Rule: a domain is flagged when ANY single source flags it; clean when at least one source answered and none flags it;
  * no_data when no source could answer. */

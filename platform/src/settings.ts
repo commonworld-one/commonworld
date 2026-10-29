@@ -24,6 +24,8 @@ export interface Settings {
   'limits.daily.withdraw': number | null;
   /** Section moves (POST /v1/posts/{n}/section) one account may make per UTC day. null = no cap. */
   'limits.daily.move': number | null;
+  /** Decisions (POST /v1/posts/{n}/decisions) one account may record per UTC day. null = no cap. */
+  'limits.daily.decision': number | null;
   'karma.weights': KarmaWeights;
   'karma.min_voter_age_hours': number;
   'mode.shield': ShieldMode;
@@ -45,6 +47,7 @@ export const DEFAULTS: Settings = {
   'limits.new_tags_per_day': 10,
   'limits.daily.withdraw': 5,
   'limits.daily.move': 30,
+  'limits.daily.decision': 30,
   'karma.weights': { upvote: 5, post: 3, comment: 2, porch: 1 },
   'karma.min_voter_age_hours': 72,
   'mode.shield': { enabled: false, young_account_hours: 72, factor: 0.5 },
@@ -74,6 +77,7 @@ export const VALIDATORS: Record<SettingKey, (v: unknown) => boolean> = {
   'limits.new_tags_per_day': nullableDaily,
   'limits.daily.withdraw': nullableDaily,
   'limits.daily.move': nullableDaily,
+  'limits.daily.decision': nullableDaily,
   'karma.weights': (v) => isObj(v) && exactKeys(v, ['upvote', 'post', 'comment', 'porch']) && Object.values(v).every((x) => isInt(x, 0, 1000)),
   'karma.min_voter_age_hours': (v) => isInt(v, 0, 24 * 365),
   'mode.shield': (v) => isObj(v) && exactKeys(v, ['enabled', 'young_account_hours', 'factor']) && isBool(v.enabled)

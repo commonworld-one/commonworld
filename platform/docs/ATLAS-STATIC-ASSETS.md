@@ -8,7 +8,8 @@ below is the state before the cutover, kept for the record. The old Cloudflare P
 
 | Request | Who answers | Billed Worker requests |
 |---|---|---|
-| Atlas static file: `/atlas/assets/*`, `/atlas/og/*`, `/atlas/screens/*`, `/atlas/badge/*`, `/atlas/data/*`, `/atlas/**.json`, `/atlas/**.txt`, `/atlas/**.xml`, `/atlas/**.md` (every Markdown twin: platform and category cards, decisions, events), `/stats.json`, `/stats/index.md`, `/about/index.md`, `/privacy/index.md`, `/terms/index.md`, `/api/*`, `/.well-known/security.txt` | Cloudflare Static Assets directly (headers from the Atlas `_headers`, redirects from `_redirects`, a miss = Atlas `404.html` with 404) | **0** |
+| Atlas static file: `/atlas/assets/*`, `/atlas/og/*`, `/atlas/screens/*`, `/atlas/badge/*`, `/atlas/data/*`, `/atlas/**.json`, `/atlas/**.txt`, `/atlas/**.xml`, `/atlas/**.md` (every Markdown twin: platform and category cards, decisions, events), `/stats.json`, `/stats/index.md`, `/about/index.md`, `/privacy/index.md`, `/terms/index.md`, `/api/*`, `/.well-known/security.txt` | Cloudflare Static Assets directly (headers from the Atlas `_headers`, redirects from `_redirects`) | **0** |
+| A miss on one of those paths (a file that does not exist) | Static Assets: the **nearest** `404.html` with 404 (`not_found_handling = "404-page"`). The Atlas build writes typed ones (2026-10-25): `/api/404.html` = a JSON error body for every miss under `/api/` (e.g. `/api/v1/atlas/page/9.json`), `<list>/page/404.html` = Markdown for a missing list-page twin (e.g. `/atlas/page/9/index.md`); `_headers` gives the content type by the requested path; anything else gets the root `404.html` | **0** |
 | Atlas HTML: `/atlas/…/`, `/privacy/`, `/terms/`, `/about/`, `/stats/`, Atlas 404s under those | Worker → `env.ASSETS.fetch` → + CSP nonce (`src/atlas-assets.ts`) | 1 |
 | Slashless / `.html` Atlas URL (`/atlas/platforms/x`) | Worker, 308 to the slash form (as Pages) | 1 |
 | Bare `/atlas`, `/privacy`, `/terms`, `/about`, `/stats` | Worker, 301 to the slash form | 1 |
@@ -16,6 +17,12 @@ below is the state before the cutover, kept for the record. The old Cloudflare P
 | `/.well-known/mcp.json` (MCP discovery manifest) | Worker (`src/mcp/docs.ts` `mcpWellKnown`) | 1 |
 | Any other `/.well-known/*` | Worker → ASSETS (Atlas 404) | 1 |
 | `/`, v1 pages, `/v1/*`, `/assets/*`, `/robots.txt`, `/sitemap.xml`, `/llms.txt`, `/llms-full.txt`, `/favicon.ico` | Worker (v1); llms files append the Atlas file read from ASSETS (no network) | 1 |
+
+Typed 404s (2026-10-25): a `run_worker_first` negative path never reaches the Worker, also on a miss (checked on staging:
+with `not_found_handling = "none"` such a miss was an empty 404 without the Worker), so the JSON and Markdown 404 bodies are
+static files found by the nearest-`404.html` rule. An HTML miss runs the Worker, which always answers with the root
+`/404.html` (never the Markdown `404.html` of a list folder) and answers a direct request for one of those files
+(`/atlas/page/404`) with 404 too.
 
 The split is `[assets] run_worker_first` in `wrangler.toml` (`"/*"` plus the `!` patterns), the same in the top-level,
 staging and production tables and equal to `ATLAS_RUN_WORKER_FIRST` in `src/atlas-assets.ts`; `test/atlas-assets.test.ts`
@@ -54,7 +61,42 @@ the build's. The Worker only adds `'nonce-…'` after `script-src 'self'` on HTM
   and the Atlas now live in one repository, so the manual `deploy-platform` workflow builds the Atlas from the same
   commit and deploys both (`../docs/DEPLOY.md`).
 
-## Staging rehearsal (not done yet; staging was in final QA on 2026-10-18)
+## Staging check (current)
+
+The A3 routing is live in production since the first successful production deploy, 2026-10-20 (`744fb1a`, run
+[39474179999](https://github.com/commonworld-one/commonworld/actions/runs/39474179999); `ATLAS_SOURCE = "assets"` in `[env.production.vars]` at that commit), and production
+answers `/atlas/` with `x-cw-upstream: atlas-assets` (checked 2026-10-27). Platform and Atlas live in this repository,
+so there is no separate Atlas checkout: `scripts/build-atlas-assets.mjs` takes the repository root by default
+(`--src` or `CW_PUBLIC_DIR` only override it).
+
+1. In this repository: `cd platform && npm ci && npm test && npx tsc --noEmit`.
+2. Deploy to staging with the manual workflow "Deploy platform (staging)" (`.github/workflows/deploy-staging.yml`,
+   input `ref` = the branch or commit; `../docs/DEPLOY.md`, "Staging deploy from GitHub"). It builds the Atlas from the
+   same checkout (`build-atlas-assets.mjs --src "$GITHUB_WORKSPACE" --build`) and runs the routing test before
+   `wrangler deploy --env staging`. Locally, `npm run deploy:staging` does the same build and deploy.
+3. Checks (`H=https://staging.commonworld.one`):
+   - `curl -sI $H/atlas/assets/atlas.css` → 200, `cache-control: public, max-age=604800`, **no** `x-cw-upstream`.
+   - `curl -sI $H/atlas/platforms.json`, `$H/api/v1/index.json`, `$H/.well-known/security.txt` → 200, no `x-cw-upstream`.
+   - `curl -sI $H/atlas/` → 200, `x-cw-upstream: atlas-assets`, CSP with `'nonce-…'`; twice → two different nonces.
+   - `curl -sI $H/atlas/platforms/1f916` → 308 `location: /atlas/platforms/1f916/`; `$H/atlas` → 301 `/atlas/`.
+   - `curl -s -o /dev/null -w '%{http_code}' $H/atlas/nope/` → 404 (Atlas 404 page); `$H/atlas/assets/nope.css` → 404.
+   - `curl -sI $H/api/v1/atlas/page/9.json` → 404 with `content-type: application/json; charset=utf-8` (body `{"error":{"code":"not_found",…}}`);
+     `curl -sI $H/atlas/page/9/index.md` → 404 with `content-type: text/markdown; charset=utf-8` (no HTML in the body).
+   - `$H/privacy/`, `/terms/`, `/about/`, `/stats/` → 200 Atlas pages; `$H/llms.txt` ends with the Atlas text;
+     `$H/sitemap.xml` is the index; `$H/robots.txt` disallows all (closed staging).
+   - Per-request Workers Logs are off on staging (`invocation_logs = false` in `[env.staging.observability.logs]`), so
+     the "one invocation per Atlas view" check of the 2026-10-18 plan (History below) cannot be repeated from the logs.
+   - Owner in a real browser: `/atlas/` and one platform page, DevTools console without CSP errors, theme toggle works.
+4. Staging rollback: `npx wrangler rollback --env staging`, or `ATLAS_SOURCE = ""` in `[env.staging.vars]` + deploy
+   (= the old proxy to `commonworld.pages.dev`).
+
+## History: staging rehearsal plan of 2026-10-18 (kept as written)
+
+Planned before the cutover, when the Atlas lived in the separate `cw-public` repository and A3 was on branch
+`feat/atlas-static-assets`. Whether this rehearsal ran on staging before the cutover is not recorded here; the current
+check is the section above.
+
+### Staging rehearsal (not done yet; staging was in final QA on 2026-10-18)
 
 1. Merge or check out `feat/atlas-static-assets`; `cd platform && npm ci && npm test && npx tsc --noEmit`.
 2. `CW_PUBLIC_DIR=<cw-public on main> npm run deploy:staging`.
@@ -64,6 +106,8 @@ the build's. The Worker only adds `'nonce-…'` after `script-src 'self'` on HTM
    - `curl -sI $H/atlas/` → 200, `x-cw-upstream: atlas-assets`, CSP with `'nonce-…'`; twice → two different nonces.
    - `curl -sI $H/atlas/platforms/1f916` → 308 `location: /atlas/platforms/1f916/`; `$H/atlas` → 301 `/atlas/`.
    - `curl -s -o /dev/null -w '%{http_code}' $H/atlas/nope/` → 404 (Atlas 404 page); `$H/atlas/assets/nope.css` → 404.
+   - `curl -sI $H/api/v1/atlas/page/9.json` → 404 with `content-type: application/json; charset=utf-8` (body `{"error":{"code":"not_found",…}}`);
+     `curl -sI $H/atlas/page/9/index.md` → 404 with `content-type: text/markdown; charset=utf-8` (no HTML in the body).
    - `$H/privacy/`, `/terms/`, `/about/`, `/stats/` → 200 Atlas pages; `$H/llms.txt` ends with the Atlas text;
      `$H/sitemap.xml` is the index; `$H/robots.txt` disallows all (closed staging).
    - Workers Logs (staging has per-request logs until 2026-10-25): opening `/atlas/` in a browser shows **one**

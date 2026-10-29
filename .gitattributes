@@ -1,3 +1,21 @@
+# Text files are stored and checked out with LF on every platform, also with core.autocrlf=true on Windows (#150).
+# Every tracked text file was already LF, so this changes no stored bytes. A new file Git detects as text has CRLF
+# turned into LF when it is added: give a byte-exact capture (raw HTTP response, signed or hashed payload) its own -text line.
+* text=auto eol=lf
+
+# Binary formats, never converted even when Git's text detection would guess wrong.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.zip binary
+*.gz binary
+
 # Captured wrangler CLI output, kept byte-for-byte (the CLI prints a trailing space after "Resource location: local").
 tests/fixtures/migrations/wrangler-*.txt -whitespace
 

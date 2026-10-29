@@ -30,7 +30,7 @@ import { assertSameOrigin, csrfValid, readForm, resolveSession, type Viewer } fr
 import { catalogData, createComment, createPorch, createPost, upvote } from '../routes/content';
 import { withdraw } from '../routes/withdraw';
 import { adminDecideRecovery } from '../routes/recovery';
-import { commentLocation } from './data';
+import { commentLocation, commentPagePath } from './data';
 import { type Raw, h } from './html';
 import { type PageCtx, citizenUrl, crumbs, document, postUrl } from './layout';
 import { type CatalogGroup, type ComposeValues, commentForm, composeForm, porchForm, withdrawForm } from './forms';
@@ -130,16 +130,20 @@ async function run(route: WriteRoute, n: string, second: string, form: URLSearch
   return res.json();
 }
 
+/** `path` (a post page, maybe with ?after=) + done=… + #comment-N. */
+const withDone = (path: string, done: string, comment: number): string => `${path}${path.includes('?') ? '&' : '?'}done=${done}#comment-${comment}`;
+
 async function redirectFor(env: Env, kind: Kind, n: string, r: any): Promise<string> {
   switch (kind) {
     case 'post': return `${postUrl(r.number)}?done=post`;
-    case 'comment': return `${postUrl(r.post_number)}?done=comment#comment-${r.number}`;
+    // a comment past the first page of comments opens the page window that shows it (#114)
+    case 'comment': return withDone(await commentPagePath(env, r.post_number, r.number), 'comment', r.number);
     case 'vote-post': return `${postUrl(Number(n))}?done=vote`;
     case 'withdraw-post': return `${postUrl(Number(n))}?done=withdrawn`;
     case 'vote-comment': case 'withdraw-comment': {
       const post = r.post_number ?? (await commentLocation(env, Number(n)));
       const done = kind === 'vote-comment' ? 'vote' : 'withdrawn';
-      return post ? `${postUrl(post)}?done=${done}#comment-${n}` : '/';
+      return post ? withDone(await commentPagePath(env, post, Number(n)), done, Number(n)) : '/';
     }
     case 'porch': return `/porch?done=porch#porch-${r.number}`;
     case 'withdraw-porch': return `/porch?done=withdrawn#porch-${n}`;
@@ -178,6 +182,7 @@ export function friendlyMessage(code: string, extra: Record<string, unknown>): [
     case 'reason_required': return ['Please add a short reason', 'Withdrawals are public: write a few words on why (it shows in place of the text).'];
     case 'reason_too_long': return ['The reason is a bit long', `Please keep it to ${extra.max_length} characters (now ${extra.length}).`];
     case 'not_your_content': return ['Only the author can withdraw this', 'You can withdraw your own posts, comments and porch lines.'];
+    case 'post_withdrawn': return ['This thread is closed', 'The author withdrew this post. Its conversation stays to read, but it takes no new comments, replies or upvotes.'];
     case 'already_withdrawn': return ['Already withdrawn', 'This was withdrawn before, so nothing changed.'];
     case 'content_hidden': return ['Hidden content cannot be withdrawn', 'Moderation hid it; see the public moderation log.'];
     case 'moderation_acted': return ['This one stays as it is', 'Moderation acted on it, so it cannot be withdrawn. See the public moderation log.'];

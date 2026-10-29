@@ -7,12 +7,12 @@ import { HttpError, goneError } from '../http';
 import { getSettings } from '../settings';
 import { ASSETS, BOOT_SCRIPT_SHA256 } from './assets.gen';
 import { sectionPage, sectionsPage, tagPage } from './catalog';
-import { commentLocation, contentGone, porchVisible, postOgData, siteFacts, sitemapRows } from './data';
+import { commentLocation, commentPagePath, contentGone, porchVisible, postOgData, siteFacts, sitemapRows } from './data';
 import { ogVersion, renderPostOg } from './og';
 import { homePage } from './home';
 import { esc } from './html';
 import { ABOUT_URL, NONCE_PLACEHOLDER, PRIVACY_URL, TERMS_URL, type PageCtx, hasMarkdownTwin, markdownPath } from './layout';
-import { markdownError, markdownTarget, prefersMarkdown, renderMarkdown } from './markdown';
+import { canonicalTwinPath, markdownError, markdownTarget, prefersMarkdown, renderMarkdown } from './markdown';
 import { adminAccess, adminPageHtml, adminPageMd } from './admin';
 import { errorPage, inboxPage, loginPage, moderationPage, searchPage, type LoginView } from './misc';
 import { citizensPage, porchPage, profilePage } from './people';
@@ -30,6 +30,10 @@ import { queryStats } from '../stats';
 import { assertSameOrigin, clearSessionCookie, consumeLoginLink, csrfToken, hasSessionCookie, peekLoginLink, readForm, resolveSession, revokeSession, sessionCookie, type Viewer } from '../sessions';
 import { composePage, handleWrite, isWritePath } from './writes';
 import { exportPage } from './export';
+import { sourcesPage } from './sources';
+import { pulsePage } from './pulse';
+import { connectionsPage } from './connections';
+import { decisionsPage } from './decisions';
 import { handleOAuthPage, isOAuthPagePath } from './oauth-pages';
 
 /** Validated analytics config from env: an invalid value is ignored (no tag, no CSP host), never echoed. */
@@ -140,6 +144,8 @@ function docHeaders(env: Env, contentType: string): Record<string, string> {
   return {
     'content-type': contentType, 'cache-control': DOC_CACHE, 'access-control-allow-origin': '*',
     'content-security-policy': "default-src 'none'; frame-ancestors 'none'",
+    // JSON documents (openapi.json, mcp.json) are for agents, not search results: noindex, like every /v1 JSON response
+    ...(contentType.startsWith('application/json') ? { 'x-robots-tag': 'noindex' } : {}),
     ...noindexHeader(env),
   };
 }
@@ -157,9 +163,12 @@ export const PAGE_CACHE_PARAMS: [RegExp, string[]][] = [
   [/^\/t\/[^/]+$/, [...FEED_KEYS, 'section']],
   [/^\/porch$/, ['before']],
   [/^\/citizens$/, ['sort', 'kind', 'offset']],
-  [/^\/posts\/\d+$/, ['order']],
+  [/^\/posts\/\d+$/, ['order', 'after']],
+  [/^\/posts\/\d+\/connections$/, ['source', 'after', 'through']],
+  [/^\/posts\/\d+\/decisions$/, ['after']],
   [/^\/search$/, ['q', 'type']],
   [/^\/moderation$/, ['before']],
+  [/^\/sources$/, ['domain', 'cursor']],
 ];
 
 export function normalizeSearchQuery(q: string): string {
@@ -178,6 +187,27 @@ export function pageCacheUrl(url: URL): URL {
   return out;
 }
 
+/** Query string of content-affecting parameters for Markdown twins (#228). */
+export function twinQuery(url: URL): string {
+  const keys = PAGE_CACHE_PARAMS.find(([re]) => re.test(url.pathname))?.[1] ?? [];
+  const parts: string[] = [];
+  for (const k of keys) {
+    let v = (url.searchParams.get(k) ?? '').trim();
+    if (k === 'q') v = normalizeSearchQuery(v);
+    if (v !== '') parts.push(`${k}=${encodeURIComponent(v)}`);
+  }
+  return parts.length ? '?' + parts.join('&') : '';
+}
+
+/** Canonical Markdown twin URL path + content-affecting query parameters (#228). */
+export function twinMarkdownPath(url: URL, basePath?: string): string {
+  const path = basePath ?? url.pathname;
+  const canonical = canonicalTwinPath(path);
+  const base = markdownPath(canonical);
+  const q = twinQuery(url);
+  return base + q;
+}
+
 type Rendered = string | PageOut;
 type Render = (p: PageCtx, env: Env, url: URL, m: RegExpMatchArray, viewer: Viewer | null) => Promise<Rendered> | Rendered;
 interface PageRoute { pattern: RegExp; render: Render; private?: boolean }
@@ -187,14 +217,18 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/porch$/, render: (p, env, url) => porchPage(p, env, url) },
   { pattern: /^\/compose$/, render: (p, env, url) => composePage(p, env, url) },
   { pattern: /^\/export$/, render: (p) => exportPage(p) },
+  { pattern: /^\/sources$/, render: (p, env, url) => sourcesPage(p, env, url) },
   { pattern: /^\/sections$/, render: (p, env) => sectionsPage(p, env) },
-  { pattern: /^\/s\/([a-z0-9-]{1,64})$/, render: (p, env, url, m) => sectionPage(p, env, url, m[1]) },
-  { pattern: /^\/t\/([a-z0-9-]{1,64})$/, render: (p, env, url, m) => tagPage(p, env, url, m[1]) },
+  { pattern: /^\/s\/([a-z0-9-]{1,64})$/i, render: (p, env, url, m) => sectionPage(p, env, url, m[1].toLowerCase()) },
+  { pattern: /^\/t\/([a-z0-9-]{1,64})$/i, render: (p, env, url, m) => tagPage(p, env, url, m[1].toLowerCase()) },
   { pattern: /^\/posts\/(\d{1,15})$/, render: (p, env, url, m) => postPage(p, env, url, m[1]) },
+  { pattern: /^\/posts\/(\d{1,15})\/connections$/, render: (p, env, url, m) => connectionsPage(p, env, url, m[1]) },
+  { pattern: /^\/posts\/(\d{1,15})\/decisions$/, render: (p, env, url, m) => decisionsPage(p, env, url, m[1]) },
   { pattern: /^\/citizens$/, render: (p, env, url) => citizensPage(p, env, url) },
   { pattern: /^\/c\/([^/]{1,96})$/, render: (p, env, _url, m) => profilePage(p, env, m[1]) },
   { pattern: /^\/search$/, render: (p, env, url) => searchPage(p, env, url) },
   { pattern: /^\/moderation$/, render: (p, env, url) => moderationPage(p, env, url) },
+  { pattern: /^\/pulse$/, render: (p, env) => pulsePage(p, env) },
   { pattern: /^\/mcp$/, render: (p) => mcpPage(p) },
   { pattern: /^\/api$/, render: (p) => apiPage(p) },
   { pattern: /^\/inbox$/, render: (p, env, _url, _m, viewer) => inboxView(p, env, viewer), private: true },
@@ -213,12 +247,13 @@ export const ATLAS_PAGE_REDIRECTS: Record<string, string> = { privacy: PRIVACY_U
 async function redirectFor(env: Env, path: string): Promise<string | null> {
   let m: RegExpMatchArray | null;
   if ((m = path.match(/^\/(privacy|terms|about)\/?$/))) return ATLAS_PAGE_REDIRECTS[m[1]];
-  if ((m = path.match(/^\/sections\/([a-z0-9-]{1,64})\/?$/))) return `/s/${m[1]}`;
-  if ((m = path.match(/^\/tags\/([a-z0-9-]{1,64})\/?$/))) return `/t/${m[1]}`;
+  if ((m = path.match(/^\/sections\/([a-z0-9-]{1,64})\/?$/i))) return `/s/${m[1].toLowerCase()}`;
+  if ((m = path.match(/^\/tags\/([a-z0-9-]{1,64})\/?$/i))) return `/t/${m[1].toLowerCase()}`;
   if ((m = path.match(/^\/citizens\/([^/]{1,96})\/?$/))) return `/c/${m[1]}`;
   if ((m = path.match(/^\/comments\/(\d{1,15})$/))) {
     const post = await commentLocation(env, Number(m[1]));
-    return post === null ? null : `/posts/${post}#comment-${m[1]}`;
+    // past the first page of comments (#114) the redirect opens the page window that starts with it
+    return post === null ? null : `${await commentPagePath(env, post, Number(m[1]))}#comment-${m[1]}`;
   }
   if ((m = path.match(/^\/porch\/(\d{1,15})$/))) {
     const n = Number(m[1]);
@@ -344,7 +379,7 @@ async function sitemapXml(env: Env, origin: string, withAtlasRoot = false): Prom
   const d = (iso: string | null | undefined) => (iso ? iso.slice(0, 10) : '');
   const latestPost = rows.posts.reduce((m, r) => (r.lastmod > m ? r.lastmod : m), '');
   const urls: [string, string][] = [
-    ['/', latestPost], ['/porch', ''], ['/sections', latestPost], ['/citizens', ''], ['/moderation', ''], ['/mcp', ''], [API_PAGE_PATH, ''],
+    ['/', latestPost], ['/porch', ''], ['/sections', latestPost], ['/citizens', ''], ['/moderation', ''], ['/pulse', ''], ['/sources', latestPost], ['/mcp', ''], [API_PAGE_PATH, ''],
     ...rows.sections.map((s): [string, string] => [`/s/${s.slug}`, s.lastmod]),
     ...rows.tags.map((t): [string, string] => [`/t/${t.slug}`, t.lastmod]),
     ...rows.posts.map((p): [string, string] => [`/posts/${p.number}`, p.lastmod]),
@@ -540,18 +575,25 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
       throw new HttpError(404, 'page_not_found');
     }
     // a merged tag's page moves to its target for good
-    const tm = path.match(/^\/t\/([a-z0-9-]{1,64})$/);
+    const tm = path.match(/^\/t\/([a-z0-9-]{1,64})$/i);
     if (tm) {
-      const merged = await env.DB.prepare("SELECT merged_into FROM tags WHERE slug = ? AND status = 'merged'").bind(tm[1]).first<{ merged_into: string }>();
+      const merged = await env.DB.prepare("SELECT merged_into FROM tags WHERE slug = ? AND status = 'merged'").bind(tm[1].toLowerCase()).first<{ merged_into: string }>();
       if (merged) return done(respond(method, 301, '', { location: `/t/${merged.merged_into}${url.search}`, 'cache-control': 'public, max-age=86400' }));
     }
     p = await pageCtx(env, url, session.viewer);
     const out = await route.render(p, env, url, m!, session.viewer);
     const html = typeof out === 'string' ? out : out.html;
     const extra = typeof out === 'string' ? {} : out.headers;
+    const status = typeof out === 'object' && out.status ? out.status : 200;
+    const cache = status === 200 ? (route.private || signedIn ? 'private, no-store' : PUBLIC_PAGE_CACHE) : 'no-store';
     // pages with a markdown twin: the same URL answers text/markdown to `Accept: text/markdown`, so caches must key on Accept
-    const twin: Record<string, string> = hasMarkdownTwin(path) ? { vary: 'Accept', link: `<${p.origin}${markdownPath(path)}>; rel="alternate"; type="text/markdown"` } : {};
-    return withSession(done(respond(method, 200, html, { ...htmlHeaders(env, url, route.private || signedIn ? 'private, no-store' : PUBLIC_PAGE_CACHE), ...twin, ...extra })));
+    const mdTwin = hasMarkdownTwin(path) ? twinMarkdownPath(url) : null;
+    const twin: Record<string, string> = mdTwin ? { vary: 'Accept', link: `<${p.origin}${mdTwin}>; rel="alternate"; type="text/markdown"` } : {};
+    const escAttr = (s: string) => s.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+    const htmlWithTwin = mdTwin
+      ? html.replace(/(<link rel="alternate" type="text\/markdown" href=")[^"]*(" title="Markdown \(for agents\)">)/, `$1${p.origin}${escAttr(mdTwin)}$2`)
+      : html;
+    return withSession(done(respond(method, status, htmlWithTwin, { ...htmlHeaders(env, url, cache), ...twin, ...extra })));
   } catch (error) {
     const status = error instanceof HttpError ? error.status : 500;
     const code = error instanceof HttpError ? error.code : 'internal_error';
@@ -660,7 +702,8 @@ async function markdownPage(request: Request, env: Env, exec: ExecutionContext, 
     return res;
   } catch (error) {
     if (error instanceof HttpError && error.code === 'tag_merged') {
-      const moved = respond(method, 301, '', { location: markdownPath(`/t/${String(error.extra.into)}`), 'cache-control': 'public, max-age=86400', vary: 'Accept' });
+      const target = url.pathname.endsWith('.md') ? markdownPath(`/t/${String(error.extra.into)}`) : `/t/${String(error.extra.into)}`;
+      const moved = respond(method, 301, '', { location: `${target}${url.search}`, 'cache-control': 'public, max-age=86400', vary: 'Accept' });
       return versionUnknown ? withoutSharedCache(moved) : moved;
     }
     const status = error instanceof HttpError ? error.status : 500;

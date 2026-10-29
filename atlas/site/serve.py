@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Local preview server for the built Atlas (stdlib only). Mimics the live static serving (Workers Static Assets in the platform Worker, same rules as the legacy Cloudflare Pages build):
 clean directory URLs, /atlas/x -> 301 /atlas/x/, real 404 status with /404.html, / serves the Commonworld landing (dist/index.html),
-301s and 302s from dist/_redirects for paths that have no file (e.g. /atlas/page/1/ -> /atlas/ 301, a vanished list page -> 302), and X-Robots-Tag: noindex on Atlas
+301s and 302s from dist/_redirects for paths that have no file (e.g. /atlas/page/1/ -> /atlas/ 301, a vanished list page -> 302), typed 404s
+(the nearest 404.html for static JSON / Markdown files, as Static Assets serves them; the site 404 page for pages), and X-Robots-Tag: noindex on Atlas
 HTML pages opened with a filter or search query string (as the platform Worker sends).
 Sends the site-wide security headers from dist/_headers (the `/*` block: CSP, Permissions-Policy, ...) so a local
 browser runs under the same strict CSP as production (minus HSTS and upgrade-insecure-requests, which need https).
@@ -45,13 +46,42 @@ GZ_EXT = ('.html', '.css', '.js', '.json', '.svg', '.xml', '.txt', '.md')
 FILTER_PARAMS = ('q', 'category', 'status', 'type', 'feature', 'tag', 'sort')  # same list as platform/src/atlas-assets.ts ATLAS_FILTER_PARAMS
 
 
+def _redirect_lines():
+    try:
+        return [l.split() for l in _read(os.path.join(DIST, '_redirects'), 'r').splitlines()]
+    except OSError:
+        return []
+
+
 def redirects():
     """{path: (target, status)} from the 301 and 302 lines of dist/_redirects."""
-    try:
-        lines = _read(os.path.join(DIST, '_redirects'), 'r').splitlines()
-    except OSError:
-        return {}
-    return {p[0]: (p[1], int(p[2])) for p in (l.split() for l in lines) if len(p) == 3 and p[2] in ('301', '302')}
+    return {p[0]: (p[1], int(p[2])) for p in _redirect_lines() if len(p) == 3 and p[2] in ('301', '302')}
+
+
+def rewrites():
+    """{path: target} from the 200 lines of dist/_redirects (a rewrite: the URL stays, the body is the target file; build.py
+    api_root_redirects, issue #159)."""
+    return {p[0]: p[1] for p in _redirect_lines() if len(p) == 3 and p[2] == '200'}
+
+
+def not_found_body(path):
+    """(content type, body) of a 404 like the live serving: a page (HTML) gets the site 404 page (the Worker always serves
+    /404.html); a static file (JSON under /api/ or *.json, a Markdown twin *.md) gets the NEAREST 404.html walking up from its
+    folder, as Cloudflare Static Assets does (build.py typed_404_files: /api/404.html is JSON, <list>/page/404.html Markdown),
+    typed by the requested path as the _headers rules do."""
+    kind = 'json' if path.startswith('/api/') or path.endswith('.json') else 'md' if path.endswith('.md') else 'html'
+    if kind == 'html':
+        return 'text/html; charset=utf-8', _read(os.path.join(DIST, '404.html'))
+    d = os.path.dirname(path.rstrip('/') if not path.endswith('/') else path[:-1])
+    while True:
+        fp = os.path.join(DIST, d.lstrip('/'), '404.html')
+        if os.path.isfile(fp):
+            break
+        if d in ('', '/'):
+            fp = os.path.join(DIST, '404.html')
+            break
+        d = os.path.dirname(d)
+    return ('application/json; charset=utf-8' if kind == 'json' else 'text/markdown; charset=utf-8'), _read(fp)
 
 
 class H(http.server.SimpleHTTPRequestHandler):
@@ -65,6 +95,11 @@ class H(http.server.SimpleHTTPRequestHandler):
         red = redirects()
         if not os.path.exists(fs) and path in red:
             return self._redirect(*red[path])
+        rew = rewrites()
+        if path in rew and not os.path.isfile(fs):  # same order as Cloudflare: _redirects before files that do not exist
+            self.path = rew[path] + self.path[len(path):]  # the base handler serves self.path: the target file, query kept
+            path = rew[path]
+            fs = self.translate_path(path)
         query = self.path[len(path):].lstrip('?')
         if query and any(kv.split('=', 1)[0] in FILTER_PARAMS for kv in query.split('&')):
             self._noindex = True
@@ -83,9 +118,9 @@ class H(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             return io.BytesIO(body)
         if not os.path.isfile(fs):
-            body = _read(os.path.join(DIST, '404.html'))
+            ctype, body = not_found_body(path)
             self.send_response(404)
-            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('Content-Type', ctype)
             self.send_header('Content-Length', str(len(body)))
             self.end_headers()
             self.wfile.write(body) if self.command != 'HEAD' else None

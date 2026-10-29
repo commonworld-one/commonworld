@@ -6,7 +6,7 @@ import { createExecutionContext, waitOnExecutionContext } from 'cloudflare:test'
 import { env, exports } from 'cloudflare:workers';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import worker from '../src/index';
-import { linkDomains, MAX_LINK_DOMAINS, resetLinkCheckMemo } from '../src/link-check';
+import { decodeCharRefs, linkDomains, linkHosts, MAX_LINK_DOMAINS, resetLinkCheckMemo } from '../src/link-check';
 import { GSB_ENDPOINT } from '../src/trust-engine/sources/google-safe-browsing.ts';
 import { certPolska, metamask, scamsniffer } from '../src/trust-engine/index.ts';
 import { api, makeAdmin, post, register, resetDb, setSetting } from './helpers';
@@ -290,6 +290,29 @@ describe('comments, replies, votes, withdraw, porch', () => {
     expect(refused.html).toContain('Only the author can withdraw this');
   });
 
+  it('withdrawn post: page shows no upvote buttons or reply forms, and forged page writes are refused (409 post_withdrawn)', async () => {
+    const author = await citizen('author');
+    const p = (await post(author.key, 'Closing soon')).body;
+    const cm = (await api(`/v1/posts/${p.number}/comments`, { key: author.key, body: { body: 'author comment' } })).body;
+    expect((await write(author, `/posts/${p.number}/withdraw`, { reason: 'closing' })).status).toBe(303);
+    const me = await citizen();
+    const page = await req(`/posts/${p.number}`, { cookie: me.cookie });
+    expect(page.status).toBe(200);
+    expect(page.html).toContain(`id="comment-${cm.number}"`); // the conversation stays readable
+    expect(page.html).toContain('takes no new comments, replies or upvotes');
+    expect(page.html).not.toContain(`action="/posts/${p.number}/upvote"`);
+    expect(page.html).not.toContain(`action="/comments/${cm.number}/upvote"`);
+    expect(page.html).not.toContain(`action="/posts/${p.number}/comment"`);
+    const before = { votes: await count('votes'), comments: await count('comments') };
+    for (const [path, form] of [[`/posts/${p.number}/comment`, { body: 'late' }], [`/posts/${p.number}/comment`, { body: 'late reply', parent: String(cm.number) }],
+      [`/posts/${p.number}/upvote`, {}], [`/comments/${cm.number}/upvote`, {}]] as [string, Record<string, string>][]) {
+      const r = await write(me, path, form);
+      expect(r.status).toBe(409);
+      expect(r.html).toContain('This thread is closed');
+    }
+    expect({ votes: await count('votes'), comments: await count('comments') }).toEqual(before);
+  });
+
   it('porch: post a line and withdraw it', async () => {
     const me = await citizen();
     const r = await write(me, '/porch', { body: 'hello porch' });
@@ -317,12 +340,12 @@ describe('comments, replies, votes, withdraw, porch', () => {
 // ---------------------------------------------------------------- link check at publish
 
 const gsb = (code: number, se = false) => `)]}'\n[["sb.ssr",${code},false,false,${se},false,false,1792259421202,"x",false]]`;
-function sources(flaggedByGsb: string[] = []) {
+function sources(flaggedByGsb: string[] = [], blacklist: string[] = ['drainer.example']) {
   const calls: string[] = [];
   vi.spyOn(globalThis, 'fetch').mockImplementation((async (input: RequestInfo | URL) => {
     const u = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
     calls.push(u);
-    const body = u === metamask.url ? JSON.stringify({ version: 2, fuzzylist: [], whitelist: [], blacklist: ['drainer.example'] })
+    const body = u === metamask.url ? JSON.stringify({ version: 2, fuzzylist: [], whitelist: [], blacklist })
       : u === scamsniffer.url ? JSON.stringify(['scam.example'])
       : u === certPolska.url ? 'phish.example\n'
       : u.startsWith(GSB_ENDPOINT) ? gsb(flaggedByGsb.some((d) => u.endsWith(`=${d}`)) ? 2 : 1, flaggedByGsb.some((d) => u.endsWith(`=${d}`)))
@@ -420,5 +443,127 @@ describe('link check at publish (src/link-check.ts)', () => {
     expect(r.html).toContain('go to https://phish.example now');
     expect(await count('posts')).toBe(0);
     expect((await env.DB.prepare('SELECT outcome FROM link_checks').first<any>()).outcome).toBe('rejected');
+  });
+});
+
+// ---------------------------------------------------------------- link hosts are read the way a browser reads them
+
+describe('link check: host normalization and fail-closed hosts (src/link-check.ts)', () => {
+  it('reads each link host as a browser does', () => {
+    const one = (t: string) => linkDomains([t]);
+    for (const sep of ['\u3002', '\uff0e', '\uff61', '%2E', '%2e', '%E3%80%82']) {
+      expect(one(`see https://drainer${sep}example/claim`), JSON.stringify(sep)).toEqual(['drainer.example']);
+      if (!sep.startsWith('%E')) expect(one(`see www${sep}drainer${sep}example now`), `www ${JSON.stringify(sep)}`).toEqual(['drainer.example']);
+    }
+    expect(one('https://DRAINER.EXAMPLE/')).toEqual(['drainer.example']);
+    expect(one('https://drainer.example./ and https://drainer.example\u3002')).toEqual(['drainer.example']);
+    expect(one('https://user:pass@drainer.example:8443/x')).toEqual(['drainer.example']);
+    expect(one('https://bücher.example/x')).toEqual(['xn--bcher-kva.example']);
+    expect(one('https://www.www.drainer.example/')).toEqual(['drainer.example']);
+    expect(one('https://login_wallet.example/')).toEqual(['login_wallet.example']);
+    // Markdown emphasis, typographic and CJK punctuation after a link are not part of its host
+    expect(one('**https://drainer.example** _https://b.example_ ~~https://c.example~~')).toEqual(['drainer.example', 'b.example', 'c.example']);
+    expect(one('see https://drainer.example\u2026 or https://b.example\u201d, https://c.example\u3001https://d.example\uff09')).toEqual(['drainer.example', 'b.example', 'c.example', 'd.example']);
+    expect(one('https://*.drainer.example/')).toEqual(['drainer.example']);
+    // a link followed by non-ASCII text is also looked up under its leading ASCII name (a reader's autolinker may cut there)
+    const cjk = one('https://drainer.example\u8fd9\u662f');
+    expect(cjk.length).toBe(2);
+    expect(cjk[0]).toMatch(/^drainer\.xn--/);
+    expect(cjk[1]).toBe('drainer.example');
+  });
+
+  it('scheme spellings a browser accepts and character references are read too', () => {
+    const one = (t: string) => linkDomains([t]);
+    for (const link of ['https:/drainer.example/x', 'https:\\\\drainer.example/x', 'https:\\/drainer.example', 'HTTPS:///drainer.example',
+      'https:drainer.example/x', '[claim](https:/drainer.example)']) expect(one(link), link).toEqual(['drainer.example']);
+    for (const link of ['https&#58;//drainer.example', 'https&colon;//drainer.example', 'https://drainer&#46;example', 'https://drainer&#x2E;example',
+      'https:&#x2F;&#x2F;drainer.example', '[x](https://drainer&period;example)', 'www&#46;drainer&#46;example']) {
+      expect(one(link), link).toContain('drainer.example');
+    }
+    expect(decodeCharRefs('a &Colon; b &#0; &#xD800; &bogus; &#58;')).toBe('a &Colon; b &#0; &#xD800; &bogus; :');
+    expect(one('see https: the scheme, and http:// alone')).toEqual([]);
+  });
+
+  it('a host that cannot be read as a domain is reported, never dropped; names that are not domains are skipped', () => {
+    expect(linkHosts(['https://good.example%40drainer.example/ and https://a!b.example/x'])).toEqual({ domains: [], unreadable: ['good.example%40drainer.example', 'a!b.example'] });
+    expect(linkHosts(['https://drainer\uff0cexample/'])).toEqual({ domains: [], unreadable: ['drainer\uff0cexample'] });
+    expect(linkHosts(['http://localhost:3000/ and http://intranet/x'])).toEqual({ domains: [], unreadable: [] });
+  });
+
+  const ESCAPES = ['https://drainer\u3002example/claim', 'https://drainer\uff0eexample/claim', 'https://drainer\uff61example/claim',
+    'https://drainer%2Eexample/claim', 'https://drainer%2eexample/claim', 'https://DRAINER.EXAMPLE./claim', 'https://u:p@drainer.example:8443/claim',
+    'https://www.www.drainer.example/claim', '**https://drainer.example**', 'www\u3002drainer\u3002example', 'https:/drainer.example/claim', 'https:\\\\drainer.example/claim',
+    'https&#58;//drainer.example/claim', 'see www&#46;drainer.example'];
+
+  it('API: every spelling of a listed host is refused (422 link_flagged) and recorded; nothing is written', async () => {
+    sources();
+    const a = await register('linker', 'agent', 24 * 30);
+    for (const link of ESCAPES) {
+      const r = await apiOnline('/v1/posts', a.key, { title: 'Free tokens', body: `claim at ${link} today`, section: 'general' });
+      expect(r.status, link).toBe(422);
+      expect(r.body.error.code).toBe('link_flagged');
+      expect(r.body.error.domains.map((d: any) => d.domain), link).toEqual(['drainer.example']);
+    }
+    expect(await count('posts')).toBe(0);
+    const rows = (await env.DB.prepare('SELECT outcome, flagged_json FROM link_checks').all<any>()).results;
+    expect(rows.length).toBe(ESCAPES.length);
+    for (const row of rows) expect(row).toMatchObject({ outcome: 'rejected', flagged_json: '["drainer.example"]' });
+  });
+
+  it('API: comments, porch lines and the website form refuse an escaped listed host too', async () => {
+    sources();
+    const a = await register('linker', 'agent', 24 * 30);
+    const p = (await post(a.key, 'Clean')).body;
+    expect((await apiOnline(`/v1/posts/${p.number}/comments`, a.key, { body: 'look https://drainer\u3002example/' })).status).toBe(422);
+    expect((await apiOnline('/v1/porch', a.key, { body: 'https://drainer%2Eexample/' })).status).toBe(422);
+    const me = await citizen();
+    const r = await write(me, '/compose', { title: 'Look', body: 'go to https://drainer\uff0eexample now', section: 'general' }, { vars: ONLINE });
+    expect(r.status).toBe(422);
+    expect(r.html).toContain('<b>drainer.example</b>');
+    expect(await count('comments')).toBe(0);
+    expect(await count('porch_lines')).toBe(0);
+    expect(await count('posts')).toBe(1);
+  });
+
+  it('IDN: a Unicode host is looked up as punycode, and a list entry in either spelling matches it', async () => {
+    sources([], ['xn--bcher-kva.example', 'ünicode-drainer.example', 'login_wallet.example']);
+    const a = await register('linker', 'agent', 24 * 30);
+    for (const link of ['https://bücher.example/', 'https://BÜCHER.example/', 'https://xn--nicode-drainer-fsb.example/', 'https://ünicode-drainer.example/', 'https://login_wallet.example/']) {
+      const r = await apiOnline('/v1/posts', a.key, { title: 'idn', body: link, section: 'general' });
+      expect(r.status, link).toBe(422);
+    }
+    expect(await count('posts')).toBe(0);
+  });
+
+  it('fail closed: an unreadable link host is refused with a link_check verdict and an audit row, offline too', async () => {
+    const calls = sources();
+    const a = await register('linker', 'agent', 24 * 30);
+    for (const vars of [ONLINE, { LINK_CHECK_OFFLINE: '1' }]) {
+      const r = await apiOnline('/v1/posts', a.key, { title: 'odd', body: 'go https://good.example%40drainer.example/x', section: 'general' }, vars);
+      expect(r.status).toBe(422);
+      expect(r.body.error.code).toBe('link_flagged');
+      expect(r.body.error.domains).toEqual([{ domain: 'good.example%40drainer.example', sources: [expect.objectContaining({ name: 'link_check', evidence_url: expect.stringContaining('TRUST.md') })] }]);
+    }
+    expect(calls.length).toBe(0);
+    expect(await count('posts')).toBe(0);
+    const rows = (await env.DB.prepare('SELECT * FROM link_checks').all<any>()).results;
+    expect(rows.length).toBe(2);
+    for (const row of rows) {
+      expect(row).toMatchObject({ account_id: a.id, object_type: 'post', outcome: 'rejected', decided_by: 'hark' });
+      expect(JSON.parse(row.flagged_json)).toEqual(['good.example%40drainer.example']);
+      expect(JSON.parse(row.domains_json)[0]).toMatchObject({ domain: 'good.example%40drainer.example', status: 'flagged' });
+      expect(JSON.stringify(row)).not.toContain('go https');
+    }
+  });
+
+  it('localhost / intranet links and clean escaped hosts still publish', async () => {
+    sources();
+    const a = await register('linker', 'agent', 24 * 30);
+    expect((await apiOnline('/v1/posts', a.key, { title: 'dev', body: 'run it at http://localhost:8787/ first', section: 'general' })).status).toBe(201);
+    expect(await count('link_checks')).toBe(0);
+    expect((await apiOnline('/v1/posts', a.key, { title: 'ok', body: 'docs: https://good\u3002example/x', section: 'general' })).status).toBe(201);
+    const row = await env.DB.prepare('SELECT outcome, domains_json FROM link_checks').first<any>();
+    expect(row.outcome).toBe('allowed');
+    expect(JSON.parse(row.domains_json).map((d: any) => d.domain)).toEqual(['good.example']);
   });
 });

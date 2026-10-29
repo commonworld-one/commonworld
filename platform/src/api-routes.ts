@@ -9,9 +9,11 @@ import * as content from './routes/content';
 import * as admin from './routes/admin';
 import * as moderation from './routes/moderation';
 import { cspReport } from './csp-report';
+import { pulse } from './routes/pulse';
 import * as deletion from './routes/deletion';
 import { withdraw } from './routes/withdraw';
 import { movePost } from './routes/move';
+import { listDecisions, recordDecision } from './routes/decisions';
 import { adminAiBots } from './ai-bots';
 import { trustStatus } from './trust';
 import { adminCitizens } from './routes/admin-citizens';
@@ -19,6 +21,8 @@ import * as recovery from './routes/recovery';
 import { adminBackups, adminRunBackup } from './routes/admin-backups';
 import { myApps, revokeMyApp } from './routes/apps';
 import { exportMine } from './routes/export';
+import { listSources } from './routes/sources';
+import { getConnections } from './post-connections';
 
 /**
  * Public read caching for requests WITHOUT an Authorization key:
@@ -56,16 +60,23 @@ export const ROUTES: ApiRoute[] = [
   r('GET', '/v1/accounts/{handle}', new RegExp(`^/v1/accounts/${H}$`), accounts.profile, PUBLIC_30),
   r('GET', '/v1/leaderboard', /^\/v1\/leaderboard$/, accounts.leaderboard, { ttl: 60, edgeParams: ['sort', 'kind', 'limit', 'offset'] }),
   r('GET', '/v1/catalog', /^\/v1\/catalog$/, content.catalog, { ttl: 300, edgeParams: [] }),
+  r('GET', '/v1/sources', /^\/v1\/sources$/, listSources, PUBLIC_30),
   r('GET', '/v1/posts', /^\/v1\/posts$/, content.listPosts, PUBLIC_30),
-  r('GET', '/v1/sections/{slug}/tags', /^\/v1\/sections\/([a-z0-9-]{1,64})\/tags$/, content.sectionTags, { ttl: 60, edgeParams: ['min'] }),
+  r('GET', '/v1/sections/{slug}/tags', /^\/v1\/sections\/([a-z0-9-]{1,64})\/tags$/i, content.sectionTags, { ttl: 60, edgeParams: ['min'] }),
   r('POST', '/v1/posts', /^\/v1\/posts$/, content.createPost),
   r('GET', '/v1/posts/{number}', new RegExp(`^/v1/posts/${N}$`), content.getPost, PUBLIC_30),
+  r('GET', '/v1/posts/{number}/comments', new RegExp(`^/v1/posts/${N}/comments$`), content.listPostComments, PUBLIC_30),
+  r('GET', '/v1/posts/{number}/voters', new RegExp(`^/v1/posts/${N}/voters$`), content.listPostVoters, PUBLIC_30),
   r('POST', '/v1/posts/{number}/comments', new RegExp(`^/v1/posts/${N}/comments$`), content.createComment),
   r('POST', '/v1/posts/{number}/upvote', new RegExp(`^/v1/posts/${N}/upvote$`), content.upvote('post')),
   r('POST', '/v1/posts/{number}/withdraw', new RegExp(`^/v1/posts/${N}/withdraw$`), withdraw('post')),
   r('POST', '/v1/posts/{number}/section', new RegExp(`^/v1/posts/${N}/section$`), movePost),
+  r('GET', '/v1/posts/{number}/connections', new RegExp(`^/v1/posts/${N}/connections$`), getConnections, PUBLIC_30),
+  r('GET', '/v1/posts/{number}/decisions', new RegExp(`^/v1/posts/${N}/decisions$`), listDecisions, PUBLIC_30),
+  r('POST', '/v1/posts/{number}/decisions', new RegExp(`^/v1/posts/${N}/decisions$`), recordDecision),
   r('GET', '/v1/posts/{number}/moves', new RegExp(`^/v1/posts/${N}/moves$`), content.listPostMoves, PUBLIC_30),
   r('GET', '/v1/comments/{number}', new RegExp(`^/v1/comments/${N}$`), content.getComment, PUBLIC_30),
+  r('GET', '/v1/comments/{number}/voters', new RegExp(`^/v1/comments/${N}/voters$`), content.listCommentVoters, PUBLIC_30),
   r('POST', '/v1/comments/{number}/upvote', new RegExp(`^/v1/comments/${N}/upvote$`), content.upvote('comment')),
   r('POST', '/v1/comments/{number}/withdraw', new RegExp(`^/v1/comments/${N}/withdraw$`), withdraw('comment')),
   r('GET', '/v1/porch', /^\/v1\/porch$/, content.listPorch, PUBLIC_30),
@@ -76,6 +87,7 @@ export const ROUTES: ApiRoute[] = [
   r('GET', '/v1/announcement', /^\/v1\/announcement$/, content.announcement, PUBLIC_30),
   r('GET', '/v1/rules', /^\/v1\/rules$/, moderation.rules, { ttl: 300 }),
   r('GET', '/v1/moderation', /^\/v1\/moderation$/, moderation.moderationLog, PUBLIC_30),
+  r('GET', '/v1/pulse', /^\/v1\/pulse$/, pulse, { ttl: 60, edgeParams: [] }),
   r('POST', '/v1/csp-report', /^\/v1\/csp-report$/, cspReport),
   r('GET', '/v1/trust/status', /^\/v1\/trust\/status$/, trustStatus, { ttl: 60 }),
   r('GET', '/v1/admin/settings', /^\/v1\/admin\/settings$/, admin.getAdminSettings),

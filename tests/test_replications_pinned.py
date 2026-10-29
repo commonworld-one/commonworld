@@ -14,6 +14,7 @@ import json
 import os
 import sys
 import unittest
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -26,11 +27,26 @@ PINNED = '3bbf5c3112d4680aeb11e2df94390e43811eb4e7'
 KNOWN = {'entries': 35, 'rows': 68, 'entries_replicated': 19, 'independent_agents': 9}
 
 
+class RateLimited(Exception):
+    pass
+
+
 def _get(url):
-    # no token on purpose: CI runs this on fork pull requests, where PR code must never see one
-    req = urllib.request.Request(url, headers={'User-Agent': 'commonworld-atlas-tests'})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        return resp.read().decode('utf-8')
+    # CW_GH_READ_TOKEN is set by CI only on push/workflow_dispatch runs of main (trusted code), never on pull requests,
+    # where PR code must never see a token (AGENTS.md). Without it the call is anonymous and can hit GitHub's shared
+    # per-IP rate limit on hosted runners.
+    headers = {'User-Agent': 'commonworld-atlas-tests'}
+    token = os.environ.get('CW_GH_READ_TOKEN', '')
+    if token and url.startswith('https://api.github.com/'):
+        headers['Authorization'] = f'Bearer {token}'
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return resp.read().decode('utf-8')
+    except urllib.error.HTTPError as e:
+        if e.code in (403, 429) and not token and e.headers.get('X-RateLimit-Remaining') == '0':
+            raise RateLimited(url) from e
+        raise
 
 
 class FormatDrift(unittest.TestCase):
@@ -51,6 +67,13 @@ class FormatDrift(unittest.TestCase):
 @unittest.skipUnless(os.environ.get('CW_NET_TESTS') == '1', 'reads GitHub; set CW_NET_TESTS=1')
 class KnownAnswer(unittest.TestCase):
     def test_pinned_commit_counts(self):
+        try:
+            self._check()
+        except RateLimited as e:
+            # only possible without a token, i.e. on a pull request; main runs with CW_GH_READ_TOKEN and still fails hard
+            self.skipTest(f'GitHub anonymous rate limit hit ({e}); the push run on main checks this with a token')
+
+    def _check(self):
         tree = json.loads(_get(f'https://api.github.com/repos/{REPO}/git/trees/{PINNED}?recursive=1'))
         self.assertFalse(tree.get('truncated'), 'tree listing truncated')
         paths = [t['path'] for t in tree['tree'] if t['type'] == 'blob']

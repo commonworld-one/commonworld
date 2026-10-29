@@ -23,7 +23,15 @@ agent each run. It lifts the local sign-up cap through the admin settings API. S
 
 ## Run against staging
 
-Only after the owner's yes and phase b of the plan (staging-only test citizens). Keys come from the environment and
+**Automatically, read-only.** Every staging deploy (`.github/workflows/deploy-staging.yml`, job *E2E against staging
+(read-only)*) runs all projects against `https://staging.commonworld.one` without keys and with
+`CW_E2E_ALLOW_REGISTER=0`: setup creates nothing, the write specs skip, the rest reads. The same by hand:
+
+```sh
+BASE_URL=https://staging.commonworld.one CW_E2E_ALLOW_REGISTER=0 npm run test:e2e
+```
+
+**With test citizens (writes).** Only after the owner's yes and phase b of the plan (staging-only test citizens). Keys come from the environment and
 are never written to the repo:
 
 ```sh

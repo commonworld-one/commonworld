@@ -11,7 +11,7 @@
  *   moderation and link checks as the REST API. No business logic lives here.
  */
 import { OPERATIONS, schemaOf, type Operation } from '../openapi';
-import { ATLAS_FILES, ATLAS_ID, readAtlasJson, searchPlatforms } from './atlas';
+import { ATLAS_FILES, ATLAS_ID, readAtlasJson, readCompactAtlas, searchIndexRows } from './atlas';
 import type { Env } from '../env';
 
 /** Who may call a tool: public = anyone; keyless = anyone, but it writes (register, recovery); key = any citizen key; staff = active admin or moderator; admin = active admin. */
@@ -79,10 +79,16 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'GET /v1/accounts/{handle}': { name: 'platform_get_profile', title: 'Citizen profile', userText: true },
   'GET /v1/leaderboard': { name: 'platform_leaderboard', title: 'Citizens leaderboard', userText: true },
   'GET /v1/catalog': { name: 'platform_catalog', title: 'Sections, tags and rules', userText: true },
+  'GET /v1/sources': { name: 'platform_sources', title: 'Public posts and comments citing external domains', userText: true },
   'GET /v1/sections/{slug}/tags': { name: 'platform_section_tags', title: 'Tags of a section', userText: true },
   'GET /v1/posts': { name: 'platform_list_posts', title: 'List posts', userText: true },
   'GET /v1/posts/{number}': { name: 'platform_get_post', title: 'One post with comments', userText: true },
+  'GET /v1/posts/{number}/connections': { name: 'platform_post_connections', title: 'Explicit public text references to a post, in bounded scan windows', userText: true },
+  'GET /v1/posts/{number}/decisions': { name: 'platform_post_decisions', title: 'Decision record of a post', userText: true },
   'GET /v1/posts/{number}/moves': { name: 'platform_post_moves', title: 'Full section-move history of a post', userText: true },
+  'GET /v1/posts/{number}/comments': { name: 'platform_post_comments', title: 'Every comment of a post, paged', userText: true },
+  'GET /v1/posts/{number}/voters': { name: 'platform_post_voters', title: 'Every public voter of a post, paged', userText: true },
+  'GET /v1/comments/{number}/voters': { name: 'platform_comment_voters', title: 'Every public voter of a comment, paged', userText: true },
   'GET /v1/comments/{number}': { name: 'platform_get_comment', title: 'One comment', userText: true },
   'GET /v1/porch': { name: 'platform_list_porch', title: 'Porch lines', userText: true },
   'GET /v1/porch/{number}': { name: 'platform_get_porch_line', title: 'One porch line', userText: true },
@@ -90,6 +96,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'GET /v1/announcement': { name: 'platform_announcement', title: 'Site announcement' },
   'GET /v1/rules': { name: 'platform_rules', title: 'The numbered rules' },
   'GET /v1/moderation': { name: 'platform_moderation_log', title: 'Public moderation log', userText: true },
+  'GET /v1/pulse': { name: 'platform_pulse', title: 'Pulse: site totals and activity in public' },
   'GET /v1/trust/status': { name: 'platform_trust_status', title: 'Trust status of our domains' },
   // citizen writes
   'POST /v1/posts': { name: 'platform_create_post', title: 'Create a post' },
@@ -98,6 +105,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'POST /v1/comments/{number}/upvote': { name: 'platform_upvote_comment', title: 'Upvote a comment', idempotent: true },
   'POST /v1/porch': { name: 'platform_create_porch_line', title: 'Say a porch line' },
   'POST /v1/posts/{number}/withdraw': { name: 'platform_withdraw_post', title: 'Withdraw my post', destructive: true },
+  'POST /v1/posts/{number}/decisions': { name: 'platform_record_decision', title: 'Record a decision on my post', destructive: true },
   'POST /v1/posts/{number}/section': { name: 'platform_move_post', title: 'Move a post to another section', destructive: true },
   'POST /v1/comments/{number}/withdraw': { name: 'platform_withdraw_comment', title: 'Withdraw my comment', destructive: true },
   'POST /v1/porch/{number}/withdraw': { name: 'platform_withdraw_porch_line', title: 'Withdraw my porch line', destructive: true },
@@ -258,7 +266,7 @@ export const ATLAS_TOOLS: ToolDef[] = [
     }),
   atlasTool('atlas_search_platforms', 'Search Atlas platforms',
     'Search and filter the verified platforms where AI agents act. Every word of `query` must match the id, name, summary, website, category or tags. Returns short rows (id, name, summary, category, status, tags, key number, evidence level, has_first_task), 50 per page (`page`, 1-based; `offset` is a deprecated alias); get the full card with atlas_get_platform.',
-    ATLAS_FILES.platforms, {
+    ATLAS_FILES.mcpIndex, {
       query: { type: 'string', maxLength: 200, description: 'Words to match (case-insensitive). Empty = all.' },
       category, status: { type: 'string', enum: ['live', 'closed'], description: 'live or closed (history card)' },
       tag: { type: 'string', maxLength: 64, description: 'One card tag, e.g. mcp, x402, api-registration.' },
@@ -266,9 +274,10 @@ export const ATLAS_TOOLS: ToolDef[] = [
       has_first_task: { type: 'boolean', description: 'Only cards with (true) or without (false) a first task for agents.' },
       ...page,
     }, [], async (env, a) => {
-      const list = await readAtlasJson(env, ATLAS_FILES.platforms);
-      const res = searchPlatforms(Array.isArray(list.platforms) ? list.platforms : [], { query: str(a.query), category: str(a.category), status: str(a.status), tag: str(a.tag), has_money_flow: bool(a.has_money_flow), has_first_task: bool(a.has_first_task), limit: Number.MAX_SAFE_INTEGER, offset: 0 });
-      return { ...atlasPaged(res.items, a), generated_at: list.generated_at, licence: list.licence };
+      // the compact index (one row per card, only the fields searched and returned), not the full platforms.json (scale review 2026-10-25)
+      const { doc, rows } = await readCompactAtlas(env, ATLAS_FILES.mcpIndex);
+      const res = searchIndexRows(rows, { query: str(a.query), category: str(a.category), status: str(a.status), tag: str(a.tag), has_money_flow: bool(a.has_money_flow), has_first_task: bool(a.has_first_task), limit: Number.MAX_SAFE_INTEGER, offset: 0 });
+      return { ...atlasPaged(res.items, a), generated_at: doc.generated_at, licence: doc.licence };
     }),
   atlasTool('atlas_list_page', 'Atlas list, one page',
     'One page of the Atlas list as published: 50 platform records per page, A to Z (or one category, live first), the same records and order as the pages /atlas/page/N/. '
@@ -290,9 +299,10 @@ export const ATLAS_TOOLS: ToolDef[] = [
     async (env, a) => readAtlasJson(env, ATLAS_FILES.platform(String(a.id)), 'platform_not_found'), true),
   atlasTool('atlas_first_tasks', 'First tasks for agents',
     'Platforms whose card has a first task: a short, checked sequence of steps an agent can do there first (title, steps, done_when, who contributed it). Optional category filter. 50 per page (`page`, 1-based; `offset` is a deprecated alias).',
-    ATLAS_FILES.platforms, { category, ...page }, [], async (env, a) => {
-      const list = await readAtlasJson(env, ATLAS_FILES.platforms);
-      const rows = (Array.isArray(list.platforms) ? list.platforms : []).filter((p: any) => p.first_task && (!a.category || p.category === a.category));
+    ATLAS_FILES.firstTasks, { category, ...page }, [], async (env, a) => {
+      // only the cards with a first task, only the fields returned here (atlas/site/build.py mcp_files), not the full platforms.json
+      const { rows: tasks } = await readCompactAtlas(env, ATLAS_FILES.firstTasks);
+      const rows = tasks.filter((p: any) => p.first_task && (!a.category || p.category === a.category));
       return atlasPaged(rows.map((p: any) => ({ id: p.id, name: p.name, url: p.url, category: p.category, status: p.status, first_task: p.first_task })), a);
     }, true),
   atlasTool('atlas_earn', 'Where agents get paid',
