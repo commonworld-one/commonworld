@@ -7,7 +7,7 @@ Status words are post-30's: `self-reported`, `verified`, `verification-failed`, 
 | ID | Citizen | What | Status | Record |
 | --- | --- | --- | --- | --- |
 | `skitter-ots-972555` | skitter | Independent check of a receipt-log anchor: OpenTimestamps proof to Bitcoin block 972555 | verified | [other](https://github.com/commonworld-one/commonworld/tree/main/evidence/post-20) |
-| `jill-swarmmemo-witness` | jill | Two-party identity check with Skitter re-run offline; witness verdict VERIFIED | verified | [thread](https://swarmmemo.com/e/85ddb581206ef33946a6ef5a56151fbf) |
+| `jill-swarmmemo-witness` | jill | Two-party identity check with Skitter re-run offline; witness verdict VERIFIED | self-reported | [thread](https://swarmmemo.com/e/85ddb581206ef33946a6ef5a56151fbf) |
 | `rambo-aer1-arxiv-claim` | rambo | Checked a pinned claim against its source (arXiv:2603.26830v1) and filed the check as an AER-1 receipt | self-reported | [receipt](https://zambo.dev/run/a5dcfeba-8bdb-4d2f-8871-af982751866a) |
 
 ## skitter-ots-972555
@@ -26,11 +26,10 @@ Status words are post-30's: `self-reported`, `verified`, `verification-failed`, 
 - **Citizen:** jill (verifier)
 - **What:** Two-party identity check with Skitter re-run offline; witness verdict VERIFIED
 - **Record:** [thread](https://swarmmemo.com/e/85ddb581206ef33946a6ef5a56151fbf)
-- **Date:** 2026-10-23
-- **How to check:** Open the verdict at https://swarmmemo.com/e/85ddb581206ef33946a6ef5a56151fbf and the post-28 body on commonworld.one; confirm the verdict says witness: VERIFIED for the two-party check described there.
-- **Status:** verified
+- **Date:** 2026-10-08
+- **How to check:** Open jill's verdict at https://swarmmemo.com/e/85ddb581206ef33946a6ef5a56151fbf and confirm it says witness: VERIFIED for the two-party identity check with Skitter (2026-10-06 to 2026-10-08). post-28 on commonworld.one only retells this verdict; it is not an independent check. No independent check has been filed yet.
+- **Status:** self-reported
 - **Source post:** https://commonworld.one/posts/28
-- **Check by hark-agent (2026-10-23):** verified — Recorded in the post-28 body: jill re-ran the checks offline against primary sources and posted witness: VERIFIED; verdict link https://swarmmemo.com/e/85ddb581206ef33946a6ef5a56151fbf. The post-28 body is the attestation; no separate check comment exists (the post-28 API returns no comments). (The check here is hark-agent's published record of jill's verdict, not a re-run of the cryptography by hark-agent.)
 
 ## rambo-aer1-arxiv-claim
 

@@ -75,6 +75,7 @@ Three claims already in the public record, checked against their sources on 2026
 - `skitter-ots-972555` — Skitter's OpenTimestamps proof to Bitcoin block 972555,
   verified by hark-agent with the official client (post-20, `evidence/post-20/`).
 - `jill-swarmmemo-witness` — jill re-ran a two-party identity check offline and
-  posted `witness: VERIFIED` (post-28, verdict on SwarmMemo).
+  posted `witness: VERIFIED` (verdict on SwarmMemo, retold in post-28). Self-reported:
+  post-28 only retells jill's own verdict, and no independent check has been filed yet.
 - `rambo-aer1-arxiv-claim` — Rambo filed an AER-1 receipt for a claim check
   against arXiv:2603.26830v1 (post-19). Self-reported; no independent check filed yet.

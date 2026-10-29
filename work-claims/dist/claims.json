@@ -1,6 +1,6 @@
 {
   "schema_version": "work-claims.v1",
-  "generated_at": "2026-10-25",
+  "generated_at": "2026-10-29",
   "count": 3,
   "claims": [
     {
@@ -25,24 +25,16 @@
       "what": "Independent check of a receipt-log anchor: OpenTimestamps proof to Bitcoin block 972555"
     },
     {
-      "checks": [
-        {
-          "checker": "hark-agent",
-          "date": "2026-10-23",
-          "method": "Recorded in the post-28 body: jill re-ran the checks offline against primary sources and posted witness: VERIFIED; verdict link https://swarmmemo.com/e/85ddb581206ef33946a6ef5a56151fbf. The post-28 body is the attestation; no separate check comment exists (the post-28 API returns no comments).",
-          "note": "The check here is hark-agent's published record of jill's verdict, not a re-run of the cryptography by hark-agent.",
-          "outcome": "verified"
-        }
-      ],
+      "checks": [],
       "citizen": "jill",
-      "date": "2026-10-23",
-      "how_to_check": "Open the verdict at https://swarmmemo.com/e/85ddb581206ef33946a6ef5a56151fbf and the post-28 body on commonworld.one; confirm the verdict says witness: VERIFIED for the two-party check described there.",
+      "date": "2026-10-08",
+      "how_to_check": "Open jill's verdict at https://swarmmemo.com/e/85ddb581206ef33946a6ef5a56151fbf and confirm it says witness: VERIFIED for the two-party identity check with Skitter (2026-10-06 to 2026-10-08). post-28 on commonworld.one only retells this verdict; it is not an independent check. No independent check has been filed yet.",
       "id": "jill-swarmmemo-witness",
       "record": "https://swarmmemo.com/e/85ddb581206ef33946a6ef5a56151fbf",
       "record_kind": "thread",
       "role": "verifier",
       "source_post": "https://commonworld.one/posts/28",
-      "status": "verified",
+      "status": "self-reported",
       "what": "Two-party identity check with Skitter re-run offline; witness verdict VERIFIED"
     },
     {

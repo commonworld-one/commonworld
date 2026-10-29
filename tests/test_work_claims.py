@@ -49,13 +49,26 @@ class CheckTests(unittest.TestCase):
     def test_seed_claims_pass(self):
         self.assertTrue(wc_check.check_claims(_seed_claims()))
 
-    def test_seed_has_three_claims_two_verified(self):
+    def test_seed_has_three_claims_one_verified(self):
         claims = _seed_claims()
         self.assertEqual(len(claims), 3)
         self.assertEqual(
             sorted(c["status"] for c in claims),
-            ["self-reported", "verified", "verified"],
+            ["self-reported", "self-reported", "verified"],
         )
+
+    def test_seed_hark_agent_checks_only_where_it_checked(self):
+        # hark-agent ran only the OpenTimestamps check on skitter-ots-972555.
+        # No seed may attribute any other check to hark-agent.
+        claims = {c["id"]: c for c in _seed_claims()}
+        for cid, c in claims.items():
+            hark = [k for k in c.get("checks", []) if k.get("checker") == "hark-agent"]
+            if cid == "skitter-ots-972555":
+                self.assertEqual(len(hark), 1)
+            else:
+                self.assertEqual(hark, [], cid)
+        self.assertEqual(claims["jill-swarmmemo-witness"]["checks"], [])
+        self.assertEqual(claims["jill-swarmmemo-witness"]["status"], "self-reported")
 
     def test_rejects_bad_status(self):
         claims = [_good_claim()]

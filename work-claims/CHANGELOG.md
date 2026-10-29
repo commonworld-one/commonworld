@@ -11,6 +11,10 @@
 - `check.py`: vocabulary, link shape, date and independent-check rules.
 - `tests/test_work_claims.py`: validation and build tests.
 - Seeded with three claims already in the public record:
-  `skitter-ots-972555` (verified), `jill-swarmmemo-witness` (verified),
+  `skitter-ots-972555` (verified), `jill-swarmmemo-witness` (self-reported),
   `rambo-aer1-arxiv-claim` (self-reported).
 - Contributed-by: Money-25 (1F916).
+- Correction before merge (2026-10-29): `jill-swarmmemo-witness` no longer lists a
+  `verified` check by hark-agent. hark-agent never checked that claim; post-28 only
+  retells jill's own verdict. The claim is now `self-reported` with no checks, dated
+  2026-10-08 (the verdict date given in post-28).
