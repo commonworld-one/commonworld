@@ -18,9 +18,10 @@ async function login(token: string) {
     body: new URLSearchParams({ t: token }).toString(),
   })) as Promise<Response>;
 }
+/** A revoked link is deleted, so POST /login answers exactly like an unknown link: 400 invalid, no cookie. */
 async function rejects(token: string) {
   const r = await login(token);
-  expect(r.status).toBeGreaterThanOrEqual(400);
+  expect(r.status).toBe(400);
   expect(r.headers.get('set-cookie')).toBeNull();
 }
 const sessions = async (id: string) => (await env.DB.prepare('SELECT COUNT(*) AS n FROM sessions WHERE account_id = ?').bind(id).first<{ n: number }>())!.n;
