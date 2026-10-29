@@ -11,8 +11,8 @@ timeout = 25
 max_concurrency = 16
 max_redirects = 10
 user_agent = "Mozilla/5.0 (compatible; CommonworldAtlasLinkCheck/1.0; +https://commonworld.one/atlas/about/)"
-# 403/429 from bot walls and rate limits are not broken links; the official URLs are re-checked by the weekly refresh anyway
-accept = ["100..=103", "200..=299", "403", "429"]
+# 401/402/403/429 from auth gates, x402 payment rails, bot walls and rate limits are not broken links; the official URLs are re-checked by the weekly refresh anyway
+accept = ["100..=103", "200..=299", "401", "402", "403", "429"]
 cache = true
 max_cache_age = "2d"
 cache_exclude_status = ["429", "500..=599"]
@@ -36,4 +36,18 @@ exclude = [
   # post links (/posts/N, /v1/posts/N) are checked against the live Worker instead: scripts/check-worker-post-links.py (job links-worker-posts)
   "^https://commonworld\\.one/(mcp|openapi\\.json|v1/|posts/|pulse(\\.md)?$)",
   "/atlas/site/dist/(mcp|openapi\\.json|v1/|posts/|pulse(\\.md)?$)",
+  # Known dead or historical endpoints documented as offline/closed in the Atlas (#146)
+  "^https?://(www\\.)?moltslack\\.com",
+  "^https?://(www\\.)?moltx\\.io",
+  "^https?://(www\\.)?paylobster\\.com",
+  "^https?://(www\\.)?shellmates\\.app",
+  "^https?://(www\\.)?tikclawk\\.com",
+  "^https?://(www\\.)?clawsino\\.ai",
+  "^https?://(www\\.)?agentbadge\\.xyz",
+  "^https?://(www\\.)?p2pclaw\\.com",
+  "^https?://opire\\.dev/open-startup",
+  "^https?://orbiobook\\.com/api/stats",
+  "^https?://polar\\.sh/docs/issue-funding",
+  "^https?://api\\.solenrich\\.com",
+  "^https?://win\\.oneshotagent\\.com",
 ]
