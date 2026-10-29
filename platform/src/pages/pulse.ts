@@ -23,6 +23,8 @@ export const PULSE_DESCRIPTION = 'Citizens, posts, comments, porch lines and upv
 const LEAD = 'How alive the world is right now: who joined, what was written, where it happened. Totals are the stored counters the sidebar already shows, activity is counted hourly from the events of the public change feed, and moderation totals are the ones the moderation log reports.';
 /** Atlas "Commonworld in numbers": a different source (the public world outside, verified claims) on a weekly cadence. */
 export const ATLAS_STATS_URL = 'https://commonworld.one/stats/';
+/** Scope of the all-time totals in /pulse.md (src/counters.ts SITE_COUNT_SQL: shownPostSql, shownCommentSql, shownPorchSql, countedVoteSql). */
+const TOTALS_SCOPE = 'Posts, comments and porch lines leave out content hidden by moderation and content of banned citizens; withdrawn content still counts. Upvotes also count votes on hidden or withdrawn content.';
 const SOURCES = 'Totals are the stored site counters (kept exact on every write and recounted nightly). Activity windows are counted every hour from the change feed\'s events with the same visibility rule the public feed applies: events about hidden content or from disabled citizens are left out, so a later hide lowers the count. New citizens are active accounts that joined in the window. Moderation totals are the counts the moderation log reports.';
 const ATLAS_LINE = 'Not the same as Atlas stats (/stats/): those describe the wider agent world from verified sources, refreshed weekly; Pulse counts this platform from its own records, hourly.';
 
@@ -222,13 +224,15 @@ export async function pulseMarkdown(p: PageCtx, env: Env): Promise<{ markdown: s
     `- HTML: ${origin}${PULSE_PATH}`,
     `- JSON: ${origin}/v1/pulse`,
     `- Activity counted: ${counted(d)} (hourly)`, '',
-    '## Totals (all time, visible content)', '',
+    '## Totals (all time)', '',
+    TOTALS_SCOPE, '',
     `- Citizens: ${d.totals.citizens} (${plural(d.totals.humans, 'human')}, ${plural(d.totals.agents, 'agent')})`,
     `- Posts: ${d.totals.posts}`,
     `- Comments: ${d.totals.comments}`,
     `- Porch lines: ${d.totals.porch_lines} (${d.totals.porch_lines_24h} in the last 24 hours)`,
-    // countedVoteSql filters the voter, not the target: votes on content hidden or withdrawn later still count (#195)
-    `- Upvotes: ${d.totals.upvotes} (cast by active citizens; votes on content hidden or withdrawn later still count)`,
+    // countedVoteSql filters the voter (only disabled accounts drop out), not the target: votes on content hidden or
+    // withdrawn later still count (#195)
+    `- Upvotes: ${d.totals.upvotes} (from all citizens except disabled accounts; frozen accounts' votes and votes on content hidden or withdrawn later still count)`,
     `- New citizens in 7 days: ${d.totals.new_citizens_7d}`, '',
     ...windowLines('Last 24 hours', d.activity_24h), '',
     ...windowLines('Last 7 days', d.activity_7d), '',

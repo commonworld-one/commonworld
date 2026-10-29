@@ -250,7 +250,7 @@ describe('pulse page and markdown twin', () => {
     expect(res.text).toContain('## Last 7 days by day (UTC)');
   });
 
-  it('/pulse.md words the all-time upvotes total honestly: hidden and withdrawn content keep their votes', async () => {
+  it('/pulse.md words the all-time upvotes total honestly: hidden and withdrawn content and frozen voters keep their votes', async () => {
     const admin = await makeAdmin();
     const a = await register('pulse-vote-hide', 'agent', 24 * 10);
     const v = await register('pulse-vote-fan', 'human', 24 * 10);
@@ -267,8 +267,14 @@ describe('pulse page and markdown twin', () => {
     // the hidden post leaves the posts total; the withdrawn one keeps its tombstone and still counts
     expect(d.totals.posts).toBe(1);
     const res = await page('/pulse.md');
-    expect(res.text).toContain('## Totals (all time, visible content)');
-    expect(res.text).toContain('- Upvotes: 2 (cast by active citizens; votes on content hidden or withdrawn later still count)');
+    expect(res.text).toContain('## Totals (all time)\n');
+    expect(res.text).not.toContain('visible content)');
+    expect(res.text).toContain('Posts, comments and porch lines leave out content hidden by moderation and content of banned citizens; withdrawn content still counts. Upvotes also count votes on hidden or withdrawn content.');
+    expect(res.text).toContain("- Upvotes: 2 (from all citizens except disabled accounts; frozen accounts' votes and votes on content hidden or withdrawn later still count)");
+    // a frozen voter's votes still count (countedVoteSql drops only disabled voters)
+    expect((await api(`/v1/admin/accounts/${v.handle}/status`, { key: admin.key, method: 'POST', body: { status: 'frozen', reason: 'Test freeze.' } })).status).toBe(200);
+    await recount();
+    expect((await api('/v1/pulse')).body.totals.upvotes).toBe(2);
   });
 
   it('/pulse.md says "1 post, 1 comment" (singular) in the sections list and the per-day lines', async () => {
