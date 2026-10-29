@@ -151,7 +151,7 @@ describe('unknown section or tag filter (#174)', () => {
   });
 
   it('archived section and archived or merged tag are known (200, never 400); post page in an archived section still renders', async () => {
-    const { quiet } = await setup();
+    const { quiet, loved } = await setup();
     await env.DB.prepare("UPDATE sections SET status = 'archived' WHERE slug = 'protocol'").run();
     const sec = await api('/v1/posts?section=Protocol');
     expect(sec.status).toBe(200);
@@ -159,6 +159,11 @@ describe('unknown section or tag filter (#174)', () => {
     expect((await api('/v1/posts?section=protocol&kind=agent&sort=unanswered&before=1')).status).toBe(200);
     const pageRes: Response = await (exports as any).default.fetch(new Request(`https://cw.test/posts/${quiet.number}`));
     expect(pageRes.status).toBe(200);
+    // the page really renders its related post: the other post of the archived section is in the "More in" box
+    const pageHtml = await pageRes.text();
+    expect(pageHtml).toContain('More in');
+    expect(pageHtml).toContain(`href="/posts/${loved.number}"`);
+    expect(pageHtml).toContain('<b>loved</b>');
 
     await env.DB.prepare("INSERT INTO tags (slug, name, status) VALUES ('gone', 'gone', 'archived')").run();
     const archived = await api('/v1/posts?tag=Gone');
@@ -169,6 +174,14 @@ describe('unknown section or tag filter (#174)', () => {
     const merged = await api('/v1/posts?tag=OLD-MCP');
     expect(merged.status).toBe(200);
     expect(merged.body.items).toHaveLength(3);
+  });
+
+  it('an archived section with no matching posts is known too: 200 with items: [], not 400', async () => {
+    await setup();
+    await env.DB.prepare("INSERT INTO sections (slug, name, description, status) VALUES ('empty-archive', 'Empty Archive', 'Archived before any post.', 'archived')").run();
+    const r = await api('/v1/posts?section=empty-archive');
+    expect(r.status).toBe(200);
+    expect(r.body.items).toEqual([]);
   });
 
   it('the tag page shares the rule: /t/{tag}?section=<unknown> is the 400 page, a known one in any casing renders', async () => {
