@@ -11,6 +11,10 @@
 
 export const ALLOWED_METHODS = ['GET', 'HEAD'];
 export const PLACEHOLDERS = ['base', 'environment', 'post'];
+/** Request headers that carry credentials; never sent by the smoke list (case-insensitive). */
+export const FORBIDDEN_HEADER = /^(authorization|proxy-authorization|cookie|x-api-key|api-key|x-auth-token|x-access-token|x-csrf-token)$/i;
+const isMap = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+const isStrMap = (v) => isMap(v) && Object.values(v).every((x) => typeof x === 'string');
 const ENTRY_KEYS = new Set(['id', 'path', 'method', 'headers', 'status', 'redirect', 'header_contains', 'body_contains',
   'body_not_contains', 'json_contains', 'added_by', 'note', 'skip']);
 
@@ -22,8 +26,9 @@ export function placeholdersOf(entry) {
     else if (Array.isArray(v)) v.forEach(scan);
     else if (v && typeof v === 'object') Object.values(v).forEach(scan);
   };
-  scan([entry.path, entry.headers, entry.redirect, entry.header_contains, entry.body_contains, entry.body_not_contains,
-    (entry.json_contains ?? []).map((j) => j?.contains)]); // JSON pointers are literal ({slug} in an OpenAPI path)
+  // JSON pointers are literal ({slug} in an OpenAPI path); a malformed json_contains is reported by validateList
+  const jsonContains = Array.isArray(entry.json_contains) ? entry.json_contains.map((j) => (isMap(j) ? j.contains : undefined)) : [];
+  scan([entry.path, entry.headers, entry.redirect, entry.header_contains, entry.body_contains, entry.body_not_contains, jsonContains]);
   return [...found];
 }
 
@@ -45,11 +50,11 @@ export function validateList(list) {
     if (e.method !== undefined && !ALLOWED_METHODS.includes(e.method)) errors.push(`${at}: "method" must be GET or HEAD (the smoke list is read-only)`);
     if (!Number.isInteger(e.status) || e.status < 100 || e.status > 599) errors.push(`${at}: "status" must be an HTTP status code`);
     if (typeof e.added_by !== 'string' || !/^#\d+( #\d+)*$/.test(e.added_by)) errors.push(`${at}: "added_by" must name the PR or issue, e.g. "#224"`);
-    if (e.headers !== undefined && (typeof e.headers !== 'object' || Array.isArray(e.headers) || !Object.values(e.headers).every((v) => typeof v === 'string'))) errors.push(`${at}: "headers" must map names to strings`);
-    if (e.headers && Object.keys(e.headers).some((h) => /^(authorization|cookie|x-api-key)$/i.test(h))) errors.push(`${at}: no credentials in the smoke list`);
-    if (e.header_contains !== undefined && (typeof e.header_contains !== 'object' || Array.isArray(e.header_contains) || !Object.values(e.header_contains).every((v) => typeof v === 'string'))) errors.push(`${at}: "header_contains" must map header names to strings`);
+    if (e.headers !== undefined && !isStrMap(e.headers)) errors.push(`${at}: "headers" must map names to strings`);
+    if (isMap(e.headers) && Object.keys(e.headers).some((h) => FORBIDDEN_HEADER.test(h))) errors.push(`${at}: no credentials in the smoke list`);
+    if (e.header_contains !== undefined && !isStrMap(e.header_contains)) errors.push(`${at}: "header_contains" must map header names to strings`);
     for (const k of ['body_contains', 'body_not_contains']) if (e[k] !== undefined && !isStrArr(e[k])) errors.push(`${at}: "${k}" must be a list of non-empty strings`);
-    if (e.json_contains !== undefined && !(Array.isArray(e.json_contains) && e.json_contains.every((j) => j && typeof j.pointer === 'string' && (j.pointer === '' || j.pointer.startsWith('/')) && typeof j.contains === 'string'))) errors.push(`${at}: "json_contains" must be a list of {pointer, contains}`);
+    if (e.json_contains !== undefined && !(Array.isArray(e.json_contains) && e.json_contains.every((j) => isMap(j) && typeof j.pointer === 'string' && (j.pointer === '' || j.pointer.startsWith('/')) && typeof j.contains === 'string'))) errors.push(`${at}: "json_contains" must be a list of {pointer, contains}`);
     if (e.redirect !== undefined && (typeof e.redirect !== 'string' || !(e.status >= 300 && e.status < 400))) errors.push(`${at}: "redirect" needs a string target and a 3xx "status"`);
     if (e.method === 'HEAD' && (e.body_contains || e.body_not_contains || e.json_contains)) errors.push(`${at}: a HEAD check has no body to look into`);
     if (e.skip !== undefined && (typeof e.skip !== 'string' || !e.skip.trim())) errors.push(`${at}: "skip" must say why the check is skipped`);
@@ -131,6 +136,16 @@ export async function discover(vars, fetchImpl, opts = {}) {
   return vars;
 }
 
+/** Why an entry may not be sent (a write method, credential headers, malformed headers); null = it is read-only. */
+export function readOnlyRefusal(entry) {
+  const method = entry?.method ?? 'GET';
+  if (!ALLOWED_METHODS.includes(method)) return `method ${String(method)} is not GET or HEAD (the smoke list is read-only)`;
+  if (entry.headers !== undefined && !isStrMap(entry.headers)) return '"headers" must map names to strings';
+  const bad = Object.keys(entry.headers ?? {}).filter((h) => FORBIDDEN_HEADER.test(h));
+  if (bad.length) return `credential header ${bad.join(', ')} is never sent`;
+  return null;
+}
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /**
@@ -140,6 +155,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 export async function runEntry(entry, vars, fetchImpl, opts = {}) {
   const method = entry.method ?? 'GET';
   const label = `${entry.id} ${method} ${entry.path} [${entry.added_by}]`;
+  // Read-only even when called directly (without validateList): refuse before any request is made.
+  const refused = readOnlyRefusal(entry);
+  if (refused) return { result: 'FAIL', line: `FAIL ${label}: refused, ${refused}`, fails: [`refused, ${refused}`] };
   if (entry.skip) return { result: 'SKIP', line: `SKIP ${label}: ${entry.skip}`, fails: [] };
   let url; let headers;
   try {

@@ -96,7 +96,10 @@ workflow run on a pull request, a fork or any other branch never gets it.
 
 Every staging and production deploy ends with the **route smoke list**: `platform/smoke/routes.json` of the deployed
 commit, run by `platform/scripts/smoke.mjs` (Node 22, no dependencies) against that environment's address. Read-only:
-only `GET` and `HEAD`, no keys, no cookies.
+only `GET` and `HEAD`, no keys, no cookies. The list check refuses anything else (exit 2), and `runEntry` in
+`platform/smoke/lib.mjs` refuses it again before any request, so the library stays read-only when called directly:
+a write method or a credential header (`Authorization`, `Proxy-Authorization`, `Cookie`, `X-API-Key`, `API-Key`,
+`X-Auth-Token`, `X-Access-Token`, `X-CSRF-Token`, any letter case) is a `FAIL` with "refused" and nothing is sent.
 
 - **Where it runs.** Staging: step *Route smoke list (staging)* of the job *Deploy to staging*, after the smoke test
   and **before** the deployed sha is recorded, so a failing entry leaves no `staging-deployed-<sha>` artifact and the

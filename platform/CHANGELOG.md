@@ -18,7 +18,10 @@ gates of both deploy workflows are unchanged.
   works on both environments.
 - `platform/scripts/smoke.mjs <BASE_URL>` (Node 22, no dependencies; `npm run smoke`): runs every entry, prints
   `PASS` / `FAIL` / `SKIP` per line, retries a failing check twice 10 s apart, exits 1 on any failure (2 on an invalid
-  list). In GitHub Actions failures are `::error::` annotations and the table goes into the job summary.
+  list). In GitHub Actions failures are `::error::` annotations and the table goes into the job summary. Read-only
+  twice over: the list check refuses a write method or a credential header (`Authorization`, `Cookie`, `X-API-Key`
+  and similar, any letter case), and `runEntry` in `smoke/lib.mjs` refuses them again before any request when called
+  directly; a malformed nested value (`"headers": null`, a non-list `json_contains`) is a list error (exit 2).
 - Deploy workflows: *Route smoke list (staging)* runs in *Deploy to staging* after the smoke test and before the
   deployed sha is recorded, so a failing route keeps that commit out of production; *Route smoke list (production)*
   runs after the production smoke test. Commits older than the list skip the step with a warning.

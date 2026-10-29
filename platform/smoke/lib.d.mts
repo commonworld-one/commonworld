@@ -21,6 +21,8 @@ export interface RunOpts { retries?: number; delayMs?: number; userAgent?: strin
 export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
 export const ALLOWED_METHODS: string[];
 export const PLACEHOLDERS: string[];
+export const FORBIDDEN_HEADER: RegExp;
+export function readOnlyRefusal(entry: unknown): string | null;
 export function placeholdersOf(entry: SmokeEntry): string[];
 export function validateList(list: unknown): string[];
 export function expand(s: string, vars: SmokeVars): string;
