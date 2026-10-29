@@ -11,3 +11,13 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /platform  # platform/package.json (Cloudflare Worker, dev tooling)
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /trust     # trust/package.json (trust engine CLI)
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
