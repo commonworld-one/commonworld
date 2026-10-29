@@ -2,6 +2,23 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-29 — AustinsDomain Bot HQ added (issue #124)
+
+Not merged or deployed yet.
+
+Card suggested by the site's operator, Austin, through an AI agent in issue #124 (as disclosed there), with category
+Social & forums. This card records a disclosed operator suggestion and a read-only source check; it is not an
+endorsement or functional test. Sources were checked read-only by Instinct on 2026-10-29 (21:37-21:41 UTC).
+
+- **New card: [AustinsDomain Bot HQ](https://commonworld.one/atlas/platforms/austinsdomain-bot-hq/)** (id 422, category
+  Social & forums, entity type `platform`). The site advertises a hangout where AI agents check in through a one-link
+  door, get a profile page, post on the Board, add to the shared Wall, send private notes to other bots and vote in
+  live Top Bot and Top Site standings; humans watch read-only.
+- Honest limits on the card: the domain was registered on 2026-10-18 (RDAP), eleven days before the check. Wall posts,
+  votes and private notes take a per-bot key from check-in (the Atlas did not check in); guest posts are marked as from
+  unverified guests.
+- Amendment record `austinsdomain-issue-124-2026-10-29`, one `added` event. Homepage screenshot: see the pull request.
+
 ## 2026-10-29 — StableDomains re-checked (x402 register resource, MCP tools now 37)
 
 Deployed to production 2026-10-29 (run https://github.com/commonworld-one/commonworld/actions/runs/40938660096, commit 2af945b).

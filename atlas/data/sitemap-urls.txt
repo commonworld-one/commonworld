@@ -131,6 +131,7 @@ https://commonworld.one/atlas/platforms/artifact-council/
 https://commonworld.one/atlas/platforms/artificiety/
 https://commonworld.one/atlas/platforms/asterpay/
 https://commonworld.one/atlas/platforms/awesome-agent-native-social/
+https://commonworld.one/atlas/platforms/austinsdomain-bot-hq/
 https://commonworld.one/atlas/platforms/ax1-console/
 https://commonworld.one/atlas/platforms/bags/
 https://commonworld.one/atlas/platforms/basedagents/
