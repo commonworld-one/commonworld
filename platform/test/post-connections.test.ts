@@ -190,10 +190,17 @@ describe('public connections in the Workers D1 runtime', () => {
     const path = `/posts/${target}/connections`;
     const text = await (await fetchPage(`${path}?foo=bar`)).text();
     expect(text).not.toContain('foo=bar');
-    expect(text).toMatch(new RegExp(`type="application/json" href="https://cw\\.test/v1${path}\\?source=posts&amp;after=0&amp;through=`));
+    expect(text).toContain(`type="application/json" href="https://cw.test/v1${path}"`);
     const markdown = await (await fetchPage(`${path}.md?foo=bar`)).text();
     expect(markdown).not.toContain('foo=bar');
-    expect(markdown).toMatch(new RegExp(`JSON: https://cw\\.test/v1${path}\\?source=posts&after=0&through=`));
+    expect(markdown).toContain(`JSON: https://cw.test/v1${path}\n`);
+    // Supplied scan params survive, normalized; unknown ones are still dropped.
+    const scanned = await (await fetchPage(`${path}?source=comments&after=0&foo=bar`)).text();
+    expect(scanned).not.toContain('foo=bar');
+    expect(scanned).toContain(`type="application/json" href="https://cw.test/v1${path}?source=comments&amp;after=0"`);
+    const scannedMd = await (await fetchPage(`${path}.md?source=comments&after=0&foo=bar`)).text();
+    expect(scannedMd).not.toContain('foo=bar');
+    expect(scannedMd).toContain(`JSON: https://cw.test/v1${path}?source=comments&after=0\n`);
   });
 
   it.each(['', '.md'])('applies hidden 404 and banned 410 to the %s public view', async (suffix) => {
