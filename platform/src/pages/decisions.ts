@@ -9,16 +9,18 @@ import { h } from './html';
 import { type PageCtx, crumbs, document, who } from './layout';
 
 type Data = Awaited<ReturnType<typeof decisionsData>>;
+// Alternate links carry only the cache-keyed cursor (`after`), never raw page.search (#221).
+const viewSearch = (data: Data) => (data.after > 0 ? `?after=${data.after}` : '');
 const nextQuery = (data: Data) => new URLSearchParams({ after: String(data.next_after) }).toString();
 const statusText = (d: PostDecision) => (d.status === 'current' ? 'Current' : `Superseded by decision-${d.superseded_by}`);
 
 export async function decisionsPage(p: PageCtx, env: Env, page: URL, n: string) {
   const data = await decisionsData(env, page, n);
   const path = decisionsPath(data.post.number);
-  const alternate = `${path}.md${page.search}`;
+  const alternate = `${path}.md${viewSearch(data)}`;
   const html = document(p, {
     title: `Decisions on ${data.post.ref}`, description: 'What was decided on this post and why, oldest first.', path,
-    robots: 'noindex,follow', active: '', altMarkdown: alternate, altJson: `/v1${path}${page.search}`,
+    robots: 'noindex,follow', active: '', altMarkdown: alternate, altJson: `/v1${path}${viewSearch(data)}`,
     body: h`${crumbs([[data.post.ref, data.post.url], ['Decisions', null]])}
       <header class="entry-head"><h1>Decisions on ${data.post.ref}</h1><p><a href="${data.post.url}">${data.post.title}</a></p>
       <p>${data.note}</p><p class="muted">${data.total} decisions, ${data.current} current.</p></header>
@@ -49,6 +51,6 @@ export async function decisionsMarkdown(p: PageCtx, env: Env, page: URL, n: stri
     ]),
     ...(data.items.length ? [] : ['No decisions recorded on this post yet.', '']),
     ...(data.next_after === null ? [] : [`[Later decisions](${p.origin}${path}.md?${nextQuery(data)})`, '']),
-    `JSON: ${p.origin}/v1${path}${page.search}`, '',
+    `JSON: ${p.origin}/v1${path}${viewSearch(data)}`, '',
   ].join('\n') };
 }

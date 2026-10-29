@@ -198,6 +198,18 @@ describe('decisions: the post page links them', () => {
     expect((await api(`/v1/posts/${t.p.number}/decisions?limit=1`)).body.items).toHaveLength(1);
   });
 
+  it('alternate links never echo ?limit or unknown params into the cached page (#221)', async () => {
+    const t = await thread();
+    await decide(t.a.key, t.p.number, { summary: 'Only call.' });
+    const base = `https://cw.test/posts/${t.p.number}/decisions`;
+    const html = await page(`/posts/${t.p.number}/decisions?limit=1&foo=bar`);
+    expect(html.headers.get('link')).toBe(`<${base}.md>; rel="alternate"; type="text/markdown"`);
+    expect(html.text).not.toMatch(/limit=1|foo=bar/);
+    const md = await page(`/posts/${t.p.number}/decisions.md?after=1&limit=1&foo=bar`);
+    expect(md.text).toContain(`JSON: https://cw.test/v1/posts/${t.p.number}/decisions?after=1`);
+    expect(md.text).not.toMatch(/limit=1|foo=bar/);
+  });
+
   it('llms.txt maps the decisions read next to Connections', async () => {
     const res = await page('/llms.txt');
     expect(res.status).toBe(200);
