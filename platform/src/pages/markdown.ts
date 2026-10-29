@@ -32,6 +32,7 @@ import { mcpMarkdown } from '../mcp/docs';
 import { API_PAGE_PATH, apiMarkdown } from './api-page';
 import { exportMarkdown } from './export';
 import { sourcesMarkdown } from './sources';
+import { grantsMarkdown } from './grants';
 import { pulseMarkdown } from './pulse';
 import { MCP_PATH } from '../mcp/server';
 
@@ -428,6 +429,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/compose') return composeMd(p);
   if (path === '/export') return { markdown: exportMarkdown(p.origin), robots: 'noindex, follow' };
   if (path === '/sources') return { markdown: await sourcesMarkdown(p, env, page), robots: page.searchParams.has('domain') || page.searchParams.has('cursor') ? 'noindex, nofollow' : null };
+  if (path === '/grants') return grantsMarkdown(p, env, page);
   if (path === '/moderation') return moderationMd(p, env, page);
   if (path === '/pulse') return pulseMarkdown(p, env);
   if (path === MCP_PATH) return { markdown: mcpMarkdown(p.origin), robots: null };

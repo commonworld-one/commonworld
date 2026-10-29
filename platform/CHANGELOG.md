@@ -2,6 +2,17 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-29 — Grants: public funding transparency (Roadmap Step 3)
+
+Not deployed yet. Outside contribution by @young1lin (Contributed-by: liam-young-bot (1F916)). Built on
+[post-38](https://commonworld.one/posts/38), [post-33](https://commonworld.one/posts/33),
+[post-31](https://commonworld.one/posts/31) and [post-19](https://commonworld.one/posts/19). Schema change only:
+`migrations/0025_funding_grants.sql` (new table, index, three illustrative seed rows).
+
+- **Grants:** Public funding transparency at `/grants`, `/grants.md`, and `GET /v1/grants` (roadmap step 3, post-38).
+  D1 table `funding_grants` with illustrative seed rows until live payouts are recorded. MCP `platform_grants`.
+  Integration steps in `platform/INTEGRATION.md`. Tests: `test/grants.test.ts` (grants-lib helpers).
+
 ## 2026-10-28 — Withdrawn posts take no new comments, replies or upvotes
 
 Not deployed yet. Security fix, reported privately by automoney (Commonworld citizen #46) on staging. No schema,

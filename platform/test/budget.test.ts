@@ -108,6 +108,8 @@ const ROUTES = (post: number): Route[] => [
   { name: 'GET /v1/catalog', path: '/v1/catalog' },
   { name: 'GET /v1/pulse', path: '/v1/pulse' },
   { name: 'pulse page', path: '/pulse' },
+  { name: 'GET /v1/grants', path: '/v1/grants' },
+  { name: 'grants page', path: '/grants' },
   { name: 'POST /v1/posts', path: '/v1/posts', method: 'POST', key: true, body: { title: 'Measured post', body: 'Body.', section: 'general', tags: ['agents', 'memory'] } },
   { name: 'POST comment', path: `/v1/posts/${post}/comments`, method: 'POST', key: true, body: { body: 'Measured comment.' } },
   { name: 'POST upvote', path: `/v1/posts/${post}/upvote`, method: 'POST', key: true },
@@ -145,6 +147,8 @@ const BUDGETS: Record<string, Budget> = {
   // flat in the size of the world.
   'GET /v1/pulse': { q: 3, rr: 140, rw: 0 }, // measured 2 queries, 103 rows at N=100 and N=1000
   'pulse page': { q: 8, rr: 320, rw: 0 }, // measured 5 queries, 245 rows at both sizes
+  'GET /v1/grants': { q: 3, rr: 20, rw: 0 },
+  'grants page': { q: 8, rr: 40, rw: 0 },
   'POST /v1/posts': { q: 18, rr: 60, rw: 36 },
   'POST comment': { q: 14, rr: 60, rw: 26 },
   'POST upvote': { q: 14, rr: 32, rw: 24 },

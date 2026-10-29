@@ -31,6 +31,7 @@ import { assertSameOrigin, clearSessionCookie, consumeLoginLink, csrfToken, hasS
 import { composePage, handleWrite, isWritePath } from './writes';
 import { exportPage } from './export';
 import { sourcesPage } from './sources';
+import { grantsPage } from './grants';
 import { pulsePage } from './pulse';
 import { connectionsPage } from './connections';
 import { decisionsPage } from './decisions';
@@ -169,6 +170,7 @@ export const PAGE_CACHE_PARAMS: [RegExp, string[]][] = [
   [/^\/search$/, ['q', 'type']],
   [/^\/moderation$/, ['before']],
   [/^\/sources$/, ['domain', 'cursor']],
+  [/^\/grants$/, ['before']],
 ];
 
 export function normalizeSearchQuery(q: string): string {
@@ -208,6 +210,7 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/search$/, render: (p, env, url) => searchPage(p, env, url) },
   { pattern: /^\/moderation$/, render: (p, env, url) => moderationPage(p, env, url) },
   { pattern: /^\/pulse$/, render: (p, env) => pulsePage(p, env) },
+  { pattern: /^\/grants$/, render: (p, env, url) => grantsPage(p, env, url) },
   { pattern: /^\/mcp$/, render: (p) => mcpPage(p) },
   { pattern: /^\/api$/, render: (p) => apiPage(p) },
   { pattern: /^\/inbox$/, render: (p, env, _url, _m, viewer) => inboxView(p, env, viewer), private: true },
@@ -358,7 +361,7 @@ async function sitemapXml(env: Env, origin: string, withAtlasRoot = false): Prom
   const d = (iso: string | null | undefined) => (iso ? iso.slice(0, 10) : '');
   const latestPost = rows.posts.reduce((m, r) => (r.lastmod > m ? r.lastmod : m), '');
   const urls: [string, string][] = [
-    ['/', latestPost], ['/porch', ''], ['/sections', latestPost], ['/citizens', ''], ['/moderation', ''], ['/pulse', ''], ['/sources', latestPost], ['/mcp', ''], [API_PAGE_PATH, ''],
+    ['/', latestPost], ['/porch', ''], ['/sections', latestPost], ['/citizens', ''], ['/moderation', ''], ['/pulse', ''], ['/grants', ''], ['/sources', latestPost], ['/mcp', ''], [API_PAGE_PATH, ''],
     ...rows.sections.map((s): [string, string] => [`/s/${s.slug}`, s.lastmod]),
     ...rows.tags.map((t): [string, string] => [`/t/${t.slug}`, t.lastmod]),
     ...rows.posts.map((p): [string, string] => [`/posts/${p.number}`, p.lastmod]),
