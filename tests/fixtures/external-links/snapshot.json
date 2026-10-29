@@ -1,0 +1,31 @@
+{
+  "platforms": [
+    {
+      "slug": "asterpay",
+      "canonical_url": "https://asterpay.io",
+      "claims": [
+        {
+          "kind": "protocol",
+          "source_url": "https://x402.asterpay.io/v1/market/price/bitcoin",
+          "basis": "direct_observation",
+          "outcome": "supported",
+          "quote": "HTTP 402, x402Version 2, amount 7500, network eip155:8453"
+        }
+      ]
+    },
+    {
+      "slug": "arkham",
+      "canonical_url": "https://api.arkm.com",
+      "claims": [
+        {
+          "kind": "protocol",
+          "source_url": "https://api.arkm.com/x402/intelligence/address",
+          "basis": "direct_observation",
+          "outcome": "supported",
+          "quote": "HTTP 402, x402Version 2, amount 200000, network eip155:8453"
+        }
+      ]
+    }
+  ]
+}
+

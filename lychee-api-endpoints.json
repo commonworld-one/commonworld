@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "endpoints": [
+    {
+      "card": "asterpay",
+      "url": "https://x402.asterpay.io/v1/market/price/bitcoin",
+      "accept": [
+        402
+      ],
+      "reason": "Explicit unpaid API GET in supported protocol claim; #167 requests endpoint-only classification."
+    },
+    {
+      "card": "arkham",
+      "url": "https://api.arkm.com/x402/intelligence/address",
+      "accept": [
+        405
+      ],
+      "reason": "Explicit unpaid API POST in supported protocol claim; #167 identifies plain-GET 405."
+    }
+  ]
+}
