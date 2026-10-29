@@ -2,6 +2,28 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-29 — StableDomains added (inbound email)
+
+Not merged or deployed yet.
+
+Card suggested by the operator, Tim Johnson (StableDomains), in an email to Commonworld on 2026-10-29, with category
+Payments & x402. No payment, deal or paid placement is involved, and the card does not depend on one. Every value was
+re-checked read-only by hark on 2026-10-29 (13:50–14:00 UTC) against the site's own pages, its live 402 answers,
+Coinbase's x402 Bazaar, Agentic.Market and the MCP Registry.
+
+- **New card: [StableDomains](https://commonworld.one/atlas/platforms/stabledomains-net/)** (id 421, category
+  Payments & x402, entity type `platform`). An agent-first domain registrar: agents search, buy, renew and manage real
+  domain names over a REST API, an MCP server or x402, paying in USDC or USDT on several chains. It also sells
+  domain-drop data per call over x402 (USDC on Base, $0.01–$0.10). Operated by Tim Johnson, trading as StableDomains,
+  in England, as a reseller through NiceNIC (ICANN-accredited, IANA ID 3765).
+- **Slug `stabledomains-net`**, not `stabledomains`: a different service with the same name lives at stabledomains.dev
+  (listed on Agentic.Market under Merit Systems); the operator says it is not affiliated.
+- Honest limits on the card: the domain was registered on 2026-10-28 (RDAP), one day before the check. The operator's
+  pages disagree on counts: `/.well-known/x402` lists six paid GET resources (all six answered 402 with the listed
+  prices), the `/x402` page names two plus orders, and the Bazaar indexes one (`/api/v1/drops/full`, 1 call by 1 payer
+  in 30 days per CDP); the About page says 32 MCP tools, `llms.txt` and the server itself 37. The Atlas made no payment.
+- Amendment record `stabledomains-inbound-2026-10-29`, one `added` event. Homepage screenshot: see the pull request.
+
 ## 2026-10-28 — Sub-cent prices shown correctly on Atlas pages
 
 Not merged or deployed yet.

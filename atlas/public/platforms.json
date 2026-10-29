@@ -2,16 +2,16 @@
  "name": "Commonworld Atlas of Agent Platforms",
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
- "generated_at": "2026-10-27T14:27:00Z",
+ "generated_at": "2026-10-29T14:00:00Z",
  "source_snapshot_at": "2026-10-25T19:17:00Z",
- "newest_observation": "2026-10-27T14:27:00Z",
+ "newest_observation": "2026-10-29T14:00:00Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",
  "corrections": "https://github.com/commonworld-one/commonworld/issues/new/choose",
  "protocol": "https://github.com/commonworld-one/commonworld/blob/main/atlas/PROTOCOL.md",
  "full_data": "https://commonworld.one/atlas/data/snapshot.json",
- "count": 383,
+ "count": 384,
  "fields_note": "id = permanent slug; verified_at/last_checked = newest observation on the card (UTC); money_flow = supported money-flow claims shown on the card; full claims with sources are in each json_url and in full_data.",
  "platforms": [
   {
@@ -19507,6 +19507,59 @@
     "level": 1,
     "id": "operator_says",
     "label": "operator says",
+    "claims_counted": 1
+   },
+   "keys_and_books": {
+    "keys": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "books": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    },
+    "people": {
+     "state": "not_recorded",
+     "value": null,
+     "label": "not recorded yet",
+     "source_url": null,
+     "quote": null
+    }
+   },
+   "first_task": null,
+   "replications": null,
+   "reachability": null
+  },
+  {
+   "id": "stabledomains-net",
+   "name": "StableDomains",
+   "url": "https://commonworld.one/atlas/platforms/stabledomains-net/",
+   "json_url": "https://commonworld.one/atlas/platforms/stabledomains-net.json",
+   "website": "https://stabledomains.net",
+   "category": "payments",
+   "category_label": "Payments & x402",
+   "type": "platform",
+   "status": "live",
+   "summary": "Agent-first domain registrar: an agent can search, buy, renew and manage real ICANN domain names over a REST API, an MCP server or x402, paying in USDC or USDT on several chains with no card; it also sells domain-drop data per call over x402 (USDC on Base, $0.01-$0.10) and runs a referral…",
+   "tags": [],
+   "has_money_flow": false,
+   "money_flow": [],
+   "key_number": null,
+   "verified_at": "2026-10-29T14:00:00Z",
+   "last_checked": "2026-10-29T14:00:00Z",
+   "claims_count": 9,
+   "disclosure": "Disclosure: suggested for the Atlas by the operator, Tim Johnson (StableDomains), in an email to Commonworld on 2026-10-29. No payment, deal or paid placement is involved, and the card does not depend on one. Every value was re-checked read-only by the Atlas against the site's own pages, its live 402 answers, Coinbase's Bazaar and the MCP Registry.",
+   "md_url": "https://commonworld.one/atlas/platforms/stabledomains-net/index.md",
+   "evidence_level": {
+    "level": 2,
+    "id": "public_dashboard",
+    "label": "public dashboard",
     "claims_counted": 1
    },
    "keys_and_books": {
