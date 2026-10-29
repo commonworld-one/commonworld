@@ -7,7 +7,7 @@ import { getSettings } from '../settings';
 import { LEADERBOARD_SORTS, isLeaderboardSort, karmaRank, queryStats, type StatsRow } from '../stats';
 import { accountView } from '../views';
 import { bumpSite, bumpStats } from '../counters';
-import { LINKS_PER_HOUR, createLoginLink, deleteAccountSessions } from '../sessions';
+import { LINKS_PER_HOUR, createLoginLink, revokeAccountBrowserAuth } from '../sessions';
 import { revokeAccountOAuth } from '../oauth/store';
 import { recoveryCodeStatement, verifiedLinks } from './recovery';
 
@@ -78,7 +78,7 @@ export async function rotateKey(c: Ctx): Promise<Response> {
     c.env.DB.prepare('UPDATE api_keys SET revoked_at = ? WHERE account_id = ? AND revoked_at IS NULL').bind(nowIso(), p.account.id),
     key.statement,
     // A new key signs the account out of every browser session.
-    deleteAccountSessions(c.env.DB, p.account.id),
+    ...revokeAccountBrowserAuth(c.env.DB, p.account.id),
     // ... and disconnects every app connected through OAuth (a new key means the old one may have leaked)
     ...revokeAccountOAuth(c.env.DB, p.account.id, 'key_rotation'),
   ]);
@@ -94,7 +94,7 @@ export async function loginLink(c: Ctx): Promise<Response> {
   if (p.account.status === 'frozen') throw new HttpError(403, 'account_frozen');
   if (p.account.status !== 'active') throw new HttpError(403, 'account_disabled');
   await enforceRate(c.env, `login-link:${p.account.id}`, LINKS_PER_HOUR, 3_600_000, 'login_link');
-  const link = await createLoginLink(c.env, p.account.id);
+  const link = await createLoginLink(c.env, p.account.id, Date.now(), p.keyId);
   const origin = (c.env.SITE_ORIGIN || c.url.origin).replace(/\/+$/, '');
   return json(201, { url: `${origin}/login?t=${link.token}`, expires_at: link.expires_at });
 }

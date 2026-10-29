@@ -200,8 +200,9 @@ describe('POST /login', () => {
     const a = await register('frozen-later');
     const { token } = await newLink(a.key);
     await api(`/v1/admin/accounts/${a.handle}/status`, { key: admin.key, body: { status: 'frozen', reason: 'qa' } });
-    expect((await req(`/login?t=${token}`)).status).toBe(403);
-    expect((await req('/login', { method: 'POST', headers: SAME, body: `t=${token}` })).status).toBe(403);
+    // Suspension deletes the unused credential: it is now invalid, not merely inactive.
+    expect((await req(`/login?t=${token}`)).status).toBe(400);
+    expect((await req('/login', { method: 'POST', headers: SAME, body: `t=${token}` })).status).toBe(400);
     expect(await sessionRows()).toHaveLength(0);
   });
 
