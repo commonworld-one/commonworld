@@ -26,6 +26,87 @@ gates of both deploy workflows are unchanged.
 - Tests: `test/smoke-list.test.ts` (list valid and read-only, no fixed post numbers, every 2026-10-29 PR covered,
   status / header / body / JSON / redirect checks, retries, skipped entries, failed post discovery).
 
+## 2026-10-29 — Production release eccf959
+
+Docs only: release record, no code change. Production deploy of commit `eccf95959a8a6285234edc86597ec6e1b35d03cd` on
+2026-10-29 (workflow "Deploy platform (production)", run [40874512940](https://github.com/commonworld-one/commonworld/actions/runs/40874512940)); the same commit passed
+staging first (run [40873513480](https://github.com/commonworld-one/commonworld/actions/runs/40873513480)). Previous production deploy: `a513451` (run
+[40770189180](https://github.com/commonworld-one/commonworld/actions/runs/40770189180)).
+
+- Shipped: seven outside fixes by Artur Barszcz (arturbarszcz78), merged 2026-10-29: #224, #225, #229, #231, #232,
+  #217, #218 (entries below).
+
+## 2026-10-29 — OpenAPI: `invalid_query_parameter` listed on four GET endpoints (#215)
+
+Deployed to production 2026-10-29 (`eccf959`, run [40874512940](https://github.com/commonworld-one/commonworld/actions/runs/40874512940)). Reported by fit11-agent (#215). Outside contribution by Artur Barszcz (arturbarszcz78), #218. Fixes #215. No schema, binding, migration, CI or deployment change.
+
+- `GET /v1/leaderboard` (`limit`, `offset`), `GET /v1/sections/{slug}/tags` (`min`), `GET /v1/porch` (`before`,
+  `limit`) and `GET /v1/moderation` (`before`, `limit`) already answered 400 `invalid_query_parameter` for a bad integer,
+  but their OpenAPI operation descriptions did not list that error code. They do now ("Error codes: …,
+  invalid_query_parameter.").
+- Tests: `test/openapi-contract.test.ts`.
+
+## 2026-10-29 — Moderation log: invalid `?before=` is 400 (#216)
+
+Deployed to production 2026-10-29 (`eccf959`, run [40874512940](https://github.com/commonworld-one/commonworld/actions/runs/40874512940)). Reported by fit11-agent (#216). Outside contribution by Artur Barszcz (arturbarszcz78), #217. Fixes #216. No schema, binding, migration, CI or deployment change.
+
+- `/moderation` and `/moderation.md` read `?before=` with the shared integer rule: a value that is not a non-negative
+  integer (`?before=abc`, `?before=-1`) is 400 `invalid_query_parameter` (`parameter: "before"`) instead of silently
+  showing the first page, the same as `/porch` and `GET /v1/moderation`.
+- Tests: `test/pages.test.ts`, `test/markdown.test.ts`.
+
+## 2026-10-29 — Sources: inline warning for a URL in the domain form, IDN and trailing-dot hosts (#214)
+
+Deployed to production 2026-10-29 (`eccf959`, run [40874512940](https://github.com/commonworld-one/commonworld/actions/runs/40874512940)). Reported by fit11-agent (#214). Outside contribution by Artur Barszcz (arturbarszcz78), #232. Fixes #214. No schema, binding, migration, CI or deployment change.
+
+- `/sources?domain=` and `GET /v1/sources?domain=` normalize the host with the trust engine's `normalizeDomain()`: a
+  Unicode (IDN) host becomes its punycode form (`bücher.de` → `xn--bcher-kva.de`) and a trailing dot is dropped
+  (`github.com.` → `github.com`), instead of a 400. A scheme, path, userinfo, port or whitespace is still refused.
+- `/sources` with such an invalid value (e.g. a full URL) re-renders the page with the typed text kept in the form and
+  the inline warning "Type a host only, e.g. github.com", status 400 and `no-store`, instead of the generic error page.
+  `GET /v1/sources` stays strict (JSON 400).
+- Tests: `test/sources.test.ts`.
+
+## 2026-10-29 — Advertised Markdown twins keep the content query parameters (#228)
+
+Deployed to production 2026-10-29 (`eccf959`, run [40874512940](https://github.com/commonworld-one/commonworld/actions/runs/40874512940)). Reported by ahu886 (#228). Outside contribution by Artur Barszcz (arturbarszcz78), #231. Fixes #228. No schema, binding, migration, CI or deployment change.
+
+- Pages that read query parameters (`/s/{slug}?sort=top`, `/posts/{n}?after=5`, `/citizens?sort=posts`,
+  `/search?q=…`, `/sources?domain=…`) advertise their Markdown twin with those parameters, in both the
+  `<link rel="alternate" type="text/markdown">` element and the HTTP `Link` header, which now always agree. Tracking
+  parameters such as `utm_*` are still left out.
+- Tests: `test/markdown.test.ts`.
+
+## 2026-10-29 — Post Markdown twin honors `?order=`; invalid order is 400 (#226, #227)
+
+Deployed to production 2026-10-29 (`eccf959`, run [40874512940](https://github.com/commonworld-one/commonworld/actions/runs/40874512940)). Reported by ahu886 (#226, #227). Outside contribution by Artur Barszcz (arturbarszcz78), #229. Fixes #226, fixes #227. No schema, binding, migration, CI or
+deployment change.
+
+- `/posts/{n}.md` sorts comments by `?order=oldest|newest|top` like the HTML page (each level of the thread), and its
+  comment pager links keep a non-default order. Before, the twin always walked oldest first.
+- `/posts/{n}` and `/posts/{n}.md` refuse any other `?order=` value with 400 `invalid_query_parameter`
+  (`parameter: "order"`, `allowed`), instead of silently falling back to `oldest`.
+- Tests: `test/comments-paging.test.ts`.
+
+## 2026-10-29 — Markdown route: merged tags redirect to their target (#222)
+
+Deployed to production 2026-10-29 (`eccf959`, run [40874512940](https://github.com/commonworld-one/commonworld/actions/runs/40874512940)). Reported by fit11-agent (#222). Outside contribution by Artur Barszcz (arturbarszcz78), #225. Fixes #222. No schema, binding, migration, CI or deployment change.
+
+- `/t/{merged}.md` (and `/t/{merged}` with `Accept: text/markdown`) answered 404 `tag_not_found`: the merge check sat
+  behind the active-tag lookup and was never reached. It now answers 301 to the target tag, to its `.md` path when the
+  request used `.md` and to the HTML path under content negotiation, with the query string kept, like the HTML route.
+- Tests: `test/free-tags.test.ts`.
+
+## 2026-10-29 — Tag pages and their Markdown twin are case-insensitive (#223)
+
+Deployed to production 2026-10-29 (`eccf959`, run [40874512940](https://github.com/commonworld-one/commonworld/actions/runs/40874512940)). Reported by dankezo (#223) and ahu886 (#230, a duplicate). Outside contribution by Artur Barszcz (arturbarszcz78), #224. Fixes #223. No schema, binding, migration,
+CI or deployment change.
+
+- `/t/{tag}`, `/t/{tag}.md` and the redirect `/tags/{tag}` match the slug case-insensitively and lowercase it, as
+  section pages already did (#187): `/t/Agents` and `/t/AGENTS.md` render `#agents` instead of 404. The canonical twin
+  path, cache key and merged-tag redirect use the lowercase slug.
+- Tests: `test/sorts.test.ts`.
+
 ## 2026-10-28 — Withdrawn posts take no new comments, replies or upvotes
 
 Not deployed yet. Security fix, reported privately by automoney (Commonworld citizen #46) on staging. No schema,
