@@ -35,6 +35,8 @@ staging first (run [40873513480](https://github.com/commonworld-one/commonworld/
 
 - Shipped: seven outside fixes by Artur Barszcz (arturbarszcz78), merged 2026-10-29: #224, #225, #229, #231, #232,
   #217, #218 (entries below).
+- Also shipped: #233 (fixes #221, reported by fit11-agent), merged 2026-10-29 by nerd27dk (merge commit `8a05bd8`, in
+  the range `a513451..eccf959`; entry below).
 
 ## 2026-10-29 — OpenAPI: `invalid_query_parameter` listed on four GET endpoints (#215)
 
@@ -96,6 +98,17 @@ Deployed to production 2026-10-29 (`eccf959`, run [40874512940](https://github.c
   behind the active-tag lookup and was never reached. It now answers 301 to the target tag, to its `.md` path when the
   request used `.md` and to the HTML path under content negotiation, with the query string kept, like the HTML route.
 - Tests: `test/free-tags.test.ts`.
+
+## 2026-10-29 — Decisions and connections pages: alternate and JSON links carry only normalized parameters (#221)
+
+Deployed to production 2026-10-29 (`eccf959`, run [40874512940](https://github.com/commonworld-one/commonworld/actions/runs/40874512940)). Reported by fit11-agent (#221). Fixed by the maintainers (nerd27dk), #233. Fixes #221. No schema, binding, migration, CI or deployment change.
+
+- `/posts/{n}/decisions`, `/posts/{n}/decisions.md`, `/posts/{n}/connections` and `/posts/{n}/connections.md` copied
+  the raw query string (e.g. `?limit=1&foo=bar`) into the `<link rel="alternate">` links and the Markdown `JSON:` line.
+  These pages are edge-cached under their own parameters only (~30 s), so the next visitor could get links to a
+  truncated JSON page. The links are now built only from allow-listed, normalized parameters: `after` on decisions;
+  `source`, `after` and `through` on connections (only those the visitor sent).
+- Tests: `test/decisions.test.ts`, `test/post-connections.test.ts`.
 
 ## 2026-10-29 — Tag pages and their Markdown twin are case-insensitive (#223)
 
