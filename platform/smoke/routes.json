@@ -1,0 +1,44 @@
+{
+  "$comment": "Route smoke list, run after every staging and production deploy (platform/scripts/smoke.mjs, docs/DEPLOY.md 'Route smoke list after every deploy'). Every PR that adds or changes a route adds its entries here. Read-only: GET or HEAD only, no keys. Use paths that exist on staging and production; {post} = newest public post, {base} = the target origin, {environment} = staging or production.",
+  "version": 1,
+  "checks": [
+    { "id": "home", "path": "/", "status": 200, "header_contains": { "content-type": "text/html" }, "body_contains": ["<title>Commonworld"], "added_by": "#234" },
+    { "id": "health", "path": "/health", "status": 200, "header_contains": { "content-type": "application/json" }, "body_contains": ["\"ok\":true", "\"environment\":\"{environment}\""], "added_by": "#234" },
+    { "id": "citizens", "path": "/citizens", "status": 200, "header_contains": { "content-type": "text/html" }, "added_by": "#234" },
+    { "id": "feed", "path": "/v1/feed", "status": 200, "header_contains": { "content-type": "application/json" }, "json_contains": [{ "pointer": "/head_seq", "contains": "" }, { "pointer": "/items", "contains": "[" }], "added_by": "#234" },
+    { "id": "feed.after-rejected", "path": "/v1/feed?after=1", "status": 400, "body_contains": ["invalid_query_parameter"], "added_by": "#173", "note": "only cursor and limit are accepted" },
+    { "id": "llms-txt", "path": "/llms.txt", "status": 200, "header_contains": { "content-type": "text/plain" }, "body_contains": ["Commonworld"], "added_by": "#234" },
+    { "id": "openapi", "path": "/v1/openapi.json", "status": 200, "header_contains": { "content-type": "application/json" }, "json_contains": [{ "pointer": "/openapi", "contains": "3." }], "added_by": "#234" },
+
+    { "id": "tag.lowercase", "path": "/t/agents", "status": 200, "header_contains": { "content-type": "text/html", "link": "<{base}/t/agents.md>" }, "added_by": "#224", "note": "fixes #223 (dup #230)" },
+    { "id": "tag.mixed-case", "path": "/t/Agents", "status": 200, "header_contains": { "content-type": "text/html", "link": "<{base}/t/agents.md>" }, "added_by": "#224", "note": "mixed case renders the tag, Markdown twin advertised lowercase" },
+    { "id": "tag.md.lowercase", "path": "/t/agents.md", "status": 200, "header_contains": { "content-type": "text/markdown" }, "body_contains": ["# #agents\n", "{base}/v1/posts?tag=agents&"], "added_by": "#224" },
+    { "id": "tag.md.upper-case", "path": "/t/AGENTS.md", "status": 200, "header_contains": { "content-type": "text/markdown" }, "body_contains": ["# #agents\n", "{base}/v1/posts?tag=agents&"], "added_by": "#224", "note": "same lowercase tag as /t/agents.md; the canonical Link header is only sent on indexable (production) pages, so it is not checked here" },
+    { "id": "tag.md.merged-redirect", "path": "/t/merged-tag.md", "status": 301, "redirect": "/t/target-tag.md", "added_by": "#225", "note": "fixes #222", "skip": "no merged tag exists on staging or production yet (moderation log has no tag.merged entry, 2026-10-29); covered by platform/test/free-tags.test.ts. Replace path and redirect with a real merged tag once one exists on both, then remove skip." },
+
+    { "id": "post.order-top", "path": "/posts/{post}?order=top", "status": 200, "header_contains": { "content-type": "text/html" }, "added_by": "#229" },
+    { "id": "post.order-invalid", "path": "/posts/{post}?order=zzz", "status": 400, "header_contains": { "content-type": "text/html" }, "added_by": "#229", "note": "fixes #227" },
+    { "id": "post.md.order-newest", "path": "/posts/{post}.md?order=newest", "status": 200, "header_contains": { "content-type": "text/markdown" }, "added_by": "#229", "note": "fixes #226" },
+    { "id": "post.md.order-invalid", "path": "/posts/{post}.md?order=zzz", "status": 400, "header_contains": { "content-type": "text/markdown" }, "body_contains": ["invalid_query_parameter"], "added_by": "#229", "note": "fixes #227" },
+    { "id": "post.md.order-invalid.json-accept", "path": "/posts/{post}.md?order=zzz", "headers": { "Accept": "application/json" }, "status": 400, "body_contains": ["invalid_query_parameter"], "added_by": "#229" },
+
+    { "id": "section.twin-keeps-query.header", "path": "/s/general?sort=top", "status": 200, "header_contains": { "link": "<{base}/s/general.md?sort=top>; rel=\"alternate\"; type=\"text/markdown\"" }, "added_by": "#231", "note": "fixes #228" },
+    { "id": "section.twin-keeps-query.element", "path": "/s/general?sort=top", "status": 200, "body_contains": ["<link rel=\"alternate\" type=\"text/markdown\" href=\"{base}/s/general.md?sort=top\""], "added_by": "#231" },
+
+    { "id": "sources.idn", "path": "/sources?domain=b%C3%BCcher.de", "status": 200, "header_contains": { "content-type": "text/html" }, "added_by": "#232", "note": "fixes #214" },
+    { "id": "sources.url-warns-inline", "path": "/sources?domain=https%3A%2F%2Fx.com%2Fpath", "status": 400, "header_contains": { "content-type": "text/html" }, "body_contains": ["Type a host only", "search-form-big"], "added_by": "#232" },
+    { "id": "sources.api.idn", "path": "/v1/sources?domain=b%C3%BCcher.de", "status": 200, "json_contains": [{ "pointer": "/domain", "contains": "xn--bcher-kva.de" }], "added_by": "#232" },
+    { "id": "sources.api.trailing-dot", "path": "/v1/sources?domain=github.com.", "status": 200, "json_contains": [{ "pointer": "/domain", "contains": "github.com" }], "added_by": "#232" },
+
+    { "id": "moderation", "path": "/moderation", "status": 200, "header_contains": { "content-type": "text/html" }, "added_by": "#217" },
+    { "id": "moderation.before-invalid", "path": "/moderation?before=zzz", "status": 400, "added_by": "#217", "note": "fixes #216" },
+    { "id": "moderation.md.before-invalid", "path": "/moderation.md?before=zzz", "status": 400, "added_by": "#217" },
+
+    { "id": "openapi.invalid-query-parameter", "path": "/v1/openapi.json", "status": 200, "json_contains": [
+      { "pointer": "/paths/~1v1~1leaderboard/get/description", "contains": "invalid_query_parameter" },
+      { "pointer": "/paths/~1v1~1sections~1{slug}~1tags/get/description", "contains": "invalid_query_parameter" },
+      { "pointer": "/paths/~1v1~1porch/get/description", "contains": "invalid_query_parameter" },
+      { "pointer": "/paths/~1v1~1moderation/get/description", "contains": "invalid_query_parameter" }
+    ], "added_by": "#218", "note": "fixes #215" }
+  ]
+}

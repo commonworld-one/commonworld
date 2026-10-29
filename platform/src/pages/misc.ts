@@ -1,4 +1,5 @@
 import type { Env } from '../env';
+import { intParam } from '../http';
 import { moderationLogData } from '../routes/moderation';
 import { APPEAL, RULES, RULES_NOTE } from '../rules';
 import { goneRefs, search } from './data';
@@ -26,12 +27,30 @@ function highlight(text: string, q: string): Raw {
   return raw(out + esc(text.slice(last)));
 }
 
+/**
+ * Moves `at` back to the start of the grapheme cluster that contains it, so a snippet never begins inside an emoji,
+ * a ZWJ family, a flag, a skin-tone sequence or a letter with combining accents. Without Intl.Segmenter it falls back
+ * to code points (never a lone low surrogate).
+ */
+export function graphemeStart(t: string, at: number): number {
+  if (at <= 0) return 0;
+  if (typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function') {
+    let start = 0;
+    for (const seg of new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(t)) {
+      if (seg.index > at) break;
+      start = seg.index;
+    }
+    return start;
+  }
+  return /[\uDC00-\uDFFF]/.test(t[at]) && /[\uD800-\uDBFF]/.test(t[at - 1] ?? '') ? at - 1 : at;
+}
+
 /** Excerpt around the first match so the highlighted word is visible. */
-function around(text: string, q: string, max = 220): string {
+export function around(text: string, q: string, max = 220): string {
   const t = String(text ?? '').replace(/\s+/g, ' ').trim();
   const i = t.toLowerCase().indexOf(q.toLowerCase());
   if (i < 0 || t.length <= max) return excerptText(t, max);
-  const start = Math.max(0, i - 60);
+  const start = graphemeStart(t, Math.max(0, i - 60));
   return (start > 0 ? '…' : '') + excerptText(t.slice(start), max);
 }
 
@@ -65,7 +84,7 @@ export async function searchPage(p: PageCtx, env: Env, page: URL): Promise<strin
     if (show('tags') && (secs.length || tags.length)) cards.push(h`<article class="cw-card" data-type="tags"><div class="cw-meta"><span class="result-type">section &amp; tag</span></div><div class="card-tags u-mt6">${tags.map((t) => tagpill(t.slug, t.post_count))}${secs.map((s) => h`<a class="link-pill" href="${sectionUrl(s.slug)}"><span class="catchip u-inherit"><i class="k-${s.slug}"></i>${s.name}</span><small>${s.post_count}</small></a>`)}</div></article>`);
     if (show('citizens')) for (const c of r.citizens) cards.push(h`<article class="cw-card" data-type="citizens"><div class="cw-meta"><span class="result-type">citizen</span><a class="ref" href="${citizenUrl(c.handle)}">citizen-${c.number}</a></div><div class="row u-mt8">${who(c)}</div><p>joined ${c.created_at.slice(0, 10)}</p></article>`);
     const tabLink = (k: string) => `/search?q=${encodeURIComponent(q)}${k === 'all' ? '' : `&type=${k}`}`;
-    summary = h`<p>${fmt(counts.all)} results across posts, comments, porch lines, citizens, sections and tags (simple text match, newest first, up to 20 per type).</p>`;
+    summary = h`<p>${fmt(counts.all)} results across posts, comments, porch lines, citizens, sections and tags (simple text match; posts, comments, porch lines and citizens newest first, up to 20 each; every matching section and tag).</p>`;
     content = h`<div class="cw-tabs" role="group" aria-label="Result type">${TYPES.map(([k, l]) => h`<a href="${tabLink(k)}"${k === type ? raw(' aria-current="page"') : ''}>${l}<span>${counts[k]}</span></a>`)}</div>
 <section class="cw-panel"><div class="cw-panel-head"><h2>Results</h2><span class="muted">newest first</span></div><div class="cw-panel-body">${cards.length ? h`<div class="cw-grid">${cards}</div>` : emptyState(`Nothing matches “${q}”.`, 'Try a shorter word, a @handle or a ref like post-12.')}</div></section>`;
   }
@@ -100,8 +119,7 @@ export function appealHow(): Raw {
 }
 
 export async function moderationPage(p: PageCtx, env: Env, page: URL): Promise<string> {
-  const beforeRaw = page.searchParams.get('before') ?? '';
-  const before = /^\d{1,15}$/.test(beforeRaw) ? Number(beforeRaw) : 0;
+  const before = intParam(page, 'before', 0, 0, Number.MAX_SAFE_INTEGER);
   const log = await moderationLogData(env, before);
   // F1: never link to what answers 410 (a disabled citizen's content or profile); the entry itself stays
   const gone = await goneRefs(env, log.items.map((e) => ({ type: e.object_type, number: e.object_number })));

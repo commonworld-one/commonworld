@@ -1,0 +1,264 @@
+{
+ "licence": "CC BY 4.0",
+ "source": "https://github.com/commonworld-one/commonworld",
+ "generated_at": "2026-10-29T17:00:00Z",
+ "source_snapshot_at": "2026-10-25T19:17:00Z",
+ "id": "stabledomains-net",
+ "name": "StableDomains",
+ "url": "https://commonworld.one/atlas/platforms/stabledomains-net/",
+ "json_url": "https://commonworld.one/atlas/platforms/stabledomains-net.json",
+ "website": "https://stabledomains.net",
+ "category": "payments",
+ "category_label": "Payments & x402",
+ "type": "platform",
+ "status": "live",
+ "summary": "Agent-first domain registrar: an agent can search, buy, renew and manage real ICANN domain names over a REST API, an MCP server or x402, paying in USDC or USDT on several chains with no card; it also sells domain-drop data per call over x402 (USDC on Base, $0.01-$0.10) and runs a referral…",
+ "tags": [],
+ "has_money_flow": false,
+ "money_flow": [],
+ "key_number": null,
+ "verified_at": "2026-10-29T17:00:00Z",
+ "last_checked": "2026-10-29T17:00:00Z",
+ "claims_count": 9,
+ "disclosure": "Disclosure: suggested for the Atlas by the operator, Tim Johnson (StableDomains), in an email to Commonworld on 2026-10-29. No payment, deal or paid placement is involved, and the card does not depend on one. Every value was re-checked read-only by the Atlas against the site's own pages, its live 402 answers, Coinbase's Bazaar and the MCP Registry.",
+ "md_url": "https://commonworld.one/atlas/platforms/stabledomains-net/index.md",
+ "evidence_level": {
+  "level": 2,
+  "id": "public_dashboard",
+  "label": "public dashboard",
+  "claims_counted": 1
+ },
+ "keys_and_books": {
+  "keys": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "books": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  },
+  "people": {
+   "state": "not_recorded",
+   "value": null,
+   "label": "not recorded yet",
+   "source_url": null,
+   "quote": null
+  }
+ },
+ "first_task": null,
+ "replications": null,
+ "reachability": null,
+ "badge_status": "Verified · 2026-10-29",
+ "badge_svg": "https://commonworld.one/atlas/badge/stabledomains-net.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/stabledomains-net-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "claims": [
+  {
+   "kind": "canonical_url",
+   "statement": "https://stabledomains.net is the official address: the home page declares it as rel=canonical, www. and http:// answer 308 to it, and the About page says it is the operator's only site (not the unrelated stabledomains.dev).",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://stabledomains.net/about",
+   "quote": "We are not affiliated with stabledomains.dev or any other similarly named site. Our only site is stabledomains.net.",
+   "observed_at": "2026-10-29T13:51:00Z",
+   "methods": [
+    "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://stabledomains.net/ (HTTP 200, <link rel=\"canonical\" href=\"https://stabledomains.net\"/>)",
+    "curl -s -o /dev/null -w '%{http_code} %{redirect_url}' https://www.stabledomains.net/ (308 -> https://stabledomains.net/)",
+    "curl -s -o /dev/null -w '%{http_code} %{redirect_url}' http://stabledomains.net/ (308 -> https://stabledomains.net/)",
+    "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://stabledomains.net/about (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "site_reachable",
+   "statement": "The home page answers HTTP 200 with the same body on two reads (36,624 bytes, sha256 a15d18c20590..., 13:50:46Z and 14:00Z) and the About page to a separate fetcher.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://stabledomains.net",
+   "quote": "StableDomains.net | Real domains. Paid in stablecoins. Bought by agents.",
+   "observed_at": "2026-10-29T14:00:00Z",
+   "methods": [
+    "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://stabledomains.net/ (HTTP 200, 36624 B, sha256 a15d18c20590, twice)",
+    "web_fetch https://stabledomains.net/about (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "description",
+   "statement": "Operator's description: an agent-first domain registrar where domains are searched, bought, renewed and managed, paid in stablecoins, from a browser, a REST API, x402 or MCP.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "operator_claim",
+   "source_url": "https://stabledomains.net/about",
+   "quote": "An agent-first domain registrar. Search, buy, renew and manage domain names, paid in stablecoins, from a browser, a REST API, x402 or MCP.",
+   "observed_at": "2026-10-29T13:51:00Z",
+   "methods": [
+    "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://stabledomains.net/about (HTTP 200)",
+    "web_fetch https://stabledomains.net/about (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "operator",
+   "statement": "Operated by Tim Johnson, trading as StableDomains, in England; a reseller that registers domains through NiceNIC International Group Co., Limited (ICANN-accredited, IANA ID 3765), per the About page and the terms (last updated 28 October 2026).",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "operator_claim",
+   "source_url": "https://stabledomains.net/about",
+   "quote": "StableDomains is operated by Tim Johnson, trading as StableDomains, in England.",
+   "observed_at": "2026-10-29T13:51:00Z",
+   "methods": [
+    "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://stabledomains.net/about (HTTP 200)",
+    "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://stabledomains.net/terms (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "docs",
+   "statement": "Public documentation for agents: llms.txt, an OpenAPI 3.1 file, a docs page and an MCP server card.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://stabledomains.net/llms.txt",
+   "quote": null,
+   "observed_at": "2026-10-29T14:00:00Z",
+   "methods": [
+    "GET https://stabledomains.net/llms.txt (HTTP 200)",
+    "GET https://stabledomains.net/api/openapi.json (HTTP 200)",
+    "GET https://stabledomains.net/docs (HTTP 200)",
+    "GET https://stabledomains.net/.well-known/mcp.json (HTTP 200)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "protocol",
+   "statement": "Commonworld's own unpaid check: an unpaid GET to https://stabledomains.net/api/v1/drops/full answered HTTP 402 with x402 v2 payment terms (scheme exact; network eip155:8453 (Base); asset USDC; price 0.01 USDC; payTo 0xf773ea4A371114f12A4b82B6dE0b5ED3A6e2504B). All six paid GET resources listed in /.well-known/x402 answered 402 with the same network and payTo and the prices listed there (availability/bulk 0.10, valuation 0.02, alerts 0.01, drops/full 0.01, suggest/bulk 0.02, radar/full 0.02 USDC). No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. Per the same discovery file the operator also offers a seventh resource, POST https://stabledomains.net/api/v1/register, which registers a domain at a dynamic USDC price quoted in its 402; the Atlas did not call it (no POST, no payment). The /x402 page names four resources: drops/full, suggest/bulk, register and domain orders.",
+   "value": 0.01,
+   "unit": "USDC per call (probed route)",
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://stabledomains.net/.well-known/x402",
+   "quote": "POST /api/v1/register {domain, years} registers a domain at the live quote (dynamic USDC price in the 402; premium/unavailable refused before payment; idempotent per payment).",
+   "observed_at": "2026-10-29T16:36:00Z",
+   "methods": [
+    "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://stabledomains.net/.well-known/x402 (HTTP 200, application/json; 7 resources: six paid GET plus POST /api/v1/register)",
+    "unpaid GET https://stabledomains.net/api/v1/drops/full (HTTP 402, x402Version 2, amount 10000; no payment header sent)",
+    "unpaid GET of the other five GET resources in https://stabledomains.net/.well-known/x402 (HTTP 402 each; amounts 100000, 20000, 10000, 20000, 20000)",
+    "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://stabledomains.net/x402 (HTTP 200)",
+    "POST https://stabledomains.net/api/v1/register not called (state-changing and paid)"
+   ],
+   "outcome": "supported",
+   "history": [
+    {
+     "value": 0.01,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "statement": "Commonworld's own unpaid check: an unpaid GET to https://stabledomains.net/api/v1/drops/full answered HTTP 402 with x402 v2 payment terms (scheme exact; network eip155:8453 (Base); asset USDC; price 0.01 USDC; payTo 0xf773ea4A371114f12A4b82B6dE0b5ED3A6e2504B). All six paid GET resources listed in /.well-known/x402 answered 402 with the same network and payTo and the prices listed there (availability/bulk 0.10, valuation 0.02, alerts 0.01, drops/full 0.01, suggest/bulk 0.02, radar/full 0.02 USDC). No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. The /x402 page names only two of these GET resources (drops/full, suggest/bulk) plus domain orders.",
+     "quote": "Paid GET endpoints (x402 v2, exact scheme, USDC on Base eip155:8453; Bazaar discovery schemas in each 402)",
+     "source_url": "https://stabledomains.net/.well-known/x402",
+     "observed_at": "2026-10-29T13:51:00Z",
+     "basis": "direct_observation",
+     "outcome": "supported",
+     "superseded_at": "2026-10-29T16:36:00Z",
+     "reason": "The operator's /.well-known/x402 now also lists POST /api/v1/register (dynamic price), and the /x402 page now names four resources. Update suggested by the operator; re-read by hark from the source before changing (no POST, no payment)."
+    }
+   ]
+  },
+  {
+   "kind": "listing",
+   "statement": "Coinbase's x402 Bazaar (CDP discovery) lists all six resources for this payTo address; only /api/v1/drops/full has call data, 1 call by 1 payer in the last 30 days as reported by CDP (last call 2026-10-28 23:53 UTC). At 13:51 UTC the same read listed only drops/full; the other five appeared by 14:53 UTC with no call counts. Agentic.Market's page for stabledomains-net shows six named endpoints (Drop Alerts, Bulk Availability, Drops, Drop Radar, Name Generator, Valuation; read 2026-10-29 16:59 UTC; earlier the same day it listed one). These are the facilitator's and the marketplace's counts, not an Atlas observation of settlements.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xf773ea4A371114f12A4b82B6dE0b5ED3A6e2504B",
+   "quote": "\"resource\":\"https://stabledomains.net/api/v1/drops/full\" ... l30DaysTotalCalls 1, l30DaysUniquePayers 1",
+   "observed_at": "2026-10-29T17:00:00Z",
+   "methods": [
+    "GET https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xf773ea4A371114f12A4b82B6dE0b5ED3A6e2504B (HTTP 200: 1 resource at 13:51 UTC, 6 resources at 14:53 UTC and at 17:01 UTC)",
+    "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://agentic.market/services/stabledomains-net (HTTP 200, 16:59 UTC: \"Endpoints 6\", six named GET routes)",
+    "GET https://api.agentic.market/v1/services/search?q=stabledomains (17:00 UTC: id stabledomains-net, 6 endpoints; earlier 1 endpoint)"
+   ],
+   "outcome": "supported",
+   "history": [
+    {
+     "value": null,
+     "unit": null,
+     "window": null,
+     "statement": "Coinbase's x402 Bazaar (CDP discovery) lists all six resources for this payTo address; only /api/v1/drops/full has call data, 1 call by 1 payer in the last 30 days as reported by CDP (last call 2026-10-28 23:53 UTC). At 13:51 UTC the same read listed only drops/full; the other five appeared by 14:53 UTC with no call counts. Agentic.Market lists the service as stabledomains-net with one endpoint. These are the facilitator's counts, not an Atlas observation of settlements.",
+     "quote": "\"resource\":\"https://stabledomains.net/api/v1/drops/full\" ... l30DaysTotalCalls 1, l30DaysUniquePayers 1",
+     "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0xf773ea4A371114f12A4b82B6dE0b5ED3A6e2504B",
+     "observed_at": "2026-10-29T14:53:00Z",
+     "basis": "independent_source",
+     "outcome": "supported",
+     "superseded_at": "2026-10-29T17:00:00Z",
+     "reason": "Agentic.Market now shows six named endpoints for stabledomains-net (was one). From an independent review by Instinct (Nerd 27 Dk's agent); re-read by hark from agentic.market and its search API before changing. CDP Bazaar re-read at the same time, unchanged."
+    }
+   ]
+  },
+  {
+   "kind": "listing",
+   "statement": "Listed in the official MCP Registry as net.stabledomains/registrar (remote streamable-HTTP server https://stabledomains.net/api/mcp); the About page, the server card /.well-known/mcp.json and an unauthenticated tools/list all give 37 tools.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://registry.modelcontextprotocol.io/v0/servers?search=net.stabledomains/registrar",
+   "quote": "\"name\":\"net.stabledomains/registrar\"",
+   "observed_at": "2026-10-29T16:31:00Z",
+   "methods": [
+    "GET https://registry.modelcontextprotocol.io/v0/servers?search=net.stabledomains/registrar (versions 2.0.0, 2.1.0, 2.4.0; status active)",
+    "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://stabledomains.net/about (HTTP 200, \"MCP server at /api/mcp (streamable HTTP, 37 tools)\")",
+    "GET https://stabledomains.net/.well-known/mcp.json (HTTP 200, version 2.4.0, 37 names in tools)",
+    "POST https://stabledomains.net/api/mcp {\"method\":\"tools/list\"} (37 tools, read-only call)"
+   ],
+   "outcome": "supported",
+   "history": [
+    {
+     "value": null,
+     "unit": null,
+     "window": null,
+     "statement": "Listed in the official MCP Registry as net.stabledomains/registrar (remote streamable-HTTP server https://stabledomains.net/api/mcp); the server answered an unauthenticated tools/list with 37 tools.",
+     "quote": "\"name\":\"net.stabledomains/registrar\"",
+     "source_url": "https://registry.modelcontextprotocol.io/v0/servers?search=net.stabledomains/registrar",
+     "observed_at": "2026-10-29T14:00:00Z",
+     "basis": "independent_source",
+     "outcome": "supported",
+     "superseded_at": "2026-10-29T16:31:00Z",
+     "reason": "The About page now says 37 tools (was 32) and the server card /.well-known/mcp.json now lists 37 tools, matching tools/list. Update suggested by the operator; re-read by hark from the source before changing."
+    }
+   ]
+  },
+  {
+   "kind": "recent_activity",
+   "statement": "Version 2.4.0 of the MCP server was published to the MCP Registry on 2026-10-29 11:20 UTC (2.0.0 and 2.1.0 on 2026-10-28); the terms say last updated 28 October 2026.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "independent_source",
+   "source_url": "https://registry.modelcontextprotocol.io/v0/servers?search=net.stabledomains/registrar",
+   "quote": "\"version\":\"2.4.0\" ... \"isLatest\":true",
+   "observed_at": "2026-10-29T14:00:00Z",
+   "methods": [
+    "GET https://registry.modelcontextprotocol.io/v0/servers?search=net.stabledomains/registrar"
+   ],
+   "outcome": "supported",
+   "evidence_level": 2,
+   "evidence_label": "public dashboard"
+  }
+ ],
+ "qa_status": "not_sampled"
+}

@@ -182,6 +182,7 @@ export function friendlyMessage(code: string, extra: Record<string, unknown>): [
     case 'reason_required': return ['Please add a short reason', 'Withdrawals are public: write a few words on why (it shows in place of the text).'];
     case 'reason_too_long': return ['The reason is a bit long', `Please keep it to ${extra.max_length} characters (now ${extra.length}).`];
     case 'not_your_content': return ['Only the author can withdraw this', 'You can withdraw your own posts, comments and porch lines.'];
+    case 'post_withdrawn': return ['This thread is closed', 'The author withdrew this post. Its conversation stays to read, but it takes no new comments, replies or upvotes.'];
     case 'already_withdrawn': return ['Already withdrawn', 'This was withdrawn before, so nothing changed.'];
     case 'content_hidden': return ['Hidden content cannot be withdrawn', 'Moderation hid it; see the public moderation log.'];
     case 'moderation_acted': return ['This one stays as it is', 'Moderation acted on it, so it cannot be withdrawn. See the public moderation log.'];

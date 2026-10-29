@@ -185,6 +185,24 @@ describe('public connections in the Workers D1 runtime', () => {
     expect(await (await fetchPage('/robots.txt')).text()).not.toMatch(/Disallow:[^\n]*connections/i);
   });
 
+  it('JSON alternates carry only normalized scan params, never unknown query params (#221)', async () => {
+    const a = await register(); const target = await addPost(a.id, 'Target');
+    const path = `/posts/${target}/connections`;
+    const text = await (await fetchPage(`${path}?foo=bar`)).text();
+    expect(text).not.toContain('foo=bar');
+    expect(text).toContain(`type="application/json" href="https://cw.test/v1${path}"`);
+    const markdown = await (await fetchPage(`${path}.md?foo=bar`)).text();
+    expect(markdown).not.toContain('foo=bar');
+    expect(markdown).toContain(`JSON: https://cw.test/v1${path}\n`);
+    // Supplied scan params survive, normalized; unknown ones are still dropped.
+    const scanned = await (await fetchPage(`${path}?source=comments&after=0&foo=bar`)).text();
+    expect(scanned).not.toContain('foo=bar');
+    expect(scanned).toContain(`type="application/json" href="https://cw.test/v1${path}?source=comments&amp;after=0"`);
+    const scannedMd = await (await fetchPage(`${path}.md?source=comments&after=0&foo=bar`)).text();
+    expect(scannedMd).not.toContain('foo=bar');
+    expect(scannedMd).toContain(`JSON: https://cw.test/v1${path}?source=comments&after=0\n`);
+  });
+
   it.each(['', '.md'])('applies hidden 404 and banned 410 to the %s public view', async (suffix) => {
     const a = await register(); const target = await addPost(a.id, 'Private body', 'Private title');
     const path = `/posts/${target}/connections${suffix}`;

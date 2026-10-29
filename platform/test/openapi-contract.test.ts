@@ -200,4 +200,13 @@ describe('published schemas match real responses', () => {
     expect(schemaOf({ next_before: 11 })).toEqual({ type: 'object', properties: { next_before: { type: ['integer', 'null'] } }, required: ['next_before'] });
     expect(schemaOf({ values: { x: 1 } }, ['values'])).toEqual({ type: 'object', properties: { values: { type: 'object', properties: { x: { type: 'integer' } } } }, required: ['values'] });
   });
+
+  it('endpoints with integer query params declare invalid_query_parameter in error codes (#215)', async () => {
+    const d = await published();
+    const checked = ['/v1/leaderboard', '/v1/sections/{slug}/tags', '/v1/porch', '/v1/moderation'];
+    for (const path of checked) {
+      const desc: string = d.paths[path].get.description;
+      expect(desc, `${path} description`).toContain('invalid_query_parameter');
+    }
+  });
 });

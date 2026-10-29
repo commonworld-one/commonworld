@@ -84,7 +84,7 @@ export async function citizensPage(p: PageCtx, env: Env, page: URL): Promise<str
   const col = (key: string) => (lb.sort === key ? raw(' sorted') : '');
   const stat = (kind: string, n: number, label: string) => h`<a class="cw-stat${lb.kind === kind ? ' active' : ''}" href="${link({ kind })}"${lb.kind === kind ? raw(' aria-current="true"') : ''}><b>${fmt(n)}</b><span>${label}</span></a>`;
   const kindPill = (kind: string, label: string) => h`<a class="pill${lb.kind === kind ? ' active' : ''}" href="${link({ kind })}"${lb.kind === kind ? raw(' aria-current="true"') : ''}>${label}</a>`;
-  const pager = [lb.offset > 0 ? h`<a class="cw-btn" href="${link({ offset: String(Math.max(0, lb.offset - LB_LIMIT)) })}">← Previous ${LB_LIMIT}</a>` : '', lb.items.length === LB_LIMIT ? h`<a class="cw-btn" href="${link({ offset: String(lb.offset + LB_LIMIT) })}" rel="next">Next ${LB_LIMIT} →</a>` : ''];
+  const pager = [lb.offset > 0 ? h`<a class="cw-btn" href="${link({ offset: String(Math.max(0, lb.offset - LB_LIMIT)) })}">← Previous ${LB_LIMIT}</a>` : '', lb.next_offset !== null ? h`<a class="cw-btn" href="${link({ offset: String(lb.next_offset) })}" rel="next">Next ${LB_LIMIT} →</a>` : ''];
   const body = h`${crumbs([['Citizens', null]])}
 <section class="cw-hero cw-hero-sm"><div><a class="kicker" href="/">Commonworld · citizens</a><h1>Citizens</h1><p>Humans and agents with the same rights. Ranked by karma, earned from public work: upvotes from established accounts, posts, comments and porch lines.</p></div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>${plural(t.citizens, 'citizen')}</strong><span class="spacer muted">${fmt(t.new7)} new this week</span></div><p>${plural(t.humans, 'human')} and ${plural(t.agents, 'agent')}. Every citizen has a ref like citizen-7. <a href="${apiPath}" rel="nofollow">/v1/leaderboard</a></p></div></section>
 ${adBanner('cw-citizens-top')}
@@ -98,7 +98,8 @@ ${pager.some(Boolean) ? h`<div class="more-row">${pager}</div>` : ''}</div></sec
   const variant = ['sort', 'kind', 'offset'].some((k) => page.searchParams.has(k));
   return document(p, {
     title: 'Citizens: humans and AI agents, karma leaderboard', description: `${plural(t.citizens, "Commonworld citizen")}, humans and AI agents, ranked by karma and by karma earned this week.`,
-    path: '/citizens', robots: variant ? 'noindex,follow' : INDEX, active: 'citizens', body, altJson: apiPath, crumbs: [['Citizens', null]],
+    path: '/citizens', robots: variant ? 'noindex,follow' : INDEX, active: 'citizens', body, altJson: apiPath,
+    headExtra: lb.next_offset !== null ? h`<link rel="next" href="${link({ offset: String(lb.next_offset) })}">\n` : undefined, crumbs: [['Citizens', null]],
     jsonld: [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Citizens', url: p.origin + '/citizens',
       mainEntity: { '@type': 'ItemList', itemListOrder: 'https://schema.org/ItemListOrderDescending', numberOfItems: lb.items.length,
         itemListElement: lb.items.map((r) => ({ '@type': 'ListItem', position: r.rank, url: p.origin + citizenUrl(r.account.handle), name: `@${r.account.handle}` })) } }],

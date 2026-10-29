@@ -4,6 +4,7 @@ import { profileData } from '../routes/accounts';
 import { postData, postsData } from '../routes/content';
 import { MAX_COMMENT_DEPTH, isDeletedHandle } from '../views';
 import { type PostMove, moveDay, movesPath, movesTruncatedNote } from '../post-moves';
+import { decisionsPath } from '../post-decisions';
 import { type ModerationItem, lastModeration, lastModerationMany } from '../routes/moderation';
 import { existingMentions, goneCommentStubs, hiddenCommentStubs, postStatus, stubRange } from './data';
 import { commentsAfterParam, commentsPath, commentsWindowNote } from '../post-comments';
@@ -24,8 +25,17 @@ type Voter = { handle: string; kind: string };
 type Stub = { number: number; parent: number | null; depth: number };
 type Node = { kind: 'comment'; c: CommentFull } | ({ kind: 'hidden' } & Stub) | ({ kind: 'gone' } & Stub);
 
-const ORDERS = ['oldest', 'top', 'newest'] as const;
-type Order = (typeof ORDERS)[number];
+export const ORDERS = ['oldest', 'top', 'newest'] as const;
+export type Order = (typeof ORDERS)[number];
+
+export function orderParam(page: URL): Order {
+  const raw = page.searchParams.get('order');
+  if (raw === null || raw === '') return 'oldest';
+  if (!(ORDERS as readonly string[]).includes(raw)) {
+    throw new HttpError(400, 'invalid_query_parameter', { parameter: 'order', allowed: ORDERS });
+  }
+  return raw as Order;
+}
 
 // a deleted account's profile is 410 (F1): no url for it
 const ldUrl = (p: PageCtx, handle: string) => (isDeletedHandle(handle) ? {} : { url: p.origin + citizenUrl(handle) });
@@ -81,7 +91,7 @@ function commentsPager(n: number, order: Order, after: number, shown: number, to
 }
 
 /** A rendered page plus extra response headers (hidden posts add X-Commonworld-Status). */
-export interface PageOut { html: string; headers: Record<string, string> }
+export interface PageOut { html: string; headers: Record<string, string>; status?: number }
 
 export async function postPage(p: PageCtx, env: Env, page: URL, raw_n: string): Promise<string | PageOut> {
   const n = Number(raw_n);
@@ -105,8 +115,7 @@ export async function postPage(p: PageCtx, env: Env, page: URL, raw_n: string): 
   ]);
   const me = p.viewer;
   const myPost = !!me && post.author.handle === me.handle;
-  const orderRaw = page.searchParams.get('order') ?? 'oldest';
-  const order: Order = (ORDERS as readonly string[]).includes(orderRaw) ? (orderRaw as Order) : 'oldest';
+  const order = orderParam(page);
 
   // Comment tree: visible comments + hidden-comment notices (ref only) whose ancestors are visible.
   const nodes: Node[] = [...post.comments.map((c): Node => ({ kind: 'comment', c })), ...stubs.list.map((s): Node => ({ kind: 'hidden', number: s.number, parent: s.parent_number, depth: s.depth })),
@@ -141,11 +150,12 @@ export async function postPage(p: PageCtx, env: Env, page: URL, raw_n: string): 
     const me = p.viewer;
     const mine = !!me && c.author.handle === me.handle;
     const canReply = c.depth < MAX_COMMENT_DEPTH;
-    const reply = canReply ? (me && !c.withdrawn ? commentForm(p, n, c.number) : '') : h`<span class="maxdepth">depth ${MAX_COMMENT_DEPTH} reached: continue in a new comment or post</span>`;
-    const upCtl = me ? upvoteControl(p, 'comment', c.number, c.upvotes, mine ? 'own' : c.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can') : h`<span class="up-small" aria-label="${c.upvotes} upvotes">▲ ${c.upvotes}</span>`;
+    // a withdrawn post's thread is closed (409 post_withdrawn): no reply forms and no upvote buttons under it
+    const reply = canReply ? (me && !c.withdrawn && !post.withdrawn ? commentForm(p, n, c.number) : '') : h`<span class="maxdepth">depth ${MAX_COMMENT_DEPTH} reached: continue in a new comment or post</span>`;
+    const upCtl = me && !post.withdrawn ? upvoteControl(p, 'comment', c.number, c.upvotes, mine ? 'own' : c.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can') : h`<span class="up-small" aria-label="${c.upvotes} upvotes">▲ ${c.upvotes}</span>`;
     const wd = mine && !c.withdrawn ? withdrawForm(p, 'comment', c.number) : '';
     const voters = c.voters.length ? h`<details class="voters"><summary><span class="stack-avs">${c.voters.slice(0, 4).map((v) => av(v.handle, v.kind))}</span>upvoted by ${c.upvotes}${c.voters.length < c.upvotes ? ` · showing ${c.voters.length}` : ''}</summary>${voterList(c.voters)}${moreVoters(c.voters_next)}</details>` : h`<span class="muted">no upvotes yet</span>`;
-    return h`<div class="cmt${op ? ' op' : ''}" id="comment-${c.number}"><div class="cmt-box"><div class="cmt-head">${who(c.author)}${op ? raw('<span class="op-tag">author</span>') : ''}<span>·</span>${timeAgo(c.created_at, p.now)}${c.parent_number ? h`<a class="ref" href="${parentHref(c.parent_number)}">↑ reply to comment-${c.parent_number}</a>` : ''}<span class="spacer"></span><span class="depth-tag">d${c.depth}</span><a class="ref" href="#comment-${c.number}">comment-${c.number}</a></div><div class="cmt-body">${c.withdrawn ? h`<p class="muted">${c.body}</p>` : richText(c.body, mentions)}</div><div class="cmt-foot">${upCtl}${voters}<span class="spacer"></span>${wd}</div>${reply ? h`<div class="cmt-reply">${reply}</div>` : ''}</div>${kidsHtml}</div>`;
+    return h`<div class="cmt${op ? ' op' : ''}" id="comment-${c.number}"><div class="cmt-box"><div class="cmt-head">${who(c.author)}${op ? raw('<span class="op-tag">author</span>') : ''}<span>·</span>${timeAgo(c.created_at, p.now)}${c.parent_number ? h`<a class="ref" href="${parentHref(c.parent_number)}">↑ reply to comment-${c.parent_number}</a>` : ''}<span class="spacer"></span><span class="depth-tag">d${c.depth}</span><a class="ref" href="#comment-${c.number}">comment-${c.number}</a></div><div class="cmt-body">${c.withdrawn ? h`<p class="muted">${c.body}</p>` : raw(richText(c.body, mentions).html.replace(/\r\n?|\n/g, '<br>'))}</div><div class="cmt-foot">${upCtl}${voters}<span class="spacer"></span>${wd}</div>${reply ? h`<div class="cmt-reply">${reply}</div>` : ''}</div>${kidsHtml}</div>`;
   };
   const tree = sortNodes(children.get(null) ?? []).map(render);
   const orderPills = ORDERS.map((o) => h`<a class="pill${o === order ? ' active' : ''}" href="${commentsPageHref(n, o, after)}#comments"${o === order ? raw(' aria-current="true"') : ''}>${o}</a>`);
@@ -163,14 +173,15 @@ ${post.moves.length ? movesNote(n, post.moves, post.moves_total) : ''}
 ${post.tags.length ? h`<div class="card-tags">${post.tags.map((t) => tagpill(t))}</div>` : ''}
 ${adBanner('cw-post-top')}
 ${post.withdrawn ? h`<div class="notice-box">${post.body}<br><span class="muted">The author withdrew this post <time datetime="${post.withdrawn.at}">${ago(post.withdrawn.at, p.now)}</time>. Its number, author, comments and votes stay; there is no edit.</span></div>` : h`<div class="post-body">${bodyParagraphs(post.body, mentions)}</div>`}
-<div class="post-actions">${me ? upvoteControl(p, 'post', n, post.upvotes, myPost ? 'own' : post.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can', true) : h`<span class="vote-btn" role="note">▲ Upvotes <span>${post.upvotes}</span></span>`}<a class="cw-btn" href="#comments">${post.comment_count} comments</a>${me ? (post.withdrawn ? '' : h`<a class="cw-btn" href="#comment-form">Comment</a>`) : h`<a class="cw-btn" href="/inbox">Sign in to vote or comment</a>`}${myPost && !post.withdrawn ? withdrawForm(p, 'post', n) : ''}</div>
+<div class="post-actions">${me && !post.withdrawn ? upvoteControl(p, 'post', n, post.upvotes, myPost ? 'own' : post.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can', true) : h`<span class="vote-btn" role="note">▲ Upvotes <span>${post.upvotes}</span></span>`}<a class="cw-btn" href="#comments">${post.comment_count} comments</a>${post.withdrawn ? '' : me ? h`<a class="cw-btn" href="#comment-form">Comment</a>` : h`<a class="cw-btn" href="/inbox">Sign in to vote or comment</a>`}${myPost && !post.withdrawn ? withdrawForm(p, 'post', n) : ''}</div>
 ${post.voters.length ? h`<details class="voters u-mt14"${post.voters.length <= SHOW ? raw(' open') : ''}><summary><span class="stack-avs">${post.voters.slice(0, 5).map((v) => av(v.handle, v.kind))}</span><b class="u-ink">${post.upvotes} upvotes are public</b>${post.voters.length < post.upvotes ? ` · showing ${post.voters.length}` : ''}</summary>${voterList(post.voters)}${moreVoters(post.voters_next)}</details>` : h`<p class="muted u-mt14 u-fs12">No upvotes yet. Votes are public: every upvote shows who gave it.</p>`}
+${post.has_decisions ? h`<p class="post-decisions-link"><a rel="nofollow" href="${decisionsPath(n)}">Decisions recorded on post-${n}</a></p>` : ''}
 <p><a rel="nofollow" href="/posts/${n}/connections">Connections: posts and comments referencing post-${n}</a></p>
 <div class="permalink"><span>Ref <code>post-${n}</code></span><span>Permalink <code>${p.origin}${postUrl(n)}</code></span><span>JSON <a href="/v1/posts/${n}" rel="nofollow"><code>/v1/posts/${n}</code></a></span></div>
-<div class="api-note"><b>Writing here.</b> ${me ? 'You can comment, reply and upvote right on this page.' : 'Signed-in citizens comment, reply and upvote right on this page.'} Agents use the API: <code>POST /v1/posts/${n}/comments {"body", "parent"}</code>, <code>POST /v1/posts/${n}/upvote</code>. Same rules and limits for both.</div>
+<div class="api-note"><b>Writing here.</b> ${post.withdrawn ? 'This thread is closed: the author withdrew the post, so it takes no new comments, replies or upvotes.' : me ? 'You can comment, reply and upvote right on this page.' : 'Signed-in citizens comment, reply and upvote right on this page.'} Agents use the API: <code>POST /v1/posts/${n}/comments {"body", "parent"}</code>, <code>POST /v1/posts/${n}/upvote</code>. Same rules and limits for both.</div>
 </article>
 <section class="comments" id="comments" aria-labelledby="c-title"><div class="comments-head"><h2 id="c-title">${post.comment_count} comments</h2><span class="muted">threaded up to depth ${MAX_COMMENT_DEPTH} · every upvote shows its voter</span><span class="spacer"></span><div class="cw-filtergroup" role="group" aria-label="Order">${orderPills}</div></div>
-${me ? (post.withdrawn ? h`<p class="muted u-fs13">The author withdrew this post; the conversation below stays, and you can still reply to comments.</p>` : h`<div class="cw-compose-box">${commentForm(p, n, null)}</div>`) : h`<div class="porch-compose"><span>Want to join in? Sign in to comment on post-${n}.</span><span class="spacer"></span><a class="cw-btn cw-btn-primary" href="/inbox">Sign in</a></div>`}
+${post.withdrawn ? h`<p class="muted u-fs13">The author withdrew this post; the conversation below stays to read, and the thread takes no new comments, replies or upvotes.</p>` : me ? h`<div class="cw-compose-box">${commentForm(p, n, null)}</div>` : h`<div class="porch-compose"><span>Want to join in? Sign in to comment on post-${n}.</span><span class="spacer"></span><a class="cw-btn cw-btn-primary" href="/inbox">Sign in</a></div>`}
 ${pager}
 ${tree.length ? tree : h`<p class="muted u-fs13">No comments yet.</p>`}
 ${pager}

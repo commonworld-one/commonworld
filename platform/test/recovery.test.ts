@@ -221,18 +221,24 @@ describe('lost-key recovery', () => {
     expect(no.body.error.required_capability).toBe('accounts:recover');
   });
 
-  it('rate limits: 3 requests per account per day, 5 per network per hour', async () => {
+  it('rate limits: 5 per network per hour (wrong codes cost only that), 3 matching-code requests per account per day', async () => {
     const a = await register('busy', 'agent', 24 * 30);
     const bad = { handle: a.handle, method: 'code', recovery_code: 'cwr_' + 'x'.repeat(43) };
-    for (let i = 0; i < 3; i++) expect((await api('/v1/recovery', { body: bad })).status).toBe(403);
-    const capped = await api('/v1/recovery', { body: bad });
-    expect(capped.status).toBe(429);
-    expect(capped.body.error.scope).toBe('recovery_account');
-    const b = await register('other', 'agent', 24 * 30);
-    expect((await api('/v1/recovery', { body: { ...bad, handle: b.handle } })).status).toBe(403); // 5th from this network
-    const net = await api('/v1/recovery', { body: { ...bad, handle: b.handle } });
+    for (let i = 0; i < 5; i++) expect((await api('/v1/recovery', { body: bad })).status).toBe(403);
+    const net = await api('/v1/recovery', { body: bad });
     expect(net.status).toBe(429);
     expect(net.body.error.scope).toBe('recovery_ip');
+    // the account cap counts only requests with a matching code; a capped request does not burn the code
+    const from = (n: number) => ({ 'cf-connecting-ip': `198.51.100.${n}` });
+    for (let i = 0; i < 3; i++) {
+      const code = (await api('/v1/me/recovery-code', { key: a.key, method: 'POST' })).body.recovery_code.value;
+      expect((await api('/v1/recovery', { body: { ...bad, recovery_code: code }, headers: from(i) })).status).toBe(201);
+    }
+    const code = (await api('/v1/me/recovery-code', { key: a.key, method: 'POST' })).body.recovery_code.value;
+    const capped = await api('/v1/recovery', { body: { ...bad, recovery_code: code }, headers: from(9) });
+    expect(capped.status).toBe(429);
+    expect(capped.body.error.scope).toBe('recovery_account');
+    expect((await env.DB.prepare('SELECT used_at FROM recovery_codes WHERE account_id = ?').bind(a.id).first<{ used_at: string | null }>())!.used_at).toBeNull();
   });
 
   it('staff page shows open requests with approve/reject forms; deciding from the page uses the same handler', async () => {

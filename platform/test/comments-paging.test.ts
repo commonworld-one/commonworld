@@ -446,4 +446,59 @@ describe('paged voter lists', () => {
     expect((await api(`/v1/posts/${p.number}/voters`)).status).toBe(410);
     expect((await api(`/v1/comments/${top.number}/voters`)).status).toBe(410);
   });
+
+  it('honors ?order= in the Markdown twin (#226)', async () => {
+    const a = await register('author2', 'agent', 24 * 10);
+    const b = await register('talker2', 'human', 24 * 10);
+    const c = await register('talker3', 'agent', 24 * 10);
+    const p = (await post(a.key, 'Thread with ordered comments')).body;
+    const c1 = await comment(b.key, p.number, 'first comment');
+    const c2 = await comment(b.key, p.number, 'second comment');
+    const c3 = await comment(b.key, p.number, 'third comment');
+
+    // Upvote c2 twice so it has 2 upvotes, c3 once
+    await api(`/v1/comments/${c2.number}/upvote`, { key: a.key, method: 'POST' });
+    await api(`/v1/comments/${c2.number}/upvote`, { key: c.key, method: 'POST' });
+    await api(`/v1/comments/${c3.number}/upvote`, { key: a.key, method: 'POST' });
+
+    // 1. Oldest (default): c1, c2, c3
+    const mdOldest = (await page(`/posts/${p.number}.md`)).text;
+    const i1 = mdOldest.indexOf(`### comment-${c1.number}`);
+    const i2 = mdOldest.indexOf(`### comment-${c2.number}`);
+    const i3 = mdOldest.indexOf(`### comment-${c3.number}`);
+    expect(i1 < i2 && i2 < i3).toBe(true);
+
+    // 2. Newest: c3, c2, c1
+    const mdNewest = (await page(`/posts/${p.number}.md?order=newest`)).text;
+    const n1 = mdNewest.indexOf(`### comment-${c1.number}`);
+    const n2 = mdNewest.indexOf(`### comment-${c2.number}`);
+    const n3 = mdNewest.indexOf(`### comment-${c3.number}`);
+    expect(n3 < n2 && n2 < n1).toBe(true);
+
+    // 3. Top: c2 (2 upvotes), c3 (1 upvote), c1 (0 upvotes)
+    const mdTop = (await page(`/posts/${p.number}.md?order=top`)).text;
+    const t1 = mdTop.indexOf(`### comment-${c1.number}`);
+    const t2 = mdTop.indexOf(`### comment-${c2.number}`);
+    const t3 = mdTop.indexOf(`### comment-${c3.number}`);
+    expect(t2 < t3 && t3 < t1).toBe(true);
+  });
+
+  it('rejects invalid ?order= on HTML and Markdown with 400 invalid_query_parameter (#227)', async () => {
+    const a = await register('author3', 'agent', 24 * 10);
+    const p = (await post(a.key, 'Thread for invalid order test')).body;
+
+    const htmlBad = await page(`/posts/${p.number}?order=zzz`);
+    expect(htmlBad.status).toBe(400);
+    expect(htmlBad.text).toContain('invalid_query_parameter');
+
+    const mdBad = await page(`/posts/${p.number}.md?order=zzz`);
+    expect(mdBad.status).toBe(400);
+    expect(mdBad.text).toContain('invalid_query_parameter');
+
+    // Controls: valid orders answer 200
+    for (const valid of ['oldest', 'newest', 'top']) {
+      expect((await page(`/posts/${p.number}?order=${valid}`)).status).toBe(200);
+      expect((await page(`/posts/${p.number}.md?order=${valid}`)).status).toBe(200);
+    }
+  });
 });

@@ -1,4 +1,4 @@
-// Vendored from commonworld-one/commonworld trust/src/http.ts @ 539d06f (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
+// Vendored from commonworld-one/commonworld trust/src/http.ts @ 1780784 (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
 /** GET with timeout, retries on network errors / 429 / 5xx, and exponential backoff. */
 import type { CheckContext } from './types.ts';
 

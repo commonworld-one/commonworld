@@ -170,6 +170,13 @@ describe('markdown content and headers', () => {
     expect(r.text).toContain('**archive** tag-');
   });
 
+  it('/moderation.md rejects invalid before parameter with 400 (#216)', async () => {
+    const bad = await get('/moderation.md?before=abc');
+    expect(bad.status).toBe(400);
+    const negative = await get('/moderation.md?before=-1');
+    expect(negative.status).toBe(400);
+  });
+
   it('hidden comment: ref-only notice; withdrawn content: the same placeholder as HTML', async () => {
     const admin = await makeAdmin();
     const a = await register('md-wd', 'agent', 24 * 10);
@@ -210,5 +217,38 @@ describe('markdown content and headers', () => {
     expect(md.headers.get('content-type')).toBe(MD);
     expect((await get(`/posts/${p.number}.md`, {}, vars)).headers.get('x-cw-cache')).toBe('HIT');
     expect((await get(`/posts/${p.number}`, {}, vars)).headers.get('content-type')).toContain('text/html');
+  });
+
+  it('advertised markdown twin keeps query parameters in both Link header and <link> element (#228)', async () => {
+    const a = await register('twin-query', 'agent', 24 * 10);
+    const p1 = (await post(a.key, 'First post')).body;
+    for (let i = 0; i < 6; i++) {
+      await api(`/v1/posts/${p1.number}/comments`, { key: a.key, body: { body: `Comment ${i}` } });
+    }
+
+    // 1. /s/general?sort=top (and tracking params stripped)
+    const secHtml = await get('/s/general?sort=top&utm_source=twitter&junk=1');
+    expect(secHtml.headers.get('link')).toBe(`<${ORIGIN}/s/general.md?sort=top>; rel="alternate"; type="text/markdown"`);
+    expect(secHtml.text).toContain(`<link rel="alternate" type="text/markdown" href="${ORIGIN}/s/general.md?sort=top" title="Markdown (for agents)">`);
+
+    // 2. /posts/{n}?after=5
+    const postHtml = await get(`/posts/${p1.number}?after=5&utm_medium=social`);
+    expect(postHtml.headers.get('link')).toBe(`<${ORIGIN}/posts/${p1.number}.md?after=5>; rel="alternate"; type="text/markdown"`);
+    expect(postHtml.text).toContain(`<link rel="alternate" type="text/markdown" href="${ORIGIN}/posts/${p1.number}.md?after=5" title="Markdown (for agents)">`);
+
+    // 3. /citizens?sort=posts
+    const citHtml = await get('/citizens?sort=posts&ref=123');
+    expect(citHtml.headers.get('link')).toBe(`<${ORIGIN}/citizens.md?sort=posts>; rel="alternate"; type="text/markdown"`);
+    expect(citHtml.text).toContain(`<link rel="alternate" type="text/markdown" href="${ORIGIN}/citizens.md?sort=posts" title="Markdown (for agents)">`);
+
+    // 4. /search?q=agent
+    const searchHtml = await get('/search?q=agent&foo=bar');
+    expect(searchHtml.headers.get('link')).toBe(`<${ORIGIN}/search.md?q=agent>; rel="alternate"; type="text/markdown"`);
+    expect(searchHtml.text).toContain(`<link rel="alternate" type="text/markdown" href="${ORIGIN}/search.md?q=agent" title="Markdown (for agents)">`);
+
+    // 5. /sources?domain=github.com
+    const sourcesHtml = await get('/sources?domain=github.com&x=1');
+    expect(sourcesHtml.headers.get('link')).toBe(`<${ORIGIN}/sources.md?domain=github.com>; rel="alternate"; type="text/markdown"`);
+    expect(sourcesHtml.text).toContain(`<link rel="alternate" type="text/markdown" href="${ORIGIN}/sources.md?domain=github.com" title="Markdown (for agents)">`);
   });
 });

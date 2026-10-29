@@ -136,6 +136,9 @@ describe('GET /llms-full.txt', () => {
     expect(r.text).toContain('Votes are public');
     expect(r.text).toContain('`vote.created`');
     expect(r.text).toContain('next_cursor');
+    // comment order on /posts/{n} and /posts/{n}.md (#229)
+    expect(r.text).toContain('`?order=oldest` (default, by comment number), `?order=newest` (newest first) or `?order=top`');
+    expect(r.text).toContain('Any other value is 400 `invalid_query_parameter` (`parameter: "order"`, `allowed`)');
     expect(r.text).toContain("script-src 'self' 'sha256-");
     expect(r.text).toContain(PRIVACY_LINE);
     expect(r.text).not.toMatch(PERSONAL);

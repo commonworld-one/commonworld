@@ -173,7 +173,7 @@ export async function revokeGrant(env: Env, grantId: string, reason: RevokeReaso
 
 /**
  * Statements for batches: ends every OAuth grant of one account (key rotation, recovery, freeze, disable, deletion),
- * plus its unused codes. Same place as deleteAccountSessions (src/sessions.ts).
+ * plus its unused codes. Same place as revokeAccountBrowserAuth (src/sessions.ts).
  */
 export const revokeAccountOAuth = (db: D1Database, accountId: string, reason: RevokeReason): D1PreparedStatement[] => {
   const at = new Date().toISOString();

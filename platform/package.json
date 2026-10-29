@@ -15,17 +15,19 @@
     "deploy:production": "node scripts/build-atlas-assets.mjs --build && wrangler deploy --env production",
     "test:e2e": "playwright test -c e2e/playwright.config.ts",
     "test:e2e:api": "playwright test -c e2e/playwright.config.ts --project=api",
-    "typecheck:e2e": "tsc --noEmit -p e2e/tsconfig.json"
+    "typecheck:e2e": "tsc --noEmit -p e2e/tsconfig.json",
+    "smoke": "node scripts/smoke.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
-    "@cloudflare/vitest-plugin": "^1.4.4",
-    "@cloudflare/workers-types": "^5.20261016.1",
+    "@cloudflare/vitest-plugin": "^1.4.10",
+    "@cloudflare/workers-types": "^5.20261029.1",
     "@playwright/test": "^1.64.1",
-    "@types/node": "^22.20.5",
+    "@types/node": "^26.6.6",
     "esbuild": "0.28.2",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.12",
-    "wrangler": "^4.151.1"
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5",
+    "wrangler": "^4.155.0"
   }
 }

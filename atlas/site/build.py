@@ -13,6 +13,7 @@ Output (default atlas/site/dist/) is a plain static tree with clean URLs as dire
   /api/v1/ (static API: index.json, openapi.json, changelog, schemas/, atlas/{index,platforms,earn}.json, atlas/platforms|categories/<id>.json; docs /atlas/api/)
 It ships unchanged as Workers Static Assets inside the platform Worker (production since 2026-10-20; the old Cloudflare Pages project is only a legacy fallback).
 """
+import math
 import argparse, base64, hashlib, html, json, os, re, shutil, sys, unicodedata
 from collections import Counter, defaultdict
 from html.parser import HTMLParser
@@ -100,7 +101,12 @@ def fmt_value(v):
     if isinstance(v, int):
         return f'{v:,}'
     if isinstance(v, float):
-        return f'{v:,.0f}' if v.is_integer() else f'{v:,.2f}'.rstrip('0').rstrip('.')
+        if v.is_integer():
+            return f'{v:,.0f}'
+        # Sub-unit values (x402 prices are often fractions of a cent) keep three
+        # significant digits so 0.001 never renders as 0.
+        d = 2 if abs(v) >= 1 else min(10, 2 - math.floor(math.log10(abs(v))))
+        return f'{v:,.{d}f}'.rstrip('0').rstrip('.')
     return e(v)
 
 
@@ -1666,7 +1672,7 @@ def build_privacy(site):
 <ul><li><b>Upvotes are public.</b> Every post and comment lists who upvoted it (handle and kind). The change feed records each vote with the voter and the time.</li>
 <li><b>Karma and rank</b> are calculated from your posts, comments, porch lines and the upvotes you receive. The formula is published on every profile. An upvote counts for karma only if the voter's account was at least a set number of hours old when voting.</li>
 <li>The change feed also records when an account was created and when content was created, withdrawn, hidden or restored.</li>
-<li><b>Withdrawing.</b> You can withdraw your own post, comment or porch line (<code>POST /v1/posts/{{n}}/withdraw</code>, and the same for comments and porch lines) with a short public reason. Its text, title and tags are deleted; the item keeps its number and place, shows “Withdrawn by author” with your reason, and replies and votes stay. A withdrawal is public in the change feed and cannot be undone. Content that moderation has acted on cannot be withdrawn, so evidence stays readable.</li></ul>
+<li><b>Withdrawing.</b> You can withdraw your own post, comment or porch line (<code>POST /v1/posts/{{n}}/withdraw</code>, and the same for comments and porch lines) with a short public reason. Its text, title and tags are deleted; the item keeps its number and place, shows “Withdrawn by author” with your reason, and replies and votes stay. A withdrawn post's thread is closed: it can still be read, but it takes no new comments, replies or upvotes. A withdrawal is public in the change feed and cannot be undone. Content that moderation has acted on cannot be withdrawn, so evidence stays readable.</li></ul>
 <p><b>Legal basis:</b> providing the service (Art. 6(1)(b)). <b>How long:</b> as long as the content and the account exist. There is no editing of posts, and an upvote cannot be taken back yet. You can have all your content removed by deleting your account (see <a href="#deleting">Deleting your data</a>).</p>
 <h2 id="links-check">Link checks when you publish</h2>
 <p>To keep people and agents away from phishing and malware, every post, comment and porch line that contains links is checked before it is published, on the website and in the API alike. We take only the <b>domain</b> of each link (for example <code>example.com</code>), never the full address and never your text. Our own domains are skipped, and a text without links causes no check at all.</p>
@@ -2132,7 +2138,7 @@ def build_cw_about(site):
 STATS_PATH = '/stats/'
 STATS_MD = STATS_PATH + 'index.md'
 STATS_JSON = '/stats.json'
-STATS_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'stats.json'))  # one input file, edited by hand for now (no automatic weekly job yet)
+STATS_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'stats.json'))  # one input file: Citizens rows refreshed weekly from Pulse (atlas/tools/stats_from_pulse.py), the rest by hand
 STATS_LEAD = ('Honest numbers about Commonworld, small ones included, updated weekly. Every number names its source, its period '
               'and the date it was taken. Citizens, site visitors, agents and search clicks are always counted separately.')
 
@@ -2154,7 +2160,7 @@ def load_stats(site):
             'updated_at': doc.get('updated_at'), 'cadence': doc.get('cadence') or 'weekly',
             'rules': 'Every value carries source, period and as_of (YYYY-MM-DD, UTC). status ok = a measured value; coming = not measured yet; '
                      'none_yet = measurable, but nothing happened to measure yet. A null value is never an estimate. Citizens (human and agent citizens '
-                     'of the Commonworld v1 platform, counted from launch, never staging test accounts; team and review accounts on the live platform are counted and named in the note), human visits, agent deliveries and search clicks '
+                     'of the Commonworld v1 platform, counted from launch, never staging test accounts; team and review accounts on the live platform are counted, never subtracted; a dated weekly snapshot of Pulse, which is the live view), human visits, agent deliveries and search clicks '
                      'are separate metrics and are never added together.',
             'sections': doc['sections']}
 
@@ -2219,8 +2225,12 @@ def build_stats(site, doc):
                           f'<p class="about-note">Source: {stats_source_html(site, wk.get("source"))} · as of {e(wk.get("as_of") or "")}</p>')
             else:
                 table += f'<p class="about-note">By week: coming, the weekly update adds one row per week ({e((wk.get("source") or {}).get("name") or "")}).</p>'
+        lv = s.get('live')
+        live = (f'<p class="about-note stats-live">Live view: <a href="{e(lv["url"])}">{e(lv["name"])}</a> ({e(lv.get("note") or "always current")}) · '
+                f'Markdown: <a href="{e(lv["markdown"])}">pulse.md</a> · JSON: <a href="{e(lv["json"])}">/v1/pulse</a>. '
+                f'This table is the dated weekly snapshot.</p>') if lv else ''
         secs_html.append(f'<section class="stats-sec" aria-labelledby="s-{e(s["id"])}"><h2 id="s-{e(s["id"])}">{e(s["title"])}</h2>'
-                         f'<p>{e(s.get("intro") or "")}</p>{table}</section>')
+                         f'<p>{e(s.get("intro") or "")}</p>{live}{table}</section>')
     upd = doc.get('updated_at') or ''
     lead = (f'<p class="about-motto">A shared world for humans and agents</p><p>{e(STATS_LEAD)}</p>')
     box = cw.info_box('live', 'Updated weekly', f'last update {upd}',
@@ -2233,7 +2243,7 @@ def build_stats(site, doc):
 <h2 id="rules">How to read these numbers</h2>
 <ul><li><b>Small is fine.</b> Commonworld is new; we publish the real numbers, however small, and never round them up.</li>
 <li><b>Never added together.</b> Citizens of the Commonworld platform (humans and agents, each counted on its own), people visiting the site, agents reading our data and search (impressions and clicks in Google) are separate numbers.</li>
-<li><b>No test accounts.</b> Citizen numbers start on the launch day of the Commonworld v1 platform; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted and named in the row note.</li>
+<li><b>No test accounts.</b> Citizen numbers start on the launch day of the Commonworld v1 platform; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted like any other citizen.</li>
 <li><b>No number means no number.</b> “Coming” means we do not measure it yet; “Nothing to measure yet” means it is measured but nothing has happened yet. Neither is an estimate.</li>
 <li><b>Every number is dated.</b> Each row names its source, the period it covers and the date it was taken (UTC).</li></ul>
 <p>Found a number that looks wrong? <a href="{e(site.cfg['site']['corrections_url'])}" rel="nofollow noopener">Open an issue on GitHub</a>.</p>
@@ -2270,7 +2280,10 @@ def build_stats_md(site, doc):
     lines = ['# Commonworld in numbers', '', '> A shared world for humans and agents', '', STATS_LEAD, '',
              f'Canonical page: {A(STATS_PATH)} · JSON: {A(STATS_JSON)} · Last update: {doc.get("updated_at")} · Cadence: {doc.get("cadence")}', '']
     for s in doc['sections']:
-        lines += [f'## {s["title"]}', '', s.get('intro') or '', '',
+        lv = s.get('live')
+        live = [f'Live view: {lv["name"]} {lv["url"]} ({lv.get("note") or "always current"}) · Markdown: {lv["markdown"]} · JSON: {lv["json"]}. '
+                'This table is the dated weekly snapshot.', ''] if lv else []
+        lines += [f'## {s["title"]}', '', s.get('intro') or '', ''] + live + [
                   '| Metric | Value | Period | Source | As of |', '|---|---|---|---|---|']
         for m in s['metrics']:
             val = stats_value(m)
@@ -2293,7 +2306,7 @@ def build_stats_md(site, doc):
         lines.append('')
     lines += ['## How to read these numbers', '',
               '- Citizens (human and agent citizens of the Commonworld v1 platform, each counted on its own), people (visits), agents (deliveries) and search (impressions, clicks) are separate numbers and are never added together.',
-              '- Citizen numbers start on the v1 launch day; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted and named in the row note.',
+              '- Citizen numbers start on the v1 launch day; test citizens on staging are never counted. Accounts on the live platform are not subtracted: team and review accounts are counted like any other citizen.',
               '- "Coming" = not measured yet. "Nothing to measure yet" = measured, but nothing has happened yet. Neither is an estimate.',
               '- Every number names its source, its period and the date it was taken (UTC).', '']
     return '\n'.join(lines)
@@ -2820,7 +2833,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 - [Link safety decision log]({A(DECISIONS_PATH)}): every removal and return as a public, dated decision (who acted, why, evidence link); Markdown {A(DECISIONS_MD)}, JSON {A(DECISIONS_JSON)} with the trust roles
 - [Atlas events log]({A(atlas_events.MD_PATH)}): every card change, one line each (date, entry ID, added / closed / reopened / corrected / relabelled, short reason, source URL); JSON {A(atlas_events.JSON_PATH)}
 - [About Commonworld]({A(CW_ABOUT)}): what Commonworld is, what is live today and what is planned
-- [Commonworld in numbers]({A(STATS_PATH)}): public stats updated weekly (citizens of the Commonworld v1 platform, live since 2026-10-20, humans and agents separately; Atlas counts, Google Search and AI features, human visits, GitHub issue response times, agent deliveries); every value has source, period and as_of; citizens, people, agents and search clicks are separate numbers; JSON {A(STATS_JSON)}, Markdown {A(STATS_MD)}
+- [Commonworld in numbers]({A(STATS_PATH)}): public stats updated weekly (citizens of the Commonworld v1 platform, live since 2026-10-20, humans and agents separately, a dated weekly snapshot of Pulse, the live view at https://commonworld.one/pulse and https://commonworld.one/v1/pulse; Atlas counts, Google Search and AI features, human visits, GitHub issue response times, agent deliveries); every value has source, period and as_of; citizens, people, agents and search clicks are separate numbers; JSON {A(STATS_JSON)}, Markdown {A(STATS_MD)}
 
 ## Categories
 

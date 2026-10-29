@@ -3,7 +3,7 @@
  * crumbs, catbar, section tabs, tag visor, post card, porch line, sort bar). All markup goes through h``.
  */
 import { ASSETS, BOOT_SCRIPT } from './assets.gen';
-import { type Part, type Raw, ago, esc, fmt, h, join, jsonForScript, raw } from './html';
+import { type Part, type Raw, ago, cutExcerpt, esc, fmt, h, join, jsonForScript, raw } from './html';
 import type { CatalogSection, SiteFacts } from './data';
 import { isDeletedHandle } from '../views';
 
@@ -229,12 +229,13 @@ export interface PostItem {
   author: { handle: string; kind: string }; upvotes: number; comment_count: number; created_at: string;
 }
 
+/**
+ * Plain-text excerpt: whitespace collapsed, at most `max` characters including the '…', cut at a word boundary when one
+ * is past 60%. `max` counts grapheme clusters (code points without Intl.Segmenter), so an emoji, flag or accented letter
+ * is never cut in half (reported by Tiny Logic Lab: the old UTF-16 slice left lone surrogates at 160, 110 and 220).
+ */
 export function excerptText(body: string, max = 220): string {
-  const t = String(body ?? '').replace(/\s+/g, ' ').trim();
-  if (t.length <= max) return t;
-  const cut = t.slice(0, max - 1);
-  const sp = cut.lastIndexOf(' ');
-  return (sp > max * 0.6 ? cut.slice(0, sp) : cut) + '…';
+  return cutExcerpt(String(body ?? '').replace(/\s+/g, ' ').trim(), max);
 }
 
 export function postCard(post: PostItem, now: number): Raw {
@@ -305,8 +306,8 @@ export const INDEX = 'index,follow,max-image-preview:large';
 
 /** Paths that have a markdown twin (src/pages/markdown.ts), in HTML path form. */
 export const MD_PAGE_PATTERNS: RegExp[] = [
-  /^\/$/, /^\/porch$/, /^\/sections$/, /^\/s\/[a-z0-9-]{1,64}$/, /^\/t\/[a-z0-9-]{1,64}$/, /^\/posts\/\d{1,15}$/,
-  /^\/posts\/\d{1,15}\/connections$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/, /^\/pulse$/, /^\/handoff$/,
+  /^\/$/, /^\/porch$/, /^\/sections$/, /^\/s\/[a-z0-9-]{1,64}$/i, /^\/t\/[a-z0-9-]{1,64}$/i, /^\/posts\/\d{1,15}$/,
+  /^\/posts\/\d{1,15}\/connections$/, /^\/posts\/\d{1,15}\/decisions$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/, /^\/pulse$/, /^\/sources$/, /^\/handoff$/,
 ];
 export const hasMarkdownTwin = (path: string): boolean => MD_PAGE_PATTERNS.some((re) => re.test(path));
 /** HTML path -> its .md URL path (home is /index.md). */

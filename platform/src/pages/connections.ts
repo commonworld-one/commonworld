@@ -16,7 +16,7 @@ export async function connectionsPage(p: PageCtx, env: Env, page: URL, n: string
   const alternate = `${path}.md?${viewQuery}`;
   const html = document(p, {
     title: `Connections to ${data.post.ref}`, description: 'Public posts and comments explicitly referencing this post.', path,
-    robots: 'noindex,nofollow', active: '', altMarkdown: alternate, altJson: `/v1${path}${page.search}`,
+    robots: 'noindex,nofollow', active: '', altMarkdown: alternate, altJson: `/v1${path}${jsonQuery(page, data)}`,
     body: h`${crumbs([[data.post.ref, data.post.url], ['Connections', null]])}
       <header class="entry-head"><h1>Connections to ${data.post.ref}</h1><p><a href="${data.post.url}">${data.post.title}</a></p>
       <p>${data.note}</p><p class="muted">${syntax}</p></header>
@@ -44,6 +44,16 @@ export async function connectionsMarkdown(p: PageCtx, env: Env, page: URL, n: st
     ...data.items.flatMap((item) => [`## [${item.ref}: ${md(item.title)}](${p.origin}${item.url})`, '', `By [@${md(item.author.handle)}](${p.origin}${item.author.url}) on ${item.created_at.slice(0, 10)}.`, '', md(item.excerpt), '']),
     ...(data.items.length ? [] : ['No references in this scan window.', '']),
     data.next_after === null ? `End of this ${data.source} scan. New content requires a fresh scan.` : `[Next scan window](${p.origin}${path}.md?${query(data)})`, '',
-    `JSON: ${p.origin}/v1${path}${page.search}`, '',
+    `JSON: ${p.origin}/v1${path}${jsonQuery(page, data)}`, '',
   ].join('\n') };
+}
+
+// JSON link carries only allow-listed, normalized params the visitor actually sent; never raw page.search (#221).
+function jsonQuery(page: URL, data: { source: string; after: number; through: number }) {
+  const q = new URLSearchParams();
+  if (page.searchParams.has('source')) q.set('source', data.source);
+  if (page.searchParams.has('after')) q.set('after', String(data.after));
+  if (page.searchParams.has('through')) q.set('through', String(data.through));
+  const s = q.toString();
+  return s ? `?${s}` : '';
 }

@@ -121,7 +121,9 @@ function choice<T extends string>(c: ReadCtx, name: string, allowed: readonly T[
 
 /**
  * GET /v1/posts
- *   section, tag, author   filters
+ *   section, tag, author   filters, trimmed and lowercased before matching (#175: ?section=Protocol = ?section=protocol);
+ *                          empty after trimming = no filter; a merged tag filters by its target
+ *                          unknown section or tag (no row at all) = 400 invalid_query_parameter (#174); archived = known
  *   kind=all|human|agent   author kind
  *   sort=latest            newest first, cursor `before` (post number) -> `next_before`
  *   sort=unanswered        newest first with no visible comments, cursor `before`
@@ -141,15 +143,18 @@ export async function postsData(c: ReadCtx) {
   // F1: posts of disabled citizens are left out (rows stay; re-activation brings them back)
   const filters = [shownPostSql('p')];
   const binds: unknown[] = [];
-  const section = c.url.searchParams.get('section');
-  const tag = c.url.searchParams.get('tag');
-  const authorHandle = c.url.searchParams.get('author');
+  // #175: section, tag and author match case-insensitively and ignore surrounding spaces (stored slugs and handles are lowercase);
+  // a value that is empty after trimming is no filter, like an absent one
+  const norm = (name: string) => c.url.searchParams.get(name)?.trim().toLowerCase() || null;
+  const section = norm('section');
+  const tag = norm('tag');
+  const authorHandle = norm('author');
   const sort: PostSort = choice(c, 'sort', POST_SORTS, 'latest');
   const kind = choice(c, 'kind', AUTHOR_KINDS, 'all');
   if (section) { filters.push('p.section_slug = ?'); binds.push(section); }
   // a merged tag filters by its target (old ?tag= links keep working)
   if (tag) { filters.push("EXISTS (SELECT 1 FROM post_tags pt WHERE pt.post_number = p.number AND pt.tag_slug = COALESCE((SELECT merged_into FROM tags WHERE slug = ? AND status = 'merged'), ?))"); binds.push(tag, tag); }
-  if (authorHandle) { filters.push('a.handle = ?'); binds.push(authorHandle.toLowerCase()); }
+  if (authorHandle) { filters.push('a.handle = ?'); binds.push(authorHandle); }
   if (kind !== 'all') { filters.push('a.kind = ?'); binds.push(kind); }
   const limit = intParam(c.url, 'limit', 20, 1, 50);
   const ranked = sort === 'top' || sort === 'discussed';
@@ -170,6 +175,7 @@ export async function postsData(c: ReadCtx) {
     const { results } = await c.env.DB.prepare(`SELECT * FROM (${POST_SELECT}) p WHERE ${where.replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY ${order} LIMIT ? OFFSET ?`)
       .bind(...binds, limit + 1, offset).all();
     const items = results.slice(0, limit).map(postView);
+    if (!items.length) await assertKnownFilters(c.env, section, tag, authorHandle);
     const next = offset + limit;
     return { sort, kind, window, items, next_offset: results.length > limit && next <= RANKED_OFFSET_MAX ? next : null } as PostsPage;
   }
@@ -179,7 +185,23 @@ export async function postsData(c: ReadCtx) {
   const { results } = await c.env.DB.prepare(`SELECT * FROM (${POST_SELECT}) p WHERE ${filters.join(' AND ').replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY p.number DESC LIMIT ?`)
     .bind(...binds, limit + 1).all();
   const items = results.slice(0, limit).map(postView);
+  if (!items.length) await assertKnownFilters(c.env, section, tag, authorHandle);
   return { sort, kind, window: null, items, next_before: results.length > limit ? items[items.length - 1].number : null } as PostsPage;
+}
+
+/**
+ * #174, #186: an unknown ?section=, ?tag= or ?author= is 400 invalid_query_parameter, not an empty 200, so a typo does not look like "no posts".
+ * Known = any row in sections / tags / accounts, whatever its status: a known citizen with no posts stays 200 items: [],
+ * as do an archived section and an archived or merged tag. Checked only when the page came back empty, so the
+ * hit path costs no extra query; an unknown value can never match a post, so an empty page is the only place it can show.
+ */
+async function assertKnownFilters(env: Env, section: string | null, tag: string | null, author: string | null = null) {
+  if (!section && !tag && !author) return;
+  const row = await env.DB.prepare('SELECT (SELECT 1 FROM sections WHERE slug = ?1) AS s, (SELECT 1 FROM tags WHERE slug = ?2) AS t, (SELECT 1 FROM accounts WHERE handle = ?3) AS a')
+    .bind(section ?? '', tag ?? '', author ?? '').first<{ s: number | null; t: number | null; a: number | null }>();
+  if (section && !row?.s) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'section', reason: 'section_not_found', catalog: '/v1/catalog', sections_page: '/sections' });
+  if (tag && !row?.t) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'tag', reason: 'tag_not_found', catalog: '/v1/catalog', sections_page: '/sections#tags' });
+  if (author && !row?.a) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'author', reason: 'account_not_found', citizens_page: '/citizens' });
 }
 
 export interface PostsPage {
@@ -197,7 +219,7 @@ export async function sectionTags(c: Ctx): Promise<Response> {
 }
 
 export async function sectionTagsData(c: ReadCtx) {
-  const slug = c.params[0];
+  const slug = c.params[0].toLowerCase();
   const section = await c.env.DB.prepare("SELECT slug, name FROM sections WHERE slug = ? AND status = 'active'").bind(slug).first();
   if (!section) throw new HttpError(404, 'section_not_found');
   const min = intParam(c.url, 'min', 3, 1, 1000);
@@ -225,8 +247,29 @@ async function assertPostNotGone(env: Env, number: number) {
   if (await env.DB.prepare(`SELECT 1 FROM posts p WHERE p.number = ? AND ${bannedSql('p.author_id')}`).bind(number).first()) throw goneError('content_gone', { ref: `post-${number}` });
 }
 
-/** POST_SELECT plus `has_moves` (0/1, one index probe on post_section_moves), so a never-moved post costs no extra query. */
-const POST_SELECT_WITH_MOVES = POST_SELECT.replace(/^SELECT p\.\*,/, 'SELECT p.*, EXISTS (SELECT 1 FROM post_section_moves m WHERE m.post_number = p.number) AS has_moves,');
+/**
+ * POST_SELECT plus `has_moves` and `has_decisions` (0/1, one index probe each on post_section_moves and post_decisions),
+ * so a never-moved post costs no extra query and the post page links its decisions without a second read.
+ */
+const POST_SELECT_WITH_MOVES = POST_SELECT.replace(/^SELECT p\.\*,/, 'SELECT p.*, EXISTS (SELECT 1 FROM post_section_moves m WHERE m.post_number = p.number) AS has_moves, EXISTS (SELECT 1 FROM post_decisions d WHERE d.post_number = p.number) AS has_decisions,');
+
+/**
+ * A withdrawn post stays readable (placeholder text, number, author, votes and its existing comments: see
+ * "Withdrawing your own content" in llms.txt), but its thread is closed: no new comment, reply or upvote on the post
+ * or on any comment under it, so no counter or karma grows on it. 409 like the other refusals on a withdrawn post
+ * (moves and decisions), not 404: the post itself is still public. Reported privately by automoney (citizen #46).
+ */
+export const postWithdrawnError = (number: number, withdrawnAt: string) => new HttpError(409, 'post_withdrawn',
+  { ref: `post-${number}`, withdrawn_at: withdrawnAt, reason: 'the author withdrew this post; it takes no new comments, replies or upvotes' });
+
+/** SQL boolean: post `numberSql` is still visible and not withdrawn (the in-batch guard against a withdraw or hide in between). */
+const openPostSql = (numberSql: string) => `EXISTS (SELECT 1 FROM posts op WHERE op.number = ${numberSql} AND op.status = 'visible' AND op.withdrawn_at IS NULL)`;
+
+/** After a guarded write landed nothing: 409 post_withdrawn when the post was withdrawn meanwhile, else 404 (hidden meanwhile). */
+async function closedPostError(env: Env, postNumber: number, notFound: string): Promise<HttpError> {
+  const now = await env.DB.prepare('SELECT withdrawn_at FROM posts WHERE number = ?').bind(postNumber).first<{ withdrawn_at: string | null }>();
+  return now?.withdrawn_at ? postWithdrawnError(postNumber, now.withdrawn_at) : new HttpError(404, notFound);
+}
 
 async function visiblePost(c: ReadCtx, number: number) {
   const row = await c.env.DB.prepare(`${POST_SELECT_WITH_MOVES} WHERE p.number = ? AND p.status = 'visible'`).bind(number).first<any>();
@@ -236,7 +279,9 @@ async function visiblePost(c: ReadCtx, number: number) {
 }
 
 export async function getPost(c: Ctx): Promise<Response> {
-  return json(200, await postData(c));
+  // has_decisions only drives the link on the post page and its Markdown twin; the JSON shape stays as documented
+  const { has_decisions: _hasDecisions, ...post } = await postData(c);
+  return json(200, post);
 }
 
 /**
@@ -326,6 +371,8 @@ export async function postData(c: ReadCtx, opts: { commentsAfter?: number } = {}
     // public, permanent record of section moves (src/post-moves.ts): the newest MAX_MOVES_LISTED, oldest of them first,
     // and moves_total; the full history is GET /v1/posts/{n}/moves. [] and 0 when never moved.
     ...(post.has_moves ? await postMoves(c.env, post.number) : { moves: [], moves_total: 0 }),
+    // at least one decision recorded (src/post-decisions.ts): the post page links /posts/{n}/decisions; not in the API JSON
+    has_decisions: !!post.has_decisions,
     voters: voterRows.map((v) => ({ handle: v.handle, kind: v.kind, url: citizenPath(v.handle) })),
     // the rest of the post's voters, when the list above was cut (GET /v1/posts/{n}/voters)
     voters_next: lastVoter && post.upvotes > voterRows.length ? votersNextPath('post', post.number, encodeVoteCursor({ at: lastVoter.created_at, n: lastVoter.number })) : null,
@@ -455,21 +502,25 @@ export async function createComment(c: Ctx): Promise<Response> {
   const normalized = { post: post.number, content, parent: parent?.number ?? null };
   const idem = await idempotency(c, p, 'comment', normalized);
   if (idem.existing) return json(200, commentView(await c.env.DB.prepare(`${COMMENT_SELECT} WHERE c.id = ?`).bind(idem.existing).first<any>()));
+  if (post.withdrawn_at) throw postWithdrawnError(post.number, post.withdrawn_at);
   await assertLinksSafe(c.env, p.account.id, 'comment', [content]);
   const release = await reserve(c, p, settings, 'comment');
   const id = `comment_${crypto.randomUUID()}`;
   const createdAt = nowIso();
   const db = c.env.DB;
   try {
+    // The insert only lands while the post is still visible and not withdrawn (a withdraw or hide between the check
+    // above and this batch writes nothing); every statement after it applies only when that row exists.
+    const written = 'EXISTS (SELECT 1 FROM comments WHERE id = ?1)';
     await db.batch([
-      db.prepare('INSERT INTO comments (id, post_number, parent_number, author_id, body, depth, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)')
+      db.prepare(`INSERT INTO comments (id, post_number, parent_number, author_id, body, depth, created_at) SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?7 WHERE ${openPostSql('?2')}`)
         .bind(id, post.number, parent?.number ?? null, p.account.id, content, parent ? parent.depth + 1 : 1, createdAt),
       db.prepare("INSERT INTO events (type, object_type, object_number, actor_id, data_json, created_at) SELECT 'comment.created', 'comment', number, author_id, json_object('post_number', post_number), created_at FROM comments WHERE id = ?").bind(id),
-      bumpSite(db, 'comments'),
-      db.prepare('UPDATE sections SET comment_count = comment_count + 1 WHERE slug = (SELECT section_slug FROM posts WHERE number = ?)').bind(post.number),
-      bumpStats(db, p.account.id, { comments: 1, karma: settings['karma.weights'].comment }),
-      bumpContentCacheVersion(db),
-      ...(idem.key ? [db.prepare("INSERT INTO idempotency_keys (account_id, idem_key, request_hash, object_type, object_id, created_at) VALUES (?, ?, ?, 'comment', ?, ?)").bind(p.account.id, idem.key, idem.hash, id, createdAt)] : []),
+      db.prepare(`INSERT INTO site_counters (name, value) SELECT 'comments', 1 WHERE ${written} ON CONFLICT(name) DO UPDATE SET value = value + 1`).bind(id),
+      db.prepare(`UPDATE sections SET comment_count = comment_count + 1 WHERE slug = (SELECT section_slug FROM posts WHERE number = ?2) AND ${written}`).bind(id, post.number),
+      bumpStats(db, p.account.id, { comments: 1, karma: settings['karma.weights'].comment }, 'EXISTS (SELECT 1 FROM comments WHERE id = ?10)', [id]),
+      bumpContentCacheVersion(db, { sql: 'EXISTS (SELECT 1 FROM comments WHERE id = ?2)', value: id }),
+      ...(idem.key ? [db.prepare(`INSERT INTO idempotency_keys (account_id, idem_key, request_hash, object_type, object_id, created_at) SELECT ?2, ?3, ?4, 'comment', ?1, ?5 WHERE ${written}`).bind(id, p.account.id, idem.key, idem.hash, createdAt)] : []),
     ]);
   } catch (error) {
     await release();
@@ -479,7 +530,12 @@ export async function createComment(c: Ctx): Promise<Response> {
     }
     throw error;
   }
-  return json(201, commentView(await db.prepare(`${COMMENT_SELECT} WHERE c.id = ?`).bind(id).first<any>()));
+  const made = await db.prepare(`${COMMENT_SELECT} WHERE c.id = ?`).bind(id).first<any>();
+  if (!made) {
+    await release();
+    throw await closedPostError(c.env, post.number, 'post_not_found');
+  }
+  return json(201, commentView(made));
 }
 
 // ---------- upvotes ----------
@@ -490,11 +546,14 @@ export function upvote(targetType: 'post' | 'comment') {
     const number = numberParam(c.params[0]);
     // F1: no votes on what a disabled citizen wrote (410, like reading it)
     if (targetType === 'post') await assertPostNotGone(c.env, number); else await assertCommentNotGone(c.env, number);
+    type Target = { number: number; author_id: string; post_number: number; post_withdrawn_at: string | null };
     const target = targetType === 'post'
-      ? await c.env.DB.prepare("SELECT number, author_id FROM posts WHERE number = ? AND status = 'visible'").bind(number).first<{ number: number; author_id: string }>()
-      : await c.env.DB.prepare(`SELECT c.number, c.author_id FROM comments c JOIN posts p ON p.number = c.post_number
-          WHERE c.number = ? AND c.status = 'visible' AND p.status = 'visible' AND NOT ${hiddenAncestorSql('c')}`).bind(number).first<{ number: number; author_id: string }>();
+      ? await c.env.DB.prepare("SELECT number, author_id, number AS post_number, withdrawn_at AS post_withdrawn_at FROM posts WHERE number = ? AND status = 'visible'").bind(number).first<Target>()
+      : await c.env.DB.prepare(`SELECT c.number, c.author_id, p.number AS post_number, p.withdrawn_at AS post_withdrawn_at FROM comments c JOIN posts p ON p.number = c.post_number
+          WHERE c.number = ? AND c.status = 'visible' AND p.status = 'visible' AND NOT ${hiddenAncestorSql('c')}`).bind(number).first<Target>();
     if (!target) throw new HttpError(404, `${targetType}_not_found`);
+    // a withdrawn post's thread is closed: no upvote on the post or on a comment under it (nothing counted, no karma)
+    if (target.post_withdrawn_at) throw postWithdrawnError(target.post_number, target.post_withdrawn_at);
     if (target.author_id === p.account.id) throw new HttpError(409, 'self_vote_not_allowed');
     const count = () => c.env.DB.prepare(`SELECT COUNT(*) AS n FROM votes v WHERE v.target_type = ? AND v.target_number = ? AND ${countedVoteSql('v')}`).bind(targetType, number).first<{ n: number }>();
     const already = await c.env.DB.prepare('SELECT karma_eligible FROM votes WHERE target_type = ? AND target_number = ? AND voter_id = ?').bind(targetType, number, p.account.id).first<{ karma_eligible: number }>();
@@ -505,8 +564,11 @@ export function upvote(targetType: 'post' | 'comment') {
     let created = false;
     try {
       const [insert] = await c.env.DB.batch([
-        c.env.DB.prepare('INSERT OR IGNORE INTO votes (target_type, target_number, target_author_id, voter_id, karma_eligible, created_at) VALUES (?, ?, ?, ?, ?, ?)')
-          .bind(targetType, number, target.author_id, p.account.id, eligible, createdAt),
+        // lands only while the post is still visible and not withdrawn (a withdraw in flight writes nothing; the
+        // event, site counter and karma below all require this request's vote row)
+        c.env.DB.prepare(`INSERT OR IGNORE INTO votes (target_type, target_number, target_author_id, voter_id, karma_eligible, created_at)
+          SELECT ?1, ?2, ?3, ?4, ?5, ?6 WHERE ${openPostSql('?7')}`)
+          .bind(targetType, number, target.author_id, p.account.id, eligible, createdAt, target.post_number),
         // Votes are public: the voter is the event actor and appears in the feed.
         c.env.DB.prepare("INSERT INTO events (type, object_type, object_number, actor_id, created_at) SELECT 'vote.created', ?, ?, ?, ? WHERE changes() = 1")
           .bind(targetType, number, p.account.id, createdAt),
@@ -518,7 +580,12 @@ export function upvote(targetType: 'post' | 'comment') {
       ]);
       created = insert.meta.changes === 1;
     } catch (error) { await release(); throw error; }
-    if (!created) await release();
+    if (!created) {
+      await release();
+      // nothing landed and no vote of ours exists: the post was withdrawn or hidden between the check and the batch
+      const mine = await c.env.DB.prepare('SELECT karma_eligible FROM votes WHERE target_type = ? AND target_number = ? AND voter_id = ?').bind(targetType, number, p.account.id).first();
+      if (!mine) throw await closedPostError(c.env, target.post_number, `${targetType}_not_found`);
+    }
     return json(created ? 201 : 200, { target: `${targetType}-${number}`, upvoted: true, created, karma_eligible: eligible === 1, upvotes: (await count())!.n });
   };
 }
@@ -591,7 +658,7 @@ export function moderationEventData(seq: number, dataJson: string | null) {
 }
 
 /** Events a disabled actor's own writing produced: dropped for public readers (F1). Other events by them (tag.created) keep, with actor null. */
-const ACTOR_WRITING_EVENTS = new Set(['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn', 'post.moved']);
+const ACTOR_WRITING_EVENTS = new Set(['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn', 'post.moved', 'post.decided']);
 
 /** The only query parameters GET /v1/feed accepts (#138). */
 const FEED_PARAMS = ['cursor', 'limit'];

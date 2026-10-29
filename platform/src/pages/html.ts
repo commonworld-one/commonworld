@@ -102,13 +102,44 @@ export function plainText(md: string): string {
   return t.replace(/\uE000([0-9a-f]{2})\uE001/g, (_m, hex: string) => String.fromCharCode(parseInt(hex, 16))); // escapes back as plain characters
 }
 
-/** Plain-text excerpt for cards and meta descriptions: collapses whitespace, cuts at a word boundary. */
+/** Grapheme segmenter (Intl.Segmenter is in workerd and Node 16+); null where a runtime lacks it, then code points are used. */
+const GRAPHEMES: Intl.Segmenter | null = typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function'
+  ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null;
+
+/**
+ * The first `limit` user-perceived characters of `text`: grapheme clusters (an emoji with skin tone, a ZWJ family, a
+ * flag, a letter with combining accents count as one), or code points without Intl.Segmenter. Never splits a
+ * surrogate pair. Reads lazily, so a long body costs only `limit` segments. Exported for tests.
+ */
+export function leadingGraphemes(text: string, limit: number): string[] {
+  const out: string[] = [];
+  if (limit <= 0) return out;
+  const it: Iterable<string> = GRAPHEMES ? (function* () { for (const s of GRAPHEMES.segment(text)) yield s.segment; })() : text;
+  for (const g of it) { out.push(g); if (out.length >= limit) break; }
+  return out;
+}
+
+/**
+ * `t` (already whitespace-collapsed) cut to at most `max` characters, counted in grapheme clusters (code points without
+ * Intl.Segmenter), with the last one being '…'. Cuts at the last space when it is past 60% of `max`, else mid-word.
+ * Returns `t` unchanged when it fits. Shared by excerptText (layout.ts) and excerpt.
+ */
+export function cutExcerpt(t: string, max: number, tidy = (s: string) => s): string {
+  if (t.length <= max) return t; // UTF-16 length >= grapheme count: fits for sure, no segmenting
+  const g = leadingGraphemes(t, max + 1);
+  if (g.length <= max) return t;
+  const cut = g.slice(0, Math.max(0, max - 1));
+  const sp = cut.lastIndexOf(' ');
+  return tidy((sp > max * 0.6 ? cut.slice(0, sp) : cut).join('')) + '…';
+}
+
+/**
+ * Plain-text excerpt for cards and meta descriptions: collapses whitespace, cuts at a word boundary. `max` counts
+ * grapheme clusters (see cutExcerpt), so an emoji or accented letter is never split.
+ */
 export function excerpt(text: string, max: number): string {
   const t = String(text ?? '').replace(/\s+/g, ' ').trim();
-  if (t.length <= max) return t;
-  const cut = t.slice(0, max - 1);
-  const sp = cut.lastIndexOf(' ');
-  return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,.;:–-]+$/, '') + '…';
+  return cutExcerpt(t, max, (s) => s.replace(/[\s,.;:–-]+$/, ''));
 }
 
 /**

@@ -1,4 +1,4 @@
-// Vendored from commonworld-one/commonworld trust/src/domain.ts @ 539d06f (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
+// Vendored from commonworld-one/commonworld trust/src/domain.ts @ 1780784 (scripts/vendor-trust.sh). Do not edit here: change the engine upstream and re-vendor.
 /** Domain normalisation and the candidate names a blocklist entry may be written under. */
 
 /** Shared hosting / platform suffixes: a listing of one of THESE as a whole would flag every site on them, so a
@@ -13,20 +13,47 @@ export const SHARED_SUFFIXES = new Set([
   'co.uk', 'com.au', 'co.jp', 'com.br', 'co.in', 'com.cn', 'co.kr', 'com.tr', 'com.mx',
 ]);
 
-/** 'HTTPS://WWW.Example.com./x' or 'Example.com' -> 'example.com' (lower case, no scheme/path/port, no trailing dot,
- * no leading www.). Returns '' when there is no usable host name. */
+/** Outcome of reading the host name of a link or domain input (see hostOf). */
+export interface HostInfo {
+  /** Normalized domain ('' unless status is 'domain'). */
+  domain: string;
+  /** domain: a usable domain name. empty: no input. not_a_domain: a well-formed name with no dot (localhost, an
+   * intranet name) or an IP literal in brackets, which no domain blocklist can list. unreadable: a host a browser may
+   * still resolve but that cannot be reduced to a plain domain name (the parser rejects it, or it keeps characters or a
+   * label structure no domain name has); a safety check must treat it as unsafe rather than skip it. */
+  status: 'domain' | 'empty' | 'not_a_domain' | 'unreadable';
+}
+
+const HOST_CHARS = /^[a-z0-9_.-]+$/;
+
+/**
+ * Reads the host the way a browser does: the WHATWG URL parser (Node and Cloudflare Workers alike) applies IDNA
+ * mapping (so the label separators U+3002, U+FF0E and U+FF61 become '.', full-width letters become ASCII), percent-
+ * decodes the host, turns Unicode labels into punycode (xn--), lower-cases, drops userinfo and port, and treats '\' as
+ * '/'. Input with or without a scheme gives the same answer (any scheme is read as https so the host is always parsed as
+ * a special-scheme host). Then trailing dots are dropped and leading "www." labels are removed while a dot remains.
+ */
+export function hostOf(input: string): HostInfo {
+  let s = String(input ?? '').trim();
+  if (!s) return { domain: '', status: 'empty' };
+  const scheme = s.indexOf('://');
+  if (scheme >= 0) s = s.slice(scheme + 3);
+  let host: string;
+  try { host = new URL('https://' + s).hostname; } catch { return { domain: '', status: 'unreadable' }; }
+  if (host.startsWith('[')) return { domain: '', status: 'not_a_domain' };  // IPv6 literal
+  host = host.replace(/\.+$/, '');
+  while (host.startsWith('www.') && host.indexOf('.', 4) > 0) host = host.slice(4);
+  if (!host) return { domain: '', status: 'empty' };
+  if (!HOST_CHARS.test(host) || host.startsWith('.') || host.includes('..')) return { domain: '', status: 'unreadable' };
+  if (!host.includes('.')) return { domain: '', status: 'not_a_domain' };
+  return { domain: host, status: 'domain' };
+}
+
+/** 'HTTPS://WWW.Example.com./x', 'Example.com' or 'u:p@Example.com:8080' -> 'example.com'; 'bücher.de' ->
+ * 'xn--bcher-kva.de'; 'example\u3002com' and 'example%2Ecom' -> 'example.com' (see hostOf). Returns '' when there is no
+ * usable domain name: callers that guard publishing must not read '' as safe (use hostOf to tell why). Idempotent. */
 export function normalizeDomain(input: string): string {
-  let s = String(input || '').trim().toLowerCase();
-  if (!s) return '';
-  if (s.includes('://')) {
-    try { s = new URL(s).hostname; } catch { return ''; }
-  } else {
-    s = s.split(/[/?#]/)[0].split('@').pop()!.replace(/:\d+$/, '');
-  }
-  s = s.replace(/\.+$/, '');
-  if (s.startsWith('www.')) s = s.slice(4);
-  if (!/^[a-z0-9.-]+$/.test(s) || !s.includes('.') || s.startsWith('.') || s.includes('..')) return '';
-  return s;
+  return hostOf(input).domain;
 }
 
 /** Names under which a blocklist would list `domain`: the domain itself, its www. form, and each parent domain with at
