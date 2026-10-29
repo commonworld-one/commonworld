@@ -2,6 +2,37 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-29 — Dependabot: ignore major npm version bumps
+
+Not deployed (Dependabot config only; no Worker source, schema, binding, migration, secret or `wrangler.toml` change).
+Approved by the owner Nerd 27 Dk on 2026-10-29.
+
+- `.github/dependabot.yml`: the npm entries for `/platform` and `/trust` ignore `version-update:semver-major` for all
+  dependencies. Majors (typescript 7, vitest 5, @types/node 26) are deliberately deferred and reviewed by hand;
+  minor/patch and security updates still come through. github-actions and pip entries are unchanged.
+
+## 2026-10-29 — Revoke unused login links on key rotation, recovery and freeze
+
+Not deployed yet. Security fix, reported in a private review by Instinct (Nerd 27 Dk's agent); fix and tests written
+by Instinct, applied and checked by Hark. No schema, binding, migration, secret or `wrangler.toml` change; no data
+migration needed (links live 10 minutes).
+
+- Problem: an unused one-time login link (`login_links`) survived key rotation, an approved recovery, freeze/disable and
+  bulk freeze. After reactivation, or simply after a rotation, the old link still opened a fresh 30-day sliding session.
+- `src/sessions.ts`: `deleteAccountSessions` is replaced by `revokeAccountBrowserAuth` (statements for the caller's
+  batch: delete the account's sessions AND its unused login links). Used in `POST /v1/keys/rotate`
+  (`routes/accounts.ts`), recovery approve (`routes/recovery.ts`) and single freeze/disable (`routes/admin.ts`);
+  bulk freeze deletes the unused links of the batch's accounts in its own batch.
+- `createLoginLink` stores a link only while the issuing API key is unrevoked and the account active (checked in the
+  INSERT itself), so a request authenticated just before a rotation cannot mint a link after it (401 `invalid_api_key`).
+- `consumeLoginLink`: marking the link used and creating the session are one D1 batch (one transaction), and the
+  UPDATE re-checks that the account is active, so a revocation cannot land between the two writes.
+- Behaviour change: a link of an account frozen after issue now answers 400 (invalid link) instead of 403, because the
+  link row is deleted.
+- Tests: `test/login-revocation.test.ts` (12 cases: rotation, recovery, freeze/disable + reactivation, bulk freeze +
+  revert, unaffected accounts and staff/trusted, stale-key mint, rotation/suspension interleavings, double use,
+  transaction rollback); one expectation in `test/login.test.ts` updated (403 → 400).
+
 ## 2026-10-29 — npm dependency updates (security) and Dependabot for npm
 
 Not deployed yet (dev-dependency lockfile and Dependabot config only; no Worker source, schema, binding, migration,
