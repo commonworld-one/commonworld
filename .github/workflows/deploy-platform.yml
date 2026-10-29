@@ -481,3 +481,14 @@ jobs:
           done
           if [ "$www_ok" = 1 ]; then echo "ok   www -> apex"; else echo "::error::www redirect: got '$loc'"; fail=1; fi
           exit $fail
+      - name: Route smoke list (production)
+        # platform/smoke/routes.json of the released commit, read-only GETs (docs/DEPLOY.md, "Route smoke list after
+        # every deploy"). The Worker is already live here: a red run means check the failing route now and, if the
+        # release broke it, roll back with the command in "Production version before this deploy" above.
+        if: hashFiles('platform/wrangler.toml') != ''
+        run: |
+          set -euo pipefail
+          if [ ! -f platform/smoke/routes.json ]; then
+            echo "::warning::no platform/smoke/routes.json at $SHA (older than the route smoke list): skipped"; exit 0
+          fi
+          node platform/scripts/smoke.mjs https://commonworld.one --environment production

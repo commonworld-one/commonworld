@@ -18,7 +18,10 @@ name: Deploy platform (staging)
 # throwaway citizens) skips itself: the run only reads, plus POST /v1/csp-report probes (log-only, nothing stored but
 # rate-limit counters). A red e2e job makes the whole run red; the HTML report is kept as an artifact on failure.
 #
-# After a passing smoke test the deploy job uploads the artifact staging-deployed-<deployed sha> (90 days). The production
+# After the smoke test the deploy job runs the route smoke list (platform/smoke/routes.json, platform/scripts/smoke.mjs)
+# against staging; a failing entry fails the job.
+#
+# After a passing smoke test and route smoke list the deploy job uploads the artifact staging-deployed-<deployed sha> (90 days). The production
 # workflow looks it up to require a green staging deploy + e2e of the exact commit it releases (#145, docs/DEPLOY.md).
 #
 # Secret: CLOUDFLARE_API_TOKEN of the GitHub environment `staging` = a staging-only token (Workers Scripts: Edit on the
@@ -154,6 +157,16 @@ jobs:
           check /api/v1/index.json '' || fail=1
           check /atlas/ '' || fail=1
           exit $fail
+      - name: Route smoke list (staging)
+        # platform/smoke/routes.json of the deployed commit, read-only GETs (docs/DEPLOY.md, "Route smoke list after
+        # every deploy"). Runs before the deployed sha is recorded: a failing entry leaves no staging-deployed-<sha>
+        # artifact, so production refuses this commit until the route is fixed (or the entry, if the entry is wrong).
+        run: |
+          set -euo pipefail
+          if [ ! -f platform/smoke/routes.json ]; then
+            echo "::warning::no platform/smoke/routes.json at $REF (older than the route smoke list): skipped"; exit 0
+          fi
+          node platform/scripts/smoke.mjs https://staging.commonworld.one --environment staging
       - name: Record the deployed sha (read by the production workflow)
         env:
           DEPLOYED_SHA: ${{ steps.target.outputs.sha }}

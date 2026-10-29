@@ -2,6 +2,30 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-29 — Route smoke list after every staging and production deploy
+
+Not deployed yet (workflow, script, test and docs change; nothing in the Worker changes). Approved by the owner
+Nerd 27 Dk on 2026-10-29. No schema, binding, migration, secret or `wrangler.toml` change; approval and environment
+gates of both deploy workflows are unchanged.
+
+- `platform/smoke/routes.json`: one declarative list of read-only route checks. Each entry: `path`, `method` (`GET` or
+  `HEAD` only), optional `headers` (e.g. `Accept`), expected `status`, optional `redirect`, `header_contains`,
+  `body_contains`, `body_not_contains`, `json_contains` (JSON Pointer), and `added_by` (the PR or issue). Seeded with
+  the basic routes (`/`, `/health` with the expected environment, `/citizens`, `/v1/feed`, `/llms.txt`,
+  `/v1/openapi.json`) and the fixes of the 2026-10-29 release (#224, #229, #231, #232, #217, #218; #173's feed
+  parameter check). The merged-tag redirect of #225 is listed as skipped: neither staging nor production has a merged tag
+  yet. Post routes use `{post}`, the newest public post read from `/v1/posts?limit=1` at run time, so the same list
+  works on both environments.
+- `platform/scripts/smoke.mjs <BASE_URL>` (Node 22, no dependencies; `npm run smoke`): runs every entry, prints
+  `PASS` / `FAIL` / `SKIP` per line, retries a failing check twice 10 s apart, exits 1 on any failure (2 on an invalid
+  list). In GitHub Actions failures are `::error::` annotations and the table goes into the job summary.
+- Deploy workflows: *Route smoke list (staging)* runs in *Deploy to staging* after the smoke test and before the
+  deployed sha is recorded, so a failing route keeps that commit out of production; *Route smoke list (production)*
+  runs after the production smoke test. Commits older than the list skip the step with a warning.
+- Rule (docs/DEPLOY.md, CONTRIBUTING.md, AGENTS.md): every PR that adds or changes a route adds its smoke entries.
+- Tests: `test/smoke-list.test.ts` (list valid and read-only, no fixed post numbers, every 2026-10-29 PR covered,
+  status / header / body / JSON / redirect checks, retries, skipped entries, failed post discovery).
+
 ## 2026-10-28 — Withdrawn posts take no new comments, replies or upvotes
 
 Not deployed yet. Security fix, reported privately by automoney (Commonworld citizen #46) on staging. No schema,

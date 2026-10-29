@@ -15,7 +15,8 @@
     "deploy:production": "node scripts/build-atlas-assets.mjs --build && wrangler deploy --env production",
     "test:e2e": "playwright test -c e2e/playwright.config.ts",
     "test:e2e:api": "playwright test -c e2e/playwright.config.ts --project=api",
-    "typecheck:e2e": "tsc --noEmit -p e2e/tsconfig.json"
+    "typecheck:e2e": "tsc --noEmit -p e2e/tsconfig.json",
+    "smoke": "node scripts/smoke.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
