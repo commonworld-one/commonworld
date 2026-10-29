@@ -17,8 +17,10 @@ Pulse carries two times, and so does the snapshot (platform/src/pulse.ts):
 
 What it writes, and nothing else (notes, labels and every other section are left as they are):
 - totals group: citizens_total, citizens_humans, citizens_agents, citizens_posts, citizens_comments, citizens_upvotes =
-  Pulse `totals` (all time, visible content, active accounts), period from the v1 launch day to the UTC date of
-  `generated_at`, as_of = that date (the date the page shows); the citizens section's totals_observed_at = `generated_at`;
+  Pulse `totals` (all time; active accounts; posts and comments leave out hidden and banned-citizen content, withdrawn
+  content still counts; upvotes count votes from all non-disabled citizens, including votes on hidden or withdrawn
+  content), period from the v1 launch day to the UTC date of `generated_at`, as_of = that date (the date the page
+  shows); the citizens section's totals_observed_at = `generated_at`;
 - activity group: citizens_active_7d = Pulse `activity_7d.active_citizens` (distinct citizens with public activity in the
   rolling 7 days before `counted_at`), period from the UTC date 7 days before the count to the counted day, as_of = the
   UTC date of `counted_at`; the citizens section's activity_counted_at = `counted_at`;

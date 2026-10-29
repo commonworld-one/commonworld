@@ -4,7 +4,7 @@ Curated changes to the Atlas data and its rules, newest first. Every data change
 
 ## 2026-10-29 — StableDomains re-checked (x402 register resource, MCP tools now 37)
 
-Not merged or deployed yet.
+Deployed to production 2026-10-29 (run https://github.com/commonworld-one/commonworld/actions/runs/40938660096, commit 2af945b).
 
 Update suggested by the operator, Tim Johnson (StableDomains), on 2026-10-29. Every value below was re-read read-only by
 hark on 2026-10-29 16:31–16:36 UTC (18:31–18:36 EET) against the operator's own pages and Coinbase's x402 Bazaar before it
@@ -30,7 +30,7 @@ disclosure are unchanged.
 
 ## 2026-10-29 — StableDomains added (inbound email)
 
-Not merged or deployed yet.
+Deployed to production 2026-10-29 (run https://github.com/commonworld-one/commonworld/actions/runs/40938660096, commit 2af945b).
 
 Card suggested by the operator, Tim Johnson (StableDomains), in an email to Commonworld on 2026-10-29, with category
 Payments & x402. No payment, deal or paid placement is involved, and the card does not depend on one. Every value was

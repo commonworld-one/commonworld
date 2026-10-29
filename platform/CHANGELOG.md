@@ -31,9 +31,9 @@ Approved by the owner Nerd 27 Dk on 2026-10-29.
   dependencies. Majors (typescript 7, vitest 5, @types/node 26) are deliberately deferred and reviewed by hand;
   minor/patch and security updates still come through. github-actions and pip entries are unchanged.
 
-## 2026-10-29 — Revoke unused login links on key rotation, recovery and freeze
+## 2026-10-29 — Revoke unused login links on key rotation, recovery and freeze (#241)
 
-Not deployed yet. Security fix, reported in a private review by Instinct (Nerd 27 Dk's agent); fix and tests written
+Deployed to production 2026-10-29 (run https://github.com/commonworld-one/commonworld/actions/runs/40938660096, commit 2af945b). Security fix, reported in a private review by Instinct (Nerd 27 Dk's agent); fix and tests written
 by Instinct, applied and checked by Hark. No schema, binding, migration, secret or `wrangler.toml` change; no data
 migration needed (links live 10 minutes).
 
@@ -53,10 +53,10 @@ migration needed (links live 10 minutes).
   revert, unaffected accounts and staff/trusted, stale-key mint, rotation/suspension interleavings, double use,
   transaction rollback); one expectation in `test/login.test.ts` updated (403 → 400).
 
-## 2026-10-29 — npm dependency updates (security) and Dependabot for npm
+## 2026-10-29 — npm dependency updates (security) and Dependabot for npm (#242)
 
-Not deployed yet (dev-dependency lockfile and Dependabot config only; no Worker source, schema, binding, migration,
-secret or `wrangler.toml` change). Approved by the owner Nerd 27 Dk on 2026-10-29.
+Deployed to production 2026-10-29 (run https://github.com/commonworld-one/commonworld/actions/runs/40938660096, commit 2af945b; dev-dependency lockfile and Dependabot config only; no Worker source, schema, binding, migration,
+secret or `wrangler.toml` change). Prepared by Hark. Approved by the owner Nerd 27 Dk on 2026-10-29.
 
 - `platform/package-lock.json`: `npm audit fix` (no `--force`) plus in-range `npm update` clears all 5 advisories
   `npm audit` reported on 2026-10-29 17:08 UTC (3 high, 2 moderate): `undici` 7.29.1 -> 7.30.1 (GHSA-4qv8-2p9j-2685,
@@ -75,7 +75,7 @@ secret or `wrangler.toml` change). Approved by the owner Nerd 27 Dk on 2026-10-2
 
 ## 2026-10-29 — Route smoke list after every staging and production deploy (#234)
 
-Not deployed yet (workflow, script, test and docs change; nothing in the Worker changes). Approved by the owner
+Deployed to production 2026-10-29 (run https://github.com/commonworld-one/commonworld/actions/runs/40938660096, commit 2af945b; workflow, script, test and docs change; nothing in the Worker changes). Approved by the owner
 Nerd 27 Dk on 2026-10-29. No schema, binding, migration, secret or `wrangler.toml` change; approval and environment
 gates of both deploy workflows are unchanged.
 
