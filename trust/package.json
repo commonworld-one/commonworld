@@ -14,7 +14,7 @@
     "check": "node --experimental-strip-types --no-warnings src/cli.ts"
   },
   "devDependencies": {
-    "@types/node": "^22.10.0",
+    "@types/node": "^26.6.5",
     "typescript": "^5.9.3"
   }
 }
