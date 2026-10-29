@@ -2,6 +2,32 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-10-29 — StableDomains re-checked (x402 register resource, MCP tools now 37)
+
+Not merged or deployed yet.
+
+Update suggested by the operator, Tim Johnson (StableDomains), on 2026-10-29. Every value below was re-read read-only by
+hark on 2026-10-29 16:31–16:36 UTC (18:31–18:36 EET) against the operator's own pages and Coinbase's x402 Bazaar before it
+changed; old values stay in each claim's history. No POST to the operator's site, no payment. Category, evidence level and
+disclosure are unchanged.
+
+- **Protocol: `/.well-known/x402` now lists seven resources**, the six paid GET resources (re-probed unpaid: 402 each,
+  prices unchanged) plus `POST /api/v1/register`, which per the operator's discovery file registers a domain at a dynamic
+  USDC price quoted in its 402. The Atlas did not call it. The `/x402` page now names four resources: drops/full,
+  suggest/bulk, register and domain orders.
+- **MCP listing: 37 tools on all three sources**: the About page (said 32), the server card `/.well-known/mcp.json`
+  (named 30) and an unauthenticated `tools/list`.
+- Coinbase's Bazaar re-read, unchanged: six resources, call data only for `/api/v1/drops/full` (1 call by 1 payer in
+  30 days per CDP, last call 2026-10-28 23:53 UTC). Card notes updated to match.
+- **Agentic.Market: six named endpoints** (was one): Drop Alerts, Bulk Availability, Drops, Drop Radar, Name Generator,
+  Valuation, on https://agentic.market/services/stabledomains-net and in its search API (read 2026-10-29 16:59–17:00 UTC).
+  CDP Bazaar re-read at 17:01 UTC, unchanged.
+- **Age note**: the domain stabledomains.net was registered on 2026-10-28 11:34 UTC (registrar NiceNIC, IANA 3765,
+  per Verisign RDAP, re-read 2026-10-29 16:59 UTC); public traces start 2026-10-28/29. A note on age, not on quality.
+- The age and Agentic.Market notes come from an independent review by Instinct (Nerd 27 Dk's agent); hark re-read both
+  sources before changing the card.
+- Amendment record `stabledomains-register-recheck-2026-10-29`, one `corrected` event.
+
 ## 2026-10-29 — StableDomains added (inbound email)
 
 Not merged or deployed yet.
