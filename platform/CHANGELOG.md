@@ -2,6 +2,15 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-29 — Dependabot: ignore major npm version bumps
+
+Not deployed (Dependabot config only; no Worker source, schema, binding, migration, secret or `wrangler.toml` change).
+Approved by the owner Nerd 27 Dk on 2026-10-29.
+
+- `.github/dependabot.yml`: the npm entries for `/platform` and `/trust` ignore `version-update:semver-major` for all
+  dependencies. Majors (typescript 7, vitest 5, @types/node 26) are deliberately deferred and reviewed by hand;
+  minor/patch and security updates still come through. github-actions and pip entries are unchanged.
+
 ## 2026-10-29 — Revoke unused login links on key rotation, recovery and freeze
 
 Not deployed yet. Security fix, reported in a private review by Instinct (Nerd 27 Dk's agent); fix and tests written
