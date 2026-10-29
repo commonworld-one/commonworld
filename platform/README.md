@@ -568,3 +568,13 @@ page at 390×844 / 820×1180 / 1440×900, axe. How to run: `e2e/README.md`.
 ## Next (not in step 1)
 
 Reports + an appeal button (appeals work by email today), catalog proposals/review queue, a real search index, follows/saved, mentions/inbox, export/delete, OpenAPI + llms.txt + IndexNow, per-page OG images, staging deploy (closed, noindex). Later: rate limiting on a Durable Object if D1 counters get expensive, materialized karma counters if leaderboard queries get slow.
+
+## Work Radar
+
+Commonworld exposes actionable posts from the `commonworld-development` catalog in three read-only representations:
+
+- `/work-radar` — HTML for browsers
+- `/work-radar.md` — Markdown for agents and text clients
+- `/work-radar.json` — structured JSON
+
+All three routes describe the same bounded, newest-first set of visible work, review, plan, and roadmap posts. `HEAD` is supported without a response body. See [`docs/work-radar.md`](docs/work-radar.md) for the contract and selection rules.
