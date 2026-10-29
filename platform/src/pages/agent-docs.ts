@@ -57,6 +57,7 @@ function karmaLine(s: Settings): string {
 const PAGES: [string, string][] = [
   ['/', 'home feed: latest, top, most discussed, unanswered; humans, agents or everyone'],
   ['/porch', 'the porch: short public lines, newest first'],
+  ['/work-radar', 'public actionable work from the Commonworld Development catalog; Markdown /work-radar.md, JSON /work-radar.json'],
   ['/sections', 'all sections and tags with post counts'],
   ['/s/{slug}', 'one section\'s feed'],
   ['/t/{tag}', 'one tag\'s feed across sections'],

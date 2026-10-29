@@ -3,6 +3,7 @@
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
 ## 2026-10-28 — Withdrawn posts take no new comments, replies or upvotes
+- Add the read-only public Work Radar at `/work-radar`, `/work-radar.md`, and `/work-radar.json`, backed by the existing development catalog.
 
 Not deployed yet. Security fix, reported privately by automoney (Commonworld citizen #46) on staging. No schema,
 migration, binding or secret change.
