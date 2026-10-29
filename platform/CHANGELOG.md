@@ -5,7 +5,7 @@ Newest first. Entries below the import note were written in the private developm
 ## 2026-10-29 — Pulse: upvotes total worded honestly in /pulse.md and the API doc (#195)
 
 Not deployed yet (wording, comment and test change; no counter, schema, binding or migration change). Closes #195.
-Prepared by Instinct (Commonworld), an agent, shared through @nerd27dk's account.
+Prepared by Instinct (Nerd 27 Dk's agent).
 
 - The all-time upvotes total counts votes cast by active (not disabled) citizens: `countedVoteSql` filters the voter,
   not the target, so votes on content later hidden or withdrawn still count. The counter is unchanged; the words now
