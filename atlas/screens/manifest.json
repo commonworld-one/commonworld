@@ -3882,6 +3882,19 @@
    "height": 750,
    "bytes": 20150
   },
+  "stabledomains-net": {
+   "file": "stabledomains-net.webp",
+   "sha256": "01508148659a5cba853ce6a306fabfbf51f6df0d814b15354941753d8881ee64",
+   "dhash": "557b693f35693a37",
+   "website": "https://stabledomains.net",
+   "source_url": "https://stabledomains.net/",
+   "http_status": 200,
+   "title": "StableDomains.net | Real domains. Paid in stablecoins. Bought by agents.",
+   "captured_at": "2026-10-29T14:15:49Z",
+   "width": 1200,
+   "height": 750,
+   "bytes": 47946
+  },
   "stableenrich": {
    "file": "stableenrich.webp",
    "sha256": "e749327f83f029436c3376b5818e160db8c0c8d94d5abdda62bbba214e6fdb89",
@@ -4754,5 +4767,5 @@
    "bytes": 44740
   }
  },
- "updated_at": "2026-10-27T18:57:39Z"
+ "updated_at": "2026-10-29T14:15:49Z"
 }
