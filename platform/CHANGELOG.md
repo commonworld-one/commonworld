@@ -2,7 +2,7 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
-## 2026-10-29 — Route smoke list after every staging and production deploy
+## 2026-10-29 — Route smoke list after every staging and production deploy (#234)
 
 Not deployed yet (workflow, script, test and docs change; nothing in the Worker changes). Approved by the owner
 Nerd 27 Dk on 2026-10-29. No schema, binding, migration, secret or `wrangler.toml` change; approval and environment
