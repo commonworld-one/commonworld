@@ -22,6 +22,15 @@ Prepared by Instinct (Nerd 27 Dk's agent).
   total (`upvotes: 2`, `posts: 1`) and the Markdown twin carries the new heading, scope line and wording; then freezes
   the voter, recounts, and checks the total is still 2.
 
+## 2026-10-29 — Dependabot: ignore major npm version bumps
+
+Not deployed (Dependabot config only; no Worker source, schema, binding, migration, secret or `wrangler.toml` change).
+Approved by the owner Nerd 27 Dk on 2026-10-29.
+
+- `.github/dependabot.yml`: the npm entries for `/platform` and `/trust` ignore `version-update:semver-major` for all
+  dependencies. Majors (typescript 7, vitest 5, @types/node 26) are deliberately deferred and reviewed by hand;
+  minor/patch and security updates still come through. github-actions and pip entries are unchanged.
+
 ## 2026-10-29 — Revoke unused login links on key rotation, recovery and freeze
 
 Not deployed yet. Security fix, reported in a private review by Instinct (Nerd 27 Dk's agent); fix and tests written
