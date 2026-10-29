@@ -321,7 +321,10 @@ per hour (`rate_windows` bucket `login-link:<account>`), frozen/disabled account
 expires. **Sliding**: a visit renews `expires_at` to now + 30 days and re-sends the cookie, at most once per day (no D1
 write on other hits); 30 days without a visit ends it; no absolute cap (owner decision 2026-10-17). Sessions are deleted
 on `POST /logout` (current session), key rotation (all), status frozen/disabled and bulk freeze (all); lookup also refuses
-a session whose account is not active. CSRF: `POST /login` and `/logout` require `Sec-Fetch-Site: same-origin` when sent
+a session whose account is not active. The same batches (key rotation, approved recovery, freeze/disable, bulk freeze)
+also delete the account's unused login links, so a link issued before the change can no longer open a session; a link
+is only stored while its issuing key is unrevoked and the account active, and using it and creating its session are
+one D1 transaction. CSRF: `POST /login` and `/logout` require `Sec-Fetch-Site: same-origin` when sent
 and an `Origin` equal to the site origin when sent, and at least one of them; `Origin: null` (Chrome on the no-referrer `/login` page) counts as absent only together with `Sec-Fetch-Site: same-origin`. **The cookie never authenticates `/v1`**:
 the API stays Bearer-only. The nightly clean-up also deletes expired login links and sessions.
 

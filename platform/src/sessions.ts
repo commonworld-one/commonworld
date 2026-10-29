@@ -9,6 +9,7 @@
  * Link tokens and session values are stored only as HMAC-SHA256(KEY_PEPPER, value).
  * Sessions slide: they end after SESSION_DAYS without a visit. A visit renews expires_at (and the cookie Max-Age) at most
  * once per SESSION_TOUCH_MS, so most page views do no D1 write. No absolute cap (owner decision 2026-10-17).
+ * Unused login links are revoked along with sessions on key rotation, recovery and suspension.
  * Sessions are deleted on sign-out, key rotation (POST /v1/keys/rotate) and when the account is frozen or disabled;
  * a session whose account is not active is also refused (and deleted) on lookup.
  *
@@ -48,11 +49,19 @@ const hash = (env: Env, value: string) => hmacHex(requirePepper(env), value);
 
 // ---------------------------------------------------------------- links
 
-export async function createLoginLink(env: Env, accountId: string, now = Date.now()): Promise<{ token: string; expires_at: string }> {
+export async function createLoginLink(env: Env, accountId: string, now = Date.now(), keyId?: string): Promise<{ token: string; expires_at: string }> {
+  // Direct callers resolve a key too; the HTTP route passes the key it authenticated with.
+  const issuingKey = keyId ?? (await env.DB.prepare('SELECT id FROM api_keys WHERE account_id = ? AND revoked_at IS NULL LIMIT 1')
+    .bind(accountId).first<{ id: string }>())?.id;
+  if (!issuingKey) throw new HttpError(401, 'invalid_api_key');
   const token = newLinkToken();
   const expiresAt = new Date(now + LINK_TTL_MS).toISOString();
-  await env.DB.prepare('INSERT INTO login_links (token_hash, account_id, created_at, expires_at) VALUES (?, ?, ?, ?)')
-    .bind(await hash(env, token), accountId, new Date(now).toISOString(), expiresAt).run();
+  // Recheck at the write: a request authenticated before rotation/recovery must not mint a link afterwards.
+  const inserted = await env.DB.prepare(`INSERT INTO login_links (token_hash, account_id, created_at, expires_at)
+    SELECT ?, a.id, ?, ? FROM accounts a JOIN api_keys k ON k.account_id = a.id
+    WHERE a.id = ? AND a.status = 'active' AND k.id = ? AND k.revoked_at IS NULL`)
+    .bind(await hash(env, token), new Date(now).toISOString(), expiresAt, accountId, issuingKey).run();
+  if (!inserted.meta.changes) throw new HttpError(401, 'invalid_api_key');
   return { token, expires_at: expiresAt };
 }
 
@@ -82,13 +91,22 @@ export async function consumeLoginLink(env: Env, token: string, now = Date.now()
   Promise<{ ok: true; account: AccountRow; session: string } | { ok: false; reason: 'invalid' | 'expired' | 'used' | 'account_inactive' }> {
   const state = await peekLoginLink(env, token, now);
   if (!state.ok) return state;
-  const used = await env.DB.prepare('UPDATE login_links SET used_at = ? WHERE token_hash = ? AND used_at IS NULL AND expires_at > ? RETURNING account_id')
-    .bind(new Date(now).toISOString(), await hash(env, token), new Date(now).toISOString()).first<{ account_id: string }>();
-  if (!used) return { ok: false, reason: 'used' }; // lost a race with another POST
   const session = newSessionValue();
   const at = new Date(now).toISOString();
-  await env.DB.prepare('INSERT INTO sessions (id, session_hash, account_id, created_at, last_seen_at, expires_at) VALUES (?, ?, ?, ?, ?, ?)')
-    .bind(`sess_${crypto.randomUUID()}`, await hash(env, session), used.account_id, at, at, new Date(now + SESSION_TTL_MS).toISOString()).run();
+  const tokenHash = await hash(env, token);
+  const sessionHash = await hash(env, session);
+  // Consume and session creation are one transaction. Revocation can land before or after this batch,
+  // never between its two writes and leave a newly created session behind.
+  const [used] = await env.DB.batch([
+    env.DB.prepare(`UPDATE login_links SET used_at = ? WHERE token_hash = ? AND used_at IS NULL AND expires_at > ?
+      AND account_id IN (SELECT id FROM accounts WHERE status = 'active')`)
+      .bind(at, tokenHash, at),
+    env.DB.prepare(`INSERT INTO sessions (id, session_hash, account_id, created_at, last_seen_at, expires_at)
+      SELECT ?, ?, account_id, ?, ?, ? FROM login_links WHERE token_hash = ? AND used_at = ? AND changes() = 1`)
+      .bind(`sess_${crypto.randomUUID()}`, sessionHash, at, at, new Date(now + SESSION_TTL_MS).toISOString(), tokenHash, at),
+  ]);
+  if (!used.meta.changes) return { ok: false, reason: 'used' };
+
   return { ok: true, account: state.account, session };
 }
 
@@ -143,9 +161,11 @@ export async function revokeSession(env: Env, sessionId: string): Promise<void> 
   await env.DB.prepare('DELETE FROM sessions WHERE id = ?').bind(sessionId).run();
 }
 
-/** Statement for batches: deletes every session of one account (key rotation, freeze, disable). */
-export const deleteAccountSessions = (db: D1Database, accountId: string): D1PreparedStatement =>
-  db.prepare('DELETE FROM sessions WHERE account_id = ?').bind(accountId);
+/** Statements for the caller's batch: revoke sessions AND unused browser sign-in credentials together. */
+export const revokeAccountBrowserAuth = (db: D1Database, accountId: string): D1PreparedStatement[] => [
+  db.prepare('DELETE FROM sessions WHERE account_id = ?').bind(accountId),
+  db.prepare('DELETE FROM login_links WHERE account_id = ? AND used_at IS NULL').bind(accountId),
+];
 
 // ---------------------------------------------------------------- CSRF
 
