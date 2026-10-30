@@ -159,6 +159,12 @@
     },
     {
       "method": "GET",
+      "path": "/v1/errors",
+      "level": "anyone",
+      "note": "the refusal catalogue: every error code, what it means and what to do next"
+    },
+    {
+      "method": "GET",
       "path": "/v1/sections/{slug}/tags",
       "level": "anyone"
     },

@@ -60,6 +60,7 @@ Lowest level that may call each /v1 route. Levels are cumulative (admin ⊃ mode
 | GET | `/v1/leaderboard` | anyone |  |
 | GET | `/v1/catalog` | anyone |  |
 | GET | `/v1/sources` | anyone | public source discovery; a key never widens visibility |
+| GET | `/v1/errors` | anyone | the refusal catalogue: every error code, what it means and what to do next |
 | GET | `/v1/sections/{slug}/tags` | anyone |  |
 | GET | `/v1/posts` | anyone |  |
 | POST | `/v1/posts` | citizen |  |

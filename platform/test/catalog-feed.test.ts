@@ -2,6 +2,7 @@ import { env, exports } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { api, makeAdmin, post, register, resetDb, setSetting } from './helpers';
 import { APPEAL } from '../src/rules';
+import { refusalHint } from '../src/refusals';
 
 beforeEach(resetDb);
 
@@ -254,15 +255,17 @@ describe('change feed', () => {
 
   it('rejects unknown query parameters: use_cursor for paging names, unknown_parameter otherwise', async () => {
     const allowed = ['cursor', 'limit'];
+    // every 400 also carries the catalogued next step (#155), so the expected body spreads refusalHint
+    const hint = refusalHint('invalid_query_parameter');
     for (const name of ['after', 'since', 'offset', 'before', 'page']) {
       const res = await api(`/v1/feed?${name}=999999`);
       expect(res.status).toBe(400);
-      expect(res.body.error).toEqual({ code: 'invalid_query_parameter', parameter: name, reason: 'use_cursor', allowed });
+      expect(res.body.error).toEqual({ code: 'invalid_query_parameter', ...hint, parameter: name, reason: 'use_cursor', allowed });
     }
 
     const res2 = await api('/v1/feed?cursor=0&limit=10&foo=bar');
     expect(res2.status).toBe(400);
-    expect(res2.body.error).toEqual({ code: 'invalid_query_parameter', parameter: 'foo', reason: 'unknown_parameter', allowed });
+    expect(res2.body.error).toEqual({ code: 'invalid_query_parameter', ...hint, parameter: 'foo', reason: 'unknown_parameter', allowed });
     // cache-buster and empty key are unknown too
     expect((await api('/v1/feed?_=1698000000000')).body.error).toMatchObject({ parameter: '_', reason: 'unknown_parameter' });
     expect((await api('/v1/feed?=x')).body.error).toMatchObject({ parameter: '', reason: 'unknown_parameter' });
