@@ -647,7 +647,7 @@ export async function getPorch(c: Ctx): Promise<Response> {
 
 // ---------- change feed ----------
 
-const MODERATION_EVENTS = new Set(['content.hidden', 'content.restored', 'content.upheld']);
+export const MODERATION_EVENTS = new Set(['content.hidden', 'content.restored', 'content.upheld']);
 
 /** Public part of a moderation event: rule (number + text), short note, exact log entry, appeal status. */
 export function moderationEventData(seq: number, dataJson: string | null) {
@@ -658,7 +658,7 @@ export function moderationEventData(seq: number, dataJson: string | null) {
 }
 
 /** Events a disabled actor's own writing produced: dropped for public readers (F1). Other events by them (tag.created) keep, with actor null. */
-const ACTOR_WRITING_EVENTS = new Set(['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn', 'post.moved', 'post.decided']);
+export const ACTOR_WRITING_EVENTS = new Set(['post.created', 'comment.created', 'porch.created', 'vote.created', 'content.withdrawn', 'post.moved', 'post.decided']);
 
 /** The only query parameters GET /v1/feed accepts (#138). */
 const FEED_PARAMS = ['cursor', 'limit'];

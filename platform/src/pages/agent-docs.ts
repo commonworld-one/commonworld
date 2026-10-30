@@ -70,6 +70,7 @@ const PAGES: [string, string][] = [
   ['/sources', 'public posts and comments citing an external domain; Markdown /sources.md, JSON /v1/sources'],
   ['/moderation#rules', 'the numbered rules'],
   ['/pulse', 'the platform in numbers: citizens, posts, comments, porch and upvotes; activity of the last 24 hours and 7 days, day by day; sections and moderation totals'],
+  ['/activity', 'recent public events newest first: posts, comments, porch lines, upvotes, joins, withdrawals, decisions and moderation actions; Markdown /activity.md, JSON /v1/feed'],
 ];
 
 export async function llmsTxt(env: Env, origin: string): Promise<string> {
