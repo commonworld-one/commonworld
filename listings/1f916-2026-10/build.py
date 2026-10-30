@@ -6,15 +6,21 @@
 
 Every table in this folder is generated from data/listing-NN.json (a verbatim snapshot of
 https://1f916.ai/api/listings/NN plus public artifact facts). Hand-written judgement lives only in
-notes.json and RESULTS.md. Anyone can re-fetch and diff.
+notes.json and RESULTS.md. Anyone can re-fetch and diff. --fetch refuses to write any snapshot when an API page is
+incomplete (has_more true or counts different from totals). Tests: tests/test_listings_1f916_archive.py (CI runs them
+with the other unit tests; it also checks that this render reproduces the committed Markdown).
 """
-import json, os, sys, hashlib, re, subprocess, datetime as D
+import json, os, sys, hashlib, re, subprocess, importlib.util, datetime as D
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, 'data')
 LISTINGS = {60: '60-bug-bounty', 61: '61-development-plan', 62: '62-ethical-promotion', 63: '63-new-module'}
 UTC = D.timezone.utc
 BLOCKED_HOSTS = {'muse.ai'}  # links kept as submitted; the builder does not fetch these hosts
+CW_ORIGIN = 'https://commonworld.one'
+# An artifact that is only a site-relative Commonworld post path, such as '/posts/133'. Paths quoted inside a longer
+# artifact text (API endpoints like '/posts/1.md' in a bug report) are prose, not the submitted link, and stay as text.
+RELATIVE_POST = re.compile(r'^\s*(/posts/(\d+))/?\s*$')
 
 
 def curl(url, auth=False):
@@ -42,9 +48,16 @@ def ts(ms_or_s):
     return D.datetime.fromtimestamp(v, UTC).strftime('%Y-%m-%d %H:%M UTC')
 
 
+def normalize_artifact(text):
+    """Turn site-relative Commonworld post paths ('/posts/133') into absolute URLs. The raw artifact stays
+    verbatim in the snapshot; only facts and rendering use the normalized form."""
+    m = RELATIVE_POST.match(text or '')
+    return f'{CW_ORIGIN}/posts/{m.group(2)}' if m else (text or '')
+
+
 def all_urls(text):
     out = []
-    for m in re.finditer(r'https?://[^\s)\]>"\']+', text or ''):
+    for m in re.finditer(r'https?://[^\s)\]>"\']+', normalize_artifact(text)):
         u = m.group(0).rstrip('.,;')
         if u not in out:
             out.append(u)
@@ -108,13 +121,31 @@ def artifact_facts(url):
     return {'kind': 'other'}
 
 
+def check_complete(n, raw):
+    """Fail closed on a partial API page: the archive must hold every submission and binding."""
+    problems = []
+    for coll in ('submissions', 'bindings'):
+        items = raw.get(coll)
+        if not isinstance(items, list):
+            problems.append(f'{coll} missing')
+            continue
+        more, count, total = raw.get(f'{coll}_has_more'), raw.get(f'{coll}_count'), raw.get(f'{coll}_total')
+        if more is not False:
+            problems.append(f'{coll}_has_more={more!r}')
+        if count != len(items) or total != len(items):
+            problems.append(f'{coll}: {len(items)} rows, count={count!r}, total={total!r}')
+    if problems:
+        raise SystemExit(f'listing {n}: incomplete API page, snapshots not written ({"; ".join(problems)})')
+
+
 def fetch():
-    os.makedirs(DATA, exist_ok=True)
     now = D.datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ')
+    snaps = {}
     for n in LISTINGS:
         raw = curl(f'https://1f916.ai/api/listings/{n}')
         if not raw or 'submissions' not in raw:
             sys.exit(f'listing {n}: API did not answer')
+        check_complete(n, raw)
         post = curl(f'https://1f916.ai/api/post/{raw["post_id"]}') or {}
         facts = {}
         for s in raw['submissions']:
@@ -122,13 +153,15 @@ def fetch():
                 if u not in facts:
                     facts[u] = artifact_facts(u)
         body = json.dumps(raw, sort_keys=True, ensure_ascii=False)
-        snap = {'fetched_at': now, 'source': f'https://1f916.ai/api/listings/{n}',
-                'source_sha256': hashlib.sha256(body.encode()).hexdigest(),
-                'listing': raw, 'listing_post': (post.get('post') or {}), 'artifact_facts': facts}
+        snaps[n] = {'fetched_at': now, 'source': f'https://1f916.ai/api/listings/{n}',
+                    'source_sha256': hashlib.sha256(body.encode()).hexdigest(),
+                    'listing': raw, 'listing_post': (post.get('post') or {}), 'artifact_facts': facts}
+    # Write only after every listing passed the completeness check, so a bad page never replaces the archive.
+    os.makedirs(DATA, exist_ok=True)
+    for n, snap in snaps.items():
         with open(os.path.join(DATA, f'listing-{n}.json'), 'w') as f:
-            out = json.dumps(snap, indent=1, ensure_ascii=False, sort_keys=True)
-            f.write(out)
-        print(n, len(raw['submissions']), 'submissions')
+            f.write(json.dumps(snap, indent=1, ensure_ascii=False, sort_keys=True))
+        print(n, len(snap['listing']['submissions']), 'submissions')
 
 
 def short(a):
@@ -162,6 +195,19 @@ def award_lines(L):
     return out
 
 
+def payout_setup(s, bindings, listing_expiry):
+    """Registry setup check for one submission: 'no active key', 'no binding', 'binding ends <date>' or 'ready'.
+    Returns (label, latest binding or None)."""
+    if not (s.get('payee_status') or {}).get('key_bound'):
+        return 'no active key', None
+    if not bindings:
+        return 'no binding', None
+    b = max(bindings, key=lambda b: b['expiry'])
+    if b['expiry'] < listing_expiry:
+        return f'binding ends {ts(b["expiry"])[:10]}', b
+    return 'ready', b
+
+
 def link_for(u, f):
     if f.get('kind') == 'blocked':
         return f'<{u}> (not auto-checked)'
@@ -169,14 +215,16 @@ def link_for(u, f):
         label = f'post {f["number"]}'
     elif f.get('kind') == 'github' and f.get('number'):
         label = f'{f["repo"]}#{f["number"]}'
+    elif re.fullmatch(r'https://commonworld\.one/posts/(\d+)', u):
+        label = f'post {u.rsplit("/", 1)[1]}'  # no facts in the snapshot for this post; label from the URL
     else:
         label = host(u)
     return f'[{label}]({u})'
 
 
-def render_listing(n, snap, notes):
+def render_listing(n, snap, notes, root=HERE):
     L = snap['listing']
-    folder = os.path.join(HERE, LISTINGS[n])
+    folder = os.path.join(root, LISTINGS[n])
     os.makedirs(folder, exist_ok=True)
     post_url = f'https://1f916.ai/api/post/{L["post_id"]}'
     api_url = snap['source']
@@ -228,19 +276,11 @@ def render_listing(n, snap, notes):
             signal = f'{f.get("state")} · 💬{f.get("comments", 0)}'
         else:
             signal = '—'
-        bs = binds.get(s['handle'], [])
-        if not s.get('payee_status', {}).get('key_bound'):
-            pay = 'no active key'
-        elif not bs:
-            pay = 'no binding'
-        else:
-            b = max(bs, key=lambda b: b['expiry'])
-            if b['expiry'] < L['expiry']:
-                pay = f'binding ends {ts(b["expiry"])[:10]}'
-            else:
-                pay = 'ready'
-            if len(addr_count.get(b['payout_address'].lower(), ())) > 1:
-                flags.append('shared payout address')
+        if u and u not in snap['artifact_facts'] and RELATIVE_POST.match(art):
+            flags.append(f'submitted as relative path {RELATIVE_POST.match(art).group(1)}; not checked at snapshot time')
+        pay, b = payout_setup(s, binds.get(s['handle'], []), L['expiry'])
+        if b and len(addr_count.get(b['payout_address'].lower(), ())) > 1:
+            flags.append('shared payout address')
         ready += pay == 'ready'
         note = notes.get(str(s['id']), '')
         if f.get('author') and f['author'].lower() != s['handle'].lower() and not note.startswith('!'):
@@ -281,7 +321,9 @@ def render():
     readme = open(os.path.join(HERE, 'README.template.md')).read()
     readme = readme.replace('{{TABLE}}', '\n'.join(rows)).replace('{{TOTAL}}', str(total))
     open(os.path.join(HERE, 'README.md'), 'w').write(readme)
-    import build_extra; build_extra.contributors(HERE, LISTINGS, ts)
+    spec = importlib.util.spec_from_file_location('listings_1f916_build_extra', os.path.join(HERE, 'build_extra.py'))
+    extra = importlib.util.module_from_spec(spec); spec.loader.exec_module(extra)
+    extra.contributors(HERE, LISTINGS, ts)
     print('rendered', total, 'submissions')
 
 
