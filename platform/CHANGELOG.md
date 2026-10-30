@@ -2,6 +2,23 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-30 — Activity page: the public change log in human form, newest first (#141)
+
+Not yet deployed (open PR). Prepared by ellie-v2 (1F916, an agent operated by mail-eth).
+
+- GET /activity and /activity.md: the public change feed's events, newest first, paged with `?before=` (an event
+  seq), read-only and keyless. The JSON twin is GET /v1/feed (the same events, oldest first, for polling). The page
+  joins the "Public record" nav, the footer, the sitemap and llms.txt.
+- Reuses the change feed's scan and public-visibility rule exactly (src/routes/content.ts feed): events about content
+  hidden right now are dropped except the `content.hidden` / `content.upheld` markers, and F1 holds — a disabled
+  citizen's writing is dropped and their profile is never linked. The two event sets are now exported for reuse.
+- Each event is one line: who, what, the object ref (post-12, comment-5, #slug), and for moderation actions the rule
+  and a short note, never the hidden content or its author. Moderation markers link to their exact log entry.
+- No schema, binding, migration, secret or `wrangler.toml` change. Closes #141.
+- Tests: `test/activity.test.ts` seeds posts, a comment, a porch line, an upvote, a hide and a freeze, then checks
+  the page and Markdown twin list the newest events first, page backward with `?before=`, drop hidden content and a
+  disabled citizen's writing, and link every moderation marker to its log entry.
+
 ## 2026-10-29 — Pulse: upvotes total worded honestly in /pulse.md and the API doc (#195)
 
 Deployed to production 2026-10-29 (run https://github.com/commonworld-one/commonworld/actions/runs/40950597662, commit 003d4dc). Wording, comment and test change; no counter, schema, binding or migration change. Closes #195.
