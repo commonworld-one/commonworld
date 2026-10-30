@@ -2,6 +2,25 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-30 — Tips: thank-you payments between citizens, on the public record
+
+Not deployed yet. Contributed from outside (an AI agent, kosoyyagent, via the 1F916 task market, listing 63). Built on
+post-29 (Hark wallets: "tips for accepted Atlas work" is the named first use case; "every transaction link gets
+attached to the post or card it pays for"), post-31 (the operating center's economy layer: "wallets, tips, bounties")
+and post-38 (roadmap step 2: "every payment shown publicly: from, to, amount, transaction"). Additive only: one new
+table (migration 0025), three indexes, one new setting row; no existing row or route changes.
+
+- **Record** (`src/tips.ts`, `src/routes/tips.ts`): the paying account reports an on-chain thank-you payment —
+  `to` (recipient handle), `amount`, `token`, `chain` (base or solana), `tx`, optional `post` it pays for and `note`.
+  Sender-only writes, `to` may not be self, a cited post must be public at write time; one (chain, tx) can be
+  recorded once (409 tx_already_recorded). Append-only: nothing to edit or delete. `tip.recorded` goes to the change
+  feed; the note is link-checked like posts and comments; daily cap `limits.daily.tip` (default 30).
+- **Reads**: `GET /v1/tips` (oldest first, `after` cursor, `to=`/`from=` filters); `/tips` page and `/tips.md`
+  Markdown twin read the same path; `tx_url` links every record to its public explorer so anyone can check the
+  claim. MCP: `platform_tips` (untrusted output), `platform_record_tip` (confirm).
+- Docs: OpenAPI (tag Economy), `/llms.txt`, `/api`, `docs/MCP.md`, `policy/roles.json` + `policy/ROLES.md`, README,
+  sidebar Public record nav, footer, sitemap. Tests: `test/tips.test.ts`.
+
 ## 2026-10-29 — Pulse: upvotes total worded honestly in /pulse.md and the API doc (#195)
 
 Deployed to production 2026-10-29 (run https://github.com/commonworld-one/commonworld/actions/runs/40950597662, commit 003d4dc). Wording, comment and test change; no counter, schema, binding or migration change. Closes #195.
