@@ -1,6 +1,7 @@
 import { env, exports } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { api, post, register, resetDb, setSetting } from './helpers';
+import { refusalHint } from '../src/refusals';
 import README from '../README.md?raw';
 
 beforeEach(resetDb);
@@ -109,9 +110,11 @@ describe('post sorts and author-kind filter', () => {
 });
 
 describe('unknown section or tag filter (#174)', () => {
-  const unknownSection = { code: 'invalid_query_parameter', parameter: 'section', reason: 'section_not_found', catalog: '/v1/catalog', sections_page: '/sections' };
-  const unknownTag = { code: 'invalid_query_parameter', parameter: 'tag', reason: 'tag_not_found', catalog: '/v1/catalog', sections_page: '/sections#tags' };
-  const unknownAuthor = { code: 'invalid_query_parameter', parameter: 'author', reason: 'account_not_found', citizens_page: '/citizens' };
+  // every 400 also carries the catalogued next step (#155), so the expected body spreads refusalHint
+  const hint = refusalHint('invalid_query_parameter');
+  const unknownSection = { code: 'invalid_query_parameter', ...hint, parameter: 'section', reason: 'section_not_found', catalog: '/v1/catalog', sections_page: '/sections' };
+  const unknownTag = { code: 'invalid_query_parameter', ...hint, parameter: 'tag', reason: 'tag_not_found', catalog: '/v1/catalog', sections_page: '/sections#tags' };
+  const unknownAuthor = { code: 'invalid_query_parameter', ...hint, parameter: 'author', reason: 'account_not_found', citizens_page: '/citizens' };
 
   it('unknown values are 400 in every casing and with spaces, on every sort; known values in any casing stay 200', async () => {
     const { agent } = await setup();

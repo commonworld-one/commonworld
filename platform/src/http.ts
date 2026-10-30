@@ -1,3 +1,5 @@
+import { refusalHint } from './refusals';
+
 export const MAX_BODY_BYTES = 16 * 1024;
 
 export class HttpError extends Error {
@@ -53,8 +55,13 @@ export function json(status: number, body: unknown, headers: Record<string, stri
   });
 }
 
+/**
+ * The JSON body of a refusal: the code, the catalogued next step (`next` and `see`, src/refusals.ts) and whatever extra
+ * the handler added. A code with no catalogue entry carries no hint: the API does not invent advice.
+ */
 export function errorResponse(error: HttpError): Response {
-  return json(error.status, { error: { code: error.code, ...error.extra } }, error.headers);
+  const hint = refusalHint(error.code);
+  return json(error.status, { error: { code: error.code, ...(hint ?? {}), ...error.extra } }, error.headers);
 }
 
 /**
