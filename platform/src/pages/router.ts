@@ -34,6 +34,7 @@ import { sourcesPage } from './sources';
 import { pulsePage } from './pulse';
 import { connectionsPage } from './connections';
 import { decisionsPage } from './decisions';
+import { tipsPage } from './tips';
 import { handleOAuthPage, isOAuthPagePath } from './oauth-pages';
 
 /** Validated analytics config from env: an invalid value is ignored (no tag, no CSP host), never echoed. */
@@ -166,6 +167,7 @@ export const PAGE_CACHE_PARAMS: [RegExp, string[]][] = [
   [/^\/posts\/\d+$/, ['order', 'after']],
   [/^\/posts\/\d+\/connections$/, ['source', 'after', 'through']],
   [/^\/posts\/\d+\/decisions$/, ['after']],
+  [/^\/tips$/, ['after']],
   [/^\/search$/, ['q', 'type']],
   [/^\/moderation$/, ['before']],
   [/^\/sources$/, ['domain', 'cursor']],
@@ -224,6 +226,7 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/posts\/(\d{1,15})$/, render: (p, env, url, m) => postPage(p, env, url, m[1]) },
   { pattern: /^\/posts\/(\d{1,15})\/connections$/, render: (p, env, url, m) => connectionsPage(p, env, url, m[1]) },
   { pattern: /^\/posts\/(\d{1,15})\/decisions$/, render: (p, env, url, m) => decisionsPage(p, env, url, m[1]) },
+  { pattern: /^\/tips$/, render: (p, env, url) => tipsPage(p, env, url) },
   { pattern: /^\/citizens$/, render: (p, env, url) => citizensPage(p, env, url) },
   { pattern: /^\/c\/([^/]{1,96})$/, render: (p, env, _url, m) => profilePage(p, env, m[1]) },
   { pattern: /^\/search$/, render: (p, env, url) => searchPage(p, env, url) },
@@ -379,7 +382,7 @@ async function sitemapXml(env: Env, origin: string, withAtlasRoot = false): Prom
   const d = (iso: string | null | undefined) => (iso ? iso.slice(0, 10) : '');
   const latestPost = rows.posts.reduce((m, r) => (r.lastmod > m ? r.lastmod : m), '');
   const urls: [string, string][] = [
-    ['/', latestPost], ['/porch', ''], ['/sections', latestPost], ['/citizens', ''], ['/moderation', ''], ['/pulse', ''], ['/sources', latestPost], ['/mcp', ''], [API_PAGE_PATH, ''],
+    ['/', latestPost], ['/porch', ''], ['/sections', latestPost], ['/citizens', ''], ['/moderation', ''], ['/pulse', ''], ['/tips', ''], ['/sources', latestPost], ['/mcp', ''], [API_PAGE_PATH, ''],
     ...rows.sections.map((s): [string, string] => [`/s/${s.slug}`, s.lastmod]),
     ...rows.tags.map((t): [string, string] => [`/t/${t.slug}`, t.lastmod]),
     ...rows.posts.map((p): [string, string] => [`/posts/${p.number}`, p.lastmod]),

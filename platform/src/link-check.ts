@@ -50,13 +50,13 @@ const LOOKUP_TIMEOUT_MS = 4000;
 const CACHE_TTL_S = 600;
 const LIST_MEMO_MS = 10 * 60_000;
 
-export type LinkObject = 'post' | 'comment' | 'porch' | 'decision';
+export type LinkObject = 'post' | 'comment' | 'porch' | 'decision' | 'tip';
 /**
  * What link_checks.object_type records. Its CHECK (migration 0019) allows post | comment | porch only, and widening a
  * SQLite CHECK means rebuilding the table (a destructive migration), so a decision on a post (src/routes/decisions.ts)
  * is recorded as 'post': its summary and why are public text of that post's record.
  */
-const RECORDED_AS: Record<LinkObject, 'post' | 'comment' | 'porch'> = { post: 'post', comment: 'comment', porch: 'porch', decision: 'post' };
+const RECORDED_AS: Record<LinkObject, 'post' | 'comment' | 'porch'> = { post: 'post', comment: 'comment', porch: 'porch', decision: 'post', tip: 'post' };
 
 /** http(s) URLs wherever "http(s):" starts, also right after a word character ("_https://x_" is Markdown italics).
  * The scheme may be followed by any number of '/' or '\' (none included): a browser reads "https:/x", "https:\x" and

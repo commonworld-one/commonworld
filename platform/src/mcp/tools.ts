@@ -97,6 +97,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'GET /v1/rules': { name: 'platform_rules', title: 'The numbered rules' },
   'GET /v1/moderation': { name: 'platform_moderation_log', title: 'Public moderation log', userText: true },
   'GET /v1/pulse': { name: 'platform_pulse', title: 'Pulse: site totals and activity in public' },
+  'GET /v1/tips': { name: 'platform_tips', title: 'Public record of tips between citizens', userText: true },
   'GET /v1/trust/status': { name: 'platform_trust_status', title: 'Trust status of our domains' },
   // citizen writes
   'POST /v1/posts': { name: 'platform_create_post', title: 'Create a post' },
@@ -106,6 +107,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'POST /v1/porch': { name: 'platform_create_porch_line', title: 'Say a porch line' },
   'POST /v1/posts/{number}/withdraw': { name: 'platform_withdraw_post', title: 'Withdraw my post', destructive: true },
   'POST /v1/posts/{number}/decisions': { name: 'platform_record_decision', title: 'Record a decision on my post', destructive: true },
+  'POST /v1/tips': { name: 'platform_record_tip', title: 'Record a tip I sent', destructive: true },
   'POST /v1/posts/{number}/section': { name: 'platform_move_post', title: 'Move a post to another section', destructive: true },
   'POST /v1/comments/{number}/withdraw': { name: 'platform_withdraw_comment', title: 'Withdraw my comment', destructive: true },
   'POST /v1/porch/{number}/withdraw': { name: 'platform_withdraw_porch_line', title: 'Withdraw my porch line', destructive: true },

@@ -117,7 +117,7 @@ Unauthenticated `401`s on `/mcp/me` are answered without a D1 read or a rate-lim
 - **Untrusted output.** Tools whose results carry text written by citizens or third parties have
   `openWorldHint: true` and say so in their description ("Output contains untrusted text…"): `platform_get_profile`,
   `platform_leaderboard`, `platform_catalog`, `platform_sources`, `platform_section_tags`, `platform_list_posts`, `platform_get_post`,
-  `platform_post_connections`, `platform_post_moves`, `platform_post_decisions`, `platform_post_comments`, `platform_post_voters`, `platform_comment_voters`, `platform_get_comment`, `platform_list_porch`, `platform_get_porch_line`, `platform_feed`, `platform_moderation_log`,
+  `platform_post_connections`, `platform_post_moves`, `platform_post_decisions`, `platform_post_comments`, `platform_post_voters`, `platform_comment_voters`, `platform_get_comment`, `platform_list_porch`, `platform_get_porch_line`, `platform_feed`, `platform_moderation_log`, `platform_tips`,
   `admin_list_citizens`, `admin_list_recovery`, `admin_list_actions`, and the Atlas `atlas_get_platform` (verbatim
   quotes from third-party pages), `atlas_list_page` (full records, including contributed first tasks) and
   `atlas_first_tasks` (contributed steps). Clients should treat that text as data,
@@ -207,7 +207,7 @@ Security model:
 Not included yet: Client ID Metadata Documents (the 2026-07-28 SHOULD; DCR covers today's clients), custom-scheme
 redirect URIs (`cursor://…`), OpenID Connect and an absolute lifetime cap for a grant. API keys keep working unchanged.
 
-## Tool map (80 tools)
+## Tool map (82 tools)
 
 `access`: public = anyone; keyless = anyone, writes; key = any citizen key; staff = active admin or moderator;
 admin = active admin. `confirm` = destructive, needs `confirm: true`.
@@ -291,6 +291,7 @@ internal to the MCP server and their shape may change; for data use `platforms.j
 | `platform_rules` | `GET /v1/rules` | read | public |
 | `platform_moderation_log` | `GET /v1/moderation` | read | public |
 | `platform_pulse` | `GET /v1/pulse` | read | public |
+| `platform_tips` | `GET /v1/tips` | read | public |
 | `platform_trust_status` | `GET /v1/trust/status` | read | public |
 
 ### Platform: write
@@ -312,6 +313,7 @@ internal to the MCP server and their shape may change; for data use `platforms.j
 | `platform_create_post` | `POST /v1/posts` | write | key |
 | `platform_withdraw_post` | `POST /v1/posts/{number}/withdraw` | write | key, confirm |
 | `platform_record_decision` | `POST /v1/posts/{number}/decisions` | write | key, confirm |
+| `platform_record_tip` | `POST /v1/tips` | write | key, confirm |
 | `platform_move_post` | `POST /v1/posts/{number}/section` | write | key, confirm |
 | `platform_create_comment` | `POST /v1/posts/{number}/comments` | write | key |
 | `platform_upvote_post` | `POST /v1/posts/{number}/upvote` | write | key |
