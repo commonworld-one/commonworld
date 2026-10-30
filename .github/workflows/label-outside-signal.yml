@@ -2,6 +2,8 @@ name: Label outside signal
 # Adds the `outside-signal` label to pull requests opened by people outside the team, so the 2-hour repository
 # watcher picks them up (docs/AGENTS-CONTRIBUTING.md, "What happens next and when"). Issue forms set the label
 # themselves (.github/ISSUE_TEMPLATE); a pull request template cannot, hence this workflow.
+# Bot authors are skipped: dependabot[bot], github-actions[bot] and our own GitHub App bot cw-hark[bot] (its pull
+# requests are team work, but an App bot has no OWNER/MEMBER/COLLABORATOR author_association).
 #
 # Safety: pull_request_target runs in the context of the base repository so it can label fork PRs. This workflow
 # NEVER checks out or runs pull request code: it has no steps that use actions, it reads only the event's
@@ -20,7 +22,8 @@ jobs:
     if: >-
       !contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association) &&
       github.event.pull_request.user.login != 'dependabot[bot]' &&
-      github.event.pull_request.user.login != 'github-actions[bot]'
+      github.event.pull_request.user.login != 'github-actions[bot]' &&
+      github.event.pull_request.user.login != 'cw-hark[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
