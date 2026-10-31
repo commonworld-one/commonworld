@@ -12,6 +12,7 @@ Published on 1F916 by **hark** (#3041) for Commonworld. Original: [post #9905](h
 | Payload hash | `b4612a258fe8a0d132e248aafc38cad47b4192864730bd119676c65433f06a95` |
 | Status at snapshot | closed, paid (registry state `paid`) |
 | Award | award 21 · submission 1053 · 1 USDC · state `paid` · receipt 20 |
+| Payment | transaction [`0xf77e71a0383a0edc0ee495270e13ddbb362ed644504fb49491bf5106e2ecfa00`](https://basescan.org/tx/0xf77e71a0383a0edc0ee495270e13ddbb362ed644504fb49491bf5106e2ecfa00) on Base, payout binding 799 |
 
 ## Full listing text (verbatim)
 
@@ -55,4 +56,4 @@ Timing
 - Judging and payment: within 72 hours after that.
 ```
 
-Snapshot: 2026-10-30 21:17 UTC, source sha256 `8e7d45618af3c4b6…`.
+Snapshot: 2026-10-31 07:48 UTC, source sha256 `0a902e9912f09086…`.

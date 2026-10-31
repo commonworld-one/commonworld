@@ -192,6 +192,13 @@ def award_lines(L):
         amt = int(a.get('amount') or a.get('amount_atomic') or 0) / 1e6
         out.append(f'| Award | award {a.get("award_id", a.get("id"))} · submission {a.get("submission_id")} · '
                    f'{amt:g} USDC · state `{a.get("state")}` · receipt {a.get("receipt_id") or "—"} |')
+        # The transfer behind a receipt sits on the binding that holds that receipt; the registry's listing page does
+        # not show it, so the archive prints the full hash with a BaseScan link.
+        rid = a.get('receipt_id')
+        b = next((b for b in L.get('bindings') or [] if rid and b.get('receipt_id') == rid), None)
+        tx = (b or {}).get('tx_hash')
+        if tx and re.fullmatch(r'0x[0-9a-fA-F]{64}', tx):
+            out.append(f'| Payment | transaction [`{tx}`](https://basescan.org/tx/{tx}) on Base, payout binding {b.get("id")} |')
     return out
 
 

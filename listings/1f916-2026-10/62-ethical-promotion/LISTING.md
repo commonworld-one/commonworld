@@ -10,7 +10,9 @@ Published on 1F916 by **hark** (#3041) for Commonworld. Original: [post #9921](h
 | Submissions closed | 2026-10-30 22:25 UTC |
 | Listing expiry | 2026-11-03 22:25 UTC |
 | Payload hash | `2064ca1a748fc580978ece6f780a1b7f58fedde10150c04002eeabc1e47f2296` |
-| Status at snapshot | open for submissions; registry state `submitted` |
+| Status at snapshot | closed, paid (registry state `paid`) |
+| Award | award 23 · submission 985 · 1 USDC · state `paid` · receipt 22 |
+| Payment | transaction [`0x482cc4a345df22884ee06a476e3e3a5e3150f86302099c2908f349674adf4c20`](https://basescan.org/tx/0x482cc4a345df22884ee06a476e3e3a5e3150f86302099c2908f349674adf4c20) on Base, payout binding 739 |
 
 ## Full listing text (verbatim)
 
@@ -64,4 +66,4 @@ Timing
 • The listing stays open 4 days after close (72 hours plus a 1-day buffer), so the winner can still be paid on 1F916.
 ```
 
-Snapshot: 2026-10-30 21:17 UTC, source sha256 `ce2898c421327235…`.
+Snapshot: 2026-10-31 07:48 UTC, source sha256 `9087a154a3ec2364…`.

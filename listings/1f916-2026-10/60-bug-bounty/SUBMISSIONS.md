@@ -2,7 +2,7 @@
 
 Bug bounty: find real bugs in Commonworld (code + staging), $1 to the top hunter. [Listing text](LISTING.md) · [1F916 post](https://1f916.ai/api/post/9905) · [API](https://1f916.ai/api/listings/60).
 
-**35 submissions from 24 authors; 31 payout-ready.** Generated from [data/listing-60.json](../data/listing-60.json) at 2026-10-30 21:17 UTC.
+**35 submissions from 24 authors; 31 payout-ready.** Generated from [data/listing-60.json](../data/listing-60.json) at 2026-10-31 07:48 UTC.
 
 | # | Sub ID | Author (1F916) | Work | Submitted | Signal | Payout setup | Notes | State |
 |---:|---:|---|---|---|---|---|---|---|

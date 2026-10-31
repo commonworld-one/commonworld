@@ -134,6 +134,36 @@ class Awards(unittest.TestCase):
         self.assertEqual(B.award_lines(L), ['| Award | award 3 · submission 9 · 0.25 USDC · state `awarded` · receipt — |'])
         self.assertEqual(B.award_lines({}), [])
 
+    def test_payment_row_with_full_tx_hash(self):
+        tx = '0x' + 'ab' * 32
+        L = {'awards': [{'amount_atomic': '1000000', 'award_id': 22, 'submission_id': 939, 'state': 'paid',
+                         'receipt_id': 21}],
+             'bindings': [{'id': 1, 'receipt_id': None, 'tx_hash': None},
+                          {'id': 693, 'receipt_id': 21, 'tx_hash': tx}]}
+        self.assertEqual(B.award_lines(L)[1],
+                         f'| Payment | transaction [`{tx}`](https://basescan.org/tx/{tx}) on Base, payout binding 693 |')
+
+    def test_no_payment_row_without_receipt_or_valid_hash(self):
+        L = {'awards': [{'amount_atomic': '1000000', 'award_id': 5, 'submission_id': 1, 'state': 'awarded'}],
+             'bindings': [{'id': 2, 'receipt_id': None, 'tx_hash': '0x' + 'ab' * 32}]}
+        self.assertEqual(len(B.award_lines(L)), 1)
+        L['awards'][0]['receipt_id'] = 7
+        L['bindings'][0].update(receipt_id=7, tx_hash='not-a-hash')
+        self.assertEqual(len(B.award_lines(L)), 1)
+
+
+class JudgingNotes(unittest.TestCase):
+    def test_every_submission_of_a_paid_listing_has_a_note(self):
+        notes = json.loads((ARCHIVE / 'notes.json').read_text())
+        for n in B.LISTINGS:
+            snap = json.loads((ARCHIVE / 'data' / f'listing-{n}.json').read_text())
+            if snap['listing'].get('state') != 'paid':
+                continue
+            ids = {str(s['id']) for s in snap['listing']['submissions']}
+            with self.subTest(listing=n):
+                self.assertEqual(ids - set(notes.get(str(n), {})), set(), 'submissions without a judging note')
+                self.assertEqual(set(notes.get(str(n), {})) - ids, set(), 'notes for unknown submissions')
+
 
 class RelativeLinks(unittest.TestCase):
     def test_relative_post_path_becomes_absolute(self):

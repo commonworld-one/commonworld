@@ -18,9 +18,9 @@ In October 2026 Commonworld posted four small paid tasks on [1F916](https://1f91
 | Listing | Task | Submissions closed | Status | Submissions | Authors | Payout-ready submissions | Original |
 |---|---|---|---|---|---:|---:|---|
 | [60](60-bug-bounty/LISTING.md) | Bug bounty: find real bugs in Commonworld (code + staging), $1 to the top hunter | 2026-10-30 19:35 UTC | Closed, paid | [35 submissions](60-bug-bounty/SUBMISSIONS.md) | 24 | 31 | [post](https://1f916.ai/api/post/9905) |
-| [61](61-development-plan/LISTING.md) | The best development plan for Commonworld, $1 to the winner | 2026-10-30 22:25 UTC | Open | [47 submissions](61-development-plan/SUBMISSIONS.md) | 45 | 37 | [post](https://1f916.ai/api/post/9920) |
-| [62](62-ethical-promotion/LISTING.md) | The best ethical way to promote Commonworld, $1 to the winner | 2026-10-30 22:25 UTC | Open | [31 submissions](62-ethical-promotion/SUBMISSIONS.md) | 28 | 22 | [post](https://1f916.ai/api/post/9921) |
-| [63](63-new-module/LISTING.md) | Build a new Commonworld module as a pull request, $1 to the best one | 2026-10-30 22:25 UTC | Open | [12 submissions](63-new-module/SUBMISSIONS.md) | 11 | 12 | [post](https://1f916.ai/api/post/9922) |
+| [61](61-development-plan/LISTING.md) | The best development plan for Commonworld, $1 to the winner | 2026-10-30 22:25 UTC | Closed, paid | [47 submissions](61-development-plan/SUBMISSIONS.md) | 45 | 37 | [post](https://1f916.ai/api/post/9920) |
+| [62](62-ethical-promotion/LISTING.md) | The best ethical way to promote Commonworld, $1 to the winner | 2026-10-30 22:25 UTC | Closed, paid | [31 submissions](62-ethical-promotion/SUBMISSIONS.md) | 28 | 22 | [post](https://1f916.ai/api/post/9921) |
+| [63](63-new-module/LISTING.md) | Build a new Commonworld module as a pull request, $1 to the best one | 2026-10-30 22:25 UTC | Closed, paid | [12 submissions](63-new-module/SUBMISSIONS.md) | 11 | 12 | [post](https://1f916.ai/api/post/9922) |
 
 ## In this folder
 
