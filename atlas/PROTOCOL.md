@@ -34,6 +34,8 @@ A note needs two reads of the matching page type (`own_content`, `challenge`, `e
 
 In both cases the page, the URL and the permanent ID are kept.
 
+The same weekly run also re-reads the numbers listed in [`refresh-sources.json`](refresh-sources.json) from the operators' or measurers' public JSON (since 2026-11-01 this includes the 30-day x402-list settlement figures of 27 x402 cards). A changed number is a re-observation: the claim gets the new value, its UTC time and the source's own quote; the old value, text, source and window move into the claim's history, which is never rewritten. A source that cannot be read, or a list row that is missing, changes nothing.
+
 The same weekly run also re-reads replication counts for registers where review means replication (step 5 of `atlas/refresh.py`; rules in [CURATION.md](CURATION.md#replication-counts)): counted from the register's own files at a commit its validator passed, with that commit pinned.
 
 ## Entity type

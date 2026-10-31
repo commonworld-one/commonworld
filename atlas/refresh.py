@@ -17,7 +17,8 @@ What it does, per entry of the Atlas snapshot (atlas/data/snapshot-verified-*.js
      responding closed entry is only listed in the summary. Pages and slugs are never removed.
   3. Domain moved: final URL on another registrable domain than canonical_url -> flagged for human review, nothing changed.
   4. Numbers: only the explicit mappings in atlas/refresh-sources.json. A changed value is a re-observation (new value
-     with observed_at in UTC, the previous value appended to claim.history); past records are never rewritten.
+     with observed_at in UTC, the previous value appended to claim.history); past records are never rewritten. A mapping
+     can read one row of a list (select: exactly one row must match) and round the published value (round).
   5. Replication counts: for entries with a `replications` source in atlas/refresh-sources.json, the register's files are
      read at the newest commit on main whose validator workflow push run succeeded, counted the way that validator counts
      (atlas/site/replications.py), and written to atlas/data/replications.json with the pinned commit. A record changes only
@@ -387,16 +388,7 @@ def read_mapping(m, fields_out=None):
                     return None, None, methods, 'pagination repeated a previously requested URL'
                 seen_urls.add(next_url)
             for row in lst:
-                matched = True
-                for key, want in (ag.get('where') or {}).items():
-                    value = dig(row, key)
-                    if want == '*':
-                        if value in (None, '', [], {}):
-                            matched = False
-                            break
-                    elif value != want:
-                        matched = False
-                        break
+                matched = row_matches(row, ag.get('where'))
                 total_items += 1
                 if matched:
                     selected_items += 1
@@ -434,15 +426,58 @@ def read_mapping(m, fields_out=None):
     doc, err = get_json(m['url'])
     if err:
         return None, None, [f'GET {m["url"]}'], f'{m["url"]}: {err}'
+    methods = [f'GET {m["url"]}']
+    if m.get('select'):
+        # one row of a list in the same document (e.g. one facilitator of a facilitators list): exactly one row must
+        # match, otherwise nothing is published (a missing or duplicated row is never read as 0 or as the wrong row)
+        doc, sel_note, err = select_row(doc, m['select'])
+        if err:
+            return None, None, methods, f'{m["url"]}: {err}'
+        methods.append(sel_note)
     val = as_number(dig(doc, m['path']))
     if val is None:
-        return None, None, [f'GET {m["url"]}'], f'no number at {m["path"]}'
+        return None, None, methods, f'no number at {m["path"]}'
+    val = round_value(val, m.get('round'))
     qf = m.get('quote_fields') or [m['path']]
     if fields_out is not None:
         for f in set(qf) | set(statement_fields(m.get('statement'))):
             fields_out[f] = as_number(dig(doc, f))
     q = ','.join(f'"{quote_key(f, qf)}":{json.dumps(dig(doc, f))}' for f in qf)
-    return val, q[:QUOTE_MAX], [f'GET {m["url"]}', f'read {m["path"]}'], None
+    return val, q[:QUOTE_MAX], methods + [f'read {m["path"]}' + (f' (rounded to {m["round"]} decimals)' if m.get('round') is not None else '')], None
+
+
+def row_matches(row, where):
+    """Literal match of a list row against a where dict ('*' = present and non-empty), the same rule agg uses."""
+    for key, want in (where or {}).items():
+        value = dig(row, key)
+        if want == '*':
+            if value in (None, '', [], {}):
+                return False
+        elif value != want:
+            return False
+    return True
+
+
+def select_row(doc, sel):
+    """-> (row, method note, error). sel: {list: dot path to a list, where: {field: literal}}; exactly one row must match."""
+    lst = dig(doc, sel.get('list') or '')
+    if not isinstance(lst, list):
+        return None, None, f'no list at {sel.get("list")}'
+    if len(lst) > MAX_AGG_ITEMS:
+        return None, None, f'list contains more than {MAX_AGG_ITEMS} items'
+    hits = [r for r in lst if isinstance(r, dict) and row_matches(r, sel.get('where'))]
+    where = ', '.join(f'{k}={v}' for k, v in (sel.get('where') or {}).items())
+    if len(hits) != 1:
+        return None, None, f'{len(hits)} rows of {sel["list"]} match {where} (exactly 1 required)'
+    return hits[0], f'select the one row of {sel["list"]} with {where} ({len(lst)} rows read)', None
+
+
+def round_value(val, places):
+    """Optional mapping.round: decimals kept in the published value (the quote keeps the source's raw number)."""
+    if places is None or isinstance(val, int):
+        return val
+    r = round(float(val), places)
+    return int(r) if places == 0 else r
 
 
 # ------------------------------------------------------------------ claim statements (the text next to the number)
@@ -545,6 +580,19 @@ def mapping_problems(m):
             probs.append(f'{m["id"]}: agg.decimals must be an integer 1-18 on a sum')
     if ag.get('fail_if_more') is not None and (not isinstance(ag['fail_if_more'], str) or m.get('paginate')):
         probs.append(f'{m["id"]}: agg.fail_if_more must be a field name, and only on a single-page read (no paginate)')
+    sel = m.get('select')
+    if sel is not None:
+        if m.get('agg') or not m.get('path'):
+            probs.append(f'{m["id"]}: select is only for path mappings (one row of a list), not with agg')
+        elif not isinstance(sel, dict) or not isinstance(sel.get('list'), str) or not sel['list'] \
+                or not isinstance(sel.get('where'), dict) or not sel['where']:
+            probs.append(f'{m["id"]}: select must be {{list: "dot.path", where: {{field: value, ...}}}} with at least one where field')
+    su = m.get('source_url')
+    if su is not None and (not isinstance(su, str) or not su.startswith('https://') or reg_domain(su) != reg_domain(m.get('url', ''))):
+        probs.append(f'{m["id"]}: source_url must be an https page on the same domain as the mapping url')
+    rnd = m.get('round')
+    if rnd is not None and (isinstance(rnd, bool) or not isinstance(rnd, int) or not 0 <= rnd <= 6 or m.get('agg')):
+        probs.append(f'{m["id"]}: round must be an integer 0-6 on a path mapping')
     v = m.get('verify')
     if v is not None:
         if not isinstance(v, dict) or not str(v.get('url', '')).startswith('https://') or not (v.get('note') or '').strip():
@@ -555,9 +603,17 @@ def mapping_problems(m):
 
 
 def fmt_value(v):
+    if isinstance(v, bool) or not isinstance(v, (int, float)):
+        return str(v)   # an older hand-entered value such as '$618.6k' (only ever shown as the old side of a change)
     if isinstance(v, int):
         return f'{v:,}'
     return f'{v:,.6f}'.rstrip('0').rstrip('.')
+
+
+def published_source(m):
+    """The claim's source_url: mapping.source_url (a human page of the same source that shows the figure, e.g. the HTML
+    table a curator reviewed in atlas/data/evidence-levels.json) or else the JSON url the script reads (always in methods)."""
+    return m.get('source_url') or m['url']
 
 
 def apply_number(entry, m, val, quote, methods, ts, fields=None):
@@ -575,7 +631,7 @@ def apply_number(entry, m, val, quote, methods, ts, fields=None):
         statement = None   # never publish a half-filled template; check.py then flags the stale note for a human
     if c is None:
         claim = {'kind': m['kind'], 'statement': statement or f'{fmt_value(val)} {m["unit"]}', 'value': val, 'unit': m['unit'],
-                 'window': m.get('window'), 'basis': m['basis'], 'source_url': m['url'], 'quote': quote, 'observed_at': ts,
+                 'window': m.get('window'), 'basis': m['basis'], 'source_url': published_source(m), 'quote': quote, 'observed_at': ts,
                  'methods': methods, 'outcome': 'supported', 'refresh_id': m['id']}
         if m.get('verify'):
             claim['verify'] = dict(m['verify'])
@@ -583,17 +639,23 @@ def apply_number(entry, m, val, quote, methods, ts, fields=None):
         return 'new', None
     if m.get('verify') and c.get('verify') != m['verify']:
         c['verify'] = dict(m['verify'])
-    if c.get('value') == val and (not statement or c.get('statement') == statement):
+    # the mapping owns the claim's source and window: a claim first entered by hand from another page of the same
+    # source (e.g. an HTML table) or with a dated window ('30d to 2026-10-15') takes the mapping's API url and its
+    # rolling window on the next re-observation; the old url and window go into history with the old value
+    resync = c.get('source_url') != published_source(m) or bool(m.get('window')) and c.get('window') != m['window']
+    if c.get('value') == val and (not statement or c.get('statement') == statement) and not resync:
         return 'same', val
     what = 'changed' if c.get('value') != val else 'note'
     old = {k: c.get(k) for k in ('value', 'unit', 'window', 'statement', 'quote', 'source_url', 'observed_at', 'basis', 'outcome')}
     old['superseded_at'] = ts
-    old['reason'] = 'weekly automated re-observation (atlas/refresh.py)' + ('' if what == 'changed' else ': statement regenerated from the same fetch')
+    old['reason'] = 'weekly automated re-observation (atlas/refresh.py)' + ('' if what == 'changed' else ': statement regenerated from the same fetch') \
+        + ('; source and window now from the mapping in atlas/refresh-sources.json' if resync else '')
     c.setdefault('history', []).append(old)
-    c.update({'value': val, 'quote': quote, 'observed_at': ts, 'methods': methods, 'outcome': 'supported', 'refresh_id': m['id']})
+    c.update({'value': val, 'quote': quote, 'observed_at': ts, 'methods': methods, 'outcome': 'supported', 'refresh_id': m['id'],
+              'source_url': published_source(m)})
     if statement:
         c['statement'] = statement
-    if m.get('window') and not c.get('window'):
+    if m.get('window'):
         c['window'] = m['window']
     return what, old['value']
 
