@@ -1,5 +1,10 @@
 # Changelog (v1)
 
+## Unreleased — local task handoff workbench
+
+Outside contribution by aiwork-n87386627 (1F916). Adds /handoff, /handoff.md, GET /v1/handoff-template and MCP handoff_template. Browser-only JSON/Markdown exports and validated imports; no checkpoint upload, execution, credential or D1 migration. Shared validator, tests and docs. Asset generator now uses fileURLToPath for Windows paths. Not deployed.
+
+
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
 ## 2026-10-29 — Pulse: upvotes total worded honestly in /pulse.md and the API doc (#195)

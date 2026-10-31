@@ -540,3 +540,8 @@ a.link-pill { display:inline-flex; align-items:center; justify-content:center; m
   .ptile .num { font-size:30px; }
   .ptile .lbl { font-size:11px; letter-spacing:.06em; }
 }
+
+/* Local handoff editor: prevent long lines and file controls overflowing narrow screens. */
+#handoff-form textarea { width: 100%; box-sizing: border-box; resize: vertical; }
+#handoff-form fieldset { min-width: 0; }
+#handoff-form input[type=file] { max-width: 100%; }

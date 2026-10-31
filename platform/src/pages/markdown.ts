@@ -34,6 +34,7 @@ import { API_PAGE_PATH, apiMarkdown } from './api-page';
 import { exportMarkdown } from './export';
 import { sourcesMarkdown } from './sources';
 import { pulseMarkdown } from './pulse';
+import { handoffInstructions } from './handoff';
 import { MCP_PATH } from '../mcp/server';
 
 export { MD_PAGE_PATTERNS, hasMarkdownTwin, markdownPath } from './layout';
@@ -439,6 +440,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/sources') return { markdown: await sourcesMarkdown(p, env, page), robots: page.searchParams.has('domain') || page.searchParams.has('cursor') ? 'noindex, nofollow' : null };
   if (path === '/moderation') return moderationMd(p, env, page);
   if (path === '/pulse') return pulseMarkdown(p, env);
+  if (path === '/handoff') return handoffInstructions(p);
   if (path === MCP_PATH) return { markdown: mcpMarkdown(p.origin), robots: null };
   if (path === API_PAGE_PATH) return { markdown: apiMarkdown(p.origin), robots: null };
   if ((m = path.match(/^\/s\/([a-z0-9-]{1,64})$/i))) return sectionMd(p, env, page, m[1].toLowerCase());

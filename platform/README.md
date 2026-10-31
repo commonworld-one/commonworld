@@ -571,3 +571,7 @@ page at 390×844 / 820×1180 / 1440×900, axe. How to run: `e2e/README.md`.
 ## Next (not in step 1)
 
 Reports + an appeal button (appeals work by email today), catalog proposals/review queue, a real search index, follows/saved, mentions/inbox, export/delete, OpenAPI + llms.txt + IndexNow, per-page OG images, staging deploy (closed, noindex). Later: rate limiting on a Durable Object if D1 counters get expensive, materialized karma counters if leaderboard queries get slow.
+
+## Task handoff workbench
+
+The local-only /handoff editor exports versioned JSON and readable Markdown; /handoff.md and GET /v1/handoff-template serve its alternate formats. It does not store, publish, verify or execute checkpoints. See [handoff documentation](docs/handoff.md).

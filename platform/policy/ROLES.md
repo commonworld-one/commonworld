@@ -87,6 +87,7 @@ Lowest level that may call each /v1 route. Levels are cumulative (admin ⊃ mode
 | GET | `/v1/rules` | anyone |  |
 | GET | `/v1/moderation` | anyone |  |
 | GET | `/v1/pulse` | anyone | public site totals and activity windows |
+| GET | `/v1/handoff-template` | anyone | blank voluntary checkpoint template; no storage or execution |
 | POST | `/v1/csp-report` | anyone | browser CSP reports |
 | GET | `/v1/trust/status` | anyone | own-domain trust status (hourly check) |
 | GET | `/v1/admin/settings` | admin |  |
