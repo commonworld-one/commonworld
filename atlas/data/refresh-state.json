@@ -1,22 +1,41 @@
 {
  "version": 1,
  "entries": {
-  "agora-burmaster": {
-   "failed_weeks": 1,
-   "first_failed_at": "2026-10-25T19:17:56Z",
-   "last_error": "HTTP 402"
-  },
   "issuehunt": {
-   "failed_weeks": 1,
+   "failed_weeks": 2,
    "first_failed_at": "2026-10-25T19:17:56Z",
-   "last_error": "HTTP 502"
+   "last_error": "HTTP 502",
+   "closed_at": "2026-11-01T08:27:19Z"
   },
   "clawsino": {
-   "failed_weeks": 1,
+   "failed_weeks": 2,
    "first_failed_at": "2026-10-25T19:17:56Z",
+   "last_error": "TimeoutError: timed out",
+   "closed_at": "2026-11-01T08:27:19Z"
+  },
+  "bountybook": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-11-01T08:27:19Z",
+   "last_error": "refused: not a public credential-free http(s) address"
+  },
+  "agent-almanac": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-11-01T08:27:19Z",
+   "last_error": "TimeoutError: The read operation timed out"
+  },
+  "the-door": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-11-01T08:27:19Z",
+   "last_error": "HTTP 404"
+  },
+  "bountix": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-11-01T08:27:19Z",
    "last_error": "TimeoutError: timed out"
   }
  },
- "moved": {},
- "updated_at": "2026-10-25T19:17:56Z"
+ "moved": {
+  "agent-bounties": "agentizable.ai"
+ },
+ "updated_at": "2026-11-01T08:27:19Z"
 }

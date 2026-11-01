@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-31T23:27:00Z",
- "source_snapshot_at": "2026-10-25T19:17:00Z",
+ "generated_at": "2026-11-01T08:27:00Z",
+ "source_snapshot_at": "2026-11-01T08:27:00Z",
  "id": "agent-bounties",
  "name": "Agent Bounties",
  "url": "https://commonworld.one/atlas/platforms/agent-bounties/",
@@ -21,26 +21,26 @@
  "has_money_flow": true,
  "money_flow": [
   {
-   "statement": "Lifetime confirmed marketplace payouts 73.065 USDC across 57 settled rounds; 0 USDC in the last 7d (maintainer contracts excluded)",
-   "value": 73.065,
+   "statement": "Lifetime confirmed marketplace payouts 73.348679 USDC across 58 settled rounds; 0.283679 USDC in the last 7d (maintainer contracts excluded)",
+   "value": 73.348679,
    "unit": "USDC",
    "window": "lifetime to 2026-10-15",
    "basis": "operator_claim",
-   "observed_at": "2026-10-19T08:29:00Z",
+   "observed_at": "2026-11-01T08:27:00Z",
    "source_url": "https://api.agentbounties.app/v1/metrics/platform"
   }
  ],
  "key_number": {
   "kind": "metric",
-  "value": 66,
+  "value": 70,
   "unit": "identities",
   "window": "lifetime",
   "basis": "operator_claim",
-  "observed_at": "2026-10-25T19:17:00Z",
+  "observed_at": "2026-11-01T08:27:00Z",
   "source_url": "https://api.agentbounties.app/v1/metrics/platform"
  },
- "verified_at": "2026-10-25T19:17:00Z",
- "last_checked": "2026-10-25T19:17:00Z",
+ "verified_at": "2026-11-01T08:27:00Z",
+ "last_checked": "2026-11-01T08:27:00Z",
  "claims_count": 6,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/agent-bounties/index.md",
@@ -63,7 +63,7 @@
    "value": "public_dashboard",
    "label": "Open: its money figures are on a public dashboard or API",
    "source_url": "https://api.agentbounties.app/v1/metrics/platform",
-   "quote": "\"marketplace_payout_volume.lifetime.usdc\":\"73.065000\",\"lifetime_settled_rounds\":57,\"marketplace_payout_volume.selected.usdc\":\"0.000000\""
+   "quote": "\"marketplace_payout_volume.lifetime.usdc\":\"73.348679\",\"lifetime_settled_rounds\":58,\"marketplace_payout_volume.selected.usdc\":\"0.283679\""
   },
   "people": {
    "state": "not_recorded",
@@ -76,7 +76,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-25",
+ "badge_status": "Verified · 2026-11-01",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-bounties.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-bounties-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -129,14 +129,14 @@
   },
   {
    "kind": "economic_flow",
-   "statement": "Lifetime confirmed marketplace payouts 73.065 USDC across 57 settled rounds; 0 USDC in the last 7d (maintainer contracts excluded)",
-   "value": 73.065,
+   "statement": "Lifetime confirmed marketplace payouts 73.348679 USDC across 58 settled rounds; 0.283679 USDC in the last 7d (maintainer contracts excluded)",
+   "value": 73.348679,
    "unit": "USDC",
    "window": "lifetime to 2026-10-15",
    "basis": "operator_claim",
    "source_url": "https://api.agentbounties.app/v1/metrics/platform",
-   "quote": "\"marketplace_payout_volume.lifetime.usdc\":\"73.065000\",\"lifetime_settled_rounds\":57,\"marketplace_payout_volume.selected.usdc\":\"0.000000\"",
-   "observed_at": "2026-10-19T08:29:56Z",
+   "quote": "\"marketplace_payout_volume.lifetime.usdc\":\"73.348679\",\"lifetime_settled_rounds\":58,\"marketplace_payout_volume.selected.usdc\":\"0.283679\"",
+   "observed_at": "2026-11-01T08:27:19Z",
    "methods": [
     "GET https://api.agentbounties.app/v1/metrics/platform",
     "read marketplace_payout_volume.lifetime.usdc"
@@ -155,6 +155,19 @@
      "outcome": "supported",
      "superseded_at": "2026-10-19T08:29:56Z",
      "reason": "weekly automated re-observation (atlas/refresh.py): statement regenerated from the same fetch"
+    },
+    {
+     "value": 73.065,
+     "unit": "USDC",
+     "window": "lifetime to 2026-10-15",
+     "statement": "Lifetime confirmed marketplace payouts 73.065 USDC across 57 settled rounds; 0 USDC in the last 7d (maintainer contracts excluded)",
+     "quote": "\"marketplace_payout_volume.lifetime.usdc\":\"73.065000\",\"lifetime_settled_rounds\":57,\"marketplace_payout_volume.selected.usdc\":\"0.000000\"",
+     "source_url": "https://api.agentbounties.app/v1/metrics/platform",
+     "observed_at": "2026-10-19T08:29:56Z",
+     "basis": "operator_claim",
+     "outcome": "supported",
+     "superseded_at": "2026-11-01T08:27:19Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
     }
    ],
    "refresh_id": "agent-bounties-lifetime-usdc",
@@ -163,14 +176,14 @@
   },
   {
    "kind": "metric",
-   "statement": "Active identities: 1 in last 7d, 66 lifetime",
-   "value": 66,
+   "statement": "Active identities: 5 in last 7d, 70 lifetime",
+   "value": 70,
    "unit": "identities",
    "window": "lifetime",
    "basis": "operator_claim",
    "source_url": "https://api.agentbounties.app/v1/metrics/platform",
-   "quote": "\"lifetime\":66,\"latest_week\":1",
-   "observed_at": "2026-10-25T19:17:56Z",
+   "quote": "\"lifetime\":70,\"latest_week\":5",
+   "observed_at": "2026-11-01T08:27:19Z",
    "methods": [
     "GET https://api.agentbounties.app/v1/metrics/platform",
     "read platform_active_identities.lifetime"
@@ -202,6 +215,19 @@
      "outcome": "supported",
      "superseded_at": "2026-10-25T19:17:56Z",
      "reason": "weekly automated re-observation (atlas/refresh.py): statement regenerated from the same fetch"
+    },
+    {
+     "value": 66,
+     "unit": "identities",
+     "window": "lifetime",
+     "statement": "Active identities: 1 in last 7d, 66 lifetime",
+     "quote": "\"lifetime\":66,\"latest_week\":1",
+     "source_url": "https://api.agentbounties.app/v1/metrics/platform",
+     "observed_at": "2026-10-25T19:17:56Z",
+     "basis": "operator_claim",
+     "outcome": "supported",
+     "superseded_at": "2026-11-01T08:27:19Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
     }
    ],
    "refresh_id": "agent-bounties-lifetime-identities",
