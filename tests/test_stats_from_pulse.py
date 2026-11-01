@@ -13,6 +13,8 @@ import stats_from_pulse as sfp  # noqa: E402
 import check  # noqa: E402
 
 NOW = datetime(2026, 10, 28, 12, 0, tzinfo=timezone.utc)  # tests never depend on the real clock
+TWO_TIMES_BASE = {'citizens_total': 41, 'citizens_humans': 1, 'citizens_agents': 40, 'citizens_active_7d': 35,
+                  'citizens_posts': 119, 'citizens_comments': 174, 'citizens_upvotes': 250}
 FIXTURE = json.load(open(ROOT / 'tests' / 'fixtures' / 'pulse' / 'pulse-2026-10-27.json', encoding='utf-8'))
 
 
@@ -251,6 +253,8 @@ class TwoTimes(unittest.TestCase):
         cit['totals_observed_at'], cit['activity_counted_at'] = '2026-10-27T16:40:00.000Z', '2026-10-27T16:07:00.000Z'
         for m in cit['metrics']:
             m['as_of'] = '2026-10-27'
+            m['value'] = TWO_TIMES_BASE[m['id']]   # fixed baseline: the weekly refresh rewrites the repo file
+        doc['updated_at'] = '2026-10-27'
         self.write(doc)
 
     def tearDown(self):
