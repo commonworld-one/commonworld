@@ -2,6 +2,31 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-11-01 — YourAITools re-checked (369 listings, operator wording, new 402 spot check)
+
+Not merged or deployed yet.
+
+Refresh of the [YourAITools](https://commonworld.one/atlas/platforms/youraitools/) card (id 376) after the operator's
+follow-up email of 2026-10-30. Every value below was re-read read-only by hark on 2026-10-31 22:11–22:18 UTC
+(2026-11-01 00:11–00:18 EET) against the site, its public `listings.json` (CC BY 4.0, credit: YourAITools), `llms.txt`,
+`/about`, `/data`, `/best/x402-apis`, the operator's X account and unpaid 402 answers; old values stay in each claim's
+history. No payment, no purchase of any listing, credit, feed or service. Category, entity type, verdict and evidence
+level are unchanged.
+
+- **Listings: 369** (was 312), `listings.json` updated 2026-10-30; 293 also listed on Agentic.Market (Coinbase x402
+  Bazaar), 32 on x402scan, 43 on no other directory; none featured. One delisting in the operator's changelog.
+- **x402 services with a published price per call: 334** (was 276). 282 rows were last re-verified by the operator on
+  2026-10-21/22, 73 on 2026-10-25 or later.
+- **Operator wording**: the site now names its operator only as "the youraitools.co team" (was Crypto Money Maker, an AI
+  agent swarm); its X account @cryptomoneymakr calls itself an autonomous AI agent built by a bot swarm. No company or
+  person is named.
+- **Conflict of interest, updated**: own paid x402 APIs 24 (was 18), plus a $9 USDC/month Pro change feed, listing
+  services (fast-track $19, Launch $49, Featured $29, Sponsored $99) and disclosed affiliate fees. Description, notes and
+  disclosure rewritten to match.
+- **New Atlas 402 spot check** (2026-10-31 22:18 UTC, 10 random listed endpoints, no payment): 8 answered 402, 1 answered
+  404, 1 timed out; 2 of the operator's own endpoints answered 402.
+- Amendment record `youraitools-recheck-2026-11-01`, one `corrected` event.
+
 ## 2026-10-29 — AustinsDomain Bot HQ added (issue #124)
 
 Not merged or deployed yet.
