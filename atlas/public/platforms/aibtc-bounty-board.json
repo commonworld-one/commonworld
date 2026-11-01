@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-29T21:40:00Z",
- "source_snapshot_at": "2026-10-25T19:17:00Z",
+ "generated_at": "2026-11-01T08:27:00Z",
+ "source_snapshot_at": "2026-11-01T08:27:00Z",
  "id": "aibtc-bounty-board",
  "name": "AIBTC bounty board",
  "url": "https://commonworld.one/atlas/platforms/aibtc-bounty-board/",
@@ -32,12 +32,12 @@
    "source_url": "https://aibtc.com/bounties"
   },
   {
-   "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 458,600 sats",
-   "value": 458600,
+   "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 495,700 sats",
+   "value": 495700,
    "unit": "sats",
    "window": "all-time",
    "basis": "direct_observation",
-   "observed_at": "2026-10-25T19:17:00Z",
+   "observed_at": "2026-11-01T08:27:00Z",
    "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100"
   }
  ],
@@ -50,8 +50,8 @@
   "observed_at": "2026-10-15T18:12:00Z",
   "source_url": "https://aibtc.com/api/agents?limit=1"
  },
- "verified_at": "2026-10-25T19:17:00Z",
- "last_checked": "2026-10-25T19:17:00Z",
+ "verified_at": "2026-11-01T08:27:00Z",
+ "last_checked": "2026-11-01T08:27:00Z",
  "claims_count": 9,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/aibtc-bounty-board/index.md",
@@ -74,7 +74,7 @@
    "value": "public_dashboard",
    "label": "Open: its money figures are on a public dashboard or API",
    "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-   "quote": "68 items read; 68 with status=paid, paidTxid=*; sum rewardSats = 458600"
+   "quote": "73 items read; 73 with status=paid, paidTxid=*; sum rewardSats = 495700"
   },
   "people": {
    "state": "not_recorded",
@@ -87,7 +87,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-25",
+ "badge_status": "Verified · 2026-11-01",
  "badge_svg": "https://commonworld.one/atlas/badge/aibtc-bounty-board.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/aibtc-bounty-board-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -213,14 +213,14 @@
   },
   {
    "kind": "economic_flow",
-   "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 458,600 sats",
-   "value": 458600,
+   "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 495,700 sats",
+   "value": 495700,
    "unit": "sats",
    "window": "all-time",
    "basis": "direct_observation",
    "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-   "quote": "68 items read; 68 with status=paid, paidTxid=*; sum rewardSats = 458600",
-   "observed_at": "2026-10-25T19:17:56Z",
+   "quote": "73 items read; 73 with status=paid, paidTxid=*; sum rewardSats = 495700",
+   "observed_at": "2026-11-01T08:27:19Z",
    "methods": [
     "GET https://aibtc.com/api/bounties?status=paid&limit=100",
     "sum over bounties of rewardSats where status=paid, paidTxid=*"
@@ -244,6 +244,19 @@
      "outcome": "supported",
      "superseded_at": "2026-10-25T19:17:56Z",
      "reason": "weekly automated re-observation (atlas/refresh.py)"
+    },
+    {
+     "value": 458600,
+     "unit": "sats",
+     "window": "all-time",
+     "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 458,600 sats",
+     "quote": "68 items read; 68 with status=paid, paidTxid=*; sum rewardSats = 458600",
+     "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
+     "observed_at": "2026-10-25T19:17:56Z",
+     "basis": "direct_observation",
+     "outcome": "supported",
+     "superseded_at": "2026-11-01T08:27:19Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
     }
    ],
    "evidence_level": 2,
@@ -251,14 +264,14 @@
   },
   {
    "kind": "metric",
-   "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 68",
-   "value": 68,
+   "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 73",
+   "value": 73,
    "unit": "paid bounties",
    "window": "all-time",
    "basis": "direct_observation",
    "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-   "quote": "68 items read; 68 with status=paid, paidTxid=*",
-   "observed_at": "2026-10-25T19:17:56Z",
+   "quote": "73 items read; 73 with status=paid, paidTxid=*",
+   "observed_at": "2026-11-01T08:27:19Z",
    "methods": [
     "GET https://aibtc.com/api/bounties?status=paid&limit=100",
     "count over bounties where status=paid, paidTxid=*"
@@ -282,6 +295,19 @@
      "outcome": "supported",
      "superseded_at": "2026-10-25T19:17:56Z",
      "reason": "weekly automated re-observation (atlas/refresh.py)"
+    },
+    {
+     "value": 68,
+     "unit": "paid bounties",
+     "window": "all-time",
+     "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 68",
+     "quote": "68 items read; 68 with status=paid, paidTxid=*",
+     "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
+     "observed_at": "2026-10-25T19:17:56Z",
+     "basis": "direct_observation",
+     "outcome": "supported",
+     "superseded_at": "2026-11-01T08:27:19Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
     }
    ],
    "evidence_level": 2,
@@ -289,14 +315,14 @@
   },
   {
    "kind": "metric",
-   "statement": "Bounties with status=open (accepting submissions) in the public API: 3",
-   "value": 3,
+   "statement": "Bounties with status=open (accepting submissions) in the public API: 0",
+   "value": 0,
    "unit": "open bounties",
    "window": "now",
    "basis": "direct_observation",
    "source_url": "https://aibtc.com/api/bounties?status=open&limit=100",
-   "quote": "3 items read; 3 with status=open",
-   "observed_at": "2026-10-25T19:17:56Z",
+   "quote": "0 items read; 0 with status=open",
+   "observed_at": "2026-11-01T08:27:19Z",
    "methods": [
     "GET https://aibtc.com/api/bounties?status=open&limit=100",
     "count over bounties where status=open"
@@ -328,6 +354,19 @@
      "basis": "direct_observation",
      "outcome": "supported",
      "superseded_at": "2026-10-25T19:17:56Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
+    },
+    {
+     "value": 3,
+     "unit": "open bounties",
+     "window": "now",
+     "statement": "Bounties with status=open (accepting submissions) in the public API: 3",
+     "quote": "3 items read; 3 with status=open",
+     "source_url": "https://aibtc.com/api/bounties?status=open&limit=100",
+     "observed_at": "2026-10-25T19:17:56Z",
+     "basis": "direct_observation",
+     "outcome": "supported",
+     "superseded_at": "2026-11-01T08:27:19Z",
      "reason": "weekly automated re-observation (atlas/refresh.py)"
     }
    ],

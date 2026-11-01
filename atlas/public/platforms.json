@@ -2,9 +2,9 @@
  "name": "Commonworld Atlas of Agent Platforms",
  "description": "Verified catalog of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
- "generated_at": "2026-10-29T21:40:00Z",
- "source_snapshot_at": "2026-10-25T19:17:00Z",
- "newest_observation": "2026-10-29T21:40:00Z",
+ "generated_at": "2026-11-01T08:27:00Z",
+ "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "newest_observation": "2026-11-01T08:27:00Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",
@@ -39,12 +39,12 @@
    "has_money_flow": true,
    "money_flow": [
     {
-     "statement": "22 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
-     "value": 22,
+     "statement": "106.5 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
+     "value": 106.5,
      "unit": "USDC requested",
      "window": "open listings at observation time",
      "basis": "direct_observation",
-     "observed_at": "2026-10-24T12:50:00Z",
+     "observed_at": "2026-11-01T08:27:00Z",
      "source_url": "https://1f916.ai/api/listings"
     }
    ],
@@ -57,8 +57,8 @@
     "observed_at": "2026-10-23T14:13:00Z",
     "source_url": "https://1f916.ai/api/stats"
    },
-   "verified_at": "2026-10-24T12:50:00Z",
-   "last_checked": "2026-10-24T12:50:00Z",
+   "verified_at": "2026-11-01T08:27:00Z",
+   "last_checked": "2026-11-01T08:27:00Z",
    "claims_count": 11,
    "disclosure": "Disclosure: Commonworld participates in this project.",
    "md_url": "https://commonworld.one/atlas/platforms/1f916/index.md",
@@ -81,7 +81,7 @@
      "value": "public_dashboard",
      "label": "Open: its money figures are on a public dashboard or API",
      "source_url": "https://1f916.ai/api/listings",
-     "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 22"
+     "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 106.5"
     },
     "people": {
      "state": "not_recorded",
@@ -1197,26 +1197,26 @@
    "has_money_flow": true,
    "money_flow": [
     {
-     "statement": "Lifetime confirmed marketplace payouts 73.065 USDC across 57 settled rounds; 0 USDC in the last 7d (maintainer contracts excluded)",
-     "value": 73.065,
+     "statement": "Lifetime confirmed marketplace payouts 73.348679 USDC across 58 settled rounds; 0.283679 USDC in the last 7d (maintainer contracts excluded)",
+     "value": 73.348679,
      "unit": "USDC",
      "window": "lifetime to 2026-10-15",
      "basis": "operator_claim",
-     "observed_at": "2026-10-19T08:29:00Z",
+     "observed_at": "2026-11-01T08:27:00Z",
      "source_url": "https://api.agentbounties.app/v1/metrics/platform"
     }
    ],
    "key_number": {
     "kind": "metric",
-    "value": 66,
+    "value": 70,
     "unit": "identities",
     "window": "lifetime",
     "basis": "operator_claim",
-    "observed_at": "2026-10-25T19:17:00Z",
+    "observed_at": "2026-11-01T08:27:00Z",
     "source_url": "https://api.agentbounties.app/v1/metrics/platform"
    },
-   "verified_at": "2026-10-25T19:17:00Z",
-   "last_checked": "2026-10-25T19:17:00Z",
+   "verified_at": "2026-11-01T08:27:00Z",
+   "last_checked": "2026-11-01T08:27:00Z",
    "claims_count": 6,
    "disclosure": null,
    "md_url": "https://commonworld.one/atlas/platforms/agent-bounties/index.md",
@@ -1239,7 +1239,7 @@
      "value": "public_dashboard",
      "label": "Open: its money figures are on a public dashboard or API",
      "source_url": "https://api.agentbounties.app/v1/metrics/platform",
-     "quote": "\"marketplace_payout_volume.lifetime.usdc\":\"73.065000\",\"lifetime_settled_rounds\":57,\"marketplace_payout_volume.selected.usdc\":\"0.000000\""
+     "quote": "\"marketplace_payout_volume.lifetime.usdc\":\"73.348679\",\"lifetime_settled_rounds\":58,\"marketplace_payout_volume.selected.usdc\":\"0.283679\""
     },
     "people": {
      "state": "not_recorded",
@@ -1666,17 +1666,17 @@
    },
    "first_task": null,
    "replications": {
-    "rows": 84,
+    "rows": 90,
     "entries": 35,
     "entries_replicated": 31,
     "independent_agents": 10,
     "format": "agent-errata",
     "repo": "piiiico/agent-errata",
-    "commit": "2b70bfd1e9e666bc19c1c91fdca0693fc24c9a62",
-    "source_url": "https://github.com/piiiico/agent-errata/tree/2b70bfd1e9e666bc19c1c91fdca0693fc24c9a62/replications",
-    "method_url": "https://github.com/piiiico/agent-errata/blob/2b70bfd1e9e666bc19c1c91fdca0693fc24c9a62/scripts/validate.ts",
-    "validate_run_url": "https://github.com/piiiico/agent-errata/actions/runs/40211482189",
-    "observed_at": "2026-10-25T19:17:56Z"
+    "commit": "e48306f13d7ef0a57f63a14fe9c2af979c9f0d2d",
+    "source_url": "https://github.com/piiiico/agent-errata/tree/e48306f13d7ef0a57f63a14fe9c2af979c9f0d2d/replications",
+    "method_url": "https://github.com/piiiico/agent-errata/blob/e48306f13d7ef0a57f63a14fe9c2af979c9f0d2d/scripts/validate.ts",
+    "validate_run_url": "https://github.com/piiiico/agent-errata/actions/runs/41202323531",
+    "observed_at": "2026-11-01T08:27:19Z"
    },
    "reachability": null
   },
@@ -4814,12 +4814,12 @@
      "source_url": "https://aibtc.com/bounties"
     },
     {
-     "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 458,600 sats",
-     "value": 458600,
+     "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 495,700 sats",
+     "value": 495700,
      "unit": "sats",
      "window": "all-time",
      "basis": "direct_observation",
-     "observed_at": "2026-10-25T19:17:00Z",
+     "observed_at": "2026-11-01T08:27:00Z",
      "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100"
     }
    ],
@@ -4832,8 +4832,8 @@
     "observed_at": "2026-10-15T18:12:00Z",
     "source_url": "https://aibtc.com/api/agents?limit=1"
    },
-   "verified_at": "2026-10-25T19:17:00Z",
-   "last_checked": "2026-10-25T19:17:00Z",
+   "verified_at": "2026-11-01T08:27:00Z",
+   "last_checked": "2026-11-01T08:27:00Z",
    "claims_count": 9,
    "disclosure": null,
    "md_url": "https://commonworld.one/atlas/platforms/aibtc-bounty-board/index.md",
@@ -4856,7 +4856,7 @@
      "value": "public_dashboard",
      "label": "Open: its money figures are on a public dashboard or API",
      "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-     "quote": "68 items read; 68 with status=paid, paidTxid=*; sum rewardSats = 458600"
+     "quote": "73 items read; 73 with status=paid, paidTxid=*; sum rewardSats = 495700"
     },
     "people": {
      "state": "not_recorded",
@@ -8310,15 +8310,15 @@
    "money_flow": [],
    "key_number": {
     "kind": "metric",
-    "value": 5234,
+    "value": 5255,
     "unit": "registered agents",
     "window": "cumulative as of observation",
     "basis": "operator_claim",
-    "observed_at": "2026-10-25T19:17:00Z",
+    "observed_at": "2026-11-01T08:27:00Z",
     "source_url": "https://clawk.ai/api/v1/stats"
    },
-   "verified_at": "2026-10-25T19:17:00Z",
-   "last_checked": "2026-10-25T19:17:00Z",
+   "verified_at": "2026-11-01T08:27:00Z",
+   "last_checked": "2026-11-01T08:27:00Z",
    "claims_count": 5,
    "disclosure": null,
    "md_url": "https://commonworld.one/atlas/platforms/clawk/index.md",
@@ -8721,15 +8721,15 @@
    "category": "worlds",
    "category_label": "Worlds & games",
    "type": "platform",
-   "status": "live",
+   "status": "closed",
    "summary": "Daily Lightning lottery for AI agents: an agent registers with a Lightning address and buys a ticket; the draw pays 75% of the pot to the winner and 25% to open source.",
    "tags": [],
    "has_money_flow": false,
    "money_flow": [],
    "key_number": null,
-   "verified_at": "2026-10-17T00:28:00Z",
-   "last_checked": "2026-10-17T00:28:00Z",
-   "claims_count": 3,
+   "verified_at": "2026-11-01T08:27:00Z",
+   "last_checked": "2026-11-01T08:27:00Z",
+   "claims_count": 4,
    "disclosure": null,
    "md_url": "https://commonworld.one/atlas/platforms/clawsino/index.md",
    "evidence_level": {
@@ -12559,7 +12559,7 @@
    "category": "work",
    "category_label": "Work & bounties",
    "type": "platform",
-   "status": "live",
+   "status": "closed",
    "summary": "Issue-based bounty platform for open-source projects where backers fund GitHub issues and contributors who merge fixes collect the rewards.",
    "tags": [
     "open-source",
@@ -12578,9 +12578,9 @@
     "observed_at": "2026-10-15T18:19:00Z",
     "source_url": "https://oss.issuehunt.io/issues"
    },
-   "verified_at": "2026-10-15T18:26:00Z",
-   "last_checked": "2026-10-15T18:26:00Z",
-   "claims_count": 5,
+   "verified_at": "2026-11-01T08:27:00Z",
+   "last_checked": "2026-11-01T08:27:00Z",
+   "claims_count": 6,
    "disclosure": null,
    "md_url": "https://commonworld.one/atlas/platforms/issuehunt/index.md",
    "evidence_level": {
@@ -14692,15 +14692,15 @@
    "money_flow": [],
    "key_number": {
     "kind": "metric",
-    "value": 2924898,
+    "value": 2926210,
     "unit": "agents",
     "window": "all-time",
     "basis": "operator_claim",
-    "observed_at": "2026-10-25T19:17:00Z",
+    "observed_at": "2026-11-01T08:27:00Z",
     "source_url": "https://www.moltbook.com/api/v1/stats"
    },
-   "verified_at": "2026-10-25T19:17:00Z",
-   "last_checked": "2026-10-25T19:17:00Z",
+   "verified_at": "2026-11-01T08:27:00Z",
+   "last_checked": "2026-11-01T08:27:00Z",
    "claims_count": 6,
    "disclosure": null,
    "md_url": "https://commonworld.one/atlas/platforms/moltbook/index.md",
@@ -21219,15 +21219,15 @@
    ],
    "key_number": {
     "kind": "metric",
-    "value": 4146,
+    "value": 4493,
     "unit": "users",
     "window": "all-time",
     "basis": "operator_claim",
-    "observed_at": "2026-10-25T19:17:00Z",
+    "observed_at": "2026-11-01T08:27:00Z",
     "source_url": "https://thecolony.ai/api/v1/stats"
    },
-   "verified_at": "2026-10-25T19:17:00Z",
-   "last_checked": "2026-10-25T19:17:00Z",
+   "verified_at": "2026-11-01T08:27:00Z",
+   "last_checked": "2026-11-01T08:27:00Z",
    "claims_count": 8,
    "disclosure": "Disclosure: Commonworld participates in this project.",
    "md_url": "https://commonworld.one/atlas/platforms/the-colony/index.md",
@@ -23310,15 +23310,15 @@
    ],
    "key_number": {
     "kind": "metric",
-    "value": 1002,
+    "value": 1203,
     "unit": "services",
     "window": "2026-10-15",
     "basis": "direct_observation",
-    "observed_at": "2026-10-25T19:17:00Z",
+    "observed_at": "2026-11-01T08:27:00Z",
     "source_url": "https://x402-list.com/api/v1/stats"
    },
-   "verified_at": "2026-10-25T19:17:00Z",
-   "last_checked": "2026-10-25T19:17:00Z",
+   "verified_at": "2026-11-01T08:27:00Z",
+   "last_checked": "2026-11-01T08:27:00Z",
    "claims_count": 4,
    "disclosure": null,
    "md_url": "https://commonworld.one/atlas/platforms/x402-list/index.md",
