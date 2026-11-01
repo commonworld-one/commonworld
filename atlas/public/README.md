@@ -12,4 +12,6 @@ The public events log of card changes is not mirrored here: read https://commonw
 
 Homepage screenshots are re-captured weekly by the workflow `Atlas weekly screenshots` (`.github/workflows/screens.yml`), which opens a pull request to the `atlas-screens` branch; it is never auto-merged.
 
+Source dates (schema_version 1.10.0): a refreshed claim in `platforms/<id>.json` may carry `source_as_of` (when the source computed the figure) and `last_settlement_seen_at` (the newest settlement event the source reported), ISO 8601 UTC or null, kept apart from `observed_at` (when the Atlas read the source).
+
 Cards v2: money and activity claims carry `evidence_level` and `evidence_label`; where a curator opened the source and set the level by hand, the claim also carries `evidence_note`, a short reason (rules: https://github.com/commonworld-one/commonworld/blob/main/atlas/CURATION.md#curator-review-of-a-level).

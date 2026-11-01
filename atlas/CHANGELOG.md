@@ -2,9 +2,24 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-11-01 — Claim source dates in the API contract (API `schema_version` 1.10.0, follow-up to #270)
+
+Merged 2026-11-01 as #274. Not deployed to production yet. Docs and schema only: no card data changes, no change to what the build writes into the data files.
+
+#270 made the build emit two optional keys on refreshed claims in `platforms/<id>.json` (they appear in the data after the next weekly refresh that has a value); this documents them as part of the v1 contract:
+
+- `source_as_of`: when the source itself computed the figure (its own as-of time, e.g. x402-list `traction.as_of`).
+- `last_settlement_seen_at`: the time of the newest settlement event the source reported (an event time, not a freshness time).
+- Both are ISO 8601 UTC (`YYYY-MM-DDTHH:MM:SSZ`) or null, both are distinct from `observed_at` (when the Atlas read the source),
+  and both are kept in a claim's `history[]` entries. They appear only on claims whose refresh mapping names a source date.
+- Declared in the claim schema (`atlas/site/api_v1.py`, `platform.schema.json`) with descriptions; new API release 1.10.0 in
+  [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md); described on the API docs page (`/atlas/api/#source-dates`), in
+  `/llms.txt`, `/atlas/llms.txt`, the mirror README and `atlas/site/README.md`. Tests: `tests/test_refresh_dates_finite_cache.py`
+  (the schema declares both keys and the generated JSON of a refreshed claim validates against it).
+
 ## 2026-11-01 — Weekly refresh covers the x402-list figures of 27 cards (#270)
 
-Merged 2026-11-01 as #270. Not deployed to production yet. No card data changes in this PR: the numbers move on the first weekly refresh after merge (its own PR, reviewed before merging).
+Merged 2026-11-01 as #270. Not deployed to production yet; ships to production together with #274. No card data changes in this PR: the numbers move on the first weekly refresh after merge (its own PR, reviewed before merging).
 
 The 30-day x402-list settlement figures were entered by hand on 2026-10-15 and had gone stale by definition. They are now
 re-read every Sunday by [`refresh.py`](refresh.py) from x402-list's open API (CC BY 4.0), with the old values kept in each claim's history:

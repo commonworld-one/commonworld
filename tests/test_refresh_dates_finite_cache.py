@@ -387,5 +387,57 @@ class DateParity(unittest.TestCase):
         self.assertFalse(any('source_as_of' in y or 'last_settlement_seen_at' in y for y in claims))
 
 
+class SourceDatesInApiContract(unittest.TestCase):
+    """api_v1 declares source_as_of and last_settlement_seen_at on a claim (schema_version 1.10.0): optional, nullable UTC
+    times with descriptions that keep them apart from observed_at; the JSON build.py emits for a refreshed claim validates."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'atlas' / 'site'))
+        import api_v1
+        import build
+        cls.api_v1, cls.build = api_v1, build
+        cls.reg = api_v1.schemas('https://commonworld.one', ['payments'])
+
+    def claim_schema(self):
+        return self.reg['platform.schema.json']['$defs']['claim']
+
+    def test_both_keys_declared_optional_nullable_utc(self):
+        claim = self.claim_schema()
+        for key in ('source_as_of', 'last_settlement_seen_at'):
+            prop = claim['properties'][key]
+            self.assertEqual(prop['type'], ['string', 'null'], key)
+            self.assertEqual(prop['pattern'], self.api_v1.UTC_PATTERN, key)
+            self.assertIn('observed_at', prop['description'], key)
+            self.assertIn('1.10.0', prop['description'], key)
+            self.assertNotIn(key, claim['required'], key)
+
+    def test_release_1_10_0_names_both_keys(self):
+        self.assertEqual(self.api_v1.SCHEMA_VERSION, '1.10.0')
+        top = self.api_v1.CHANGELOG[0]
+        self.assertEqual(top['schema_version'], self.api_v1.SCHEMA_VERSION)
+        text = ' '.join(top['changes'])
+        self.assertIn('`source_as_of`', text)
+        self.assertIn('`last_settlement_seen_at`', text)
+
+    def validate_claim(self, rec):
+        return self.api_v1.validate(rec, {'$ref': 'platform.schema.json#/$defs/claim'}, self.reg, 'platform.schema.json')
+
+    def test_emitted_claim_json_validates(self):
+        rec = {'kind': 'economic_flow', 'statement': 's', 'basis': 'direct_observation', 'outcome': 'supported', 'value': 1.5,
+               'observed_at': '2026-11-01T09:44:00Z', 'source_as_of': '2026-10-28T11:42:00Z',
+               'last_settlement_seen_at': '2026-10-28T12:29:00Z'}
+        out = self.build.rfc3339(rec)
+        self.assertEqual(self.validate_claim(out), [])
+        self.assertEqual(self.validate_claim(dict(out, source_as_of=None, last_settlement_seen_at=None)), [])
+        self.assertTrue(self.validate_claim(dict(out, source_as_of='2026-10-28 11:42')))
+
+    def test_docs_and_llms_mention_both_keys(self):
+        src = (ROOT / 'atlas' / 'site' / 'build.py').read_text(encoding='utf-8')
+        for marker in ('id="source-dates"', '- Source dates on claims (schema_version 1.10.0)', '- Source dates: a refreshed claim',
+                       "'Source dates (schema_version 1.10.0)"):
+            self.assertIn(marker, src)
+
+
 if __name__ == '__main__':
     unittest.main()

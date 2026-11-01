@@ -2,6 +2,10 @@
 
 Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) ships as /api/v2/, and /api/v1/ keeps working.
 
+## 1.10.0 (2026-11-01)
+
+- Two new optional fields on a claim (claims[] of platforms/{id}.json, and the same keys inside a claim's history[] entries): `source_as_of`, the time the source itself computed the figure (its own as-of time, for example x402-list traction.as_of), and `last_settlement_seen_at`, the time of the newest settlement event the source reported (an event time, not an as-of time). Both are ISO 8601 UTC strings (RFC 3339, YYYY-MM-DDTHH:MM:SSZ) or null, and both are kept apart from `observed_at`, the time the Atlas read the source. A claim carries them only when its weekly refresh mapping names a source date (atlas/refresh-sources.json, as_of_field / last_settlement_field); other claims leave them out. The card page and its Markdown twin show the same dates ("source data as of", "last settlement seen"). The fields are first emitted by the build with #270 (2026-11-01); they appear in platforms/{id}.json after the next weekly refresh that has a value. This release documents them in the claim schema.
+
 ## 1.9.0 (2026-10-25)
 
 - `generated_at` now gives the time of the newest data in the build (the later of the source snapshot time and newest_observation), still ISO 8601 UTC. Before, it was the time of the source snapshot file alone, which stayed at 2026-10-19 while cards were amended until 2026-10-24 (the sitemap and newest_observation already showed the later date). Same type, same format; only the value moves forward. Clients that need the old value read the new optional field `source_snapshot_at` (in every file that carries generated_at next to the Atlas data: platforms.json, platforms/{id}.json, categories/{category}.json, the list pages, earn.json, atlas/index.json, index.json).

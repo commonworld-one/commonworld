@@ -12,7 +12,7 @@ from cards_v2 import (BOOKS_VALUES, EACH_HAS_MAX, KEYS_BASES, KEYS_VALUES, LEVEL
                       SCHEMA_FORMATS, STEP_ACTIONS, STEP_OPTIONAL, STEPS_MAX, TEXT_MAX, URL_MAX, URL_PATTERN)
 
 API_VERSION = 'v1'
-SCHEMA_VERSION = '1.9.0'
+SCHEMA_VERSION = '1.10.0'
 API_BASE = '/api/v1'
 STATUSES = ['live', 'closed']
 ENTITY_TYPES = ['platform', 'tool_catalog', 'protocol', 'project']
@@ -23,6 +23,15 @@ UTC_PATTERN = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?Z$'  # ISO 8601 U
 
 # newest first; build.py writes changelog.json and CHANGELOG.md from this list
 CHANGELOG = [
+    {'schema_version': '1.10.0', 'date': '2026-11-01', 'changes': [
+        'Two new optional fields on a claim (claims[] of platforms/{id}.json, and the same keys inside a claim\'s history[] entries): '
+        '`source_as_of`, the time the source itself computed the figure (its own as-of time, for example x402-list traction.as_of), and '
+        '`last_settlement_seen_at`, the time of the newest settlement event the source reported (an event time, not an as-of time). '
+        'Both are ISO 8601 UTC strings (RFC 3339, YYYY-MM-DDTHH:MM:SSZ) or null, and both are kept apart from `observed_at`, the time the '
+        'Atlas read the source. A claim carries them only when its weekly refresh mapping names a source date (atlas/refresh-sources.json, '
+        'as_of_field / last_settlement_field); other claims leave them out. The card page and its Markdown twin show the same dates '
+        '("source data as of", "last settlement seen"). The fields are first emitted by the build with #270 (2026-11-01); they '
+        'appear in platforms/{id}.json after the next weekly refresh that has a value. This release documents them in the claim schema.']},
     {'schema_version': '1.9.0', 'date': '2026-10-25', 'changes': [
         '`generated_at` now gives the time of the newest data in the build (the later of the source snapshot time and newest_observation), '
         'still ISO 8601 UTC. Before, it was the time of the source snapshot file alone, which stayed at 2026-10-19 while cards were amended '
@@ -257,11 +266,20 @@ def schemas(origin, categories):
                   'required': ['kind', 'value', 'unit', 'window', 'basis', 'observed_at', 'source_url'],
                   'properties': {'kind': {'type': 'string'}, 'value': scalar, 'unit': {'type': ['string', 'null']}, 'window': {'type': ['string', 'null']},
                                  'basis': {'enum': BASES}, 'observed_at': utc_n, 'source_url': uri_n}}
-    claim = {'type': 'object', 'description': 'One checked statement with its source, basis, outcome and observation time. Extra keys (history, recheck, methods, verify) may appear.',
+    claim = {'type': 'object', 'description': 'One checked statement with its source, basis, outcome and observation time (observed_at). Extra keys (history, recheck, methods, verify) may appear; a refreshed claim may also carry the source\'s own dates, source_as_of and last_settlement_seen_at (since 1.10.0), which history[] entries keep too.',
              'required': ['kind', 'statement', 'basis', 'outcome'],
              'properties': {'kind': {'type': 'string'}, 'statement': {'type': 'string'}, 'value': scalar, 'unit': {'type': ['string', 'null']},
                             'window': {'type': ['string', 'null']}, 'basis': {'enum': BASES}, 'outcome': {'enum': OUTCOMES},
                             'source_url': uri_n, 'quote': {'type': ['string', 'null']}, 'observed_at': utc_n,
+                            'source_as_of': utc_n | {'description': 'When the source itself computed this figure (its own as-of time, '
+                                             'e.g. x402-list traction.as_of), ISO 8601 UTC, or null. Distinct from observed_at, the time '
+                                             'the Atlas read the source: a figure read today can describe an earlier snapshot. Present only '
+                                             'when the claim\'s refresh mapping names the source\'s as-of field. Added in schema_version 1.10.0.'},
+                            'last_settlement_seen_at': utc_n | {'description': 'Time of the newest settlement event the source reported '
+                                                        '(e.g. a service\'s last_settlement_at on x402-list), ISO 8601 UTC, or null. An '
+                                                        'event time, not an as-of time: it says when money last moved, not how fresh the '
+                                                        'figure is (see source_as_of) or when the Atlas read it (observed_at). Added in '
+                                                        'schema_version 1.10.0.'},
                             'methods': {'type': 'array', 'items': {'type': 'string'}}, 'history': {'type': 'array', 'items': {'type': 'object'}},
                             'recheck': {'type': 'object'},
                             'verify': {'type': 'object', 'description': 'Smaller cross-check for this figure: a URL an agent can fetch within '
