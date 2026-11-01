@@ -21,6 +21,12 @@ re-read every Sunday by [`refresh.py`](refresh.py) from x402-list's open API (CC
 - `refresh.py`: a mapping can read one row of a list (`select`, exactly one row must match, otherwise nothing changes),
   round the published value (`round`), name a human source page (`source_url`), and owns the claim's window when it sets
   one (dated windows become rolling ones; the old window goes into history). Tests: `tests/test_refresh_select.py`.
+- Review fixes (`tests/test_refresh_dates_finite_cache.py`): the source's own as-of time (x402-list `traction.as_of`,
+  mapping key `as_of_field`) is stored as `source_as_of`, apart from our `observed_at`, and shown on the claim line
+  ("source data as of"); a service's `last_settlement_at` is the newest settlement seen (`last_settlement_seen_at`,
+  shown as "last settlement seen"), never the as-of time. NaN and Infinity are rejected when read and can never be
+  written (strict JSON; `check.py` fails on them). Each URL is fetched once per run (an in-run cache: 15 requests for
+  the 29 x402-list mappings, not 29).
 - Not covered (left as dated observations): the fixed 7-day windows of 2026-10-09..10-15 on the service cards, the
   "last settlement day" activity claims, and the Robinhood Chain service count.
 

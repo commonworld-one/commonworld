@@ -95,6 +95,17 @@ def time_tag(dt):
     return f'<time datetime="{dt.strftime("%Y-%m-%dT%H:%MZ")}" title="{dt.strftime("%Y-%m-%d %H:%M UTC")}">{fmt_date(dt)}</time>' if dt else 'date unknown'
 
 
+def source_dates_html(x):
+    """The source's own dates, shown apart from our observed_at: source_as_of (when the source computed the figure, e.g.
+    x402-list traction.as_of) and last_settlement_seen_at (the newest settlement it saw: an event, not an as-of time)."""
+    out = ''
+    for key, label in (('source_as_of', 'source data as of'), ('last_settlement_seen_at', 'last settlement seen')):
+        dt = parse_time(x.get(key))
+        if dt:
+            out += f' · {label} {time_tag(dt)}'
+    return out
+
+
 def fmt_value(v):
     if isinstance(v, bool) or v is None:
         return e(v)
@@ -800,7 +811,7 @@ def build_platform(site, c):
                    f'<span class="tag t-{OUTCOME_TONE.get(o, "warn")}">{e(OUTCOME_LABEL.get(o, o))}</span>'
                    f'<span class="tag t-basis">{e(BASIS_LABEL.get(x.get("basis"), x.get("basis") or "basis unknown"))}</span>{evidence_tag(site, x, c["_evo"])}</div>'
                    f'{lab}{val}<p class="stmt">{e(x.get("statement"))}</p>{quote}'
-                   f'<p class="claim-meta">Observed {time_tag(dt)} · {src}</p>{verify_html(x)}{history_html(x)}</li>')
+                   f'<p class="claim-meta">Observed {time_tag(dt)}{source_dates_html(x)} · {src}</p>{verify_html(x)}{history_html(x)}</li>')
     qa_rows = []
     for q in c.get('qa', []):
         dt = parse_time(q.get('observed_at'))
