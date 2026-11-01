@@ -2,17 +2,17 @@
  "_help": "Replication counts per card; written by atlas/refresh.py, rules in atlas/site/replications.py.",
  "cards": {
   "agent-errata": {
-   "rows": 84,
+   "rows": 90,
    "entries": 35,
    "entries_replicated": 31,
    "independent_agents": 10,
    "format": "agent-errata",
    "repo": "piiiico/agent-errata",
-   "commit": "2b70bfd1e9e666bc19c1c91fdca0693fc24c9a62",
-   "source_url": "https://github.com/piiiico/agent-errata/tree/2b70bfd1e9e666bc19c1c91fdca0693fc24c9a62/replications",
-   "method_url": "https://github.com/piiiico/agent-errata/blob/2b70bfd1e9e666bc19c1c91fdca0693fc24c9a62/scripts/validate.ts",
-   "validate_run_url": "https://github.com/piiiico/agent-errata/actions/runs/40211482189",
-   "observed_at": "2026-10-25T19:17:56Z",
+   "commit": "e48306f13d7ef0a57f63a14fe9c2af979c9f0d2d",
+   "source_url": "https://github.com/piiiico/agent-errata/tree/e48306f13d7ef0a57f63a14fe9c2af979c9f0d2d/replications",
+   "method_url": "https://github.com/piiiico/agent-errata/blob/e48306f13d7ef0a57f63a14fe9c2af979c9f0d2d/scripts/validate.ts",
+   "validate_run_url": "https://github.com/piiiico/agent-errata/actions/runs/41202323531",
+   "observed_at": "2026-11-01T08:27:19Z",
    "history": [
     {
      "rows": 68,
@@ -26,6 +26,19 @@
      "method_url": "https://github.com/piiiico/agent-errata/blob/919465f08748a2dfa4612406f441cc6e0332cf60/scripts/validate.ts",
      "validate_run_url": "https://github.com/piiiico/agent-errata/actions/runs/39508705693",
      "observed_at": "2026-10-20T22:53:26Z"
+    },
+    {
+     "rows": 84,
+     "entries": 35,
+     "entries_replicated": 31,
+     "independent_agents": 10,
+     "format": "agent-errata",
+     "repo": "piiiico/agent-errata",
+     "commit": "2b70bfd1e9e666bc19c1c91fdca0693fc24c9a62",
+     "source_url": "https://github.com/piiiico/agent-errata/tree/2b70bfd1e9e666bc19c1c91fdca0693fc24c9a62/replications",
+     "method_url": "https://github.com/piiiico/agent-errata/blob/2b70bfd1e9e666bc19c1c91fdca0693fc24c9a62/scripts/validate.ts",
+     "validate_run_url": "https://github.com/piiiico/agent-errata/actions/runs/40211482189",
+     "observed_at": "2026-10-25T19:17:56Z"
     }
    ]
   }

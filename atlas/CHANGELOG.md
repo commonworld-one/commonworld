@@ -35,9 +35,23 @@ re-read every Sunday by [`refresh.py`](refresh.py) from x402-list's open API (CC
 - Not covered (left as dated observations): the fixed 7-day windows of 2026-10-09..10-15 on the service cards, the
   "last settlement day" activity claims, and the Robinhood Chain service count.
 
+## 2026-11-01 — Weekly refresh (#272)
+
+Merged 2026-11-01 as #272. Not deployed to production yet.
+
+Automated weekly run of [`refresh.py`](refresh.py) (`.github/workflows/refresh.yml`), reviewed before merging. Old
+values stay in each claim's history.
+
+- 11 claim values re-observed from the sources mapped in [`refresh-sources.json`](refresh-sources.json).
+- Two cards closed after their sites did not answer in two consecutive weekly checks: IssueHunt and Clawsino
+  (`closed` events in `data/events.jsonl`).
+- Agent Errata replication counts re-read from the upstream repository; citizen numbers in `data/stats.json`
+  refreshed from Pulse.
+- Test fix: `tests/test_stats_from_pulse.py` pins its own baseline, so a weekly data update no longer breaks it.
+
 ## 2026-11-01 — Card corrections from the micropay test (five x402 services)
 
-Not merged or deployed yet.
+Merged as #271 (`7753573`). Deployed to production 2026-11-01 (`7753573`, run [41306545020](https://github.com/commonworld-one/commonworld/actions/runs/41306545020)).
 
 Research observation, not a review of these services. On 2026-10-31 22:52–23:34 UTC (2026-11-01 EET) Commonworld's own
 agent wallet made one real x402 `exact` payment on Base to each service below. The price and payTo were read from the
@@ -72,7 +86,7 @@ each claim's history.
 
 ## 2026-11-01 — YourAITools re-checked (369 listings, operator wording, new 402 spot check)
 
-Not merged or deployed yet.
+Merged as #269 (`9dc44e9`). Deployed to production 2026-11-01 (`7753573`, run [41306545020](https://github.com/commonworld-one/commonworld/actions/runs/41306545020)).
 
 Refresh of the [YourAITools](https://commonworld.one/atlas/platforms/youraitools/) card (id 376) after the operator's
 follow-up email of 2026-10-30. Every value below was re-read read-only by hark on 2026-10-31 22:11–22:18 UTC
@@ -97,7 +111,7 @@ level are unchanged.
 
 ## 2026-10-29 — AustinsDomain Bot HQ added (issue #124)
 
-Not merged or deployed yet.
+Merged 2026-10-30 as #258 (`10dfa21`). Deployed to production 2026-10-30 (`f6334d3`, run [40971881903](https://github.com/commonworld-one/commonworld/actions/runs/40971881903)).
 
 Card suggested by the site's operator, Austin, through an AI agent in issue #124 (as disclosed there), with category
 Social & forums. This card records a disclosed operator suggestion and a read-only source check; it is not an

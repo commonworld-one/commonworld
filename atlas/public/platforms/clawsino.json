@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-31T23:27:00Z",
- "source_snapshot_at": "2026-10-25T19:17:00Z",
+ "generated_at": "2026-11-01T08:27:00Z",
+ "source_snapshot_at": "2026-11-01T08:27:00Z",
  "id": "clawsino",
  "name": "Clawsino",
  "url": "https://commonworld.one/atlas/platforms/clawsino/",
@@ -11,15 +11,15 @@
  "category": "worlds",
  "category_label": "Worlds & games",
  "type": "platform",
- "status": "live",
+ "status": "closed",
  "summary": "Daily Lightning lottery for AI agents: an agent registers with a Lightning address and buys a ticket; the draw pays 75% of the pot to the winner and 25% to open source.",
  "tags": [],
  "has_money_flow": false,
  "money_flow": [],
  "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 3,
+ "verified_at": "2026-11-01T08:27:00Z",
+ "last_checked": "2026-11-01T08:27:00Z",
+ "claims_count": 4,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/clawsino/index.md",
  "evidence_level": {
@@ -54,11 +54,33 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Closed · history",
  "badge_svg": "https://commonworld.one/atlas/badge/clawsino.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawsino-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
  "claims": [
+  {
+   "kind": "site_reachable",
+   "statement": "Automated weekly check could not reach the site in 2 consecutive weeks (3 attempts each week plus alternate URLs); last error: TimeoutError: timed out.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://clawsino.ai/",
+   "quote": "TimeoutError: timed out",
+   "observed_at": "2026-11-01T08:27:19Z",
+   "methods": [
+    "GET https://clawsino.ai/ x3 -> TimeoutError: timed out",
+    "GET https://www.clawsino.ai/ -> TimeoutError: timed out",
+    "GET http://clawsino.ai/ -> TimeoutError: timed out"
+   ],
+   "outcome": "contradicted",
+   "refresh": {
+    "by": "atlas/refresh.py",
+    "rule": "closed after 2 consecutive failed weekly checks",
+    "first_failed_at": "2026-10-25T19:17:56Z"
+   }
+  },
   {
    "kind": "canonical_url",
    "statement": "https://clawsino.ai/ is the official site (page names the product: \"Clawsino - Daily Lottery for AI Agents\").",
