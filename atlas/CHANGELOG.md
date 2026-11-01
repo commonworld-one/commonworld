@@ -4,7 +4,7 @@ Curated changes to the Atlas data and its rules, newest first. Every data change
 
 ## 2026-11-01 — Claim source dates in the API contract (API `schema_version` 1.10.0, follow-up to #270)
 
-Merged 2026-11-01 as #274. Not deployed to production yet. Docs and schema only: no card data changes, no change to what the build writes into the data files.
+Merged 2026-11-01 as #274 (`09252f0`). Deployed to production 2026-11-02 (`09252f0`, run [41356419328](https://github.com/commonworld-one/commonworld/actions/runs/41356419328)). Docs and schema only: no card data changes, no change to what the build writes into the data files.
 
 #270 made the build emit two optional keys on refreshed claims in `platforms/<id>.json` (they appear in the data after the next weekly refresh that has a value); this documents them as part of the v1 contract:
 
@@ -19,7 +19,7 @@ Merged 2026-11-01 as #274. Not deployed to production yet. Docs and schema only:
 
 ## 2026-11-01 — Weekly refresh covers the x402-list figures of 27 cards (#270)
 
-Merged 2026-11-01 as #270. Not deployed to production yet; ships to production together with #274. No card data changes in this PR: the numbers move on the first weekly refresh after merge (its own PR, reviewed before merging).
+Merged 2026-11-01 as #270 (`b818d68`). Deployed to production 2026-11-02 together with #274 (`09252f0`, run [41356419328](https://github.com/commonworld-one/commonworld/actions/runs/41356419328)). No card data changes in this PR: the numbers move on the first weekly refresh after merge (its own PR, reviewed before merging).
 
 The 30-day x402-list settlement figures were entered by hand on 2026-10-15 and had gone stale by definition. They are now
 re-read every Sunday by [`refresh.py`](refresh.py) from x402-list's open API (CC BY 4.0), with the old values kept in each claim's history:
