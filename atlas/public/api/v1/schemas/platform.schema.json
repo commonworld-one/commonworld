@@ -969,7 +969,7 @@
   },
   "claim": {
    "type": "object",
-   "description": "One checked statement with its source, basis, outcome and observation time. Extra keys (history, recheck, methods, verify) may appear.",
+   "description": "One checked statement with its source, basis, outcome and observation time (observed_at). Extra keys (history, recheck, methods, verify) may appear; a refreshed claim may also carry the source's own dates, source_as_of and last_settlement_seen_at (since 1.10.0), which history[] entries keep too.",
    "required": [
     "kind",
     "statement",
@@ -1039,6 +1039,24 @@
      ],
      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
      "format": "date-time"
+    },
+    "source_as_of": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
+     "format": "date-time",
+     "description": "When the source itself computed this figure (its own as-of time, e.g. x402-list traction.as_of), ISO 8601 UTC, or null. Distinct from observed_at, the time the Atlas read the source: a figure read today can describe an earlier snapshot. Present only when the claim's refresh mapping names the source's as-of field. Added in schema_version 1.10.0."
+    },
+    "last_settlement_seen_at": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
+     "format": "date-time",
+     "description": "Time of the newest settlement event the source reported (e.g. a service's last_settlement_at on x402-list), ISO 8601 UTC, or null. An event time, not an as-of time: it says when money last moved, not how fresh the figure is (see source_as_of) or when the Atlas read it (observed_at). Added in schema_version 1.10.0."
     },
     "methods": {
      "type": "array",

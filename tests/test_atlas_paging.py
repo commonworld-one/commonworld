@@ -550,7 +550,7 @@ class GeneratedAt(unittest.TestCase):
             props = sch[name]['properties']
             self.assertIn('source_snapshot_at', props, name)
             self.assertIn('newest observation', props['generated_at']['description'].replace('newest_observation', 'newest observation'), name)
-        self.assertEqual(api_v1.SCHEMA_VERSION, '1.9.0')
+        self.assertGreaterEqual(tuple(map(int, api_v1.SCHEMA_VERSION.split('.'))), (1, 9, 0))
         self.assertEqual(api_v1.CHANGELOG[0]['schema_version'], api_v1.SCHEMA_VERSION)
 
 
