@@ -1,7 +1,7 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-29T21:40:00Z",
+ "generated_at": "2026-10-31T23:27:00Z",
  "source_snapshot_at": "2026-10-25T19:17:00Z",
  "id": "blockrun",
  "name": "BlockRun",
@@ -48,9 +48,9 @@
   "observed_at": "2026-10-15T18:08:00Z",
   "source_url": "https://x402-list.com/api/v1/services?per_page=100"
  },
- "verified_at": "2026-10-15T18:25:00Z",
- "last_checked": "2026-10-15T18:25:00Z",
- "claims_count": 6,
+ "verified_at": "2026-10-31T23:21:00Z",
+ "last_checked": "2026-10-31T23:21:00Z",
+ "claims_count": 7,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/blockrun/index.md",
  "evidence_level": {
@@ -85,7 +85,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-10-31",
  "badge_svg": "https://commonworld.one/atlas/badge/blockrun.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/blockrun-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -187,6 +187,24 @@
    "outcome": "supported",
    "evidence_level": 2,
    "evidence_label": "public dashboard"
+  },
+  {
+   "kind": "protocol",
+   "statement": "Commonworld's own paid check (research observation, micropay test 2026-11-01): the live 402 of https://blockrun.ai/api/v1/chat/completions for model gpt-4o-mini asked 0.002 USDC on Base (x402 v2, scheme exact, payTo 0xe9030014F5DAe217d0A152f02A043567b16c1aBf); Commonworld paid it once and got a real completion (55 tokens). Settlement: Base tx 0x5c341f8a1bbab0dc5d0a6685076e6201116d82d812654f6381ee3e1119114c27 (block 53349788), 0.002 USDC to that payTo.",
+   "value": 0.002,
+   "unit": "USDC per call (chat completions, gpt-4o-mini, paid)",
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://blockrun.ai/api/v1/chat/completions",
+   "quote": "HTTP 402, x402Version 2, scheme exact, amount 2000, network eip155:8453, payTo 0xe9030014F5DAe217d0A152f02A043567b16c1aBf",
+   "observed_at": "2026-10-31T23:21:56Z",
+   "methods": [
+    "unpaid POST https://blockrun.ai/api/v1/chat/completions (model gpt-4o-mini) at 2026-10-31T23:21:56Z (HTTP 402, payment-required decoded: amount 2000, payTo 0xe9030014F5DAe217d0A152f02A043567b16c1aBf)",
+    "paid POST with an x402 exact (EIP-3009) authorization for exactly those terms at 2026-10-31T23:21:59Z (HTTP 200, completion returned, PAYMENT-RESPONSE success)",
+    "Base receipt (status 1, block 53349788): one USDC Transfer of 2000 units to 0xe9030014F5DAe217d0A152f02A043567b16c1aBf; authorizationState(nonce) 0 -> 1",
+    "explorer record: https://basescan.org/tx/0x5c341f8a1bbab0dc5d0a6685076e6201116d82d812654f6381ee3e1119114c27"
+   ],
+   "outcome": "supported"
   }
  ],
  "qa_status": "checked"

@@ -1,7 +1,7 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-29T21:40:00Z",
+ "generated_at": "2026-10-31T23:27:00Z",
  "source_snapshot_at": "2026-10-25T19:17:00Z",
  "id": "agent402-tools",
  "name": "Agent402",
@@ -17,9 +17,9 @@
  "has_money_flow": false,
  "money_flow": [],
  "key_number": null,
- "verified_at": "2026-10-19T11:14:00Z",
- "last_checked": "2026-10-19T11:14:00Z",
- "claims_count": 4,
+ "verified_at": "2026-10-31T23:19:00Z",
+ "last_checked": "2026-10-31T23:19:00Z",
+ "claims_count": 5,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/agent402-tools/index.md",
  "evidence_level": {
@@ -54,7 +54,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-19",
+ "badge_status": "Verified · 2026-10-31",
  "badge_svg": "https://commonworld.one/atlas/badge/agent402-tools.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent402-tools-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -116,6 +116,25 @@
    "observed_at": "2026-10-19T11:14:47Z",
    "methods": [
     "curl -sL -A \"<Chrome UA>\" https://agent402.tools/marketplace (HTTP 200, final URL https://agent402.tools/marketplace, 20782 chars of page text)"
+   ],
+   "outcome": "supported"
+  },
+  {
+   "kind": "protocol",
+   "statement": "Commonworld's own paid check (research observation, micropay test 2026-11-01): the live 402 of https://agent402.tools/api/random asked 0.001 USDC on Base (x402 v2, scheme exact, payTo 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0; the 402 also offers other networks); Commonworld paid it once with ?min=1&max=100&count=3 and got three integers. Settlement: Base tx 0xfd2e232fb27f03c428c9643818119a5ad380225b63768803cd4779a9f08d4035 (block 53349729), 0.001 USDC to that payTo. A first paid request without query parameters was rejected with HTTP 400 before settlement (not charged).",
+   "value": 0.001,
+   "unit": "USDC per call (/api/random, paid)",
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://agent402.tools/api/random",
+   "quote": "HTTP 402, x402Version 2, scheme exact, amount 1000, network eip155:8453, payTo 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0",
+   "observed_at": "2026-10-31T23:19:57Z",
+   "methods": [
+    "unpaid GET https://agent402.tools/api/random at 2026-10-31T23:19:57Z (HTTP 402, payment-required decoded: amount 1000, payTo 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0)",
+    "paid GET ?min=1&max=100&count=3 with an x402 exact (EIP-3009) authorization for exactly those terms at 2026-10-31T23:20:00Z (HTTP 200, {\"integers\":[42,66,77]}, PAYMENT-RESPONSE success)",
+    "first paid GET without parameters: HTTP 400 \"Provide ?bytes= or integer ?min= and ?max=\", authorization still unused, balance unchanged (not charged)",
+    "Base receipt (status 1, block 53349729): one USDC Transfer of 1000 units to 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0; authorizationState(nonce) 0 -> 1",
+    "explorer record: https://basescan.org/tx/0xfd2e232fb27f03c428c9643818119a5ad380225b63768803cd4779a9f08d4035"
    ],
    "outcome": "supported"
   }
