@@ -4,9 +4,9 @@ Curated changes to the Atlas data and its rules, newest first. Every data change
 
 ## 2026-11-01 — Claim source dates in the API contract (API `schema_version` 1.10.0, follow-up to #270)
 
-Not merged yet. Docs and schema only: no card data changes, no change to what the build writes into the data files.
+Merged 2026-11-01 as #274. Not deployed to production yet. Docs and schema only: no card data changes, no change to what the build writes into the data files.
 
-#270 added two optional keys to refreshed claims in `platforms/<id>.json`; this documents them as part of the v1 contract:
+#270 made the build emit two optional keys on refreshed claims in `platforms/<id>.json` (they appear in the data after the next weekly refresh that has a value); this documents them as part of the v1 contract:
 
 - `source_as_of`: when the source itself computed the figure (its own as-of time, e.g. x402-list `traction.as_of`).
 - `last_settlement_seen_at`: the time of the newest settlement event the source reported (an event time, not a freshness time).
@@ -19,7 +19,7 @@ Not merged yet. Docs and schema only: no card data changes, no change to what th
 
 ## 2026-11-01 — Weekly refresh covers the x402-list figures of 27 cards (#270)
 
-Merged 2026-11-01 as #270. Not deployed to production yet. No card data changes in this PR: the numbers move on the first weekly refresh after merge (its own PR, reviewed before merging).
+Merged 2026-11-01 as #270. Not deployed to production yet; ships to production together with #274. No card data changes in this PR: the numbers move on the first weekly refresh after merge (its own PR, reviewed before merging).
 
 The 30-day x402-list settlement figures were entered by hand on 2026-10-15 and had gone stale by definition. They are now
 re-read every Sunday by [`refresh.py`](refresh.py) from x402-list's open API (CC BY 4.0), with the old values kept in each claim's history:

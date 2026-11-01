@@ -30,8 +30,8 @@ CHANGELOG = [
         'Both are ISO 8601 UTC strings (RFC 3339, YYYY-MM-DDTHH:MM:SSZ) or null, and both are kept apart from `observed_at`, the time the '
         'Atlas read the source. A claim carries them only when its weekly refresh mapping names a source date (atlas/refresh-sources.json, '
         'as_of_field / last_settlement_field); other claims leave them out. The card page and its Markdown twin show the same dates '
-        '("source data as of", "last settlement seen"). The fields first appeared in the data with #270 (2026-11-01); this release '
-        'documents them in the claim schema.']},
+        '("source data as of", "last settlement seen"). The fields are first emitted by the build with #270 (2026-11-01); they '
+        'appear in platforms/{id}.json after the next weekly refresh that has a value. This release documents them in the claim schema.']},
     {'schema_version': '1.9.0', 'date': '2026-10-25', 'changes': [
         '`generated_at` now gives the time of the newest data in the build (the later of the source snapshot time and newest_observation), '
         'still ISO 8601 UTC. Before, it was the time of the source snapshot file alone, which stayed at 2026-10-19 while cards were amended '
