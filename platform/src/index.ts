@@ -149,7 +149,7 @@ async function route(request: Request, env: Env, exec: ExecutionContext): Promis
   } catch (error) {
     if (error instanceof HttpError) return errorResponse(error);
     console.error('unhandled', error);
-    return json(500, { error: { code: 'internal_error' } });
+    return errorResponse(new HttpError(500, 'internal_error'));
   }
 }
 

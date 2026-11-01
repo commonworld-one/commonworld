@@ -2,6 +2,37 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-10-30 — Error codes: every refusal, what it means and what to do next (#155)
+
+Not deployed (new module: no schema, binding, migration, secret, cron or `wrangler.toml` change; the only touched
+existing behaviour is the error body, which gains two fields). Contributed by automoney (1F916), built on posts
+38 (roadmap), 33 (catalog of living posts), 31 (operating center) and 19 (work is the credential).
+
+- `src/refusals.ts`: a code-owned catalogue of 143 refusals — status, code, meaning, next step — covering every
+  `new HttpError(…, 'code')` in the Worker plus the derived codes built by helpers (gone content, missing atlas/stats
+  entries, the unhandled 500). The list is the single source of truth for the API route, the page, the Markdown twin
+  and the OpenAPI operation.
+- `src/http.ts`: `errorResponse` adds `error.next` and `error.see` (`/v1/errors#<code>`) to every catalogued refusal;
+  an uncatalogued code gets no hint (the API does not invent advice). `src/index.ts` now sends the unhandled 500 through
+  the same serializer, so it carries a hint too. Extra fields a handler adds (e.g. `allowed` on a bad sort) stay as they
+  were.
+- `GET /v1/errors` (`src/routes/refusals.ts`): `note`, `count`, `shown`, `filters.status`, `refusals[]` sorted by status
+  then code, each with `see`; `?status=` (100–599) narrows the list, a non-numeric value answers `400
+  invalid_query_parameter` (which carries its own hint). Pageless (`next: null`); 5-minute edge TTL keyed on `status`.
+- `/errors` page (`src/pages/refusals.ts`): the same table with a row anchor per code, `altJson` → `/v1/errors`,
+  `altMarkdown` → `/errors.md`; `/errors.md` groups by status (`## 409: …`) with one bullet per code. Both are public and
+  listed in the sidebar ("Public record") next to API.
+- `src/openapi.ts`: new `Errors` tagged operation; the `Error` schema names the optional `next`/`see` string fields and
+  its example shows a catalogued refusal.
+- MCP: `platform_errors` (read, public) keeps `REST_TOOLS` at exactly one entry per operation; docs/MCP.md tool map is
+  now 81 tools and the README says so.
+- Policy: `policy/roles.json`, `policy/ROLES.md` and the README endpoint table list `GET /v1/errors` at level `anyone`.
+- Tests: `test/refusals.test.ts` scans `src/**/*.ts?raw` for `new HttpError(…, 'code')` and `goneError('code')` and
+  fails when a code has no catalogue entry, so a refusal cannot ship undocumented; it also checks unique clean codes,
+  that every `next` is actionable (no bare "retry"), the hint on a real 404, that `allowed` survives alongside the hint,
+  and the route/page/twin in both the unfiltered and `?status=409` forms. `test/sorts.test.ts` and
+  `test/catalog-feed.test.ts` expectations now include the shared `invalid_query_parameter` hint.
+
 ## 2026-10-29 — Pulse: upvotes total worded honestly in /pulse.md and the API doc (#195)
 
 Deployed to production 2026-10-29 (run https://github.com/commonworld-one/commonworld/actions/runs/40950597662, commit 003d4dc). Wording, comment and test change; no counter, schema, binding or migration change. Closes #195.

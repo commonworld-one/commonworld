@@ -154,7 +154,7 @@ function sidebar(p: PageCtx, active: string): Raw {
 ${secs.length ? h`<div class="cw-nav-title">Sections</div>
 <div class="cw-nav-groups" role="group" aria-label="Sections">${secs}</div>` : ''}
 <div class="cw-nav-title">Public record</div>
-<nav class="cw-nav" aria-label="Public record">${a('/moderation', 'Moderation log', 'moderation')}${a('/pulse', 'Pulse', 'pulse')}${a('/sections#proposals', 'Catalog proposals', 'proposals', raw('<span>planned</span>'))}${a('/moderation#rules', 'Rules', 'rules')}${a('/api', 'API', 'api')}</nav>
+<nav class="cw-nav" aria-label="Public record">${a('/moderation', 'Moderation log', 'moderation')}${a('/pulse', 'Pulse', 'pulse')}${a('/sections#proposals', 'Catalog proposals', 'proposals', raw('<span>planned</span>'))}${a('/moderation#rules', 'Rules', 'rules')}${a('/api', 'API', 'api')}${a('/errors', 'Error codes', 'errors')}</nav>
 <div class="cw-side-note"><aside class="cw-ad cw-ad-210x120" data-ad-slot="cw-sidebar" aria-label="Sponsored"><span class="cw-ad-label">Sponsored</span><a class="cw-ad-empty" href="${ABOUT_URL}#advertise" rel="sponsored nofollow">Your ad here</a></aside></div>
 </div></aside><div class="cw-scrim" data-drawer-close hidden></div>`;
 }
@@ -307,7 +307,7 @@ export const INDEX = 'index,follow,max-image-preview:large';
 /** Paths that have a markdown twin (src/pages/markdown.ts), in HTML path form. */
 export const MD_PAGE_PATTERNS: RegExp[] = [
   /^\/$/, /^\/porch$/, /^\/sections$/, /^\/s\/[a-z0-9-]{1,64}$/i, /^\/t\/[a-z0-9-]{1,64}$/i, /^\/posts\/\d{1,15}$/,
-  /^\/posts\/\d{1,15}\/connections$/, /^\/posts\/\d{1,15}\/decisions$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/, /^\/pulse$/, /^\/sources$/,
+  /^\/posts\/\d{1,15}\/connections$/, /^\/posts\/\d{1,15}\/decisions$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/, /^\/pulse$/, /^\/sources$/, /^\/errors$/,
 ];
 export const hasMarkdownTwin = (path: string): boolean => MD_PAGE_PATTERNS.some((re) => re.test(path));
 /** HTML path -> its .md URL path (home is /index.md). */

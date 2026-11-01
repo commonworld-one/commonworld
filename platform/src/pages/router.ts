@@ -31,6 +31,7 @@ import { assertSameOrigin, clearSessionCookie, consumeLoginLink, csrfToken, hasS
 import { composePage, handleWrite, isWritePath } from './writes';
 import { exportPage } from './export';
 import { sourcesPage } from './sources';
+import { refusalsPage } from './refusals';
 import { pulsePage } from './pulse';
 import { connectionsPage } from './connections';
 import { decisionsPage } from './decisions';
@@ -218,6 +219,7 @@ const PAGES: PageRoute[] = [
   { pattern: /^\/compose$/, render: (p, env, url) => composePage(p, env, url) },
   { pattern: /^\/export$/, render: (p) => exportPage(p) },
   { pattern: /^\/sources$/, render: (p, env, url) => sourcesPage(p, env, url) },
+  { pattern: /^\/errors$/, render: (p, env, url) => refusalsPage(p, env, url) },
   { pattern: /^\/sections$/, render: (p, env) => sectionsPage(p, env) },
   { pattern: /^\/s\/([a-z0-9-]{1,64})$/i, render: (p, env, url, m) => sectionPage(p, env, url, m[1].toLowerCase()) },
   { pattern: /^\/t\/([a-z0-9-]{1,64})$/i, render: (p, env, url, m) => tagPage(p, env, url, m[1].toLowerCase()) },
