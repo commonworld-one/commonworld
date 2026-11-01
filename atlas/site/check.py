@@ -56,7 +56,7 @@ atlas/data/trust-roles.json, a date, a reason and an https evidence link; a rest
 Refreshed numbers: the text of every claim the weekly refresh manages agrees with its number and quote (refresh_note_checks).
 Also: native ad cards sit after every 12th card, the tag shelf exists with its expander, every card links to its page.
 """
-import fnmatch, gzip, html, json, os, re, struct, sys, xml.etree.ElementTree as ET
+import fnmatch, gzip, html, json, math, os, re, struct, sys, xml.etree.ElementTree as ET
 from urllib.parse import quote, unquote
 from html.parser import HTMLParser
 from collections import Counter
@@ -1680,6 +1680,27 @@ def events_checks():
     return fails
 
 
+def _reject_non_finite(token):
+    raise ValueError(f'non-finite number {token} (not JSON)')
+
+
+def claim_number_problems(c, refresh):
+    """One claim and its history: numeric values are finite; the source's as-of time (source_as_of) and the newest
+    settlement seen (last_settlement_seen_at) are UTC times kept apart from observed_at (our own read)."""
+    probs = []
+    for rec in [c] + [h for h in (c.get('history') or []) if isinstance(h, dict)]:
+        v = rec.get('value')
+        if isinstance(v, float) and not math.isfinite(v):
+            probs.append(f'claim value {v} is not a finite number')
+        for k in refresh.DATE_KEYS:
+            if rec.get(k) is None:
+                continue
+            when, why = refresh.utc_time(rec[k])
+            if why or when != rec[k]:
+                probs.append(f'claim {k} {rec[k]!r} must be a UTC time YYYY-MM-DDTHH:MM:SSZ ({why or "not normalised"})')
+    return probs
+
+
 def refresh_note_checks():
     """Refreshed claims keep their words in step with their number: for every claim carrying a refresh_id (a number the
     weekly refresh re-observes), atlas/refresh.py note_drift() must find nothing (statement = its template re-rendered
@@ -1695,9 +1716,15 @@ def refresh_note_checks():
         for m in v.get('numbers', []):
             fails += [f'refresh-sources.json: {p_}' for p_ in refresh.mapping_problems(m)]
             maps[m['id']] = (slug, m)
-    snap = json.load(open(refresh.default_snapshot(), encoding='utf-8'))
+    snap_path = refresh.default_snapshot()
+    try:
+        # strict parse: NaN / Infinity / -Infinity are not JSON and are never published
+        snap = json.load(open(snap_path, encoding='utf-8'), parse_constant=_reject_non_finite)
+    except ValueError as ex:
+        return fails + [f'{os.path.basename(snap_path)}: {ex}']
     for e in snap.get('platforms', []):
         for c in e.get('claims', []):
+            fails += [f'{e["slug"]}: {p_}' for p_ in claim_number_problems(c, refresh)]
             v = c.get('verify')
             if v is not None and (not isinstance(v, dict) or not str(v.get('url', '')).startswith('https://') or not (v.get('note') or '').strip()):
                 fails.append(f'{e["slug"]}: claim verify must be {{url: https://..., note}}')

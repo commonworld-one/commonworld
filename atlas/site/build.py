@@ -95,6 +95,30 @@ def time_tag(dt):
     return f'<time datetime="{dt.strftime("%Y-%m-%dT%H:%MZ")}" title="{dt.strftime("%Y-%m-%d %H:%M UTC")}">{fmt_date(dt)}</time>' if dt else 'date unknown'
 
 
+SOURCE_DATE_KEYS = (('source_as_of', 'source data as of'), ('last_settlement_seen_at', 'last settlement seen'))
+
+
+def source_dates(x):
+    """The source's own dates on a claim, kept apart from our observed_at: source_as_of (when the source computed the figure,
+    e.g. x402-list traction.as_of) and last_settlement_seen_at (the newest settlement it saw: an event, not an as-of time).
+    [(label, datetime)] in a fixed order; the HTML card, its Markdown twin and the JSON record all carry these same facts."""
+    out = []
+    for key, label in SOURCE_DATE_KEYS:
+        dt = parse_time(x.get(key))
+        if dt:
+            out.append((label, dt))
+    return out
+
+
+def source_dates_html(x):
+    return ''.join(f' · {label} {time_tag(dt)}' for label, dt in source_dates(x))
+
+
+def source_dates_md(x):
+    """Same facts and words as source_dates_html, as plain text for the Markdown twin (minute precision, UTC)."""
+    return ''.join(f' · {label} {dt.strftime("%Y-%m-%d %H:%M UTC")}' for label, dt in source_dates(x))
+
+
 def fmt_value(v):
     if isinstance(v, bool) or v is None:
         return e(v)
@@ -800,7 +824,7 @@ def build_platform(site, c):
                    f'<span class="tag t-{OUTCOME_TONE.get(o, "warn")}">{e(OUTCOME_LABEL.get(o, o))}</span>'
                    f'<span class="tag t-basis">{e(BASIS_LABEL.get(x.get("basis"), x.get("basis") or "basis unknown"))}</span>{evidence_tag(site, x, c["_evo"])}</div>'
                    f'{lab}{val}<p class="stmt">{e(x.get("statement"))}</p>{quote}'
-                   f'<p class="claim-meta">Observed {time_tag(dt)} · {src}</p>{verify_html(x)}{history_html(x)}</li>')
+                   f'<p class="claim-meta">Observed {time_tag(dt)}{source_dates_html(x)} · {src}</p>{verify_html(x)}{history_html(x)}</li>')
     qa_rows = []
     for q in c.get('qa', []):
         dt = parse_time(q.get('observed_at'))
@@ -1033,7 +1057,9 @@ def build_platform_md(site, c):
         val = '' if x.get('value') in (None, '') else f"{x['value']}{(' ' + x['unit']) if x.get('unit') else ''}{(' (' + fmt_window(x['window']) + ')') if x.get('window') else ''}"
         L.append('| ' + ' | '.join(md_cell(v) for v in [KIND_LABEL.get(x.get('kind'), (x.get('kind') or 'claim').replace('_', ' ').capitalize()), x.get('statement'), val,
                  BASIS_LABEL.get(x.get('basis'), x.get('basis')), OUTCOME_LABEL.get(x.get('outcome'), x.get('outcome')),
-                 (f'{lv} · {cv2.LEVELS[lv][1]}' + (f' (curator review: {note})' if note else '')) if lv else '', dt.strftime('%Y-%m-%d %H:%M UTC') if dt else '', x.get('source_url') or '']) + ' |')
+                 (f'{lv} · {cv2.LEVELS[lv][1]}' + (f' (curator review: {note})' if note else '')) if lv else '',
+                 ((dt.strftime('%Y-%m-%d %H:%M UTC') if dt else 'date unknown') + source_dates_md(x)) if (dt or source_dates(x)) else '',
+                 x.get('source_url') or '']) + ' |')
     L += ['', f"Data licence: {site.cfg.get('data_licence') or 'see the site'}; please credit \"Commonworld Atlas\" with a link to {A(c['_url'])}.", '']
     return '\n'.join(L)
 
@@ -2685,6 +2711,12 @@ def rfc3339(o):
     return o
 
 
+def platform_json_claims(c):
+    """claims[] of platforms/<id>.json: every claim key as stored (source_as_of and last_settlement_seen_at included, the same
+    dates the card and its Markdown twin show), plus the evidence annotation, times as RFC 3339."""
+    return rfc3339([cv2.annotate_claim(x, c['_evo']) for x in c.get('claims', [])])
+
+
 def agent_record(site, c):
     """Stable public fields for one published entry (same set as the site cards)."""
     claims = c.get('claims', [])
@@ -2797,7 +2829,7 @@ def build_agent_files(site, write):
         bu = badge_urls(site, c)
         one = {'licence': lic, 'source': REPO_URL, 'generated_at': iso(gen), 'source_snapshot_at': src} | r | {
             'badge_status': badges.status_of(c)[1], 'badge_svg': bu['svg'], 'badge_svg_dark': bu['svg_dark'], 'badge_page': bu['page'],
-            'claims': rfc3339([cv2.annotate_claim(x, c['_evo']) for x in c.get('claims', [])]), 'qa_status': c.get('qa_status')}
+            'claims': platform_json_claims(c), 'qa_status': c.get('qa_status')}
         write(f"{b}/platforms/{c['slug']}.json", json.dumps(one, ensure_ascii=False, indent=1) + '\n')
         site.api_docs.append((f"/atlas/platforms/{c['slug']}.json", one, 'platform.schema.json', True))
 

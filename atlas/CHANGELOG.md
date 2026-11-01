@@ -2,9 +2,42 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-11-01 — Weekly refresh covers the x402-list figures of 27 cards (#270)
+
+Merged 2026-11-01 as #270. Not deployed to production yet. No card data changes in this PR: the numbers move on the first weekly refresh after merge (its own PR, reviewed before merging).
+
+The 30-day x402-list settlement figures were entered by hand on 2026-10-15 and had gone stale by definition. They are now
+re-read every Sunday by [`refresh.py`](refresh.py) from x402-list's open API (CC BY 4.0), with the old values kept in each claim's history:
+
+- **x402-list**: 30-day paid volume to listed services (buyers, settlements, top-1 and top-10 shares) and the 30-day
+  facilitator total, from `/api/v1/stats`; the services count now has a rolling window instead of the stale "2026-10-15".
+- **13 facilitator cards** (Coinbase CDP + Bazaar, FluxA, Meridian, PayAI, Dexter, Daydreams, Thirdweb, Heurist, Polygon,
+  Celo, three.ws, Ultravioleta DAO, Figment): 30-day settled volume, settlements and 7-day volume, one row of
+  `/api/v1/facilitators`. The eight claims a curator reviewed on the HTML facilitators page keep that page as their source
+  (evidence level unchanged) and name the JSON in `verify`; their hand-typed values ("$618.6k") become exact numbers.
+- **13 service cards** (Laso Finance, Cluster Protocol, dTelecom, Clash of Coins, AX1 Console, X Pay, BlockRun,
+  keyring-agent, StableEnrich, claw402, Bitrefill, Laevitas, CheapTokens): 30-day settlement to the payout address,
+  distinct buyers and settlements from `/api/v1/services/<slug>` (traction block).
+- `refresh.py`: a mapping can read one row of a list (`select`, exactly one row must match, otherwise nothing changes),
+  round the published value (`round`), name a human source page (`source_url`), and owns the claim's window when it sets
+  one (dated windows become rolling ones; the old window goes into history). Tests: `tests/test_refresh_select.py`.
+- Review fixes (`tests/test_refresh_dates_finite_cache.py`): the source's own as-of time (x402-list `traction.as_of`,
+  mapping key `as_of_field`) is stored as `source_as_of`, apart from our `observed_at`, and shown on the claim line
+  ("source data as of"); a service's `last_settlement_at` is the newest settlement seen (`last_settlement_seen_at`,
+  shown as "last settlement seen"), never the as-of time. NaN and Infinity are rejected when read and can never be
+  written (strict JSON; `check.py` fails on them). Each URL is fetched once per run (an in-run cache: 15 requests for
+  the 29 x402-list mappings, not 29).
+- Second review fixes: the card's Markdown twin (`index.md`) shows the same source dates as the HTML card
+  ("source data as of", "last settlement seen") next to our observed time, and `platforms/<id>.json` carries the same
+  keys (a test checks the three agree). A numeric string that overflows to infinity (`"9" * 400`) is not a number:
+  the read fails and the old value stays. The snapshot, state, replications, summary and report files are serialised
+  first and written through a temp file in the same folder and an atomic replace, so a failed write keeps the old file.
+- Not covered (left as dated observations): the fixed 7-day windows of 2026-10-09..10-15 on the service cards, the
+  "last settlement day" activity claims, and the Robinhood Chain service count.
+
 ## 2026-11-01 — Weekly refresh (#272)
 
-Merged 2026-11-01 as #272. Not deployed to production yet.
+Merged 2026-11-01 as #272 (`6547fc1`). Deployed to production 2026-11-01 (`6547fc1`, run [41340007663](https://github.com/commonworld-one/commonworld/actions/runs/41340007663)).
 
 Automated weekly run of [`refresh.py`](refresh.py) (`.github/workflows/refresh.yml`), reviewed before merging. Old
 values stay in each claim's history.

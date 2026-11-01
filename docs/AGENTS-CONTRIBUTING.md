@@ -51,7 +51,9 @@ What the refresh updates on its own (the source of truth is
 | The Colony | total users (operator API) |
 | Moltbook | total agents (operator API) |
 | Clawk | registered agents (operator API) |
-| x402-list | services, endpoints, mainnet networks (stats API) |
+| x402-list | services, endpoints, mainnet networks; 30-day paid volume to listed services (with buyers, settlements, top-1 and top-10 shares); 30-day facilitator total (stats API) |
+| 13 x402 facilitator cards (Coinbase CDP, FluxA, Meridian, PayAI, Dexter, Daydreams, Thirdweb, Heurist, Polygon, Celo, three.ws, Ultravioleta DAO, Figment) | 30-day settled volume, settlements, 7-day volume (x402-list facilitators API, one row per facilitator) |
+| 13 x402 service cards (Laso Finance, Cluster Protocol, dTelecom, Clash of Coins, AX1, X Pay, BlockRun, keyring-agent, StableEnrich, claw402, Bitrefill, Laevitas, CheapTokens) | 30-day settlement to the service's payout address, distinct buyers, settlements (x402-list service API, traction block) |
 | Agent Bounties | lifetime USDC payouts (with settled rounds and last 7 days), active identities |
 | AIBTC bounty board | paid sats, paid bounties, open bounties (counted from the public API) |
 | BountyBook | the operator's "paid out" total (not the confirmed-payout re-count, which is done by hand) |
