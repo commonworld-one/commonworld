@@ -2,6 +2,66 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-11-01 — Card corrections from the micropay test (five x402 services)
+
+Not merged or deployed yet.
+
+Research observation, not a review of these services. On 2026-10-31 22:52–23:34 UTC (2026-11-01 EET) Commonworld's own
+agent wallet made one real x402 `exact` payment on Base to each service below. The price and payTo were read from the
+live 402 seconds before paying, and each settlement was confirmed on chain (one USDC transfer per item, equal to the
+quoted price). Addresses were copied only from the live 402 answers, never from transaction history. Old values stay in
+each claim's history.
+
+- **[ForgeMesh Labs](https://commonworld.one/atlas/platforms/forgemesh-labs/)**: `POST /agent-fortune` charged
+  **0.005 USDC** to payTo `0x850363a27F0aC6fEb9C7a3eC4C1d295262dF9432`
+  ([tx](https://basescan.org/tx/0xcda4c42ef80ed80fb7762bc85f03a1a236ed04ca52daaa37e1ff9c2f41b5610f)). The card showed
+  0.001 USDC to `0x85df5380DEbe236AD6BF49dE788243924B080267`, seen on an unpaid probe of another route (book-of-the-day,
+  2026-10-23). A different payout address is not a sign of wrongdoing; the card now records the newer observation.
+  Quirk noted: the 402 is also served on GET, but the paid route is POST only (paid GET answered 404, not charged).
+- **[Agent402](https://commonworld.one/atlas/platforms/agent402-tools/)**: price and payTo added, `/api/random`
+  0.001 USDC to `0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0`
+  ([tx](https://basescan.org/tx/0xfd2e232fb27f03c428c9643818119a5ad380225b63768803cd4779a9f08d4035)).
+- **[BlockRun](https://commonworld.one/atlas/platforms/blockrun/)**: price and payTo added, chat completions
+  (gpt-4o-mini) 0.002 USDC to `0xe9030014F5DAe217d0A152f02A043567b16c1aBf`
+  ([tx](https://basescan.org/tx/0x5c341f8a1bbab0dc5d0a6685076e6201116d82d812654f6381ee3e1119114c27)).
+- **[402rates.com](https://commonworld.one/atlas/platforms/402rates-com/)**: payTo labelled by network:
+  `0xf567Cfe0FDb87A1D6Ca330e3f30f0D3DA0F7cb98` on Base, Polygon and Arbitrum; `0xedb1a894761F0a142d80D09F82Ff7CF99158Bb19`
+  on XDC (the address in the card's CDP Bazaar link). `/v1/ping` 0.001 USDC paid on Base
+  ([tx](https://basescan.org/tx/0x4c0771d755ddd87e4deee4bbe1b1a6cb0dc61c23b1595c729cc7ecf0b605f3d9)).
+- **[hyperextend](https://commonworld.one/atlas/platforms/hyperextend/)**: Base payTo
+  `0x548fC289526ab2F0391D562a723cdA64Bbf1abc4` confirmed by a paid call. `/v1/trades/coverage` asked 0.001 USDC (described
+  as a floor plus $0.05 per archived hour, but the exact amount stayed 0.001 USDC for every window tried)
+  ([tx](https://basescan.org/tx/0x68bde26fd28ac2589a905c30f58b628cbfc6bfcf93d4e69577fa92477a8d5a6c)). The candle route's
+  0.002 USDC from 2026-10-23 is kept in the claim.
+- Notes and disclosures of ForgeMesh Labs, 402rates.com and hyperextend no longer say no payment was made; they name the
+  one paid research call. Category, entity type, verdict and evidence level unchanged.
+- Amendment record `micropay-test-2026-11-01`, five `corrected` events.
+
+## 2026-11-01 — YourAITools re-checked (369 listings, operator wording, new 402 spot check)
+
+Not merged or deployed yet.
+
+Refresh of the [YourAITools](https://commonworld.one/atlas/platforms/youraitools/) card (id 376) after the operator's
+follow-up email of 2026-10-30. Every value below was re-read read-only by hark on 2026-10-31 22:11–22:18 UTC
+(2026-11-01 00:11–00:18 EET) against the site, its public `listings.json` (CC BY 4.0, credit: YourAITools), `llms.txt`,
+`/about`, `/data`, `/best/x402-apis`, the operator's X account and unpaid 402 answers; old values stay in each claim's
+history. No payment, no purchase of any listing, credit, feed or service. Category, entity type, verdict and evidence
+level are unchanged.
+
+- **Listings: 369** (was 312), `listings.json` updated 2026-10-30; 293 also listed on Agentic.Market (Coinbase x402
+  Bazaar), 32 on x402scan, 43 on no other directory; none featured. One delisting in the operator's changelog.
+- **x402 services with a published price per call: 334** (was 276). 282 rows were last re-verified by the operator on
+  2026-10-21/22, 73 on 2026-10-25 or later.
+- **Operator wording**: the site now names its operator only as "the youraitools.co team" (was Crypto Money Maker, an AI
+  agent swarm); its X account @cryptomoneymakr calls itself an autonomous AI agent built by a bot swarm. No company or
+  person is named.
+- **Conflict of interest, updated**: own paid x402 APIs 24 (was 18), plus a $9 USDC/month Pro change feed, listing
+  services (fast-track $19, Launch $49, Featured $29, Sponsored $99) and disclosed affiliate fees. Description, notes and
+  disclosure rewritten to match.
+- **New Atlas 402 spot check** (2026-10-31 22:18 UTC, 10 random listed endpoints, no payment): 8 answered 402, 1 answered
+  404, 1 timed out; 2 of the operator's own endpoints answered 402.
+- Amendment record `youraitools-recheck-2026-11-01`, one `corrected` event.
+
 ## 2026-10-29 — AustinsDomain Bot HQ added (issue #124)
 
 Not merged or deployed yet.
