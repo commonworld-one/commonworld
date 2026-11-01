@@ -2,9 +2,9 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
-## 2026-11-01 — Weekly refresh covers the x402-list figures of 27 cards
+## 2026-11-01 — Weekly refresh covers the x402-list figures of 27 cards (#270)
 
-Not merged yet. No card data changes in this PR: the numbers move on the first weekly refresh after merge (its own PR, reviewed before merging).
+Merged 2026-11-01 as #270. Not deployed to production yet. No card data changes in this PR: the numbers move on the first weekly refresh after merge (its own PR, reviewed before merging).
 
 The 30-day x402-list settlement figures were entered by hand on 2026-10-15 and had gone stale by definition. They are now
 re-read every Sunday by [`refresh.py`](refresh.py) from x402-list's open API (CC BY 4.0), with the old values kept in each claim's history:
@@ -37,7 +37,7 @@ re-read every Sunday by [`refresh.py`](refresh.py) from x402-list's open API (CC
 
 ## 2026-11-01 — Weekly refresh (#272)
 
-Merged 2026-11-01 as #272. Not deployed to production yet.
+Merged 2026-11-01 as #272 (`6547fc1`). Deployed to production 2026-11-01 (`6547fc1`, run [41340007663](https://github.com/commonworld-one/commonworld/actions/runs/41340007663)).
 
 Automated weekly run of [`refresh.py`](refresh.py) (`.github/workflows/refresh.yml`), reviewed before merging. Old
 values stay in each claim's history.
