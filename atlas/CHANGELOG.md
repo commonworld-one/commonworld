@@ -27,6 +27,11 @@ re-read every Sunday by [`refresh.py`](refresh.py) from x402-list's open API (CC
   shown as "last settlement seen"), never the as-of time. NaN and Infinity are rejected when read and can never be
   written (strict JSON; `check.py` fails on them). Each URL is fetched once per run (an in-run cache: 15 requests for
   the 29 x402-list mappings, not 29).
+- Second review fixes: the card's Markdown twin (`index.md`) shows the same source dates as the HTML card
+  ("source data as of", "last settlement seen") next to our observed time, and `platforms/<id>.json` carries the same
+  keys (a test checks the three agree). A numeric string that overflows to infinity (`"9" * 400`) is not a number:
+  the read fails and the old value stays. The snapshot, state, replications, summary and report files are serialised
+  first and written through a temp file in the same folder and an atomic replace, so a failed write keeps the old file.
 - Not covered (left as dated observations): the fixed 7-day windows of 2026-10-09..10-15 on the service cards, the
   "last settlement day" activity claims, and the Robinhood Chain service count.
 

@@ -279,5 +279,113 @@ class Display(unittest.TestCase):
         self.assertEqual(self.build.source_dates_html({'last_settlement_seen_at': None}), '')
 
 
+class HugeNumericString(unittest.TestCase):
+    """A digit string too long for a float ('9' * 400) overflows to inf in float(): it is not a number, the read fails closed."""
+
+    def test_as_number_rejects_overflowing_digit_strings(self):
+        for v in ('9' * 400, '-' + '9' * 400, '9' * 400 + '.5'):
+            self.assertIsNone(refresh.as_number(v), v[:10])
+        self.assertEqual(refresh.as_number('12'), 12)
+        self.assertEqual(refresh.as_number('1234.5'), 1234.5)
+
+    def test_huge_numeric_string_fails_the_read_on_the_real_mapping(self):
+        m = mapping('laso-finance-x402-list-30d')
+        val, quote, _m, err, _f, _ = read_with({m['url']: service_doc(volume='9' * 400)}, m)
+        self.assertIsNone(val)
+        self.assertIsNone(quote)
+        self.assertEqual(err, 'no number at data.assessment.traction.volume_usd_30d')
+
+
+class AtomicWrites(unittest.TestCase):
+    """Snapshot, state, replications, summary and report are serialised first and written through a temp file in the same
+    directory + os.replace, so a failed dump or write keeps the old file byte-for-byte."""
+
+    def setUp(self):
+        import tempfile
+        self.dir = tempfile.TemporaryDirectory()
+        self.path = Path(self.dir.name) / 'snapshot-verified.json'
+        self.old = refresh.dump({'platforms': [{'slug': 'x', 'claims': [{'value': 1.5}]}]}).encode('utf-8')
+        self.path.write_bytes(self.old)
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def leftovers(self):
+        return sorted(p.name for p in Path(self.dir.name).iterdir() if p.name != self.path.name)
+
+    def test_failed_dump_keeps_the_snapshot_byte_identical(self):
+        bad = {'platforms': [{'slug': 'x', 'claims': [{'value': float('inf')}]}]}
+        with self.assertRaises(ValueError):
+            refresh.write_atomic(str(self.path), refresh.dump(bad))
+        self.assertEqual(self.path.read_bytes(), self.old)
+        self.assertEqual(self.leftovers(), [])
+
+    def test_failed_replace_keeps_the_old_file_and_no_temp_file(self):
+        with mock.patch.object(refresh.os, 'replace', side_effect=OSError('disk full')):
+            with self.assertRaises(OSError):
+                refresh.write_atomic(str(self.path), refresh.dump({'platforms': []}))
+        self.assertEqual(self.path.read_bytes(), self.old)
+        self.assertEqual(self.leftovers(), [])
+
+    def test_successful_write_replaces_the_file(self):
+        refresh.write_atomic(str(self.path), refresh.dump({'platforms': []}))
+        self.assertEqual(json.loads(self.path.read_text(encoding='utf-8')), {'platforms': []})
+        self.assertEqual(self.leftovers(), [])
+
+    def test_refresh_never_opens_an_output_file_for_truncating_write(self):
+        src = (ROOT / 'atlas' / 'refresh.py').read_text(encoding='utf-8')
+        import re
+        self.assertEqual(re.findall(r"(?<![\w.])open\([^)]*['\"]w['\"]", src), [], 'outputs go through write_atomic()')
+        self.assertNotIn('json.dump(', src)
+        self.assertGreaterEqual(src.count('write_atomic('), 6)   # definition + snapshot, state, replications, summary, report
+
+
+class DateParity(unittest.TestCase):
+    """The card page (HTML), its Markdown twin (index.md) and platforms/<id>.json carry the same source dates for a claim."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'atlas' / 'site'))
+        import build
+        cls.build = build
+
+    def card(self, **dates):
+        import copy
+        b = self.build
+        cfg = json.loads((ROOT / 'atlas' / 'site' / 'site-config.json').read_text(encoding='utf-8'))
+        data = json.loads(Path(b.DEFAULT_DATA).read_text(encoding='utf-8'))
+        c = copy.deepcopy(next(p for p in data['platforms'] if p['slug'] == 'laso-finance'))
+        x = next(x for x in c['claims'] if x['kind'] == 'economic_flow')
+        x['observed_at'] = '2026-11-01T09:44:00Z'
+        x.update(dates)
+        site = b.Site(cfg, dict(data, platforms=[c]))
+        site.removed, site.safety, site.claim_labels, site.img_v, site.asset_v = [], b.load_link_safety(), {}, 'test', 'test'
+        b.enrich(site, {})
+        c = site.cards[0]
+        return b.build_platform(site, c), b.build_platform_md(site, c), b.platform_json_claims(c)
+
+    def test_html_markdown_and_json_agree_on_source_dates(self):
+        dates = {'source_as_of': '2026-10-28T11:42:00Z', 'last_settlement_seen_at': '2026-10-28T12:29:00Z'}
+        html, md, claims = self.card(**dates)
+        rec = next(y for y in claims if y.get('source_as_of'))
+        import re
+        for key, label in self.build.SOURCE_DATE_KEYS:
+            dt = self.build.parse_time(dates[key])
+            txt = dt.strftime('%Y-%m-%d %H:%M UTC')
+            self.assertRegex(html, re.escape(label) + r' <time datetime="[^"]+" title="' + re.escape(txt) + '"')
+            self.assertIn(f'{label} {txt}', md)
+            self.assertEqual(self.build.parse_time(rec[key]), dt)
+        # our own read stays first and separate in both
+        self.assertIn('Observed <time datetime="2026-11-01T09:44Z" title="2026-11-01 09:44 UTC"', html)
+        self.assertIn('| 2026-11-01 09:44 UTC · source data as of 2026-10-28 11:42 UTC · last settlement seen 2026-10-28 12:29 UTC |', md)
+
+    def test_no_source_dates_anywhere_when_the_claim_has_none(self):
+        html, md, claims = self.card()
+        for label in ('source data as of', 'last settlement seen'):
+            self.assertNotIn(label, html)
+            self.assertNotIn(label, md)
+        self.assertFalse(any('source_as_of' in y or 'last_settlement_seen_at' in y for y in claims))
+
+
 if __name__ == '__main__':
     unittest.main()

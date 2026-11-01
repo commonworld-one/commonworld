@@ -31,7 +31,7 @@ What it does, per entry of the Atlas snapshot (atlas/data/snapshot-verified-*.js
 No change at all -> the snapshot and state files are left byte-identical (so the workflow opens no PR).
 Exit code 0 always unless the script itself breaks; findings go to the summary.
 """
-import argparse, concurrent.futures as cf, copy, glob, http.client, ipaddress, json, math, os, re, socket, ssl, string, sys, threading, time, urllib.error, urllib.parse, urllib.request
+import argparse, concurrent.futures as cf, copy, glob, http.client, ipaddress, json, math, os, re, socket, ssl, string, sys, tempfile, threading, time, urllib.error, urllib.parse, urllib.request
 from datetime import datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -318,6 +318,8 @@ def as_number(v):
         return v if math.isfinite(v) else None
     if isinstance(v, str) and re.fullmatch(r'-?\d+(\.\d+)?', v.strip()):
         f = float(v)
+        if not math.isfinite(f):  # a long digit string ('9' * 400) overflows to inf: not a number, the read fails closed
+            return None
         return int(f) if f.is_integer() and '.' not in v else round(f, 6)
     return None
 
@@ -876,8 +878,7 @@ def run_replications(entries, sources, results, rep, ts, path, dry_run, workers=
                                     'commit': got['commit'], 'source': got['source_url'], 'methods': methods})
         changed |= what != 'same'
     if changed and not dry_run:
-        with open(path, 'w', encoding='utf-8') as f:
-            f.write(dump(doc))
+        write_atomic(path, dump(doc))
     return changed
 
 
@@ -898,6 +899,29 @@ def load_json(p, default):
 def dump(obj):
     # strict JSON: a NaN or Infinity anywhere raises instead of being written as a non-JSON token
     return json.dumps(obj, ensure_ascii=False, indent=1, allow_nan=False) + '\n'
+
+
+def write_atomic(path, text):
+    """Write text to path all or nothing: into a temp file in the same directory, then os.replace. The caller serialises
+    first (dump() raises on NaN/Infinity), so a failed dump or write leaves the old file byte-for-byte as it was."""
+    d = os.path.dirname(os.path.abspath(path))
+    fd, tmp = tempfile.mkstemp(prefix='.' + os.path.basename(path) + '.', suffix='.tmp', dir=d)
+    try:
+        with os.fdopen(fd, 'w', encoding='utf-8') as f:
+            f.write(text)
+            f.flush()
+            os.fsync(f.fileno())
+        if os.path.exists(path):
+            os.chmod(tmp, os.stat(path).st_mode & 0o777)
+        else:
+            os.chmod(tmp, 0o644)
+        os.replace(tmp, path)
+    except BaseException:
+        try:
+            os.unlink(tmp)
+        except FileNotFoundError:
+            pass
+        raise
 
 
 def main():
@@ -943,11 +967,9 @@ def main():
         rep['replications_changed'] = ch
         md = replications_md(rep)
         if a.summary:
-            with open(a.summary, 'w', encoding='utf-8') as f:
-                f.write(md)
+            write_atomic(a.summary, md)
         if a.report:
-            with open(a.report, 'w', encoding='utf-8') as f:
-                json.dump(rep, f, ensure_ascii=False, indent=1, allow_nan=False)
+            write_atomic(a.report, dump(rep))
         print(md)
         print(f'changes: replications={ch} dry_run={a.dry_run}')
         return
@@ -1077,8 +1099,7 @@ def main():
     md = summary_md(rep, snap_path)
     if not a.dry_run:
         if data_changed:
-            with open(snap_path, 'w', encoding='utf-8') as f:
-                f.write(dump(snap))
+            write_atomic(snap_path, dump(snap))  # serialise first, then temp file + os.replace: a failed dump keeps the old snapshot
             # public events log (atlas/data/events.jsonl): closures and revivals by this script are card events;
             # number updates are not (check.py events_checks requires these lines for every died/revived slug)
             sys.path.insert(0, os.path.join(HERE, 'site'))
@@ -1092,14 +1113,11 @@ def main():
                 atlas_events.append(ev_file, today, d['slug'], 'reopened',
                                     'Automated weekly check: site answers again after an automated closure', https(d['url']))
         if state_changed:
-            with open(a.state, 'w', encoding='utf-8') as f:
-                f.write(dump(state))
+            write_atomic(a.state, dump(state))
     if a.summary:
-        with open(a.summary, 'w', encoding='utf-8') as f:
-            f.write(md)
+        write_atomic(a.summary, md)
     if a.report:
-        with open(a.report, 'w', encoding='utf-8') as f:
-            json.dump(rep | {'results': results}, f, ensure_ascii=False, indent=1, allow_nan=False)
+        write_atomic(a.report, dump(rep | {'results': results}))
     print(md)
     print(f'changes: data={data_changed} state={state_changed} replications={repl_changed} dry_run={a.dry_run}')
 
