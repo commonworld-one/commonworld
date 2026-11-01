@@ -1,7 +1,7 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-10-31T22:18:00Z",
+ "generated_at": "2026-10-31T23:27:00Z",
  "source_snapshot_at": "2026-10-25T19:17:00Z",
  "id": "hyperextend",
  "name": "hyperextend",
@@ -25,10 +25,10 @@
   "observed_at": "2026-10-23T23:10:00Z",
   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/merchant?payTo=0x548fC289526ab2F0391D562a723cdA64Bbf1abc4"
  },
- "verified_at": "2026-10-23T23:14:00Z",
- "last_checked": "2026-10-23T23:14:00Z",
+ "verified_at": "2026-10-31T23:16:00Z",
+ "last_checked": "2026-10-31T23:16:00Z",
  "claims_count": 8,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with hyperextend or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC) and one paid research call on 2026-10-31 23:16 UTC (0.001 USDC, micropay test). No deal or contact with hyperextend or YourAITools is involved.",
  "md_url": "https://commonworld.one/atlas/platforms/hyperextend/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,7 +62,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-23",
+ "badge_status": "Verified · 2026-10-31",
  "badge_svg": "https://commonworld.one/atlas/badge/hyperextend.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/hyperextend-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -130,18 +130,36 @@
   },
   {
    "kind": "protocol",
-   "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.hyperextend.xyz/v1/candles/BTC/1m/latest answered HTTP 402 with x402 v2 payment terms (scheme batch-settlement, exact; network Base, Hyperliquid; asset USDC; price 0.002 USDC; payTo Base 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4; plus 1 other network option(s)). YourAITools lists the price as $0.001–$0.002. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. The probed route is not the cheapest one listed.",
-   "value": 0.002,
-   "unit": "USDC per call (probed route)",
+   "statement": "Commonworld's own paid check (research observation, micropay test 2026-11-01): the live 402 of https://api.hyperextend.xyz/v1/trades/coverage asked 0.001 USDC on Base (x402 v2, scheme exact, payTo 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4, the same Base payTo as the earlier unpaid candle probe); its description says floor $0.001 + $0.05 per archived hour examined, but the exact amount stayed 0.001 USDC for every window tried. Commonworld paid once (coin BTC, last hour) and got a real but empty answer (archived_hours_examined 0: the last hour was not archived yet). Settlement: Base tx 0x68bde26fd28ac2589a905c30f58b628cbfc6bfcf93d4e69577fa92477a8d5a6c (block 53349613), 0.001 USDC to that payTo. The candle route /v1/candles/BTC/1m/latest asked 0.002 USDC on the 2026-10-23 unpaid probe.",
+   "value": 0.001,
+   "unit": "USDC per call (/v1/trades/coverage, paid)",
    "window": null,
    "basis": "direct_observation",
-   "source_url": "https://api.hyperextend.xyz/v1/candles/BTC/1m/latest",
-   "quote": "HTTP 402, x402Version 2, amount 2000, network eip155:8453",
-   "observed_at": "2026-10-23T23:09:47Z",
+   "source_url": "https://api.hyperextend.xyz/v1/trades/coverage",
+   "quote": "HTTP 402, x402Version 2, scheme exact, amount 1000, network eip155:8453, payTo 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4",
+   "observed_at": "2026-10-31T23:16:06Z",
    "methods": [
-    "unpaid GET https://api.hyperextend.xyz/v1/candles/BTC/1m/latest (HTTP 402, header:payment-required; no payment header sent)"
+    "unpaid GET https://api.hyperextend.xyz/v1/trades/coverage (coin BTC) at 2026-10-31T23:16:06Z (HTTP 402, payment-required decoded: Base exact amount 1000, payTo 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4; Hyperliquid option 0.001 to the same address)",
+    "paid GET with an x402 exact (EIP-3009) authorization for exactly those terms at 2026-10-31T23:16:09Z (HTTP 200, archived_hours_examined 0, hours_with_trades 0, gaps [], PAYMENT-RESPONSE success)",
+    "Base receipt (status 1, block 53349613): one USDC Transfer of 1000 units to 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4; authorizationState(nonce) 0 -> 1",
+    "explorer record: https://basescan.org/tx/0x68bde26fd28ac2589a905c30f58b628cbfc6bfcf93d4e69577fa92477a8d5a6c"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "history": [
+    {
+     "value": 0.002,
+     "unit": "USDC per call (probed route)",
+     "window": null,
+     "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.hyperextend.xyz/v1/candles/BTC/1m/latest answered HTTP 402 with x402 v2 payment terms (scheme batch-settlement, exact; network Base, Hyperliquid; asset USDC; price 0.002 USDC; payTo Base 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4; plus 1 other network option(s)). YourAITools lists the price as $0.001–$0.002. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. The probed route is not the cheapest one listed.",
+     "quote": "HTTP 402, x402Version 2, amount 2000, network eip155:8453",
+     "source_url": "https://api.hyperextend.xyz/v1/candles/BTC/1m/latest",
+     "observed_at": "2026-10-23T23:09:47Z",
+     "basis": "direct_observation",
+     "outcome": "supported",
+     "superseded_at": "2026-10-31T23:16:06Z",
+     "reason": "Base payTo 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4 confirmed by a paid call to another route (/v1/trades/coverage, 0.001 USDC); the 0.002 USDC candle price is kept in the new statement. Research observation from Commonworld's micropay test of 2026-11-01 (one real paid x402 call per service, payTo and price taken from the live 402 seconds before paying, settlement confirmed on Base); old values kept here."
+    }
+   ]
   },
   {
    "kind": "metric",
