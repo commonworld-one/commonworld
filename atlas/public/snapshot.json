@@ -489,18 +489,36 @@
     },
     {
      "kind": "protocol",
-     "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.402rates.com/v1/ping answered HTTP 402 with x402 v2 payment terms (scheme exact; network Arbitrum, Base, Polygon, XDC; asset USDC; price 0.001 USDC; payTo Base 0xf567Cfe0FDb87A1D6Ca330e3f30f0D3DA0F7cb98; plus 3 other network option(s)). YourAITools lists the price as $0.001–$0.03. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+     "statement": "Commonworld's own paid check (research observation, micropay test 2026-11-01): the live 402 of https://api.402rates.com/v1/ping asked 0.001 USDC (x402 v2, scheme exact) with payTo 0xf567Cfe0FDb87A1D6Ca330e3f30f0D3DA0F7cb98 on Base, Polygon and Arbitrum, and payTo 0xedb1a894761F0a142d80D09F82Ff7CF99158Bb19 on XDC (eip155:50); the CDP Bazaar link on this card uses the XDC address. Commonworld paid once on Base and got a pong. Settlement: Base tx 0x4c0771d755ddd87e4deee4bbe1b1a6cb0dc61c23b1595c729cc7ecf0b605f3d9 (block 53349502), 0.001 USDC to the Base payTo. YourAITools lists the price as $0.001-$0.03.",
      "value": 0.001,
-     "unit": "USDC per call (probed route)",
+     "unit": "USDC per call (/v1/ping, paid)",
      "window": null,
      "basis": "direct_observation",
      "source_url": "https://api.402rates.com/v1/ping",
-     "quote": "HTTP 402, x402Version 2, amount 1000, network eip155:8453",
-     "observed_at": "2026-10-23T23:09:44Z",
+     "quote": "HTTP 402, x402Version 2, amount 1000; eip155:8453/137/42161 payTo 0xf567Cfe0FDb87A1D6Ca330e3f30f0D3DA0F7cb98; eip155:50 payTo 0xedb1a894761F0a142d80D09F82Ff7CF99158Bb19",
+     "observed_at": "2026-10-31T23:12:24Z",
      "methods": [
-      "unpaid GET https://api.402rates.com/v1/ping (HTTP 402, header:payment-required; no payment header sent)"
+      "unpaid GET https://api.402rates.com/v1/ping at 2026-10-31T23:12:24Z (HTTP 402, payment-required decoded: 4 exact options, amount 1000 each; Base, Polygon, Arbitrum payTo 0xf567Cfe0FDb87A1D6Ca330e3f30f0D3DA0F7cb98; XDC payTo 0xedb1a894761F0a142d80D09F82Ff7CF99158Bb19)",
+      "paid GET with an x402 exact (EIP-3009) authorization for the Base option at 2026-10-31T23:12:27Z (HTTP 200, {\"pong\":true,\"rail\":\"cdp-v2\",\"mode\":\"mainnet\",...}, PAYMENT-RESPONSE success)",
+      "Base receipt (status 1, block 53349502): one USDC Transfer of 1000 units to 0xf567Cfe0FDb87A1D6Ca330e3f30f0D3DA0F7cb98; authorizationState(nonce) 0 -> 1",
+      "explorer record: https://basescan.org/tx/0x4c0771d755ddd87e4deee4bbe1b1a6cb0dc61c23b1595c729cc7ecf0b605f3d9"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 0.001,
+       "unit": "USDC per call (probed route)",
+       "window": null,
+       "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.402rates.com/v1/ping answered HTTP 402 with x402 v2 payment terms (scheme exact; network Arbitrum, Base, Polygon, XDC; asset USDC; price 0.001 USDC; payTo Base 0xf567Cfe0FDb87A1D6Ca330e3f30f0D3DA0F7cb98; plus 3 other network option(s)). YourAITools lists the price as $0.001–$0.03. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+       "quote": "HTTP 402, x402Version 2, amount 1000, network eip155:8453",
+       "source_url": "https://api.402rates.com/v1/ping",
+       "observed_at": "2026-10-23T23:09:44Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-31T23:12:24Z",
+       "reason": "Payout addresses now labelled by network: 0xf567Cfe0FDb87A1D6Ca330e3f30f0D3DA0F7cb98 is the Base (and Polygon, Arbitrum) payTo, 0xedb1a894761F0a142d80D09F82Ff7CF99158Bb19 (the address in the CDP Bazaar link on this card) is the XDC payTo; price unchanged; one paid call confirmed. Research observation from Commonworld's micropay test of 2026-11-01 (one real paid x402 call per service, payTo and price taken from the live 402 seconds before paying, settlement confirmed on Base); old values kept here."
+      }
+     ]
     },
     {
      "kind": "metric",
@@ -551,7 +569,7 @@
    "qa": [],
    "qa_status": "not_sampled",
    "verdict": "include_verified",
-   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with 402rates.com or YourAITools is involved.",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC) and one paid research call on 2026-10-31 23:12 UTC (0.001 USDC, micropay test). No deal or contact with 402rates.com or YourAITools is involved.",
    "url": "https://commonworld.one/atlas/platforms/402rates-com/"
   },
   {
@@ -3354,6 +3372,25 @@
      "observed_at": "2026-10-19T11:14:47Z",
      "methods": [
       "curl -sL -A \"<Chrome UA>\" https://agent402.tools/marketplace (HTTP 200, final URL https://agent402.tools/marketplace, 20782 chars of page text)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own paid check (research observation, micropay test 2026-11-01): the live 402 of https://agent402.tools/api/random asked 0.001 USDC on Base (x402 v2, scheme exact, payTo 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0; the 402 also offers other networks); Commonworld paid it once with ?min=1&max=100&count=3 and got three integers. Settlement: Base tx 0xfd2e232fb27f03c428c9643818119a5ad380225b63768803cd4779a9f08d4035 (block 53349729), 0.001 USDC to that payTo. A first paid request without query parameters was rejected with HTTP 400 before settlement (not charged).",
+     "value": 0.001,
+     "unit": "USDC per call (/api/random, paid)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://agent402.tools/api/random",
+     "quote": "HTTP 402, x402Version 2, scheme exact, amount 1000, network eip155:8453, payTo 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0",
+     "observed_at": "2026-10-31T23:19:57Z",
+     "methods": [
+      "unpaid GET https://agent402.tools/api/random at 2026-10-31T23:19:57Z (HTTP 402, payment-required decoded: amount 1000, payTo 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0)",
+      "paid GET ?min=1&max=100&count=3 with an x402 exact (EIP-3009) authorization for exactly those terms at 2026-10-31T23:20:00Z (HTTP 200, {\"integers\":[42,66,77]}, PAYMENT-RESPONSE success)",
+      "first paid GET without parameters: HTTP 400 \"Provide ?bytes= or integer ?min= and ?max=\", authorization still unused, balance unchanged (not charged)",
+      "Base receipt (status 1, block 53349729): one USDC Transfer of 1000 units to 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0; authorizationState(nonce) 0 -> 1",
+      "explorer record: https://basescan.org/tx/0xfd2e232fb27f03c428c9643818119a5ad380225b63768803cd4779a9f08d4035"
      ],
      "outcome": "supported"
     }
@@ -9969,6 +10006,24 @@
      "observed_at": "2026-10-15T18:10:00Z",
      "methods": [
       "GET https://x402-list.com/api/v1/services/blockrun/volume?days=60"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "protocol",
+     "statement": "Commonworld's own paid check (research observation, micropay test 2026-11-01): the live 402 of https://blockrun.ai/api/v1/chat/completions for model gpt-4o-mini asked 0.002 USDC on Base (x402 v2, scheme exact, payTo 0xe9030014F5DAe217d0A152f02A043567b16c1aBf); Commonworld paid it once and got a real completion (55 tokens). Settlement: Base tx 0x5c341f8a1bbab0dc5d0a6685076e6201116d82d812654f6381ee3e1119114c27 (block 53349788), 0.002 USDC to that payTo.",
+     "value": 0.002,
+     "unit": "USDC per call (chat completions, gpt-4o-mini, paid)",
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://blockrun.ai/api/v1/chat/completions",
+     "quote": "HTTP 402, x402Version 2, scheme exact, amount 2000, network eip155:8453, payTo 0xe9030014F5DAe217d0A152f02A043567b16c1aBf",
+     "observed_at": "2026-10-31T23:21:56Z",
+     "methods": [
+      "unpaid POST https://blockrun.ai/api/v1/chat/completions (model gpt-4o-mini) at 2026-10-31T23:21:56Z (HTTP 402, payment-required decoded: amount 2000, payTo 0xe9030014F5DAe217d0A152f02A043567b16c1aBf)",
+      "paid POST with an x402 exact (EIP-3009) authorization for exactly those terms at 2026-10-31T23:21:59Z (HTTP 200, completion returned, PAYMENT-RESPONSE success)",
+      "Base receipt (status 1, block 53349788): one USDC Transfer of 2000 units to 0xe9030014F5DAe217d0A152f02A043567b16c1aBf; authorizationState(nonce) 0 -> 1",
+      "explorer record: https://basescan.org/tx/0x5c341f8a1bbab0dc5d0a6685076e6201116d82d812654f6381ee3e1119114c27"
      ],
      "outcome": "supported"
     }
@@ -17020,18 +17075,37 @@
     },
     {
      "kind": "protocol",
-     "statement": "Commonworld's own unpaid check: an unpaid POST to https://library.forgemesh.io/book-of-the-day answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base; asset USDC; price 0.001 USDC; payTo Base 0x85df5380DEbe236AD6BF49dE788243924B080267). YourAITools lists the price as $0.001–$0.01. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
-     "value": 0.001,
-     "unit": "USDC per call (probed route)",
+     "statement": "Commonworld's own paid check (research observation, micropay test 2026-11-01): the live 402 of https://x402.forgemesh.io/agent-fortune asked 0.005 USDC (x402 v2, scheme exact, Base, payTo 0x850363a27F0aC6fEb9C7a3eC4C1d295262dF9432); Commonworld paid it once and got a fortune plus a signed EIP-712 offer-receipt. Settlement: Base tx 0xcda4c42ef80ed80fb7762bc85f03a1a236ed04ca52daaa37e1ff9c2f41b5610f (block 53349948), 0.005 USDC to that payTo. An earlier unpaid probe of https://library.forgemesh.io/book-of-the-day (2026-10-23) showed 0.001 USDC to 0x85df5380DEbe236AD6BF49dE788243924B080267; the two observations differ in route, date, price and payout address. This is an updated observation, not a finding of wrongdoing. Quirk: the 402 is also served on GET, but the paid route is POST only (a paid GET answered 404 and was not charged).",
+     "value": 0.005,
+     "unit": "USDC per call (agent-fortune, paid)",
      "window": null,
      "basis": "direct_observation",
-     "source_url": "https://library.forgemesh.io/book-of-the-day",
-     "quote": "HTTP 402, x402Version 2, amount 1000, network eip155:8453",
-     "observed_at": "2026-10-23T23:09:43Z",
+     "source_url": "https://x402.forgemesh.io/agent-fortune",
+     "quote": "HTTP 402, x402Version 2, scheme exact, amount 5000, network eip155:8453, payTo 0x850363a27F0aC6fEb9C7a3eC4C1d295262dF9432",
+     "observed_at": "2026-10-31T23:27:17Z",
      "methods": [
-      "unpaid POST https://library.forgemesh.io/book-of-the-day (HTTP 402, header:payment-required; no payment header sent)"
+      "unpaid POST https://x402.forgemesh.io/agent-fortune at 2026-10-31T23:27:17Z (HTTP 402, payment-required header decoded: amount 5000, payTo 0x850363a27F0aC6fEb9C7a3eC4C1d295262dF9432)",
+      "paid POST {} with an x402 exact (EIP-3009) authorization for exactly those terms at 2026-10-31T23:27:20Z (HTTP 200, PAYMENT-RESPONSE success, signed offer-receipt)",
+      "first try was a paid GET: HTTP 404 \"Cannot GET /agent-fortune\", authorization still unused on chain, balance unchanged (not charged)",
+      "Base receipt (status 1, block 53349948): one USDC Transfer of 5000 units to 0x850363a27F0aC6fEb9C7a3eC4C1d295262dF9432; authorizationState(nonce) 0 -> 1",
+      "explorer record: https://basescan.org/tx/0xcda4c42ef80ed80fb7762bc85f03a1a236ed04ca52daaa37e1ff9c2f41b5610f"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 0.001,
+       "unit": "USDC per call (probed route)",
+       "window": null,
+       "statement": "Commonworld's own unpaid check: an unpaid POST to https://library.forgemesh.io/book-of-the-day answered HTTP 402 with x402 v2 payment terms (scheme exact; network Base; asset USDC; price 0.001 USDC; payTo Base 0x85df5380DEbe236AD6BF49dE788243924B080267). YourAITools lists the price as $0.001–$0.01. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works.",
+       "quote": "HTTP 402, x402Version 2, amount 1000, network eip155:8453",
+       "source_url": "https://library.forgemesh.io/book-of-the-day",
+       "observed_at": "2026-10-23T23:09:43Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-31T23:27:17Z",
+       "reason": "The paid agent-fortune route asked 0.005 USDC to a different Base payTo than the one seen on the earlier unpaid book-of-the-day probe (0.001 USDC to 0x85df5380DEbe236AD6BF49dE788243924B080267). Research observation from Commonworld's micropay test of 2026-11-01 (one real paid x402 call per service, payTo and price taken from the live 402 seconds before paying, settlement confirmed on Base); old values kept here."
+      }
+     ]
     },
     {
      "kind": "metric",
@@ -17082,7 +17156,7 @@
    "qa": [],
    "qa_status": "not_sampled",
    "verdict": "include_verified",
-   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with ForgeMesh Labs or YourAITools is involved.",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC) and one paid research call on 2026-10-31 23:27 UTC (0.005 USDC, micropay test). No deal or contact with ForgeMesh Labs or YourAITools is involved.",
    "url": "https://commonworld.one/atlas/platforms/forgemesh-labs/"
   },
   {
@@ -19302,18 +19376,36 @@
     },
     {
      "kind": "protocol",
-     "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.hyperextend.xyz/v1/candles/BTC/1m/latest answered HTTP 402 with x402 v2 payment terms (scheme batch-settlement, exact; network Base, Hyperliquid; asset USDC; price 0.002 USDC; payTo Base 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4; plus 1 other network option(s)). YourAITools lists the price as $0.001–$0.002. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. The probed route is not the cheapest one listed.",
-     "value": 0.002,
-     "unit": "USDC per call (probed route)",
+     "statement": "Commonworld's own paid check (research observation, micropay test 2026-11-01): the live 402 of https://api.hyperextend.xyz/v1/trades/coverage asked 0.001 USDC on Base (x402 v2, scheme exact, payTo 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4, the same Base payTo as the earlier unpaid candle probe); its description says floor $0.001 + $0.05 per archived hour examined, but the exact amount stayed 0.001 USDC for every window tried. Commonworld paid once (coin BTC, last hour) and got a real but empty answer (archived_hours_examined 0: the last hour was not archived yet). Settlement: Base tx 0x68bde26fd28ac2589a905c30f58b628cbfc6bfcf93d4e69577fa92477a8d5a6c (block 53349613), 0.001 USDC to that payTo. The candle route /v1/candles/BTC/1m/latest asked 0.002 USDC on the 2026-10-23 unpaid probe.",
+     "value": 0.001,
+     "unit": "USDC per call (/v1/trades/coverage, paid)",
      "window": null,
      "basis": "direct_observation",
-     "source_url": "https://api.hyperextend.xyz/v1/candles/BTC/1m/latest",
-     "quote": "HTTP 402, x402Version 2, amount 2000, network eip155:8453",
-     "observed_at": "2026-10-23T23:09:47Z",
+     "source_url": "https://api.hyperextend.xyz/v1/trades/coverage",
+     "quote": "HTTP 402, x402Version 2, scheme exact, amount 1000, network eip155:8453, payTo 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4",
+     "observed_at": "2026-10-31T23:16:06Z",
      "methods": [
-      "unpaid GET https://api.hyperextend.xyz/v1/candles/BTC/1m/latest (HTTP 402, header:payment-required; no payment header sent)"
+      "unpaid GET https://api.hyperextend.xyz/v1/trades/coverage (coin BTC) at 2026-10-31T23:16:06Z (HTTP 402, payment-required decoded: Base exact amount 1000, payTo 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4; Hyperliquid option 0.001 to the same address)",
+      "paid GET with an x402 exact (EIP-3009) authorization for exactly those terms at 2026-10-31T23:16:09Z (HTTP 200, archived_hours_examined 0, hours_with_trades 0, gaps [], PAYMENT-RESPONSE success)",
+      "Base receipt (status 1, block 53349613): one USDC Transfer of 1000 units to 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4; authorizationState(nonce) 0 -> 1",
+      "explorer record: https://basescan.org/tx/0x68bde26fd28ac2589a905c30f58b628cbfc6bfcf93d4e69577fa92477a8d5a6c"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 0.002,
+       "unit": "USDC per call (probed route)",
+       "window": null,
+       "statement": "Commonworld's own unpaid check: an unpaid GET to https://api.hyperextend.xyz/v1/candles/BTC/1m/latest answered HTTP 402 with x402 v2 payment terms (scheme batch-settlement, exact; network Base, Hyperliquid; asset USDC; price 0.002 USDC; payTo Base 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4; plus 1 other network option(s)). YourAITools lists the price as $0.001–$0.002. No payment was made; a 402 shows the endpoint is up and asks for payment, not that the paid service works. The probed route is not the cheapest one listed.",
+       "quote": "HTTP 402, x402Version 2, amount 2000, network eip155:8453",
+       "source_url": "https://api.hyperextend.xyz/v1/candles/BTC/1m/latest",
+       "observed_at": "2026-10-23T23:09:47Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-31T23:16:06Z",
+       "reason": "Base payTo 0x548fC289526ab2F0391D562a723cdA64Bbf1abc4 confirmed by a paid call to another route (/v1/trades/coverage, 0.001 USDC); the 0.002 USDC candle price is kept in the new statement. Research observation from Commonworld's micropay test of 2026-11-01 (one real paid x402 call per service, payTo and price taken from the live 402 seconds before paying, settlement confirmed on Base); old values kept here."
+      }
+     ]
     },
     {
      "kind": "metric",
@@ -19364,7 +19456,7 @@
    "qa": [],
    "qa_status": "not_sampled",
    "verdict": "include_verified",
-   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC). No payment, deal or contact with hyperextend or YourAITools is involved.",
+   "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (23:09-23:11 UTC) and one paid research call on 2026-10-31 23:16 UTC (0.001 USDC, micropay test). No deal or contact with hyperextend or YourAITools is involved.",
    "url": "https://commonworld.one/atlas/platforms/hyperextend/"
   },
   {
