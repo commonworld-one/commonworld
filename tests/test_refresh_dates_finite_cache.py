@@ -413,9 +413,9 @@ class SourceDatesInApiContract(unittest.TestCase):
             self.assertNotIn(key, claim['required'], key)
 
     def test_release_1_10_0_names_both_keys(self):
-        self.assertEqual(self.api_v1.SCHEMA_VERSION, '1.10.0')
-        top = self.api_v1.CHANGELOG[0]
-        self.assertEqual(top['schema_version'], self.api_v1.SCHEMA_VERSION)
+        self.assertGreaterEqual(tuple(map(int, self.api_v1.SCHEMA_VERSION.split('.'))), (1, 10, 0))
+        self.assertEqual(self.api_v1.CHANGELOG[0]['schema_version'], self.api_v1.SCHEMA_VERSION)
+        top = next(x for x in self.api_v1.CHANGELOG if x['schema_version'] == '1.10.0')
         text = ' '.join(top['changes'])
         self.assertIn('`source_as_of`', text)
         self.assertIn('`last_settlement_seen_at`', text)

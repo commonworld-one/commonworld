@@ -2,6 +2,31 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-11-02 — Weekly confirmations: "Observed · Confirmed" on every re-checked fact (#273; API `schema_version` 1.11.0)
+
+Not merged yet. No card data changes in this PR: no value, `observed_at` or screenshot is changed, and no confirmation is
+backfilled. Confirmed dates appear after the first weekly refresh and screenshot run after merge (their own PRs, reviewed before merging).
+
+Owner decision on [issue #273](https://github.com/commonworld-one/commonworld/issues/273#issuecomment-6564079672) after the 10-card re-check pilot:
+
+- **Check records.** [`refresh.py`](refresh.py) writes `confirmed_at` (UTC) on every fact it re-reads and finds unchanged: a
+  mapped number with the same value, statement and source dates; a supported `site_reachable` claim whose own source URL
+  answered below HTTP 400; a replication record with the same counts. [`tools/screens.py`](tools/screens.py) writes `confirmed_at`
+  on a stored screenshot's manifest entry when a new capture shows no visible change. A blocked or failed read confirms nothing.
+- **`observed_at` never moves on a re-check.** Only a real change of the value is a new observation; the old record keeps its
+  last `confirmed_at` in history and the new one starts without one.
+- **Display.** Card pages show "Observed <date> · Confirmed <date>" on each claim (Confirmed only when a re-check exists),
+  and the same on the replication block and the screenshot caption; the Markdown twin carries the same dates.
+- **API 1.11.0.** Optional, nullable `confirmed_at` on a claim (and its `history[]` entries), on `replications` and on `preview`;
+  [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md), API docs (`/atlas/api/#confirmed-dates`), `/llms.txt`,
+  `/atlas/llms.txt`, the mirror README, [`PROTOCOL.md`](PROTOCOL.md) and `site/README.md`.
+- **Effect on the weekly PRs.** A week in which facts are only confirmed still changes the snapshot, so the refresh workflow
+  opens a PR every week; the screenshots workflow opens a PR to `atlas-screens` whenever a capture confirms a stored image
+  (manifest only), which then needs the usual `atlas/screens.lock` bump on `main`.
+- **Checks.** `check.py`, `site/replications.py` and `tools/screens_artifact.py` refuse a `confirmed_at` that is malformed,
+  in the future or earlier than the observation; a stored screenshot entry may change only by a later `confirmed_at`.
+  Tests: `tests/test_confirmed_dates.py`.
+
 ## 2026-11-01 — Claim source dates in the API contract (API `schema_version` 1.10.0, follow-up to #270)
 
 Merged 2026-11-01 as #274 (`09252f0`). Deployed to production 2026-11-02 (`09252f0`, run [41356419328](https://github.com/commonworld-one/commonworld/actions/runs/41356419328)). Docs and schema only: no card data changes, no change to what the build writes into the data files.

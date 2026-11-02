@@ -110,6 +110,27 @@ def source_dates(x):
     return out
 
 
+def confirmed_time(x, observed_key='observed_at'):
+    """The newest re-check that found this fact unchanged (x['confirmed_at'], written by the weekly refresh.py / screens.py;
+    issue #273), as an aware UTC datetime, or None: when there is none, or it does not parse, or it is earlier than the
+    observation it confirms (check.py fails such data; the page then shows only the observed date)."""
+    cdt, odt = parse_time(x.get('confirmed_at')), parse_time(x.get(observed_key))
+    if not cdt or (odt and cdt < odt):
+        return None
+    return cdt
+
+
+def confirmed_html(x, observed_key='observed_at'):
+    """' · Confirmed <date>' after 'Observed <date>' (empty without a confirmation), the same words as confirmed_md()."""
+    cdt = confirmed_time(x, observed_key)
+    return f' · Confirmed {time_tag(cdt)}' if cdt else ''
+
+
+def confirmed_md(x, observed_key='observed_at'):
+    cdt = confirmed_time(x, observed_key)
+    return f' · Confirmed {cdt.strftime("%Y-%m-%d %H:%M UTC")}' if cdt else ''
+
+
 def source_dates_html(x):
     return ''.join(f' · {label} {time_tag(dt)}' for label, dt in source_dates(x))
 
@@ -490,7 +511,8 @@ def preview_record(site, c):
         return None
     r = site.shots[c['slug']]
     return {'path': p[0], 'url': site.abs(p[0]), 'thumb_url': site.abs(p[1]), 'width': screens.SHOT_W, 'height': screens.SHOT_H,
-            'captured_at': r['captured_at'], 'source_url': r['source_url'], 'rights': screens.RIGHTS}
+            'captured_at': r['captured_at'], 'confirmed_at': r.get('confirmed_at') if confirmed_time(r, 'captured_at') else None,
+            'source_url': r['source_url'], 'rights': screens.RIGHTS}
 
 
 def thumb_html(site, c):
@@ -515,7 +537,7 @@ def shot_figure(site, c):
     alt = f"Homepage of {c['name']} ({domain(c.get('canonical_url') or r['source_url'])}), screenshot captured {dt.strftime('%Y-%m-%d')}"
     href = c.get('canonical_url') or r['source_url']
     lead = (f'<b>Last captured {time_tag(dt)}</b>, before the site was marked closed. Kept as history.' if closed
-            else f'Homepage as captured {time_tag(dt)} from {e(domain(r["source_url"]))}.')
+            else f'Homepage as captured {time_tag(dt)} from {e(domain(r["source_url"]))}{confirmed_html(r, "captured_at")}.')
     return (f'<figure class="entry-shot{" is-closed" if closed else ""}"><a href="{e(href)}" rel="nofollow noopener">'
             f'<img src="{p[0]}" width="{screens.SHOT_W}" height="{screens.SHOT_H}" loading="lazy" decoding="async" alt="{e(alt)}"></a>'
             f'<figcaption>{lead} Screenshot © the site owner, not part of the CC BY data.</figcaption></figure>')
@@ -824,7 +846,7 @@ def build_platform(site, c):
                    f'<span class="tag t-{OUTCOME_TONE.get(o, "warn")}">{e(OUTCOME_LABEL.get(o, o))}</span>'
                    f'<span class="tag t-basis">{e(BASIS_LABEL.get(x.get("basis"), x.get("basis") or "basis unknown"))}</span>{evidence_tag(site, x, c["_evo"])}</div>'
                    f'{lab}{val}<p class="stmt">{e(x.get("statement"))}</p>{quote}'
-                   f'<p class="claim-meta">Observed {time_tag(dt)}{source_dates_html(x)} · {src}</p>{verify_html(x)}{history_html(x)}</li>')
+                   f'<p class="claim-meta">Observed {time_tag(dt)}{confirmed_html(x)}{source_dates_html(x)} · {src}</p>{verify_html(x)}{history_html(x)}</li>')
     qa_rows = []
     for q in c.get('qa', []):
         dt = parse_time(q.get('observed_at'))
@@ -879,7 +901,7 @@ def build_platform(site, c):
 </dl>
 {v2_panels(site, c)}
 <section class="cw-panel" aria-labelledby="h-claims"><div class="cw-panel-head"><h2 id="h-claims">Verified facts</h2><span class="muted">{len(claims)} claims · last verified {time_tag(c['_verified'])}</span></div>
-<div class="cw-panel-body"><p class="sec-desc">Each fact shows how it is known (observed directly, operator claim, independent source or inference), whether the source supported it, when it was observed and where. Operator figures are what the platform says about itself.</p>
+<div class="cw-panel-body"><p class="sec-desc">Each fact shows how it is known (observed directly, operator claim, independent source or inference), whether the source supported it, when it was observed and where, and when a later weekly re-check last confirmed it unchanged. Operator figures are what the platform says about itself.</p>
 <ol class="claims">{''.join(lis)}</ol></div></section>
 {f'<section class="cw-panel cw-panel-gap" aria-labelledby="h-qa"><div class="cw-panel-head"><h2 id="h-qa">Independent QA re-check</h2><span class="muted">{len(qa_rows)} re-checks</span></div><div class="cw-panel-body"><p class="sec-desc">A second agent re-checked these claims separately.</p><ol class="claims">{"".join(qa_rows)}</ol></div></section>' if qa_rows else ''}
 {badge_block(site, c)}
@@ -976,7 +998,7 @@ def repl_html(r):
             f'<p class="repl-line">{e(repl.sentence(r))}</p><dl class="facts repl-facts">{cells}</dl>'
             f'<p class="claim-meta">Read from {ext_link(r["source_url"], e(r["repo"]) + " at commit <code>" + e(r["commit"][:12]) + "</code>")}, '
             f'a commit its {ext_link(r["validate_run_url"], "validate workflow")} passed on push; counting rules: '
-            f'{ext_link(r["method_url"], "scripts/validate.ts")}. Observed {time_tag(dt) if dt else e(r["observed_at"])}.</p></div></section>')
+            f'{ext_link(r["method_url"], "scripts/validate.ts")}. Observed {time_tag(dt) if dt else e(r["observed_at"])}{confirmed_html(r)}.</p></div></section>')
 
 
 def repl_md(r):
@@ -986,7 +1008,7 @@ def repl_md(r):
             f"- Replication rows: {r['rows']}", f"- Entries: {r['entries']}", f"- Entries independently reproduced: {r['entries_replicated']}",
             f"- Independent agents: {r['independent_agents']}", '',
             f"Read from {r['source_url']} (commit {r['commit']}), a commit whose validate workflow passed on push ({r['validate_run_url']}). "
-            f"Counting rules: {r['method_url']}. Observed {r['observed_at']}."]
+            f"Counting rules: {r['method_url']}. Observed {r['observed_at']}" + (f" · Confirmed {r['confirmed_at']}" if confirmed_time(r) else '') + '.']
 
 
 def reach_html(r):
@@ -1058,7 +1080,7 @@ def build_platform_md(site, c):
         L.append('| ' + ' | '.join(md_cell(v) for v in [KIND_LABEL.get(x.get('kind'), (x.get('kind') or 'claim').replace('_', ' ').capitalize()), x.get('statement'), val,
                  BASIS_LABEL.get(x.get('basis'), x.get('basis')), OUTCOME_LABEL.get(x.get('outcome'), x.get('outcome')),
                  (f'{lv} · {cv2.LEVELS[lv][1]}' + (f' (curator review: {note})' if note else '')) if lv else '',
-                 ((dt.strftime('%Y-%m-%d %H:%M UTC') if dt else 'date unknown') + source_dates_md(x)) if (dt or source_dates(x)) else '',
+                 ((dt.strftime('%Y-%m-%d %H:%M UTC') if dt else 'date unknown') + confirmed_md(x) + source_dates_md(x)) if (dt or source_dates(x)) else '',
                  x.get('source_url') or '']) + ' |')
     L += ['', f"Data licence: {site.cfg.get('data_licence') or 'see the site'}; please credit \"Commonworld Atlas\" with a link to {A(c['_url'])}.", '']
     return '\n'.join(L)
@@ -1534,7 +1556,7 @@ def build_about(site):
 <p>A card is published only after its key facts were re-observed from sources and recorded claim by claim. Every claim on a card carries:</p>
 <ul><li><b>Basis</b> — how it is known: <i>observed directly</i> (we fetched the page or API ourselves), <i>operator claim</i> (what the platform says about itself), <i>independent source</i> (a third party, e.g. an on-chain decoder or press), or <i>inference</i>.</li>
 <li><b>Outcome</b> — whether the source supported the claim: supported, contradicted, not checked, source inaccessible, or needs a browser check.</li>
-<li><b>Observed date</b> and a <b>source link</b>, so anyone can re-check it.</li>
+<li><b>Observed date</b> and a <b>source link</b>, so anyone can re-check it. When the weekly re-check reads the same fact again and finds it unchanged, the claim also shows a <b>Confirmed</b> date (“Observed &lt;date&gt; · Confirmed &lt;date&gt;”). A confirmation never moves the observed date: only a real change of the value is a new observation, and the old value stays in the claim’s history.</li>
 <li>A published card can still show individual claims that were not confirmed; they are labelled as such.</li></ul>
 <p>A Verified badge confirms three things, each with a dated source: the platform’s official address, that its site is reachable now, and a factual description of what it does; payouts and other money figures are shown as separate claims, each with its own basis label.</p>
 <p>“Verified” means the card was checked this way. It does not mean we endorse a platform, and an operator claim stays labelled as an operator claim even when it is shown.</p>
@@ -1578,7 +1600,7 @@ def build_about(site):
 <h2 id="sources">Sources and data</h2>
 <p>Sources are the platforms' own pages and APIs, public registries, on-chain data and independent analyses, linked on each claim. The full published dataset is available as <a href="{b}/data/snapshot.json">downloadable JSON</a>.{(' It is published under ' + e(lic) + '.') if lic else ''}</p>
 <h2 id="screenshots">Homepage screenshots</h2>
-<p>Most cards show a dated screenshot of the platform's homepage, so you can recognise the site at a glance. Each one is a single screen of the public homepage, taken without logging in, and its caption gives the capture date and the address it came from. The images are copies stored on this site, so your browser never contacts the platform when you look at one. A closed platform keeps its last screenshot as part of its history. When a capture fails or shows nothing useful (an error, a challenge page, a blank screen), the card shows no preview rather than a bad one.</p>
+<p>Most cards show a dated screenshot of the platform's homepage, so you can recognise the site at a glance. Each one is a single screen of the public homepage, taken without logging in, and its caption gives the capture date and the address it came from. When a later weekly capture shows no visible change, the stored image is kept and the caption adds a <i>Confirmed</i> date. The images are copies stored on this site, so your browser never contacts the platform when you look at one. A closed platform keeps its last screenshot as part of its history. When a capture fails or shows nothing useful (an error, a challenge page, a blank screen), the card shows no preview rather than a bad one.</p>
 <p>The screenshots show third-party websites. Their content remains the property of the respective site owners and is <b>not</b> licensed under CC BY 4.0 (nor MIT). They are shown to identify each catalogued site at a stated date. A homepage can incidentally show public posts, usernames or avatars of that site's users. Site owners, and people who appear in a screenshot, can ask for it to be replaced or removed via the <a href="{e(site.cfg['site']['corrections_url'])}" rel="nofollow noopener">corrections link</a>; we act on such requests. In the JSON files the <code>preview</code> field carries the image URLs, the capture time and this rights note.</p>
 <h2 id="agents">For agents</h2>
 <p>AI agents and other programs can read the Atlas directly: <a href="/llms.txt">/llms.txt</a> is a short map of the site in the llms.txt format (with <a href="/llms-full.txt">/llms-full.txt</a>, one line per entry, and <a href="{b}/llms.txt">{b}/llms.txt</a>, a short guide to the Atlas data with one JSON file per category), and <a href="{b}/platforms.json">{b}/platforms.json</a> lists every published entry with stable fields (ID, category, status, summary, money flow, last verified date, claim count). Each entry is also available as <code>{b}/platforms/&lt;id&gt;.json</code>. All of it is generated from the same data as the cards{(" and published under " + e(lic)) if lic else ""}. The same data is also served as a versioned static API at <a href="{api_v1.API_BASE}/index.json">{api_v1.API_BASE}/</a>, with an OpenAPI description and JSON Schemas; see <a href="{API_DOCS}">the API documentation</a>.</p>
@@ -2800,6 +2822,9 @@ def write_github_mirror(out, b):
                  'Source dates (schema_version 1.10.0): a refreshed claim in `platforms/<id>.json` may carry `source_as_of` (when the source '
                  'computed the figure) and `last_settlement_seen_at` (the newest settlement event the source reported), ISO 8601 UTC or null, '
                  'kept apart from `observed_at` (when the Atlas read the source).\n\n'
+                 'Confirmed dates (schema_version 1.11.0): a claim in `platforms/<id>.json` may carry `confirmed_at`, the newest weekly '
+                 're-check that read the same fact again and found it unchanged (ISO 8601 UTC or null; never earlier than `observed_at`, '
+                 'which a re-check never changes). `replications` and `preview` carry `confirmed_at` the same way.\n\n'
                  'Cards v2: money and activity claims carry `evidence_level` and `evidence_label`; where a curator opened the source and set '
                  'the level by hand, the claim also carries `evidence_note`, a short reason (rules: '
                  'https://github.com/commonworld-one/commonworld/blob/main/atlas/CURATION.md#curator-review-of-a-level).\n')
@@ -2887,6 +2912,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 - Replications (schema_version 1.6.0): replication counts for a register where review means replication, or null; {{rows, entries, entries_replicated, independent_agents, format, repo, commit, source_url, method_url, validate_run_url, observed_at}}, counted at a pinned commit of the register the way its own validator counts (rows = replication rows; entries_replicated = entries with at least one reproduction by an agent other than the finder and the repo operator; independent_agents = distinct such agents); contract: {REPO_URL}/blob/main/atlas/site/replications.py
 - Reachability (schema_version 1.7.0): on a live card whose site does not answer the way its status suggests, reachability {{state, label, checked_at, reads, note, credit, reported_via}}, otherwise null. state stale = marked live, but no read got the site's own content (the card stays live until the protocol closes it); state challenge_walled = the site is up and serves its own content, but plain scripts get a challenge page, so what you see depends on your client. Each read: url, observed_at, http_status, bytes, page_type (own_content, challenge, error), client, by, sha256. Two reads of the same page type at least two hours apart, one by the Atlas; contract: {REPO_URL}/blob/main/atlas/site/reachability.py
 - Source dates on claims (schema_version 1.10.0): a refreshed claim in <id>.json may carry source_as_of (when the source itself computed the figure, its own as-of time) and last_settlement_seen_at (the newest settlement event the source reported, an event time), both ISO 8601 UTC or null and kept apart from observed_at (when the Atlas read the source); history[] entries keep them too
+- Confirmed dates (schema_version 1.11.0): a claim in <id>.json may carry confirmed_at, the newest weekly re-check (atlas/refresh.py) that read the same fact again and found it unchanged; ISO 8601 UTC or null, never earlier than observed_at, which a re-check never changes (only a real change of the value is a new observation; the old record and its last confirmed_at move into history[]). replications.confirmed_at (same counts re-read) and preview.confirmed_at (a weekly capture with no visible change, atlas/tools/screens.py) work the same way. Card pages and Markdown twins show "Observed <date> · Confirmed <date>"
 - Closed entries: closed by human review (official statement or at least two independent signals; never reopened automatically) or by the automated weekly check (unreachable in 2 consecutive weekly checks; reopens automatically if the site answers again). A single failed load is never proof.
 - IDs are readable slugs made from the platform name (examples: {', '.join(c['slug'] for c in exs)}). Never guess or construct an ID: take it from platforms.json or llms-full.txt. An ID that is not listed there does not exist in the Atlas.
 {ex_lines}
@@ -2950,6 +2976,7 @@ Some agent tools cannot reach the site directly. The same published files are mi
 - Replication counts: records of registers where review means replication carry replications {{rows, entries, entries_replicated, independent_agents, commit, source_url, method_url, validate_run_url, observed_at}}, counted at a pinned commit the way the register's validator counts; null elsewhere
 - Reachability: live cards whose site does not answer the way the status suggests carry reachability {{state stale or challenge_walled, label, checked_at, reads, note, credit, reported_via}}; null elsewhere. status itself stays live or closed
 - Source dates: a refreshed claim may carry source_as_of (when the source computed the figure) and last_settlement_seen_at (the newest settlement the source reported, an event time), ISO 8601 UTC or null, never the same as observed_at (when the Atlas read it)
+- Confirmed dates: a claim may carry confirmed_at, the newest weekly re-check that found the fact unchanged (ISO 8601 UTC or null); observed_at is never moved by a re-check, only by a real change of the value. replications and preview carry confirmed_at too
 - Cards v2: every record has evidence_level (1 operator says, 2 public dashboard, 3 public transactions set only by a curator who opened the record, or null = not recorded yet), keys_and_books (keys, books, people; filled only from sourced claims on the card; books only from a money-flow claim at evidence level 2 or 3) and first_task (verified, read-only, with credit, or null; typed steps from a closed action list, open_page, find_field, check_field, plus steps_text, the rendered sentences). A claim level set by curator review carries evidence_note (manual relabel rules: {REPO_URL}/blob/main/atlas/CURATION.md#curator-review-of-a-level). How it works: {A(f'{b}/about/#evidence-ladder')}
 
 ## Categories (JSON)
@@ -3414,6 +3441,7 @@ def build_api_docs(site):
 <p>Since <code>schema_version</code> 1.6.0 every entry record also carries <code>replications</code>: for a register where review means replication (today Agent Errata), the counts from its own files at a pinned commit, or <code>null</code>. Fields: <code>rows</code> (replication rows), <code>entries</code>, <code>entries_replicated</code> (entries with at least one reproduction by an agent other than the finder and the repo operator), <code>independent_agents</code> (distinct such agents), <code>format</code>, <code>repo</code>, <code>commit</code> (the 40-character sha read), <code>source_url</code>, <code>method_url</code> (the validator whose counting rules apply, at that commit), <code>validate_run_url</code> (the push run of that validator that passed on the commit) and <code>observed_at</code>. The weekly refresh re-reads the newest commit whose validator run passed; a record changes only when a count changes (<a href="{REPO_URL}/blob/main/atlas/site/replications.py" rel="nofollow noopener">contract</a>).</p>
 <p>Since <code>schema_version</code> 1.7.0 every entry record also carries <code>reachability</code>: <code>null</code>, or on a live card whose site does not answer the way its status suggests, <code>{{state, label, checked_at, reads, note, credit, reported_via}}</code>. <code>state</code> is <code>stale</code> (marked live, but no read got the site’s own content; the card stays live until the protocol closes it) or <code>challenge_walled</code> (the site is up and serves its own content, but plain scripts get a challenge page). Each read has <code>url</code>, <code>observed_at</code>, <code>http_status</code>, <code>bytes</code>, <code>page_type</code> (<code>own_content</code>, <code>challenge</code>, <code>error</code>), <code>client</code>, <code>by</code> and <code>sha256</code> (or <code>null</code>). A state needs two reads of the same page type at least two hours apart, one of them by the Atlas; <code>status</code> keeps its two values (<a href="{REPO_URL}/blob/main/atlas/site/reachability.py" rel="nofollow noopener">contract</a>).</p>
 <p id="source-dates">Since <code>schema_version</code> 1.10.0 a claim in <code>platforms/&lt;id&gt;.json</code> (and each entry of its <code>history</code>) may carry two optional dates from the source itself, both ISO 8601 UTC or <code>null</code> and both kept apart from <code>observed_at</code> (the time the Atlas read the source): <code>source_as_of</code>, when the source computed the figure (its own as-of time, for example x402-list <code>traction.as_of</code>), and <code>last_settlement_seen_at</code>, the time of the newest settlement event the source reported (an event time, not a freshness time). They appear only on claims whose weekly refresh mapping names a source date; the card page and its Markdown twin show the same dates as “source data as of” and “last settlement seen”.</p>
+<p id="confirmed-dates">Since <code>schema_version</code> 1.11.0 a claim in <code>platforms/&lt;id&gt;.json</code> may carry <code>confirmed_at</code>: the time of the newest weekly re-check that read the same fact again and found it unchanged, ISO 8601 UTC or <code>null</code>, never earlier than <code>observed_at</code>. A re-check never changes <code>observed_at</code>; only a real change of the value (or of the statement or source dates read with it) is a new observation, and then the old record, with its last <code>confirmed_at</code>, moves into <code>history</code> and the new one starts without <code>confirmed_at</code>. Today the weekly refresh confirms the numbers it reads from mapped sources (<a href="{REPO_URL}/blob/main/atlas/refresh-sources.json" rel="nofollow noopener">refresh-sources.json</a>) and a supported site-reachability claim whose own source URL answered below HTTP 400; other claims keep only their observed date. <code>replications.confirmed_at</code> is the newest re-read with the same counts (the record keeps the commit it was first observed at), and <code>preview.confirmed_at</code> the newest weekly capture that showed no visible change (the stored image and <code>captured_at</code> stay). The card page and its Markdown twin show “Observed &lt;date&gt; · Confirmed &lt;date&gt;”.</p>
 <h2 id="pages">Paged lists</h2>
 <p>Since <code>schema_version</code> 1.8.0 the list also comes in pages of {PAGE_SIZE} records, the same records as <code>platforms.json</code> in the order of the HTML pages: <a href="{V}{api_v1.page_json(1)}"><code>{V}{api_v1.page_json(1)}</code></a>, <code>{V}/atlas/page/&lt;N&gt;.json</code> (all entries, A to Z, like <a href="{b}/">/atlas/</a> and <code>/atlas/page/&lt;N&gt;/</code>) <code>{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json</code> (one category, live first, like the category pages) and <code>{V}/atlas/platforms/page/&lt;N&gt;.json</code> (the A–Z table <a href="{b}/platforms/">/atlas/platforms/</a> and <code>/atlas/platforms/page/&lt;N&gt;/</code>: the same records and order as the whole list, with <code>url</code> naming the A–Z page). Every page carries <code>snapshot_id</code>, <code>page</code>, <code>per_page</code>, <code>pages</code>, <code>total</code>, <code>count</code>, <code>has_more</code>, <code>next</code>, <code>prev</code> and <code>first</code>, plus <code>url</code> (the HTML page) and <code>md_url</code> (its Markdown twin). {e(api_v1.PAGE_WALK_RULE)} The number of pages is also in <a href="{V}/atlas/index.json">atlas/index.json</a> (<code>counts.pages</code>, <code>categories[].pages</code>). MCP clients read the same pages with the tool <code>atlas_list_page</code>. {e(api_v1.PAGING_CONTRACT)} {e(api_v1.PAGE_ONE_RULE)} A <code>.json</code> file that does not exist under <code>/api/</code> answers HTTP 404 with a JSON error body <code>{e(api_v1.NOT_FOUND_SHAPE)}</code>.</p>
 <h2 id="mcp-files">Compact files of the MCP server</h2>
@@ -3688,7 +3716,7 @@ def main():
                 tb += len(t)
         man = {'note': screens.RIGHTS + ' Site owners can ask for a screenshot to be replaced or removed via the corrections link.',
                'source': f'{REPO_URL}/tree/{screens.BRANCH}', 'count': len(site.shots),
-               'screens': {s: {k: r.get(k) for k in ('file', 'sha256', 'source_url', 'captured_at', 'width', 'height', 'bytes')} for s, r in sorted(site.shots.items())}}
+               'screens': {s: {k: r.get(k) for k in ('file', 'sha256', 'source_url', 'captured_at', 'confirmed_at', 'width', 'height', 'bytes')} for s, r in sorted(site.shots.items())}}
         write(f'{b}{SHOTS_PATH}/manifest.json', json.dumps(man, ensure_ascii=False, indent=1) + '\n')
         print(f'screens: {len(site.shots)} of {len(site.cards)} cards from {site.shot_src}; {sb // 1024} KB full + {tb // 1024} KB thumbnails')
     if site.og_enabled:

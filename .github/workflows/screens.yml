@@ -1,6 +1,7 @@
 name: Atlas weekly screenshots
 # Re-captures the homepage screenshot of every live Atlas card (atlas/tools/screens.py, capture rules in its docstring)
-# into the orphan branch atlas-screens and opens a PR against that branch when an image was added or replaced.
+# into the orphan branch atlas-screens and opens a PR against that branch when an image was added or replaced, or when a
+# capture with no visible change confirmed a stored image (manifest confirmed_at only, issue #273).
 # Never auto-merges: every new image is compared with the stored one (old|new previews in the run artifact) before merging.
 # Builds use the atlas-screens commit pinned in atlas/screens.lock on main, not the branch head: after this PR is merged,
 # a PR on main must bump atlas/screens.lock to the new atlas-screens commit (the PR body says so). This workflow cannot

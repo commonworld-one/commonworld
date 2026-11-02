@@ -126,7 +126,8 @@ class DataFile(unittest.TestCase):
     def test_good_record_and_published_shape(self):
         self.assertEqual(R.validate({'agent-errata': record()}, {'agent-errata'}), [])
         pub = R.published({'agent-errata': record(history=[record(rows=12, observed_at='2026-10-10T00:00:00Z')])}, 'agent-errata')
-        self.assertEqual(list(pub), list(R.RECORD_KEYS))
+        self.assertEqual(list(pub), list(R.RECORD_KEYS) + ['confirmed_at'])
+        self.assertIsNone(pub['confirmed_at'])
         self.assertIsNone(R.published({}, 'agent-errata'))
 
     def test_bad_records(self):
@@ -223,9 +224,12 @@ class RefreshStep(unittest.TestCase):
         got = record(observed_at=None)
         self.assertEqual(refresh.apply_replications(cards, 'agent-errata', got, '2026-10-20T00:00:00Z')[0], 'new')
         first = json.dumps(cards)
-        # a newer commit with the same counts: nothing changes (no weekly PR churn), the pinned commit stays the one observed
+        # a newer commit with the same counts: only a check record (confirmed_at, issue #273); the pinned commit and
+        # observed_at stay the ones first observed
         self.assertEqual(refresh.apply_replications(cards, 'agent-errata', dict(got, commit=SHA2), '2026-10-27T00:00:00Z')[0], 'same')
+        self.assertEqual(cards['agent-errata'].pop('confirmed_at'), '2026-10-27T00:00:00Z')
         self.assertEqual(json.dumps(cards), first)
+        cards['agent-errata']['confirmed_at'] = '2026-10-27T00:00:00Z'
         new = dict(got, rows=14, commit=SHA2, source_url=f'https://github.com/{REPO}/tree/{SHA2}/replications',
                    method_url=f'https://github.com/{REPO}/blob/{SHA2}/scripts/validate.ts')
         what, old = refresh.apply_replications(cards, 'agent-errata', new, '2026-10-27T00:00:00Z')
@@ -233,6 +237,9 @@ class RefreshStep(unittest.TestCase):
         rec = cards['agent-errata']
         self.assertEqual((rec['rows'], rec['commit'], rec['observed_at']), (14, SHA2, '2026-10-27T00:00:00Z'))
         self.assertEqual([(h['rows'], h['commit'], h['observed_at']) for h in rec['history']], [(13, SHA, '2026-10-20T00:00:00Z')])
+        # the old record keeps its last confirmation in history; the new observation starts without one
+        self.assertEqual(rec['history'][0]['confirmed_at'], '2026-10-27T00:00:00Z')
+        self.assertNotIn('confirmed_at', rec)
         self.assertEqual(R.validate(cards, {'agent-errata'}), [])
 
     def test_run_writes_only_on_change_and_skips_failed_entries(self):
@@ -246,8 +253,12 @@ class RefreshStep(unittest.TestCase):
                 self.assertTrue(refresh.run_replications(entries, sources, {'down': {'cls': 'fail'}}, rep, '2026-10-20T00:00:00Z', path, False))
                 raw = Path(path).read_text(encoding='utf-8')
                 rep2 = {'replications': [], 'replication_errors': []}
-                self.assertFalse(refresh.run_replications(entries, sources, {'down': {'cls': 'fail'}}, rep2, '2026-10-27T00:00:00Z', path, False))
-            self.assertEqual(Path(path).read_text(encoding='utf-8'), raw, 'unchanged counts leave the file byte-identical')
+                # unchanged counts: the file changes only by confirmed_at (issue #273); counts, commit and observed_at stay
+                self.assertTrue(refresh.run_replications(entries, sources, {'down': {'cls': 'fail'}}, rep2, '2026-10-27T00:00:00Z', path, False))
+            after = json.loads(Path(path).read_text(encoding='utf-8'))
+            self.assertEqual(after['cards']['agent-errata'].pop('confirmed_at'), '2026-10-27T00:00:00Z')
+            self.assertEqual(after, json.loads(raw), 'unchanged counts change nothing but confirmed_at')
+            self.assertEqual([r['action'] for r in rep2['replications']], ['same'])
             self.assertEqual(list(json.loads(raw)['cards']), ['agent-errata'])
             self.assertEqual([r['action'] for r in rep['replications']], ['new'])
             self.assertIn('12 rows', refresh.replications_md(rep | {'run_at': '2026-10-20T00:00:00Z'}))

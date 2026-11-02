@@ -2,6 +2,12 @@
 
 Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) ships as /api/v2/, and /api/v1/ keeps working.
 
+## 1.11.0 (2026-11-02)
+
+- New optional field `confirmed_at` on a claim (claims[] of platforms/{id}.json, and inside a claim's history[] entries): the time of the newest weekly re-check that read the same fact again and found it unchanged (issue #273). ISO 8601 UTC (RFC 3339, YYYY-MM-DDTHH:MM:SSZ) or null, never earlier than `observed_at`. A re-check never changes `observed_at`: only a real change of the value (or of the statement or source dates read with it) is a new observation; the old record, with its last `confirmed_at`, then moves into history[] and the new one starts without `confirmed_at`. Claims that no weekly check re-reads leave it out.
+- `replications` gains `confirmed_at` (the newest re-read with the same counts; the record keeps the commit it was first observed at) and `preview` gains `confirmed_at` (the newest weekly capture that showed no visible change; the stored image and `captured_at` stay). Both are ISO 8601 UTC or null, and both are optional in the schema, so older records stay valid.
+- The card page and its Markdown twin show "Observed <date> · Confirmed <date>" (Confirmed only when a re-check exists). Values appear after the first weekly refresh and screenshot run that include this change.
+
 ## 1.10.0 (2026-11-01)
 
 - Two new optional fields on a claim (claims[] of platforms/{id}.json, and the same keys inside a claim's history[] entries): `source_as_of`, the time the source itself computed the figure (its own as-of time, for example x402-list traction.as_of), and `last_settlement_seen_at`, the time of the newest settlement event the source reported (an event time, not an as-of time). Both are ISO 8601 UTC strings (RFC 3339, YYYY-MM-DDTHH:MM:SSZ) or null, and both are kept apart from `observed_at`, the time the Atlas read the source. A claim carries them only when its weekly refresh mapping names a source date (atlas/refresh-sources.json, as_of_field / last_settlement_field); other claims leave them out. The card page and its Markdown twin show the same dates ("source data as of", "last settlement seen"). The fields are first emitted by the build with #270 (2026-11-01); they appear in platforms/{id}.json after the next weekly refresh that has a value. This release documents them in the claim schema.

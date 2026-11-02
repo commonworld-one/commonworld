@@ -4,7 +4,9 @@ The images do not live on main. They sit on the orphan branch `atlas-screens` of
 
     atlas/screens/<slug>.webp      1200x750 WebP, one viewport of the card's homepage
     atlas/screens/manifest.json    {"screens": {slug: {file, sha256, dhash, website, source_url, http_status, title,
-                                                       captured_at, width, height, bytes}}}
+                                                       captured_at, width, height, bytes[, shot_url][, confirmed_at]}}}
+                                   confirmed_at (issue #273): the newest weekly capture that showed no visible change; the
+                                   stored image and captured_at stay as they were
 
 build.py calls load() once. Where the screenshots come from, first hit wins:
   1. env CW_SCREENS=off                  -> no previews (placeholders everywhere)
@@ -163,6 +165,10 @@ def load():
             _log(f'skip {slug}: captured_at is not ISO 8601 UTC'); continue
         if not str(r.get('source_url') or '').startswith('https://'):
             _log(f'skip {slug}: source_url not https'); continue
+        ca = r.get('confirmed_at')
+        if ca is not None and (not re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z', str(ca)) or str(ca) < r['captured_at']):
+            _log(f'{slug}: confirmed_at {ca!r} ignored (not ISO 8601 UTC, or earlier than captured_at)')
+            r = {k: v for k, v in r.items() if k != 'confirmed_at'}
         recs[slug] = r
     return d, recs, src
 

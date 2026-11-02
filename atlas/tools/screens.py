@@ -32,6 +32,13 @@ Capture rules (owner decision 2026-10-17; atlas screens PLAN "Standing capture r
     still checks every host first and then hands the connection to that proxy (which resolves the name again: only the
     direct mode, the one CI uses, also pins the checked address); a host it cannot resolve is refused (fail closed).
 Only live cards are captured; closed cards keep their last capture and no slug is ever removed from the manifest.
+
+Confirmations (owner decision on issue #273, 2026-11-01): a capture that passes the checks and shows no visible change
+(decide() -> 'keep:no visible change', dHash distance < 6/64) is a check record for the stored image: its manifest entry
+gets `confirmed_at` = the time of that capture, and nothing else in the entry changes (captured_at, sha256, dhash and the
+image stay those of the stored shot). A held, failed, too-young or replaced capture confirms nothing; a new or replaced
+image starts without confirmed_at. The weekly PR to atlas-screens then carries the manifest change even when no image
+was added (atlas/tools/screens_artifact.py allows a stored entry to change only by a later confirmed_at).
 """
 import argparse, asyncio, base64, glob, hashlib, io, ipaddress, json, os, socket, sys, time, urllib.parse
 from datetime import datetime, timezone
@@ -478,6 +485,15 @@ def manifest_record(slug, rec, website, shot_url=None):
     return new
 
 
+def confirm_record(old, when):
+    """-> a copy of the stored manifest entry `old` with confirmed_at = `when` (the time of a capture that showed no
+    visible change). Only confirmed_at moves, and never backwards; every other field stays as stored (issue #273)."""
+    new = dict(old)
+    if not old.get('confirmed_at') or when > old['confirmed_at']:
+        new['confirmed_at'] = when
+    return new
+
+
 def side_by_side(old_path, new_img, out_path):
     from PIL import Image, ImageDraw
     old = Image.open(old_path).convert('RGB') if old_path and os.path.exists(old_path) else Image.new('RGB', (SHOT_W, SHOT_H), 'white')
@@ -564,6 +580,9 @@ async def run(a):
                 with open(os.path.join(a.screens_dir, f'{slug}.webp'), 'wb') as f:
                     f.write(webp)
                 screens[slug] = manifest_record(slug, rec, cards[slug], o.get('shot_url'))
+            elif act == 'keep:no visible change':   # a passing capture (rec ok): the stored image is confirmed
+                if not a.dry_run:
+                    screens[slug] = confirm_record(old, rec['captured_at'])
             elif a.review_dir and img is not None and not rec.get('ok'):
                 img.convert('RGB').resize((600, 375)).save(os.path.join(a.review_dir, f'{slug}.rejected.webp'), 'WEBP', quality=40)
             results[slug] = rec
@@ -576,7 +595,7 @@ async def run(a):
     if guard:
         await guard.close()
         a.net_denied = guard.denied
-    if not a.dry_run and any(r['action'] in ('add', 'replace') for r in results.values()):
+    if not a.dry_run and any(r['action'] in ('add', 'replace', 'keep:no visible change') for r in results.values()):
         manifest['screens'] = dict(sorted(screens.items()))
         manifest['updated_at'] = utc_iso()
         with open(mf_path, 'w', encoding='utf-8') as f:
@@ -588,9 +607,12 @@ def summary_md(results, unknown, denied=()):
     by = lambda pred: sorted(s for s, r in results.items() if pred(r['action']))
     added, replaced = by(lambda x: x == 'add'), by(lambda x: x == 'replace')
     failed = sorted(s for s, r in results.items() if not r.get('ok'))
+    confirmed = by(lambda x: x == 'keep:no visible change')
     L = ['## Atlas homepage screenshots', '',
          f'Captured {len(results)} live card(s): {len(added)} added, {len(replaced)} replaced, '
-         f'{len(results) - len(added) - len(replaced) - len(failed)} unchanged, {len(failed)} failed (stored image kept).', '']
+         f'{len(results) - len(added) - len(replaced) - len(failed)} unchanged, {len(failed)} failed (stored image kept).', '',
+         f'Confirmed unchanged (no visible change; the stored image gets confirmed_at, nothing else changes): {len(confirmed)}'
+         + (': ' + ', '.join(f'`{s}`' for s in confirmed) if confirmed else '') + '.', '']
     if added or replaced:
         L += ['Every new image must be looked at next to the stored one before merging (old|new previews are in the run artifact).', '',
               '| entry | action | dHash distance | page |', '|---|---|---|---|']

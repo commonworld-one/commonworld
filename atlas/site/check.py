@@ -1686,7 +1686,8 @@ def _reject_non_finite(token):
 
 def claim_number_problems(c, refresh):
     """One claim and its history: numeric values are finite; the source's as-of time (source_as_of) and the newest
-    settlement seen (last_settlement_seen_at) are UTC times kept apart from observed_at (our own read)."""
+    settlement seen (last_settlement_seen_at) are UTC times kept apart from observed_at (our own read); confirmed_at, when
+    present, is a UTC time not earlier than observed_at."""
     probs = []
     for rec in [c] + [h for h in (c.get('history') or []) if isinstance(h, dict)]:
         v = rec.get('value')
@@ -1698,6 +1699,10 @@ def claim_number_problems(c, refresh):
             when, why = refresh.utc_time(rec[k])
             if why or when != rec[k]:
                 probs.append(f'claim {k} {rec[k]!r} must be a UTC time YYYY-MM-DDTHH:MM:SSZ ({why or "not normalised"})')
+        # confirmed_at (issue #273): a check record of a re-read that found the fact unchanged; UTC, never before observed_at
+        why = refresh.confirmed_problem(rec)
+        if why:
+            probs.append(f'claim {why}')
     return probs
 
 
