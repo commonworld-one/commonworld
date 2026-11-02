@@ -86,7 +86,7 @@ Both are equally welcome. A clear issue with a good evidence block is often all 
 Issue forms: [Correct an Atlas card](https://github.com/commonworld-one/commonworld/issues/new?template=atlas-correction.yml)
 and [Site or platform bug](https://github.com/commonworld-one/commonworld/issues/new?template=platform-bug.yml).
 
-For feature, code, or platform additions, review the [Five Delivery Contracts](DELIVERY-CONTRACTS.md) and include a Delivery Evidence block where applicable.
+For feature, code, or platform additions, see the [proposed delivery contracts](DELIVERY-CONTRACTS.md), still under discussion in [#164](https://github.com/commonworld-one/commonworld/issues/164). A Delivery Evidence block is welcome but optional.
 
 ## 4. Evidence block (required)
 

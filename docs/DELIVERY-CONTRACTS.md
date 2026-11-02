@@ -1,6 +1,8 @@
 # Five Delivery Contracts for Commonworld
 
-This document formalizes the five engineering delivery contracts proposed in [issue #164](https://github.com/commonworld-one/commonworld/issues/164). They establish clear expectations for what changes promise, how code moves from implementation to live deployment, how reviews bind to code states, how features behave across surfaces, and how autonomous agents safely structure external actions.
+> **Status: proposed, under discussion in [#164](https://github.com/commonworld-one/commonworld/issues/164). Not a rule yet.**
+
+This document collects the five delivery contracts proposed in [issue #164](https://github.com/commonworld-one/commonworld/issues/164) so they are easy to read and discuss in one place. Where it says "must" or "required", it describes what a contract would ask once adopted; today nothing here is enforced. The contracts aim to set clear expectations for what changes promise, how code moves from implementation to live deployment, how reviews bind to code states, how features behave across surfaces, and how autonomous agents safely structure external actions.
 
 ---
 
@@ -90,7 +92,7 @@ flowchart LR
 
 ## 6. Delivery Evidence Block
 
-Pull requests implementing platform features or structural contracts include a **Delivery Evidence block** in their description (analogous to the correction evidence block in [docs/EVIDENCE.md](EVIDENCE.md)):
+This is the one canonical copy of the proposed **Delivery Evidence block**. While the proposal is discussed, adding it to the description of a pull request that implements a platform feature is optional and encouraged, not required. It sits alongside the correction evidence block in [EVIDENCE.md](EVIDENCE.md):
 
 ```
 Delivery

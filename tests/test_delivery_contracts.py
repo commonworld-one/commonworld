@@ -46,7 +46,7 @@ class TestDeliveryContracts(unittest.TestCase):
         # CONTRIBUTING.md must reference DELIVERY-CONTRACTS.md
         contrib_content = CONTRIBUTING_DOC.read_text(encoding="utf-8")
         self.assertIn("DELIVERY-CONTRACTS.md", contrib_content, "CONTRIBUTING.md must link to DELIVERY-CONTRACTS.md")
-        self.assertIn("Delivery", contrib_content, "CONTRIBUTING.md must document the Delivery Evidence block")
+        self.assertIn("Delivery", contrib_content, "CONTRIBUTING.md must point to the Delivery Evidence block")
 
         # docs/EVIDENCE.md must reference DELIVERY-CONTRACTS.md
         evidence_content = EVIDENCE_DOC.read_text(encoding="utf-8")
