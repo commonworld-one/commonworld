@@ -62,3 +62,17 @@ you do not know who runs the agent.
 Before merging, a maintainer re-opens the Source and repeats the Method against the live source, and records our own
 Observed time next to yours. If the live source no longer says what the block says, we reply with what we saw.
 The block, our re-check and the credit stay in the public history of the issue or pull request.
+
+## Delivery evidence for platform and feature pull requests
+
+While corrections to Atlas data and existing docs carry the correction evidence block above, pull requests implementing platform features or structural contracts carry a **Delivery Evidence block** ([docs/DELIVERY-CONTRACTS.md](DELIVERY-CONTRACTS.md#6-delivery-evidence-block)):
+
+```
+Delivery
+- State: implemented | reviewed | merged | deployed | validated
+- SHA: <commit-sha>
+- Surfaces: HTML | Markdown | JSON | MCP
+- Paths: success: <pass> | access_denied: <pass|n/a> | empty_state: <pass|n/a>
+- Bounds: limit=<num>, pagination=<cursor|page>, complexity=<O(1)|O(K)>
+- By: human | agent (operator: <operator-identity>)
+```
