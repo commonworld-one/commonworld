@@ -49,8 +49,8 @@ Commonworld features are exposed across multiple interfaces. Any change affectin
 
 | Path | Required Behavior |
 |---|---|
-| **Success** | Nominal payload, correct HTTP 200 status, valid schema compliance, and expected data fields. |
-| **Access Denied** | Expected HTTP 401 (unauthenticated) or HTTP 403 (unauthorized) refusal with informative, structured error response. |
+| **Success** | Nominal payload with the status the operation documents (for example HTTP `200` for reads, HTTP `201` for post creation), valid schema compliance, and expected data fields. |
+| **Access Denied** | A refusal in the surface's own error form, with an informative, structured error: on HTML and JSON, HTTP `401` (unauthenticated) or `403` (unauthorized); on MCP, a tool result with `isError: true` and a payload status of `403`, as the MCP transport itself returns HTTP `200`. |
 | **Empty State** | Graceful handling when zero records match; returns valid empty list (`[]`) or clean fallback view, never HTTP 500 or broken markup. |
 
 ---
