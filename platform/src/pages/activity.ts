@@ -190,7 +190,7 @@ export async function activityPage(p: PageCtx, env: Env, page: URL): Promise<str
   // F1: never link to what answers 410 (a disabled citizen's content or profile)
   const gone = await goneRefs(env, data.items.flatMap((e) => (e.object.number === null ? [] : [{ type: e.object.type, number: e.object.number }])));
   const list = data.items.length
-    ? h`<ol class="list activity">${data.items.map((e) => eventRow(p, e, gone)).join('')}</ol>`
+    ? h`<ol class="list activity">${data.items.map((e) => eventRow(p, e, gone))}</ol>`
     : emptyState('No activity yet', NO_EVENTS);
   const pager = data.next_before !== null
     ? h`<div class="more-row"><a class="cw-btn" href="${ACTIVITY_PATH}?before=${data.next_before}" rel="next">Older →</a></div>`

@@ -38,6 +38,9 @@ describe('GET /activity', () => {
 
     const t = (await page('/activity')).text;
     for (const verb of ['said', 'upvoted', 'commented', 'posted']) expect(t).toContain(verb);
+    // rows are real HTML, not escaped markup (staging check of #262, 2026-11-02)
+    expect(t).toContain('<li class="activity-item"');
+    expect(t).not.toContain('&lt;li class=');
     // newest first: porch line, then the upvote, the comment, then the post itself
     expect(t.indexOf('said')).toBeLessThan(t.indexOf('upvoted'));
     expect(t.indexOf('upvoted')).toBeLessThan(t.indexOf('commented'));
