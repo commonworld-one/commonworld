@@ -123,7 +123,7 @@ function refLink(ref: string, url: string | null, gone: Set<string>): Raw {
 
 /** The actor, with its normal byline; a neutral muted noun when the actor is hidden from this reader. */
 function actorWho(p: PageCtx, e: ActivityItem, fallback: string): Raw {
-  return e.actor?.handle ? who(e.actor) : h`<span class="who"><span class="h muted">${fallback}</span></span>`;
+  return e.actor?.handle ? who(e.actor, true, false) : h`<span class="who"><span class="h muted">${fallback}</span></span>`;
 }
 
 /** The main sentence: actor + verb + target. */
@@ -178,11 +178,24 @@ function note(p: PageCtx, e: ActivityItem): Raw {
 }
 
 function eventRow(p: PageCtx, e: ActivityItem, gone: Set<string>): Raw {
-  const star = e.actor?.handle ? av(e.actor.handle, e.actor.kind) : av('cw', 'human', 'cw-av-muted');
-  return h`<li class="activity-item" data-type="${e.type}">${star}<div class="ai-body"><div class="ai-line">${sentence(p, e, gone)}${note(p, e)}</div><div class="ai-meta muted">${e.created_at.slice(0, 16).replace('T', ' ')} UTC · ${ago(e.created_at, p.now)}</div></div></li>`;
+  // One avatar per row (the byline itself carries none), the readable sentence, then "how long ago" first and the
+  // exact UTC time after it: the page is read top-down as "what just happened" (#141).
+  const avatar = e.actor?.handle ? av(e.actor.handle, e.actor.kind) : av('cw', 'human', 'cw-av-muted');
+  const when = `${e.created_at.slice(0, 16).replace('T', ' ')} UTC`;
+  return h`<li class="activity-item" data-type="${e.type}">${avatar}<div class="ai-body"><div class="ai-line">${sentence(p, e, gone)}${note(p, e)}</div><div class="ai-meta muted"><time datetime="${e.created_at}" title="${when}">${ago(e.created_at, p.now)}</time> · ${when}</div></div></li>`;
 }
 
-// ---------------------------------------------------------------- page
+/** Rows with a day heading (UTC) before the first event of each day. */
+function eventRows(p: PageCtx, items: ActivityItem[], gone: Set<string>): Raw[] {
+  const out: Raw[] = [];
+  let day = '';
+  for (const e of items) {
+    const d = e.created_at.slice(0, 10);
+    if (d !== day) { day = d; out.push(h`<li class="activity-day" aria-hidden="true">${d}</li>`); }
+    out.push(eventRow(p, e, gone));
+  }
+  return out;
+}
 
 export async function activityPage(p: PageCtx, env: Env, page: URL): Promise<string> {
   const before = intParam(page, 'before', 0, 0, Number.MAX_SAFE_INTEGER);
@@ -190,13 +203,13 @@ export async function activityPage(p: PageCtx, env: Env, page: URL): Promise<str
   // F1: never link to what answers 410 (a disabled citizen's content or profile)
   const gone = await goneRefs(env, data.items.flatMap((e) => (e.object.number === null ? [] : [{ type: e.object.type, number: e.object.number }])));
   const list = data.items.length
-    ? h`<ol class="list activity">${data.items.map((e) => eventRow(p, e, gone))}</ol>`
+    ? h`<ul class="activity-list">${eventRows(p, data.items, gone)}</ul>`
     : emptyState('No activity yet', NO_EVENTS);
-  const pager = data.next_before !== null
-    ? h`<div class="more-row"><a class="cw-btn" href="${ACTIVITY_PATH}?before=${data.next_before}" rel="next">Older →</a></div>`
-    : h``;
+  const newest = before ? h`<a class="cw-btn" href="${ACTIVITY_PATH}">← Newest</a>` : h``;
+  const older = data.next_before !== null ? h`<a class="cw-btn" href="${ACTIVITY_PATH}?before=${data.next_before}" rel="next">Older →</a>` : h``;
+  const pager = before || data.next_before !== null ? h`<div class="more-row">${newest}${older}</div>` : h``;
   const body = h`${crumbs([['Activity', null]])}
-<section class="cw-hero cw-hero-sm"><div><a class="kicker" href="/pulse">Public record</a><h1>Activity</h1><p>${LEAD}</p></div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>${data.items.length} events</strong><span class="spacer muted">newest first · JSON: /v1/feed</span></div><p>The same events as the public <a href="/v1/feed" rel="nofollow">change feed</a> (oldest first, for polling) and the <a href="/moderation">moderation log</a> (moderation actions only).</p></div></section>
+<section class="cw-hero cw-hero-sm"><div><a class="kicker" href="/pulse">Public record</a><h1>Activity</h1><p>${LEAD}</p></div><div class="cw-identity"><div class="row"><i class="dot live"></i><strong>${before ? `${data.items.length} older events` : `Latest ${data.items.length} events`}</strong><span class="spacer muted">newest first · JSON: /v1/feed</span></div><p>The same events as the public <a href="/v1/feed" rel="nofollow">change feed</a> (oldest first, for polling) and the <a href="/moderation">moderation log</a> (moderation actions only).</p></div></section>
 <section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Recent events</h2><span class="muted">newest first · every public event</span></div><div class="cw-panel-body">${list}${pager}</div></section>`;
   return document(p, {
     title: ACTIVITY_TITLE, description: ACTIVITY_DESCRIPTION,
