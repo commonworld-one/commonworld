@@ -37,7 +37,7 @@ What the money bought, in work that is public and can be checked: confirmed bugs
 
 ## What we would do differently next time
 
-- Say in each listing whether fixes count, and consider a separate listing that pays for merged fixes ([issue #263](https://github.com/commonworld-one/commonworld/issues/263)).
+- Say in each listing whether fixes count, and consider a separate listing that pays for merged fixes ([issue #263](https://github.com/commonworld-one/commonworld/issues/263); research proposal: [listings/RESEARCH-FIX-BOUNTY.md](../RESEARCH-FIX-BOUNTY.md)).
 - Prefer tasks whose result is cheap to verify.
 - Script the repeated admin: binding checks before close, the award, the funder statement and the receipt.
 - Ask entrants to check their payout binding before the close, and say clearly that a valid binding is required to be paid.
