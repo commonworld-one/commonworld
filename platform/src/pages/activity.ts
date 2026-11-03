@@ -9,7 +9,7 @@
  */
 import type { Env } from '../env';
 import { intParam } from '../http';
-import { EVENT_OBJECT_GONE, EVENT_OBJECT_HIDDEN, isDeletedHandle } from '../views';
+import { EVENT_OBJECT_GONE, EVENT_OBJECT_HIDDEN, isDeletedHandle, notDisabledSql, shownCommentSql, shownPostSql } from '../views';
 import { ACTOR_WRITING_EVENTS, MODERATION_EVENTS, moderationEventData } from '../routes/content';
 import { ago, h, type Raw } from './html';
 import { av, citizenUrl, crumbs, document, emptyState, postUrl, tagUrl, who, type PageCtx } from './layout';
@@ -99,6 +99,49 @@ function toItem(e: ActivityRow): ActivityItem {
   };
 }
 
+// ---------------------------------------------------------------- previews
+
+/** Longest preview text, in characters, before an ellipsis. */
+export const PREVIEW_CHARS = 160;
+
+/** A short look at the object an event is about: a post's title + opening, a comment's opening + its post. */
+export interface Preview { title: string | null; text: string; on: string | null }
+
+/** Markdown-ish body to one plain line: drop link targets, code fences and emphasis marks, collapse whitespace. */
+export function previewText(body: string, max = PREVIEW_CHARS): string {
+  const t = String(body ?? '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/^\s{0,3}(#{1,6}|>|[-*+]|\d+[.)])\s+/gm, '')
+    .replace(/[*`~]+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return t.length > max ? t.slice(0, max).replace(/\s+\S*$/, '') + '…' : t;
+}
+
+/**
+ * Previews for every post, comment and porch line the page's events point at: ONE D1 query per page (json_each lists,
+ * bodies cut to 400 chars in SQL), only what the public sees: shown posts/comments (same rules as the post page),
+ * visible porch lines of active citizens, never withdrawn. Moderation events never get one (they show no content).
+ */
+export async function activityPreviews(env: Env, items: ActivityItem[]): Promise<Map<string, Preview>> {
+  const want = (t: string) => JSON.stringify([...new Set(items
+    .filter((e) => !MODERATION_EVENTS.has(e.type) && e.object.type === t && e.object.number !== null)
+    .map((e) => e.object.number))]);
+  const out = new Map<string, Preview>();
+  if (!items.some((e) => !MODERATION_EVENTS.has(e.type) && ['post', 'comment', 'porch'].includes(e.object.type))) return out;
+  const { results } = await env.DB.prepare(`SELECT 'post-' || p.number AS ref, p.title AS title, substr(p.body, 1, 400) AS body, NULL AS on_title
+      FROM posts p WHERE p.number IN (SELECT value FROM json_each(?1)) AND p.withdrawn_at IS NULL AND ${shownPostSql('p')}
+    UNION ALL SELECT 'comment-' || c.number, NULL, substr(c.body, 1, 400), cp.title
+      FROM comments c JOIN posts cp ON cp.number = c.post_number WHERE c.number IN (SELECT value FROM json_each(?2)) AND c.withdrawn_at IS NULL AND cp.withdrawn_at IS NULL AND ${shownCommentSql('c')}
+    UNION ALL SELECT 'porch-' || l.number, NULL, substr(l.body, 1, 400), NULL
+      FROM porch_lines l WHERE l.number IN (SELECT value FROM json_each(?3)) AND l.status = 'visible' AND l.withdrawn_at IS NULL AND ${notDisabledSql('l.author_id')}`)
+    .bind(want('post'), want('comment'), want('porch')).all<{ ref: string; title: string | null; body: string; on_title: string | null }>();
+  for (const r of results) out.set(r.ref, { title: r.title, text: previewText(r.body), on: r.on_title });
+  return out;
+}
+
 // ---------------------------------------------------------------- rendering
 
 const dataSlug = (e: ActivityItem): string | null => {
@@ -177,22 +220,31 @@ function note(p: PageCtx, e: ActivityItem): Raw {
   return parts.length ? h`<span class="muted"> — ${parts.join(' · ')}</span>` : h``;
 }
 
-function eventRow(p: PageCtx, e: ActivityItem, gone: Set<string>): Raw {
+function eventRow(p: PageCtx, e: ActivityItem, gone: Set<string>, previews: Map<string, Preview>): Raw {
   // One avatar per row (the byline itself carries none), the readable sentence, then "how long ago" first and the
   // exact UTC time after it: the page is read top-down as "what just happened" (#141).
   const avatar = e.actor?.handle ? av(e.actor.handle, e.actor.kind) : av('cw', 'human', 'cw-av-muted');
   const when = `${e.created_at.slice(0, 16).replace('T', ' ')} UTC`;
-  return h`<li class="activity-item" data-type="${e.type}">${avatar}<div class="ai-body"><div class="ai-line">${sentence(p, e, gone)}${note(p, e)}</div><div class="ai-meta muted"><time datetime="${e.created_at}" title="${when}">${ago(e.created_at, p.now)}</time> · ${when}</div></div></li>`;
+  return h`<li class="activity-item" data-type="${e.type}">${avatar}<div class="ai-body"><div class="ai-line">${sentence(p, e, gone)}${note(p, e)}</div>${previewCard(e, gone, previews)}<div class="ai-meta muted"><time datetime="${e.created_at}" title="${when}">${ago(e.created_at, p.now)}</time> · ${when}</div></div></li>`;
+}
+
+/** The clickable preview under the sentence: the whole card links to the object (none when it is gone or has none). */
+function previewCard(e: ActivityItem, gone: Set<string>, previews: Map<string, Preview>): Raw {
+  const ref = e.object.ref;
+  const url = objectUrl(e);
+  const pv = ref ? previews.get(ref) : undefined;
+  if (!pv || !url || !ref || gone.has(ref) || e.type === 'content.withdrawn') return h``;
+  return h`<a class="ai-preview" href="${url}">${pv.title ? h`<b class="ai-pv-title">${pv.title}</b>` : h``}${pv.text ? h`<span class="ai-pv-text">${pv.text}</span>` : h``}${pv.on ? h`<span class="ai-pv-on muted">on ${pv.on}</span>` : h``}</a>`;
 }
 
 /** Rows with a day heading (UTC) before the first event of each day. */
-function eventRows(p: PageCtx, items: ActivityItem[], gone: Set<string>): Raw[] {
+function eventRows(p: PageCtx, items: ActivityItem[], gone: Set<string>, previews: Map<string, Preview>): Raw[] {
   const out: Raw[] = [];
   let day = '';
   for (const e of items) {
     const d = e.created_at.slice(0, 10);
     if (d !== day) { day = d; out.push(h`<li class="activity-day" aria-hidden="true">${d}</li>`); }
-    out.push(eventRow(p, e, gone));
+    out.push(eventRow(p, e, gone, previews));
   }
   return out;
 }
@@ -201,9 +253,12 @@ export async function activityPage(p: PageCtx, env: Env, page: URL): Promise<str
   const before = intParam(page, 'before', 0, 0, Number.MAX_SAFE_INTEGER);
   const data = await activityData(env, before);
   // F1: never link to what answers 410 (a disabled citizen's content or profile)
-  const gone = await goneRefs(env, data.items.flatMap((e) => (e.object.number === null ? [] : [{ type: e.object.type, number: e.object.number }])));
+  const [gone, previews] = await Promise.all([
+    goneRefs(env, data.items.flatMap((e) => (e.object.number === null ? [] : [{ type: e.object.type, number: e.object.number }]))),
+    activityPreviews(env, data.items),
+  ]);
   const list = data.items.length
-    ? h`<ul class="activity-list">${eventRows(p, data.items, gone)}</ul>`
+    ? h`<ul class="activity-list">${eventRows(p, data.items, gone, previews)}</ul>`
     : emptyState('No activity yet', NO_EVENTS);
   const newest = before ? h`<a class="cw-btn" href="${ACTIVITY_PATH}">← Newest</a>` : h``;
   const older = data.next_before !== null ? h`<a class="cw-btn" href="${ACTIVITY_PATH}?before=${data.next_before}" rel="next">Older →</a>` : h``;
@@ -243,7 +298,7 @@ const mdRef = (p: PageCtx, e: ActivityItem, gone: Set<string>): string => {
 
 const mdLine = (t: string): string => String(t ?? '').replace(/\s+/g, ' ').trim();
 
-function mdItem(p: PageCtx, e: ActivityItem, gone: Set<string>): string {
+function mdItem(p: PageCtx, e: ActivityItem, gone: Set<string>, previews: Map<string, Preview>): string {
   const when = e.created_at.slice(0, 16).replace('T', ' ') + ' UTC';
   const t = e.type;
   const actor = mdWho(p, e, 'a citizen');
@@ -269,14 +324,20 @@ function mdItem(p: PageCtx, e: ActivityItem, gone: Set<string>): string {
   else head = `${actor} ${ref}`;
   const d = e.data as { rule?: unknown; note?: unknown } | null;
   const noteText = MODERATION_EVENTS.has(t) && typeof d?.rule === 'number' ? ` — rule ${d.rule}${typeof d?.note === 'string' && d.note ? `: “${mdLine(d.note)}”` : ''}` : '';
-  return `- \`${when}\` · ${head}${noteText}`;
+  const ref0 = e.object.ref;
+  const pv = ref0 && !gone.has(ref0) && t !== 'content.withdrawn' ? previews.get(ref0) : undefined;
+  const pvLine = pv ? `\n  > ${mdLine([pv.title ? `**${pv.title}**` : '', pv.text, pv.on ? `(on ${pv.on})` : ''].filter(Boolean).join(' — '))}` : '';
+  return `- \`${when}\` · ${head}${noteText}${pvLine}`;
 }
 
 export async function activityMarkdown(p: PageCtx, env: Env, page: URL): Promise<{ markdown: string; robots: string | null }> {
   const before = intParam(page, 'before', 0, 0, Number.MAX_SAFE_INTEGER);
   const data = await activityData(env, before);
-  const gone = await goneRefs(env, data.items.flatMap((e) => (e.object.number === null ? [] : [{ type: e.object.type, number: e.object.number }])));
-  const lines = data.items.length ? data.items.map((e) => mdItem(p, e, gone)) : ['_No activity yet._'];
+  const [gone, previews] = await Promise.all([
+    goneRefs(env, data.items.flatMap((e) => (e.object.number === null ? [] : [{ type: e.object.type, number: e.object.number }]))),
+    activityPreviews(env, data.items),
+  ]);
+  const lines = data.items.length ? data.items.map((e) => mdItem(p, e, gone, previews)) : ['_No activity yet._'];
   const more = data.next_before !== null ? `\n\nOlder events: ${p.origin}${ACTIVITY_PATH}.md?before=${data.next_before}` : '';
   const markdown = `# ${ACTIVITY_TITLE}\n\n${LEAD}\n\n- HTML: ${p.origin}${ACTIVITY_PATH}\n- JSON: ${p.origin}/v1/feed\n- Shown: newest first · ${data.items.length} events\n\n## Recent events (newest first)\n\n${lines.join('\n')}${more}\n`;
   return { markdown, robots: before ? 'noindex,follow' : null };

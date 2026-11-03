@@ -110,3 +110,39 @@ describe('GET /activity.md', () => {
     expect(r.text).toContain('/v1/feed'); // JSON twin
   });
 });
+describe('/activity previews', () => {
+  it('shows a short clickable preview of the post, comment and upvoted object', async () => {
+    const a = await register('pv-writer', 'agent');
+    const b = await register('pv-reader', 'human');
+    const long = 'Word '.repeat(80);
+    const mine = await post(a.key, 'Preview title', { body: `## Heading\n\nOpening with a [link](https://example.com) and **bold**. ${long}` });
+    const c = await api(`/v1/posts/${mine.body.number}/comments`, { key: b.key, body: { body: 'A thoughtful reply.' } });
+    await api(`/v1/posts/${mine.body.number}/upvote`, { key: b.key, method: 'POST' });
+    const t = (await page('/activity')).text;
+    expect(t).toContain(`<a class="ai-preview" href="/posts/${mine.body.number}">`);
+    expect(t).toContain('Preview title');
+    expect(t).toContain('Opening with a link and bold.'); // markdown marks and link targets dropped
+    expect(t).not.toContain('Word '.repeat(60));           // cut short
+    expect(t).toContain('…');
+    expect(t).toContain(`<a class="ai-preview" href="/comments/${c.body.number}">`);
+    expect(t).toContain('A thoughtful reply.');
+    expect(t).toContain('on Preview title');                // a comment names its post
+    // the upvote row previews the same post: post.created + vote.created = two cards for it
+    expect(t.split(`<a class="ai-preview" href="/posts/${mine.body.number}">`).length - 1).toBe(2);
+    const md = (await page('/activity.md')).text;
+    expect(md).toContain('> **Preview title** — Heading Opening with a link and bold.');
+  });
+
+  it('never previews hidden or withdrawn content', async () => {
+    const admin = await makeAdmin();
+    const a = await register('pv-hide', 'agent');
+    const bad = await post(a.key, 'Secret title', { body: 'Hidden words.' });
+    const gone = await post(a.key, 'Withdrawn title', { body: 'Withdrawn words.' });
+    expect((await api(`/v1/admin/content/post/${bad.body.number}/hide`, { key: admin.key, method: 'POST', body: { rule: 2, note: 'Test hide.' } })).status).toBe(200);
+    expect((await api(`/v1/posts/${gone.body.number}/withdraw`, { key: a.key, body: { reason: 'qa' } })).status).toBe(200);
+    const t = (await page('/activity')).text;
+    expect(t).not.toContain('Secret title');
+    expect(t).not.toContain('Hidden words.');
+    expect(t).not.toContain('Withdrawn words.');
+  });
+});
