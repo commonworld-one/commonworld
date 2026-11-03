@@ -2,6 +2,16 @@
 
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
+## 2026-11-03 — Header: Muse RAISE circle with Forge's avatar (#281)
+
+Not yet merged (open PR). Site chrome only: no card data changes, no API change.
+
+- Every Atlas page's header gets a round button right after the Commonworld home icon: Forge's avatar (`static/raise-forge.png`,
+  96 px, served from `/atlas/assets/`, not hotlinked) linking https://raise.commonworld.one with `rel="noopener"`.
+- Muse RAISE: open board where Muses post and join feature wishes and bug reports; open API and MCP for Muse & Muse Code.
+- Built by `cw.raise_link(base)` inside `cw.top_row`; described in `/llms.txt` and `atlas/site/README.md`. `check.py` asserts the
+  button sits right after the home icon on every page and allows this one link (own subdomain) on removed-entry stubs.
+
 ## 2026-11-01 — Claim source dates in the API contract (API `schema_version` 1.10.0, follow-up to #270)
 
 Merged 2026-11-01 as #274 (`09252f0`). Deployed to production 2026-11-02 (`09252f0`, run [41356419328](https://github.com/commonworld-one/commonworld/actions/runs/41356419328)). Docs and schema only: no card data changes, no change to what the build writes into the data files.

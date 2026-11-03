@@ -68,6 +68,7 @@ ORIGIN = json.load(open(os.path.join(HERE, 'site-config.json')))['site']['origin
 X_HANDLE, X_URL = '@commonworldone', 'https://x.com/commonworldone'  # official X account: twitter:site on every page, footer, sameAs
 REPO_URL, GITHUB_ORG_URL = 'https://github.com/commonworld-one/commonworld', 'https://github.com/commonworld-one'
 OFFICIAL_URLS = {X_URL, REPO_URL}  # own accounts: linked with rel="me noopener" (no nofollow)
+RAISE_URL = 'https://raise.commonworld.one'  # Muse RAISE circle in the header of every page (cw_components.raise_link): own subdomain
 MAX = 150 * 1024          # raw HTML per page
 PAGE_SIZE = 50            # cards per list page (D4); build.py and api_v1.py use the same value (api_v1.PAGE_SIZE, checked below)
 MAX_GZ = 60 * 1024        # what actually goes over the wire, every page
@@ -198,7 +199,7 @@ def removed_checks(parsed, pages):
         if 'noindex' not in (p.meta.get('robots') or ''): fails.append(f'{u}: removed-entry stub is not noindex')
         if REMOVED_LINE not in h: fails.append(f'{u}: stub lacks {REMOVED_LINE!r}')
         ext = [href for tag, href, rel in p.links if tag == 'a' and href.startswith(('http://', 'https://', '//')) and not href.startswith(ORIGIN)
-               and href not in OFFICIAL_URLS and not href.startswith(REPO_URL)]
+               and href not in OFFICIAL_URLS and href != RAISE_URL and not href.startswith(REPO_URL)]
         if ext: fails.append(f'{u}: removed-entry stub has outbound links {ext[:3]}')
     for fn in ('atlas/data/snapshot.json', 'atlas/platforms.json', 'atlas/earn.json', 'atlas/data/search-index.json'):
         raw = open(os.path.join(DIST, fn), encoding='utf-8').read()
@@ -1999,6 +2000,9 @@ def main():
             if href.startswith(('http://', 'https://')):
                 if href.startswith(ORIGIN) or tag != 'a':
                     continue
+                if href == RAISE_URL:  # Muse RAISE circle in the header: own commonworld.one subdomain, noopener only
+                    if 'noopener' not in rel.split(): fails.append(f'{u}: Muse RAISE link without noopener: {href}')
+                    continue
                 if href in OFFICIAL_URLS and 'me' in rel.split():
                     if 'noopener' not in rel.split(): fails.append(f'{u}: official link without noopener: {href}')
                     continue
@@ -2091,6 +2095,8 @@ def main():
             fails.append(f'{u}: footer lacks About Commonworld / How the Atlas works links')
         if f'class="cw-iconbtn cw-product" href="{product}" aria-label="Commonworld home"' not in h:
             fails.append(f'{u}: home icon href != product_url {product}')
+        if not re.search(r'aria-label="Commonworld home"[^>]*>.*?</a><a class="cw-iconbtn cw-raise" href="https://raise\.commonworld\.one" rel="noopener" aria-label="Muse RAISE" title="Muse RAISE"><img src="/atlas/assets/raise-forge\.png(\?v=\w+)?" alt=""', h[h.find('<header class="cw-top"'):h.find('</header>')]):
+            fails.append(f'{u}: Muse RAISE circle (Forge avatar) missing or not right after the home icon')
         if 'class="cw-consent"' in h and f'href="{PRIV_URL}">Privacy</a></p>' not in h:
             fails.append(f'{u}: cookie banner does not link to {PRIV_URL}')
     # --- Commonworld landing (/)

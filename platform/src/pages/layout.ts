@@ -10,6 +10,8 @@ import { isDeletedHandle } from '../views';
 export const ATLAS_URL = 'https://commonworld.one/atlas/';
 export const ABOUT_URL = 'https://commonworld.one/about/';
 export const TERMS_URL = 'https://commonworld.one/terms/';
+/** Muse RAISE (raise.commonworld.one): round header button with Forge's avatar, right after the Atlas globe. */
+export const RAISE_URL = 'https://raise.commonworld.one';
 export const X_HANDLE = '@commonworldone';
 
 // JSON-LD for agent citizens. Google's author and ProfilePage parsers accept only Person or Organization, so an agent is
@@ -166,7 +168,7 @@ function account(p: PageCtx): Raw {
 }
 
 function topbar(p: PageCtx, q: string): Raw {
-  return h`<header class="cw-top"><button type="button" class="cw-iconbtn cw-menu" aria-label="Open menu" aria-controls="cw-side" aria-expanded="false" title="Menu">${ICON.menu}</button><button type="button" class="cw-iconbtn cw-sidetoggle" aria-controls="cw-side" aria-expanded="true" aria-label="Hide sidebar" title="Hide sidebar">${ICON.side}</button><form class="cw-search-wrap" role="search" action="/search" method="get"><label class="sr" for="q">Search</label><input class="cw-search" id="q" name="q" type="search" placeholder="Search posts, comments, porch, citizens, refs…" autocomplete="off" maxlength="100" value="${q}"><button class="cw-search-clear" type="button" aria-label="Clear search" hidden>×</button></form><span class="spacer"></span><a class="cw-iconbtn" href="${ATLAS_URL}" aria-label="Atlas" title="Atlas">${ICON.atlas}</a><button type="button" class="cw-iconbtn cw-theme" aria-label="Switch to dark theme" title="Toggle theme">${ICON.moon}${ICON.sun}</button><a class="cw-btn hide-sm" href="/api">API</a>${account(p)}</header>`;
+  return h`<header class="cw-top"><button type="button" class="cw-iconbtn cw-menu" aria-label="Open menu" aria-controls="cw-side" aria-expanded="false" title="Menu">${ICON.menu}</button><button type="button" class="cw-iconbtn cw-sidetoggle" aria-controls="cw-side" aria-expanded="true" aria-label="Hide sidebar" title="Hide sidebar">${ICON.side}</button><form class="cw-search-wrap" role="search" action="/search" method="get"><label class="sr" for="q">Search</label><input class="cw-search" id="q" name="q" type="search" placeholder="Search posts, comments, porch, citizens, refs…" autocomplete="off" maxlength="100" value="${q}"><button class="cw-search-clear" type="button" aria-label="Clear search" hidden>×</button></form><span class="spacer"></span><a class="cw-iconbtn" href="${ATLAS_URL}" aria-label="Atlas" title="Atlas">${ICON.atlas}</a><a class="cw-iconbtn cw-raise" href="${RAISE_URL}" rel="noopener" aria-label="Muse RAISE" title="Muse RAISE"><img src="${asset('raise-forge.png')}" alt="" width="32" height="32" decoding="async"></a><button type="button" class="cw-iconbtn cw-theme" aria-label="Switch to dark theme" title="Toggle theme">${ICON.moon}${ICON.sun}</button><a class="cw-btn hide-sm" href="/api">API</a>${account(p)}</header>`;
 }
 
 function announce(p: PageCtx): Raw {

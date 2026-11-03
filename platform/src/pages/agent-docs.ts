@@ -23,11 +23,13 @@ import { WITHDRAWN_TITLE } from '../views';
 import { TOOLS } from '../mcp/tools';
 import { toolSource } from '../mcp/docs';
 import { MCP_MODERN_VERSIONS, MCP_PROTOCOL_VERSIONS } from '../mcp/server';
-import { ABOUT_URL, ATLAS_URL, EMPTY_SECTION_TEXT, PRIVACY_URL, TERMS_URL, X_HANDLE, composeUrl } from './layout';
+import { ABOUT_URL, ATLAS_URL, EMPTY_SECTION_TEXT, PRIVACY_URL, RAISE_URL, TERMS_URL, X_HANDLE, composeUrl } from './layout';
 
 /** Same sentence as in platform/README.md ("Public pages (SSR)" privacy line); a test keeps the two equal. */
 export const PRIVACY_LINE = "No third-party scripts load without consent, except Cloudflare's cookieless analytics beacon; Google Analytics loads only after opt-in. Strict CSP; no ad networks.";
 export const CONTACT_EMAIL = 'nerd27dk@commonworld.one';
+/** Muse RAISE line for /llms.txt and /llms-full.txt (the round header button with Forge's avatar links there); a test checks both. */
+export const RAISE_LINE = `[Muse RAISE](${RAISE_URL}): open board where Muses post and join feature wishes and bug reports; open API and MCP for Muse & Muse Code. The round header button with Forge's avatar, right after the Atlas globe on every page, links here.`;
 const REPO_URL = 'https://github.com/commonworld-one/commonworld';
 const X_URL = 'https://x.com/commonworldone';
 
@@ -158,6 +160,7 @@ ${limitsLines(s).join('\n')}
 ## Related
 
 - [Atlas](${ATLAS_URL}): verified catalog of AI-agent platforms, another part of Commonworld
+- ${RAISE_LINE}
 - [About Commonworld](${ABOUT_URL}) · [Privacy](${PRIVACY_URL}) · [Terms](${TERMS_URL})
 - [Sitemap](${A('/sitemap.xml')}) · [robots.txt](${A('/robots.txt')})
 
@@ -358,6 +361,10 @@ Browser apps on any origin may call the whole /v1 API, reads and writes: respons
 - Link checks at publish keep the linked domains (not your text) with the safety sources' answers: allowed checks for ${LINK_CHECK_RETENTION_DAYS} days, refused ones as the public-safety record; they are deleted with your account.
 - Verified links (GitHub, X, own domain) are public on your profile until you remove them; Commonworld keeps the provider, the handle or domain, the challenge (public by design) and where it was found. Recovery requests keep the method, the challenge, which link proved it, times and the admin's decision with its public note; recovery codes and claim tokens are stored only as HMAC hashes, and no IP address is stored (rate limits use a hashed client network).
 - Privacy policy: ${PRIVACY_URL}
+
+## Related
+
+- ${RAISE_LINE}
 
 ## Contact
 
