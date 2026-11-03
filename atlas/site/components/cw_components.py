@@ -161,6 +161,16 @@ def product_icon(href, label, icon='home'):
     return f'<a class="cw-iconbtn cw-product" href="{e(href)}" aria-label="{e(label)}" title="{e(label)}">{svg}</a>'
 
 
+RAISE_URL = 'https://raise.commonworld.one'
+
+
+def raise_link(base):
+    """Round top-right button to Muse RAISE with Forge's avatar (assets/raise-forge.png, 96 px, served locally), placed
+    right after the product button (house on the Atlas, globe on the main product) in every top_row()."""
+    return (f'<a class="cw-iconbtn cw-raise" href="{RAISE_URL}" rel="noopener" aria-label="Muse RAISE" title="Muse RAISE">'
+            f'<img src="{e(base)}/assets/raise-forge.png{_mv()}" alt="" width="32" height="32" decoding="async"></a>')
+
+
 def home_link(cfg):
     """Atlas: house icon to the main Commonworld product (site.product_url)."""
     s = cfg.get('site') or {}
@@ -188,8 +198,9 @@ def search_form(action, placeholder, live=False, value=''):
 
 def top_row(search_html, cfg, product_html=None):
     """product_html: override the top-right product button (default home_link(cfg); the main product passes
-    product_icon(atlas_url, 'Commonworld Atlas', 'globe'))."""
-    return f'<header class="cw-top">{menu_button()}{side_toggle()}{search_html}<span class="spacer"></span>{home_link(cfg) if product_html is None else product_html}{theme_toggle()}</header>'
+    product_icon(atlas_url, 'Commonworld Atlas', 'globe')). The Muse RAISE circle (raise_link) always follows it."""
+    base = ((cfg.get('site') or {}).get('base_path') or '/atlas').rstrip('/')
+    return f'<header class="cw-top">{menu_button()}{side_toggle()}{search_html}<span class="spacer"></span>{home_link(cfg) if product_html is None else product_html}{raise_link(base)}{theme_toggle()}</header>'
 
 
 def footer(left, links_html, official=()):

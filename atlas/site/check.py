@@ -1999,6 +1999,9 @@ def main():
             if href.startswith(('http://', 'https://')):
                 if href.startswith(ORIGIN) or tag != 'a':
                     continue
+                if href == 'https://raise.commonworld.one' and tag == 'a':  # Muse RAISE circle in the header: own commonworld.one subdomain
+                    if 'noopener' not in rel.split(): fails.append(f'{u}: Muse RAISE link without noopener: {href}')
+                    continue
                 if href in OFFICIAL_URLS and 'me' in rel.split():
                     if 'noopener' not in rel.split(): fails.append(f'{u}: official link without noopener: {href}')
                     continue
@@ -2091,6 +2094,8 @@ def main():
             fails.append(f'{u}: footer lacks About Commonworld / How the Atlas works links')
         if f'class="cw-iconbtn cw-product" href="{product}" aria-label="Commonworld home"' not in h:
             fails.append(f'{u}: home icon href != product_url {product}')
+        if not re.search(r'aria-label="Commonworld home"[^>]*>.*?</a><a class="cw-iconbtn cw-raise" href="https://raise\.commonworld\.one" rel="noopener" aria-label="Muse RAISE" title="Muse RAISE"><img src="/atlas/assets/raise-forge\.png(\?v=\w+)?" alt=""', h[h.find('<header class="cw-top"'):h.find('</header>')]):
+            fails.append(f'{u}: Muse RAISE circle (Forge avatar) missing or not right after the home icon')
         if 'class="cw-consent"' in h and f'href="{PRIV_URL}">Privacy</a></p>' not in h:
             fails.append(f'{u}: cookie banner does not link to {PRIV_URL}')
     # --- Commonworld landing (/)
