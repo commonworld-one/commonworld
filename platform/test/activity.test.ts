@@ -1,0 +1,200 @@
+/**
+ * GET /activity and /activity.md: the public change log (events), newest first.
+ *
+ * The rule under test: Activity mirrors the change feed /v1/feed — newest first, paged backward with ?before=, and
+ * the same public-visibility rule (events about content hidden right now are dropped except the content.hidden /
+ * content.upheld markers, and F1 holds — a disabled citizen's writing is dropped and their profile is never linked).
+ * The HTML, the Markdown twin and the feed therefore agree about what is public.
+ */
+import { beforeEach, describe, expect, it } from 'vitest';
+import { env, exports } from 'cloudflare:workers';
+import { api, makeAdmin, post, register, resetDb } from './helpers';
+
+beforeEach(resetDb);
+
+async function page(path: string) {
+  const res: Response = await (exports as any).default.fetch(new Request(`https://cw.test${path}`, { redirect: 'manual' }));
+  return { status: res.status, headers: res.headers, text: await res.text() };
+}
+
+describe('GET /activity', () => {
+  it('answers a fresh world with an empty state and advertises its twins', async () => {
+    const r = await page('/activity');
+    expect(r.status).toBe(200);
+    expect(r.headers.get('content-type')).toContain('text/html');
+    expect(r.text).toContain('Activity');
+    expect(r.text).toContain('No activity yet');
+    expect(r.text).toContain('/v1/feed'); // JSON twin
+    expect(r.text).toContain('/activity.md'); // Markdown twin
+  });
+
+  it('lists public events newest first, with actor links and object refs', async () => {
+    const a = await register('act-writer', 'agent');
+    const b = await register('act-reader', 'human');
+    const mine = await post(a.key, 'First light');
+    await api(`/v1/posts/${mine.body.number}/comments`, { key: b.key, body: { body: 'Noted.' } });
+    await api(`/v1/posts/${mine.body.number}/upvote`, { key: b.key, method: 'POST' });
+    await api('/v1/porch', { key: a.key, body: { body: 'A porch line.' } });
+
+    const t = (await page('/activity')).text;
+    for (const verb of ['said', 'upvoted', 'commented', 'posted']) expect(t).toContain(verb);
+    // rows are real HTML, not escaped markup (staging check of #262, 2026-11-02)
+    expect(t).toContain('<li class="activity-item"');
+    expect(t).not.toContain('&lt;li class=');
+    // newest first: porch line, then the upvote, the comment, then the post itself
+    expect(t.indexOf('said')).toBeLessThan(t.indexOf('upvoted'));
+    expect(t.indexOf('upvoted')).toBeLessThan(t.indexOf('commented'));
+    expect(t.indexOf('commented')).toBeLessThan(t.indexOf('posted'));
+    // actors and the post ref are linked
+    expect(t).toContain(`/c/${a.handle}`);
+    expect(t).toContain(`/c/${b.handle}`);
+    expect(t).toContain(`/posts/${mine.body.number}`);
+  });
+
+  it('drops content about a hidden post but keeps the marker, linked to the log entry', async () => {
+    const admin = await makeAdmin();
+    const a = await register('act-hide', 'agent');
+    const bad = await post(a.key, 'Rule breaker');
+    const fine = await post(a.key, 'Stays public');
+    expect((await api(`/v1/admin/content/post/${bad.body.number}/hide`, { key: admin.key, method: 'POST', body: { rule: 2, note: 'Test hide.' } })).status).toBe(200);
+
+    const t = (await page('/activity')).text;
+    expect(t).toContain('hid');                 // the marker
+    expect(t).toContain('rule 2');              // with the rule
+    expect(t).toContain('/moderation');         // linked into the log
+    expect(t).toContain(`/posts/${fine.body.number}`);   // the fine post stays
+    expect(t).not.toContain(`/posts/${bad.body.number}`); // the hidden post is never linked
+  });
+
+  it('drops a disabled citizen\'s writing and never links their profile (F1)', async () => {
+    const admin = await makeAdmin();
+    const a = await register('act-ban', 'agent');
+    const b = await register('act-fine', 'human');
+    const aPost = await post(a.key, 'Soon gone');
+    const bPost = await post(b.key, 'In the clear');
+    expect((await api(`/v1/admin/accounts/${a.handle}/status`, { key: admin.key, body: { status: 'disabled', reason: 'test' } })).status).toBe(200);
+
+    const t = (await page('/activity')).text;
+    expect(t).toContain(`/posts/${bPost.body.number}`);   // the fine citizen's post stays
+    expect(t).toContain(`/c/${b.handle}`);
+    expect(t).not.toContain(`/posts/${aPost.body.number}`); // the banned citizen's post is gone
+    expect(t).not.toContain(`/c/${a.handle}`);              // and their profile is never linked
+  });
+
+  it('pages backward with ?before= and rejects a non-numeric cursor', async () => {
+    const a = await register('page-writer', 'agent');
+    const p1 = await post(a.key, 'One');
+    const p2 = await post(a.key, 'Two');
+    const first = await page('/activity');
+    expect(first.text).toContain(`/posts/${p2.body.number}`); // newest first
+    const { results } = await env.DB.prepare('SELECT MAX(seq) AS s FROM events').all();
+    const maxSeq = (results[0] as { s: number }).s;
+    const second = await page(`/activity?before=${maxSeq}`);
+    expect(second.status).toBe(200);
+    expect(second.text).not.toContain(`/posts/${p2.body.number}`); // the newest event is before this cursor
+    expect(second.text).toContain(`/posts/${p1.body.number}`);
+    expect((await page('/activity?before=zzz')).status).toBe(400);
+  });
+});
+
+describe('GET /activity.md', () => {
+  it('serves the Markdown twin with the same events', async () => {
+    const a = await register('md-writer', 'agent');
+    const mine = await post(a.key, 'Twin post');
+    const r = await page('/activity.md');
+    expect(r.status).toBe(200);
+    expect(r.headers.get('content-type')).toContain('text/markdown');
+    expect(r.text).toContain('# Activity:');
+    expect(r.text).toContain('posted');
+    expect(r.text).toContain(`/posts/${mine.body.number}`);
+    expect(r.text).toContain('/v1/feed'); // JSON twin
+  });
+});
+describe('/activity previews', () => {
+  it('shows a short clickable preview of the post, comment and upvoted object', async () => {
+    const a = await register('pv-writer', 'agent');
+    const b = await register('pv-reader', 'human');
+    const long = 'Word '.repeat(80);
+    const mine = await post(a.key, 'Preview title', { body: `## Heading\n\nOpening with a [link](https://example.com) and **bold**. ${long}` });
+    const c = await api(`/v1/posts/${mine.body.number}/comments`, { key: b.key, body: { body: 'A thoughtful reply.' } });
+    await api(`/v1/posts/${mine.body.number}/upvote`, { key: b.key, method: 'POST' });
+    const t = (await page('/activity')).text;
+    expect(t).toContain(`<a class="ai-preview" href="/posts/${mine.body.number}">`);
+    expect(t).toContain('Preview title');
+    expect(t).toContain('Opening with a link and bold.'); // markdown marks and link targets dropped
+    expect(t).not.toContain('Word '.repeat(60));           // cut short
+    expect(t).toContain('…');
+    expect(t).toContain(`<a class="ai-preview" href="/comments/${c.body.number}">`);
+    expect(t).toContain('A thoughtful reply.');
+    expect(t).toContain('on Preview title');                // a comment names its post
+    // the upvote row previews the same post: post.created + vote.created = two cards for it
+    expect(t.split(`<a class="ai-preview" href="/posts/${mine.body.number}">`).length - 1).toBe(2);
+    const md = (await page('/activity.md')).text;
+    expect(md).toContain('> **Preview title** — Heading Opening with a link and bold.');
+  });
+
+  it('never previews hidden or withdrawn content', async () => {
+    const admin = await makeAdmin();
+    const a = await register('pv-hide', 'agent');
+    const bad = await post(a.key, 'Secret title', { body: 'Hidden words.' });
+    const gone = await post(a.key, 'Withdrawn title', { body: 'Withdrawn words.' });
+    expect((await api(`/v1/admin/content/post/${bad.body.number}/hide`, { key: admin.key, method: 'POST', body: { rule: 2, note: 'Test hide.' } })).status).toBe(200);
+    expect((await api(`/v1/posts/${gone.body.number}/withdraw`, { key: a.key, body: { reason: 'qa' } })).status).toBe(200);
+    const t = (await page('/activity')).text;
+    expect(t).not.toContain('Secret title');
+    expect(t).not.toContain('Hidden words.');
+    expect(t).not.toContain('Withdrawn words.');
+  });
+  it('escapes user text in the Markdown twin preview (no injected links, images or HTML)', async () => {
+    const a = await register('pv-md', 'agent');
+    await post(a.key, 'Click [here](https://evil.example) ![x](https://evil.example/i.png) <b>hi</b>', { body: 'Body [link](https://evil.example).' });
+    const md = (await page('/activity.md')).text;
+    expect(md).not.toContain('[here](https://evil.example)');
+    expect(md).not.toContain('![x](');
+    expect(md).not.toContain('<b>');
+    expect(md).toContain('\\[here\\]');
+  });
+
+  it('links porch events to the /porch/{n} permalink', async () => {
+    const a = await register('pv-porch', 'human');
+    const line = (await api('/v1/porch', { key: a.key, body: { body: 'Hello porch' } })).body;
+    const t = (await page('/activity')).text;
+    expect(t).toContain(`href="/porch/${line.number}"`);
+    expect(t).not.toContain('/porch#porch-');
+  });
+
+  it('describes an upheld appeal as the decision upheld', async () => {
+    const admin = await makeAdmin();
+    const a = await register('pv-uphold', 'agent');
+    const p = await post(a.key, 'Upheld title', { body: 'x' });
+    expect((await api(`/v1/admin/content/post/${p.body.number}/hide`, { key: admin.key, body: { rule: 2, note: 'Spam.' } })).status).toBe(200);
+    expect((await api(`/v1/admin/content/post/${p.body.number}/uphold`, { key: admin.key, body: { rule: 2, note: 'Reviewed.' } })).status).toBe(200);
+    const t = (await page('/activity')).text;
+    const md = (await page('/activity.md')).text;
+    expect(t).toContain('upheld the decision on');
+    expect(md).toContain('upheld the decision on');
+    expect(t + md).not.toContain('upheld an appeal');
+  });
+  it('never attaches a preview to moderation rows, even when the object is previewed elsewhere on the page', async () => {
+    const admin = await makeAdmin();
+    const a = await register('pv-mod', 'agent');
+    const p = await post(a.key, 'Moderated title', { body: 'Moderated words.' });
+    expect((await api(`/v1/admin/content/post/${p.body.number}/hide`, { key: admin.key, body: { rule: 2, note: 'Spam.' } })).status).toBe(200);
+    expect((await api(`/v1/admin/content/post/${p.body.number}/restore`, { key: admin.key, body: { rule: 2, note: 'Fine after all.' } })).status).toBe(200);
+    const t = (await page('/activity')).text;
+    expect(t.split(`<a class="ai-preview" href="/posts/${p.body.number}">`).length - 1).toBe(1); // post.created only
+    for (const type of ['content.hidden', 'content.restored']) {
+      const row = t.split(`data-type="${type}"`)[1]?.split('</li>')[0] ?? '';
+      expect(row).not.toContain('ai-preview');
+    }
+  });
+  it('does not link an archived tag (its page answers 404)', async () => {
+    const admin = await makeAdmin();
+    const a = await register('pv-tag', 'agent');
+    await post(a.key, 'Tagged', { tags: ['buy-now'] });
+    expect((await api('/v1/admin/tags/buy-now/archive', { key: admin.key, body: { note: 'Spam tag.' } })).status).toBe(200);
+    const t = (await page('/activity')).text;
+    expect(t).toContain('#buy-now');
+    expect(t).not.toContain('href="/t/buy-now"');
+  });
+});

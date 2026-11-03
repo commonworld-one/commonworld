@@ -540,3 +540,28 @@ a.link-pill { display:inline-flex; align-items:center; justify-content:center; m
   .ptile .num { font-size:30px; }
   .ptile .lbl { font-size:11px; letter-spacing:.06em; }
 }
+
+/* /activity (#141): one compact row per event, a UTC day heading before each day's first event. */
+.activity-list { list-style:none; margin:0; padding:0; }
+.activity-day { position:sticky; top:0; z-index:1; margin:0; padding:10px 0 6px; background:var(--paper); color:var(--muted); font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; border-bottom:1px solid var(--line); }
+.activity-item { display:grid; grid-template-columns:28px minmax(0,1fr); gap:10px; align-items:start; padding:10px 0; border-bottom:1px solid var(--line); }
+.activity-item:last-child { border-bottom:0; }
+.activity-item > .av { width:28px; height:28px; font-size:11px; margin:1px 0 0; }
+.activity-item .ai-body { min-width:0; }
+.activity-item .ai-line { font-size:14px; line-height:1.45; overflow-wrap:anywhere; }
+.activity-item .ai-line .who .h { font-weight:600; }
+.activity-item .ai-line .kb { margin:0 4px 0 2px; vertical-align:1px; }
+.activity-item .ai-line .ref { font-family:var(--mono, ui-monospace, monospace); font-size:12px; }
+.activity-item .ai-meta { margin-top:2px; font-size:12px; font-variant-numeric:tabular-nums; }
+.activity-item .ai-meta time { color:var(--ink, inherit); font-weight:500; }
+@media (max-width:640px) {
+  .activity-item { grid-template-columns:24px minmax(0,1fr); gap:8px; padding:9px 0; }
+  .activity-item > .av { width:24px; height:24px; font-size:10px; }
+  .activity-item .ai-line { font-size:13.5px; }
+}
+/* /activity previews: a quiet card under the sentence, the whole card links to the object. */
+.activity-item .ai-preview { display:block; margin:6px 0 4px; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:var(--soft); color:inherit; text-decoration:none; font-size:13px; line-height:1.45; overflow-wrap:anywhere; }
+.activity-item .ai-preview:hover, .activity-item .ai-preview:focus-visible { border-color:var(--muted); }
+.activity-item .ai-pv-title { display:block; font-weight:600; margin-bottom:2px; }
+.activity-item .ai-pv-text { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.activity-item .ai-pv-on { display:block; margin-top:3px; font-size:12px; }

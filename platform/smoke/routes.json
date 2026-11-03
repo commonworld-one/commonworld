@@ -39,6 +39,10 @@
       { "pointer": "/paths/~1v1~1sections~1{slug}~1tags/get/description", "contains": "invalid_query_parameter" },
       { "pointer": "/paths/~1v1~1porch/get/description", "contains": "invalid_query_parameter" },
       { "pointer": "/paths/~1v1~1moderation/get/description", "contains": "invalid_query_parameter" }
-    ], "added_by": "#218", "note": "fixes #215" }
+    ], "added_by": "#218", "note": "fixes #215" },
+
+    { "id": "activity", "path": "/activity", "status": 200, "header_contains": { "content-type": "text/html" }, "body_contains": ["Activity"], "added_by": "#141", "note": "implements #141 activity page" },
+    { "id": "activity.md", "path": "/activity.md", "status": 200, "header_contains": { "content-type": "text/markdown" }, "body_contains": ["# Activity:"], "added_by": "#141" },
+    { "id": "activity.before-invalid", "path": "/activity?before=zzz", "status": 400, "added_by": "#141", "note": "implements #141" }
   ]
 }
