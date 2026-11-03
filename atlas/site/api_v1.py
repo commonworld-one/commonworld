@@ -12,7 +12,7 @@ from cards_v2 import (BOOKS_VALUES, EACH_HAS_MAX, KEYS_BASES, KEYS_VALUES, LEVEL
                       SCHEMA_FORMATS, STEP_ACTIONS, STEP_OPTIONAL, STEPS_MAX, TEXT_MAX, URL_MAX, URL_PATTERN)
 
 API_VERSION = 'v1'
-SCHEMA_VERSION = '1.10.0'
+SCHEMA_VERSION = '1.11.0'
 API_BASE = '/api/v1'
 STATUSES = ['live', 'closed']
 ENTITY_TYPES = ['platform', 'tool_catalog', 'protocol', 'project']
@@ -23,6 +23,17 @@ UTC_PATTERN = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?Z$'  # ISO 8601 U
 
 # newest first; build.py writes changelog.json and CHANGELOG.md from this list
 CHANGELOG = [
+    {'schema_version': '1.11.0', 'date': '2026-11-02', 'changes': [
+        'New optional field `confirmed_at` on a claim (claims[] of platforms/{id}.json, and inside a claim\'s history[] entries): the time of '
+        'the newest weekly re-check that read the same fact again and found it unchanged (issue #273). ISO 8601 UTC (RFC 3339, '
+        'YYYY-MM-DDTHH:MM:SSZ) or null, never earlier than `observed_at`. A re-check never changes `observed_at`: only a real change of '
+        'the value (or of the statement or source dates read with it) is a new observation; the old record, with its last `confirmed_at`, '
+        'then moves into history[] and the new one starts without `confirmed_at`. Claims that no weekly check re-reads leave it out.',
+        '`replications` gains `confirmed_at` (the newest re-read with the same counts; the record keeps the commit it was first observed at) '
+        'and `preview` gains `confirmed_at` (the newest weekly capture that showed no visible change; the stored image and `captured_at` '
+        'stay). Both are ISO 8601 UTC or null, and both are optional in the schema, so older records stay valid.',
+        'The card page and its Markdown twin show "Observed <date> · Confirmed <date>" (Confirmed only when a re-check exists). '
+        'Values appear after the first weekly refresh and screenshot run that include this change.']},
     {'schema_version': '1.10.0', 'date': '2026-11-01', 'changes': [
         'Two new optional fields on a claim (claims[] of platforms/{id}.json, and the same keys inside a claim\'s history[] entries): '
         '`source_as_of`, the time the source itself computed the figure (its own as-of time, for example x402-list traction.as_of), and '
@@ -266,7 +277,7 @@ def schemas(origin, categories):
                   'required': ['kind', 'value', 'unit', 'window', 'basis', 'observed_at', 'source_url'],
                   'properties': {'kind': {'type': 'string'}, 'value': scalar, 'unit': {'type': ['string', 'null']}, 'window': {'type': ['string', 'null']},
                                  'basis': {'enum': BASES}, 'observed_at': utc_n, 'source_url': uri_n}}
-    claim = {'type': 'object', 'description': 'One checked statement with its source, basis, outcome and observation time (observed_at). Extra keys (history, recheck, methods, verify) may appear; a refreshed claim may also carry the source\'s own dates, source_as_of and last_settlement_seen_at (since 1.10.0), which history[] entries keep too.',
+    claim = {'type': 'object', 'description': 'One checked statement with its source, basis, outcome and observation time (observed_at). Extra keys (history, recheck, methods, verify) may appear; a refreshed claim may also carry the source\'s own dates, source_as_of and last_settlement_seen_at (since 1.10.0), which history[] entries keep too, and confirmed_at, the newest weekly re-check that found it unchanged (since 1.11.0).',
              'required': ['kind', 'statement', 'basis', 'outcome'],
              'properties': {'kind': {'type': 'string'}, 'statement': {'type': 'string'}, 'value': scalar, 'unit': {'type': ['string', 'null']},
                             'window': {'type': ['string', 'null']}, 'basis': {'enum': BASES}, 'outcome': {'enum': OUTCOMES},
@@ -280,6 +291,11 @@ def schemas(origin, categories):
                                                         'event time, not an as-of time: it says when money last moved, not how fresh the '
                                                         'figure is (see source_as_of) or when the Atlas read it (observed_at). Added in '
                                                         'schema_version 1.10.0.'},
+                            'confirmed_at': utc_n | {'description': 'Time of the newest weekly re-check that read the same fact again and found '
+                                             'it unchanged, ISO 8601 UTC, or null. Never earlier than observed_at, and never moves it: '
+                                             'observed_at stays the time this value was first observed; a real change is a new observation '
+                                             '(the old record, with its last confirmed_at, moves into history[]). Present only on claims a '
+                                             'weekly check re-reads. Added in schema_version 1.11.0.'},
                             'methods': {'type': 'array', 'items': {'type': 'string'}}, 'history': {'type': 'array', 'items': {'type': 'object'}},
                             'recheck': {'type': 'object'},
                             'verify': {'type': 'object', 'description': 'Smaller cross-check for this figure: a URL an agent can fetch within '
@@ -338,7 +354,10 @@ def schemas(origin, categories):
                        'source_url': {'type': 'string', 'format': 'uri', 'pattern': '^https://github\\.com/'},
                        'method_url': {'type': 'string', 'format': 'uri', 'pattern': '^https://github\\.com/'},
                        'validate_run_url': {'type': 'string', 'format': 'uri', 'pattern': '^https://github\\.com/[^/]+/[^/]+/actions/runs/[0-9]+$'},
-                       'observed_at': {'type': 'string', 'pattern': '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$'}}}
+                       'observed_at': {'type': 'string', 'pattern': '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$'},
+                       'confirmed_at': {'type': ['string', 'null'], 'pattern': '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$',
+                                        'description': 'Newest weekly re-read that found the same counts (the record keeps the commit and '
+                                        'observed_at of its first observation), ISO 8601 UTC, or null. Added in schema_version 1.11.0.'}}}
     summary_props['reachability'] = {
         'type': ['object', 'null'], 'additionalProperties': False,
         'description': 'A note on a live card whose site does not answer the way its status suggests, or null. stale = marked live, but no read got the '
@@ -365,6 +384,8 @@ def schemas(origin, categories):
                'properties': {'path': {'type': 'string', 'pattern': '^/atlas/screens/[a-z0-9-]+\\.webp$'}, 'url': uri, 'thumb_url': uri,
                               'width': {'type': 'integer', 'minimum': 1}, 'height': {'type': 'integer', 'minimum': 1},
                               'captured_at': utc, 'source_url': {'type': 'string', 'format': 'uri', 'pattern': '^https://'},
+                              'confirmed_at': utc_n | {'description': 'Newest weekly capture that showed no visible change, so the stored image '
+                                               'was kept (captured_at stays the time of the stored image), ISO 8601 UTC, or null. Added in schema_version 1.11.0.'},
                               'rights': {'type': 'string'}}}
     defs = {'platformSummary': summary, 'moneyFlow': money_flow, 'keyNumber': key_number, 'claim': claim, 'preview': preview}
     platform = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': S('platform.schema.json'),

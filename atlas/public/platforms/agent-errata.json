@@ -67,7 +67,8 @@
   "source_url": "https://github.com/piiiico/agent-errata/tree/e48306f13d7ef0a57f63a14fe9c2af979c9f0d2d/replications",
   "method_url": "https://github.com/piiiico/agent-errata/blob/e48306f13d7ef0a57f63a14fe9c2af979c9f0d2d/scripts/validate.ts",
   "validate_run_url": "https://github.com/piiiico/agent-errata/actions/runs/41202323531",
-  "observed_at": "2026-11-01T08:27:19Z"
+  "observed_at": "2026-11-01T08:27:19Z",
+  "confirmed_at": null
  },
  "reachability": null,
  "badge_status": "Verified · 2026-10-15",

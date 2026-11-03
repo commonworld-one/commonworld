@@ -17,7 +17,8 @@ copied or pushed; every problem is reported (not only the first):
              optional), each of the right type: file == "<slug>.webp", sha256 64-hex, dhash 16-hex, website / source_url
              / shot_url https URLs, http_status an int 100..599 (not a bool) or null (screens.py stores None when
              page.goto() timed out but the page still rendered and passed its checks: no response, no status),
-             title a string, captured_at YYYY-MM-DDTHH:MM:SSZ, width 1200, height 750, bytes a positive int.
+             title a string, captured_at YYYY-MM-DDTHH:MM:SSZ, width 1200, height 750, bytes a positive int;
+             confirmed_at optional (issue #273): YYYY-MM-DDTHH:MM:SSZ, not earlier than captured_at, not in the future.
   images     every <slug>.webp in the artifact is at most MAX_BYTES (stat before opening, bounded read), is a
              structurally valid WebP (webp_problem below, stdlib: RIFF size, chunk walk, VP8 / VP8L / VP8X headers,
              ALPH placement and the VP8X alpha flag, no trailing bytes), then really decodes (decode_problem below:
@@ -29,8 +30,9 @@ copied or pushed; every problem is reported (not only the first):
   cards      (--data) every slug whose image is in the artifact is a live Atlas card of the newest
              snapshot-verified-*.json, and its `website` equals the card's canonical_url (what the capture shot).
   base       (--base, the atlas/screens directory of the atlas-screens checkout the PR goes to) no slug of the stored
-             manifest disappears; every entry whose image is NOT in the artifact is unchanged from the stored entry, and
-             its stored <slug>.webp exists with that sha256 (stat size check against MAX_BYTES first, then a streamed,
+             manifest disappears; every entry whose image is NOT in the artifact is unchanged from the stored entry
+             except, at most, a later confirmed_at (a capture with no visible change confirms the stored image; it never
+             moves backwards and no other field may change with it), and its stored <slug>.webp exists with that sha256 (stat size check against MAX_BYTES first, then a streamed,
              bounded sha256). Without --base every manifest entry needs its image in the artifact.
   summary    screens.md is at most MAX_SUMMARY_BYTES (1 MiB; real summaries are a few KB) and valid UTF-8. The PR body
              gets only summary_excerpt(): the first PR_SUMMARY_BYTES (60 000) bytes, cut on a character boundary with a
@@ -55,7 +57,8 @@ SHOT_W, SHOT_H = 1200, 750
 TOP_KEYS = {'screens', 'note', 'format', 'updated_at'}
 REQUIRED = {'file', 'sha256', 'dhash', 'website', 'source_url', 'http_status', 'title', 'captured_at', 'width',
             'height', 'bytes'}
-OPTIONAL = {'shot_url'}
+OPTIONAL = {'shot_url', 'confirmed_at'}
+FUTURE_SLACK_S = 600               # confirmed_at may not lie further in the future than this
 MAX_BYTES = 8 * 1024 * 1024        # real screens are 5..210 KB
 MAX_SUMMARY_BYTES = 1024 * 1024    # screens.md; real summaries are a few KB (GitHub's step summary limit is 1 MiB too)
 PR_SUMMARY_BYTES = 60_000          # of screens.md in the PR body (GitHub caps a PR body at 65 536 characters)
@@ -384,6 +387,7 @@ def record_problems(slug, r):
         'http_status': lambda v: v is None or (_int(v) and 100 <= v <= 599),   # None: goto() timed out (screens.py)
         'title': lambda v: isinstance(v, str),
         'captured_at': lambda v: isinstance(v, str) and ISO_UTC.fullmatch(v),
+        'confirmed_at': lambda v: isinstance(v, str) and ISO_UTC.fullmatch(v) and v <= _utc_now(FUTURE_SLACK_S),
         'width': lambda v: _int(v) and v == SHOT_W,
         'height': lambda v: _int(v) and v == SHOT_H,
         'bytes': lambda v: _int(v) and v > 0,
@@ -391,7 +395,26 @@ def record_problems(slug, r):
     for k, ok in checks.items():
         if k in r and not ok(r[k]):
             out.append(f'manifest: {slug}: bad {k} {r[k]!r}'[:300])
+    if not out and 'confirmed_at' in r and 'captured_at' in r and r['confirmed_at'] < r['captured_at']:
+        out.append(f'manifest: {slug}: confirmed_at {r["confirmed_at"]} is earlier than captured_at {r["captured_at"]}')
     return out
+
+
+def _utc_now(slack_s=0):
+    from datetime import datetime, timedelta, timezone
+    return (datetime.now(timezone.utc) + timedelta(seconds=slack_s)).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def only_confirmed(new, old):
+    """True when the manifest entry `new` equals the stored `old` except for a confirmed_at that is set and not earlier
+    than the stored one (issue #273: a capture with no visible change confirms the stored image, nothing else moves)."""
+    if not isinstance(new, dict) or not isinstance(old, dict) or not isinstance(new.get('confirmed_at'), str):
+        return False
+    rest = lambda r: {k: v for k, v in r.items() if k != 'confirmed_at'}
+    if rest(new) != rest(old):
+        return False
+    prev = old.get('confirmed_at')
+    return prev is None or (isinstance(prev, str) and new['confirmed_at'] >= prev)
 
 
 def live_cards(data_dir):
@@ -529,6 +552,8 @@ def check(artifact, base=None, cards=None):
             out.append(f'images: screens/{slug}.webp is {len(b)} bytes, manifest says {r["bytes"]}')
         if dims and dims != (r['width'], r['height']):
             out.append(f'images: screens/{slug}.webp is {dims[0]}x{dims[1]}, manifest says {r["width"]}x{r["height"]}')
+        if 'confirmed_at' in r:
+            out.append(f'manifest: {slug}: a new or replaced image starts without confirmed_at')
         if cards is not None:
             if slug not in cards:
                 out.append(f'cards: {slug} is not a live Atlas card')
@@ -557,8 +582,9 @@ def check(artifact, base=None, cards=None):
         if slug not in stored:
             out.append(f'base: {slug} is new in the manifest but its image is not in the artifact')
             continue
-        if screens[slug] != stored[slug]:
-            out.append(f'base: {slug} changed in the manifest but its image is not in the artifact')
+        if screens[slug] != stored[slug] and not only_confirmed(screens[slug], stored[slug]):
+            out.append(f'base: {slug} changed in the manifest but its image is not in the artifact'
+                       + (' (only a later confirmed_at may change on a stored entry)' if isinstance(screens[slug], dict) and 'confirmed_at' in screens[slug] else ''))
             continue
         fp = os.path.join(base, f'{slug}.webp')
         if slug not in good:

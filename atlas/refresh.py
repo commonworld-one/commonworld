@@ -28,7 +28,15 @@ What it does, per entry of the Atlas snapshot (atlas/data/snapshot-verified-*.js
      (atlas/site/replications.py), and written to atlas/data/replications.json with the pinned commit. A record changes only
      when a count changes; the previous record moves into its history.
        python3 atlas/refresh.py --replications-only      # step 5 alone (no reachability, no numbers)
-No change at all -> the snapshot and state files are left byte-identical (so the workflow opens no PR).
+  6. Confirmations (owner decision on issue #273, 2026-11-01): a fact this run re-read and found unchanged gets a check
+     record, confirmed_at (UTC), on the claim (or on the replication record); observed_at is never touched by it. Only a
+     real change of the value (or of the statement or source dates read with it) is a new observation, with a new
+     observed_at; the old record, its last confirmed_at included, moves into history and the new one starts without
+     confirmed_at. What counts as confirmed: a numbers mapping that reads the same value, statement and source dates
+     again; a supported site_reachable claim whose own source_url answered below HTTP 400 this run (the entry's primary
+     check URL or one of its fallbacks); a replication record whose counts are the same at the newest validated commit.
+No change at all -> the snapshot and state files are left byte-identical (so the workflow opens no PR). A run that only
+confirms facts still writes the snapshot (new confirmed_at values), so the weekly PR shows every confirmation.
 Exit code 0 always unless the script itself breaks; findings go to the summary.
 """
 import argparse, concurrent.futures as cf, copy, glob, http.client, ipaddress, json, math, os, re, socket, ssl, string, sys, tempfile, threading, time, urllib.error, urllib.parse, urllib.request
@@ -517,6 +525,7 @@ def read_mapping(m, fields_out=None):
 SOURCE_AS_OF = 'source_as_of'                       # claim key: when the source computed the figure (its own as_of), UTC
 LAST_SETTLEMENT = 'last_settlement_seen_at'          # claim key: newest settlement the source saw (an event, not an as-of)
 DATE_KEYS = (SOURCE_AS_OF, LAST_SETTLEMENT)
+CONFIRMED = 'confirmed_at'                           # claim key: newest re-check that found the fact unchanged, UTC (#273)
 FUTURE_SLACK_S = 600
 
 
@@ -532,6 +541,21 @@ def utc_time(v, now=None):
     if (dt - (now or datetime.now(timezone.utc))).total_seconds() > FUTURE_SLACK_S:
         return None, f'time in the future ({v})'
     return dt.strftime('%Y-%m-%dT%H:%M:%SZ'), None
+
+
+def confirmed_problem(rec, now=None):
+    """-> None or why a record's confirmed_at is not acceptable: a UTC time YYYY-MM-DDTHH:MM:SSZ, not in the future, and
+    not earlier than the record's observed_at (a confirmation re-reads an existing observation; it never precedes it)."""
+    v = rec.get(CONFIRMED)
+    if v is None:
+        return None
+    when, why = utc_time(v, now)
+    if why or when != v:
+        return f'{CONFIRMED} {v!r} must be a UTC time YYYY-MM-DDTHH:MM:SSZ ({why or "not normalised"})'
+    obs, _ = utc_time(rec.get('observed_at'), now) if isinstance(rec.get('observed_at'), str) else (None, None)
+    if obs and when < obs:
+        return f'{CONFIRMED} {v} is earlier than observed_at {rec.get("observed_at")}'
+    return None
 
 
 def row_matches(row, where):
@@ -710,7 +734,10 @@ def published_source(m):
 def apply_number(entry, m, val, quote, methods, ts, fields=None):
     """Mutates entry. Returns ('new'|'changed'|'note'|'same', old_value).
     'note': the number is unchanged but the statement beside it (rendered from the same fetch) changed, e.g. a 7-day
-    count inside a lifetime claim; it is a re-observation too, so the old statement goes into history."""
+    count inside a lifetime claim; it is a re-observation too, so the old statement goes into history.
+    'same': the fact was read again unchanged: the claim gets confirmed_at = ts (the check record, issue #273) and keeps
+    its observed_at, value, quote and methods as they were. A new observation ('changed', 'note') moves the old record,
+    its confirmed_at included, into history and starts the claim again without confirmed_at."""
     claims = entry.setdefault('claims', [])
     c = next((x for x in claims if x.get('refresh_id') == m['id']), None)
     if c is None and m.get('match'):
@@ -737,10 +764,12 @@ def apply_number(entry, m, val, quote, methods, ts, fields=None):
     resync = c.get('source_url') != published_source(m) or bool(m.get('window')) and c.get('window') != m['window']
     dates_moved = any(c.get(k) != v for k, v in dates.items())
     if c.get('value') == val and (not statement or c.get('statement') == statement) and not resync and not dates_moved:
+        c[CONFIRMED] = ts   # a check record only: observed_at stays the time this value was first observed
         return 'same', val
     what = 'changed' if c.get('value') != val else 'note'
     old = {k: c.get(k) for k in ('value', 'unit', 'window', 'statement', 'quote', 'source_url', 'observed_at', 'basis', 'outcome')}
-    old.update({k: c[k] for k in DATE_KEYS if k in c})
+    old.update({k: c[k] for k in DATE_KEYS + (CONFIRMED,) if k in c})
+    c.pop(CONFIRMED, None)   # the new observation has not been re-checked yet
     old['superseded_at'] = ts
     stmt_moved = bool(statement) and c.get('statement') != statement
     old['reason'] = 'weekly automated re-observation (atlas/refresh.py)' + ('' if what == 'changed' or not stmt_moved else ': statement regenerated from the same fetch') \
@@ -754,6 +783,24 @@ def apply_number(entry, m, val, quote, methods, ts, fields=None):
     if m.get('window'):
         c['window'] = m['window']
     return what, old['value']
+
+
+def _same_url(a, b):
+    return isinstance(a, str) and isinstance(b, str) and a.rstrip('/') == b.rstrip('/')
+
+
+def confirm_reachability(entry, r, ts):
+    """Mutates entry. A live entry whose check answered below HTTP 400 (cls 'ok') confirms its supported site_reachable
+    claims whose own source_url is the URL that answered (r['via']): confirmed_at = ts, observed_at untouched. A blocked
+    answer (403, 429, a challenge ...) or a fallback URL that is not the claim's own confirms nothing. -> number confirmed."""
+    if entry.get('status') != 'live' or r.get('cls') != 'ok' or not r.get('via'):
+        return 0
+    n = 0
+    for c in entry.get('claims', []):
+        if c.get('kind') == 'site_reachable' and c.get('outcome') == 'supported' and _same_url(c.get('source_url'), r['via']):
+            c[CONFIRMED] = ts
+            n += 1
+    return n
 
 
 # ------------------------------------------------------------------ replication counts (atlas/site/replications.py)
@@ -840,15 +887,17 @@ def read_replications(cfg, workers=8):
 
 def apply_replications(cards, slug, got, ts):
     """Mutates cards ({slug: record}). Returns ('new'|'changed'|'same', old_counts). Only a count change is a new record;
-    the previous record goes into history (oldest first) and is never rewritten."""
+    the previous record (its last confirmed_at included) goes into history (oldest first) and is never rewritten. Same
+    counts: the record keeps its commit, sources and observed_at and gets confirmed_at = ts (the check record, issue #273)."""
     R = _repl_module()
     cur = cards.get(slug)
     new_counts = {k: got[k] for k in R.COUNT_KEYS}
     if cur and {k: cur.get(k) for k in R.COUNT_KEYS} == new_counts:
+        cur[CONFIRMED] = ts
         return 'same', new_counts
     rec = {k: got[k] for k in R.RECORD_KEYS if k != 'observed_at'} | {'observed_at': ts}
     if cur:
-        rec['history'] = list(cur.get('history') or []) + [{k: cur[k] for k in R.RECORD_KEYS if k in cur}]
+        rec['history'] = list(cur.get('history') or []) + [{k: cur[k] for k in R.RECORD_KEYS + (CONFIRMED,) if k in cur}]
         cards[slug] = rec
         return 'changed', {k: cur.get(k) for k in R.COUNT_KEYS}
     cards[slug] = rec
@@ -856,7 +905,8 @@ def apply_replications(cards, slug, got, ts):
 
 
 def run_replications(entries, sources, results, rep, ts, path, dry_run, workers=8):
-    """Step 5 for every live entry with a replications source. Returns True when the data file changed (and was written unless dry_run)."""
+    """Step 5 for every live entry with a replications source. Returns True when the data file changed (and was written unless dry_run):
+    a record that was read again always changes, by a new record or by its confirmed_at (step 6)."""
     R = _repl_module()
     raw = None
     if os.path.exists(path):
@@ -876,7 +926,7 @@ def run_replications(entries, sources, results, rep, ts, path, dry_run, workers=
         what, old = apply_replications(cards, e['slug'], got, ts)
         rep['replications'].append({'slug': e['slug'], 'action': what, 'old': old, 'new': {k: got[k] for k in R.COUNT_KEYS},
                                     'commit': got['commit'], 'source': got['source_url'], 'methods': methods})
-        changed |= what != 'same'
+        changed = True   # a new or changed record, or confirmed_at on an unchanged one
     if changed and not dry_run:
         write_atomic(path, dump(doc))
     return changed
@@ -991,7 +1041,7 @@ def main():
 
     rep = {'run_at': ts, 'dry_run': a.dry_run, 'counts': {}, 'died': [], 'suspected': [], 'recovered': [], 'revived': [],
            'moved': [], 'closed_responding': [], 'numbers': [], 'number_errors': [], 'note_drift': [], 'notes': [],
-           'replications': [], 'replication_errors': []}
+           'replications': [], 'replication_errors': [], 'confirmed': []}
     from collections import Counter
     rep['counts'] = dict(Counter(r['cls'] for r in results.values()))
     rep['counts_by_status'] = {st: dict(Counter(results[e['slug']]['cls'] for e in entries if e['status'] == st)) for st in ('live', 'closed')}
@@ -1051,6 +1101,12 @@ def main():
             elif slug in state['moved']:
                 state['moved'].pop(slug)
 
+    # confirmations of reachability (step 6): after the death rule, so a closure or revival in this run is never confirmed
+    for e in entries:
+        if confirm_reachability(e, results[e['slug']], ts):
+            rep['confirmed'].append({'slug': e['slug'], 'id': 'site_reachable', 'what': 'site answers', 'source': results[e['slug']]['via']})
+            changed_slugs.add(e['slug'])
+
     # numbers
     for e in entries:
         if e['status'] != 'live' or results[e['slug']]['cls'] == 'fail':
@@ -1069,8 +1125,10 @@ def main():
                 rep['note_drift'].append({'slug': e['slug'], 'id': m['id'], 'problem': drift})
                 rep['notes'].append(f'{e["slug"]}: the text beside {m["id"]} no longer matches its number ({drift}); '
                                     f'give the mapping a statement template in atlas/refresh-sources.json or fix the claim by hand.')
+            if what == 'same':
+                rep['confirmed'].append({'slug': e['slug'], 'id': m['id'], 'what': fmt_value(val) + ' ' + str(m['unit']), 'source': m['url']})
             if what == 'same' and json.dumps(e.get('claims'), sort_keys=True) != before:
-                changed_slugs.add(e['slug'])   # e.g. a verify link added from the mapping
+                changed_slugs.add(e['slug'])   # confirmed_at set (step 6), or e.g. a verify link added from the mapping
             if what != 'same':
                 changed_slugs.add(e['slug'])
                 rep['numbers'].append({'slug': e['slug'], 'id': m['id'], 'kind': m['kind'], 'basis': m['basis'], 'unit': m['unit'],
@@ -1087,7 +1145,8 @@ def main():
             'date': today, 'tag': f'refresh-{today}', 'by': TOOL,
             'rule': 'weekly automated refresh: reachability (2 failed weeks -> closed history), explicit numeric mappings from atlas/refresh-sources.json',
             'died': [d['slug'] for d in rep['died']], 'revived': [d['slug'] for d in rep['revived']],
-            'number_updates': [f'{n["slug"]}:{n["id"]}' for n in rep['numbers']]})
+            'number_updates': [f'{n["slug"]}:{n["id"]}' for n in rep['numbers']],
+            'confirmed': [f'{n["slug"]}:{n["id"]}' for n in rep['confirmed']]})
     state_changed = state != state_before
     if state_changed:
         state['updated_at'] = ts
@@ -1135,7 +1194,8 @@ def summary_md(rep, snap_path):
           f'| recovered from suspected | {len(rep["recovered"])} |', f'| **revived** (closed by refresh → live) | {len(rep["revived"])} |',
           f'| domain moved (needs human review) | {len(rep["moved"])} |', f'| number changes | {len(rep["numbers"])} |',
           f'| statements out of step with their number (needs a human) | {len(rep.get("note_drift", []))} |',
-          f'| replication count changes | {sum(1 for r in rep.get("replications", []) if r["action"] != "same")} |', '']
+          f'| replication count changes | {sum(1 for r in rep.get("replications", []) if r["action"] != "same")} |',
+          f'| facts confirmed unchanged (confirmed_at set, observed_at kept) | {len(rep.get("confirmed", [])) + sum(1 for r in rep.get("replications", []) if r["action"] == "same")} |', '']
 
     def table(title, rows, cols):
         if not rows:
@@ -1158,6 +1218,9 @@ def summary_md(rep, snap_path):
     if rep['closed_responding']:
         L.append('<details><summary>Closed entries (closed by a human) that answer HTTP 2xx/3xx — not revived automatically</summary>'); L.append('')
         L += [f'- {pg(r["slug"])}: HTTP {r["status"]} → {r["final_url"]}' for r in rep['closed_responding']]; L += ['', '</details>', '']
+    if rep.get('confirmed'):
+        L.append('<details><summary>Confirmed unchanged (check records: confirmed_at set, observed_at and value kept)</summary>'); L.append('')
+        L += [f'- {pg(r["slug"])} `{r["id"]}`: {r["what"]} ({r["source"]})' for r in rep['confirmed']]; L += ['', '</details>', '']
     if rep['number_errors']:
         L.append('<details><summary>Number sources that could not be read (no change made)</summary>'); L.append('')
         L += [f'- {r["slug"]} `{r["id"]}`: {r["error"]}' for r in rep['number_errors']]; L += ['', '</details>', '']
@@ -1175,7 +1238,7 @@ def replications_md(rep, heading=True):
         L.append('')
     same = [r for r in rep.get('replications', []) if r['action'] == 'same']
     if same:
-        L += [f'Replication counts unchanged: {", ".join(r["slug"] + " (" + fmt(r["new"]) + ")" for r in same)}.', '']
+        L += [f'Replication counts unchanged (confirmed_at set, observed_at kept): {", ".join(r["slug"] + " (" + fmt(r["new"]) + ")" for r in same)}.', '']
     if rep.get('replication_errors'):
         L += ['<details><summary>Replication sources that could not be read (no change made)</summary>', '']
         L += [f'- {r["slug"]}: {r["error"]}' for r in rep['replication_errors']] + ['', '</details>', '']
