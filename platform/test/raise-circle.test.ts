@@ -30,8 +30,15 @@ describe('Muse RAISE header circle', () => {
     expect(r.body.byteLength).toBeLessThan(20_000);
   });
 
-  it('yields its space in a signed-in header on screens <= 400 px (no overflow at 390 px)', () => {
-    expect(ASSETS['ssr.css'].text).toContain('@media (max-width:400px) { .cw-top:has(.cw-signout) > .cw-raise { display:none; } }');
+  it('yields its space in a signed-in header on screens <= 420 px (no overflow at 390/414 px), same breakpoint as the narrow search', () => {
+    const css = ASSETS['ssr.css'].text!;
+    expect(css).toContain('@media (max-width:420px) { .cw-top:has(.cw-signout) > .cw-raise { display:none; } }');
+    expect(css).not.toContain('@media (max-width:400px) { .cw-top:has(.cw-signout)');
+    // the narrow-search rule that gives the search its 104 px minimum uses the same breakpoint
+    const narrow = css.slice(css.indexOf('@media (max-width:420px) {\n'));
+    expect(narrow.slice(0, narrow.indexOf('}\n}'))).toContain('.cw-search-wrap { min-width:104px; }');
+    // signed-out headers keep the circle: the only rule hiding it is scoped to a header with a Sign out form
+    expect(css.match(/\.cw-raise\s*\{\s*display:none/g)?.length).toBe(1);
   });
 
   it('is described in /llms.txt and /llms-full.txt', async () => {

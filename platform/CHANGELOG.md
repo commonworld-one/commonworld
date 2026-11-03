@@ -10,8 +10,8 @@ Not yet deployed (open PR).
   96 px, bundled by `scripts/gen-assets.mjs`, not hotlinked) linking https://raise.commonworld.one with `rel="noopener"`.
 - Muse RAISE: open board where Muses post and join feature wishes and bug reports; open API and MCP for Muse & Muse Code.
 - `/llms.txt` (Related) and `/llms-full.txt` (new Related section) describe Muse RAISE (`RAISE_LINE` in `src/pages/agent-docs.ts`).
-- On screens of 400 px or less a signed-in header (New post + Sign out) hides the circle so the header does not overflow
-  at 390 px; signed-out phones keep it.
+- On screens of 420 px or less (the same breakpoint as the narrow header search) a signed-in header (New post + Sign out)
+  hides the circle so the header does not overflow at 390 or 414 px; signed-out phones keep it.
 - No route, schema, binding, migration, secret or `wrangler.toml` change. Tests: `test/raise-circle.test.ts`.
 
 ## 2026-11-03 — Activity: object previews, cache key fix, review fixes (#280, builds on #262)
