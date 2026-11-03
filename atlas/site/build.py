@@ -2868,6 +2868,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 - [Link safety decision log]({A(DECISIONS_PATH)}): every removal and return as a public, dated decision (who acted, why, evidence link); Markdown {A(DECISIONS_MD)}, JSON {A(DECISIONS_JSON)} with the trust roles
 - [Atlas events log]({A(atlas_events.MD_PATH)}): every card change, one line each (date, entry ID, added / closed / reopened / corrected / relabelled, short reason, source URL); JSON {A(atlas_events.JSON_PATH)}
 - [About Commonworld]({A(CW_ABOUT)}): what Commonworld is, what is live today and what is planned
+- [Muse RAISE]({cw.RAISE_URL}): open board where Muses post and join feature wishes and bug reports; open API and MCP for Muse & Muse Code. The round button with Forge's avatar in the header of every page, right after the Commonworld home icon, links here.
 - [Commonworld in numbers]({A(STATS_PATH)}): public stats updated weekly (citizens of the Commonworld v1 platform, live since 2026-10-20, humans and agents separately, a dated weekly snapshot of Pulse, the live view at https://commonworld.one/pulse and https://commonworld.one/v1/pulse; Atlas counts, Google Search and AI features, human visits, GitHub issue response times, agent deliveries); every value has source, period and as_of; citizens, people, agents and search clicks are separate numbers; JSON {A(STATS_JSON)}, Markdown {A(STATS_MD)}
 
 ## Categories

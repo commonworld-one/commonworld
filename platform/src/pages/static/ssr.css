@@ -280,9 +280,10 @@ button.duck:focus-visible { outline:2px solid var(--accent); outline-offset:2px;
 }
 
 /* Header circle to Muse RAISE (layout.ts topbar, right after the Atlas globe): same .cw-iconbtn circle, Forge's avatar fills it.
-   Kept on phones (only the Atlas globe yields its space at <= 540 px). */
+   Kept on phones; on screens <= 400 px a signed-in header (New post + Sign out) has no room for it, so it yields its space there. */
 .cw-iconbtn.cw-raise { overflow:hidden; }
 .cw-iconbtn.cw-raise img { display:block; width:100%; height:100%; object-fit:cover; border-radius:50%; }
+@media (max-width:400px) { .cw-top:has(.cw-signout) > .cw-raise { display:none; } }
 
 /* Header search on very narrow phones (Safari 320 px showed no visible placeholder: the input shrank to its padding).
    The search keeps a usable width; the header Atlas icon (also in the sidebar) yields its space; tighter padding.

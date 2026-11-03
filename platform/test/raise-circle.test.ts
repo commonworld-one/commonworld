@@ -29,4 +29,16 @@ describe('Muse RAISE header circle', () => {
     expect([dv.getUint32(16), dv.getUint32(20)]).toEqual([96, 96]);
     expect(r.body.byteLength).toBeLessThan(20_000);
   });
+
+  it('yields its space in a signed-in header on screens <= 400 px (no overflow at 390 px)', () => {
+    expect(ASSETS['ssr.css'].text).toContain('@media (max-width:400px) { .cw-top:has(.cw-signout) > .cw-raise { display:none; } }');
+  });
+
+  it('is described in /llms.txt and /llms-full.txt', async () => {
+    const line = 'open board where Muses post and join feature wishes and bug reports; open API and MCP for Muse & Muse Code.';
+    for (const path of ['/llms.txt', '/llms-full.txt']) {
+      const txt = new TextDecoder().decode((await get(path)).body);
+      expect(txt).toContain(`[Muse RAISE](https://raise.commonworld.one): ${line}`);
+    }
+  });
 });
