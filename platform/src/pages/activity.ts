@@ -183,6 +183,8 @@ function sentence(p: PageCtx, e: ActivityItem, gone: Set<string>): Raw {
   if (t === 'vote.created') return h`${actorWho(p, e, 'a citizen')} upvoted ${target}`;
   if (t === 'tag.created') {
     const slug = dataSlug(e);
+    // link only a tag whose page answers (tagPage 404s for archived tags, which are not in the catalog facts)
+    if (slug && !p.facts.tags.some((x) => x.slug === slug)) return h`${actorWho(p, e, 'a citizen')} created <span class="ref">#${slug}</span>`;
     return h`${actorWho(p, e, 'a citizen')} created ${slug ? h`<a class="ref" href="${tagUrl(slug)}">#${slug}</a>` : refLink(ref, url, gone)}`;
   }
   if (t === 'content.withdrawn') return h`${actorWho(p, e, 'a citizen')} withdrew ${target}`;
@@ -234,7 +236,7 @@ function previewCard(e: ActivityItem, gone: Set<string>, previews: Map<string, P
   const ref = e.object.ref;
   const url = objectUrl(e);
   const pv = ref ? previews.get(ref) : undefined;
-  if (!pv || !url || !ref || gone.has(ref) || e.type === 'content.withdrawn') return h``;
+  if (!pv || !url || !ref || gone.has(ref) || e.type === 'content.withdrawn' || MODERATION_EVENTS.has(e.type)) return h``;
   return h`<a class="ai-preview" href="${url}">${pv.title ? h`<b class="ai-pv-title">${pv.title}</b>` : h``}${pv.text ? h`<span class="ai-pv-text">${pv.text}</span>` : h``}${pv.on ? h`<span class="ai-pv-on muted">on ${pv.on}</span>` : h``}</a>`;
 }
 
@@ -326,7 +328,7 @@ function mdItem(p: PageCtx, e: ActivityItem, gone: Set<string>, previews: Map<st
   const d = e.data as { rule?: unknown; note?: unknown } | null;
   const noteText = MODERATION_EVENTS.has(t) && typeof d?.rule === 'number' ? ` — rule ${d.rule}${typeof d?.note === 'string' && d.note ? `: “${mdText(mdLine(d.note))}”` : ''}` : '';
   const ref0 = e.object.ref;
-  const pv = ref0 && !gone.has(ref0) && t !== 'content.withdrawn' ? previews.get(ref0) : undefined;
+  const pv = ref0 && !gone.has(ref0) && t !== 'content.withdrawn' && !MODERATION_EVENTS.has(t) ? previews.get(ref0) : undefined;
   const pvLine = pv ? `\n  > ${[pv.title ? `**${mdText(mdLine(pv.title))}**` : '', pv.text ? mdText(mdLine(pv.text)) : '', pv.on ? `(on ${mdText(mdLine(pv.on))})` : ''].filter(Boolean).join(' — ')}` : '';
   return `- \`${when}\` · ${head}${noteText}${pvLine}`;
 }

@@ -10,6 +10,7 @@ Newest first. Entries below the import note were written in the private developm
 - Edge cache key keeps `?before` on `/activity` (a warm cache served page one for every `?before`).
 - Codex review fixes: user text in the Markdown twin is escaped (`mdText`); porch refs link to `/porch/{n}`;
   `content.upheld` reads "upheld the decision on"; README documents `/activity`.
+  Moderation rows never carry a preview; an archived tag's `tag.created` row is not linked (its page is 404).
 
 ## 2026-10-30 — Activity page: the public change log in human form, newest first (#141)
 

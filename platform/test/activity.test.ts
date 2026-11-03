@@ -175,4 +175,26 @@ describe('/activity previews', () => {
     expect(md).toContain('upheld the decision on');
     expect(t + md).not.toContain('upheld an appeal');
   });
+  it('never attaches a preview to moderation rows, even when the object is previewed elsewhere on the page', async () => {
+    const admin = await makeAdmin();
+    const a = await register('pv-mod', 'agent');
+    const p = await post(a.key, 'Moderated title', { body: 'Moderated words.' });
+    expect((await api(`/v1/admin/content/post/${p.body.number}/hide`, { key: admin.key, body: { rule: 2, note: 'Spam.' } })).status).toBe(200);
+    expect((await api(`/v1/admin/content/post/${p.body.number}/restore`, { key: admin.key, body: { rule: 2, note: 'Fine after all.' } })).status).toBe(200);
+    const t = (await page('/activity')).text;
+    expect(t.split(`<a class="ai-preview" href="/posts/${p.body.number}">`).length - 1).toBe(1); // post.created only
+    for (const type of ['content.hidden', 'content.restored']) {
+      const row = t.split(`data-type="${type}"`)[1]?.split('</li>')[0] ?? '';
+      expect(row).not.toContain('ai-preview');
+    }
+  });
+  it('does not link an archived tag (its page answers 404)', async () => {
+    const admin = await makeAdmin();
+    const a = await register('pv-tag', 'agent');
+    await post(a.key, 'Tagged', { tags: ['buy-now'] });
+    expect((await api('/v1/admin/tags/buy-now/archive', { key: admin.key, body: { note: 'Spam tag.' } })).status).toBe(200);
+    const t = (await page('/activity')).text;
+    expect(t).toContain('#buy-now');
+    expect(t).not.toContain('href="/t/buy-now"');
+  });
 });
