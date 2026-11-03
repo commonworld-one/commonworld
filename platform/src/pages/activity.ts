@@ -14,6 +14,7 @@ import { ACTOR_WRITING_EVENTS, MODERATION_EVENTS, moderationEventData } from '..
 import { ago, h, type Raw } from './html';
 import { av, citizenUrl, crumbs, document, emptyState, postUrl, tagUrl, who, type PageCtx } from './layout';
 import { goneRefs } from './data';
+import { mdText } from './markdown';
 
 export const ACTIVITY_PATH = '/activity';
 export const ACTIVITY_TITLE = 'Activity: recent public events';
@@ -154,7 +155,7 @@ function objectUrl(e: ActivityItem): string | null {
   const { type, number } = e.object;
   if (type === 'post') return number === null ? null : postUrl(number);
   if (type === 'comment') return number === null ? null : `/comments/${number}`;
-  if (type === 'porch') return number === null ? null : `/porch#porch-${number}`;
+  if (type === 'porch') return number === null ? null : `/porch/${number}`;
   return null;
 }
 
@@ -190,7 +191,7 @@ function sentence(p: PageCtx, e: ActivityItem, gone: Set<string>): Raw {
   // moderation markers are public records; the target links to the exact log entry
   if (t === 'content.hidden') return moderationSentence(p, e, 'hid', gone);
   if (t === 'content.restored') return moderationSentence(p, e, 'restored', gone);
-  if (t === 'content.upheld') return moderationSentence(p, e, 'upheld an appeal on', gone);
+  if (t === 'content.upheld') return moderationSentence(p, e, 'upheld the decision on', gone);
   if (t === 'tag.merged') return h`${actorWho(p, e, 'a moderator')} merged a tag`;
   if (t === 'tag.archived') return h`${actorWho(p, e, 'a moderator')} archived a tag`;
   if (t === 'account.recovered') return h`${actorWho(p, e, 'a moderator')} approved a key recovery`;
@@ -314,7 +315,7 @@ function mdItem(p: PageCtx, e: ActivityItem, gone: Set<string>, previews: Map<st
   else if (t === 'post.decided') head = `${actor} recorded a decision on ${ref}`;
   else if (t === 'content.hidden') head = `${mdWho(p, e, 'a moderator')} hid ${ref}`;
   else if (t === 'content.restored') head = `${mdWho(p, e, 'a moderator')} restored ${ref}`;
-  else if (t === 'content.upheld') head = `${mdWho(p, e, 'a moderator')} upheld an appeal on ${ref}`;
+  else if (t === 'content.upheld') head = `${mdWho(p, e, 'a moderator')} upheld the decision on ${ref}`;
   else if (t === 'tag.merged') head = `${mdWho(p, e, 'a moderator')} merged a tag`;
   else if (t === 'tag.archived') head = `${mdWho(p, e, 'a moderator')} archived a tag`;
   else if (t === 'account.recovered') head = `${mdWho(p, e, 'a moderator')} approved a key recovery`;
@@ -323,10 +324,10 @@ function mdItem(p: PageCtx, e: ActivityItem, gone: Set<string>, previews: Map<st
   else if (t === 'account.deleted') head = `An account was deleted`;
   else head = `${actor} ${ref}`;
   const d = e.data as { rule?: unknown; note?: unknown } | null;
-  const noteText = MODERATION_EVENTS.has(t) && typeof d?.rule === 'number' ? ` — rule ${d.rule}${typeof d?.note === 'string' && d.note ? `: “${mdLine(d.note)}”` : ''}` : '';
+  const noteText = MODERATION_EVENTS.has(t) && typeof d?.rule === 'number' ? ` — rule ${d.rule}${typeof d?.note === 'string' && d.note ? `: “${mdText(mdLine(d.note))}”` : ''}` : '';
   const ref0 = e.object.ref;
   const pv = ref0 && !gone.has(ref0) && t !== 'content.withdrawn' ? previews.get(ref0) : undefined;
-  const pvLine = pv ? `\n  > ${mdLine([pv.title ? `**${pv.title}**` : '', pv.text, pv.on ? `(on ${pv.on})` : ''].filter(Boolean).join(' — '))}` : '';
+  const pvLine = pv ? `\n  > ${[pv.title ? `**${mdText(mdLine(pv.title))}**` : '', pv.text ? mdText(mdLine(pv.text)) : '', pv.on ? `(on ${mdText(mdLine(pv.on))})` : ''].filter(Boolean).join(' — ')}` : '';
   return `- \`${when}\` · ${head}${noteText}${pvLine}`;
 }
 

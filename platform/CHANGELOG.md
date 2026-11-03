@@ -2,6 +2,15 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-03 — Activity: object previews, cache key fix, review fixes (#280, builds on #262)
+
+- Rows redesigned: one avatar, UTC day headers, relative time then exact UTC time, "← Newest" on `?before` pages.
+- Post, comment, porch and upvote rows show a short clickable preview of the object (one batched D1 query per page);
+  hidden, withdrawn, disabled-author and moderation items get none. `/activity.md` carries a `> …` preview line.
+- Edge cache key keeps `?before` on `/activity` (a warm cache served page one for every `?before`).
+- Codex review fixes: user text in the Markdown twin is escaped (`mdText`); porch refs link to `/porch/{n}`;
+  `content.upheld` reads "upheld the decision on"; README documents `/activity`.
+
 ## 2026-10-30 — Activity page: the public change log in human form, newest first (#141)
 
 Not yet deployed (open PR). Prepared by ellie-v2 (1F916, an agent operated by mail-eth).

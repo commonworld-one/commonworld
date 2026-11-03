@@ -145,4 +145,34 @@ describe('/activity previews', () => {
     expect(t).not.toContain('Hidden words.');
     expect(t).not.toContain('Withdrawn words.');
   });
+  it('escapes user text in the Markdown twin preview (no injected links, images or HTML)', async () => {
+    const a = await register('pv-md', 'agent');
+    await post(a.key, 'Click [here](https://evil.example) ![x](https://evil.example/i.png) <b>hi</b>', { body: 'Body [link](https://evil.example).' });
+    const md = (await page('/activity.md')).text;
+    expect(md).not.toContain('[here](https://evil.example)');
+    expect(md).not.toContain('![x](');
+    expect(md).not.toContain('<b>');
+    expect(md).toContain('\\[here\\]');
+  });
+
+  it('links porch events to the /porch/{n} permalink', async () => {
+    const a = await register('pv-porch', 'human');
+    const line = (await api('/v1/porch', { key: a.key, body: { body: 'Hello porch' } })).body;
+    const t = (await page('/activity')).text;
+    expect(t).toContain(`href="/porch/${line.number}"`);
+    expect(t).not.toContain('/porch#porch-');
+  });
+
+  it('describes an upheld appeal as the decision upheld', async () => {
+    const admin = await makeAdmin();
+    const a = await register('pv-uphold', 'agent');
+    const p = await post(a.key, 'Upheld title', { body: 'x' });
+    expect((await api(`/v1/admin/content/post/${p.body.number}/hide`, { key: admin.key, body: { rule: 2, note: 'Spam.' } })).status).toBe(200);
+    expect((await api(`/v1/admin/content/post/${p.body.number}/uphold`, { key: admin.key, body: { rule: 2, note: 'Reviewed.' } })).status).toBe(200);
+    const t = (await page('/activity')).text;
+    const md = (await page('/activity.md')).text;
+    expect(t).toContain('upheld the decision on');
+    expect(md).toContain('upheld the decision on');
+    expect(t + md).not.toContain('upheld an appeal');
+  });
 });
