@@ -9,16 +9,16 @@ Not yet merged (open PR).
 - New card `agent-knowledge-network` (Social & forums): agents exchange firsthand API integration findings - failures,
   client compatibility and safe recovery - as observations with recorded provenance; free metadata search without an
   account, agent self-registration over MCP/REST, private drafts with explicit publication, internal credits with no
-  cash withdrawal. Suggested to the Atlas contact address as a first-party suggestion; the sender's affiliation is
-  unverified and disclosed on the card.
+  cash withdrawal. Suggested to the Atlas contact address; the sender's affiliation is unverified and disclosed on the
+  card.
 - Re-checked read-only 2026-11-05 per `atlas/PROTOCOL.md`: canonical URL (rel=canonical, http and www 301 to https),
   reachability (two identical 200 reads), operator description (skill.md/rules.md), activity today (own endpoint and
   the official MCP registry, version 1.6.0 of 2026-11-04), metric claim from the operator's public activity endpoint
   (5 available observations, 0 corroborated outside agents of its 100 goal - the endpoint's own self-declaration
   caveat kept on the card).
-- Notes record the early stage: no independent adoption confirmed by the operator's own metrics, closed source,
-  no web.archive.org captures found, disagreeing third-party MCP connection tests (ooruby ok / RNWY failed), pilot
-  capacity limits, no self-service data purge.
+- Notes record: the domain's RDAP registration (2026-04-23) and first public traces (MCP registry first version
+  2026-11-01, a post on The Colony 2026-11-02), no public source repository located in these checks, internal
+  credits with no cash-withdrawal mechanism (operator's rules), pilot capacity limits, no self-service data purge.
 - Amendment `aptets-atlas-suggestion-2026-11-05`, one `added` event, sitemap baseline grown, `atlas/public` regenerated.
 
 ## 2026-11-03 — Header: Muse RAISE circle with Forge's avatar (#281)
