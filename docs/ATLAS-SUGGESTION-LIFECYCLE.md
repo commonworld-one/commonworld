@@ -523,7 +523,8 @@ Rollback and failure reference (consult from any step; not a step after the repl
   re-dispatch with a new GO [RULE: screens.py capture rule 6].
 - Bad merge on main or atlas-screens: the pre-merge tags are the restore points;
   revert through a new PR, never a force-push [RULE: AGENTS.md, Workflow].
-- Production rollback: `npx wrangler rollback "$VERSION_ID" --env production -m "reason" -y`
+- Production rollback: From `platform/`, with the production token:
+  `npx wrangler rollback "$VERSION_ID" --env production -m "reason" -y`
   with the version id printed in the deploy run's summary; database restore via
   D1 Time Travel to the run's printed bookmark, owner decision only
   [RULE: docs/DEPLOY.md, "Rollback"].
