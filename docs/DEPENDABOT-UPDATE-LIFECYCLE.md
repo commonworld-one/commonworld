@@ -51,13 +51,13 @@ Step 0. Identities and decision rights
   explicit decision" and "Agents never merge, never force-push main, never
   bypass checks"
   [RULE: https://github.com/commonworld-one/commonworld/blob/main/AGENTS.md].
-  That rule stands. In the observed run the owner additionally authorized each
-  individual write - tag, this one squash merge, the two deploy dispatches - to
-  be executed by the team's GitHub App cw-instinct[bot], one named action at a
-  time. An agent-executed merge is only ever a single explicitly authorized
-  exception for one named PR at one verified head sha; it is never a pattern a
-  future run may copy without the same explicit authorization, and GitHub
-  metadata alone does not establish who physically acted [OBSERVED:
+  That rule stands, and this procedure gives no agent a merge path: an agent
+  prepares, verifies and reports; the owner performs every merge. In the
+  observed run the tag, the #287 squash merge and the two deploy dispatches
+  are recorded under the team's GitHub App cw-instinct[bot]; GitHub metadata
+  records the acting account, and the one-off arrangement behind it was the
+  owner's personal decision for that run alone, deliberately outside this
+  written procedure [OBSERVED:
   https://github.com/commonworld-one/commonworld/pull/287,
   https://github.com/commonworld-one/commonworld/actions/runs/42187809698].
 - The production environment approval is personal: only the owner, as the
@@ -161,13 +161,12 @@ Action, in order:
 1. Re-verify SECONDS before merging: PR head still the reviewed sha, PR base
    still exactly the tagged sha, mergeable_state clean, CI green on the head.
    STOP on any drift and report.
-2. The owner decides the merge. The written rule is that the owner performs it
-   (Step 0); if the owner explicitly authorizes an agent executor, that
-   authorization names exactly this PR at this head sha and nothing else. Merge
-   with the repo's observed convention: squash (recent main history is
-   single-parent commits titled "... (#N)"). In the observed run the squash
-   merge is recorded 2026-11-06T08:05:01Z under cw-instinct[bot] after the
-   owner's scoped GO [OBSERVED:
+2. The owner decides AND performs the merge (Step 0; an agent never merges).
+   Use the repo's observed convention: squash (recent main history is
+   single-parent commits titled "... (#N)"). The 2026-11-06 run is recorded
+   differently: the #287 squash merge of 2026-11-06T08:05:01Z is recorded
+   under cw-instinct[bot], a one-off arrangement for that run alone, outside
+   this procedure [OBSERVED:
    https://github.com/commonworld-one/commonworld/commit/042d901b5912590a67e89a66a00f11224166f54e].
 3. Verify through the API: PR state closed/merged, merge_commit_sha recorded,
    the merge commit's first parent equals the tagged pre-merge base.
