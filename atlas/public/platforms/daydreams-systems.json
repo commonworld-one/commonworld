@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-08T08:21:00Z",
+ "source_snapshot_at": "2026-11-08T08:21:00Z",
  "id": "daydreams-systems",
  "name": "Daydreams (router + facilitator)",
  "url": "https://commonworld.one/atlas/platforms/daydreams-systems/",
@@ -22,18 +22,26 @@
  "has_money_flow": true,
  "money_flow": [
   {
-   "statement": "x402-list on-chain measurement: Daydreams facilitator settled $818.16 over 30 d ($93.12 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-14.",
-   "value": "$818.16",
+   "statement": "x402-list on-chain measurement: Daydreams facilitator settled $1,135.98 over 30 d (983 settlements; $381.77 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+   "value": 1135.98,
    "unit": "USDC (gross settlement)",
-   "window": "30d to 2026-10-15",
+   "window": "trailing 30d at observation time",
    "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
+   "observed_at": "2026-11-08T08:21:00Z",
    "source_url": "https://x402-list.com/facilitators"
   }
  ],
- "key_number": null,
- "verified_at": "2026-10-15T18:19:00Z",
- "last_checked": "2026-10-15T18:19:00Z",
+ "key_number": {
+  "kind": "economic_flow",
+  "value": 1135.98,
+  "unit": "USDC (gross settlement)",
+  "window": "trailing 30d at observation time",
+  "basis": "independent_source",
+  "observed_at": "2026-11-08T08:21:00Z",
+  "source_url": "https://x402-list.com/facilitators"
+ },
+ "verified_at": "2026-11-08T08:21:00Z",
+ "last_checked": "2026-11-08T08:21:00Z",
  "claims_count": 3,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/daydreams-systems/index.md",
@@ -56,7 +64,7 @@
    "value": "public_dashboard",
    "label": "Open: its money figures are on a public dashboard or API",
    "source_url": "https://x402-list.com/facilitators",
-   "quote": "Daydreams ... $93.12 $818.16 2026-10-14"
+   "quote": "\"volume_usd_30d\":1135.98,\"tx_count_30d\":983,\"volume_usd_7d\":381.77,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\""
   },
   "people": {
    "state": "not_recorded",
@@ -69,7 +77,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-08",
  "badge_svg": "https://commonworld.one/atlas/badge/daydreams-systems.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/daydreams-systems-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -112,18 +120,40 @@
   },
   {
    "kind": "economic_flow",
-   "statement": "x402-list on-chain measurement: Daydreams facilitator settled $818.16 over 30 d ($93.12 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-14.",
-   "value": "$818.16",
+   "statement": "x402-list on-chain measurement: Daydreams facilitator settled $1,135.98 over 30 d (983 settlements; $381.77 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+   "value": 1135.98,
    "unit": "USDC (gross settlement)",
-   "window": "30d to 2026-10-15",
+   "window": "trailing 30d at observation time",
    "basis": "independent_source",
    "source_url": "https://x402-list.com/facilitators",
-   "quote": "Daydreams ... $93.12 $818.16 2026-10-14",
-   "observed_at": "2026-10-15T18:10:00Z",
+   "quote": "\"volume_usd_30d\":1135.98,\"tx_count_30d\":983,\"volume_usd_7d\":381.77,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+   "observed_at": "2026-11-08T08:21:10Z",
    "methods": [
-    "curl https://x402-list.com/facilitators"
+    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+    "select the one row of data with facilitator_id=daydreams (41 rows read)",
+    "read volume_usd_30d (rounded to 2 decimals)"
    ],
    "outcome": "supported",
+   "verify": {
+    "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+    "note": "The same figure as JSON: the one row of data with facilitator_id=daydreams, field volume_usd_30d (about 17 KB)."
+   },
+   "history": [
+    {
+     "value": "$818.16",
+     "unit": "USDC (gross settlement)",
+     "window": "30d to 2026-10-15",
+     "statement": "x402-list on-chain measurement: Daydreams facilitator settled $818.16 over 30 d ($93.12 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-14.",
+     "quote": "Daydreams ... $93.12 $818.16 2026-10-14",
+     "source_url": "https://x402-list.com/facilitators",
+     "observed_at": "2026-10-15T18:10:00Z",
+     "basis": "independent_source",
+     "outcome": "supported",
+     "superseded_at": "2026-11-08T08:21:10Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+    }
+   ],
+   "refresh_id": "daydreams-systems-x402-list-30d",
    "evidence_level": 2,
    "evidence_label": "public dashboard",
    "evidence_note": "Independent public dashboard: x402-list measures each facilitator's on-chain USDC settlement, with 7-day and 30-day volume updated daily."

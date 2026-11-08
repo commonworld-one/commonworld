@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-08T08:21:00Z",
+ "source_snapshot_at": "2026-11-08T08:21:00Z",
  "id": "x-pay-api-xpay",
  "name": "X Pay (api-xpay.com)",
  "url": "https://commonworld.one/atlas/platforms/x-pay-api-xpay/",
@@ -20,13 +20,13 @@
  "has_money_flow": true,
  "money_flow": [
   {
-   "statement": "x402 settlement to this service's payout address: $5,313.91 in 30d from 221 distinct buyers, 51,338 settlements; top buyer share 2.1%",
-   "value": 5313.91,
+   "statement": "x402 settlement to this service's payout address: $9,690.36 in 30d from 348 distinct buyers, 64,905 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+   "value": 9690.36,
    "unit": "USD (USDC)",
-   "window": "trailing 30d to 2026-10-15",
+   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
    "basis": "independent_source",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://x402-list.com/api/v1/services?per_page=100"
+   "observed_at": "2026-11-08T08:21:00Z",
+   "source_url": "https://x402-list.com/api/v1/services/x-pay"
   },
   {
    "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $2,824.84",
@@ -40,15 +40,15 @@
  ],
  "key_number": {
   "kind": "economic_flow",
-  "value": 5313.91,
+  "value": 9690.36,
   "unit": "USD (USDC)",
-  "window": "trailing 30d to 2026-10-15",
+  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
   "basis": "independent_source",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://x402-list.com/api/v1/services?per_page=100"
+  "observed_at": "2026-11-08T08:21:00Z",
+  "source_url": "https://x402-list.com/api/v1/services/x-pay"
  },
- "verified_at": "2026-10-15T18:19:00Z",
- "last_checked": "2026-10-15T18:19:00Z",
+ "verified_at": "2026-11-08T08:21:00Z",
+ "last_checked": "2026-11-08T08:21:00Z",
  "claims_count": 6,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/x-pay-api-xpay/index.md",
@@ -70,8 +70,8 @@
    "state": "recorded",
    "value": "public_dashboard",
    "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-   "quote": "traction.volume_usd_30d=5313.91, unique_buyers_30d=221, top_buyer_share_30d=0.0207"
+   "source_url": "https://x402-list.com/api/v1/services/x-pay",
+   "quote": "\"volume_usd_30d\":9690.36,\"unique_buyers_30d\":348,\"tx_count_30d\":64905,\"top_buyer_share_30d\":0.01135613124796189,\"last_settlement_at\":\"2026-10-28T03:42:17Z\""
   },
   "people": {
    "state": "not_recorded",
@@ -84,7 +84,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-08",
  "badge_svg": "https://commonworld.one/atlas/badge/x-pay-api-xpay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x-pay-api-xpay-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -139,18 +139,37 @@
   },
   {
    "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $5,313.91 in 30d from 221 distinct buyers, 51,338 settlements; top buyer share 2.1%",
-   "value": 5313.91,
+   "statement": "x402 settlement to this service's payout address: $9,690.36 in 30d from 348 distinct buyers, 64,905 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+   "value": 9690.36,
    "unit": "USD (USDC)",
-   "window": "trailing 30d to 2026-10-15",
+   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
    "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-   "quote": "traction.volume_usd_30d=5313.91, unique_buyers_30d=221, top_buyer_share_30d=0.0207",
-   "observed_at": "2026-10-15T18:08:00Z",
+   "source_url": "https://x402-list.com/api/v1/services/x-pay",
+   "quote": "\"volume_usd_30d\":9690.36,\"unique_buyers_30d\":348,\"tx_count_30d\":64905,\"top_buyer_share_30d\":0.01135613124796189,\"last_settlement_at\":\"2026-10-28T03:42:17Z\"",
+   "observed_at": "2026-11-08T08:21:10Z",
    "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100"
+    "GET https://x402-list.com/api/v1/services/x-pay",
+    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
    ],
    "outcome": "supported",
+   "history": [
+    {
+     "value": 5313.91,
+     "unit": "USD (USDC)",
+     "window": "trailing 30d to 2026-10-15",
+     "statement": "x402 settlement to this service's payout address: $5,313.91 in 30d from 221 distinct buyers, 51,338 settlements; top buyer share 2.1%",
+     "quote": "traction.volume_usd_30d=5313.91, unique_buyers_30d=221, top_buyer_share_30d=0.0207",
+     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "basis": "independent_source",
+     "outcome": "supported",
+     "superseded_at": "2026-11-08T08:21:10Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+    }
+   ],
+   "refresh_id": "x-pay-api-xpay-x402-list-30d",
+   "last_settlement_seen_at": "2026-10-28T03:42:17Z",
    "evidence_level": 2,
    "evidence_label": "public dashboard"
   },

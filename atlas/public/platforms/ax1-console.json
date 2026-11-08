@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-08T08:21:00Z",
+ "source_snapshot_at": "2026-11-08T08:21:00Z",
  "id": "ax1-console",
  "name": "AX1 Console",
  "url": "https://commonworld.one/atlas/platforms/ax1-console/",
@@ -20,13 +20,13 @@
  "has_money_flow": true,
  "money_flow": [
   {
-   "statement": "x402 settlement to this service's payout address: $8,034.78 in 30d from 3557 distinct buyers, 401,739 settlements; top buyer share 5.0%",
-   "value": 8034.78,
+   "statement": "x402 settlement to this service's payout address: $9,920.76 in 30d from 4,870 distinct buyers, 496,038 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+   "value": 9920.76,
    "unit": "USD (USDC)",
-   "window": "trailing 30d to 2026-10-15",
+   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
    "basis": "independent_source",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://x402-list.com/api/v1/services?per_page=100"
+   "observed_at": "2026-11-08T08:21:00Z",
+   "source_url": "https://x402-list.com/api/v1/services/ax1-console"
   },
   {
    "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $1,518.06",
@@ -40,15 +40,15 @@
  ],
  "key_number": {
   "kind": "economic_flow",
-  "value": 8034.78,
+  "value": 9920.76,
   "unit": "USD (USDC)",
-  "window": "trailing 30d to 2026-10-15",
+  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
   "basis": "independent_source",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://x402-list.com/api/v1/services?per_page=100"
+  "observed_at": "2026-11-08T08:21:00Z",
+  "source_url": "https://x402-list.com/api/v1/services/ax1-console"
  },
- "verified_at": "2026-10-15T18:19:00Z",
- "last_checked": "2026-10-15T18:19:00Z",
+ "verified_at": "2026-11-08T08:21:00Z",
+ "last_checked": "2026-11-08T08:21:00Z",
  "claims_count": 6,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/ax1-console/index.md",
@@ -70,8 +70,8 @@
    "state": "recorded",
    "value": "public_dashboard",
    "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-   "quote": "traction.volume_usd_30d=8034.78, unique_buyers_30d=3557, top_buyer_share_30d=0.05"
+   "source_url": "https://x402-list.com/api/v1/services/ax1-console",
+   "quote": "\"volume_usd_30d\":9920.76,\"unique_buyers_30d\":4870,\"tx_count_30d\":496038,\"top_buyer_share_30d\":0.05807216382615848,\"last_settlement_at\":\"2026-10-28T03:42:27Z\""
   },
   "people": {
    "state": "not_recorded",
@@ -84,7 +84,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-08",
  "badge_svg": "https://commonworld.one/atlas/badge/ax1-console.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ax1-console-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -138,18 +138,37 @@
   },
   {
    "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $8,034.78 in 30d from 3557 distinct buyers, 401,739 settlements; top buyer share 5.0%",
-   "value": 8034.78,
+   "statement": "x402 settlement to this service's payout address: $9,920.76 in 30d from 4,870 distinct buyers, 496,038 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+   "value": 9920.76,
    "unit": "USD (USDC)",
-   "window": "trailing 30d to 2026-10-15",
+   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
    "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-   "quote": "traction.volume_usd_30d=8034.78, unique_buyers_30d=3557, top_buyer_share_30d=0.05",
-   "observed_at": "2026-10-15T18:08:00Z",
+   "source_url": "https://x402-list.com/api/v1/services/ax1-console",
+   "quote": "\"volume_usd_30d\":9920.76,\"unique_buyers_30d\":4870,\"tx_count_30d\":496038,\"top_buyer_share_30d\":0.05807216382615848,\"last_settlement_at\":\"2026-10-28T03:42:27Z\"",
+   "observed_at": "2026-11-08T08:21:10Z",
    "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100"
+    "GET https://x402-list.com/api/v1/services/ax1-console",
+    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
    ],
    "outcome": "supported",
+   "history": [
+    {
+     "value": 8034.78,
+     "unit": "USD (USDC)",
+     "window": "trailing 30d to 2026-10-15",
+     "statement": "x402 settlement to this service's payout address: $8,034.78 in 30d from 3557 distinct buyers, 401,739 settlements; top buyer share 5.0%",
+     "quote": "traction.volume_usd_30d=8034.78, unique_buyers_30d=3557, top_buyer_share_30d=0.05",
+     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "basis": "independent_source",
+     "outcome": "supported",
+     "superseded_at": "2026-11-08T08:21:10Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+    }
+   ],
+   "refresh_id": "ax1-console-x402-list-30d",
+   "last_settlement_seen_at": "2026-10-28T03:42:27Z",
    "evidence_level": 2,
    "evidence_label": "public dashboard"
   },

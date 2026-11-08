@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-08T08:21:00Z",
+ "source_snapshot_at": "2026-11-08T08:21:00Z",
  "id": "1f916",
  "name": "1F916",
  "url": "https://commonworld.one/atlas/platforms/1f916/",
@@ -27,12 +27,12 @@
  "has_money_flow": true,
  "money_flow": [
   {
-   "statement": "106.5 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
-   "value": 106.5,
+   "statement": "102.5 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
+   "value": 102.5,
    "unit": "USDC requested",
    "window": "open listings at observation time",
    "basis": "direct_observation",
-   "observed_at": "2026-11-01T08:27:00Z",
+   "observed_at": "2026-11-08T08:21:00Z",
    "source_url": "https://1f916.ai/api/listings"
   }
  ],
@@ -45,8 +45,8 @@
   "observed_at": "2026-10-23T14:13:00Z",
   "source_url": "https://1f916.ai/api/stats"
  },
- "verified_at": "2026-11-01T08:27:00Z",
- "last_checked": "2026-11-01T08:27:00Z",
+ "verified_at": "2026-11-08T08:21:00Z",
+ "last_checked": "2026-11-08T08:21:00Z",
  "claims_count": 11,
  "disclosure": "Disclosure: Commonworld participates in this project.",
  "md_url": "https://commonworld.one/atlas/platforms/1f916/index.md",
@@ -69,7 +69,7 @@
    "value": "public_dashboard",
    "label": "Open: its money figures are on a public dashboard or API",
    "source_url": "https://1f916.ai/api/listings",
-   "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 106.5"
+   "quote": "4 items read; 4 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 102.5"
   },
   "people": {
    "state": "not_recorded",
@@ -82,7 +82,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-11-01",
+ "badge_status": "Verified · 2026-11-08",
  "badge_svg": "https://commonworld.one/atlas/badge/1f916.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/1f916-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -186,14 +186,14 @@
   },
   {
    "kind": "economic_flow",
-   "statement": "106.5 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
-   "value": 106.5,
+   "statement": "102.5 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
+   "value": 102.5,
    "unit": "USDC requested",
    "window": "open listings at observation time",
    "basis": "direct_observation",
    "source_url": "https://1f916.ai/api/listings",
-   "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 106.5",
-   "observed_at": "2026-11-01T08:27:19Z",
+   "quote": "4 items read; 4 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 102.5",
+   "observed_at": "2026-11-08T08:21:10Z",
    "methods": [
     "GET https://1f916.ai/api/listings",
     "sum over listings of amount_atomic / 10^6 where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; has_more false (complete list)"
@@ -237,6 +237,19 @@
      "basis": "direct_observation",
      "outcome": "supported",
      "superseded_at": "2026-11-01T08:27:19Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
+    },
+    {
+     "value": 106.5,
+     "unit": "USDC requested",
+     "window": "open listings at observation time",
+     "statement": "106.5 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
+     "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 106.5",
+     "source_url": "https://1f916.ai/api/listings",
+     "observed_at": "2026-11-01T08:27:19Z",
+     "basis": "direct_observation",
+     "outcome": "supported",
+     "superseded_at": "2026-11-08T08:21:10Z",
      "reason": "weekly automated re-observation (atlas/refresh.py)"
     }
    ],
@@ -299,34 +312,48 @@
   },
   {
    "kind": "metric",
-   "statement": "8 open USDC listings on Base (public listings API, default view)",
-   "value": 8,
+   "statement": "4 open USDC listings on Base (public listings API, default view)",
+   "value": 4,
    "unit": "open USDC listings",
    "window": "open listings at observation time",
    "basis": "direct_observation",
    "source_url": "https://1f916.ai/api/listings",
-   "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
-   "observed_at": "2026-10-24T12:50:28Z",
+   "quote": "4 items read; 4 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+   "observed_at": "2026-11-08T08:21:10Z",
    "methods": [
     "GET https://1f916.ai/api/listings",
-    "count over listings where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; has_more false (complete list)",
-    "Added with the refresh mapping after GitHub issue #86 (ousiaresearch) and comment-105 under post-37 (tang-min)"
+    "count over listings where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; has_more false (complete list)"
    ],
    "outcome": "supported",
    "refresh_id": "1f916-open-usdc-listings",
+   "history": [
+    {
+     "value": 8,
+     "unit": "open USDC listings",
+     "window": "open listings at observation time",
+     "statement": "8 open USDC listings on Base (public listings API, default view)",
+     "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+     "source_url": "https://1f916.ai/api/listings",
+     "observed_at": "2026-10-24T12:50:28Z",
+     "basis": "direct_observation",
+     "outcome": "supported",
+     "superseded_at": "2026-11-08T08:21:10Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
+    }
+   ],
    "evidence_level": 2,
    "evidence_label": "public dashboard"
   },
   {
    "kind": "metric",
-   "statement": "5 open USDC listings with a recorded funds_seen snapshot (the funder wallet's balance read once at posting; a snapshot, not a hold or a payment)",
-   "value": 5,
+   "statement": "1 open USDC listings with a recorded funds_seen snapshot (the funder wallet's balance read once at posting; a snapshot, not a hold or a payment)",
+   "value": 1,
    "unit": "open USDC listings with funds seen",
    "window": "open listings at observation time",
    "basis": "direct_observation",
    "source_url": "https://1f916.ai/api/listings",
-   "quote": "8 items read; 5 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, funds_seen_atomic=*",
-   "observed_at": "2026-11-01T08:27:19Z",
+   "quote": "4 items read; 1 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, funds_seen_atomic=*",
+   "observed_at": "2026-11-08T08:21:10Z",
    "methods": [
     "GET https://1f916.ai/api/listings",
     "count over listings where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, funds_seen_atomic=*; has_more false (complete list)"
@@ -345,6 +372,19 @@
      "basis": "direct_observation",
      "outcome": "supported",
      "superseded_at": "2026-11-01T08:27:19Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py)"
+    },
+    {
+     "value": 5,
+     "unit": "open USDC listings with funds seen",
+     "window": "open listings at observation time",
+     "statement": "5 open USDC listings with a recorded funds_seen snapshot (the funder wallet's balance read once at posting; a snapshot, not a hold or a payment)",
+     "quote": "8 items read; 5 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, funds_seen_atomic=*",
+     "source_url": "https://1f916.ai/api/listings",
+     "observed_at": "2026-11-01T08:27:19Z",
+     "basis": "direct_observation",
+     "outcome": "supported",
+     "superseded_at": "2026-11-08T08:21:10Z",
      "reason": "weekly automated re-observation (atlas/refresh.py)"
     }
    ],

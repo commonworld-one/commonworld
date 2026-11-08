@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-08T08:21:00Z",
+ "source_snapshot_at": "2026-11-08T08:21:00Z",
  "id": "polygon-x402-facilitator",
  "name": "Polygon Facilitator",
  "url": "https://commonworld.one/atlas/platforms/polygon-x402-facilitator/",
@@ -20,26 +20,26 @@
  "has_money_flow": true,
  "money_flow": [
   {
-   "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $124,629.88 over 30d (4,190,487 settlements); $19,187.46 over last 7d",
-   "value": 124629.88,
+   "statement": "x402-list on-chain measurement: Polygon facilitator settled $28,155.14 over 30 d (942,325 settlements; $15,317.02 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+   "value": 28155.14,
    "unit": "USD (USDC)",
-   "window": "trailing 30d to 2026-10-15",
+   "window": "trailing 30d at observation time",
    "basis": "independent_source",
-   "observed_at": "2026-10-15T18:08:00Z",
+   "observed_at": "2026-11-08T08:21:00Z",
    "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
   }
  ],
  "key_number": {
   "kind": "economic_flow",
-  "value": 124629.88,
+  "value": 28155.14,
   "unit": "USD (USDC)",
-  "window": "trailing 30d to 2026-10-15",
+  "window": "trailing 30d at observation time",
   "basis": "independent_source",
-  "observed_at": "2026-10-15T18:08:00Z",
+  "observed_at": "2026-11-08T08:21:00Z",
   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
  },
- "verified_at": "2026-10-15T18:19:00Z",
- "last_checked": "2026-10-15T18:19:00Z",
+ "verified_at": "2026-11-08T08:21:00Z",
+ "last_checked": "2026-11-08T08:21:00Z",
  "claims_count": 5,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/polygon-x402-facilitator/index.md",
@@ -62,7 +62,7 @@
    "value": "public_dashboard",
    "label": "Open: its money figures are on a public dashboard or API",
    "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "quote": "volume_usd_30d=124629.88, tx_count_30d=4190487, volume_usd_7d=19187.46"
+   "quote": "\"volume_usd_30d\":28155.14,\"tx_count_30d\":942325,\"volume_usd_7d\":15317.02,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\""
   },
   "people": {
    "state": "not_recorded",
@@ -75,7 +75,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-08",
  "badge_svg": "https://commonworld.one/atlas/badge/polygon-x402-facilitator.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/polygon-x402-facilitator-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -128,18 +128,36 @@
   },
   {
    "kind": "economic_flow",
-   "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $124,629.88 over 30d (4,190,487 settlements); $19,187.46 over last 7d",
-   "value": 124629.88,
+   "statement": "x402-list on-chain measurement: Polygon facilitator settled $28,155.14 over 30 d (942,325 settlements; $15,317.02 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+   "value": 28155.14,
    "unit": "USD (USDC)",
-   "window": "trailing 30d to 2026-10-15",
+   "window": "trailing 30d at observation time",
    "basis": "independent_source",
    "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "quote": "volume_usd_30d=124629.88, tx_count_30d=4190487, volume_usd_7d=19187.46",
-   "observed_at": "2026-10-15T18:08:00Z",
+   "quote": "\"volume_usd_30d\":28155.14,\"tx_count_30d\":942325,\"volume_usd_7d\":15317.02,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+   "observed_at": "2026-11-08T08:21:10Z",
    "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
+    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+    "select the one row of data with facilitator_id=polygon (41 rows read)",
+    "read volume_usd_30d (rounded to 2 decimals)"
    ],
    "outcome": "supported",
+   "history": [
+    {
+     "value": 124629.88,
+     "unit": "USD (USDC)",
+     "window": "trailing 30d to 2026-10-15",
+     "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $124,629.88 over 30d (4,190,487 settlements); $19,187.46 over last 7d",
+     "quote": "volume_usd_30d=124629.88, tx_count_30d=4190487, volume_usd_7d=19187.46",
+     "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "basis": "independent_source",
+     "outcome": "supported",
+     "superseded_at": "2026-11-08T08:21:10Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+    }
+   ],
+   "refresh_id": "polygon-x402-facilitator-x402-list-30d",
    "evidence_level": 2,
    "evidence_label": "public dashboard"
   },

@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-08T08:21:00Z",
+ "source_snapshot_at": "2026-11-08T08:21:00Z",
  "id": "payai",
  "name": "PayAI",
  "url": "https://commonworld.one/atlas/platforms/payai/",
@@ -21,12 +21,12 @@
  "has_money_flow": true,
  "money_flow": [
   {
-   "statement": "x402-list on-chain measurement: PayAI facilitator settled $8.1k over 30 d ($3.3k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
-   "value": "$8.1k",
+   "statement": "x402-list on-chain measurement: PayAI facilitator settled $23,181.07 over 30 d (117,204 settlements; $9,395.65 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+   "value": 23181.07,
    "unit": "USDC (gross settlement)",
-   "window": "30d to 2026-10-15",
+   "window": "trailing 30d at observation time",
    "basis": "independent_source",
-   "observed_at": "2026-10-15T20:37:00Z",
+   "observed_at": "2026-11-08T08:21:00Z",
    "source_url": "https://x402-list.com/facilitators"
   },
   {
@@ -39,9 +39,17 @@
    "source_url": "https://x402stats.io/llms-full.txt"
   }
  ],
- "key_number": null,
- "verified_at": "2026-10-15T20:37:00Z",
- "last_checked": "2026-10-15T20:37:00Z",
+ "key_number": {
+  "kind": "economic_flow",
+  "value": 23181.07,
+  "unit": "USDC (gross settlement)",
+  "window": "trailing 30d at observation time",
+  "basis": "independent_source",
+  "observed_at": "2026-11-08T08:21:00Z",
+  "source_url": "https://x402-list.com/facilitators"
+ },
+ "verified_at": "2026-11-08T08:21:00Z",
+ "last_checked": "2026-11-08T08:21:00Z",
  "claims_count": 3,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/payai/index.md",
@@ -64,7 +72,7 @@
    "value": "public_dashboard",
    "label": "Open: its money figures are on a public dashboard or API",
    "source_url": "https://x402-list.com/facilitators",
-   "quote": "PayAI ... $3.3k $8.1k"
+   "quote": "\"volume_usd_30d\":23181.07,\"tx_count_30d\":117204,\"volume_usd_7d\":9395.65,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\""
   },
   "people": {
    "state": "not_recorded",
@@ -77,7 +85,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-08",
  "badge_svg": "https://commonworld.one/atlas/badge/payai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/payai-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -99,16 +107,18 @@
   },
   {
    "kind": "economic_flow",
-   "statement": "x402-list on-chain measurement: PayAI facilitator settled $8.1k over 30 d ($3.3k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
-   "value": "$8.1k",
+   "statement": "x402-list on-chain measurement: PayAI facilitator settled $23,181.07 over 30 d (117,204 settlements; $9,395.65 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+   "value": 23181.07,
    "unit": "USDC (gross settlement)",
-   "window": "30d to 2026-10-15",
+   "window": "trailing 30d at observation time",
    "basis": "independent_source",
    "source_url": "https://x402-list.com/facilitators",
-   "quote": "PayAI ... $3.3k $8.1k",
-   "observed_at": "2026-10-15T20:37:56Z",
+   "quote": "\"volume_usd_30d\":23181.07,\"tx_count_30d\":117204,\"volume_usd_7d\":9395.65,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+   "observed_at": "2026-11-08T08:21:10Z",
    "methods": [
-    "curl https://x402-list.com/facilitators"
+    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+    "select the one row of data with facilitator_id=payAI (41 rows read)",
+    "read volume_usd_30d (rounded to 2 decimals)"
    ],
    "outcome": "supported",
    "history": [
@@ -124,6 +134,19 @@
      "outcome": "supported",
      "superseded_at": "2026-10-15T21:45:00Z",
      "reason": "newer value re-observed independently (Codex QA)"
+    },
+    {
+     "value": "$8.1k",
+     "unit": "USDC (gross settlement)",
+     "window": "30d to 2026-10-15",
+     "statement": "x402-list on-chain measurement: PayAI facilitator settled $8.1k over 30 d ($3.3k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
+     "quote": "PayAI ... $3.3k $8.1k",
+     "source_url": "https://x402-list.com/facilitators",
+     "observed_at": "2026-10-15T20:37:56Z",
+     "basis": "independent_source",
+     "outcome": "supported",
+     "superseded_at": "2026-11-08T08:21:10Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
     }
    ],
    "recheck": {
@@ -137,6 +160,11 @@
     ],
     "finding": "On 2026-10-15, x402-list displays PayAI Base + Solana as $3.3k and $8.1k for its 7-day/30-day windows, versus the earlier claim of $3.1k/$8.0k."
    },
+   "verify": {
+    "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+    "note": "The same figure as JSON: the one row of data with facilitator_id=payAI, field volume_usd_30d (about 17 KB)."
+   },
+   "refresh_id": "payai-x402-list-30d",
    "evidence_level": 2,
    "evidence_label": "public dashboard",
    "evidence_note": "Independent public dashboard: x402-list measures each facilitator's on-chain USDC settlement, with 7-day and 30-day volume updated daily."

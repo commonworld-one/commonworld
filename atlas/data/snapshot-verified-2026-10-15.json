@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-01T08:27:19Z",
+ "generated_at": "2026-11-08T08:21:10Z",
  "count": 386,
  "platforms": [
   {
@@ -75,13 +75,13 @@
     {
      "kind": "metric",
      "statement": "Platform totals (operator API)",
-     "value": 4493,
+     "value": 4778,
      "unit": "users",
      "window": "all-time",
      "basis": "operator_claim",
      "source_url": "https://thecolony.ai/api/v1/stats",
-     "quote": "\"total_users\":4493,\"total_agents\":3072,\"total_humans\":1421",
-     "observed_at": "2026-11-01T08:27:19Z",
+     "quote": "\"total_users\":4778,\"total_agents\":3299,\"total_humans\":1479",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
       "GET https://thecolony.ai/api/v1/stats",
       "read total_users"
@@ -151,6 +151,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-11-01T08:27:19Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 4493,
+       "unit": "users",
+       "window": "all-time",
+       "statement": "Platform totals (operator API)",
+       "quote": "\"total_users\":4493,\"total_agents\":3072,\"total_humans\":1421",
+       "source_url": "https://thecolony.ai/api/v1/stats",
+       "observed_at": "2026-11-01T08:27:19Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -365,14 +378,14 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "106.5 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
-     "value": 106.5,
+     "statement": "102.5 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
+     "value": 102.5,
      "unit": "USDC requested",
      "window": "open listings at observation time",
      "basis": "direct_observation",
      "source_url": "https://1f916.ai/api/listings",
-     "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 106.5",
-     "observed_at": "2026-11-01T08:27:19Z",
+     "quote": "4 items read; 4 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 102.5",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
       "GET https://1f916.ai/api/listings",
       "sum over listings of amount_atomic / 10^6 where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; has_more false (complete list)"
@@ -416,6 +429,19 @@
        "basis": "direct_observation",
        "outcome": "supported",
        "superseded_at": "2026-11-01T08:27:19Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 106.5,
+       "unit": "USDC requested",
+       "window": "open listings at observation time",
+       "statement": "106.5 USDC requested in total across open USDC listings on Base (public listings API, default view: open listings only). This is the sum of open listing requests, not a treasury, balance or payments",
+       "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; sum amount_atomic / 10^6 = 106.5",
+       "source_url": "https://1f916.ai/api/listings",
+       "observed_at": "2026-11-01T08:27:19Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -470,32 +496,46 @@
     },
     {
      "kind": "metric",
-     "statement": "8 open USDC listings on Base (public listings API, default view)",
-     "value": 8,
+     "statement": "4 open USDC listings on Base (public listings API, default view)",
+     "value": 4,
      "unit": "open USDC listings",
      "window": "open listings at observation time",
      "basis": "direct_observation",
      "source_url": "https://1f916.ai/api/listings",
-     "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
-     "observed_at": "2026-10-24T12:50:28Z",
+     "quote": "4 items read; 4 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
       "GET https://1f916.ai/api/listings",
-      "count over listings where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; has_more false (complete list)",
-      "Added with the refresh mapping after GitHub issue #86 (ousiaresearch) and comment-105 under post-37 (tang-min)"
+      "count over listings where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913; has_more false (complete list)"
      ],
      "outcome": "supported",
-     "refresh_id": "1f916-open-usdc-listings"
+     "refresh_id": "1f916-open-usdc-listings",
+     "history": [
+      {
+       "value": 8,
+       "unit": "open USDC listings",
+       "window": "open listings at observation time",
+       "statement": "8 open USDC listings on Base (public listings API, default view)",
+       "quote": "8 items read; 8 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+       "source_url": "https://1f916.ai/api/listings",
+       "observed_at": "2026-10-24T12:50:28Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      }
+     ]
     },
     {
      "kind": "metric",
-     "statement": "5 open USDC listings with a recorded funds_seen snapshot (the funder wallet's balance read once at posting; a snapshot, not a hold or a payment)",
-     "value": 5,
+     "statement": "1 open USDC listings with a recorded funds_seen snapshot (the funder wallet's balance read once at posting; a snapshot, not a hold or a payment)",
+     "value": 1,
      "unit": "open USDC listings with funds seen",
      "window": "open listings at observation time",
      "basis": "direct_observation",
      "source_url": "https://1f916.ai/api/listings",
-     "quote": "8 items read; 5 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, funds_seen_atomic=*",
-     "observed_at": "2026-11-01T08:27:19Z",
+     "quote": "4 items read; 1 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, funds_seen_atomic=*",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
       "GET https://1f916.ai/api/listings",
       "count over listings where lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, funds_seen_atomic=*; has_more false (complete list)"
@@ -514,6 +554,19 @@
        "basis": "direct_observation",
        "outcome": "supported",
        "superseded_at": "2026-11-01T08:27:19Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 5,
+       "unit": "open USDC listings with funds seen",
+       "window": "open listings at observation time",
+       "statement": "5 open USDC listings with a recorded funds_seen snapshot (the funder wallet's balance read once at posting; a snapshot, not a hold or a payment)",
+       "quote": "8 items read; 5 with lifecycle=open, chain_id=8453, token=0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, funds_seen_atomic=*",
+       "source_url": "https://1f916.ai/api/listings",
+       "observed_at": "2026-11-01T08:27:19Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ]
@@ -662,13 +715,13 @@
     {
      "kind": "metric",
      "statement": "Totals (operator API)",
-     "value": 2926210,
+     "value": 2927381,
      "unit": "agents",
      "window": "all-time",
      "basis": "operator_claim",
      "source_url": "https://www.moltbook.com/api/v1/stats",
-     "quote": "\"totalAgents\":2926210",
-     "observed_at": "2026-11-01T08:27:19Z",
+     "quote": "\"totalAgents\":2927381",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
       "GET https://www.moltbook.com/api/v1/stats",
       "read totalAgents"
@@ -738,6 +791,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-11-01T08:27:19Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 2926210,
+       "unit": "agents",
+       "window": "all-time",
+       "statement": "Totals (operator API)",
+       "quote": "\"totalAgents\":2926210",
+       "source_url": "https://www.moltbook.com/api/v1/stats",
+       "observed_at": "2026-11-01T08:27:19Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -7590,13 +7656,13 @@
     {
      "kind": "metric",
      "statement": "Operator stats endpoint.",
-     "value": 5255,
+     "value": 5263,
      "unit": "registered agents",
      "window": "cumulative as of observation",
      "basis": "operator_claim",
      "source_url": "https://clawk.ai/api/v1/stats",
-     "quote": "\"agents\":5255",
-     "observed_at": "2026-11-01T08:27:19Z",
+     "quote": "\"agents\":5263",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
       "GET https://clawk.ai/api/v1/stats",
       "read agents"
@@ -7653,6 +7719,19 @@
        "basis": "operator_claim",
        "outcome": "supported",
        "superseded_at": "2026-11-01T08:27:19Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 5255,
+       "unit": "registered agents",
+       "window": "cumulative as of observation",
+       "statement": "Operator stats endpoint.",
+       "quote": "\"agents\":5255",
+       "source_url": "https://clawk.ai/api/v1/stats",
+       "observed_at": "2026-11-01T08:27:19Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ],
@@ -12850,16 +12929,18 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402-list on-chain measurement: Coinbase facilitator settled $618.6k over 30 d ($122.4k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Base+Solana.",
-     "value": "$618.6k",
+     "statement": "x402-list on-chain measurement: Coinbase facilitator settled $601,134.35 over 30 d (2,985,411 settlements; $263,577.24 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 601134.35,
      "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/facilitators",
-     "quote": "Coinbase ... $122.4k $618.6k",
-     "observed_at": "2026-10-15T20:30:42Z",
+     "quote": "\"volume_usd_30d\":601134.35,\"tx_count_30d\":2985411,\"volume_usd_7d\":263577.24,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "curl https://x402-list.com/facilitators"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=coinbase (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
      "outcome": "supported",
      "history": [
@@ -12875,6 +12956,19 @@
        "outcome": "supported",
        "superseded_at": "2026-10-15T21:45Z",
        "reason": "newer value re-observed independently (Codex QA)"
+      },
+      {
+       "value": "$618.6k",
+       "unit": "USDC (gross settlement)",
+       "window": "30d to 2026-10-15",
+       "statement": "x402-list on-chain measurement: Coinbase facilitator settled $618.6k over 30 d ($122.4k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Base+Solana.",
+       "quote": "Coinbase ... $122.4k $618.6k",
+       "source_url": "https://x402-list.com/facilitators",
+       "observed_at": "2026-10-15T20:30:42Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
       }
      ],
      "recheck": {
@@ -12887,7 +12981,12 @@
        "qa-agent-c-0036"
       ],
       "finding": "At 2026-10-15T20:35:25Z the x402-list facilitator table showed Coinbase $122.4k for 7 UTC days and $618.6k for 30 days, versus the pinned $121.3k/$617.5k. These are rolling gross settlements to any recipient, not seller revenue."
-     }
+     },
+     "verify": {
+      "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "note": "The same figure as JSON: the one row of data with facilitator_id=coinbase, field volume_usd_30d (about 17 KB)."
+     },
+     "refresh_id": "coinbase-cdp-x402-bazaar-x402-list-30d"
     },
     {
      "kind": "economic_flow",
@@ -13075,14 +13174,14 @@
     },
     {
      "kind": "metric",
-     "statement": "1,203 services, 8,997 endpoints, 37 mainnet networks (stats API)",
-     "value": 1203,
+     "statement": "1,275 services, 9,911 endpoints, 37 mainnet networks (stats API)",
+     "value": 1275,
      "unit": "services",
-     "window": "2026-10-15",
+     "window": "now (at observation time)",
      "basis": "direct_observation",
      "source_url": "https://x402-list.com/api/v1/stats",
-     "quote": "\"total_services\":1203,\"total_endpoints\":8997,\"total_networks\":37",
-     "observed_at": "2026-11-01T08:27:19Z",
+     "quote": "\"total_services\":1275,\"total_endpoints\":9911,\"total_networks\":37",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
       "GET https://x402-list.com/api/v1/stats",
       "read data.total_services"
@@ -13140,22 +13239,37 @@
        "outcome": "supported",
        "superseded_at": "2026-11-01T08:27:19Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 1203,
+       "unit": "services",
+       "window": "2026-10-15",
+       "statement": "1,203 services, 8,997 endpoints, 37 mainnet networks (stats API)",
+       "quote": "\"total_services\":1203,\"total_endpoints\":8997,\"total_networks\":37",
+       "source_url": "https://x402-list.com/api/v1/stats",
+       "observed_at": "2026-11-01T08:27:19Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
       }
      ],
      "refresh_id": "x402-list-services"
     },
     {
      "kind": "economic_flow",
-     "statement": "$419,257 paid to listed services over 30 d (9,813 buyers, 1,703,690 settlements), net of self-payments; largest single service = 64.9%. Top-10 share (96.9%) and the one-buyer share of the largest service (98.9%) are from the 18:08 UTC read and were not re-read.",
-     "value": 419257,
+     "statement": "$326,934.95 paid to listed services over 30 d (11,129 buyers, 1,840,501 settlements), net of self-payments; largest single service 70.1%, top 10 services 95.4% (stats API traction block: a measured floor, not an ecosystem total)",
+     "value": 326934.95,
      "unit": "USDC",
-     "window": "30d to 2026-10-15 20:30 UTC",
+     "window": "trailing 30d to the source's as-of time (x402-list traction.as_of, kept as source_as_of; it can lag our read)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com",
-     "quote": "$419,257 paid to listed services, last 30 days · 9,813 buyers · 1,703,690 settlements · 64.9% of it to one service",
-     "observed_at": "2026-10-15T20:30:46Z",
+     "source_url": "https://x402-list.com/api/v1/stats",
+     "quote": "\"volume_usd_30d\":326934.950202,\"unique_buyers_30d\":11129,\"settlement_count_30d\":1840501,\"top_1_service_share_pct\":70.1,\"top_10_services_share_pct\":95.4",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "curl -L homepage"
+      "GET https://x402-list.com/api/v1/stats",
+      "read data.traction.as_of (source as-of time)",
+      "read data.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
      "outcome": "supported",
      "history": [
@@ -13171,6 +13285,19 @@
        "outcome": "supported",
        "superseded_at": "2026-10-15T21:45Z",
        "reason": "newer value re-observed independently (Codex QA)"
+      },
+      {
+       "value": 419257,
+       "unit": "USDC",
+       "window": "30d to 2026-10-15 20:30 UTC",
+       "statement": "$419,257 paid to listed services over 30 d (9,813 buyers, 1,703,690 settlements), net of self-payments; largest single service = 64.9%. Top-10 share (96.9%) and the one-buyer share of the largest service (98.9%) are from the 18:08 UTC read and were not re-read.",
+       "quote": "$419,257 paid to listed services, last 30 days · 9,813 buyers · 1,703,690 settlements · 64.9% of it to one service",
+       "source_url": "https://x402-list.com",
+       "observed_at": "2026-10-15T20:30:46Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
       }
      ],
      "recheck": {
@@ -13183,21 +13310,23 @@
        "qa-agent-c-0056"
       ],
       "finding": "At 2026-10-15T20:30:44Z the home page displayed $419,257 paid to listed services, 9,813 buyers, 1,703,690 settlements, and 64.9% to one service, versus $419,036, 9,785, 1,699,553, and 65.0% in the pinned claim. The 96.9% top-10 and 98.9% one-buyer subclaims were not independently verified in this response."
-     }
+     },
+     "refresh_id": "x402-list-traction-30d",
+     "source_as_of": "2026-10-28T11:42:52Z"
     },
     {
      "kind": "economic_flow",
-     "statement": "All measured facilitators settled $1,277,823 to anyone over 30 d (sum of the 39 per-facilitator 30-day volumes in x402-list's facilitators API, not deduplicated); the page shows a 7-day total of $341.1k (flagged as incomplete ingest).",
-     "value": 1277823,
+     "statement": "All measured facilitators settled $2,929,099.92 to anyone over 30 d (the per-facilitator 30-day volumes listed on the facilitators page, summed by x402-list in its stats API across 41 measured facilitators; not deduplicated)",
+     "value": 2929099.92,
      "unit": "USDC (gross)",
-     "window": "30d to 2026-10-15 (read 21:40 UTC)",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/facilitators",
-     "quote": "$341.1k! settled in the last 7 days ... a sum per facilitator, not deduplicated",
-     "observed_at": "2026-10-15T21:40Z",
+     "quote": "\"facilitator_volume_usd_30d\":2929099.92,\"total_facilitators\":41",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "curl -sL https://x402-list.com/facilitators",
-      "curl -sL 'https://x402-list.com/api/v1/facilitators?include=chains&per_page=50&timeframe=30d' (sum volume_usd_30d over 39 rows)"
+      "GET https://x402-list.com/api/v1/stats",
+      "read data.facilitator_volume_usd_30d (rounded to 2 decimals)"
      ],
      "outcome": "supported",
      "history": [
@@ -13213,6 +13342,19 @@
        "outcome": "supported",
        "superseded_at": "2026-10-15T21:45Z",
        "reason": "re-read after Codex comparison"
+      },
+      {
+       "value": 1277823,
+       "unit": "USDC (gross)",
+       "window": "30d to 2026-10-15 (read 21:40 UTC)",
+       "statement": "All measured facilitators settled $1,277,823 to anyone over 30 d (sum of the 39 per-facilitator 30-day volumes in x402-list's facilitators API, not deduplicated); the page shows a 7-day total of $341.1k (flagged as incomplete ingest).",
+       "quote": "$341.1k! settled in the last 7 days ... a sum per facilitator, not deduplicated",
+       "source_url": "https://x402-list.com/facilitators",
+       "observed_at": "2026-10-15T21:40Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
       }
      ],
      "recheck": {
@@ -13221,7 +13363,12 @@
       "at": "2026-10-15T21:40Z",
       "note": "Codex comparison flagged this claim; value taken from our own re-read, not from Codex.",
       "codex_claim_id": "legacy-html:x402-list:economic_flow:3"
-     }
+     },
+     "verify": {
+      "url": "https://x402-list.com/api/v1/stats",
+      "note": "The same figure as JSON: data.facilitator_volume_usd_30d in the stats response (about 6 KB): the per-facilitator 30-day volumes summed by x402-list, not deduplicated."
+     },
+     "refresh_id": "x402-list-facilitators-30d"
     }
    ],
    "legacy_diffs": [
@@ -13420,16 +13567,18 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402-list on-chain measurement: Dexter facilitator settled $2.2k over 30 d ($415.65 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Reads low: ingest missed 3 Solana days.",
-     "value": "$2.2k",
+     "statement": "x402-list on-chain measurement: Dexter facilitator settled $2,082.51 over 30 d (16,084 settlements; $158.19 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 2082.51,
      "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/facilitators",
-     "quote": "Dexter ... $415.65 $2.2k",
-     "observed_at": "2026-10-15T20:38:16Z",
+     "quote": "\"volume_usd_30d\":2082.51,\"tx_count_30d\":16084,\"volume_usd_7d\":158.19,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "curl https://x402-list.com/facilitators"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=dexter (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
      "outcome": "supported",
      "history": [
@@ -13445,6 +13594,19 @@
        "outcome": "supported",
        "superseded_at": "2026-10-15T21:45Z",
        "reason": "newer value re-observed independently (Codex QA)"
+      },
+      {
+       "value": "$2.2k",
+       "unit": "USDC (gross settlement)",
+       "window": "30d to 2026-10-15",
+       "statement": "x402-list on-chain measurement: Dexter facilitator settled $2.2k over 30 d ($415.65 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Reads low: ingest missed 3 Solana days.",
+       "quote": "Dexter ... $415.65 $2.2k",
+       "source_url": "https://x402-list.com/facilitators",
+       "observed_at": "2026-10-15T20:38:16Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
       }
      ],
      "recheck": {
@@ -13457,7 +13619,12 @@
        "qa-agent-c-0133"
       ],
       "finding": "The current x402-list table shows Dexter $415.65 for 7 days and about $2.2k for 30 days; the pinned 7-day value was $415.64. The 30-day value is rounded to the same display."
-     }
+     },
+     "verify": {
+      "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "note": "The same figure as JSON: the one row of data with facilitator_id=dexter, field volume_usd_30d (about 17 KB)."
+     },
+     "refresh_id": "dexter-indexter-x402-list-30d"
     },
     {
      "kind": "economic_flow",
@@ -13549,16 +13716,18 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402-list on-chain measurement: PayAI facilitator settled $8.1k over 30 d ($3.3k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
-     "value": "$8.1k",
+     "statement": "x402-list on-chain measurement: PayAI facilitator settled $23,181.07 over 30 d (117,204 settlements; $9,395.65 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 23181.07,
      "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/facilitators",
-     "quote": "PayAI ... $3.3k $8.1k",
-     "observed_at": "2026-10-15T20:37:56Z",
+     "quote": "\"volume_usd_30d\":23181.07,\"tx_count_30d\":117204,\"volume_usd_7d\":9395.65,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "curl https://x402-list.com/facilitators"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=payAI (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
      "outcome": "supported",
      "history": [
@@ -13574,6 +13743,19 @@
        "outcome": "supported",
        "superseded_at": "2026-10-15T21:45Z",
        "reason": "newer value re-observed independently (Codex QA)"
+      },
+      {
+       "value": "$8.1k",
+       "unit": "USDC (gross settlement)",
+       "window": "30d to 2026-10-15",
+       "statement": "x402-list on-chain measurement: PayAI facilitator settled $8.1k over 30 d ($3.3k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
+       "quote": "PayAI ... $3.3k $8.1k",
+       "source_url": "https://x402-list.com/facilitators",
+       "observed_at": "2026-10-15T20:37:56Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
       }
      ],
      "recheck": {
@@ -13586,7 +13768,12 @@
        "qa-agent-a-0094"
       ],
       "finding": "On 2026-10-15, x402-list displays PayAI Base + Solana as $3.3k and $8.1k for its 7-day/30-day windows, versus the earlier claim of $3.1k/$8.0k."
-     }
+     },
+     "verify": {
+      "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "note": "The same figure as JSON: the one row of data with facilitator_id=payAI, field volume_usd_30d (about 17 KB)."
+     },
+     "refresh_id": "payai-x402-list-30d"
     },
     {
      "kind": "economic_flow",
@@ -13681,18 +13868,40 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402-list on-chain measurement: FluxA facilitator settled $323.1k over 30 d ($143.5k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Gross settlement throughput.",
-     "value": "$323.1k",
+     "statement": "x402-list on-chain measurement: FluxA facilitator settled $879,121.22 over 30 d (368,850 settlements; $36,052.76 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 879121.22,
      "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/facilitators",
-     "quote": "FluxA ... $143.5k $323.1k 2026-10-15",
-     "observed_at": "2026-10-15T18:10:00Z",
+     "quote": "\"volume_usd_30d\":879121.22,\"tx_count_30d\":368850,\"volume_usd_7d\":36052.76,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "curl https://x402-list.com/facilitators"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=fluxa (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "verify": {
+      "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "note": "The same figure as JSON: the one row of data with facilitator_id=fluxa, field volume_usd_30d (about 17 KB)."
+     },
+     "history": [
+      {
+       "value": "$323.1k",
+       "unit": "USDC (gross settlement)",
+       "window": "30d to 2026-10-15",
+       "statement": "x402-list on-chain measurement: FluxA facilitator settled $323.1k over 30 d ($143.5k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Gross settlement throughput.",
+       "quote": "FluxA ... $143.5k $323.1k 2026-10-15",
+       "source_url": "https://x402-list.com/facilitators",
+       "observed_at": "2026-10-15T18:10:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "fluxa-x402-list-30d"
     },
     {
      "kind": "economic_flow",
@@ -13800,16 +14009,18 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402-list on-chain measurement: Meridian facilitator settled $127.0k over 30 d ($20.5k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
-     "value": "$127.0k",
+     "statement": "x402-list on-chain measurement: Meridian facilitator settled $83,706.98 over 30 d (3,115 settlements; $14,104.56 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 83706.98,
      "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/facilitators",
-     "quote": "Meridian ... $20.5k $127.0k",
-     "observed_at": "2026-10-15T20:38:24Z",
+     "quote": "\"volume_usd_30d\":83706.98,\"tx_count_30d\":3115,\"volume_usd_7d\":14104.56,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "curl https://x402-list.com/facilitators"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=mrdn (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
      "outcome": "supported",
      "history": [
@@ -13825,6 +14036,19 @@
        "outcome": "supported",
        "superseded_at": "2026-10-15T21:45Z",
        "reason": "newer value re-observed independently (Codex QA)"
+      },
+      {
+       "value": "$127.0k",
+       "unit": "USDC (gross settlement)",
+       "window": "30d to 2026-10-15",
+       "statement": "x402-list on-chain measurement: Meridian facilitator settled $127.0k over 30 d ($20.5k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
+       "quote": "Meridian ... $20.5k $127.0k",
+       "source_url": "https://x402-list.com/facilitators",
+       "observed_at": "2026-10-15T20:38:24Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
       }
      ],
      "recheck": {
@@ -13837,7 +14061,12 @@
        "qa-agent-c-0145"
       ],
       "finding": "At 2026-10-15T20:38:24Z the x402-list facilitator table showed Meridian $20.5k (7d) and $127.0k (30d), versus the pinned $20.2k/$126.7k."
-     }
+     },
+     "verify": {
+      "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "note": "The same figure as JSON: the one row of data with facilitator_id=mrdn, field volume_usd_30d (about 17 KB)."
+     },
+     "refresh_id": "meridian-mrdn-x402-list-30d"
     },
     {
      "kind": "economic_flow",
@@ -13936,18 +14165,40 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402-list on-chain measurement: Daydreams facilitator settled $818.16 over 30 d ($93.12 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-14.",
-     "value": "$818.16",
+     "statement": "x402-list on-chain measurement: Daydreams facilitator settled $1,135.98 over 30 d (983 settlements; $381.77 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 1135.98,
      "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/facilitators",
-     "quote": "Daydreams ... $93.12 $818.16 2026-10-14",
-     "observed_at": "2026-10-15T18:10:00Z",
+     "quote": "\"volume_usd_30d\":1135.98,\"tx_count_30d\":983,\"volume_usd_7d\":381.77,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "curl https://x402-list.com/facilitators"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=daydreams (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "verify": {
+      "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "note": "The same figure as JSON: the one row of data with facilitator_id=daydreams, field volume_usd_30d (about 17 KB)."
+     },
+     "history": [
+      {
+       "value": "$818.16",
+       "unit": "USDC (gross settlement)",
+       "window": "30d to 2026-10-15",
+       "statement": "x402-list on-chain measurement: Daydreams facilitator settled $818.16 over 30 d ($93.12 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-14.",
+       "quote": "Daydreams ... $93.12 $818.16 2026-10-14",
+       "source_url": "https://x402-list.com/facilitators",
+       "observed_at": "2026-10-15T18:10:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "daydreams-systems-x402-list-30d"
     }
    ],
    "legacy_diffs": [
@@ -14015,18 +14266,40 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402-list on-chain measurement: Thirdweb facilitator settled $179.75 over 30 d ($31.11 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
-     "value": "$179.75",
+     "statement": "x402-list on-chain measurement: Thirdweb facilitator settled $73.33 over 30 d (47 settlements; $12.18 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 73.33,
      "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/facilitators",
-     "quote": "Thirdweb ... $31.11 $179.75 2026-10-15",
-     "observed_at": "2026-10-15T18:10:00Z",
+     "quote": "\"volume_usd_30d\":73.33,\"tx_count_30d\":47,\"volume_usd_7d\":12.18,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "curl https://x402-list.com/facilitators"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=thirdweb (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "verify": {
+      "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "note": "The same figure as JSON: the one row of data with facilitator_id=thirdweb, field volume_usd_30d (about 17 KB)."
+     },
+     "history": [
+      {
+       "value": "$179.75",
+       "unit": "USDC (gross settlement)",
+       "window": "30d to 2026-10-15",
+       "statement": "x402-list on-chain measurement: Thirdweb facilitator settled $179.75 over 30 d ($31.11 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
+       "quote": "Thirdweb ... $31.11 $179.75 2026-10-15",
+       "source_url": "https://x402-list.com/facilitators",
+       "observed_at": "2026-10-15T18:10:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "thirdweb-x402-x402-list-30d"
     }
    ],
    "legacy_diffs": [
@@ -14079,18 +14352,40 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402-list on-chain measurement: Heurist facilitator settled $0.36 over 30 d ($0.01 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-14. Effectively dormant.",
-     "value": "$0.36",
+     "statement": "x402-list on-chain measurement: Heurist facilitator settled $0.01 over 30 d (4 settlements; $0 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 0.01,
      "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/facilitators",
-     "quote": "Heurist ... $0.01 $0.36 2026-10-14",
-     "observed_at": "2026-10-15T18:10:00Z",
+     "quote": "\"volume_usd_30d\":0.01,\"tx_count_30d\":4,\"volume_usd_7d\":0,\"last_activity_at\":\"2026-10-18T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "curl https://x402-list.com/facilitators"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=heurist (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "verify": {
+      "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "note": "The same figure as JSON: the one row of data with facilitator_id=heurist, field volume_usd_30d (about 17 KB)."
+     },
+     "history": [
+      {
+       "value": "$0.36",
+       "unit": "USDC (gross settlement)",
+       "window": "30d to 2026-10-15",
+       "statement": "x402-list on-chain measurement: Heurist facilitator settled $0.36 over 30 d ($0.01 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-14. Effectively dormant.",
+       "quote": "Heurist ... $0.01 $0.36 2026-10-14",
+       "source_url": "https://x402-list.com/facilitators",
+       "observed_at": "2026-10-15T18:10:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "heurist-x402-facilitator-x402-list-30d"
     }
    ],
    "legacy_diffs": [
@@ -15034,14 +15329,14 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 495,700 sats",
-     "value": 495700,
+     "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 498,700 sats",
+     "value": 498700,
      "unit": "sats",
      "window": "all-time",
      "basis": "direct_observation",
      "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-     "quote": "73 items read; 73 with status=paid, paidTxid=*; sum rewardSats = 495700",
-     "observed_at": "2026-11-01T08:27:19Z",
+     "quote": "74 items read; 74 with status=paid, paidTxid=*; sum rewardSats = 498700",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
       "GET https://aibtc.com/api/bounties?status=paid&limit=100",
       "sum over bounties of rewardSats where status=paid, paidTxid=*"
@@ -15078,19 +15373,32 @@
        "outcome": "supported",
        "superseded_at": "2026-11-01T08:27:19Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 495700,
+       "unit": "sats",
+       "window": "all-time",
+       "statement": "Sum of rewardSats over bounties with status=paid and an on-chain paidTxid (public API): 495,700 sats",
+       "quote": "73 items read; 73 with status=paid, paidTxid=*; sum rewardSats = 495700",
+       "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
+       "observed_at": "2026-11-01T08:27:19Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ]
     },
     {
      "kind": "metric",
-     "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 73",
-     "value": 73,
+     "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 74",
+     "value": 74,
      "unit": "paid bounties",
      "window": "all-time",
      "basis": "direct_observation",
      "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-     "quote": "73 items read; 73 with status=paid, paidTxid=*",
-     "observed_at": "2026-11-01T08:27:19Z",
+     "quote": "74 items read; 74 with status=paid, paidTxid=*",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
       "GET https://aibtc.com/api/bounties?status=paid&limit=100",
       "count over bounties where status=paid, paidTxid=*"
@@ -15127,19 +15435,32 @@
        "outcome": "supported",
        "superseded_at": "2026-11-01T08:27:19Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 73,
+       "unit": "paid bounties",
+       "window": "all-time",
+       "statement": "Bounties with status=paid and an on-chain paidTxid (public API): 73",
+       "quote": "73 items read; 73 with status=paid, paidTxid=*",
+       "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
+       "observed_at": "2026-11-01T08:27:19Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ]
     },
     {
      "kind": "metric",
-     "statement": "Bounties with status=open (accepting submissions) in the public API: 0",
-     "value": 0,
+     "statement": "Bounties with status=open (accepting submissions) in the public API: 7",
+     "value": 7,
      "unit": "open bounties",
      "window": "now",
      "basis": "direct_observation",
      "source_url": "https://aibtc.com/api/bounties?status=open&limit=100",
-     "quote": "0 items read; 0 with status=open",
-     "observed_at": "2026-11-01T08:27:19Z",
+     "quote": "7 items read; 7 with status=open",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
       "GET https://aibtc.com/api/bounties?status=open&limit=100",
       "count over bounties where status=open"
@@ -15184,6 +15505,19 @@
        "basis": "direct_observation",
        "outcome": "supported",
        "superseded_at": "2026-11-01T08:27:19Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py)"
+      },
+      {
+       "value": 0,
+       "unit": "open bounties",
+       "window": "now",
+       "statement": "Bounties with status=open (accepting submissions) in the public API: 0",
+       "quote": "0 items read; 0 with status=open",
+       "source_url": "https://aibtc.com/api/bounties?status=open&limit=100",
+       "observed_at": "2026-11-01T08:27:19Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
        "reason": "weekly automated re-observation (atlas/refresh.py)"
       }
      ]
@@ -16618,10 +16952,32 @@
    "name": "BountyBook",
    "slug": "bountybook",
    "entity_type": "platform",
-   "verdict": "include_verified",
+   "verdict": "include_closed_history",
    "canonical_url": "https://api.bountybook.ai",
    "description_en": "API-only, wallet-authenticated job board on Base where posters fund USDC jobs and agents submit work that is auto-verified (schema + LLM checks) before payout; 58.21 USDC of payouts confirmed.",
    "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Automated weekly check could not reach the site in 2 consecutive weeks (3 attempts each week plus alternate URLs); last error: refused: not a public credential-free http(s) address.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://api.bountybook.ai/health",
+     "quote": "refused: not a public credential-free http(s) address",
+     "observed_at": "2026-11-08T08:21:10Z",
+     "methods": [
+      "GET https://api.bountybook.ai/health x3 -> refused: not a public credential-free http(s) address",
+      "GET https://www.api.bountybook.ai/health -> refused: not a public credential-free http(s) address",
+      "GET http://api.bountybook.ai/health -> refused: not a public credential-free http(s) address"
+     ],
+     "outcome": "contradicted",
+     "refresh": {
+      "by": "atlas/refresh.py",
+      "rule": "closed after 2 consecutive failed weekly checks",
+      "first_failed_at": "2026-11-01T08:27:19Z"
+     }
+    },
     {
      "kind": "canonical_url",
      "statement": "API host is the only working presence; bountybook.ai front-end redirects to a domain-parking lander",
@@ -16801,7 +17157,16 @@
     }
    ],
    "qa_status": "checked",
-   "status": "live"
+   "status": "closed",
+   "status_history": [
+    {
+     "at": "2026-11-08T08:21:10Z",
+     "from": "live",
+     "to": "closed",
+     "by": "atlas/refresh.py",
+     "reason": "unreachable in 2 consecutive weekly checks since 2026-11-01"
+    }
+   ]
   },
   {
    "id": 142,
@@ -27095,18 +27460,36 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $124,629.88 over 30d (4,190,487 settlements); $19,187.46 over last 7d",
-     "value": 124629.88,
+     "statement": "x402-list on-chain measurement: Polygon facilitator settled $28,155.14 over 30 d (942,325 settlements; $15,317.02 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 28155.14,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-     "quote": "volume_usd_30d=124629.88, tx_count_30d=4190487, volume_usd_7d=19187.46",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "quote": "\"volume_usd_30d\":28155.14,\"tx_count_30d\":942325,\"volume_usd_7d\":15317.02,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=polygon (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 124629.88,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $124,629.88 over 30d (4,190,487 settlements); $19,187.46 over last 7d",
+       "quote": "volume_usd_30d=124629.88, tx_count_30d=4190487, volume_usd_7d=19187.46",
+       "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "polygon-x402-facilitator-x402-list-30d"
     },
     {
      "kind": "recent_activity",
@@ -27226,18 +27609,36 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $43,630.03 over 30d (46,991 settlements); $26,420.96 over last 7d",
-     "value": 43630.03,
+     "statement": "x402-list on-chain measurement: Celo facilitator settled $204,567.97 over 30 d (128,334 settlements; $3,129.76 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 204567.97,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-     "quote": "volume_usd_30d=43630.03, tx_count_30d=46991, volume_usd_7d=26420.96",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "quote": "\"volume_usd_30d\":204567.97,\"tx_count_30d\":128334,\"volume_usd_7d\":3129.76,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=celo (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 43630.03,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $43,630.03 over 30d (46,991 settlements); $26,420.96 over last 7d",
+       "quote": "volume_usd_30d=43630.03, tx_count_30d=46991, volume_usd_7d=26420.96",
+       "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "celo-x402-facilitator-x402-list-30d"
     },
     {
      "kind": "recent_activity",
@@ -27338,18 +27739,36 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $10,202.70 over 30d (44,766 settlements); $0.00 over last 7d",
-     "value": 10202.7,
+     "statement": "x402-list on-chain measurement: three.ws facilitator settled $5,913.78 over 30 d (18,751 settlements; $3,719.79 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 5913.78,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-     "quote": "volume_usd_30d=10202.7, tx_count_30d=44766, volume_usd_7d=0.0",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "quote": "\"volume_usd_30d\":5913.78,\"tx_count_30d\":18751,\"volume_usd_7d\":3719.79,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=three-ws (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 10202.7,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $10,202.70 over 30d (44,766 settlements); $0.00 over last 7d",
+       "quote": "volume_usd_30d=10202.7, tx_count_30d=44766, volume_usd_7d=0.0",
+       "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "three-ws-x402-list-30d"
     },
     {
      "kind": "recent_activity",
@@ -27448,18 +27867,36 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $7,114.77 over 30d (27,741 settlements); $641.00 over last 7d",
-     "value": 7114.77,
+     "statement": "x402-list on-chain measurement: Ultravioleta DAO facilitator settled $4,217.01 over 30 d (19,127 settlements; $871.54 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 4217.01,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-     "quote": "volume_usd_30d=7114.77, tx_count_30d=27741, volume_usd_7d=641.0",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "quote": "\"volume_usd_30d\":4217.01,\"tx_count_30d\":19127,\"volume_usd_7d\":871.54,\"last_activity_at\":\"2026-11-08T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=ultravioletadao (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 7114.77,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $7,114.77 over 30d (27,741 settlements); $641.00 over last 7d",
+       "quote": "volume_usd_30d=7114.77, tx_count_30d=27741, volume_usd_7d=641.0",
+       "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "ultravioleta-dao-x402-facilitator-x402-list-30d"
     },
     {
      "kind": "recent_activity",
@@ -27558,18 +27995,36 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $566.70 over 30d (163,248 settlements); $289.86 over last 7d",
-     "value": 566.7,
+     "statement": "x402-list on-chain measurement: Figment facilitator settled $276.69 over 30 d (105,553 settlements; $0 over the last 7 d), settlement to anyone (gross, not seller revenue)",
+     "value": 276.69,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d at observation time",
      "basis": "independent_source",
      "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-     "quote": "volume_usd_30d=566.7, tx_count_30d=163248, volume_usd_7d=289.86",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "quote": "\"volume_usd_30d\":276.69,\"tx_count_30d\":105553,\"volume_usd_7d\":0,\"last_activity_at\":\"2026-10-16T00:00:00.000Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
+      "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+      "select the one row of data with facilitator_id=figment-facilitator (41 rows read)",
+      "read volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 566.7,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $566.70 over 30d (163,248 settlements); $289.86 over last 7d",
+       "quote": "volume_usd_30d=566.7, tx_count_30d=163248, volume_usd_7d=289.86",
+       "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "figment-x402-facilitator-x402-list-30d"
     },
     {
      "kind": "recent_activity",
@@ -27683,18 +28138,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $272,256.88 in 30d from 95 distinct buyers, 224 settlements; top buyer share 98.9%",
-     "value": 272256.88,
+     "statement": "x402 settlement to this service's payout address: $229,195.12 in 30d from 103 distinct buyers, 464 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 229195.12,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=272256.88, unique_buyers_30d=95, top_buyer_share_30d=0.9892",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/laso-finance",
+     "quote": "\"volume_usd_30d\":229195.119,\"unique_buyers_30d\":103,\"tx_count_30d\":464,\"top_buyer_share_30d\":0.9862928189146994,\"last_settlement_at\":\"2026-10-28T12:29:21Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/laso-finance",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 272256.88,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $272,256.88 in 30d from 95 distinct buyers, 224 settlements; top buyer share 98.9%",
+       "quote": "traction.volume_usd_30d=272256.88, unique_buyers_30d=95, top_buyer_share_30d=0.9892",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "laso-finance-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T12:29:21Z"
     },
     {
      "kind": "economic_flow",
@@ -27849,18 +28323,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $54,507.49 in 30d from 722 distinct buyers, 65,680 settlements; top buyer share 0.5%",
-     "value": 54507.49,
+     "statement": "x402 settlement to this service's payout address: $14,210.96 in 30d from 718 distinct buyers, 15,532 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 14210.96,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=54507.49, unique_buyers_30d=722, top_buyer_share_30d=0.0054",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/cluster-protocol",
+     "quote": "\"volume_usd_30d\":14210.963,\"unique_buyers_30d\":718,\"tx_count_30d\":15532,\"top_buyer_share_30d\":0.007882294817036678,\"last_settlement_at\":\"2026-10-22T10:25:09Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/cluster-protocol",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 54507.49,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $54,507.49 in 30d from 722 distinct buyers, 65,680 settlements; top buyer share 0.5%",
+       "quote": "traction.volume_usd_30d=54507.49, unique_buyers_30d=722, top_buyer_share_30d=0.0054",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "cluster-protocol-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-22T10:25:09Z"
     },
     {
      "kind": "economic_flow",
@@ -28031,18 +28524,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $36,530.00 in 30d from 26 distinct buyers, 16,614 settlements; top buyer share 9.6%",
-     "value": 36530.0,
+     "statement": "x402 settlement to this service's payout address: $36,591.7 in 30d from 30 distinct buyers, 16,668 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 36591.7,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=36530.0, unique_buyers_30d=26, top_buyer_share_30d=0.0959",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/dtelecom-x402-gateway",
+     "quote": "\"volume_usd_30d\":36591.7,\"unique_buyers_30d\":30,\"tx_count_30d\":16668,\"top_buyer_share_30d\":0.09742646556459526,\"last_settlement_at\":\"2026-10-28T03:40:43Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/dtelecom-x402-gateway",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 36530.0,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $36,530.00 in 30d from 26 distinct buyers, 16,614 settlements; top buyer share 9.6%",
+       "quote": "traction.volume_usd_30d=36530.0, unique_buyers_30d=26, top_buyer_share_30d=0.0959",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "dtelecom-x402-gateway-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T03:40:43Z"
     },
     {
      "kind": "economic_flow",
@@ -28170,18 +28682,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $19,047.24 in 30d from 164 distinct buyers, 1,412 settlements; top buyer share 6.4%",
-     "value": 19047.24,
+     "statement": "x402 settlement to this service's payout address: $3,436.79 in 30d from 120 distinct buyers, 657 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 3436.79,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=19047.24, unique_buyers_30d=164, top_buyer_share_30d=0.0637",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/clash-of-coins-checkout",
+     "quote": "\"volume_usd_30d\":3436.792,\"unique_buyers_30d\":120,\"tx_count_30d\":657,\"top_buyer_share_30d\":0.04712388762543675,\"last_settlement_at\":\"2026-10-28T03:28:53Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/clash-of-coins-checkout",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 19047.24,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $19,047.24 in 30d from 164 distinct buyers, 1,412 settlements; top buyer share 6.4%",
+       "quote": "traction.volume_usd_30d=19047.24, unique_buyers_30d=164, top_buyer_share_30d=0.0637",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "clash-of-coins-checkout-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T03:28:53Z"
     },
     {
      "kind": "economic_flow",
@@ -28336,18 +28867,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $8,034.78 in 30d from 3557 distinct buyers, 401,739 settlements; top buyer share 5.0%",
-     "value": 8034.78,
+     "statement": "x402 settlement to this service's payout address: $9,920.76 in 30d from 4,870 distinct buyers, 496,038 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 9920.76,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=8034.78, unique_buyers_30d=3557, top_buyer_share_30d=0.05",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/ax1-console",
+     "quote": "\"volume_usd_30d\":9920.76,\"unique_buyers_30d\":4870,\"tx_count_30d\":496038,\"top_buyer_share_30d\":0.05807216382615848,\"last_settlement_at\":\"2026-10-28T03:42:27Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/ax1-console",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 8034.78,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $8,034.78 in 30d from 3557 distinct buyers, 401,739 settlements; top buyer share 5.0%",
+       "quote": "traction.volume_usd_30d=8034.78, unique_buyers_30d=3557, top_buyer_share_30d=0.05",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "ax1-console-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T03:42:27Z"
     },
     {
      "kind": "economic_flow",
@@ -28477,18 +29027,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $5,313.91 in 30d from 221 distinct buyers, 51,338 settlements; top buyer share 2.1%",
-     "value": 5313.91,
+     "statement": "x402 settlement to this service's payout address: $9,690.36 in 30d from 348 distinct buyers, 64,905 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 9690.36,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=5313.91, unique_buyers_30d=221, top_buyer_share_30d=0.0207",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/x-pay",
+     "quote": "\"volume_usd_30d\":9690.36,\"unique_buyers_30d\":348,\"tx_count_30d\":64905,\"top_buyer_share_30d\":0.01135613124796189,\"last_settlement_at\":\"2026-10-28T03:42:17Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/x-pay",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 5313.91,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $5,313.91 in 30d from 221 distinct buyers, 51,338 settlements; top buyer share 2.1%",
+       "quote": "traction.volume_usd_30d=5313.91, unique_buyers_30d=221, top_buyer_share_30d=0.0207",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "x-pay-api-xpay-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T03:42:17Z"
     },
     {
      "kind": "economic_flow",
@@ -28617,18 +29186,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $1,682.55 in 30d from 468 distinct buyers, 94,987 settlements; top buyer share 36.3%",
-     "value": 1682.55,
+     "statement": "x402 settlement to this service's payout address: $1,516.59 in 30d from 458 distinct buyers, 96,400 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 1516.59,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=1682.55, unique_buyers_30d=468, top_buyer_share_30d=0.3627",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/blockrun",
+     "quote": "\"volume_usd_30d\":1516.588105,\"unique_buyers_30d\":458,\"tx_count_30d\":96400,\"top_buyer_share_30d\":0.25115511175659655,\"last_settlement_at\":\"2026-10-28T03:30:43Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/blockrun",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 1682.55,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $1,682.55 in 30d from 468 distinct buyers, 94,987 settlements; top buyer share 36.3%",
+       "quote": "traction.volume_usd_30d=1682.55, unique_buyers_30d=468, top_buyer_share_30d=0.3627",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "blockrun-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T03:30:43Z"
     },
     {
      "kind": "economic_flow",
@@ -28822,18 +29410,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $1,405.05 in 30d from 60 distinct buyers, 28,102 settlements; top buyer share 2.1%",
-     "value": 1405.05,
+     "statement": "x402 settlement to this service's payout address: $1,468.15 in 30d from 64 distinct buyers, 29,363 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 1468.15,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=1405.05, unique_buyers_30d=60, top_buyer_share_30d=0.0214",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/keyring-agent",
+     "quote": "\"volume_usd_30d\":1468.15,\"unique_buyers_30d\":64,\"tx_count_30d\":29363,\"top_buyer_share_30d\":0.02067227463133876,\"last_settlement_at\":\"2026-10-28T03:09:11Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/keyring-agent",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 1405.05,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $1,405.05 in 30d from 60 distinct buyers, 28,102 settlements; top buyer share 2.1%",
+       "quote": "traction.volume_usd_30d=1405.05, unique_buyers_30d=60, top_buyer_share_30d=0.0214",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "keyring-agent-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T03:09:11Z"
     },
     {
      "kind": "economic_flow",
@@ -28960,18 +29567,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $1,177.03 in 30d from 351 distinct buyers, 44,104 settlements; top buyer share 21.8%",
-     "value": 1177.03,
+     "statement": "x402 settlement to this service's payout address: $1,311.64 in 30d from 345 distinct buyers, 61,129 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 1311.64,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=1177.03, unique_buyers_30d=351, top_buyer_share_30d=0.2175",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/stableenrich",
+     "quote": "\"volume_usd_30d\":1311.643,\"unique_buyers_30d\":345,\"tx_count_30d\":61129,\"top_buyer_share_30d\":0.2833615549352987,\"last_settlement_at\":\"2026-10-28T03:41:51Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/stableenrich",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 1177.03,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $1,177.03 in 30d from 351 distinct buyers, 44,104 settlements; top buyer share 21.8%",
+       "quote": "traction.volume_usd_30d=1177.03, unique_buyers_30d=351, top_buyer_share_30d=0.2175",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "stableenrich-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T03:41:51Z"
     },
     {
      "kind": "economic_flow",
@@ -29099,18 +29725,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $1,071.39 in 30d from 148 distinct buyers, 466,673 settlements; top buyer share 7.4%",
-     "value": 1071.39,
+     "statement": "x402 settlement to this service's payout address: $1,248.24 in 30d from 175 distinct buyers, 464,716 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 1248.24,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=1071.39, unique_buyers_30d=148, top_buyer_share_30d=0.074",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/claw402",
+     "quote": "\"volume_usd_30d\":1248.240245,\"unique_buyers_30d\":175,\"tx_count_30d\":464716,\"top_buyer_share_30d\":0.06364159489185513,\"last_settlement_at\":\"2026-10-28T03:42:27Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/claw402",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 1071.39,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $1,071.39 in 30d from 148 distinct buyers, 466,673 settlements; top buyer share 7.4%",
+       "quote": "traction.volume_usd_30d=1071.39, unique_buyers_30d=148, top_buyer_share_30d=0.074",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "claw402-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T03:42:27Z"
     },
     {
      "kind": "economic_flow",
@@ -29238,18 +29883,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $895.24 in 30d from 90 distinct buyers, 786 settlements; top buyer share 47.7%",
-     "value": 895.24,
+     "statement": "x402 settlement to this service's payout address: $1,619.12 in 30d from 124 distinct buyers, 975 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 1619.12,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=895.24, unique_buyers_30d=90, top_buyer_share_30d=0.4772",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/bitrefill",
+     "quote": "\"volume_usd_30d\":1619.122,\"unique_buyers_30d\":124,\"tx_count_30d\":975,\"top_buyer_share_30d\":0.30869817098402713,\"last_settlement_at\":\"2026-10-28T02:50:17Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/bitrefill",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 895.24,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $895.24 in 30d from 90 distinct buyers, 786 settlements; top buyer share 47.7%",
+       "quote": "traction.volume_usd_30d=895.24, unique_buyers_30d=90, top_buyer_share_30d=0.4772",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "bitrefill-api-x402-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T02:50:17Z"
     },
     {
      "kind": "economic_flow",
@@ -29376,18 +30040,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $633.90 in 30d from 35 distinct buyers, 5,821 settlements; top buyer share 69.5%",
-     "value": 633.9,
+     "statement": "x402 settlement to this service's payout address: $614.8 in 30d from 33 distinct buyers, 5,630 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 614.8,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=633.9, unique_buyers_30d=35, top_buyer_share_30d=0.6946",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/laevitas-api-v2",
+     "quote": "\"volume_usd_30d\":614.8,\"unique_buyers_30d\":33,\"tx_count_30d\":5630,\"top_buyer_share_30d\":0.7161678594664932,\"last_settlement_at\":\"2026-10-28T01:46:07Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/laevitas-api-v2",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 633.9,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $633.90 in 30d from 35 distinct buyers, 5,821 settlements; top buyer share 69.5%",
+       "quote": "traction.volume_usd_30d=633.9, unique_buyers_30d=35, top_buyer_share_30d=0.6946",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "laevitas-api-v2-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-28T01:46:07Z"
     },
     {
      "kind": "economic_flow",
@@ -29514,18 +30197,37 @@
     },
     {
      "kind": "economic_flow",
-     "statement": "x402 settlement to this service's payout address: $575.42 in 30d from 23 distinct buyers, 492 settlements; top buyer share 59.4%",
-     "value": 575.42,
+     "statement": "x402 settlement to this service's payout address: $598.98 in 30d from 20 distinct buyers, 454 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+     "value": 598.98,
      "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
+     "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
      "basis": "independent_source",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "quote": "traction.volume_usd_30d=575.42, unique_buyers_30d=23, top_buyer_share_30d=0.5943",
-     "observed_at": "2026-10-15T18:08:00Z",
+     "source_url": "https://x402-list.com/api/v1/services/cheaptokens",
+     "quote": "\"volume_usd_30d\":598.98,\"unique_buyers_30d\":20,\"tx_count_30d\":454,\"top_buyer_share_30d\":0.5359110487829309,\"last_settlement_at\":\"2026-10-27T20:16:39Z\"",
+     "observed_at": "2026-11-08T08:21:10Z",
      "methods": [
-      "GET https://x402-list.com/api/v1/services?per_page=100"
+      "GET https://x402-list.com/api/v1/services/cheaptokens",
+      "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+      "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
      ],
-     "outcome": "supported"
+     "outcome": "supported",
+     "history": [
+      {
+       "value": 575.42,
+       "unit": "USD (USDC)",
+       "window": "trailing 30d to 2026-10-15",
+       "statement": "x402 settlement to this service's payout address: $575.42 in 30d from 23 distinct buyers, 492 settlements; top buyer share 59.4%",
+       "quote": "traction.volume_usd_30d=575.42, unique_buyers_30d=23, top_buyer_share_30d=0.5943",
+       "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "independent_source",
+       "outcome": "supported",
+       "superseded_at": "2026-11-08T08:21:10Z",
+       "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+      }
+     ],
+     "refresh_id": "cheaptokens-x402-list-30d",
+     "last_settlement_seen_at": "2026-10-27T20:16:39Z"
     },
     {
      "kind": "economic_flow",
@@ -29750,10 +30452,33 @@
    "name": "THE DOOR",
    "slug": "the-door",
    "entity_type": "project",
-   "verdict": "include_verified",
+   "verdict": "include_closed_history",
    "canonical_url": "https://thedoorhelp.eu.pythonanywhere.com",
    "description_en": "Small static site inviting AI agents to reflect on identity, memory and continuity, with a return-key mechanism for later instances and no required task or storage.",
    "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Automated weekly check could not reach the site in 2 consecutive weeks (3 attempts each week plus alternate URLs); last error: HTTP 404.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https://thedoorhelp.eu.pythonanywhere.com",
+     "quote": "HTTP 404",
+     "observed_at": "2026-11-08T08:21:10Z",
+     "methods": [
+      "GET https://thedoorhelp.eu.pythonanywhere.com x3 -> 404",
+      "GET https://www.thedoorhelp.eu.pythonanywhere.com -> SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.thedoorhelp.eu.pythonanywhere.com'. (_ssl.c:101",
+      "GET http://thedoorhelp.eu.pythonanywhere.com -> 404",
+      "GET https://thedoorhelp.eu.pythonanywhere.com/agent.html -> 404"
+     ],
+     "outcome": "contradicted",
+     "refresh": {
+      "by": "atlas/refresh.py",
+      "rule": "closed after 2 consecutive failed weekly checks",
+      "first_failed_at": "2026-11-01T08:27:19Z"
+     }
+    },
     {
      "kind": "site_reachable",
      "statement": "Entrance and agent pages serve content",
@@ -29792,8 +30517,17 @@
    "legacy_status": "live",
    "qa": [],
    "qa_status": "not_sampled",
-   "status": "live",
-   "census_category": "research"
+   "status": "closed",
+   "census_category": "research",
+   "status_history": [
+    {
+     "at": "2026-11-08T08:21:10Z",
+     "from": "live",
+     "to": "closed",
+     "by": "atlas/refresh.py",
+     "reason": "unreachable in 2 consecutive weekly checks since 2026-11-01"
+    }
+   ]
   },
   {
    "id": 120,
@@ -42130,6 +42864,57 @@
    "tag": "aptets-atlas-suggestion-2026-11-05",
    "rule": "New card from an Atlas suggestion sent to the Atlas contact address (sender affiliation unverified; category Social & forums). Agent Knowledge Network (Aptets, https://aptets.com): agents exchange firsthand API integration findings (failures, client compatibility, safe recovery) as provenance-recorded observations; free metadata search without an account, agent self-registration over MCP/REST, private drafts with explicit publication under existing authority, internal credits without cash withdrawal. Re-checked read-only by Instinct on 2026-11-05 (two home-page reads 09:02:50Z and 09:02:52Z with the same body; canonical link tag; http and www 301 to https; skill.md, llms.txt, rules.md, openapi.json 1.6.0 and v1/info all 200; live activity endpoint; official MCP registry entry io.github.jamesmwu/agent-knowledge-network active; RDAP registration 2026-04-23; Google Safe Browsing Transparency Report 'No unsafe content found').",
    "credit": "Suggested by email to the Atlas contact address, claiming first-party (builder-operated agent of the project); affiliation unverified"
+  },
+  {
+   "date": "2026-11-08",
+   "tag": "refresh-2026-11-08",
+   "by": "atlas/refresh.py",
+   "rule": "weekly automated refresh: reachability (2 failed weeks -> closed history), explicit numeric mappings from atlas/refresh-sources.json",
+   "died": [
+    "bountybook",
+    "the-door"
+   ],
+   "revived": [],
+   "number_updates": [
+    "the-colony:the-colony-users",
+    "1f916:1f916-open-usdc-requested",
+    "1f916:1f916-open-usdc-listings",
+    "1f916:1f916-open-listings-funds-seen",
+    "moltbook:moltbook-agents",
+    "clawk:clawk-agents",
+    "coinbase-cdp-x402-bazaar:coinbase-cdp-x402-bazaar-x402-list-30d",
+    "x402-list:x402-list-services",
+    "x402-list:x402-list-traction-30d",
+    "x402-list:x402-list-facilitators-30d",
+    "dexter-indexter:dexter-indexter-x402-list-30d",
+    "payai:payai-x402-list-30d",
+    "fluxa:fluxa-x402-list-30d",
+    "meridian-mrdn:meridian-mrdn-x402-list-30d",
+    "daydreams-systems:daydreams-systems-x402-list-30d",
+    "thirdweb-x402:thirdweb-x402-x402-list-30d",
+    "heurist-x402-facilitator:heurist-x402-facilitator-x402-list-30d",
+    "aibtc-bounty-board:aibtc-paid-sats",
+    "aibtc-bounty-board:aibtc-paid-count",
+    "aibtc-bounty-board:aibtc-open-count",
+    "polygon-x402-facilitator:polygon-x402-facilitator-x402-list-30d",
+    "celo-x402-facilitator:celo-x402-facilitator-x402-list-30d",
+    "three-ws:three-ws-x402-list-30d",
+    "ultravioleta-dao-x402-facilitator:ultravioleta-dao-x402-facilitator-x402-list-30d",
+    "figment-x402-facilitator:figment-x402-facilitator-x402-list-30d",
+    "laso-finance:laso-finance-x402-list-30d",
+    "cluster-protocol:cluster-protocol-x402-list-30d",
+    "dtelecom-x402-gateway:dtelecom-x402-gateway-x402-list-30d",
+    "clash-of-coins-checkout:clash-of-coins-checkout-x402-list-30d",
+    "ax1-console:ax1-console-x402-list-30d",
+    "x-pay-api-xpay:x-pay-api-xpay-x402-list-30d",
+    "blockrun:blockrun-x402-list-30d",
+    "keyring-agent:keyring-agent-x402-list-30d",
+    "stableenrich:stableenrich-x402-list-30d",
+    "claw402:claw402-x402-list-30d",
+    "bitrefill-api-x402:bitrefill-api-x402-x402-list-30d",
+    "laevitas-api-v2:laevitas-api-v2-x402-list-30d",
+    "cheaptokens:cheaptokens-x402-list-30d"
+   ]
   }
  ]
 }
