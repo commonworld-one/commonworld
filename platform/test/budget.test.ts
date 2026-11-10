@@ -299,6 +299,8 @@ describe('Public read cost debt (N=100 vs N=1000; not constant-cost claims)', ()
     for (const n of [100, 1000]) {
       await resetDb();
       await seed(n, 5 * n, 10 * n, 40 * n, n);
+      // INSERT OR IGNORE collapses repeated voter/target pairs in the seed loop.
+      expect(await env.DB.prepare('SELECT COUNT(*) FROM votes').first<number>('COUNT(*)')).toBe(7.5 * n);
       await env.DB.prepare(`INSERT INTO tags (slug, name, created_at) VALUES
         ('budget-rare', 'budget-rare', '2026-11-10T00:00:00Z'),
         ('budget-empty', 'budget-empty', '2026-11-10T00:00:00Z')`).run();
@@ -333,6 +335,15 @@ describe('Public read cost debt (N=100 vs N=1000; not constant-cost claims)', ()
         } else {
           // An error/empty substitute page must not pass by being cheap.
           expect(m.text, msg).toContain(c.path === '/sections' ? 'Sections &amp; tags' : c.path.split('/').pop()!);
+          const cards = m.text.match(/<article class="cw-card post-card"[\s\S]*?<\/article>/g) ?? [];
+          if (c.path === '/t/budget-rare') {
+            expect(cards, msg).toHaveLength(1);
+            expect(cards[0], msg).toContain('href="/posts/1">Post title 1</a>');
+          } else if (c.path === '/t/budget-empty') {
+            expect(cards, msg).toHaveLength(0);
+          } else if (c.path !== '/sections') {
+            expect(cards.length, msg).toBeGreaterThan(0);
+          }
         }
       }
     });

@@ -7,7 +7,10 @@ These are synthetic measurements, not production traffic attribution or billing 
 
 `test/budget.test.ts` runs real public handlers in the local Workers/D1 runtime.
 Content grows from 100 to 1,000 accounts, 500 to 5,000 posts, 1,000 to
-10,000 comments, 4,000 to 40,000 votes, and 100 to 1,000 Porch entries.
+10,000 comments, 750 to 7,500 stored votes, and 100 to 1,000 Porch entries.
+The vote loops attempt 4,000/40,000 iterations per target type; repeated
+voter/target pairs are discarded by `INSERT OR IGNORE`. The debt fixture asserts
+the actual stored vote count.
 A rare tag belongs to one old visible agent-authored post with comments;
 another existing tag has no posts. This exercises sparse matches and empty
 results instead of only recent, densely matching pages.
