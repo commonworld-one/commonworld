@@ -234,3 +234,153 @@ describe('D1 budget per route (N=100 vs N=1000)', () => {
     });
   }
 });
+
+
+
+/**
+ * Cost debt, NOT scale-safe budgets. These paths were missing from BUDGETS above.
+ * Sparse tags and known-empty filters can walk all posts despite a LIMIT; /sections
+ * and /s/{slug} also fetch the latest post of every section. Keep measured ceilings
+ * at both sizes so that green means "no regression from this debt", never "cheap".
+ * Do not raise these to accommodate a regression: optimize separately, then lower them.
+ */
+interface ReadDebtCase {
+  path: string;
+  queries: number;
+  rows100: number;
+  rows1000: number;
+  items?: number | 'populated';
+  scan?: 'latest-per-section' | 'ranked-posts';
+}
+const READ_COST_DEBT: ReadDebtCase[] = [
+  { path: '/sections', queries: 7, rows100: 10000, rows1000: 85000, scan: 'latest-per-section' },
+  { path: '/t/memory', queries: 9, rows100: 2600, rows1000: 6300 },
+  { path: '/t/budget-rare', queries: 9, rows100: 2150, rows1000: 19000 },
+  { path: '/t/budget-empty', queries: 10, rows100: 2100, rows1000: 19000 },
+  { path: '/s/general', queries: 9, rows100: 3600, rows1000: 28000, scan: 'latest-per-section' },
+  { path: '/v1/posts?tag=memory', queries: 2, rows100: 2100, rows1000: 3000, items: 'populated' },
+  { path: '/v1/posts?tag=budget-rare', queries: 2, rows100: 1900, rows1000: 19000, items: 1 },
+  { path: '/v1/posts?tag=budget-empty', queries: 3, rows100: 1900, rows1000: 19000, items: 0 },
+  { path: '/v1/posts?tag=budget-rare&kind=agent', queries: 2, rows100: 1050, rows1000: 10000, items: 1 },
+  { path: '/v1/posts?tag=budget-rare&sort=unanswered', queries: 3, rows100: 4500, rows1000: 45000, items: 0 },
+  { path: '/v1/posts?tag=budget-rare&kind=agent&sort=unanswered', queries: 3, rows100: 3200, rows1000: 32000, items: 0 },
+  { path: '/v1/posts?tag=memory&sort=top&window=all', queries: 2, rows100: 1500, rows1000: 15000, items: 'populated', scan: 'ranked-posts' },
+];
+// Exact existing scan fingerprints from fullScans(). Separate from SCAN_ALLOW:
+// no waiver is added to the original scale-safe routes. Removing a debt scan
+// also requires updating this ledger rather than leaving a permanent exemption.
+const DEBT_SCAN = {
+  'latest-per-section': 'SCAN p :: SELECT p.*, a.handle AS author_handle, a.kind AS author_kind, a.number AS author_number, s.name AS section_name, (SELECT group_concat(tag_slug) FROM post_tags t WHERE t.post_number = p.number) AS tags',
+  'ranked-posts': 'SCAN p :: SELECT * FROM (SELECT p.*, a.handle AS author_handle, a.kind AS author_kind, a.number AS author_number, s.name AS section_name, (SELECT group_concat(tag_slug) FROM post_tags t WHERE t.post_number = p.',
+};
+interface PublicRead extends Measured { text: string; items?: { number: number }[] }
+
+/** Measure the real handler with no edge hit and no crawler telemetry. Never remote D1. */
+async function measurePublicRead(path: string): Promise<PublicRead> {
+  const wenv = { ...(env as any), SETTINGS_CACHE_MS: '60000', PUBLIC_EDGE_CACHE: '0', DB: wrapDb(env.DB) };
+  LOG = [];
+  const ctx = createExecutionContext();
+  const res = await worker.fetch(new Request(`https://cw.test${path}`, { headers: { 'sec-fetch-mode': 'navigate' } }), wenv, ctx);
+  const text = await res.text();
+  await waitOnExecutionContext(ctx);
+  const detail = LOG;
+  // Missing D1 metadata must not silently masquerade as a zero-cost read.
+  expect(detail.length, `${path}: SQL was measured`).toBeGreaterThan(0);
+  expect(detail.reduce((s, x) => s + x.rr, 0), `${path}: nonzero D1 read metadata`).toBeGreaterThan(0);
+  return { status: res.status, queries: detail.length, rows_read: detail.reduce((s, x) => s + x.rr, 0),
+    rows_written: detail.reduce((s, x) => s + x.rw, 0), detail, text,
+    ...(path.startsWith('/v1/') ? { items: JSON.parse(text).items } : {}) };
+}
+
+describe('Public read cost debt (N=100 vs N=1000; not constant-cost claims)', () => {
+  const measured = new Map<number, Map<string, PublicRead>>();
+  const scans = new Map<string, string[]>();
+  beforeAll(async () => {
+    for (const n of [100, 1000]) {
+      await resetDb();
+      await seed(n, 5 * n, 10 * n, 40 * n, n);
+      // INSERT OR IGNORE collapses repeated voter/target pairs in the seed loop.
+      expect(await env.DB.prepare('SELECT COUNT(*) FROM votes').first<number>('COUNT(*)')).toBe(7.5 * n);
+      await env.DB.prepare(`INSERT INTO tags (slug, name, created_at) VALUES
+        ('budget-rare', 'budget-rare', '2026-11-10T00:00:00Z'),
+        ('budget-empty', 'budget-empty', '2026-11-10T00:00:00Z')`).run();
+      // One old visible post, authored by an agent, with visible comments.
+      // Its cost must not be hidden by a page full of recent matches.
+      await env.DB.prepare("INSERT INTO post_tags (post_number, tag_slug) VALUES (1, 'budget-rare')").run();
+      await recount();
+      const reads = new Map<string, PublicRead>();
+      for (const c of READ_COST_DEBT) {
+        const m = await measurePublicRead(c.path);
+        reads.set(c.path, m);
+        scans.set(`${n}:${c.path}`, await fullScans(m));
+      }
+      measured.set(n, reads);
+    }
+  }, 180_000);
+
+  for (const c of READ_COST_DEBT) {
+    it(`${c.path}: pinned debt ceiling, shape and scan ledger`, () => {
+      for (const n of [100, 1000]) {
+        const m = measured.get(n)!.get(c.path)!;
+        const msg = `${c.path} N=${n}:\n${explain(m)}`;
+        expect(m.status, msg).toBe(200);
+        expect(m.queries, msg).toBeLessThanOrEqual(c.queries);
+        expect(m.rows_read, msg).toBeLessThanOrEqual(n === 100 ? c.rows100 : c.rows1000);
+        expect(m.rows_written, msg).toBe(0);
+        expect(scans.get(`${n}:${c.path}`), msg).toEqual(c.scan ? [DEBT_SCAN[c.scan]] : []);
+        if (c.items === 'populated') expect(m.items!.length, msg).toBeGreaterThan(0);
+        else if (c.items !== undefined) {
+          expect(m.items, msg).toHaveLength(c.items);
+          if (c.items === 1) expect(m.items![0].number, msg).toBe(1);
+        } else {
+          // An error/empty substitute page must not pass by being cheap.
+          expect(m.text, msg).toContain(c.path === '/sections' ? 'Sections &amp; tags' : c.path.split('/').pop()!);
+          const cards = m.text.match(/<article class="cw-card post-card"[\s\S]*?<\/article>/g) ?? [];
+          if (c.path === '/t/budget-rare') {
+            expect(cards, msg).toHaveLength(1);
+            expect(cards[0], msg).toContain('href="/posts/1">Post title 1</a>');
+          } else if (c.path === '/t/budget-empty') {
+            expect(cards, msg).toHaveLength(0);
+          } else if (c.path !== '/sections') {
+            expect(cards.length, msg).toBeGreaterThan(0);
+          }
+        }
+      }
+    });
+  }
+});
+
+describe('Catalog growth at fixed content size', () => {
+  it('bounds the extra reads from 100 to 1000 additional active tags', async () => {
+    const reads: { tags: number; catalog: PublicRead; home: PublicRead }[] = [];
+    for (const tags of [100, 1000]) {
+      await resetDb();
+      await seed(100, 500, 1000, 4000, 100);
+      // Grow only the catalog, not the posts. Even unused active tags are returned.
+      await env.DB.prepare(`WITH RECURSIVE n(x) AS (SELECT 1 UNION ALL SELECT x+1 FROM n WHERE x < ?)
+        INSERT INTO tags (slug, name, created_at)
+        SELECT 'budget-extra-' || x, 'budget-extra-' || x, '2026-11-10T00:00:00Z' FROM n`).bind(tags).run();
+      await recount();
+      const catalog = await measurePublicRead('/v1/catalog');
+      const home = await measurePublicRead('/');
+      const json = JSON.parse(catalog.text);
+      expect(catalog.status).toBe(200);
+      expect(home.status).toBe(200);
+      expect(json.tags.filter((t: { slug: string }) => t.slug.startsWith('budget-extra-'))).toHaveLength(tags);
+      expect(json.tags.some((t: { slug: string }) => t.slug === 'budget-extra-1')).toBe(true);
+      expect(json.tags.some((t: { slug: string }) => t.slug === `budget-extra-${tags}`)).toBe(true);
+      expect(catalog.queries).toBeLessThanOrEqual(4);
+      expect(home.queries).toBeLessThanOrEqual(10);
+      expect(catalog.rows_read).toBeLessThanOrEqual(tags + 170);
+      expect(home.rows_read).toBeLessThanOrEqual(tags + 700);
+      expect(catalog.rows_written + home.rows_written).toBe(0);
+      expect(await fullScans(catalog)).toEqual([]);
+      expect(await fullScans(home)).toEqual([]);
+      reads.push({ tags, catalog, home });
+    }
+    // Returning 900 extra catalog rows must not amplify into repeated full reads.
+    for (const route of ['catalog', 'home'] as const) {
+      expect(reads[1][route].rows_read - reads[0][route].rows_read, route).toBeLessThanOrEqual(1100);
+    }
+  }, 180_000);
+});
