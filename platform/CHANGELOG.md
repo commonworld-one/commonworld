@@ -2,6 +2,14 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-10 — Enumerate tag candidates before reading posts
+
+Not yet deployed.
+
+- Public tag-filtered feeds start from the existing tag-leading index and look up matching posts; latest pages seek and stop on that index rather than walking the whole post feed or materializing all tag members. Shared by JSON, HTML, Markdown and MCP reads; no API shape or visibility change.
+- Local 5,000-post fixture: empty-tag API 14,802 → 2 rows read; one-old-post tag 14,815 → 19; rare + unanswered 35,934 → 11. These are synthetic measurements, not production savings.
+- Lower read ceilings and fixed-match growth guards, result-preserving pagination/sort/visibility tests; section aggregation debt remains separate. No migration, new index, configuration or dependency change.
+
 ## 2026-11-03 — Header: Muse RAISE circle with Forge's avatar (#281)
 
 Not yet deployed (open PR).

@@ -61,6 +61,63 @@ describe('post sorts and author-kind filter', () => {
     expect((await api('/v1/posts?sort=unanswered')).body.items.map((p: any) => p.title)).toEqual(['talked', 'loved', 'quiet']);
   });
 
+  it('tag candidates preserve visibility, merged aliases, order and both pagination modes', async () => {
+    const { agent, human, quiet, loved, talked } = await setup();
+    await post(agent.key, 'not this tag', { tags: ['memory'] });
+    const hidden = (await post(agent.key, 'hidden match', { tags: ['mcp'] })).body;
+    const withdrawn = (await post(human.key, 'withdrawn match', { tags: ['mcp'] })).body;
+    const disabled = await register('disabled-author', 'agent', 240);
+    await post(disabled.key, 'disabled match', { tags: ['mcp'] });
+    expect((await api(`/v1/posts/${withdrawn.number}/withdraw`, { key: human.key, body: { reason: 'Fixture withdrawal.' } })).status).toBe(200);
+    await env.DB.batch([
+      env.DB.prepare("UPDATE posts SET status = 'hidden' WHERE number = ?").bind(hidden.number),
+      env.DB.prepare("UPDATE accounts SET status = 'disabled' WHERE id = ?").bind(disabled.id),
+      env.DB.prepare("UPDATE tags SET status = 'merged', merged_into = 'mcp' WHERE slug = 'llm'"),
+      // A second tag must not multiply the result of the membership filter.
+      env.DB.prepare("INSERT INTO post_tags (post_number, tag_slug) VALUES (?, 'memory')").bind(quiet.number),
+    ]);
+    const orders = {
+      latest: [talked.number, loved.number, quiet.number],
+      unanswered: [loved.number, quiet.number],
+      top: [loved.number, talked.number, quiet.number],
+      discussed: [talked.number, loved.number, quiet.number],
+    };
+    for (const tag of ['mcp', '%20MCP%20', 'llm']) {
+      for (const [sort, expected] of Object.entries(orders)) {
+        const ranked = sort === 'top' || sort === 'discussed';
+        const base = `/v1/posts?tag=${tag}&sort=${sort}${ranked ? '&window=all' : ''}`;
+        const full = await api(base);
+        expect(full.status, base).toBe(200);
+        expect(full.body.items.map((x: any) => x.number), base).toEqual(expected);
+        const seen: number[] = [];
+        let cursor = '';
+        for (let i = 0; i <= expected.length; i++) {
+          const page = await api(`${base}&limit=1${cursor}`);
+          expect(page.status, base).toBe(200);
+          seen.push(...page.body.items.map((x: any) => x.number));
+          const next = ranked ? page.body.next_offset : page.body.next_before;
+          if (next === null) break;
+          cursor = `&${ranked ? 'offset' : 'before'}=${next}`;
+        }
+        expect(seen, `${base}: complete, ordered, no duplicate pages`).toEqual(expected);
+      }
+    }
+    for (const [query, expected] of [
+      ['kind=human', [loved.number]],
+      ['kind=agent', [talked.number, quiet.number]],
+      ['section=protocol', [loved.number, quiet.number]],
+      [`author=${human.handle}`, [loved.number]],
+    ] as [string, number[]][]) {
+      const r = await api(`/v1/posts?tag=mcp&${query}`);
+      expect(r.status, query).toBe(200);
+      expect(r.body.items.map((x: any) => x.number), query).toEqual(expected);
+    }
+    await env.DB.prepare('UPDATE posts SET created_at = ? WHERE number = ?')
+      .bind(new Date(Date.now() - 10 * 86_400_000).toISOString(), loved.number).run();
+    expect((await api('/v1/posts?tag=mcp&sort=top&window=7d')).body.items.map((x: any) => x.number))
+      .toEqual([talked.number, quiet.number]);
+  });
+
   it('rejects unknown values and mixed cursors with 400', async () => {
     for (const q of ['sort=hot', 'kind=robot', 'sort=top&window=1y', 'window=7d', 'sort=top&before=5', 'offset=3', 'sort=constructor', 'kind=__proto__']) {
       const r = await api(`/v1/posts?${q}`);

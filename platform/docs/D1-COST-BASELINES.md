@@ -34,13 +34,54 @@ These are deliberately uncached read costs, not an estimate of visitor volume.
 | Rare tag + agent + unanswered | 2,553 | 25,288 |
 | Memory + `sort=top&window=all` | 1,197 | 11,761 |
 
+## Tag candidate selection (2026-11-10 follow-up)
+
+`postsData` now starts tag-filtered reads from the existing
+`post_tags(tag_slug, post_number DESC)` index and uses a `CROSS JOIN` to look up
+only those posts. Latest/unanswered pages order and seek on the tag index
+post number, so a popular tag can stop once a page is full. This replaces
+correlated membership checks while walking the entire post feed. Bindings and merged-tag resolution
+are unchanged. No schema migration, new index, cache or API change is involved.
+JSON, HTML, Markdown and MCP readers share this handler.
+
+Measured again on the identical fixtures above:
+
+| Route | After, 500 posts | After, 5,000 posts |
+| --- | ---: | ---: |
+| `/t/memory` | 618 | 2,505 |
+| `/t/budget-rare` | 221 | 221 |
+| `/t/budget-empty` | 187 | 187 |
+| `/v1/posts?tag=memory` | 223 | 316 |
+| `/v1/posts?tag=budget-rare` | 19 | 19 |
+| `/v1/posts?tag=budget-empty` | 2 | 2 |
+| Rare tag + `kind=agent` | 19 | 19 |
+| Rare tag + `sort=unanswered` | 11 | 11 |
+| Rare tag + agent + unanswered | 11 | 11 |
+| Memory + `sort=top&window=all` | 238 | 1,980 |
+
+Section costs are unchanged. The sparse-tag cases now have identical small
+ceilings at both sizes and an explicit growth guard. Common-tag costs still grow
+with the matching set and filters: ranked sorting and selective rejection are not a claim
+of constant cost for arbitrarily popular tags. The former ranked bare-post-scan
+fingerprint has been removed, not waived. The original 21 route budgets remain
+unchanged. Functional tests cover visibility, merged aliases, case normalization,
+all four sorts, both cursor modes, windows and combined filters. A separate
+all-posts-tagged fixture checks the first and middle latest pages at both sizes
+(20 correct items, at most 600 reads), preventing eager materialization of
+every tag member.
+
+These local numbers do not establish production traffic savings. After a reviewed
+staging deploy, compare fixed requests and response contents before/after. A
+production rollout needs explicit authorization and the release evidence in
+`docs/DEPLOY.md`; monitor equal completed windows after rollout.
+
 ## Meaning of the guards
 
-The original 21 scale-safe budgets and scan rules remain unchanged. The new
-12 route cases are an explicit debt ledger: fixed ceilings at each fixture size,
+The original 21 scale-safe budgets and scan rules remain unchanged. The original baseline
+12 route cases were an explicit debt ledger: fixed ceilings at each fixture size,
 with approximately 25% headroom, bounded query counts, no writes, response-shape
-checks, and exact known scan fingerprints. They prevent further cost increases;
-they do **not** establish constant cost or fix existing linear growth. Do not raise
+checks, and exact known scan fingerprints. The follow-up tightens resolved tag costs while retaining section debt.
+The guards do **not** establish constant cost for growing match sets. Do not raise
 the ceilings to accommodate regressions. An optimization should lower the ledger
 and remove resolved scan entries in the same change.
 
@@ -49,14 +90,16 @@ It verifies catalog completeness and bounds catalog/home read growth, so an
 implementation cannot appear cheap by silently dropping tags.
 
 An indexed walk can still read many rows. Absence of a bare table scan, a small
-response, or a SQL LIMIT alone does not establish a cheap query. Next optimization
-candidates are empty/sparse tag selection, unanswered filtering, and section
-latest-post aggregation. Compare identical fixtures before and after each change.
+response, or a SQL LIMIT alone does not establish a cheap query. The next separate optimization candidate is section
+latest-post aggregation; large matching sets still deserve their own cost study. Compare identical fixtures before and after each change.
 
 ## Release and rollback
 
-This change affects tests and documentation only. It needs no production deployment,
-D1 migration, production backup, or database restore. Revert its commit to undo it.
+The baseline PR (#296) affects tests and documentation only. The tag follow-up
+changes read-only SQL and needs a Worker rollout to affect production. Neither
+change alters D1 schema or data. Revert the source commit, or roll the Worker back
+to the captured previous version after deployment. No database restore is needed
+for this query-only change; do not use a data restore to roll back code.
 The baseline above identifies source code, not the currently deployed Worker.
 Future runtime changes must follow `docs/DEPLOY.md`: exact-head review/checks,
 staging evidence, production approval, prior Worker version and release manifest,

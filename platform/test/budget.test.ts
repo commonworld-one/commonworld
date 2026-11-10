@@ -238,10 +238,10 @@ describe('D1 budget per route (N=100 vs N=1000)', () => {
 
 
 /**
- * Cost debt, NOT scale-safe budgets. These paths were missing from BUDGETS above.
- * Sparse tags and known-empty filters can walk all posts despite a LIMIT; /sections
- * and /s/{slug} also fetch the latest post of every section. Keep measured ceilings
- * at both sizes so that green means "no regression from this debt", never "cheap".
+ * Sparse-tag guards and remaining cost debt, separate from BUDGETS above.
+ * Fixed-match tags must stay cheap as unrelated content grows. Common tags still
+ * grow with their matching set; /sections and /s/{slug} retain latest-post debt.
+ * Keep both measured ceilings and the fixed-match growth assertions.
  * Do not raise these to accommodate a regression: optimize separately, then lower them.
  */
 interface ReadDebtCase {
@@ -250,28 +250,28 @@ interface ReadDebtCase {
   rows100: number;
   rows1000: number;
   items?: number | 'populated';
-  scan?: 'latest-per-section' | 'ranked-posts';
+  scan?: 'latest-per-section';
+  fixedMatches?: boolean;
 }
 const READ_COST_DEBT: ReadDebtCase[] = [
   { path: '/sections', queries: 7, rows100: 10000, rows1000: 85000, scan: 'latest-per-section' },
-  { path: '/t/memory', queries: 9, rows100: 2600, rows1000: 6300 },
-  { path: '/t/budget-rare', queries: 9, rows100: 2150, rows1000: 19000 },
-  { path: '/t/budget-empty', queries: 10, rows100: 2100, rows1000: 19000 },
+  { path: '/t/memory', queries: 9, rows100: 800, rows1000: 3400 },
+  { path: '/t/budget-rare', queries: 9, rows100: 280, rows1000: 280, fixedMatches: true },
+  { path: '/t/budget-empty', queries: 10, rows100: 240, rows1000: 240, fixedMatches: true },
   { path: '/s/general', queries: 9, rows100: 3600, rows1000: 28000, scan: 'latest-per-section' },
-  { path: '/v1/posts?tag=memory', queries: 2, rows100: 2100, rows1000: 3000, items: 'populated' },
-  { path: '/v1/posts?tag=budget-rare', queries: 2, rows100: 1900, rows1000: 19000, items: 1 },
-  { path: '/v1/posts?tag=budget-empty', queries: 3, rows100: 1900, rows1000: 19000, items: 0 },
-  { path: '/v1/posts?tag=budget-rare&kind=agent', queries: 2, rows100: 1050, rows1000: 10000, items: 1 },
-  { path: '/v1/posts?tag=budget-rare&sort=unanswered', queries: 3, rows100: 4500, rows1000: 45000, items: 0 },
-  { path: '/v1/posts?tag=budget-rare&kind=agent&sort=unanswered', queries: 3, rows100: 3200, rows1000: 32000, items: 0 },
-  { path: '/v1/posts?tag=memory&sort=top&window=all', queries: 2, rows100: 1500, rows1000: 15000, items: 'populated', scan: 'ranked-posts' },
+  { path: '/v1/posts?tag=memory', queries: 2, rows100: 300, rows1000: 600, items: 'populated' },
+  { path: '/v1/posts?tag=budget-rare', queries: 2, rows100: 30, rows1000: 30, fixedMatches: true, items: 1 },
+  { path: '/v1/posts?tag=budget-empty', queries: 3, rows100: 6, rows1000: 6, fixedMatches: true, items: 0 },
+  { path: '/v1/posts?tag=budget-rare&kind=agent', queries: 2, rows100: 30, rows1000: 30, fixedMatches: true, items: 1 },
+  { path: '/v1/posts?tag=budget-rare&sort=unanswered', queries: 3, rows100: 18, rows1000: 18, fixedMatches: true, items: 0 },
+  { path: '/v1/posts?tag=budget-rare&kind=agent&sort=unanswered', queries: 3, rows100: 18, rows1000: 18, fixedMatches: true, items: 0 },
+  { path: '/v1/posts?tag=memory&sort=top&window=all', queries: 2, rows100: 320, rows1000: 2900, items: 'populated' },
 ];
 // Exact existing scan fingerprints from fullScans(). Separate from SCAN_ALLOW:
 // no waiver is added to the original scale-safe routes. Removing a debt scan
 // also requires updating this ledger rather than leaving a permanent exemption.
 const DEBT_SCAN = {
   'latest-per-section': 'SCAN p :: SELECT p.*, a.handle AS author_handle, a.kind AS author_kind, a.number AS author_number, s.name AS section_name, (SELECT group_concat(tag_slug) FROM post_tags t WHERE t.post_number = p.number) AS tags',
-  'ranked-posts': 'SCAN p :: SELECT * FROM (SELECT p.*, a.handle AS author_handle, a.kind AS author_kind, a.number AS author_number, s.name AS section_name, (SELECT group_concat(tag_slug) FROM post_tags t WHERE t.post_number = p.',
 };
 interface PublicRead extends Measured { text: string; items?: { number: number }[] }
 
@@ -292,7 +292,7 @@ async function measurePublicRead(path: string): Promise<PublicRead> {
     ...(path.startsWith('/v1/') ? { items: JSON.parse(text).items } : {}) };
 }
 
-describe('Public read cost debt (N=100 vs N=1000; not constant-cost claims)', () => {
+describe('Tag read guards and remaining cost debt (N=100 vs N=1000)', () => {
   const measured = new Map<number, Map<string, PublicRead>>();
   const scans = new Map<string, string[]>();
   beforeAll(async () => {
@@ -319,7 +319,11 @@ describe('Public read cost debt (N=100 vs N=1000; not constant-cost claims)', ()
   }, 180_000);
 
   for (const c of READ_COST_DEBT) {
-    it(`${c.path}: pinned debt ceiling, shape and scan ledger`, () => {
+    it(`${c.path}: read ceiling, shape and scan ledger`, () => {
+      if (c.fixedMatches) {
+        expect(measured.get(1000)!.get(c.path)!.rows_read, `${c.path}: unrelated content growth`)
+          .toBeLessThanOrEqual(measured.get(100)!.get(c.path)!.rows_read + 5);
+      }
       for (const n of [100, 1000]) {
         const m = measured.get(n)!.get(c.path)!;
         const msg = `${c.path} N=${n}:\n${explain(m)}`;
@@ -381,6 +385,30 @@ describe('Catalog growth at fixed content size', () => {
     // Returning 900 extra catalog rows must not amplify into repeated full reads.
     for (const route of ['catalog', 'home'] as const) {
       expect(reads[1][route].rows_read - reads[0][route].rows_read, route).toBeLessThanOrEqual(1100);
+    }
+  }, 180_000);
+});
+
+describe('Popular tag latest-page guard', () => {
+  it('stops at a full page instead of materializing every tag member', async () => {
+    for (const n of [100, 1000]) {
+      await resetDb();
+      await seed(n, 5 * n, 10 * n, 40 * n, n);
+      await env.DB.prepare("INSERT INTO tags (slug, name, created_at) VALUES ('budget-dense', 'budget-dense', '2026-11-10T00:00:00Z')").run();
+      await env.DB.prepare("INSERT INTO post_tags (post_number, tag_slug) SELECT number, 'budget-dense' FROM posts").run();
+      await recount();
+      for (const before of [0, Math.floor(5 * n / 2)]) {
+        const path = `/v1/posts?tag=budget-dense&limit=20${before ? `&before=${before}` : ''}`;
+        const m = await measurePublicRead(path);
+        const expected = Array.from({ length: 5 * n }, (_, i) => 5 * n - i)
+          .filter(x => x % 50 !== 0 && (!before || x < before)).slice(0, 20);
+        expect(m.status).toBe(200);
+        expect(m.items!.map(x => x.number)).toEqual(expected);
+        expect(m.queries).toBeLessThanOrEqual(2);
+        expect(m.rows_read).toBeLessThanOrEqual(600);
+        expect(m.rows_written).toBe(0);
+        expect(await fullScans(m)).toEqual([]);
+      }
     }
   }, 180_000);
 });
