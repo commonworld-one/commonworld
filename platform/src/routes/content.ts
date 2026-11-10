@@ -152,8 +152,14 @@ export async function postsData(c: ReadCtx) {
   const sort: PostSort = choice(c, 'sort', POST_SORTS, 'latest');
   const kind = choice(c, 'kind', AUTHOR_KINDS, 'all');
   if (section) { filters.push('p.section_slug = ?'); binds.push(section); }
-  // a merged tag filters by its target (old ?tag= links keep working)
-  if (tag) { filters.push("EXISTS (SELECT 1 FROM post_tags pt WHERE pt.post_number = p.number AND pt.tag_slug = COALESCE((SELECT merged_into FROM tags WHERE slug = ? AND status = 'merged'), ?))"); binds.push(tag, tag); }
+  // Tag-first nested loops use post_tags_tag for sparse AND popular tags. CROSS JOIN
+  // keeps posts behind the tag index; ordering by its post number lets latest pages
+  // stop at LIMIT instead of materializing every matching ID (as IN would do).
+  const select = tag ? POST_SELECT
+    .replace('SELECT p.*,', 'SELECT p.*, tag_posts.tag_slug AS filter_tag_slug, tag_posts.post_number AS tag_post_number,')
+    .replace('FROM posts p', 'FROM post_tags tag_posts CROSS JOIN posts p ON p.number = tag_posts.post_number') : POST_SELECT;
+  // A merged tag filters by its target; old links retain the same behavior.
+  if (tag) { filters.push("p.filter_tag_slug = COALESCE((SELECT merged_into FROM tags WHERE slug = ? AND status = 'merged'), ?)"); binds.push(tag, tag); }
   if (authorHandle) { filters.push('a.handle = ?'); binds.push(authorHandle); }
   if (kind !== 'all') { filters.push('a.kind = ?'); binds.push(kind); }
   const limit = intParam(c.url, 'limit', 20, 1, 50);
@@ -172,7 +178,7 @@ export async function postsData(c: ReadCtx) {
     if (c.url.searchParams.has('before')) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'before', reason: 'use_offset_for_ranked_sorts' });
     const offset = intParam(c.url, 'offset', 0, 0, RANKED_OFFSET_MAX);
     const order = sort === 'top' ? 'upvotes DESC, comment_count DESC, p.number DESC' : 'comment_count DESC, upvotes DESC, p.number DESC';
-    const { results } = await c.env.DB.prepare(`SELECT * FROM (${POST_SELECT}) p WHERE ${where.replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY ${order} LIMIT ? OFFSET ?`)
+    const { results } = await c.env.DB.prepare(`SELECT * FROM (${select}) p WHERE ${where.replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY ${order} LIMIT ? OFFSET ?`)
       .bind(...binds, limit + 1, offset).all();
     const items = results.slice(0, limit).map(postView);
     if (!items.length) await assertKnownFilters(c.env, section, tag, authorHandle);
@@ -181,8 +187,8 @@ export async function postsData(c: ReadCtx) {
   }
   if (c.url.searchParams.has('offset')) throw new HttpError(400, 'invalid_query_parameter', { parameter: 'offset', reason: 'use_before_for_latest_or_unanswered' });
   const before = intParam(c.url, 'before', 0, 0, Number.MAX_SAFE_INTEGER);
-  if (before) { filters.push('p.number < ?'); binds.push(before); }
-  const { results } = await c.env.DB.prepare(`SELECT * FROM (${POST_SELECT}) p WHERE ${filters.join(' AND ').replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY p.number DESC LIMIT ?`)
+  if (before) { filters.push(tag ? 'p.tag_post_number < ?' : 'p.number < ?'); binds.push(before); }
+  const { results } = await c.env.DB.prepare(`SELECT * FROM (${select}) p WHERE ${filters.join(' AND ').replace(/\ba\.(handle|kind)\b/g, 'author_$1')} ORDER BY ${tag ? 'p.tag_post_number' : 'p.number'} DESC LIMIT ?`)
     .bind(...binds, limit + 1).all();
   const items = results.slice(0, limit).map(postView);
   if (!items.length) await assertKnownFilters(c.env, section, tag, authorHandle);
