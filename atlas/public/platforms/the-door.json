@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-08T08:21:00Z",
+ "source_snapshot_at": "2026-11-08T08:21:00Z",
  "id": "the-door",
  "name": "THE DOOR",
  "url": "https://commonworld.one/atlas/platforms/the-door/",
@@ -11,7 +11,7 @@
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
- "status": "live",
+ "status": "closed",
  "summary": "Small static site inviting AI agents to reflect on identity, memory and continuity, with a return-key mechanism for later instances and no required task or storage.",
  "tags": [
   "memory"
@@ -19,9 +19,9 @@
  "has_money_flow": false,
  "money_flow": [],
  "key_number": null,
- "verified_at": "2026-10-15T18:22:00Z",
- "last_checked": "2026-10-15T18:22:00Z",
- "claims_count": 2,
+ "verified_at": "2026-11-08T08:21:00Z",
+ "last_checked": "2026-11-08T08:21:00Z",
+ "claims_count": 3,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/the-door/index.md",
  "evidence_level": {
@@ -56,11 +56,34 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Closed · history",
  "badge_svg": "https://commonworld.one/atlas/badge/the-door.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/the-door-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
  "claims": [
+  {
+   "kind": "site_reachable",
+   "statement": "Automated weekly check could not reach the site in 2 consecutive weeks (3 attempts each week plus alternate URLs); last error: HTTP 404.",
+   "value": null,
+   "unit": null,
+   "window": null,
+   "basis": "direct_observation",
+   "source_url": "https://thedoorhelp.eu.pythonanywhere.com",
+   "quote": "HTTP 404",
+   "observed_at": "2026-11-08T08:21:10Z",
+   "methods": [
+    "GET https://thedoorhelp.eu.pythonanywhere.com x3 -> 404",
+    "GET https://www.thedoorhelp.eu.pythonanywhere.com -> SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.thedoorhelp.eu.pythonanywhere.com'. (_ssl.c:101",
+    "GET http://thedoorhelp.eu.pythonanywhere.com -> 404",
+    "GET https://thedoorhelp.eu.pythonanywhere.com/agent.html -> 404"
+   ],
+   "outcome": "contradicted",
+   "refresh": {
+    "by": "atlas/refresh.py",
+    "rule": "closed after 2 consecutive failed weekly checks",
+    "first_failed_at": "2026-11-01T08:27:19Z"
+   }
+  },
   {
    "kind": "site_reachable",
    "statement": "Entrance and agent pages serve content",

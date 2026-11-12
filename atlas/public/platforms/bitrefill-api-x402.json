@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-08T08:21:00Z",
+ "source_snapshot_at": "2026-11-08T08:21:00Z",
  "id": "bitrefill-api-x402",
  "name": "Bitrefill API",
  "url": "https://commonworld.one/atlas/platforms/bitrefill-api-x402/",
@@ -21,13 +21,13 @@
  "has_money_flow": true,
  "money_flow": [
   {
-   "statement": "x402 settlement to this service's payout address: $895.24 in 30d from 90 distinct buyers, 786 settlements; top buyer share 47.7%",
-   "value": 895.24,
+   "statement": "x402 settlement to this service's payout address: $1,619.12 in 30d from 124 distinct buyers, 975 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+   "value": 1619.12,
    "unit": "USD (USDC)",
-   "window": "trailing 30d to 2026-10-15",
+   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
    "basis": "independent_source",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://x402-list.com/api/v1/services?per_page=100"
+   "observed_at": "2026-11-08T08:21:00Z",
+   "source_url": "https://x402-list.com/api/v1/services/bitrefill"
   },
   {
    "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $73.30",
@@ -41,15 +41,15 @@
  ],
  "key_number": {
   "kind": "economic_flow",
-  "value": 895.24,
+  "value": 1619.12,
   "unit": "USD (USDC)",
-  "window": "trailing 30d to 2026-10-15",
+  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
   "basis": "independent_source",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://x402-list.com/api/v1/services?per_page=100"
+  "observed_at": "2026-11-08T08:21:00Z",
+  "source_url": "https://x402-list.com/api/v1/services/bitrefill"
  },
- "verified_at": "2026-10-15T18:19:00Z",
- "last_checked": "2026-10-15T18:19:00Z",
+ "verified_at": "2026-11-08T08:21:00Z",
+ "last_checked": "2026-11-08T08:21:00Z",
  "claims_count": 6,
  "disclosure": null,
  "md_url": "https://commonworld.one/atlas/platforms/bitrefill-api-x402/index.md",
@@ -71,8 +71,8 @@
    "state": "recorded",
    "value": "public_dashboard",
    "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-   "quote": "traction.volume_usd_30d=895.24, unique_buyers_30d=90, top_buyer_share_30d=0.4772"
+   "source_url": "https://x402-list.com/api/v1/services/bitrefill",
+   "quote": "\"volume_usd_30d\":1619.122,\"unique_buyers_30d\":124,\"tx_count_30d\":975,\"top_buyer_share_30d\":0.30869817098402713,\"last_settlement_at\":\"2026-10-28T02:50:17Z\""
   },
   "people": {
    "state": "not_recorded",
@@ -85,7 +85,7 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-08",
  "badge_svg": "https://commonworld.one/atlas/badge/bitrefill-api-x402.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/bitrefill-api-x402-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
@@ -140,18 +140,37 @@
   },
   {
    "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $895.24 in 30d from 90 distinct buyers, 786 settlements; top buyer share 47.7%",
-   "value": 895.24,
+   "statement": "x402 settlement to this service's payout address: $1,619.12 in 30d from 124 distinct buyers, 975 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
+   "value": 1619.12,
    "unit": "USD (USDC)",
-   "window": "trailing 30d to 2026-10-15",
+   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
    "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-   "quote": "traction.volume_usd_30d=895.24, unique_buyers_30d=90, top_buyer_share_30d=0.4772",
-   "observed_at": "2026-10-15T18:08:00Z",
+   "source_url": "https://x402-list.com/api/v1/services/bitrefill",
+   "quote": "\"volume_usd_30d\":1619.122,\"unique_buyers_30d\":124,\"tx_count_30d\":975,\"top_buyer_share_30d\":0.30869817098402713,\"last_settlement_at\":\"2026-10-28T02:50:17Z\"",
+   "observed_at": "2026-11-08T08:21:10Z",
    "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100"
+    "GET https://x402-list.com/api/v1/services/bitrefill",
+    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
+    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
    ],
    "outcome": "supported",
+   "history": [
+    {
+     "value": 895.24,
+     "unit": "USD (USDC)",
+     "window": "trailing 30d to 2026-10-15",
+     "statement": "x402 settlement to this service's payout address: $895.24 in 30d from 90 distinct buyers, 786 settlements; top buyer share 47.7%",
+     "quote": "traction.volume_usd_30d=895.24, unique_buyers_30d=90, top_buyer_share_30d=0.4772",
+     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "basis": "independent_source",
+     "outcome": "supported",
+     "superseded_at": "2026-11-08T08:21:10Z",
+     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
+    }
+   ],
+   "refresh_id": "bitrefill-api-x402-x402-list-30d",
+   "last_settlement_seen_at": "2026-10-28T02:50:17Z",
    "evidence_level": 2,
    "evidence_label": "public dashboard"
   },

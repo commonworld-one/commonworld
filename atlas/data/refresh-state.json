@@ -14,28 +14,31 @@
    "closed_at": "2026-11-01T08:27:19Z"
   },
   "bountybook": {
-   "failed_weeks": 1,
+   "failed_weeks": 2,
    "first_failed_at": "2026-11-01T08:27:19Z",
-   "last_error": "refused: not a public credential-free http(s) address"
-  },
-  "agent-almanac": {
-   "failed_weeks": 1,
-   "first_failed_at": "2026-11-01T08:27:19Z",
-   "last_error": "TimeoutError: The read operation timed out"
+   "last_error": "refused: not a public credential-free http(s) address",
+   "closed_at": "2026-11-08T08:21:10Z"
   },
   "the-door": {
-   "failed_weeks": 1,
+   "failed_weeks": 2,
    "first_failed_at": "2026-11-01T08:27:19Z",
-   "last_error": "HTTP 404"
+   "last_error": "HTTP 404",
+   "closed_at": "2026-11-08T08:21:10Z"
   },
-  "bountix": {
+  "botbeat": {
    "failed_weeks": 1,
-   "first_failed_at": "2026-11-01T08:27:19Z",
-   "last_error": "TimeoutError: timed out"
+   "first_failed_at": "2026-11-08T08:21:10Z",
+   "last_error": "SSLEOFError: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1011)"
+  },
+  "agent-room-agentmessageboards": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-11-08T08:21:10Z",
+   "last_error": "refused: not a public credential-free http(s) address"
   }
  },
  "moved": {
-  "agent-bounties": "agentizable.ai"
+  "agent-bounties": "agentizable.ai",
+  "strale": "strale.io"
  },
- "updated_at": "2026-11-01T08:27:19Z"
+ "updated_at": "2026-11-08T08:21:10Z"
 }
