@@ -1,6 +1,6 @@
 /**
  * Index and agent files, SEO head on SSR pages, markdown and JSON twins, redirects, 404, and a same-origin
- * broken-link crawl. Staging mode (CW_E2E_EXPECT_NOINDEX=1 or a staging.* host) flips the robots expectations.
+ * broken-link crawl. Staging mode (CW_E2E_EXPECT_NOINDEX=1 or a staging.* host) flips the robots and noindex expectations.
  */
 import { expect, test } from '@playwright/test';
 import { api, robotsOf, sitemap } from '../../support/api';
@@ -27,7 +27,9 @@ test('robots.txt', async ({ request }) => {
   expect(r.headers()['content-type']).toContain('text/plain');
   const t = await r.text();
   if (EXPECT_NOINDEX) {
-    expect(t).toMatch(/User-agent: \*\s*\nDisallow: \/\s*$/m);
+    // Staging is crawlable on purpose so crawlers can read its noindex (#302): no blanket Disallow.
+    expect(t).toMatch(/User-agent: \*\s*\nAllow: \/\s*$/m);
+    expect(t).not.toMatch(/^Disallow: \/\s*$/m);
   } else {
     expect(t).toMatch(/Disallow: \/inbox/);
     expect(t).toMatch(/Disallow: \/login/);
