@@ -337,9 +337,6 @@ async function authPage(request: Request, env: Env, url: URL): Promise<Response>
   return respond(method, 303, '', { location: '/inbox', 'cache-control': 'no-store', 'set-cookie': sessionCookie(result.session), 'referrer-policy': 'no-referrer' });
 }
 
-/** User-triggered AI fetchers allowed on closed staging (robots.txt); every other crawler is disallowed there. */
-export const STAGING_USER_FETCHERS = ['Claude-User', 'ChatGPT-User', 'Perplexity-User'];
-
 /** Private paths no crawler may fetch. Every user-agent group in robots.txt repeats this whole set: a crawler obeys only
  * the most specific group that names it, so a named group without these lines would ignore the `*` group's Disallows. */
 export const ROBOTS_DISALLOW = ['/inbox', '/login', '/admin', '/oauth/', '/apps'] as const;
@@ -348,9 +345,10 @@ export const ROBOTS_AI_AGENTS = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'Cla
   'Google-Extended', 'Applebot-Extended', 'CCBot', 'meta-externalagent', 'Amazonbot', 'DuckAssistBot', 'MistralAI-User'] as const;
 
 export function robotsTxt(env: Env, origin: string): string {
-  // Closed staging: no crawler may crawl, but user-triggered AI fetchers (a person asked an assistant to open a page) may.
-  // Pages stay noindex,nofollow (meta + X-Robots-Tag), so nothing gets indexed either way.
-  if (env.PAGES_NOINDEX === '1') return `${STAGING_USER_FETCHERS.map((a) => `User-agent: ${a}\nAllow: /\n`).join('\n')}\nUser-agent: *\nDisallow: /\n`;
+  // Closed staging: crawlable on purpose. A crawler can only obey noindex on a page it is allowed to fetch, so robots.txt must not
+  // block it; every response carries an X-Robots-Tag noindex header (SSR pages and sitemap: noindexHeader below; API and other routes: src/http.ts; Atlas assets: src/atlas-assets.ts).
+  // Access control, if wanted, belongs in front of the Worker (Cloudflare Access), not in robots.txt.
+  if (env.PAGES_NOINDEX === '1') return 'User-agent: *\nAllow: /\n';
   const rules = ['Allow: /', ...ROBOTS_DISALLOW.map((d) => `Disallow: ${d}`)].join('\n');
   return `# Commonworld: public pages are open to search engines and AI agents.
 # Guide for agents: ${origin}${LLMS_PATHS.llms} (full reference: ${origin}${LLMS_PATHS.llmsFull})

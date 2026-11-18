@@ -106,7 +106,7 @@ ratelimits = [
 ENVIRONMENT = "staging"
 BACKUPS_BUCKET = "commonworld-backups-staging"
 SETTINGS_CACHE_MS = "5000"
-# Closed staging: every SSR page noindex,nofollow and robots.txt disallows all.
+# Closed staging: every response noindex,nofollow (header) and robots.txt lets crawlers in, so the noindex can be read.
 PAGES_NOINDEX = "1"
 SITE_ORIGIN = "https://staging.commonworld.one"
 # Routing option A3: the Atlas comes from this Worker's Static Assets (src/atlas-assets.ts). ATLAS_ORIGIN is the

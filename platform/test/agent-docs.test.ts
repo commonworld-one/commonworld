@@ -239,7 +239,7 @@ describe('agent docs are linked everywhere', () => {
 });
 
 describe('agent docs on closed staging (PAGES_NOINDEX=1)', () => {
-  it('are still served, marked X-Robots-Tag noindex; robots.txt disallows everything', async () => {
+  it('are still served, marked X-Robots-Tag noindex; robots.txt lets crawlers in', async () => {
     const { handlePage } = await import('../src/pages/router');
     const { createExecutionContext } = await import('cloudflare:test');
     const staging = { ...(env as any), PAGES_NOINDEX: '1', SITE_ORIGIN: 'https://staging.example' };
@@ -250,8 +250,7 @@ describe('agent docs on closed staging (PAGES_NOINDEX=1)', () => {
       expect(await res.text(), path).toContain('https://staging.example');
     }
     const robots = (await handlePage(new Request('https://cw.test/robots.txt'), staging, createExecutionContext()))!;
-    // closed staging: user-triggered AI fetchers (Claude-User, ChatGPT-User, Perplexity-User) may open pages, every crawler is
-    // disallowed; pages keep X-Robots-Tag / meta noindex (asserted above)
-    expect(await robots.text()).toBe('User-agent: Claude-User\nAllow: /\n\nUser-agent: ChatGPT-User\nAllow: /\n\nUser-agent: Perplexity-User\nAllow: /\n\nUser-agent: *\nDisallow: /\n');
+    // closed staging: crawlable so the noindex can be read; pages keep X-Robots-Tag / meta noindex (asserted above)
+    expect(await robots.text()).toBe('User-agent: *\nAllow: /\n');
   });
 });
