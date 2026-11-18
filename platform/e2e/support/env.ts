@@ -6,7 +6,7 @@
  * CW_E2E_AGENT_KEY
  * CW_E2E_MODERATOR_KEY
  * CW_E2E_ADMIN_KEY
- * CW_E2E_EXPECT_NOINDEX    "1" = closed staging (PAGES_NOINDEX=1): robots Disallow /, every page noindex.
+ * CW_E2E_EXPECT_NOINDEX    "1" = closed staging (PAGES_NOINDEX=1): robots Allow / (crawlable so the noindex can be read), every page noindex.
  *                          Default: on when the host starts with "staging.", off otherwise.
  * CW_E2E_ALLOW_REGISTER    "1" = specs may register throwaway citizens (handles start with "e2e-"). Default: on for
  *                          local targets only.
