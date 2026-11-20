@@ -142,7 +142,7 @@ production bind different buckets and production's is `commonworld-backups`. The
 
 | When (UTC) | Job | Writes |
 |---|---|---|
-| daily 03:00 (before the 03:17 retention clean-up) | **backup**: every D1 table (schema from `sqlite_master` + every row, read in pages of 5000; at today's size every table is one page and all pages are one D1 batch = one consistent snapshot) → one SQL file → gzip | `<env>/d1/YYYY-MM-DD.sql.gz` + `<env>/d1/YYYY-MM-DD.manifest.json` |
+| daily 03:00 (before the 03:17 retention clean-up) | **backup**: every D1 table (schema from `sqlite_master` + every row, read in pages of 5000: a table of up to 5000 rows is read in one D1 batch, i.e. one transaction; a larger table is read by key in several calls, see "What a dump guarantees") → one SQL file → gzip | `<env>/d1/YYYY-MM-DDTHHMMSSZ.sql.gz` + `.manifest.json`, one name per run (a same-second rerun adds `-2`); older `YYYY-MM-DD.*` objects stay valid |
 | Monday 04:30 | **restore check** of the newest backup: sha256 of the `.gz` and of the SQL, every statement parsed (each row decoded, column count checked), table list + row count per table + `sqlite_sequence` counters against the manifest, newest backup ≤ 36 h old | `<env>/checks/YYYY-MM-DD.json` |
 
 `<env>` = `prod` (production), `staging`, `local` (tests / `wrangler dev`, simulated bucket). Each env has its own bucket (table above).
@@ -195,12 +195,24 @@ curl -s -X POST -H "Authorization: Bearer $ADMIN_KEY" -H 'content-type: applicat
   -d '{"job":"restore-check"}' https://commonworld.one/v1/admin/backups/run | jq
 ```
 
+### What a dump guarantees (and does not)
+
+- Tables of at most 5000 rows, and `sqlite_sequence`, are read together in one `db.batch`, which D1 runs as one transaction.
+- A larger table is read in several calls at different moments. Pages after the first use the key (`rowid > last`, or the primary key columns of a WITHOUT ROWID table), not an offset. A row that is not inserted, updated, deleted or re-keyed during the dump appears exactly once. This is **not a point-in-time snapshot**: a row changed during the dump may carry an older or newer value, and a row inserted or deleted during it may be present or absent. Different tables can also be read at different moments.
+- Today the only such tables are `unnamed_agent_visits` and `ai_bot_visits` (manifest of 2026-11-20: 42,386 and 25,745 rows). The writer upserts today's UTC day, so today's visit counts can mix moments.
+- The manifest has a `consistency` block: `paged_tables` lists every table that needed more than one read (mode, key, pages, rows, `count_after`, `changed_during_dump`). `count_after` is a COUNT(*) after the last page. A difference proves the table changed during the dump; equality does not prove it did not, because updates are not counted. The Monday check prints such tables as a note and does not fail on them.
+- A table with no usable key (no primary key, a column named `rowid`, or a key value that is not a string or a safe number) falls back to offset paging and is marked `mode: offset` with a reason.
+- The Monday check proves the file is intact and parseable and matches its manifest. It does not load the dump into a database.
+- For a consistent export of a large database, D1's own export is the alternative, but Cloudflare documents that a running export blocks other database requests (https://developers.cloudflare.com/d1/best-practices/import-export-data/). Time Travel restores in place (https://developers.cloudflare.com/d1/reference/time-travel/).
+- Names: each run claims its name with a create-only R2 put (`If-None-Match: *`), so parallel runs in the same second get `-2`, `-3`, ... and nothing is overwritten; if 50 names are taken the run fails. "Newest" is chosen by stamp text, then the `-N` number as a number (`-12` after `-9`). The create-only put is tested against the local R2 simulator only; Cloudflare documents conditional put (null on a failed condition) and conditional headers (https://developers.cloudflare.com/r2/api/workers/workers-api-reference/), but I did not test it against real R2.
+- Check results are still named `<env>/checks/YYYY-MM-DD.json`: a second check on the same day overwrites the first.
+
 ### Verify the Monday check
 
 The check runs every Monday at 04:30 UTC (cron times are UTC all year, no daylight-saving shift). On Monday after 04:30 UTC:
 
 1. `GET /v1/admin/backups` (admin key): `latest_check.ok` is `true`, `latest_check.checked_at` is today ~04:30 UTC,
-   `latest_check.backup_key` is today's `<env>/d1/YYYY-MM-DD.sql.gz`, `problems` is empty and `healthy` is `true`.
+   `latest_check.backup_key` is the newest `<env>/d1/YYYY-MM-DD[THHMMSSZ].sql.gz`, `problems` is empty and `healthy` is `true`.
 2. The check file is in R2 (read-only, needs a token with R2 read on the bucket):
    ```
    npx wrangler r2 object get commonworld-backups/prod/checks/2026-11-02.json --pipe --remote | jq '{ok, backup_key, age_hours, table_count, total_rows, problems}'
@@ -220,7 +232,7 @@ table differs, and keep Time Travel (section 1) as the fallback.
 ```
 npx wrangler d1 migrations apply commonworld-dev --local
 npx wrangler dev --test-scheduled
-curl "http://localhost:8787/__scheduled?cron=0+3+*+*+*"     # backup  -> local/d1/<today>.sql.gz + manifest
+curl "http://localhost:8787/__scheduled?cron=0+3+*+*+*"     # backup  -> local/d1/<run time>.sql.gz + manifest
 curl "http://localhost:8787/__scheduled?cron=30+4+*+*+1"    # check   -> local/checks/<today>.json, log line PASS
 ```
 

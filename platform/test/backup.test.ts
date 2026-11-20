@@ -127,20 +127,20 @@ describe('dump -> restore roundtrip', () => {
 });
 
 describe('runBackup -> R2 + manifest', () => {
-  it('writes <env>/d1/YYYY-MM-DD.sql.gz and a manifest with counts and both sha256', async () => {
+  it('writes <env>/d1/YYYY-MM-DDTHHMMSSZ.sql.gz and a manifest with counts and both sha256', async () => {
     await seed();
     expect(envPrefix(E)).toBe('local');
     expect(envPrefix({ ENVIRONMENT: 'production' })).toBe('prod');
     expect(envPrefix({ ENVIRONMENT: 'staging' })).toBe('staging');
     const r = await runBackup(E, NOW);
-    expect(r.key).toBe('local/d1/2026-10-19.sql.gz');
-    expect(r.manifest_key).toBe('local/d1/2026-10-19.manifest.json');
+    expect(r.key).toBe('local/d1/2026-10-19T030000Z.sql.gz');
+    expect(r.manifest_key).toBe('local/d1/2026-10-19T030000Z.manifest.json');
     const gz = await (await E.BACKUPS.get(r.key)).arrayBuffer();
     const m: Manifest = await (await E.BACKUPS.get(r.manifest_key)).json();
     expect(m.format).toBe(BACKUP_FORMAT);
     expect(m.created_utc).toBe('2026-10-19T03:00:00Z');
     expect(m.env).toBe('local');
-    expect(m.artifact).toMatchObject({ file: '2026-10-19.sql.gz', key: r.key, bytes: gz.byteLength, gzip: true, encrypted: false });
+    expect(m.artifact).toMatchObject({ file: '2026-10-19T030000Z.sql.gz', key: r.key, bytes: gz.byteLength, gzip: true, encrypted: false });
     expect(m.artifact.sha256).toBe(await sha256Hex(gz));
     const plain = await gunzip(gz);
     expect(m.sql_sha256).toBe(await sha256Hex(plain));
@@ -165,7 +165,7 @@ describe('runBackup -> R2 + manifest', () => {
     await worker.scheduled!(createScheduledController({ scheduledTime: NOW + 3_600_000, cron: RESTORE_CHECK_CRON }), E, ctx2);
     await waitOnExecutionContext(ctx2);
     const all = logs.join('\n');
-    expect(all).toMatch(/d1 backup OK local\/d1\/2026-10-19\.sql\.gz/);
+    expect(all).toMatch(/d1 backup OK local\/d1\/2026-10-19T030000Z\.sql\.gz/);
     expect(all).toMatch(/d1 restore check PASS/);
     for (const secret of ['Line one', 'backup-src', 'Tricky body', 'quotes']) expect(all).not.toContain(secret);
   });
@@ -179,7 +179,7 @@ describe('runRestoreCheck', () => {
     expect(r.problems).toEqual([]);
     expect(r.ok).toBe(true);
     expect(r.age_hours).toBe(1.5);
-    expect(r.backup_key).toBe('local/d1/2026-10-19.sql.gz');
+    expect(r.backup_key).toBe('local/d1/2026-10-19T030000Z.sql.gz');
     expect(r.check_key).toBe('local/checks/2026-10-19.json');
     expect(await (await E.BACKUPS.get(r.check_key)).json()).toMatchObject({ ok: true, backup_key: r.backup_key });
   });
@@ -190,7 +190,7 @@ describe('runRestoreCheck', () => {
     await runBackup(E, NOW);
     const r = await runRestoreCheck(E, NOW + 60_000);
     expect(r.ok).toBe(true);
-    expect(r.backup_key).toBe('local/d1/2026-10-19.sql.gz');
+    expect(r.backup_key).toBe('local/d1/2026-10-19T030000Z.sql.gz');
   });
 
   it('FAIL: no backup, stale backup, corrupted artifact, manifest/dump mismatch', async () => {
@@ -249,7 +249,7 @@ describe('cron dispatch', () => {
     await fire(CLEANUP_CRON);
     expect(await keys()).toEqual([]);
     await fire(BACKUP_CRON);
-    expect(await keys()).toEqual(['local/d1/2026-10-19.manifest.json', 'local/d1/2026-10-19.sql.gz']);
+    expect(await keys()).toEqual(['local/d1/2026-10-19T030000Z.manifest.json', 'local/d1/2026-10-19T030000Z.sql.gz']);
     await fire(RESTORE_CHECK_CRON, NOW + 90 * 60_000);
     expect(await keys()).toContain('local/checks/2026-10-19.json');
   });
@@ -280,7 +280,7 @@ describe('GET /v1/admin/backups, POST /v1/admin/backups/run', () => {
     expect((await api('/v1/admin/backups/run', { key: admin.key, body: { job: 'nope' } })).body.error.code).toBe('invalid_job');
     const run = await api('/v1/admin/backups/run', { key: admin.key, body: { job: 'backup' } });
     expect(run.status).toBe(200);
-    expect(run.body.backup.key).toMatch(/^local\/d1\/\d{4}-\d{2}-\d{2}\.sql\.gz$/);
+    expect(run.body.backup.key).toMatch(/^local\/d1\/\d{4}-\d{2}-\d{2}T\d{6}Z\.sql\.gz$/);
     const check = await api('/v1/admin/backups/run', { key: admin.key, body: { job: 'restore-check' } });
     expect(check.body).toMatchObject({ job: 'restore-check', ok: true, backup: null });
     const after = await api('/v1/admin/backups', { key: admin.key });
@@ -296,5 +296,127 @@ describe('GET /v1/admin/backups, POST /v1/admin/backups/run', () => {
     const future = await backupStatus(E, Date.now() - 86_400_000);
     expect(future.healthy).toBe(false);
     expect(future.problems).toEqual(['newest backup has a future or invalid timestamp', 'latest restore check has a future or invalid timestamp']);
+  });
+});
+
+describe('keyset paging and run names', () => {
+  const seedMany = async (n: number) => {
+    await E.DB.exec("CREATE TABLE IF NOT EXISTS kv_nr (a TEXT NOT NULL, b INTEGER NOT NULL, v TEXT, PRIMARY KEY (a, b)) WITHOUT ROWID");
+    await E.DB.exec('DELETE FROM kv_nr');
+    const stmts = [];
+    for (let i = 0; i < n; i++) stmts.push(E.DB.prepare('INSERT INTO kv_nr (a, b, v) VALUES (?, ?, ?)').bind(`g${i % 3}`, i, `v${i}`));
+    await E.DB.batch(stmts);
+  };
+
+  it('small pages give the same file as one page, with a WITHOUT ROWID composite key', async () => {
+    await seed();
+    await seedMany(23);
+    const one = await dumpDatabase(E.DB, { pageRows: 100000 });
+    const paged = await dumpDatabase(E.DB, { pageRows: 5 });
+    expect(paged.sql).toBe(one.sql);
+    expect(paged.paging.kv_nr).toMatchObject({ mode: 'keyset', key: ['a', 'b'], rows: 23, count_after: 23, changed_during_dump: false });
+    expect(paged.paging.kv_nr.pages).toBe(5);
+    expect(one.paging).toEqual({});
+  });
+
+  it('keyset queries never use OFFSET after the first page', async () => {
+    await seedMany(12);
+    const sqls: string[] = [];
+    const orig = E.DB.prepare.bind(E.DB);
+    const spy = vi.spyOn(E.DB, 'prepare').mockImplementation(((q: string) => { sqls.push(q); return orig(q); }) as any);
+    await dumpDatabase(E.DB, { pageRows: 4 });
+    spy.mockRestore();
+    expect(sqls.some((q) => /OFFSET/.test(q))).toBe(false);
+    expect(sqls.some((q) => /WHERE \("a","b"\) > \(\?,\?\)/.test(q))).toBe(true);
+  });
+
+  it('rows inserted during the dump are not duplicated; a changed count is flagged', async () => {
+    await seedMany(12);
+    const orig = E.DB.batch.bind(E.DB);
+    let calls = 0;
+    const spy = vi.spyOn(E.DB, 'batch').mockImplementation((async (stmts: any[]) => {
+      if (++calls === 2) await E.DB.prepare("INSERT INTO kv_nr (a, b, v) VALUES ('g0', 1000, 'late')").run();
+      return orig(stmts);
+    }) as any);
+    const d = await dumpDatabase(E.DB, { pageRows: 4 });
+    spy.mockRestore();
+    const ins = d.sql.split('\n').filter((l) => l.startsWith('INSERT INTO "kv_nr"'));
+    expect(new Set(ins).size).toBe(ins.length);
+    expect(d.paging.kv_nr.changed_during_dump).toBe(d.paging.kv_nr.rows !== 13);
+    expect(d.paging.kv_nr.count_after).toBe(13);
+  });
+
+  it('every run gets its own name; a same-second rerun gets -2; old daily names stay readable and sort first', async () => {
+    await seed();
+    const a = await runBackup(E, NOW);
+    const b = await runBackup(E, NOW);
+    const c = await runBackup(E, NOW + 3_600_000);
+    expect(a.key).toBe('local/d1/2026-10-19T030000Z.sql.gz');
+    expect(b.key).toBe('local/d1/2026-10-19T030000Z-2.sql.gz');
+    expect(c.key).toBe('local/d1/2026-10-19T040000Z.sql.gz');
+    expect(await E.BACKUPS.head(a.key)).not.toBeNull();
+    const m: Manifest = await (await E.BACKUPS.get(a.manifest_key)).json();
+    expect(m.consistency?.note).toMatch(/NOT a point-in-time snapshot/);
+    expect(m.consistency?.paged_tables).toEqual({});
+    const r = await runRestoreCheck(E, NOW + 2 * 3_600_000);
+    expect(r.backup_key).toBe(c.key);
+  });
+
+  it('a manifest and key in the old daily format (no consistency field) still pass the check and the status', async () => {
+    await seed();
+    const b = await runBackup(E, NOW);
+    const m: Manifest = await (await E.BACKUPS.get(b.manifest_key)).json();
+    const { consistency, ...old } = m as any;
+    const oldKey = 'local/d1/2026-10-19.sql.gz';
+    await E.BACKUPS.put(oldKey, await (await E.BACKUPS.get(b.key)).arrayBuffer());
+    await E.BACKUPS.put('local/d1/2026-10-19.manifest.json', JSON.stringify({ ...old, artifact: { ...old.artifact, key: oldKey, file: '2026-10-19.sql.gz' } }));
+    await E.BACKUPS.delete(b.key); await E.BACKUPS.delete(b.manifest_key);
+    const r = await runRestoreCheck(E, NOW + 60_000);
+    expect(r.problems).toEqual([]);
+    expect(r.backup_key).toBe(oldKey);
+    expect((await backupStatus(E, NOW + 60_000)).backups[0].key).toBe(oldKey);
+  });
+
+  it('parallel runs in the same second each get their own name and none overwrites another', async () => {
+    await seed();
+    const runs = await Promise.all(Array.from({ length: 12 }, () => runBackup(E, NOW)));
+    const keys = runs.map((r) => r.key);
+    expect(new Set(keys).size).toBe(12);
+    expect(new Set(runs.map((r) => r.manifest_key)).size).toBe(12);
+    for (const r of runs) {
+      const m: Manifest = await (await E.BACKUPS.get(r.manifest_key)).json();
+      expect(m.artifact.key).toBe(r.key);
+      expect(m.artifact.sha256).toBe(r.sha256);
+      expect(await sha256Hex(await (await E.BACKUPS.get(r.key)).arrayBuffer())).toBe(r.sha256);
+    }
+  });
+
+  it('never overwrites an existing object: a taken name is skipped, and a full name space fails the run', async () => {
+    await seed();
+    await E.BACKUPS.put('local/d1/2026-10-19T030000Z.sql.gz', 'precious');
+    const r = await runBackup(E, NOW);
+    expect(r.key).toBe('local/d1/2026-10-19T030000Z-2.sql.gz');
+    expect(await (await E.BACKUPS.get('local/d1/2026-10-19T030000Z.sql.gz')).text()).toBe('precious');
+    await E.BACKUPS.put('local/d1/2026-10-19T030000Z-3.manifest.json', 'orphan manifest');
+    const r2 = await runBackup(E, NOW);
+    expect(r2.key).toBe('local/d1/2026-10-19T030000Z-4.sql.gz');
+    expect(await E.BACKUPS.head('local/d1/2026-10-19T030000Z-3.sql.gz')).toBeNull(); // our dump was given back
+    expect(await (await E.BACKUPS.get('local/d1/2026-10-19T030000Z-3.manifest.json')).text()).toBe('orphan manifest');
+    for (let n = 2; n <= 50; n++) await E.BACKUPS.put(`local/d1/2026-10-19T030000Z-${n}.sql.gz`, 'x');
+    await expect(runBackup(E, NOW)).rejects.toThrow(/no free backup name/);
+  });
+
+  it('12 same-second runs: status and restore check pick the newest by number (-12 after -2), over older daily and older stamps', async () => {
+    await seed();
+    await runBackup(E, NOW - 86_400_000);
+    for (let i = 0; i < 12; i++) await runBackup(E, NOW);
+    await E.BACKUPS.put('local/d1/2026-10-19.sql.gz', 'old daily', {});
+    const status = await backupStatus(E, NOW + 60_000);
+    expect(status.backups[0].key).toBe('local/d1/2026-10-19T030000Z-12.sql.gz');
+    expect(status.backups.slice(0, 3).map((b) => b.key)).toEqual([
+      'local/d1/2026-10-19T030000Z-12.sql.gz', 'local/d1/2026-10-19T030000Z-11.sql.gz', 'local/d1/2026-10-19T030000Z-10.sql.gz']);
+    const r = await runRestoreCheck(E, NOW + 60_000);
+    expect(r.ok).toBe(true);
+    expect(r.backup_key).toBe('local/d1/2026-10-19T030000Z-12.sql.gz');
   });
 });
