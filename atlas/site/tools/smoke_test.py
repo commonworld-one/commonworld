@@ -162,7 +162,7 @@ with sync_playwright() as p:
     n = pg.evaluate(VIS)
     check(f'status chip closed -> {N_CLOSED} ({n})', n == N_CLOSED)
     v, a, good = pg.evaluate(ADS_OK)
-    check(f'native ad re-inserted after filter ({v} cards, {a} ads)', good and a == 1)
+    check(f'native ad re-inserted after filter ({v} cards, {a} ads, expect {N_CLOSED // 12})', good and a == N_CLOSED // 12)
     check('list count updates', pg.inner_text('#list-count') == f'{N_CLOSED} of {N_ALL}')
     pg.click('#f-reset')
     pg.click('[data-filter="feat:money"]')
