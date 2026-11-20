@@ -376,4 +376,47 @@ describe('keyset paging and run names', () => {
     expect(r.backup_key).toBe(oldKey);
     expect((await backupStatus(E, NOW + 60_000)).backups[0].key).toBe(oldKey);
   });
+
+  it('parallel runs in the same second each get their own name and none overwrites another', async () => {
+    await seed();
+    const runs = await Promise.all(Array.from({ length: 12 }, () => runBackup(E, NOW)));
+    const keys = runs.map((r) => r.key);
+    expect(new Set(keys).size).toBe(12);
+    expect(new Set(runs.map((r) => r.manifest_key)).size).toBe(12);
+    for (const r of runs) {
+      const m: Manifest = await (await E.BACKUPS.get(r.manifest_key)).json();
+      expect(m.artifact.key).toBe(r.key);
+      expect(m.artifact.sha256).toBe(r.sha256);
+      expect(await sha256Hex(await (await E.BACKUPS.get(r.key)).arrayBuffer())).toBe(r.sha256);
+    }
+  });
+
+  it('never overwrites an existing object: a taken name is skipped, and a full name space fails the run', async () => {
+    await seed();
+    await E.BACKUPS.put('local/d1/2026-10-19T030000Z.sql.gz', 'precious');
+    const r = await runBackup(E, NOW);
+    expect(r.key).toBe('local/d1/2026-10-19T030000Z-2.sql.gz');
+    expect(await (await E.BACKUPS.get('local/d1/2026-10-19T030000Z.sql.gz')).text()).toBe('precious');
+    await E.BACKUPS.put('local/d1/2026-10-19T030000Z-3.manifest.json', 'orphan manifest');
+    const r2 = await runBackup(E, NOW);
+    expect(r2.key).toBe('local/d1/2026-10-19T030000Z-4.sql.gz');
+    expect(await E.BACKUPS.head('local/d1/2026-10-19T030000Z-3.sql.gz')).toBeNull(); // our dump was given back
+    expect(await (await E.BACKUPS.get('local/d1/2026-10-19T030000Z-3.manifest.json')).text()).toBe('orphan manifest');
+    for (let n = 2; n <= 50; n++) await E.BACKUPS.put(`local/d1/2026-10-19T030000Z-${n}.sql.gz`, 'x');
+    await expect(runBackup(E, NOW)).rejects.toThrow(/no free backup name/);
+  });
+
+  it('12 same-second runs: status and restore check pick the newest by number (-12 after -2), over older daily and older stamps', async () => {
+    await seed();
+    await runBackup(E, NOW - 86_400_000);
+    for (let i = 0; i < 12; i++) await runBackup(E, NOW);
+    await E.BACKUPS.put('local/d1/2026-10-19.sql.gz', 'old daily', {});
+    const status = await backupStatus(E, NOW + 60_000);
+    expect(status.backups[0].key).toBe('local/d1/2026-10-19T030000Z-12.sql.gz');
+    expect(status.backups.slice(0, 3).map((b) => b.key)).toEqual([
+      'local/d1/2026-10-19T030000Z-12.sql.gz', 'local/d1/2026-10-19T030000Z-11.sql.gz', 'local/d1/2026-10-19T030000Z-10.sql.gz']);
+    const r = await runRestoreCheck(E, NOW + 60_000);
+    expect(r.ok).toBe(true);
+    expect(r.backup_key).toBe('local/d1/2026-10-19T030000Z-12.sql.gz');
+  });
 });

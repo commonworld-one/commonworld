@@ -40,6 +40,8 @@ export const MAX_BACKUP_AGE_HOURS = 36;
 /** The Monday check runs weekly; one missed run plus a day of slack before status turns unhealthy. */
 export const MAX_CHECK_AGE_DAYS = 8;
 /** A backup or restore-check timestamp may run ahead of `now` by at most this much (clock skew); later = unhealthy. */
+/** Names tried for one run second before the run fails (nothing is overwritten). */
+export const MAX_RUN_NAME_TRIES = 50;
 export const MAX_CLOCK_SKEW_MS = 5 * 60_000;
 const SKIP_PREFIXES = ['sqlite_', '_cf_'];
 /** Written into every manifest next to the per-table paging facts. States what the dump does and does not guarantee. */
@@ -513,9 +515,15 @@ const isoSeconds = (ms: number) => new Date(ms).toISOString().replace(/\.\d{3}Z$
 const day = (ms: number) => new Date(ms).toISOString().slice(0, 10);
 /** Run name: `2026-11-21T030010Z`. One per run, so a second run on the same day never replaces the cron copy. */
 const runStamp = (ms: number) => new Date(ms).toISOString().replace(/\.\d{3}Z$/, 'Z').replace(/:/g, '');
-/** Object name without its extension: sorts old `YYYY-MM-DD` before new `YYYY-MM-DDTHHMMSSZ` before `...Z-2` (plain key order would put `-2.` before `.`). */
-const stem = (key: string) => key.replace(/\.(sql\.gz|manifest\.json)$/, '');
-const byStem = (a: string, b: string) => (stem(a) < stem(b) ? -1 : stem(a) > stem(b) ? 1 : 0);
+/** Object name without its extension. */
+const stem = (key: string) => key.slice(key.lastIndexOf('/') + 1).replace(/\.(sql\.gz|manifest\.json)$/, '');
+/** Oldest first: base name (a run stamp or an old `YYYY-MM-DD`) as text, then the `-N` collision number as a NUMBER (-2 < -10; no suffix = 1). */
+function byStem(a: string, b: string): number {
+  const split = (k: string): [string, number] => { const m = /^(\d{4}-\d{2}-\d{2}(?:T\d{6}Z)?)(?:-(\d+))?$/.exec(stem(k)) ?? [stem(k), stem(k), undefined]; return [m[1], m[2] ? Number(m[2]) : 1]; };
+  const [sa, na] = split(a), [sb, nb] = split(b);
+  return sa < sb ? -1 : sa > sb ? 1 : na - nb;
+}
+const CREATE_ONLY = () => ({ onlyIf: new Headers({ 'If-None-Match': '*' }) });
 
 // ---------- jobs ----------
 
@@ -529,24 +537,33 @@ export async function runBackup(env: Env, now: number = Date.now(), source = 'wo
   const plain = new TextEncoder().encode(dump.sql);
   const gz = await gzip(plain);
   const [sqlSha, gzSha] = await Promise.all([sha256Hex(plain), sha256Hex(gz)]);
-  let name = runStamp(now);
-  for (let n = 2; n < 100 && ((await r2.head(`${prefix}/d1/${name}.sql.gz`)) || (await r2.head(`${prefix}/d1/${name}.manifest.json`))); n++) name = `${runStamp(now)}-${n}`;
-  const file = `${name}.sql.gz`;
-  const key = `${prefix}/d1/${file}`;
-  const manifestKey = `${prefix}/d1/${name}.manifest.json`;
-  const manifest: Manifest = {
-    format: BACKUP_FORMAT, created_utc: created, db: DB_NAMES[prefix] ?? null, env: prefix, source,
-    last_migration: dump.last_migration, table_count: dump.table_count, total_rows: dump.total_rows, tables: dump.tables,
-    sqlite_sequence: dump.sqlite_sequence, sql_sha256: sqlSha, sql_bytes: plain.byteLength, duration_ms: 0,
-    consistency: { page_rows: PAGE_ROWS, single_batch_tables: dump.single_batch_tables, paged_tables: dump.paging, note: CONSISTENCY_NOTE },
-    artifact: { file, key, bytes: gz.byteLength, sha256: gzSha, gzip: true, encrypted: false, age_recipient: null },
-  };
-  await r2.put(key, gz, {
-    httpMetadata: { contentType: 'application/gzip' },
-    customMetadata: { sha256: gzSha, created_utc: created, total_rows: String(dump.total_rows), table_count: String(dump.table_count) },
-  });
-  manifest.duration_ms = Date.now() - t0;
-  await r2.put(manifestKey, JSON.stringify(manifest, null, 2) + '\n', { httpMetadata: { contentType: 'application/json' } });
+  // The name is claimed by a create-only put (If-None-Match: *), not by a head() check: two runs in the same second cannot both
+  // win one name, and an existing object is never overwritten. The loser takes -2, -3, ...; no free name = the run fails.
+  let key = '', manifestKey = '', manifest!: Manifest;
+  for (let n = 1; ; n++) {
+    if (n > MAX_RUN_NAME_TRIES) throw new Error(`no free backup name for ${runStamp(now)} after ${MAX_RUN_NAME_TRIES} tries; nothing overwritten`);
+    const name = n === 1 ? runStamp(now) : `${runStamp(now)}-${n}`;
+    const file = `${name}.sql.gz`;
+    key = `${prefix}/d1/${file}`;
+    manifestKey = `${prefix}/d1/${name}.manifest.json`;
+    manifest = {
+      format: BACKUP_FORMAT, created_utc: created, db: DB_NAMES[prefix] ?? null, env: prefix, source,
+      last_migration: dump.last_migration, table_count: dump.table_count, total_rows: dump.total_rows, tables: dump.tables,
+      sqlite_sequence: dump.sqlite_sequence, sql_sha256: sqlSha, sql_bytes: plain.byteLength, duration_ms: 0,
+      consistency: { page_rows: PAGE_ROWS, single_batch_tables: dump.single_batch_tables, paged_tables: dump.paging, note: CONSISTENCY_NOTE },
+      artifact: { file, key, bytes: gz.byteLength, sha256: gzSha, gzip: true, encrypted: false, age_recipient: null },
+    };
+    const claimed = await r2.put(key, gz, {
+      ...CREATE_ONLY(),
+      httpMetadata: { contentType: 'application/gzip' },
+      customMetadata: { sha256: gzSha, created_utc: created, total_rows: String(dump.total_rows), table_count: String(dump.table_count) },
+    });
+    if (!claimed) continue; // name taken by another run (or an older object)
+    manifest.duration_ms = Date.now() - t0;
+    const wrote = await r2.put(manifestKey, JSON.stringify(manifest, null, 2) + '\n', { ...CREATE_ONLY(), httpMetadata: { contentType: 'application/json' } });
+    if (wrote) break;
+    await r2.delete(key); // a manifest of that name already exists (orphan): give our dump back and try the next name
+  }
   return { key, manifest_key: manifestKey, bytes: gz.byteLength, sql_bytes: plain.byteLength, sha256: gzSha, table_count: dump.table_count, total_rows: dump.total_rows, duration_ms: manifest.duration_ms };
 }
 

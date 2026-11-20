@@ -204,6 +204,7 @@ curl -s -X POST -H "Authorization: Bearer $ADMIN_KEY" -H 'content-type: applicat
 - A table with no usable key (no primary key, a column named `rowid`, or a key value that is not a string or a safe number) falls back to offset paging and is marked `mode: offset` with a reason.
 - The Monday check proves the file is intact and parseable and matches its manifest. It does not load the dump into a database.
 - For a consistent export of a large database, D1's own export is the alternative, but Cloudflare documents that a running export blocks other database requests (https://developers.cloudflare.com/d1/best-practices/import-export-data/). Time Travel restores in place (https://developers.cloudflare.com/d1/reference/time-travel/).
+- Names: each run claims its name with a create-only R2 put (`If-None-Match: *`), so parallel runs in the same second get `-2`, `-3`, ... and nothing is overwritten; if 50 names are taken the run fails. "Newest" is chosen by stamp text, then the `-N` number as a number (`-12` after `-9`). The create-only put is tested against the local R2 simulator only; Cloudflare documents conditional put (null on a failed condition) and conditional headers (https://developers.cloudflare.com/r2/api/workers/workers-api-reference/), but I did not test it against real R2.
 - Check results are still named `<env>/checks/YYYY-MM-DD.json`: a second check on the same day overwrites the first.
 
 ### Verify the Monday check
