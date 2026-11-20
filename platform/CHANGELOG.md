@@ -2,6 +2,15 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-21 — Backup: one name per run, key paging for large tables
+
+Not yet deployed.
+
+- `src/backup.ts`: each backup run writes `<env>/d1/YYYY-MM-DDTHHMMSSZ.sql.gz` and `.manifest.json` (a same-second rerun adds `-2`), so a manual run no longer replaces the cron copy of that day. Old `YYYY-MM-DD.*` objects stay readable and sort before new ones.
+- Pages after the first use the key instead of OFFSET (`rowid`, or the primary key of a WITHOUT ROWID table); the dump text is identical to before. This is not a point-in-time snapshot for tables over 5000 rows.
+- Manifest gets an optional `consistency` block (paged tables, `count_after`, note). Old manifests without it still pass the check. Restore check key (`checks/YYYY-MM-DD.json`) is unchanged.
+- No migration, configuration or dependency change.
+
 ## 2026-11-10 — Enumerate tag candidates before reading posts
 
 Not yet deployed.
