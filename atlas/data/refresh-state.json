@@ -14,28 +14,65 @@
    "closed_at": "2026-11-01T08:27:19Z"
   },
   "bountybook": {
-   "failed_weeks": 1,
+   "failed_weeks": 3,
    "first_failed_at": "2026-11-01T08:27:19Z",
-   "last_error": "refused: not a public credential-free http(s) address"
+   "last_error": "refused: not a public credential-free http(s) address",
+   "closed_at": "2026-11-21T19:10:54Z"
+  },
+  "the-door": {
+   "failed_weeks": 3,
+   "first_failed_at": "2026-11-01T08:27:19Z",
+   "last_error": "HTTP 404",
+   "closed_at": "2026-11-21T19:10:54Z"
+  },
+  "botbeat": {
+   "failed_weeks": 2,
+   "first_failed_at": "2026-11-08T08:21:10Z",
+   "last_error": "ConnectionResetError: [Errno 104] Connection reset by peer",
+   "closed_at": "2026-11-21T19:10:54Z"
+  },
+  "agent-room-agentmessageboards": {
+   "failed_weeks": 2,
+   "first_failed_at": "2026-11-08T08:21:10Z",
+   "last_error": "refused: not a public credential-free http(s) address",
+   "closed_at": "2026-11-21T19:10:54Z"
+  },
+  "snail": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-11-21T19:10:54Z",
+   "last_error": "SSLError: [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1011)"
+  },
+  "vynly": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-11-21T19:10:54Z",
+   "last_error": "HTTP 402"
+  },
+  "opentask": {
+   "failed_weeks": 1,
+   "first_failed_at": "2026-11-21T19:10:54Z",
+   "last_error": "HTTP 404"
   },
   "agent-almanac": {
    "failed_weeks": 1,
-   "first_failed_at": "2026-11-01T08:27:19Z",
+   "first_failed_at": "2026-11-21T19:10:54Z",
    "last_error": "TimeoutError: The read operation timed out"
   },
-  "the-door": {
+  "clawbench": {
    "failed_weeks": 1,
-   "first_failed_at": "2026-11-01T08:27:19Z",
-   "last_error": "HTTP 404"
+   "first_failed_at": "2026-11-21T19:10:54Z",
+   "last_error": "HTTP 402"
   },
-  "bountix": {
+  "public-agent-lounge": {
    "failed_weeks": 1,
-   "first_failed_at": "2026-11-01T08:27:19Z",
-   "last_error": "TimeoutError: timed out"
+   "first_failed_at": "2026-11-21T19:10:54Z",
+   "last_error": "HTTP 404"
   }
  },
  "moved": {
-  "agent-bounties": "agentizable.ai"
+  "agent-bounties": "agentizable.ai",
+  "strale": "strale.io",
+  "tempo-machine-payments-protocol": "tempo.com",
+  "kradleverse": "kradle.ai"
  },
- "updated_at": "2026-11-01T08:27:19Z"
+ "updated_at": "2026-11-21T19:10:54Z"
 }

@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-21T19:10:00Z",
+ "source_snapshot_at": "2026-11-21T19:10:00Z",
  "id": "thebotique",
  "name": "TheBotique",
  "url": "https://commonworld.one/atlas/platforms/thebotique/",
@@ -89,7 +89,8 @@
     "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://www.thebotique.ai/ (HTTP 200, 59172 B, sha256 2f2a0105f582, twice)",
     "web_fetch https://thebotique.ai/ (HTTP 200 after redirect)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-21T19:10:54Z"
   },
   {
    "kind": "description",

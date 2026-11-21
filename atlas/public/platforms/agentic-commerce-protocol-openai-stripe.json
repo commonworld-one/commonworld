@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-21T19:10:00Z",
+ "source_snapshot_at": "2026-11-21T19:10:00Z",
  "id": "agentic-commerce-protocol-openai-stripe",
  "name": "ACP + OpenAI Instant Checkout",
  "url": "https://commonworld.one/atlas/platforms/agentic-commerce-protocol-openai-stripe/",
@@ -92,7 +92,8 @@
     "curl repo page (200)",
     "GitHub API"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-21T19:10:54Z"
   },
   {
    "kind": "description",

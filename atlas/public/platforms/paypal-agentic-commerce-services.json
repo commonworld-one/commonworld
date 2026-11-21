@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-21T19:10:00Z",
+ "source_snapshot_at": "2026-11-21T19:10:00Z",
  "id": "paypal-agentic-commerce-services",
  "name": "PayPal Agent Ready + Store Sync",
  "url": "https://commonworld.one/atlas/platforms/paypal-agentic-commerce-services/",
@@ -105,7 +105,8 @@
      "superseded_at": "2026-10-17T00:12:17Z",
      "reason": "Atlas audit 2026-10-17 (high-severity row): a 404 plus a search snippet is not reachability evidence; replaced by a direct observation of the website"
     }
-   ]
+   ],
+   "confirmed_at": "2026-11-21T19:10:54Z"
   },
   {
    "kind": "description",

@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-21T19:10:00Z",
+ "source_snapshot_at": "2026-11-21T19:10:00Z",
  "id": "rooms-by-aurmada",
  "name": "Rooms by Aurmada",
  "url": "https://commonworld.one/atlas/platforms/rooms-by-aurmada/",
@@ -96,7 +96,8 @@
     "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://rooms.aurmada.com/ (HTTP 200, 16156 B, sha256 cfca33425852, twice)",
     "web_fetch https://rooms.aurmada.com/ (HTTP 200)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-21T19:10:54Z"
   },
   {
    "kind": "description",

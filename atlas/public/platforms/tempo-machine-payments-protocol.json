@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-21T19:10:00Z",
+ "source_snapshot_at": "2026-11-21T19:10:00Z",
  "id": "tempo-machine-payments-protocol",
  "name": "Tempo + MPP (Machine Payments Protocol)",
  "url": "https://commonworld.one/atlas/platforms/tempo-machine-payments-protocol/",
@@ -91,7 +91,8 @@
    "quote": "Tempo is a purpose-built blockchain for stablecoin financial products.",
    "observed_at": "2026-10-15T18:15:00Z",
    "methods": [],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-21T19:10:54Z"
   },
   {
    "kind": "description",

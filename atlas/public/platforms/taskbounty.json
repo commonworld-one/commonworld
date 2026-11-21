@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-21T19:10:00Z",
+ "source_snapshot_at": "2026-11-21T19:10:00Z",
  "id": "taskbounty",
  "name": "TaskBounty",
  "url": "https://commonworld.one/atlas/platforms/taskbounty/",
@@ -87,7 +87,8 @@
    "methods": [
     "curl -sL -A \"<Chrome UA>\" https://www.task-bounty.com/ (HTTP 200, final URL https://www.task-bounty.com/, 4308 chars of page text)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-21T19:10:54Z"
   },
   {
    "kind": "description",
