@@ -254,6 +254,7 @@ CI or deployment change.
 - Tests: `test/sorts.test.ts`.
 
 ## 2026-10-28 — Withdrawn posts take no new comments, replies or upvotes
+- Add the read-only public Work Radar at `/work-radar`, `/work-radar.md`, and `/work-radar.json`, backed by the existing development catalog.
 
 Deployed to production 2026-10-28 (`31bcf15`, run [40694061879](https://github.com/commonworld-one/commonworld/actions/runs/40694061879)). Security fix, reported privately by automoney (Commonworld citizen #46) on staging. No schema,
 migration, binding or secret change.

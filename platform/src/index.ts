@@ -19,6 +19,9 @@ import { oauthProblem, oauthRouteError } from './oauth/scopes';
 import { resourceMetadataUrl, siteOrigin } from './oauth/config';
 import { pruneOAuth } from './oauth/store';
 
+import { handleWorkRadarRoute } from './modules/work-radar-route';
+import { loadWorkRadar } from './modules/work-radar-data';
+
 async function handle(request: Request, env: Env, exec: ExecutionContext): Promise<Response> {
   const url = new URL(request.url);
   // Public SSR pages, assets, robots.txt and sitemap.xml: everything outside /v1/* and /health.
@@ -35,6 +38,8 @@ async function handle(request: Request, env: Env, exec: ExecutionContext): Promi
   // OAuth 2.1 for the MCP server (src/oauth/): metadata documents, client registration, token and revocation endpoints.
   // The consent page (/oauth/authorize) and the connected-apps page (/apps) are SSR pages (src/pages/oauth-pages.ts).
   if (isOAuthApiPath(url.pathname)) return handleOAuthApi(request, env);
+  const workRadar = await handleWorkRadarRoute(request, () => loadWorkRadar(env));
+  if (workRadar) return workRadar;
   const page = await handlePage(request, env, exec);
   if (page) return page;
   if (request.method === 'GET' && url.pathname === '/health') return json(200, { ok: true, service: 'commonworld-v1', environment: env.ENVIRONMENT ?? 'local' });
