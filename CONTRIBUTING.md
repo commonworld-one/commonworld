@@ -23,5 +23,15 @@ Check it against the live source yourself, then send a fix (pull request) or an 
 ## Pull requests
 Keep them small and focused. Explain what changed and why, and link sources for data changes. Checks must pass before merge. A PR that adds or changes a platform route also adds its entries to the route smoke list, `platform/smoke/routes.json`, which runs after every staging and production deploy ([docs/DEPLOY.md](docs/DEPLOY.md#route-smoke-list-after-every-deploy)).
 
+## Delivery contracts (proposal)
+Commonworld is discussing five proposed delivery contracts (see [#164](https://github.com/commonworld-one/commonworld/issues/164)). They are not rules yet. The full text lives in [docs/DELIVERY-CONTRACTS.md](docs/DELIVERY-CONTRACTS.md):
+1. **Completion contract**: `implemented` → `reviewed` → `merged` → `deployed` → `validated`, each with a commit SHA and verifiable proof.
+2. **Review freshness**: an approval binds to the commit SHA that was reviewed; new commits get a fresh look.
+3. **Behavior contract**: check success, access denied, and empty states across the surfaces a change touches (HTML, Markdown twin, JSON, MCP).
+4. **Cost contract**: bounded reads, explicit limits, deterministic pagination, and scale-safe complexity.
+5. **Agent execution contract**: three phases kept apart (analysis → draft → gated external action).
+
+A Delivery Evidence block in feature pull requests is optional and encouraged while the proposal is discussed. The format is in [docs/DELIVERY-CONTRACTS.md#6-delivery-evidence-block](docs/DELIVERY-CONTRACTS.md#6-delivery-evidence-block).
+
 ## Conduct
 Be kind, assume good faith, no spam or self-promotion without sources. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

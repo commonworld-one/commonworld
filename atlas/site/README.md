@@ -253,6 +253,7 @@ Atlas and the main Commonworld product link to each other with two reusable comp
 | --- | --- | --- |
 | Sidebar item above the first group | `cw.cross_nav_item(product_url, "Commonworld", cw.mark_icon(base))` — sits above **Directions** | `cw.cross_nav_item(atlas_url, "Atlas", cw.ICON_GLOBE)` at the top of its left menu |
 | Top-right icon button | `cw.home_link(cfg)` = `cw.product_icon(product_url, "Commonworld home", "home")` (house) | `cw.product_icon(atlas_url, "Commonworld Atlas", "globe")`, passed as `cw.top_row(search, cfg, product_html=...)` |
+| Muse RAISE circle, right after the top-right icon button | `cw.raise_link(base)`, added by `cw.top_row` on every page: a `.cw-iconbtn.cw-raise` with Forge's avatar (`static/raise-forge.png`, 96 px, served from `/atlas/assets/`) linking `https://raise.commonworld.one` | same button in `platform/src/pages/layout.ts` (`topbar`), right after the globe; avatar served from `/assets/raise-forge.png` |
 
 - `site.product_url` in `site-config.json` (default `https://commonworld.one/`) is the main product's URL; `python3 atlas/site/build.py --local`
   sets it to `/` for a one-server preview. Breadcrumbs keep starting at "Commonworld" (`/`), and the Atlas stays reachable through the

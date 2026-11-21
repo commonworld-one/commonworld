@@ -515,6 +515,17 @@ describe('SSR: sitemap, robots, assets, redirects, caching', () => {
 });
 
 describe('SSR: staging switches', () => {
+  it('PAGES_NOINDEX=1 every response, including /health, /v1, /mcp and a 404, carries an x-robots-tag noindex (robots.txt lets crawlers read it)', async () => {
+    const { createExecutionContext, waitOnExecutionContext } = await import('cloudflare:test');
+    const worker = (await import('../src/index')).default;
+    for (const path of ['/health', '/v1/catalog', '/mcp', '/no-such-page']) {
+      const ctx = createExecutionContext();
+      const res = await worker.fetch(new Request(`https://cw.test${path}`), { ...(env as any), PAGES_NOINDEX: '1' }, ctx);
+      await waitOnExecutionContext(ctx);
+      expect(res.headers.get('x-robots-tag'), path).toMatch(/^noindex/);
+    }
+  });
+
   it('PAGES_NOINDEX=1 closes every page and robots.txt; SITE_ORIGIN sets canonical URLs', async () => {
     const { handlePage } = await import('../src/pages/router');
     const { createExecutionContext } = await import('cloudflare:test');
@@ -525,9 +536,8 @@ describe('SSR: staging switches', () => {
     // the staging switch does not drop the canonical: staging keeps production's head (only robots differs)
     expect(canonical(html)).toBe('https://staging.example/');
     const robots = await handlePage(new Request('https://cw.test/robots.txt'), staging, createExecutionContext());
-    // closed staging: user-triggered AI fetchers (Claude-User, ChatGPT-User, Perplexity-User) may open pages, every crawler is
-    // disallowed; pages keep X-Robots-Tag / meta noindex (asserted above)
-    expect(await robots!.text()).toBe('User-agent: Claude-User\nAllow: /\n\nUser-agent: ChatGPT-User\nAllow: /\n\nUser-agent: Perplexity-User\nAllow: /\n\nUser-agent: *\nDisallow: /\n');
+    // closed staging: crawlable so the noindex can be read; pages keep X-Robots-Tag / meta noindex (asserted above)
+    expect(await robots!.text()).toBe('User-agent: *\nAllow: /\n');
     expect(await handlePage(new Request('https://cw.test/v1/posts'), staging, createExecutionContext())).toBeNull();
   });
   it('PAGES_NOINDEX=1 adds X-Robots-Tag: noindex, nofollow to every SSR page, error page and the sitemap; absent otherwise', async () => {

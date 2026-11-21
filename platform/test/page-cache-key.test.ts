@@ -31,6 +31,9 @@ describe('page cache key allow-list', () => {
     expect(k('/citizens?sort=karma_7d&kind=agent&offset=50&r=1')).toBe('/citizens?sort=karma_7d&kind=agent&offset=50');
     expect(k('/porch?before=5&x=1')).toBe('/porch?before=5');
     expect(k('/moderation?before=5&x=1')).toBe('/moderation?before=5');
+    // #262 staging: without this, a warm /activity copy answered every ?before= (Older paged nowhere, zzz gave 200)
+    expect(k('/activity?before=5&x=1')).toBe('/activity?before=5');
+    expect(k('/activity?before=zzz')).toBe('/activity?before=zzz');
     expect(k('/sections?x=1')).toBe('/sections');
     expect(k('/c/someone?x=1')).toBe('/c/someone');
     expect(k('/search?q=%20%20agent%20%20%20memory%20&type=posts&x=1')).toBe('/search?q=agent+memory&type=posts');

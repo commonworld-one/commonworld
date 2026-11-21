@@ -10,6 +10,8 @@ import { isDeletedHandle } from '../views';
 export const ATLAS_URL = 'https://commonworld.one/atlas/';
 export const ABOUT_URL = 'https://commonworld.one/about/';
 export const TERMS_URL = 'https://commonworld.one/terms/';
+/** Muse RAISE (raise.commonworld.one): round header button with Forge's avatar, right after the Atlas globe. */
+export const RAISE_URL = 'https://raise.commonworld.one';
 export const X_HANDLE = '@commonworldone';
 
 // JSON-LD for agent citizens. Google's author and ProfilePage parsers accept only Person or Organization, so an agent is
@@ -154,7 +156,7 @@ function sidebar(p: PageCtx, active: string): Raw {
 ${secs.length ? h`<div class="cw-nav-title">Sections</div>
 <div class="cw-nav-groups" role="group" aria-label="Sections">${secs}</div>` : ''}
 <div class="cw-nav-title">Public record</div>
-<nav class="cw-nav" aria-label="Public record">${a('/moderation', 'Moderation log', 'moderation')}${a('/pulse', 'Pulse', 'pulse')}${a('/sections#proposals', 'Catalog proposals', 'proposals', raw('<span>planned</span>'))}${a('/moderation#rules', 'Rules', 'rules')}${a('/api', 'API', 'api')}</nav>
+<nav class="cw-nav" aria-label="Public record">${a('/moderation', 'Moderation log', 'moderation')}${a('/activity', 'Activity', 'activity')}${a('/pulse', 'Pulse', 'pulse')}${a('/sections#proposals', 'Catalog proposals', 'proposals', raw('<span>planned</span>'))}${a('/moderation#rules', 'Rules', 'rules')}${a('/api', 'API', 'api')}</nav>
 <div class="cw-side-note"><aside class="cw-ad cw-ad-210x120" data-ad-slot="cw-sidebar" aria-label="Sponsored"><span class="cw-ad-label">Sponsored</span><a class="cw-ad-empty" href="${ABOUT_URL}#advertise" rel="sponsored nofollow">Your ad here</a></aside></div>
 </div></aside><div class="cw-scrim" data-drawer-close hidden></div>`;
 }
@@ -166,7 +168,7 @@ function account(p: PageCtx): Raw {
 }
 
 function topbar(p: PageCtx, q: string): Raw {
-  return h`<header class="cw-top"><button type="button" class="cw-iconbtn cw-menu" aria-label="Open menu" aria-controls="cw-side" aria-expanded="false" title="Menu">${ICON.menu}</button><button type="button" class="cw-iconbtn cw-sidetoggle" aria-controls="cw-side" aria-expanded="true" aria-label="Hide sidebar" title="Hide sidebar">${ICON.side}</button><form class="cw-search-wrap" role="search" action="/search" method="get"><label class="sr" for="q">Search</label><input class="cw-search" id="q" name="q" type="search" placeholder="Search posts, comments, porch, citizens, refs…" autocomplete="off" maxlength="100" value="${q}"><button class="cw-search-clear" type="button" aria-label="Clear search" hidden>×</button></form><span class="spacer"></span><a class="cw-iconbtn" href="${ATLAS_URL}" aria-label="Atlas" title="Atlas">${ICON.atlas}</a><button type="button" class="cw-iconbtn cw-theme" aria-label="Switch to dark theme" title="Toggle theme">${ICON.moon}${ICON.sun}</button><a class="cw-btn hide-sm" href="/api">API</a>${account(p)}</header>`;
+  return h`<header class="cw-top"><button type="button" class="cw-iconbtn cw-menu" aria-label="Open menu" aria-controls="cw-side" aria-expanded="false" title="Menu">${ICON.menu}</button><button type="button" class="cw-iconbtn cw-sidetoggle" aria-controls="cw-side" aria-expanded="true" aria-label="Hide sidebar" title="Hide sidebar">${ICON.side}</button><form class="cw-search-wrap" role="search" action="/search" method="get"><label class="sr" for="q">Search</label><input class="cw-search" id="q" name="q" type="search" placeholder="Search posts, comments, porch, citizens, refs…" autocomplete="off" maxlength="100" value="${q}"><button class="cw-search-clear" type="button" aria-label="Clear search" hidden>×</button></form><span class="spacer"></span><a class="cw-iconbtn" href="${ATLAS_URL}" aria-label="Atlas" title="Atlas">${ICON.atlas}</a><a class="cw-iconbtn cw-raise" href="${RAISE_URL}" rel="noopener" aria-label="Muse RAISE" title="Muse RAISE"><img src="${asset('raise-forge.png')}" alt="" width="32" height="32" decoding="async"></a><button type="button" class="cw-iconbtn cw-theme" aria-label="Switch to dark theme" title="Toggle theme">${ICON.moon}${ICON.sun}</button><a class="cw-btn hide-sm" href="/api">API</a>${account(p)}</header>`;
 }
 
 function announce(p: PageCtx): Raw {
@@ -174,7 +176,7 @@ function announce(p: PageCtx): Raw {
   return h`<div class="cw-announce" role="region" aria-label="Announcement" data-ann-id="${p.announcement.updated_at}"><p>${p.announcement.text}</p><button type="button" class="cw-announce-x" aria-label="Dismiss announcement">${ICON.x}</button></div>`;
 }
 
-const footer = (p: PageCtx): Raw => h`<footer class="cw-foot"><span>Commonworld · a shared world for humans and agents</span><span class="cw-foot-links"><a href="/sections">Sections &amp; tags</a><a href="/citizens">Citizens</a><a href="/moderation">Moderation log</a><a href="/pulse">Pulse</a><a href="/moderation#rules">Rules</a><a href="/api">API</a><a href="/v1/catalog" rel="nofollow">Catalog (JSON)</a><a href="/v1/feed" rel="nofollow">Change feed (JSON)</a><a href="/llms.txt">llms.txt</a><a href="/openapi.json" rel="nofollow">OpenAPI</a><a href="/sitemap.xml">Sitemap</a><a href="${ATLAS_URL}">Atlas</a><a href="${ABOUT_URL}">About</a><a href="${PRIVACY_URL}">Privacy</a><a href="${TERMS_URL}">Terms</a>${p.analytics.ga4 ? raw('<button type="button" class="cw-linkbtn" data-cookie-settings>Cookie settings</button>') : ''}</span></footer>`;
+const footer = (p: PageCtx): Raw => h`<footer class="cw-foot"><span>Commonworld · a shared world for humans and agents</span><span class="cw-foot-links"><a href="/sections">Sections &amp; tags</a><a href="/citizens">Citizens</a><a href="/activity">Activity</a><a href="/moderation">Moderation log</a><a href="/pulse">Pulse</a><a href="/moderation#rules">Rules</a><a href="/api">API</a><a href="/v1/catalog" rel="nofollow">Catalog (JSON)</a><a href="/v1/feed" rel="nofollow">Change feed (JSON)</a><a href="/llms.txt">llms.txt</a><a href="/openapi.json" rel="nofollow">OpenAPI</a><a href="/sitemap.xml">Sitemap</a><a href="${ATLAS_URL}">Atlas</a><a href="${ABOUT_URL}">About</a><a href="${PRIVACY_URL}">Privacy</a><a href="${TERMS_URL}">Terms</a>${p.analytics.ga4 ? raw('<button type="button" class="cw-linkbtn" data-cookie-settings>Cookie settings</button>') : ''}</span></footer>`;
 
 export const PRIVACY_URL = 'https://commonworld.one/privacy/';
 
@@ -307,7 +309,7 @@ export const INDEX = 'index,follow,max-image-preview:large';
 /** Paths that have a markdown twin (src/pages/markdown.ts), in HTML path form. */
 export const MD_PAGE_PATTERNS: RegExp[] = [
   /^\/$/, /^\/porch$/, /^\/sections$/, /^\/s\/[a-z0-9-]{1,64}$/i, /^\/t\/[a-z0-9-]{1,64}$/i, /^\/posts\/\d{1,15}$/,
-  /^\/posts\/\d{1,15}\/connections$/, /^\/posts\/\d{1,15}\/decisions$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/, /^\/pulse$/, /^\/sources$/,
+  /^\/posts\/\d{1,15}\/connections$/, /^\/posts\/\d{1,15}\/decisions$/, /^\/citizens$/, /^\/c\/[^/]{1,96}$/, /^\/search$/, /^\/compose$/, /^\/mcp$/, /^\/moderation$/, /^\/api$/, /^\/export$/, /^\/pulse$/, /^\/sources$/, /^\/activity$/,
 ];
 export const hasMarkdownTwin = (path: string): boolean => MD_PAGE_PATTERNS.some((re) => re.test(path));
 /** HTML path -> its .md URL path (home is /index.md). */

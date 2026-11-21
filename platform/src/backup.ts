@@ -3,7 +3,8 @@
  * (ops/d1-backup.yml, retired 2026-10-19). Runbook: docs/ops/BACKUP-RESTORE.md.
  *
  *   BACKUP_CRON        03:00 UTC daily  runBackup(): every D1 table (schema from sqlite_master + all rows, paged) as one
- *                                       SQL file, gzipped, to R2 `<env>/d1/YYYY-MM-DD.sql.gz` + `<env>/d1/YYYY-MM-DD.manifest.json`
+ *                                       SQL file, gzipped, to R2 `<env>/d1/YYYY-MM-DDTHHMMSSZ.sql.gz` + `...manifest.json`
+ *                                       (one name per run; older `YYYY-MM-DD.*` objects stay readable)
  *                                       (row count per table, sqlite_sequence counters, last migration, sha256 of the
  *                                       artifact and of the plain SQL). Same manifest format as scripts/d1-backup.sh, so
  *                                       scripts/d1-restore.sh restores a Worker backup unchanged.
@@ -39,8 +40,17 @@ export const MAX_BACKUP_AGE_HOURS = 36;
 /** The Monday check runs weekly; one missed run plus a day of slack before status turns unhealthy. */
 export const MAX_CHECK_AGE_DAYS = 8;
 /** A backup or restore-check timestamp may run ahead of `now` by at most this much (clock skew); later = unhealthy. */
+/** Names tried for one run second before the run fails (nothing is overwritten). */
+export const MAX_RUN_NAME_TRIES = 50;
 export const MAX_CLOCK_SKEW_MS = 5 * 60_000;
 const SKIP_PREFIXES = ['sqlite_', '_cf_'];
+/** Written into every manifest next to the per-table paging facts. States what the dump does and does not guarantee. */
+export const CONSISTENCY_NOTE =
+  'Tables of at most page_rows rows and sqlite_sequence are read in one D1 batch (one transaction). A larger table is read in several '
+  + 'calls at different moments, by key, not by row offset: rows that are not inserted, updated, deleted or re-keyed during the dump appear '
+  + 'exactly once, but this is NOT a point-in-time snapshot. Rows changed during the dump may show an older or newer value, and rows '
+  + 'inserted or deleted during it may be present or absent. count_after is a count taken after the last page; a difference from rows '
+  + 'proves the table changed during the dump, equality does not prove it did not (updates are not counted).';
 
 type Value = null | number | string | bigint | boolean | ArrayBuffer | Uint8Array | number[];
 type Row = Record<string, unknown>;
@@ -52,7 +62,21 @@ export interface DumpCounts {
   table_count: number;
   total_rows: number;
 }
-export interface Dump extends DumpCounts { sql: string }
+export type PagingMode = 'keyset' | 'offset';
+/** How one multi-page table was read. `offset` is the old behaviour, kept only as a flagged fallback. */
+export interface PagingInfo {
+  mode: PagingMode;
+  /** 'rowid' or the primary key columns used for ordering and for the page cursor; null = no usable order (unordered) */
+  key: 'rowid' | string[] | null;
+  pages: number;
+  rows: number;
+  /** COUNT(*) taken after the last page; null when it could not be read */
+  count_after: number | null;
+  /** count_after differs from rows: the table changed while it was being dumped */
+  changed_during_dump: boolean;
+  fallback_reason?: string;
+}
+export interface Dump extends DumpCounts { sql: string; paging: Record<string, PagingInfo>; single_batch_tables: number }
 
 export interface Manifest extends DumpCounts {
   format: string;
@@ -64,6 +88,8 @@ export interface Manifest extends DumpCounts {
   sql_sha256: string;
   sql_bytes: number;
   duration_ms: number;
+  /** Absent in manifests written before 2026-11-21. */
+  consistency?: { page_rows: number; single_batch_tables: number; paged_tables: Record<string, PagingInfo>; note: string };
   artifact: { file: string; key: string; bytes: number; sha256: string; gzip: boolean; encrypted: false; age_recipient: null };
 }
 
@@ -76,6 +102,8 @@ export interface CheckResult {
   table_count: number | null;
   total_rows: number | null;
   problems: string[];
+  /** Informational, never a failure: e.g. tables that changed while the backup was being read. */
+  notes?: string[];
 }
 
 // ---------- environment ----------
@@ -185,6 +213,7 @@ export function sqlValue(v: unknown): string {
 }
 
 const skip = (name: string) => SKIP_PREFIXES.some((p) => name.startsWith(p));
+const RID = '__cw_rowid';
 const withoutRowid = (sql: string) => /\)\s*WITHOUT\s+ROWID\s*;?\s*$/i.test(sql);
 
 // ---------- dump ----------
@@ -204,22 +233,86 @@ export async function dumpDatabase(db: D1Database, opts: { pageRows?: number; cr
 
   const rows = new Map<string, Row[]>(tables.map((t) => [t.name, []]));
   let seq: { name: string; seq: number }[] = [];
+
+  // Page order per table. rowid tables: rowid. WITHOUT ROWID tables: the primary key columns (PRAGMA table_info, pk order).
+  // A table with no usable key order (no primary key, or a column called rowid) is still read, by OFFSET, and flagged.
+  interface Plan { keyCols: string[] | 'rowid' | null; reason?: string; orderBy: string }
+  const plans = new Map<string, Plan>();
+  for (const t of tables) {
+    const info = (await db.prepare(`PRAGMA table_info(${qi(t.name)})`).all<{ name: string; pk: number }>()).results;
+    if (!withoutRowid(t.sql)) {
+      const clash = info.some((c) => c.name.toLowerCase() === 'rowid');
+      plans.set(t.name, clash ? { keyCols: null, reason: 'a column is named rowid', orderBy: ' ORDER BY rowid' } : { keyCols: 'rowid', orderBy: ' ORDER BY rowid' });
+    } else {
+      const pk = info.filter((c) => c.pk > 0).sort((x, y) => x.pk - y.pk).map((c) => c.name);
+      plans.set(t.name, pk.length ? { keyCols: pk, orderBy: ` ORDER BY ${pk.map(qi).join(',')}` } : { keyCols: null, reason: 'no primary key found', orderBy: '' });
+    }
+  }
+  const pageCount = new Map<string, number>(tables.map((t) => [t.name, 0]));
+  const offsetFallback = new Map<string, string>();
+  const keyOf = (name: string, row: Row): Value[] | null => {
+    const plan = plans.get(name)!;
+    const cols = plan.keyCols;
+    if (cols === null) return null;
+    const vals = cols === 'rowid' ? [row[RID]] : cols.map((c) => row[c]);
+    // only strings and exactly representable numbers survive a bind round trip unchanged
+    return vals.every((v) => typeof v === 'string' || (typeof v === 'number' && Number.isFinite(v) && (!Number.isInteger(v) || Number.isSafeInteger(v)))) ? (vals as Value[]) : null;
+  };
+  const lastKey = new Map<string, Value[]>();
   let pending = tables.map((t) => t.name);
-  const order = new Map(tables.map((t) => [t.name, withoutRowid(t.sql) ? '' : ' ORDER BY rowid']));
   let first = true;
   while (pending.length) {
-    const stmts = pending.map((name) => db.prepare(`SELECT * FROM ${qi(name)}${order.get(name)} LIMIT ? OFFSET ?`).bind(pageRows, rows.get(name)!.length));
+    const stmts = pending.map((name) => {
+      const plan = plans.get(name)!;
+      if (first) return db.prepare(`SELECT *${plan.keyCols === 'rowid' ? `, rowid AS ${RID}` : ''} FROM ${qi(name)}${plan.orderBy} LIMIT ?`).bind(pageRows);
+      if (offsetFallback.has(name) || plan.keyCols === null) {
+        return db.prepare(`SELECT * FROM ${qi(name)}${plan.orderBy} LIMIT ? OFFSET ?`).bind(pageRows, rows.get(name)!.length);
+      }
+      const k = lastKey.get(name)!;
+      if (plan.keyCols === 'rowid') return db.prepare(`SELECT *, rowid AS ${RID} FROM ${qi(name)} WHERE rowid > ? ORDER BY rowid LIMIT ?`).bind(k[0], pageRows);
+      const cols = `(${plan.keyCols.map(qi).join(',')})`;
+      return db.prepare(`SELECT * FROM ${qi(name)} WHERE ${cols} > (${plan.keyCols.map(() => '?').join(',')})${plan.orderBy} LIMIT ?`).bind(...k, pageRows);
+    });
     if (first && hasSeq) stmts.push(db.prepare('SELECT name, seq FROM sqlite_sequence ORDER BY name'));
     const results = await db.batch<Row>(stmts);
     if (first && hasSeq) seq = (results.pop()!.results as unknown as { name: string; seq: number }[]);
     const next: string[] = [];
     pending.forEach((name, i) => {
       const page = results[i].results;
+      pageCount.set(name, pageCount.get(name)! + 1);
+      const plan = plans.get(name)!;
+      if (page.length === pageRows && plan.keyCols !== null && !offsetFallback.has(name)) {
+        const cursor = keyOf(name, page[page.length - 1]);
+        if (cursor) lastKey.set(name, cursor);
+        else offsetFallback.set(name, 'a key value cannot be used as a cursor');
+      }
+      if (plan.keyCols === 'rowid') for (const r of page) delete r[RID];
       rows.get(name)!.push(...page);
       if (page.length === pageRows) next.push(name);
     });
     pending = next;
     first = false;
+  }
+
+  // Tables that needed more than one read: count them again after the last page (informational, see CONSISTENCY_NOTE).
+  const multi = tables.map((t) => t.name).filter((n) => pageCount.get(n)! > 1);
+  const after = new Map<string, number | null>();
+  if (multi.length) {
+    try {
+      const res = await db.batch<{ n: number }>(multi.map((n) => db.prepare(`SELECT count(*) AS n FROM ${qi(n)}`)));
+      multi.forEach((n, i) => after.set(n, Number(res[i].results[0]?.n)));
+    } catch { multi.forEach((n) => after.set(n, null)); }
+  }
+  const paging: Record<string, PagingInfo> = {};
+  for (const n of multi) {
+    const plan = plans.get(n)!;
+    const reason = offsetFallback.get(n) ?? plan.reason;
+    const count = after.get(n) ?? null;
+    paging[n] = {
+      mode: reason ? 'offset' : 'keyset', key: reason ? null : plan.keyCols, pages: pageCount.get(n)!, rows: rows.get(n)!.length,
+      count_after: count, changed_during_dump: count !== null && count !== rows.get(n)!.length,
+      ...(reason ? { fallback_reason: reason } : {}),
+    };
   }
 
   const out: string[] = [];
@@ -256,7 +349,7 @@ export async function dumpDatabase(db: D1Database, opts: { pageRows?: number; cr
     const top = mig.reduce((a, b) => (Number(b.id) > Number(a.id) ? b : a));
     last = { id: Number(top.id), name: String(top.name) };
   }
-  return { sql: out.join('\n') + '\n', tables: counts, sqlite_sequence: seqMap, last_migration: last, table_count: tables.length, total_rows: total };
+  return { sql: out.join('\n') + '\n', tables: counts, sqlite_sequence: seqMap, last_migration: last, table_count: tables.length, total_rows: total, paging, single_batch_tables: tables.length - multi.length };
 }
 
 // ---------- parse (restore check) ----------
@@ -420,6 +513,17 @@ export async function gunzip(data: ArrayBuffer): Promise<ArrayBuffer> {
 
 const isoSeconds = (ms: number) => new Date(ms).toISOString().replace(/\.\d{3}Z$/, 'Z');
 const day = (ms: number) => new Date(ms).toISOString().slice(0, 10);
+/** Run name: `2026-11-21T030010Z`. One per run, so a second run on the same day never replaces the cron copy. */
+const runStamp = (ms: number) => new Date(ms).toISOString().replace(/\.\d{3}Z$/, 'Z').replace(/:/g, '');
+/** Object name without its extension. */
+const stem = (key: string) => key.slice(key.lastIndexOf('/') + 1).replace(/\.(sql\.gz|manifest\.json)$/, '');
+/** Oldest first: base name (a run stamp or an old `YYYY-MM-DD`) as text, then the `-N` collision number as a NUMBER (-2 < -10; no suffix = 1). */
+function byStem(a: string, b: string): number {
+  const split = (k: string): [string, number] => { const m = /^(\d{4}-\d{2}-\d{2}(?:T\d{6}Z)?)(?:-(\d+))?$/.exec(stem(k)) ?? [stem(k), stem(k), undefined]; return [m[1], m[2] ? Number(m[2]) : 1]; };
+  const [sa, na] = split(a), [sb, nb] = split(b);
+  return sa < sb ? -1 : sa > sb ? 1 : na - nb;
+}
+const CREATE_ONLY = () => ({ onlyIf: new Headers({ 'If-None-Match': '*' }) });
 
 // ---------- jobs ----------
 
@@ -433,21 +537,33 @@ export async function runBackup(env: Env, now: number = Date.now(), source = 'wo
   const plain = new TextEncoder().encode(dump.sql);
   const gz = await gzip(plain);
   const [sqlSha, gzSha] = await Promise.all([sha256Hex(plain), sha256Hex(gz)]);
-  const file = `${day(now)}.sql.gz`;
-  const key = `${prefix}/d1/${file}`;
-  const manifestKey = `${prefix}/d1/${day(now)}.manifest.json`;
-  const manifest: Manifest = {
-    format: BACKUP_FORMAT, created_utc: created, db: DB_NAMES[prefix] ?? null, env: prefix, source,
-    last_migration: dump.last_migration, table_count: dump.table_count, total_rows: dump.total_rows, tables: dump.tables,
-    sqlite_sequence: dump.sqlite_sequence, sql_sha256: sqlSha, sql_bytes: plain.byteLength, duration_ms: 0,
-    artifact: { file, key, bytes: gz.byteLength, sha256: gzSha, gzip: true, encrypted: false, age_recipient: null },
-  };
-  await r2.put(key, gz, {
-    httpMetadata: { contentType: 'application/gzip' },
-    customMetadata: { sha256: gzSha, created_utc: created, total_rows: String(dump.total_rows), table_count: String(dump.table_count) },
-  });
-  manifest.duration_ms = Date.now() - t0;
-  await r2.put(manifestKey, JSON.stringify(manifest, null, 2) + '\n', { httpMetadata: { contentType: 'application/json' } });
+  // The name is claimed by a create-only put (If-None-Match: *), not by a head() check: two runs in the same second cannot both
+  // win one name, and an existing object is never overwritten. The loser takes -2, -3, ...; no free name = the run fails.
+  let key = '', manifestKey = '', manifest!: Manifest;
+  for (let n = 1; ; n++) {
+    if (n > MAX_RUN_NAME_TRIES) throw new Error(`no free backup name for ${runStamp(now)} after ${MAX_RUN_NAME_TRIES} tries; nothing overwritten`);
+    const name = n === 1 ? runStamp(now) : `${runStamp(now)}-${n}`;
+    const file = `${name}.sql.gz`;
+    key = `${prefix}/d1/${file}`;
+    manifestKey = `${prefix}/d1/${name}.manifest.json`;
+    manifest = {
+      format: BACKUP_FORMAT, created_utc: created, db: DB_NAMES[prefix] ?? null, env: prefix, source,
+      last_migration: dump.last_migration, table_count: dump.table_count, total_rows: dump.total_rows, tables: dump.tables,
+      sqlite_sequence: dump.sqlite_sequence, sql_sha256: sqlSha, sql_bytes: plain.byteLength, duration_ms: 0,
+      consistency: { page_rows: PAGE_ROWS, single_batch_tables: dump.single_batch_tables, paged_tables: dump.paging, note: CONSISTENCY_NOTE },
+      artifact: { file, key, bytes: gz.byteLength, sha256: gzSha, gzip: true, encrypted: false, age_recipient: null },
+    };
+    const claimed = await r2.put(key, gz, {
+      ...CREATE_ONLY(),
+      httpMetadata: { contentType: 'application/gzip' },
+      customMetadata: { sha256: gzSha, created_utc: created, total_rows: String(dump.total_rows), table_count: String(dump.table_count) },
+    });
+    if (!claimed) continue; // name taken by another run (or an older object)
+    manifest.duration_ms = Date.now() - t0;
+    const wrote = await r2.put(manifestKey, JSON.stringify(manifest, null, 2) + '\n', { ...CREATE_ONLY(), httpMetadata: { contentType: 'application/json' } });
+    if (wrote) break;
+    await r2.delete(key); // a manifest of that name already exists (orphan): give our dump back and try the next name
+  }
   return { key, manifest_key: manifestKey, bytes: gz.byteLength, sql_bytes: plain.byteLength, sha256: gzSha, table_count: dump.table_count, total_rows: dump.total_rows, duration_ms: manifest.duration_ms };
 }
 
@@ -466,7 +582,7 @@ export async function runRestoreCheck(env: Env, now: number = Date.now(), keyPre
   const { r2, prefix } = backupTarget(env, keyPrefix);
   const result: CheckResult = { ok: false, checked_at: isoSeconds(now), backup_key: null, backup_created_utc: null, age_hours: null, table_count: null, total_rows: null, problems: [] };
   try {
-    const manifests = (await listAll(r2, `${prefix}/d1/`)).map((o) => o.key).filter((k) => k.endsWith('.manifest.json')).sort();
+    const manifests = (await listAll(r2, `${prefix}/d1/`)).map((o) => o.key).filter((k) => k.endsWith('.manifest.json')).sort(byStem);
     const latest = manifests[manifests.length - 1];
     if (!latest) throw new Error(`no backup found under ${prefix}/d1/`);
     const mObj = await r2.get(latest);
@@ -490,6 +606,8 @@ export async function runRestoreCheck(env: Env, now: number = Date.now(), keyPre
     const plain = await gunzip(gz);
     if ((await sha256Hex(plain)) !== manifest.sql_sha256) throw new Error('decompressed SQL sha256 does not match the manifest');
     result.problems.push(...compareWithManifest(parseDump(new TextDecoder().decode(plain)), manifest));
+    const changed = Object.entries(manifest.consistency?.paged_tables ?? {}).filter(([, v]) => v?.changed_during_dump).map(([k]) => k);
+    if (changed.length) result.notes = [`tables that changed while this backup was read (not a point-in-time snapshot): ${changed.join(', ')}`];
   } catch (error) {
     result.problems.push(error instanceof Error ? error.message : String(error));
   }
@@ -521,7 +639,7 @@ export interface BackupStatus {
 
 export async function backupStatus(env: Env, now: number = Date.now(), limit = 14): Promise<BackupStatus> {
   const { r2, bucket, prefix } = backupTarget(env);
-  const objects = (await listAll(r2, `${prefix}/d1/`, ['customMetadata'])).filter((o) => o.key.endsWith('.sql.gz')).sort((a, b) => (a.key < b.key ? 1 : -1));
+  const objects = (await listAll(r2, `${prefix}/d1/`, ['customMetadata'])).filter((o) => o.key.endsWith('.sql.gz')).sort((a, b) => byStem(b.key, a.key));
   const backups = objects.slice(0, limit).map((o) => ({
     key: o.key, bytes: o.size, uploaded: o.uploaded.toISOString(),
     created_utc: o.customMetadata?.created_utc ?? null,

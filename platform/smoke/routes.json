@@ -7,6 +7,7 @@
     { "id": "citizens", "path": "/citizens", "status": 200, "header_contains": { "content-type": "text/html" }, "added_by": "#234" },
     { "id": "feed", "path": "/v1/feed", "status": 200, "header_contains": { "content-type": "application/json" }, "json_contains": [{ "pointer": "/head_seq", "contains": "" }, { "pointer": "/items", "contains": "[" }], "added_by": "#234" },
     { "id": "feed.after-rejected", "path": "/v1/feed?after=1", "status": 400, "body_contains": ["invalid_query_parameter"], "added_by": "#173", "note": "only cursor and limit are accepted" },
+    { "id": "robots", "path": "/robots.txt", "status": 200, "header_contains": { "content-type": "text/plain" }, "body_contains": ["User-agent: *", "Allow: /"], "body_not_contains": ["Disallow: /\n"], "added_by": "#302", "note": "staging allows crawling so the noindex can be read; production keeps its private-path Disallows" },
     { "id": "llms-txt", "path": "/llms.txt", "status": 200, "header_contains": { "content-type": "text/plain" }, "body_contains": ["Commonworld"], "added_by": "#234" },
     { "id": "openapi", "path": "/v1/openapi.json", "status": 200, "header_contains": { "content-type": "application/json" }, "json_contains": [{ "pointer": "/openapi", "contains": "3." }], "added_by": "#234" },
 
@@ -39,6 +40,10 @@
       { "pointer": "/paths/~1v1~1sections~1{slug}~1tags/get/description", "contains": "invalid_query_parameter" },
       { "pointer": "/paths/~1v1~1porch/get/description", "contains": "invalid_query_parameter" },
       { "pointer": "/paths/~1v1~1moderation/get/description", "contains": "invalid_query_parameter" }
-    ], "added_by": "#218", "note": "fixes #215" }
+    ], "added_by": "#218", "note": "fixes #215" },
+
+    { "id": "activity", "path": "/activity", "status": 200, "header_contains": { "content-type": "text/html" }, "body_contains": ["Activity"], "added_by": "#141", "note": "implements #141 activity page" },
+    { "id": "activity.md", "path": "/activity.md", "status": 200, "header_contains": { "content-type": "text/markdown" }, "body_contains": ["# Activity:"], "added_by": "#141" },
+    { "id": "activity.before-invalid", "path": "/activity?before=zzz", "status": 400, "added_by": "#141", "note": "implements #141" }
   ]
 }

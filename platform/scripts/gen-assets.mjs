@@ -3,6 +3,7 @@
 // with no Workers Static Assets binding needed (works the same in wrangler dev and the vitest pool).
 //   Sources: mockups/assets/{atlas.css, product.css}  (approved Atlas look, single source)
 //            src/pages/static/brand/*  (CW mark SVG + PNG fallbacks, favicons, apple-touch icon; vector logo 2026-10-18)
+//            src/pages/static/brand/raise-forge.png  (header circle to Muse RAISE, Forge's avatar)
 //            src/pages/static/{ssr.css, site.js, og-default.png}                   (SSR-only additions)
 // Run after changing any of them:  npm run gen:assets
 import { createHash } from 'node:crypto';
@@ -27,6 +28,8 @@ const files = [
   ['favicon-32.png', 'src/pages/static/brand/favicon-32.png', 'image/png'],
   ['apple-touch-icon.png', 'src/pages/static/brand/apple-touch-icon.png', 'image/png'],
   ['og-default.png', 'src/pages/static/og-default.png', 'image/png'],
+  // Header circle to Muse RAISE: Forge's avatar, 96 px (from https://raise.commonworld.one/avatars/forge.png), served from here, not hotlinked.
+  ['raise-forge.png', 'src/pages/static/brand/raise-forge.png', 'image/png'],
 ];
 
 // Runs before first paint: theme, collapsed sidebar, dismissed announcement (its id is on <html data-ann>).
