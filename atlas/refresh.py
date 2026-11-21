@@ -40,7 +40,7 @@ confirms facts still writes the snapshot (new confirmed_at values), so the weekl
 Exit code 0 always unless the script itself breaks; findings go to the summary.
 """
 import argparse, concurrent.futures as cf, copy, glob, http.client, ipaddress, json, math, os, re, socket, ssl, string, sys, tempfile, threading, time, urllib.error, urllib.parse, urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, 'data')
@@ -57,6 +57,48 @@ MULTI_SUFFIX = {'co.uk', 'org.uk', 'ac.uk', 'gov.uk', 'com.au', 'net.au', 'org.a
                 'replit.app', 'repl.co', 'chatgpt.site', 'web.app', 'firebaseapp.com', 'azurewebsites.net', 'hf.space',
                 'streamlit.app', 'vercel.sh', 'deno.dev', 'surge.sh', 'glitch.me', 'notion.site', 'substack.com',
                 'medium.com', 'blogspot.com', 'wordpress.com', 'framer.website', 'framer.app', 'webflow.io', 'carrd.co'}
+
+
+MIN_WEEK_GAP = timedelta(days=7)
+
+
+def _parse_ts(ts):
+    return datetime.strptime(ts, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
+
+
+def earned_closure(st):
+    """True when this entry already reached the closure threshold in a counting run (a valid `last_counted_at` is written only when a
+    week is counted, and a counted 2nd week closes the card) but the closure itself was lost, e.g. the run failed after Refresh and
+    only the state was carried. The still-failing check of this run then applies the closure without adding a week. An entry without a
+    valid `last_counted_at` (legacy state, unknown history) is never treated as earned."""
+    try:
+        return st.get('failed_weeks', 0) >= 2 and isinstance(st.get('last_counted_at'), str) and bool(_parse_ts(st['last_counted_at']))
+    except ValueError:
+        return False
+
+
+def counts_as_new_week(st, ts):
+    """True when this failed check adds a week: >= 7 days (MIN_WEEK_GAP) since the previous counted failed check.
+    The previous count time is `last_counted_at`; for an entry recorded before that field existed with exactly 1 failed week it is
+    `first_failed_at`, which this script sets only when it creates the entry, in the same run as the first count.
+    When the previous count time is unknown or unreadable (older entry with more weeks, bad value) nothing is assumed: the check
+    does not count, and `interval_baseline_at` is set to this check's time (not a counted failure, only the start of the 7-day
+    interval). The entry keeps its failed_weeks and first_failed_at. A later check counts once 7 days have passed since the baseline.
+    Mutates only st['interval_baseline_at'] (set when missing or unreadable)."""
+    def parsed(v):
+        try:
+            return _parse_ts(v) if isinstance(v, str) else None
+        except ValueError:
+            return None
+    last = parsed(st.get('last_counted_at'))
+    if last is None and st.get('last_counted_at') is None and st.get('failed_weeks') == 1:
+        last = parsed(st.get('first_failed_at'))
+    if last is None:
+        last = parsed(st.get('interval_baseline_at'))
+        if last is None:
+            st['interval_baseline_at'] = ts
+            return False
+    return _parse_ts(ts) - last >= MIN_WEEK_GAP
 
 
 def now_iso():
@@ -980,13 +1022,21 @@ def write_atomic(path, text):
         raise
 
 
+def valid_state(d):
+    """Shape check for a state file that comes from outside the repo checkout (PR branch, failed-run artifact)."""
+    return (isinstance(d, dict) and d.get('version') == 1 and isinstance(d.get('entries'), dict)
+            and isinstance(d.get('updated_at', ''), str)
+            and all(isinstance(v, dict) and isinstance(v.get('failed_weeks'), int) and isinstance(v.get('first_failed_at'), str)
+                    for v in d['entries'].values()))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--dry-run', action='store_true', help='check everything, write nothing')
     ap.add_argument('--snapshot', default=None)
     ap.add_argument('--sources', default=os.path.join(HERE, 'refresh-sources.json'))
     ap.add_argument('--state', default=os.path.join(DATA, 'refresh-state.json'))
-    ap.add_argument('--state-from', default=None, help='start from this state (e.g. the open refresh PR) if it is newer than --state')
+    ap.add_argument('--state-from', action='append', default=None, help='start from this state (repeatable; e.g. the open refresh PR, the state kept by a failed run) if it is newer than --state; the newest updated_at wins')
     ap.add_argument('--summary', default=None, help='write the markdown PR summary here')
     ap.add_argument('--report', default=None, help='write the full JSON report here')
     ap.add_argument('--only', default=None, help='comma-separated slugs (testing)')
@@ -1002,13 +1052,22 @@ def main():
     sources = load_json(a.sources, {}).get('sources', {})
     state_raw = open(a.state, encoding='utf-8').read() if os.path.exists(a.state) else None
     state = json.loads(state_raw) if state_raw else {'version': 1, 'entries': {}, 'moved': {}}
-    if a.state_from and os.path.exists(a.state_from):
-        alt = load_json(a.state_from, None)
-        if alt and (alt.get('updated_at') or '') > (state.get('updated_at') or ''):
-            print(f'starting from newer state {a.state_from} ({alt.get("updated_at")})')
+    state_on_disk = copy.deepcopy(state)
+    state_on_disk.setdefault('entries', {}); state_on_disk.setdefault('moved', {})
+    for path in (a.state_from or []):
+        if not os.path.exists(path):
+            continue
+        alt = load_json(path, None)
+        if not valid_state(alt):
+            print(f'ignoring {path}: not a valid refresh state')
+            continue
+        if (alt.get('updated_at') or '') > (state.get('updated_at') or ''):
+            print(f'starting from newer state {path} ({alt.get("updated_at")})')
             state = alt
     state.setdefault('entries', {}); state.setdefault('moved', {})
-    state_before = copy.deepcopy(state)
+    # Compared with what --state holds on disk, not with the adopted state: an adopted state (open refresh PR, state kept by a failed
+    # run) must be written even when this run adds nothing, because the workflow deletes the superseded PR branch afterwards.
+    state_before = state_on_disk
     ts = now_iso()
     today = ts[:10]
 
@@ -1059,20 +1118,24 @@ def main():
         if e['status'] == 'live':
             if r['cls'] == 'fail':
                 st = st or {'failed_weeks': 0, 'first_failed_at': ts}
-                st['failed_weeks'] += 1
+                new_week = counts_as_new_week(st, ts) if st['failed_weeks'] else True
+                if new_week:
+                    st['failed_weeks'] += 1
+                    st['last_counted_at'] = ts
+                    st.pop('interval_baseline_at', None)
                 st['last_error'] = r['error']
                 state['entries'][slug] = st
-                if st['failed_weeks'] >= 2:
-                    rep['died'].append({'slug': slug, 'url': r['via'], 'error': r['error'], 'first_failed_at': st['first_failed_at']})
+                if st['failed_weeks'] >= 2 and (new_week or earned_closure(st)):
+                    rep['died'].append({'slug': slug, 'url': r['via'], 'error': r['error'], 'first_failed_at': st['first_failed_at'], 'failed_weeks': st['failed_weeks']})
                     claim = {'kind': 'site_reachable',
-                             'statement': f'Automated weekly check could not reach the site in {st["failed_weeks"]} consecutive weeks '
+                             'statement': f'Automated weekly check could not reach the site in {st["failed_weeks"]} recorded weekly checks since {st["first_failed_at"][:10]} '
                                           f'({ATTEMPTS} attempts each week plus alternate URLs); last error: {r["error"]}.',
                              'value': None, 'unit': None, 'window': None, 'basis': 'direct_observation', 'source_url': r['via'],
                              'quote': (r['error'] or '')[:200], 'observed_at': ts, 'methods': r['methods'], 'outcome': 'contradicted',
-                             'refresh': {'by': TOOL, 'rule': 'closed after 2 consecutive failed weekly checks', 'first_failed_at': st['first_failed_at']}}
+                             'refresh': {'by': TOOL, 'rule': 'closed after 2 consecutive failed weekly checks', 'failed_weeks_recorded': st['failed_weeks'], 'first_failed_at': st['first_failed_at']}}
                     e['claims'].insert(0, claim)
                     e.setdefault('status_history', []).append({'at': ts, 'from': 'live', 'to': 'closed', 'by': TOOL,
-                                                               'reason': f'unreachable in {st["failed_weeks"]} consecutive weekly checks since {st["first_failed_at"][:10]}'})
+                                                               'reason': f'unreachable in {st["failed_weeks"]} recorded weekly checks since {st["first_failed_at"][:10]}'})
                     e['status'], e['verdict'] = 'closed', 'include_closed_history'
                     st['closed_at'] = ts
                     changed_slugs.add(slug)
@@ -1179,7 +1242,7 @@ def main():
             https = lambda u: u if str(u).startswith('https://') else 'https://' + str(u).split('://', 1)[-1]
             for d in rep['died']:
                 atlas_events.append(ev_file, today, d['slug'], 'closed',
-                                    'Automated weekly check: site unreachable in 2 consecutive weekly checks', https(d['url']))
+                                    f'Automated weekly check: site unreachable in {d["failed_weeks"]} recorded weekly checks since {d["first_failed_at"][:10]}', https(d['url']))
             for d in rep['revived']:
                 atlas_events.append(ev_file, today, d['slug'], 'reopened',
                                     'Automated weekly check: site answers again after an automated closure', https(d['url']))
