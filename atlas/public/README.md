@@ -14,4 +14,6 @@ Homepage screenshots are re-captured weekly by the workflow `Atlas weekly screen
 
 Source dates (schema_version 1.10.0): a refreshed claim in `platforms/<id>.json` may carry `source_as_of` (when the source computed the figure) and `last_settlement_seen_at` (the newest settlement event the source reported), ISO 8601 UTC or null, kept apart from `observed_at` (when the Atlas read the source).
 
+Confirmed dates (schema_version 1.11.0): a claim in `platforms/<id>.json` may carry `confirmed_at`, the newest weekly re-check that read the same fact again and found it unchanged (ISO 8601 UTC or null; never earlier than `observed_at`, which a re-check never changes). `replications` and `preview` carry `confirmed_at` the same way.
+
 Cards v2: money and activity claims carry `evidence_level` and `evidence_label`; where a curator opened the source and set the level by hand, the claim also carries `evidence_note`, a short reason (rules: https://github.com/commonworld-one/commonworld/blob/main/atlas/CURATION.md#curator-review-of-a-level).

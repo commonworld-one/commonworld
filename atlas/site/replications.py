@@ -18,10 +18,12 @@ Today one format is supported:
 
 atlas/refresh.py reads the files at the newest commit on main whose validate.yml push run succeeded (so the counts are
 counts validate.ts accepted), pins that commit sha, and writes the record here. A record only changes when a count
-changes; the previous record then moves into `history` (past records are never rewritten). build.py publishes the
+changes; the previous record then moves into `history` (past records are never rewritten). A weekly re-read with the same
+counts only sets `confirmed_at` (UTC, issue #273): observed_at, commit and sources stay those of the first observation. build.py publishes the
 record as `replications` on the card JSON, the card page and its Markdown twin; check.py validates this file.
 """
 import json
+from datetime import datetime, timezone
 import os
 import re
 
@@ -31,7 +33,7 @@ DATA_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'replications.json
 FORMATS = ('agent-errata',)
 COUNT_KEYS = ('rows', 'entries', 'entries_replicated', 'independent_agents')
 RECORD_KEYS = COUNT_KEYS + ('format', 'repo', 'commit', 'source_url', 'method_url', 'validate_run_url', 'observed_at')
-OPTIONAL_KEYS = ('history',)
+OPTIONAL_KEYS = ('history', 'confirmed_at')   # confirmed_at: newest weekly re-read with the same counts (issue #273), UTC
 REPO_RE = re.compile(r'^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})/[A-Za-z0-9._-]{1,100}$')
 SHA_RE = re.compile(r'^[0-9a-f]{40}$')
 UTC_RE = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$')
@@ -172,7 +174,24 @@ def record_problems(slug, r):
             p.append(f'{w}: validate_run_url must be a run page of {repo}')
     if not UTC_RE.fullmatch(str(r['observed_at'])):
         p.append(f'{w}: observed_at must be YYYY-MM-DDTHH:MM:SSZ')
+    if 'confirmed_at' in r:
+        if not UTC_RE.fullmatch(str(r['confirmed_at'])):
+            p.append(f'{w}: confirmed_at must be YYYY-MM-DDTHH:MM:SSZ')
+        elif not _real_utc_time(r['confirmed_at']):
+            p.append(f'{w}: confirmed_at must be a real time, not in the future')
+        elif UTC_RE.fullmatch(str(r['observed_at'])) and r['confirmed_at'] < r['observed_at']:
+            p.append(f'{w}: confirmed_at must not be earlier than observed_at')
     return p
+
+
+def _real_utc_time(v, now=None):
+    """True for a YYYY-MM-DDTHH:MM:SSZ that is a real calendar time and not more than 10 minutes in the future
+    (the same bound as refresh.py's claim check)."""
+    try:
+        dt = datetime.strptime(v, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
+    except (TypeError, ValueError):
+        return False
+    return (dt - (now or datetime.now(timezone.utc))).total_seconds() <= 600
 
 
 def validate(cards, slugs):
@@ -197,11 +216,12 @@ def validate(cards, slugs):
 
 
 def published(cards, slug):
-    """The record as the API publishes it (`replications` on the card), or None. History stays in the data file."""
+    """The record as the API publishes it (`replications` on the card), or None. History stays in the data file.
+    confirmed_at (since API 1.11.0) is the newest weekly re-read that found the same counts, or None."""
     r = cards.get(slug)
     if not r:
         return None
-    return {k: r[k] for k in RECORD_KEYS}
+    return {k: r[k] for k in RECORD_KEYS} | {'confirmed_at': r.get('confirmed_at')}
 
 
 def sentence(r):

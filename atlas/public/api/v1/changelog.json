@@ -1,7 +1,16 @@
 {
- "schema_version": "1.10.0",
+ "schema_version": "1.11.0",
  "versioning": "Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) ships as /api/v2/, and /api/v1/ keeps working.",
  "releases": [
+  {
+   "schema_version": "1.11.0",
+   "date": "2026-11-02",
+   "changes": [
+    "New optional field `confirmed_at` on a claim (claims[] of platforms/{id}.json, and inside a claim's history[] entries): the time of the newest weekly re-check that read the same fact again and found it unchanged (issue #273). ISO 8601 UTC (RFC 3339, YYYY-MM-DDTHH:MM:SSZ) or null, never earlier than `observed_at`. A re-check never changes `observed_at`: only a real change of the value (or of the statement or source dates read with it) is a new observation; the old record, with its last `confirmed_at`, then moves into history[] and the new one starts without `confirmed_at`. Claims that no weekly check re-reads leave it out.",
+    "`replications` gains `confirmed_at` (the newest re-read with the same counts; the record keeps the commit it was first observed at) and `preview` gains `confirmed_at` (the newest weekly capture that showed no visible change; the stored image and `captured_at` stay). Both are ISO 8601 UTC or null, and both are optional in the schema, so older records stay valid.",
+    "The card page and its Markdown twin show \"Observed <date> · Confirmed <date>\" (Confirmed only when a re-check exists). Values appear after the first weekly refresh and screenshot run that include this change."
+   ]
+  },
   {
    "schema_version": "1.10.0",
    "date": "2026-11-01",
