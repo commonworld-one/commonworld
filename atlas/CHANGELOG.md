@@ -36,7 +36,7 @@ Not yet merged (open PR). Site chrome only: no card data changes, no API change.
 Not merged yet. No card data changes in this PR: no value, `observed_at` or screenshot is changed, and no confirmation is
 backfilled. Confirmed dates appear after the first weekly refresh and screenshot run after merge (their own PRs, reviewed before merging).
 
-Owner decision on [issue #273](https://github.com/commonworld-one/commonworld/issues/273#issuecomment-6564079672) after the 10-card re-check pilot:
+Proposed by Hark in the 10-card re-check pilot report on [issue #273](https://github.com/commonworld-one/commonworld/issues/273#issuecomment-6564079672); the maintainer chose the issue #273 direction on 2026-11-01. The exact rules below were written by Hark and are open to review:
 
 - **Check records.** [`refresh.py`](refresh.py) writes `confirmed_at` (UTC) on every fact it re-reads and finds unchanged: a
   mapped number with the same value, statement and source dates; a supported `site_reachable` claim whose own source URL

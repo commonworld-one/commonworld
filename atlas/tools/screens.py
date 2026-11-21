@@ -33,7 +33,7 @@ Capture rules (owner decision 2026-10-17; atlas screens PLAN "Standing capture r
     direct mode, the one CI uses, also pins the checked address); a host it cannot resolve is refused (fail closed).
 Only live cards are captured; closed cards keep their last capture and no slug is ever removed from the manifest.
 
-Confirmations (owner decision on issue #273, 2026-11-01): a capture that passes the checks and shows no visible change
+Confirmations (proposed by Hark in the issue #273 pilot; the maintainer chose the #273 direction, 2026-11-01): a capture that passes the checks and shows no visible change
 (decide() -> 'keep:no visible change', dHash distance < 6/64) is a check record for the stored image: its manifest entry
 gets `confirmed_at` = the time of that capture, and nothing else in the entry changes (captured_at, sha256, dhash and the
 image stay those of the stored shot). A held, failed, too-young or replaced capture confirms nothing; a new or replaced

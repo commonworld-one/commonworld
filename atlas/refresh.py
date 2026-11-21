@@ -28,7 +28,7 @@ What it does, per entry of the Atlas snapshot (atlas/data/snapshot-verified-*.js
      (atlas/site/replications.py), and written to atlas/data/replications.json with the pinned commit. A record changes only
      when a count changes; the previous record moves into its history.
        python3 atlas/refresh.py --replications-only      # step 5 alone (no reachability, no numbers)
-  6. Confirmations (owner decision on issue #273, 2026-11-01): a fact this run re-read and found unchanged gets a check
+  6. Confirmations (proposed by Hark in the issue #273 pilot; the maintainer chose the #273 direction, 2026-11-01): a fact this run re-read and found unchanged gets a check
      record, confirmed_at (UTC), on the claim (or on the replication record); observed_at is never touched by it. Only a
      real change of the value (or of the statement or source dates read with it) is a new observation, with a new
      observed_at; the old record, its last confirmed_at included, moves into history and the new one starts without

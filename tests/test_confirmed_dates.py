@@ -1,4 +1,4 @@
-"""Confirmed dates (issue #273, owner decision 2026-11-01): the weekly refresh.py and screens.py write a check record
+"""Confirmed dates (issue #273: proposed by Hark in the pilot; the maintainer chose the #273 direction, 2026-11-01): the weekly refresh.py and screens.py write a check record
 (confirmed_at, UTC) for every fact they re-read and find unchanged; a re-check never changes observed_at; only a real
 change of the value is a new observation. Cards show "Observed <date> · Confirmed <date>" (Confirmed only when a re-check
 exists) in HTML, the Markdown twin and platforms/<id>.json; check.py, replications.py and screens_artifact.py refuse a
