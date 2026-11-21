@@ -3499,9 +3499,92 @@ def csp_hash(src):
     return "'sha256-" + base64.b64encode(hashlib.sha256(src.encode('utf-8')).digest()).decode() + "'"
 
 
-# executable inline <script> (no src, not a JSON data block) and inline <style>; check.py uses the same patterns
-INLINE_SCRIPT_RE = re.compile(r'<script\b(?![^>]*\bsrc=)(?![^>]*\btype="application/(?:ld\+)?json")[^>]*>(.*?)</script>', re.S | re.I)
-INLINE_STYLE_RE = re.compile(r'<style\b[^>]*>(.*?)</style>', re.S | re.I)
+class _InlineTags(HTMLParser):
+    """Find <script>/<style> elements with a real HTML parser.
+
+    CodeQL py/bad-tag-filter: a regexp cannot match every tag form a browser accepts
+    (mixed case, tabs or quotes in attributes, </script > end tags, ...), so the
+    previous regexes were both unsound and permanently flagged. Bodies keep their raw
+    text (no entity conversion), exactly like the old (.*?) captures, so CSP sha256
+    hashes computed from them are unchanged for pages the regexes already matched.
+    check.py keeps the same helper for the audit side.
+    """
+
+    JSON_SCRIPT_TYPES = ('application/ld+json', 'application/json')
+
+    def __init__(self):
+        super().__init__(convert_charrefs=False)
+        self.scripts = []   # executable inline script bodies (no src, not a JSON data block)
+        self.styles = []    # inline style bodies
+        self.spans = []     # (start, end) char offsets of every script/style element
+        self._in = None     # 'script' | 'style' while inside such an element
+        self._keep = False  # whether the current body is collected
+        self._buf = []
+        self._src = ''
+        self._offs = [0]
+        self._start = 0
+        self.unterminated = None  # (tag, start offset) when EOF hits inside script/style
+
+    def scan(self, text):
+        self._src = text
+        self._offs = [0] + [m.end() for m in re.finditer('\n', text)]
+        self.feed(text)
+        self.close()
+        if self._in:
+            # unterminated element: a browser reads the rest of the file as raw text,
+            # so callers must fail loudly instead of silently skipping this content
+            self.unterminated = (self._in, self._start)
+        return self
+
+    def _off(self):
+        line, col = self.getpos()
+        return self._offs[line - 1] + col
+
+    def _open(self, tag, attrs):
+        self._in = tag
+        self._start = self._off()
+        a = {k.lower(): (v or '') for k, v in attrs}
+        self._keep = tag == 'style' or ('src' not in a and a.get('type', '').strip().lower() not in self.JSON_SCRIPT_TYPES)
+        self._buf = []
+
+    def handle_starttag(self, tag, attrs):
+        if self._in or tag not in ('script', 'style'):
+            return
+        self._open(tag, attrs)
+
+    def handle_startendtag(self, tag, attrs):
+        # browsers ignore the self-closing slash on raw-text elements: '<script/>x</script>'
+        # executes x, so treat it as an open tag and switch to CDATA mode ourselves
+        if not self._in and tag in ('script', 'style'):
+            self._open(tag, attrs)
+            self.set_cdata_mode(tag)
+
+    def handle_data(self, data):
+        if self._in:
+            self._buf.append(data)
+
+    def handle_endtag(self, tag):
+        if not self._in or tag != self._in:
+            return
+        if self._keep:
+            (self.scripts if self._in == 'script' else self.styles).append(''.join(self._buf))
+        self.spans.append((self._start, self._src.index('>', self._off()) + 1))
+        self._in, self._keep, self._buf = None, False, []
+
+
+def scan_inline_tags(html_text):
+    """Parse html_text once; exposes .scripts, .styles, .spans and .unterminated."""
+    return _InlineTags().scan(html_text)
+
+
+def inline_script_bodies(html_text):
+    """Executable inline <script> bodies (no src, not a JSON data block), via HTML parsing."""
+    return scan_inline_tags(html_text).scripts
+
+
+def inline_style_bodies(html_text):
+    """Inline <style> bodies, via HTML parsing."""
+    return scan_inline_tags(html_text).styles
 
 
 def build_csp(script_hashes, style_hashes=()):
@@ -3616,8 +3699,11 @@ def main():
         os.makedirs(os.path.dirname(p), exist_ok=True)
         if p.endswith('.html') and isinstance(content, str):
             content = nofollow_json_links(content)
-            script_hashes.update(csp_hash(m.group(1)) for m in INLINE_SCRIPT_RE.finditer(content))
-            style_hashes.update(csp_hash(m.group(1)) for m in INLINE_STYLE_RE.finditer(content))
+            tags = scan_inline_tags(content)
+            if tags.unterminated:
+                raise SystemExit(f"refusing to write {rel!r}: unterminated <{tags.unterminated[0]}> element (a browser reads the rest of the file as raw text; the page would ship unaudited)")
+            script_hashes.update(csp_hash(b) for b in tags.scripts)
+            style_hashes.update(csp_hash(b) for b in tags.styles)
         with open(p, mode, **({} if 'b' in mode else {'encoding': 'utf-8'})) as f:
             f.write(content)
 
