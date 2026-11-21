@@ -211,6 +211,27 @@ class StateFrom(unittest.TestCase):
             _, state, _ = run_refresh(main_state, [older, bad])
             self.assertEqual(state['entries']['opentask']['failed_weeks'], 1)
 
+    def test_adopted_state_is_persisted_even_when_this_run_counts_nothing(self):
+        # Codex P1 on 5f585e03: carried PR state with 1 counted week, same-week rerun, nothing new. It must be written to --state.
+        with tempfile.TemporaryDirectory() as d:
+            carried = self.write(d, 'pr.json', fresh(1, '2026-11-22T09:00:00Z', '2026-11-22T09:00:00Z'))
+            snap, state, _ = run_refresh({'version': 1, 'moved': {}, 'entries': {}}, [carried], now='2026-11-23T09:00:00Z')
+            e = state['entries']['opentask']
+            self.assertEqual((e['failed_weeks'], e['last_counted_at'], e['first_failed_at']), (1, '2026-11-22T09:00:00Z', '2026-11-22T09:00:00Z'))
+            self.assertEqual(snap['platforms'][0]['status'], 'live')
+            # and the next counted check still waits for 168 h from that count
+            _, early, _ = run_refresh(state, now='2026-11-29T08:00:00Z')
+            self.assertEqual(early['entries']['opentask']['failed_weeks'], 1)
+            s2, late, _ = run_refresh(early, now='2026-11-29T09:00:00Z')
+            self.assertEqual((s2['platforms'][0]['status'], late['entries']['opentask']['failed_weeks']), ('closed', 2))
+
+    def test_older_or_invalid_adopted_candidates_leave_the_disk_state_alone(self):
+        with tempfile.TemporaryDirectory() as d:
+            older = self.write(d, 'old.json', st(1, at='2026-10-01T00:00:00Z'))
+            _, state, _ = run_refresh({'version': 1, 'moved': {}, 'updated_at': '2026-11-10T00:00:00Z', 'entries': {}}, [older], now='2026-11-23T09:00:00Z')
+            self.assertEqual(state['entries']['opentask']['failed_weeks'], 1)   # counted from the disk state (empty), not from the older candidate
+            self.assertNotEqual(state['entries']['opentask'].get('last_counted_at'), None)
+
     def test_valid_state_shape(self):
         self.assertTrue(refresh.valid_state(st(1)))
         for bad in (None, [], {'version': 2, 'entries': {}}, {'version': 1, 'entries': []},

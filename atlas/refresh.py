@@ -1052,6 +1052,8 @@ def main():
     sources = load_json(a.sources, {}).get('sources', {})
     state_raw = open(a.state, encoding='utf-8').read() if os.path.exists(a.state) else None
     state = json.loads(state_raw) if state_raw else {'version': 1, 'entries': {}, 'moved': {}}
+    state_on_disk = copy.deepcopy(state)
+    state_on_disk.setdefault('entries', {}); state_on_disk.setdefault('moved', {})
     for path in (a.state_from or []):
         if not os.path.exists(path):
             continue
@@ -1063,7 +1065,9 @@ def main():
             print(f'starting from newer state {path} ({alt.get("updated_at")})')
             state = alt
     state.setdefault('entries', {}); state.setdefault('moved', {})
-    state_before = copy.deepcopy(state)
+    # Compared with what --state holds on disk, not with the adopted state: an adopted state (open refresh PR, state kept by a failed
+    # run) must be written even when this run adds nothing, because the workflow deletes the superseded PR branch afterwards.
+    state_before = state_on_disk
     ts = now_iso()
     today = ts[:10]
 
