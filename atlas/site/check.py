@@ -1148,6 +1148,10 @@ def screens_checks(pages):
     return fails
 
 
+SCRIPT_STYLE_STRIP_RE = re.compile(r'<script.*?</script>|<style.*?</style>', re.S | re.I)
+CSP_INLINE_SCRIPT_RE = re.compile(r'<script\b(?![^>]*\bsrc=)(?![^>]*\btype="application/(?:ld\+)?json")[^>]*>(.*?)</script>', re.S | re.I)
+
+
 def csp_checks(pages):
     """Strict CSP (no 'unsafe-inline'): every inline <script>/<style> on every page has its sha256 in the CSP,
     no style="" / on*="" attributes or javascript: URLs, the Pages nonce middleware matches the CSP, the Function
@@ -1172,7 +1176,7 @@ def csp_checks(pages):
     pp = re.search(r'^  Permissions-Policy: (.+)$', blk, re.M)
     if pp and 'picture-in-picture' in pp.group(1): fails.append('Permissions-Policy names picture-in-picture (Cloudflare challenge script logs an error)')
     sh = lambda t: "'sha256-" + base64.b64encode(hashlib.sha256(t.encode('utf-8')).digest()).decode() + "'"
-    script_re = re.compile(r'<script\b(?![^>]*\bsrc=)(?![^>]*\btype="application/(?:ld\+)?json")[^>]*>(.*?)</script>', re.S)
+    script_re = CSP_INLINE_SCRIPT_RE
     used = set()
     every = {os.path.relpath(os.path.join(r, f), DIST): os.path.join(r, f) for r, _, fs in os.walk(DIST) for f in fs if f.endswith('.html')}
     for u, fp in sorted(every.items()):  # every HTML file, stubs included
@@ -1931,7 +1935,7 @@ def main():
     for u in [PRIV_URL, TERMS_URL, '/atlas/about/', '/atlas/decisions/', '/atlas/', '/404.html', '/', '/about/', '/stats/']:
         if u in pages:
             txt = open(pages[u], encoding='utf-8').read()
-            copy = re.sub(r'<script.*?</script>|<style.*?</style>', '', txt, flags=re.S)
+            copy = SCRIPT_STYLE_STRIP_RE.sub('', txt)
             m = FORBIDDEN_SITE_TEXT.search(copy)
             if m: fails.append(f'{u}: operator location wording {m.group(0)!r}')
             if u in (PRIV_URL, TERMS_URL, '/', '/about/', '/atlas/about/', '/atlas/decisions/', '/stats/'):

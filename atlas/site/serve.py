@@ -72,15 +72,25 @@ def not_found_body(path):
     kind = 'json' if path.startswith('/api/') or path.endswith('.json') else 'md' if path.endswith('.md') else 'html'
     if kind == 'html':
         return 'text/html; charset=utf-8', _read(os.path.join(DIST, '404.html'))
+    # the request path is attacker-controlled and is NOT unquoted here: treat both '/' and '\\' as separators,
+    # drop '.', '..' and '' parts, and verify every candidate stays inside DIST after resolving symlinks
     d = os.path.dirname(path.rstrip('/') if not path.endswith('/') else path[:-1])
+    parts = [p for p in d.replace('\\', '/').split('/') if p not in ('', '.', '..')]
+    base = os.path.realpath(DIST)
     while True:
-        fp = os.path.join(DIST, d.lstrip('/'), '404.html')
+        fp = os.path.realpath(os.path.join(base, *parts, '404.html'))
+        try:
+            inside = os.path.commonpath((base, fp)) == base
+        except ValueError:  # different drives on Windows: treat as outside
+            inside = False
+        if not inside:
+            fp = os.path.join(base, '404.html')
         if os.path.isfile(fp):
             break
-        if d in ('', '/'):
-            fp = os.path.join(DIST, '404.html')
+        if not parts:
+            fp = os.path.join(base, '404.html')
             break
-        d = os.path.dirname(d)
+        parts.pop()
     return ('application/json; charset=utf-8' if kind == 'json' else 'text/markdown; charset=utf-8'), _read(fp)
 
 

@@ -72,6 +72,15 @@ test('blocklist entries are compared normalized: Unicode, percent and IDNA-dot s
   assert.deepEqual([...oddEntries(r)].sort(), ['listed-host.example', 'pct.example', 'xn--bcher-kva.de']);
 });
 
+test('oddEntries stays linear and correct on a hostile long plain-ASCII token', () => {
+  // the old X*(?:Y)X* pattern needed quadratic backtracking here (CodeQL js/polynomial-redos)
+  const hostile = 'a'.repeat(200000);
+  const t0 = Date.now();
+  const r = `[${hostile}] "pct%2Eexample" bücher.de`;
+  assert.deepEqual([...oddEntries(r)].sort(), ['pct.example', 'xn--bcher-kva.de']);
+  assert.ok(Date.now() - t0 < 1000, 'oddEntries must not backtrack quadratically on long ASCII tokens');
+});
+
 test('a listing written in Unicode flags the punycode lookup through both matchers', async () => {
   const body = JSON.stringify({ blacklist: ['bücher-wallet.example', 'plain.example'] });
   const fetch: FetchLike = async () => ({ ok: true, status: 200, text: async () => body });

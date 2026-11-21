@@ -3500,8 +3500,8 @@ def csp_hash(src):
 
 
 # executable inline <script> (no src, not a JSON data block) and inline <style>; check.py uses the same patterns
-INLINE_SCRIPT_RE = re.compile(r'<script\b(?![^>]*\bsrc=)(?![^>]*\btype="application/(?:ld\+)?json")[^>]*>(.*?)</script>', re.S)
-INLINE_STYLE_RE = re.compile(r'<style\b[^>]*>(.*?)</style>', re.S)
+INLINE_SCRIPT_RE = re.compile(r'<script\b(?![^>]*\bsrc=)(?![^>]*\btype="application/(?:ld\+)?json")[^>]*>(.*?)</script>', re.S | re.I)
+INLINE_STYLE_RE = re.compile(r'<style\b[^>]*>(.*?)</style>', re.S | re.I)
 
 
 def build_csp(script_hashes, style_hashes=()):
