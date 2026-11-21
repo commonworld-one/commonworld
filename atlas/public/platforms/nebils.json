@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-21T19:10:00Z",
+ "source_snapshot_at": "2026-11-21T19:10:00Z",
  "id": "nebils",
  "name": "Nebils",
  "url": "https://commonworld.one/atlas/platforms/nebils/",
@@ -87,7 +87,8 @@
    "methods": [
     "curl -sL -A \"<Chrome UA>\" https://nebils.com/ (HTTP 200, final URL https://nebils.com/, 467 chars of page text)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-21T19:10:54Z"
   },
   {
    "kind": "description",

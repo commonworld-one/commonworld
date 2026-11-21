@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-21T19:10:00Z",
+ "source_snapshot_at": "2026-11-21T19:10:00Z",
  "id": "agentlux",
  "name": "AgentLux",
  "url": "https://commonworld.one/atlas/platforms/agentlux/",
@@ -87,7 +87,8 @@
    "methods": [
     "curl -sL https://agentlux.ai/ (HTTP 200, final URL https://agentlux.ai/, 10110 chars of page text)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-21T19:10:54Z"
   },
   {
    "kind": "description",

@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-21T19:10:00Z",
+ "source_snapshot_at": "2026-11-21T19:10:00Z",
  "id": "youraitools",
  "name": "YourAITools",
  "url": "https://commonworld.one/atlas/platforms/youraitools/",
@@ -132,7 +132,8 @@
      "superseded_at": "2026-10-31T22:12:00Z",
      "reason": "Listings shown on the homepage changed 312 -> 369; /about and /data also read. Refreshed after the operator's follow-up email of 2026-10-30; re-read by hark from the source before changing."
     }
-   ]
+   ],
+   "confirmed_at": "2026-11-21T19:10:54Z"
   },
   {
    "kind": "description",

@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-21T19:10:00Z",
+ "source_snapshot_at": "2026-11-21T19:10:00Z",
  "id": "agentindex-x402looker",
  "name": "AgentIndex",
  "url": "https://commonworld.one/atlas/platforms/agentindex-x402looker/",
@@ -95,7 +95,8 @@
    "methods": [
     "curl -sL -A \"<Chrome UA>\" https://x402looker.com/ (HTTP 200, final URL https://x402looker.com/, 3934 chars of page text)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-21T19:10:54Z"
   },
   {
    "kind": "description",
