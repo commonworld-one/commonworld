@@ -174,6 +174,9 @@ class Screens(unittest.TestCase):
                'source_url': 'https://a.example/', 'http_status': 200, 'title': 'a', 'captured_at': OBS, 'width': 1200, 'height': 750, 'bytes': 1}
         self.assertEqual(sa.record_problems('alpha', dict(rec, confirmed_at=CONF)), [])
         self.assertTrue(any('earlier than captured_at' in p for p in sa.record_problems('alpha', dict(rec, confirmed_at=utc('10-01')))))
+        # Codex review of #276 (5c73180), P1: an impossible calendar date is refused, not only a malformed string
+        for bad in ('2026-10-99T00:00:00Z', '2026-02-30T00:00:00Z', '2026-13-01T00:00:00Z', '2026-11-01T25:00:00Z'):
+            self.assertTrue(any('bad confirmed_at' in p for p in sa.record_problems('alpha', dict(rec, confirmed_at=bad))), bad)
         self.assertTrue(sa.record_problems('alpha', dict(rec, confirmed_at='2999-01-01T00:00:00' + 'Z')))
         self.assertTrue(sa.record_problems('alpha', dict(rec, confirmed_at='2026-11-01')))
 

@@ -387,7 +387,7 @@ def record_problems(slug, r):
         'http_status': lambda v: v is None or (_int(v) and 100 <= v <= 599),   # None: goto() timed out (screens.py)
         'title': lambda v: isinstance(v, str),
         'captured_at': lambda v: isinstance(v, str) and ISO_UTC.fullmatch(v),
-        'confirmed_at': lambda v: isinstance(v, str) and ISO_UTC.fullmatch(v) and v <= _utc_now(FUTURE_SLACK_S),
+        'confirmed_at': lambda v: _real_utc(v) and v <= _utc_now(FUTURE_SLACK_S),
         'width': lambda v: _int(v) and v == SHOT_W,
         'height': lambda v: _int(v) and v == SHOT_H,
         'bytes': lambda v: _int(v) and v > 0,
@@ -398,6 +398,18 @@ def record_problems(slug, r):
     if not out and 'confirmed_at' in r and 'captured_at' in r and r['confirmed_at'] < r['captured_at']:
         out.append(f'manifest: {slug}: confirmed_at {r["confirmed_at"]} is earlier than captured_at {r["captured_at"]}')
     return out
+
+
+def _real_utc(v):
+    """True for a YYYY-MM-DDTHH:MM:SSZ string that is a real calendar time (2026-10-99 and 2026-02-30 are not)."""
+    from datetime import datetime
+    if not isinstance(v, str) or not ISO_UTC.fullmatch(v):
+        return False
+    try:
+        datetime.strptime(v, '%Y-%m-%dT%H:%M:%SZ')
+    except ValueError:
+        return False
+    return True
 
 
 def _utc_now(slack_s=0):
