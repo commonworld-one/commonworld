@@ -49,9 +49,16 @@ jobs:
             git show "origin/$newest:atlas/data/refresh-state.json" > "$RUNNER_TEMP/prev-state.json" || true
             echo "Carrying state from open PR branch $newest"
           fi
+      - name: Carry state kept by a failed run
+        # A run that fails after Refresh (Check, Smoke) never opens a PR, so its weekly counters would be lost. That run uploads only
+        # refresh-state.json as an artifact (no generated pages or data). Here the newest such artifact of this workflow is offered as a
+        # second candidate (atlas/tools/carry_failed_state.py picks the newest valid one among recent failed runs on main); refresh.py ignores it unless its updated_at is newer than main's and the PR branch's state, and ignores
+        # a file that is not a valid state. Nothing from it is published without a PR and its CI.
+        run: python atlas/tools/carry_failed_state.py --out "$RUNNER_TEMP/failed-state/refresh-state.json"
       - name: Refresh
+        id: refresh
         run: |
-          python atlas/refresh.py --state-from "$RUNNER_TEMP/prev-state.json" \
+          python atlas/refresh.py --state-from "$RUNNER_TEMP/prev-state.json" --state-from "$RUNNER_TEMP/failed-state/refresh-state.json" \
             --summary "$RUNNER_TEMP/summary.md" --report "$RUNNER_TEMP/report.json"
           cat "$RUNNER_TEMP/summary.md" >> "$GITHUB_STEP_SUMMARY"
       - name: Stats from Pulse
@@ -73,6 +80,14 @@ jobs:
           python atlas/site/check.py
       - name: Smoke (browser)
         run: python atlas/site/tools/smoke_test.py
+      - name: Keep state if a later step failed
+        if: failure() && steps.refresh.outcome == 'success'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: atlas-refresh-state
+          path: atlas/data/refresh-state.json
+          retention-days: 21
+          if-no-files-found: error
       - name: Open PR
         if: steps.diff.outputs.changed == 'true'
         run: |

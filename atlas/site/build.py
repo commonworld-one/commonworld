@@ -868,7 +868,7 @@ def build_platform(site, c):
         if how == 'auto':
             ev = next((x.get('statement') for x in claims if x.get('kind') == 'site_reachable' and x.get('outcome') == 'contradicted'), None) or ev
             closed_box = (f'<div class="closed-box" role="note"><b>Closed by automated check since {time_tag(since)}.</b> '
-                          f'The site could not be reached in 2 consecutive weekly checks (several attempts plus alternate URLs each week). '
+                          f'Rule: closed after the site could not be reached in 2 consecutive weekly checks (several attempts plus alternate URLs each week); the evidence below gives the checks recorded for this card. '
                           f'This card is kept as a history record and reopens automatically if the site answers again. {e(ev) if ev else ""}</div>')
         else:
             closed_box = (f'<div class="closed-box" role="note"><b>Closed.</b> This card is kept as a history record. '
