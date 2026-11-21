@@ -62,7 +62,10 @@ function hostOfLine(line: string, urls: boolean): string {
  */
 export function oddEntries(r: string): Set<string> {
   const out = new Set<string>();
-  for (const tok of r.match(/[^\s",[\]]*(?:[^\x00-\x7f]|%[0-9a-f]{2})[^\s",[\]]*/gi) ?? []) {
+  // split on the same separators, then keep tokens holding a non-ASCII char or %xx escape: the old
+  // X*(?:Y)X* pattern needed quadratic backtracking on long plain-ASCII tokens in an untrusted list
+  for (const tok of r.split(/[\s",[\]]+/)) {
+    if (!/[^\x00-\x7f]|%[0-9a-f]{2}/i.test(tok)) continue;
     if (/[/?#]/.test(tok)) continue;
     const d = normalizeDomain(tok);
     if (d) out.add(d);

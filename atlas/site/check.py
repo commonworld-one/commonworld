@@ -1148,6 +1148,108 @@ def screens_checks(pages):
     return fails
 
 
+class _InlineTags(HTMLParser):
+    """Find <script>/<style> elements with a real HTML parser.
+
+    CodeQL py/bad-tag-filter: a regexp cannot match every tag form a browser accepts
+    (mixed case, tabs or quotes in attributes, </script > end tags, ...), so the
+    previous regexes were both unsound and permanently flagged. Bodies keep their raw
+    text (no entity conversion), exactly like the old (.*?) captures, so CSP sha256
+    hashes computed from them are unchanged for pages the regexes already matched.
+    """
+
+    JSON_SCRIPT_TYPES = ('application/ld+json', 'application/json')
+
+    def __init__(self):
+        super().__init__(convert_charrefs=False)
+        self.scripts = []   # executable inline script bodies (no src, not a JSON data block)
+        self.styles = []    # inline style bodies
+        self.spans = []     # (start, end) char offsets of every script/style element
+        self._in = None     # 'script' | 'style' while inside such an element
+        self._keep = False  # whether the current body is collected
+        self._buf = []
+        self._src = ''
+        self._offs = [0]
+        self._start = 0
+        self.unterminated = None  # (tag, start offset) when EOF hits inside script/style
+
+    def scan(self, text):
+        self._src = text
+        self._offs = [0] + [m.end() for m in re.finditer('\n', text)]
+        self.feed(text)
+        self.close()
+        if self._in:
+            # unterminated element: a browser reads the rest of the file as raw text,
+            # so callers must fail loudly instead of silently skipping this content
+            self.unterminated = (self._in, self._start)
+        return self
+
+    def _off(self):
+        line, col = self.getpos()
+        return self._offs[line - 1] + col
+
+    def _open(self, tag, attrs):
+        self._in = tag
+        self._start = self._off()
+        a = {k.lower(): (v or '') for k, v in attrs}
+        self._keep = tag == 'style' or ('src' not in a and a.get('type', '').strip().lower() not in self.JSON_SCRIPT_TYPES)
+        self._buf = []
+
+    def handle_starttag(self, tag, attrs):
+        if self._in or tag not in ('script', 'style'):
+            return
+        self._open(tag, attrs)
+
+    def handle_startendtag(self, tag, attrs):
+        # browsers ignore the self-closing slash on raw-text elements: '<script/>x</script>'
+        # executes x, so treat it as an open tag and switch to CDATA mode ourselves
+        if not self._in and tag in ('script', 'style'):
+            self._open(tag, attrs)
+            self.set_cdata_mode(tag)
+
+    def handle_data(self, data):
+        if self._in:
+            self._buf.append(data)
+
+    def handle_endtag(self, tag):
+        if not self._in or tag != self._in:
+            return
+        if self._keep:
+            (self.scripts if self._in == 'script' else self.styles).append(''.join(self._buf))
+        self.spans.append((self._start, self._src.index('>', self._off()) + 1))
+        self._in, self._keep, self._buf = None, False, []
+
+
+def scan_inline_tags(html_text):
+    """Parse html_text once; exposes .scripts, .styles, .spans and .unterminated."""
+    return _InlineTags().scan(html_text)
+
+
+def inline_script_bodies(html_text):
+    """Executable inline <script> bodies (no src, not a JSON data block), via HTML parsing."""
+    return scan_inline_tags(html_text).scripts
+
+
+def inline_style_bodies(html_text):
+    """Inline <style> bodies, via HTML parsing."""
+    return scan_inline_tags(html_text).styles
+
+
+def strip_script_style(html_text):
+    """The page text with every <script>/<style> element removed, via HTML parsing.
+    An unterminated element removes the rest of the file, matching browser raw-text parsing."""
+    s = scan_inline_tags(html_text)
+    spans = sorted(s.spans)
+    if s.unterminated:
+        spans.append((s.unterminated[1], len(html_text)))
+    out, pos = [], 0
+    for a, b in spans:
+        out.append(html_text[pos:a])
+        pos = b
+    out.append(html_text[pos:])
+    return ''.join(out)
+
+
 def csp_checks(pages):
     """Strict CSP (no 'unsafe-inline'): every inline <script>/<style> on every page has its sha256 in the CSP,
     no style="" / on*="" attributes or javascript: URLs, the Pages nonce middleware matches the CSP, the Function
@@ -1172,16 +1274,18 @@ def csp_checks(pages):
     pp = re.search(r'^  Permissions-Policy: (.+)$', blk, re.M)
     if pp and 'picture-in-picture' in pp.group(1): fails.append('Permissions-Policy names picture-in-picture (Cloudflare challenge script logs an error)')
     sh = lambda t: "'sha256-" + base64.b64encode(hashlib.sha256(t.encode('utf-8')).digest()).decode() + "'"
-    script_re = re.compile(r'<script\b(?![^>]*\bsrc=)(?![^>]*\btype="application/(?:ld\+)?json")[^>]*>(.*?)</script>', re.S)
     used = set()
     every = {os.path.relpath(os.path.join(r, f), DIST): os.path.join(r, f) for r, _, fs in os.walk(DIST) for f in fs if f.endswith('.html')}
     for u, fp in sorted(every.items()):  # every HTML file, stubs included
         h = open(fp, encoding='utf-8').read()
-        for mm in script_re.finditer(h):
-            hs = sh(mm.group(1)); used.add(hs)
+        tags = scan_inline_tags(h)
+        if tags.unterminated:
+            fails.append(f'{u}: unterminated <{tags.unterminated[0]}> element (rest of file is raw script/style text to a browser; refusing to pass unaudited content)')
+        for body in tags.scripts:
+            hs = sh(body); used.add(hs)
             if hs not in csp.get('script-src', []): fails.append(f'{u}: inline script {hs} not allowed by the CSP hash list')
-        for mm in re.finditer(r'<style\b[^>]*>(.*?)</style>', h, re.S):
-            if sh(mm.group(1)) not in csp.get('style-src', []): fails.append(f'{u}: inline <style> without a CSP hash')
+        for body in tags.styles:
+            if sh(body) not in csp.get('style-src', []): fails.append(f'{u}: inline <style> without a CSP hash')
         tags = re.findall(r'<[a-zA-Z][^>]*>', h)
         if any(re.search(r'\sstyle\s*=', t) for t in tags): fails.append(f'{u}: style="" attribute (blocked by style-src-attr)')
         if any(re.search(r'\son[a-z]+\s*=', t) for t in tags): fails.append(f'{u}: inline event handler (blocked by script-src-attr)')
@@ -1931,7 +2035,7 @@ def main():
     for u in [PRIV_URL, TERMS_URL, '/atlas/about/', '/atlas/decisions/', '/atlas/', '/404.html', '/', '/about/', '/stats/']:
         if u in pages:
             txt = open(pages[u], encoding='utf-8').read()
-            copy = re.sub(r'<script.*?</script>|<style.*?</style>', '', txt, flags=re.S)
+            copy = strip_script_style(txt)
             m = FORBIDDEN_SITE_TEXT.search(copy)
             if m: fails.append(f'{u}: operator location wording {m.group(0)!r}')
             if u in (PRIV_URL, TERMS_URL, '/', '/about/', '/atlas/about/', '/atlas/decisions/', '/stats/'):
