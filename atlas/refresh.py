@@ -1108,7 +1108,10 @@ def main():
                 state['moved'].pop(slug)
 
     # confirmations of reachability (step 6): after the death rule, so a closure or revival in this run is never confirmed
+    revived_now = {d['slug'] for d in rep['revived']}
     for e in entries:
+        if e['slug'] in revived_now:
+            continue   # its supported reachability claim was just created by this run: a new observation, not a re-check
         if confirm_reachability(e, results[e['slug']], ts):
             rep['confirmed'].append({'slug': e['slug'], 'id': 'site_reachable', 'what': 'site answers', 'source': results[e['slug']]['via']})
             changed_slugs.add(e['slug'])
