@@ -66,6 +66,17 @@ def _parse_ts(ts):
     return datetime.strptime(ts, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
 
 
+def earned_closure(st):
+    """True when this entry already reached the closure threshold in a counting run (a valid `last_counted_at` is written only when a
+    week is counted, and a counted 2nd week closes the card) but the closure itself was lost, e.g. the run failed after Refresh and
+    only the state was carried. The still-failing check of this run then applies the closure without adding a week. An entry without a
+    valid `last_counted_at` (legacy state, unknown history) is never treated as earned."""
+    try:
+        return st.get('failed_weeks', 0) >= 2 and isinstance(st.get('last_counted_at'), str) and bool(_parse_ts(st['last_counted_at']))
+    except ValueError:
+        return False
+
+
 def counts_as_new_week(st, ts):
     """True when this failed check adds a week: >= 7 days (MIN_WEEK_GAP) since the previous counted failed check.
     The previous count time is `last_counted_at`; for an entry recorded before that field existed with exactly 1 failed week it is
@@ -1110,7 +1121,7 @@ def main():
                     st.pop('interval_baseline_at', None)
                 st['last_error'] = r['error']
                 state['entries'][slug] = st
-                if new_week and st['failed_weeks'] >= 2:
+                if st['failed_weeks'] >= 2 and (new_week or earned_closure(st)):
                     rep['died'].append({'slug': slug, 'url': r['via'], 'error': r['error'], 'first_failed_at': st['first_failed_at'], 'failed_weeks': st['failed_weeks']})
                     claim = {'kind': 'site_reachable',
                              'statement': f'Automated weekly check could not reach the site in {st["failed_weeks"]} recorded weekly checks since {st["first_failed_at"][:10]} '

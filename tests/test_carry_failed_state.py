@@ -133,16 +133,16 @@ class Chain(unittest.TestCase):
             snap, state_b, _ = run_refresh({'version': 1, 'moved': {}, 'entries': {}}, [art_a], now='2026-11-22T09:00:00Z')
             self.assertEqual(snap['platforms'][0]['status'], 'closed')
             self.assertEqual(state_b['entries']['opentask']['failed_weeks'], 2)
-            # run C, same week as B, with A's artifact still listed and B's state as main/PR state: B's state is newer, A is not used
-            # again, and the same-week rerun adds nothing
-            _, state_c, _ = run_refresh(state_b, [art_a], now='2026-11-22T12:00:00Z')
+            # run C within 7 days of B's count, with B's state carried but B's closure lost (snapshot live again): the still-failing check
+            # applies the already-earned closure and does NOT add a week
+            snap_c, state_c, _ = run_refresh(state_b, [art_a], now='2026-11-22T12:00:00Z')
             self.assertEqual(state_c['entries']['opentask']['failed_weeks'], 2)
-            # an artifact left by a failed run of the SAME week as the state it started from is not counted again either
-            art_b2 = self.write(d, 'b2.json', state_b)
-            snap_d, state_d, _ = run_refresh({'version': 1, 'moved': {}, 'entries': {}}, [art_b2], now='2026-11-22T15:00:00Z')
-            # nothing new this week: no data change, so no state is written and nothing is counted a third time
-            self.assertEqual(state_d, {'version': 1, 'moved': {}, 'entries': {}})
-            self.assertEqual(snap_d['platforms'][0]['status'], 'live')   # the harness snapshot is not touched
+            self.assertEqual(snap_c['platforms'][0]['status'], 'closed')
+            self.assertEqual(state_c['entries']['opentask']['last_counted_at'], '2026-11-22T09:00:00Z')
+            # the same artifact offered again (older main state) still only applies the earned closure, never a third count
+            snap_d, state_d, _ = run_refresh({'version': 1, 'moved': {}, 'entries': {}}, [art_b2 := self.write(d, 'b2.json', state_b)], now='2026-11-22T15:00:00Z')
+            self.assertEqual(state_d['entries']['opentask']['failed_weeks'], 2)
+            self.assertEqual(snap_d['platforms'][0]['status'], 'closed')
 
 if __name__ == '__main__':
     unittest.main()

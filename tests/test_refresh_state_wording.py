@@ -152,6 +152,30 @@ class SevenDayGap(unittest.TestCase):
         e = state['entries']['opentask']
         self.assertEqual((e['failed_weeks'], e['interval_baseline_at']), (3, '2026-11-22T09:00:00Z'))
 
+    def test_earned_closure_is_applied_without_counting_again(self):
+        # state kept by a run that counted the 2nd week then failed before publishing: the retry (live card, 2 weeks, valid count time) closes
+        s, state, _ = run_refresh(fresh(2, '2026-11-22T09:00:00Z'), now='2026-11-23T09:00:00Z')
+        e = state['entries']['opentask']
+        self.assertEqual(s['platforms'][0]['status'], 'closed')
+        self.assertEqual((e['failed_weeks'], e['last_counted_at']), (2, '2026-11-22T09:00:00Z'))
+        self.assertIn('2 recorded weekly checks', s['platforms'][0]['claims'][0]['statement'])
+
+    def test_earned_closure_unit(self):
+        self.assertTrue(refresh.earned_closure({'failed_weeks': 2, 'last_counted_at': '2026-11-22T09:00:00Z'}))
+
+    def test_legacy_history_without_a_valid_count_time_is_never_an_earned_closure(self):
+        for entry in ({'failed_weeks': 3, 'first_failed_at': '2026-11-01T09:00:00Z'},
+                      {'failed_weeks': 2, 'first_failed_at': '2026-11-01T09:00:00Z', 'last_counted_at': 'garbage'},
+                      {'failed_weeks': 2, 'first_failed_at': '2026-11-01T09:00:00Z', 'last_counted_at': None},
+                      {'failed_weeks': 1, 'first_failed_at': '2026-11-01T09:00:00Z', 'last_counted_at': '2026-11-22T09:00:00Z'}):
+            self.assertFalse(refresh.earned_closure(entry))
+        st_ = fresh(3, None, '2026-11-01T09:00:00Z')
+        s, state, _ = run_refresh(st_, now='2026-11-22T09:00:00Z')
+        self.assertEqual((s['platforms'][0]['status'], state['entries']['opentask']['failed_weeks']), ('live', 3))
+        bad = fresh(2, 'garbage', '2026-11-01T09:00:00Z')
+        s, state, _ = run_refresh(bad, now='2026-11-22T09:00:00Z')
+        self.assertEqual((s['platforms'][0]['status'], state['entries']['opentask']['failed_weeks']), ('live', 2))
+
     def test_bad_timestamp_does_not_count(self):
         st_ = {'failed_weeks': 2, 'last_counted_at': 'garbage', 'first_failed_at': '2026-11-01T09:00:00Z'}
         self.assertFalse(refresh.counts_as_new_week(st_, '2026-11-22T09:00:00Z'))
