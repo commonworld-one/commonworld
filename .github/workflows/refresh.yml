@@ -80,14 +80,6 @@ jobs:
           python atlas/site/check.py
       - name: Smoke (browser)
         run: python atlas/site/tools/smoke_test.py
-      - name: Keep state if a later step failed
-        if: failure() && steps.refresh.outcome == 'success'
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: atlas-refresh-state
-          path: atlas/data/refresh-state.json
-          retention-days: 21
-          if-no-files-found: error
       - name: Open PR
         if: steps.diff.outputs.changed == 'true'
         run: |
@@ -116,3 +108,13 @@ jobs:
             else msg="Closed: the newest weekly refresh found no difference from main, so this PR is obsolete."; fi
             gh pr close "$n" --comment "$msg" --delete-branch || true
           done
+      - name: Keep state if any later step failed
+        # Last step on purpose: failure() is evaluated when the step's turn comes, so only a step placed after Open PR and the cleanup
+        # can see a failure of those.
+        if: failure() && steps.refresh.outcome == 'success'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: atlas-refresh-state
+          path: atlas/data/refresh-state.json
+          retention-days: 21
+          if-no-files-found: error
