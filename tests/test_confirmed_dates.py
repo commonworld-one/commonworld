@@ -57,6 +57,22 @@ class RefreshNumbers(unittest.TestCase):
         refresh.apply_number(e, MAPPING, 100, '"users":100', ['GET'], CONF2)
         self.assertEqual((c['observed_at'], c['confirmed_at']), (OBS, CONF2))
 
+    def test_missing_template_field_confirms_nothing(self):
+        # Codex review of #276, P1: the main number is read again, but a figure the statement needs is not returned
+        m = dict(MAPPING, statement='{value} users, {stats.agents} agents')
+        e = number_entry()
+        e['claims'][0]['statement'] = '100 users, 5 agents'
+        before = copy.deepcopy(e)
+        self.assertEqual(refresh.apply_number(e, m, 100, '"users":100', ['GET'], CONF, fields={}), ('incomplete', 100))
+        self.assertEqual(e, before, 'the claim is untouched: no confirmed_at, same statement')
+        # the field is back and equal: confirmed as usual
+        self.assertEqual(refresh.apply_number(e, m, 100, '"users":100', ['GET'], CONF2, fields={'stats.agents': 5}), ('same', 100))
+        self.assertEqual(e['claims'][0]['confirmed_at'], CONF2)
+        # a changed main value is still a new observation even when a field is missing (existing behaviour)
+        e2 = copy.deepcopy(before)
+        self.assertEqual(refresh.apply_number(e2, m, 120, '"users":120', ['GET'], CONF, fields={})[0], 'changed')
+        self.assertNotIn('confirmed_at', e2['claims'][0])
+
     def test_real_change_is_a_new_observation_and_moves_the_confirmation_into_history(self):
         e = number_entry()
         refresh.apply_number(e, MAPPING, 100, '"users":100', ['GET'], CONF)
@@ -126,6 +142,9 @@ class Validation(unittest.TestCase):
         self.assertEqual(R.record_problems('x', dict(rec, confirmed_at=CONF)), [])
         self.assertTrue(R.record_problems('x', dict(rec, confirmed_at=utc('10-01'))))
         self.assertTrue(R.record_problems('x', dict(rec, confirmed_at='soon')))
+        # Codex review of #276, P2: a well-formed but future or impossible time is refused too
+        for bad in ('2999-01-01T00:00:00Z', '2026-11-99T00:00:00Z', '2026-02-30T00:00:00Z'):
+            self.assertTrue(R.record_problems('x', dict(rec, confirmed_at=bad)), bad)
         self.assertEqual(R.published({'x': dict(rec, confirmed_at=CONF)}, 'x')['confirmed_at'], CONF)
 
 

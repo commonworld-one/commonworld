@@ -23,6 +23,7 @@ counts only sets `confirmed_at` (UTC, issue #273): observed_at, commit and sourc
 record as `replications` on the card JSON, the card page and its Markdown twin; check.py validates this file.
 """
 import json
+from datetime import datetime, timezone
 import os
 import re
 
@@ -176,9 +177,21 @@ def record_problems(slug, r):
     if 'confirmed_at' in r:
         if not UTC_RE.fullmatch(str(r['confirmed_at'])):
             p.append(f'{w}: confirmed_at must be YYYY-MM-DDTHH:MM:SSZ')
+        elif not _real_utc_time(r['confirmed_at']):
+            p.append(f'{w}: confirmed_at must be a real time, not in the future')
         elif UTC_RE.fullmatch(str(r['observed_at'])) and r['confirmed_at'] < r['observed_at']:
             p.append(f'{w}: confirmed_at must not be earlier than observed_at')
     return p
+
+
+def _real_utc_time(v, now=None):
+    """True for a YYYY-MM-DDTHH:MM:SSZ that is a real calendar time and not more than 10 minutes in the future
+    (the same bound as refresh.py's claim check)."""
+    try:
+        dt = datetime.strptime(v, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
+    except (TypeError, ValueError):
+        return False
+    return (dt - (now or datetime.now(timezone.utc))).total_seconds() <= 600
 
 
 def validate(cards, slugs):

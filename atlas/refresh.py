@@ -732,7 +732,9 @@ def published_source(m):
 
 
 def apply_number(entry, m, val, quote, methods, ts, fields=None):
-    """Mutates entry. Returns ('new'|'changed'|'note'|'same', old_value).
+    """Mutates entry. Returns ('new'|'changed'|'note'|'same'|'incomplete', old_value).
+    'incomplete': the number is unchanged but the claim's statement template needs a field this read did not return;
+    the claim is left untouched and is not confirmed (Codex review of #276, P1).
     'note': the number is unchanged but the statement beside it (rendered from the same fetch) changed, e.g. a 7-day
     count inside a lifetime claim; it is a re-observation too, so the old statement goes into history.
     'same': the fact was read again unchanged: the claim gets confirmed_at = ts (the check record, issue #273) and keeps
@@ -763,6 +765,10 @@ def apply_number(entry, m, val, quote, methods, ts, fields=None):
     # rolling window on the next re-observation; the old url and window go into history with the old value
     resync = c.get('source_url') != published_source(m) or bool(m.get('window')) and c.get('window') != m['window']
     dates_moved = any(c.get(k) != v for k, v in dates.items())
+    if missing and c.get('value') == val and not resync and not dates_moved:
+        # the template needs a figure this read did not return: that figure was not re-read, so nothing is confirmed
+        # (the claim stays exactly as it was; a changed main value still becomes a new observation below)
+        return 'incomplete', val
     if c.get('value') == val and (not statement or c.get('statement') == statement) and not resync and not dates_moved:
         c[CONFIRMED] = ts   # a check record only: observed_at stays the time this value was first observed
         return 'same', val
@@ -1125,6 +1131,9 @@ def main():
                 rep['note_drift'].append({'slug': e['slug'], 'id': m['id'], 'problem': drift})
                 rep['notes'].append(f'{e["slug"]}: the text beside {m["id"]} no longer matches its number ({drift}); '
                                     f'give the mapping a statement template in atlas/refresh-sources.json or fix the claim by hand.')
+            if what == 'incomplete':
+                rep['notes'].append(f'{e["slug"]}: {m["id"]} was not confirmed: the statement template needs a figure this read did not return.')
+                continue
             if what == 'same':
                 rep['confirmed'].append({'slug': e['slug'], 'id': m['id'], 'what': fmt_value(val) + ' ' + str(m['unit']), 'source': m['url']})
             if what == 'same' and json.dumps(e.get('claims'), sort_keys=True) != before:
