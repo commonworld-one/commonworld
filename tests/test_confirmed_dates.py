@@ -194,6 +194,9 @@ class Display(unittest.TestCase):
         cfg = json.loads((ROOT / 'atlas' / 'site' / 'site-config.json').read_text(encoding='utf-8'))
         data = json.loads(Path(b.DEFAULT_DATA).read_text(encoding='utf-8'))
         c = copy.deepcopy(next(p for p in data['platforms'] if p['slug'] == 'laso-finance'))
+        for y in c['claims']:
+            for k in ('confirmed_at', 'source_as_of', 'last_settlement_seen_at'):
+                y.pop(k, None)
         x = next(x for x in c['claims'] if x['kind'] == 'economic_flow')
         x['observed_at'] = OBS
         for k in ('confirmed_at', 'source_as_of', 'last_settlement_seen_at'):
