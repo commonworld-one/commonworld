@@ -310,6 +310,34 @@ class RefreshRun(unittest.TestCase):
             self.assertEqual(out['amendments'][-1]['number_updates'], [])
             self.assertIn('| facts confirmed unchanged (confirmed_at set, observed_at kept) | 2 |', (td / 'summary.md').read_text())
 
+    def test_revived_entry_is_not_confirmed_in_the_same_run(self):
+        """Codex review of #276 (P2): an entry the refresh closed earlier that answers again is revived with a NEW supported
+        reachability claim (observed_at = now). That claim is a new observation, not a later re-check, so it must carry no
+        confirmed_at and must not be listed as a confirmed fact in the same run."""
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as td:
+            td = Path(td)
+            e = {'slug': 'gone', 'name': 'Gone', 'canonical_url': 'https://gone.example', 'status': 'closed', 'verdict': 'include_closed_history',
+                 'claims': [], 'status_history': [{'at': OBS, 'from': 'live', 'to': 'closed', 'by': refresh.TOOL, 'reason': 'site unreachable'}]}
+            snap = td / 'snapshot-verified-2026-10-15.json'
+            snap.write_text(json.dumps({'generated_at': OBS, 'count': 1, 'platforms': [e], 'amendments': []}))
+            src = td / 'sources.json'
+            src.write_text(json.dumps({'sources': {}}))
+            ok = {'cls': 'ok', 'status': 200, 'final_url': 'https://gone.example/', 'error': None, 'attempts': 1,
+                  'methods': ['GET https://gone.example -> 200'], 'via': 'https://gone.example'}
+            argv = ['refresh.py', '--snapshot', str(snap), '--sources', str(src), '--state', str(td / 'state.json'),
+                    '--replications', str(td / 'replications.json'), '--summary', str(td / 'summary.md'), '--workers', '1']
+            with mock.patch.object(sys, 'argv', argv), mock.patch.object(refresh, 'check', lambda url, extra=(): dict(ok)), \
+                    mock.patch.object(refresh, 'now_iso', lambda: CONF), mock.patch('builtins.print'):
+                refresh.main()
+            out = json.loads(snap.read_text())
+            entry = out['platforms'][0]
+            self.assertEqual(entry['status'], 'live')
+            revived = [c for c in entry['claims'] if c['kind'] == 'site_reachable']
+            self.assertEqual([(c['observed_at'], c.get('confirmed_at')) for c in revived], [(CONF, None)])
+            self.assertEqual(out['amendments'][-1]['confirmed'], [])
+            self.assertEqual(out['amendments'][-1]['revived'], ['gone'])
+
 
 if __name__ == '__main__':
     unittest.main()
