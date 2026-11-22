@@ -8,7 +8,7 @@
  *                                       (row count per table, sqlite_sequence counters, last migration, sha256 of the
  *                                       artifact and of the plain SQL). Same manifest format as scripts/d1-backup.sh, so
  *                                       scripts/d1-restore.sh restores a Worker backup unchanged.
- *   RESTORE_CHECK_CRON Mon 04:30 UTC    runRestoreCheck(): newest backup -> sha256 (gz + SQL) -> full parse of every
+ *   RESTORE_CHECK_CRON Sun 04:30 UTC    runRestoreCheck(): newest backup -> sha256 (gz + SQL) -> full parse of every
  *                                       statement (each INSERT decoded to its values, column count checked) -> table
  *                                       list, row counts, sqlite_sequence vs manifest -> age <= 36 h. Result to
  *                                       `<env>/checks/YYYY-MM-DD.json` + one log line (console.error on FAIL).
@@ -31,13 +31,14 @@
 import type { Env } from './env';
 
 export const BACKUP_CRON = '0 3 * * *';
+// Sunday 04:30 UTC: Cloudflare's cron parser counts the weekday field 1 = Sunday (Quartz-style).
 export const RESTORE_CHECK_CRON = '30 4 * * 1';
 export const BACKUP_FORMAT = 'commonworld-d1-backup/1';
 /** Rows per SELECT page. The first page of every table is read in one D1 batch (one transaction = one consistent snapshot). */
 export const PAGE_ROWS = 5000;
 /** A newest backup older than this fails the restore check (the daily job stopped). */
 export const MAX_BACKUP_AGE_HOURS = 36;
-/** The Monday check runs weekly; one missed run plus a day of slack before status turns unhealthy. */
+/** The weekly check runs on Sunday; one missed run plus a day of slack before status turns unhealthy. */
 export const MAX_CHECK_AGE_DAYS = 8;
 /** A backup or restore-check timestamp may run ahead of `now` by at most this much (clock skew); later = unhealthy. */
 /** Names tried for one run second before the run fails (nothing is overwritten). */

@@ -350,12 +350,16 @@ Observed technical follow-ups from the 2026-11-06 run
 - The remaining batch PRs #288, #289, #290 received new heads after the #287
   merge; their earlier CI greens and Codex state predate those heads, so each
   needs fresh checks before its own merge GO.
-- Weekly restore-check cron: the code comment in platform/src/backup.ts says
+- Weekly restore-check cron: the code comment in platform/src/backup.ts said
   "Mon 04:30 UTC", but the Cloudflare Quartz expression `30 4 * * 1` fires on
   SUNDAY (Quartz weekdays run 1 = Sunday to 7 = Saturday)
   [RULE: https://developers.cloudflare.com/workers/configuration/cron-triggers/;
   https://github.com/commonworld-one/commonworld/blob/main/platform/src/backup.ts].
-  Code comment and actual behavior disagree.
+  Fix prepared 2026-11-22 in an unpublished branch: labels say Sunday and the
+  expression is intentionally unchanged, so live triggers would not move; not
+  yet merged or deployed. Verified live the same day: the production dashboard
+  trigger reads "At 04:30 AM on Sunday" and the weekly check ran on Sundays
+  Nov 1, 8, 15 and 22.
 - The repo's backup runbook documents the full end-to-end restore drill (a
   production dump restored into a scratch D1) as the second line behind D1 Time
   Travel. Recorded to date: a restore drill on STAGING data (2026-10-18, which

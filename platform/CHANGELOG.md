@@ -2,6 +2,20 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-22 — Restore-check docs say Sunday, as deployed
+
+Not yet deployed.
+
+- The weekly restore check has always fired on Sunday 04:30 UTC in production: Cloudflare's cron parser counts the
+  weekday field 1 = Sunday (documented: https://developers.cloudflare.com/workers/configuration/cron-triggers/ —
+  "Days of the week go from 1 = Sunday to 7 = Saturday"), so `30 4 * * 1` means Sunday, not Monday as comments and
+  docs said. The expression is intentionally unchanged, so this changes no schedule and no live trigger. Verified
+  live 2026-11-22: the production trigger reads "At 04:30 AM on Sunday" and the check ran on Sundays Nov 1, 8, 15
+  and 22.
+- Comments (`src/backup.ts`, `wrangler.toml`), `README.md`, the OpenAPI description of `GET /v1/admin/backups`, the
+  ops runbook and one test title now say Sunday / "weekly check" instead of Monday.
+- No behavior, configuration, migration or dependency change.
+
 ## 2026-11-21 — Backup: one name per run, key paging for large tables
 
 Not yet deployed.

@@ -51,7 +51,8 @@ SETTINGS_CACHE_MS = "5000"
 
 # Nightly (UTC) retention clean-up (deletes daily_usage and idempotency_keys rows older than 30 days, src/retention.ts)
 # + full counters reconcile; hourly karma_7d window expiry + stored ranks (src/counters.ts). scheduled() in src/index.ts.
-# Daily 03:00 UTC D1 backup to R2 + weekly Monday 04:30 UTC restore check (src/backup.ts, docs/ops/BACKUP-RESTORE.md).
+# Daily 03:00 UTC D1 backup to R2 + weekly Sunday 04:30 UTC restore check (src/backup.ts, docs/ops/BACKUP-RESTORE.md).
+# `30 4 * * 1` fires on Sunday: Cloudflare's cron parser counts the weekday field 1 = Sunday (Quartz-style).
 # Must equal [CLEANUP_CRON, HOURLY_CRON, BACKUP_CRON, RESTORE_CHECK_CRON] (src/retention.ts, src/backup.ts; a test checks).
 [triggers]
 crons = ["17 3 * * *", "7 * * * *", "0 3 * * *", "30 4 * * 1"]

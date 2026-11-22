@@ -244,7 +244,7 @@ describe('cron dispatch', () => {
   }
   const keys = async () => ((await E.BACKUPS.list()).objects as R2Object[]).map((o) => o.key).sort();
 
-  it('03:00 UTC backs up, Monday 04:30 UTC checks, the other crons do neither', async () => {
+  it('03:00 UTC backs up, Sunday 04:30 UTC checks, the other crons do neither', async () => {
     vi.spyOn(console, 'log').mockImplementation(() => undefined);
     await fire(CLEANUP_CRON);
     expect(await keys()).toEqual([]);
