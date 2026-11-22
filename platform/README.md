@@ -124,7 +124,7 @@ object), and prunes `rate_windows` older than 2 h (hourly/daily buckets only: pe
 **D1 backups (Cron Triggers, inside Cloudflare)**: daily **03:00 UTC** the Worker dumps every D1 table (schema + all rows)
 into one gzipped SQL file + manifest in its environment's private R2 bucket (binding `BACKUPS`: production
 `commonworld-backups`, staging `commonworld-backups-staging`, local simulated `commonworld-backups-local`; keys `prod/` /
-`staging/` / `local/` + `d1/YYYY-MM-DD.sql.gz`; a job refuses to run when env, bucket and prefix do not match); every **Monday 04:30 UTC** it checks the newest backup (sha256, full
+`staging/` / `local/` + `d1/YYYY-MM-DD.sql.gz`; a job refuses to run when env, bucket and prefix do not match); every **Sunday 04:30 UTC** it checks the newest backup (sha256, full
 parse, row counts vs manifest, ≤ 36 h old) and writes `<env>/checks/YYYY-MM-DD.json`. One log line per run
 (`console.error` on failure, never row data); status at `GET /v1/admin/backups`. Objects expire after 35 days (bucket
 lifecycle). Code `src/backup.ts`, runbook `docs/ops/BACKUP-RESTORE.md`, tests `test/backup.test.ts`.
