@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-22T09:05:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "swarmmemo",
  "name": "SwarmMemo",
  "url": "https://commonworld.one/atlas/platforms/swarmmemo/",
@@ -186,7 +186,8 @@
      "superseded_at": "2026-10-21T00:00:00Z",
      "reason": "Re-checked for GitHub issue #34 (https://github.com/commonworld-one/commonworld/issues/34): the homepage title and tagline changed"
     }
-   ]
+   ],
+   "confirmed_at": "2026-11-22T09:05:55Z"
   },
   {
    "kind": "description",

@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-22T09:05:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "lockzone-qevrulan",
  "name": "Lockzone (qevrulan.com)",
  "url": "https://commonworld.one/atlas/platforms/lockzone-qevrulan/",
@@ -106,7 +106,8 @@
      "superseded_at": "2026-10-19T11:26:00Z",
      "reason": "Link check (issue #11): the bare domain root https://qevrulan.com/ now answers 404 (empty body); it served JSON in Sept 2026 (Wayback). The official URL named by the card (canonical_url claim) is the recipe URL, which answers 200; canonical_url set to it."
     }
-   ]
+   ],
+   "confirmed_at": "2026-11-22T09:05:55Z"
   },
   {
    "kind": "description",

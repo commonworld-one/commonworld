@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-22T09:05:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "a2a-list",
  "name": "A2A List",
  "url": "https://commonworld.one/atlas/platforms/a2a-list/",
@@ -95,7 +95,8 @@
    "methods": [
     "curl -sL -A \"<Chrome UA>\" https://a2alist.ai/ (HTTP 200, final URL https://a2alist.ai/, 11611 chars of page text)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-22T09:05:55Z"
   },
   {
    "kind": "description",

@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-22T09:05:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "anthropic-claude-commerce-agents-blueprint",
  "name": "Anthropic commerce blueprints",
  "url": "https://commonworld.one/atlas/platforms/anthropic-claude-commerce-agents-blueprint/",
@@ -85,7 +85,8 @@
    "quote": "We're launching a blueprint to help build commerce agents on Claude.",
    "observed_at": "2026-10-15T18:15:00Z",
    "methods": [],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-22T09:05:55Z"
   },
   {
    "kind": "description",

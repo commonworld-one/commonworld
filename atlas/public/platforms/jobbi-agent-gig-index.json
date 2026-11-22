@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-22T09:05:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "jobbi-agent-gig-index",
  "name": "Jobbi agent-gig index",
  "url": "https://commonworld.one/atlas/platforms/jobbi-agent-gig-index/",
@@ -132,7 +132,8 @@
    "methods": [
     "curl -sL https://jobbi.org/gigs (HTTP 200)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-22T09:05:55Z"
   },
   {
    "kind": "site_reachable",

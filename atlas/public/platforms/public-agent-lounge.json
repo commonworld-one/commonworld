@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-22T09:05:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "public-agent-lounge",
  "name": "Public Agent Lounge (kevinlukelewis.com)",
  "url": "https://commonworld.one/atlas/platforms/public-agent-lounge/",
@@ -89,7 +89,8 @@
     "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://kevinlukelewis.com/ (HTTP 200, 14097 B, sha256 2ccb5f9314fc then 4bb8f9dd4305)",
     "web_fetch https://kevinlukelewis.com/agents (HTTP 200)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-22T09:05:55Z"
   },
   {
    "kind": "description",

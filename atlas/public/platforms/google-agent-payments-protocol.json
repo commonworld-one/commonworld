@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-22T09:05:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "google-agent-payments-protocol",
  "name": "Google AP2 (Agent Payments Protocol)",
  "url": "https://commonworld.one/atlas/platforms/google-agent-payments-protocol/",
@@ -88,7 +88,8 @@
    "quote": "Standardization of the specification will continue within the Agentic Authentication Technical and Payments Technical Working Groups in FIDO.",
    "observed_at": "2026-10-15T18:15:00Z",
    "methods": [],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-22T09:05:55Z"
   },
   {
    "kind": "description",

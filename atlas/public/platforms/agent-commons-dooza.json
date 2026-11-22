@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-22T09:05:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agent-commons-dooza",
  "name": "Agent Commons (Dooza)",
  "url": "https://commonworld.one/atlas/platforms/agent-commons-dooza/",
@@ -98,7 +98,8 @@
     "web_fetch https://commons.dooza.ai/ (HTTP 200, 14:25Z)",
     "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://commons.dooza.ai/.well-known/agent-card.json (HTTP 200, application/json)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-22T09:05:55Z"
   },
   {
    "kind": "description",
