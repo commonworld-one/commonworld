@@ -833,6 +833,18 @@ def apply_number(entry, m, val, quote, methods, ts, fields=None):
     return what, old['value']
 
 
+def comparison_of(claim, what):
+    """How the new record of a re-observed number relates to the record it replaced (the last history entry apply_number wrote):
+    'same' when source URL and window label are both unchanged, else 'source', 'window' or 'source+window' for what changed.
+    None when there is no earlier record to compare with ('new'). Only labels are compared; no value or date is inferred."""
+    hist = (claim or {}).get('history') or []
+    if what == 'new' or not hist:
+        return None
+    old = hist[-1]
+    diff = [k for k in ('source_url', 'window') if old.get(k) != claim.get(k)]
+    return 'same' if not diff else '+'.join('source' if k == 'source_url' else 'window' for k in diff)
+
+
 def _same_url(a, b):
     return isinstance(a, str) and isinstance(b, str) and a.rstrip('/') == b.rstrip('/')
 
@@ -1140,7 +1152,10 @@ def main():
                     st['closed_at'] = ts
                     changed_slugs.add(slug)
                 else:
-                    rep['suspected'].append({'slug': slug, 'url': r['via'], 'error': r['error'], 'methods': r['methods']})
+                    rep['suspected'].append({'slug': slug, 'url': r['via'], 'error': r['error'], 'methods': r['methods'],
+                                             'failed_weeks': st['failed_weeks'], 'first_failed_at': st['first_failed_at'],
+                                             'closed_at': st.get('closed_at'), 'interval_baseline_at': st.get('interval_baseline_at'),
+                                             'last_counted_at': st.get('last_counted_at')})
             else:
                 if st and st.get('failed_weeks'):
                     rep['recovered'].append({'slug': slug, 'was_failed_weeks': st['failed_weeks']})
@@ -1207,7 +1222,8 @@ def main():
             if what != 'same':
                 changed_slugs.add(e['slug'])
                 rep['numbers'].append({'slug': e['slug'], 'id': m['id'], 'kind': m['kind'], 'basis': m['basis'], 'unit': m['unit'],
-                                       'old': old, 'new': val, 'action': what, 'source': m['url']})
+                                       'old': old, 'new': val, 'action': what, 'source': m['url'],
+                                       'comparison': comparison_of(c, what)})
                 if m.get('on_change_note'):
                     rep['notes'].append(f'{e["slug"]}: {m["on_change_note"]}')
 
@@ -1265,9 +1281,11 @@ def summary_md(rep, snap_path):
     c = rep['counts']
     L += [f'| checked | {sum(c.values())} |', f'| reachable (2xx/3xx) | {c.get("ok", 0)} |', f'| blocked / needs browser (401/403/429/503…) | {c.get("blocked", 0)} |',
           f'| failed this week | {c.get("fail", 0)} |',
-          f'| **died** (2nd failed week → closed history) | {len(rep["died"])} |', f'| suspected down (1st failed week) | {len(rep["suspected"])} |',
+          f'| **died** (2nd failed week → closed history) | {len(rep["died"])} |', f'| suspected down (1st failed week) | {sum(1 for r in rep["suspected"] if r.get("failed_weeks", 1) < 2)} |',
+          f'| older failed weeks on record, not counted this run, not closed | {sum(1 for r in rep["suspected"] if r.get("failed_weeks", 1) >= 2)} |',
           f'| recovered from suspected | {len(rep["recovered"])} |', f'| **revived** (closed by refresh → live) | {len(rep["revived"])} |',
           f'| domain moved (needs human review) | {len(rep["moved"])} |', f'| number changes | {len(rep["numbers"])} |',
+          f'| of which source or window label changed (not like for like) | {sum(1 for r in rep["numbers"] if r.get("comparison") not in (None, "same"))} |',
           f'| statements out of step with their number (needs a human) | {len(rep.get("note_drift", []))} |',
           f'| replication count changes | {sum(1 for r in rep.get("replications", []) if r["action"] != "same")} |',
           f'| facts confirmed unchanged (confirmed_at set, observed_at kept) | {len(rep.get("confirmed", [])) + sum(1 for r in rep.get("replications", []) if r["action"] == "same")} |', '']
@@ -1282,11 +1300,31 @@ def summary_md(rep, snap_path):
         L.append('')
     pg = lambda s: f'[{s}](https://commonworld.one/atlas/platforms/{s}/)'
     table('Died (status → closed history; page and URL kept)', rep['died'], [('entry', lambda r: pg(r['slug'])), ('url', lambda r: r['url']), ('first failed', lambda r: r['first_failed_at'][:10]), ('last error', lambda r: r['error'])])
-    table('Suspected down (first failed week; nothing published)', rep['suspected'], [('entry', lambda r: pg(r['slug'])), ('url', lambda r: r['url']), ('error', lambda r: r['error'])])
+    table('Suspected down (first failed week; nothing published)', [r for r in rep['suspected'] if r.get('failed_weeks', 1) < 2],
+          [('entry', lambda r: pg(r['slug'])), ('url', lambda r: r['url']), ('error', lambda r: r['error'])])
+    older = [r for r in rep['suspected'] if r.get('failed_weeks', 1) >= 2]
+    if older:
+        L += ['### Older failed weeks on record (not counted this run, not closed, nothing published)', '',
+              'These entries already hold 2 or more failed weeks from earlier runs, including runs under the earlier counting rule, and the state has no '
+              'valid time of the last counted check. This run added no week and closed nothing; `interval_baseline_at` is where the 7 days start. '
+              'The next failed check at least 7 days after that time counts as a new week and closes the card, because the record already holds 2 or more weeks. '
+              'Counts and `first_failed_at` are unchanged.', '']
+        L.append('| entry | url | error | failed weeks on record | first failed | closed_at in state (card still live) | interval baseline |')
+        L.append('|---|---|---|---:|---|---|---|')
+        for r in older:
+            L.append('| ' + ' | '.join(str(x).replace('|', '\\|').replace('\n', ' ') for x in (
+                pg(r['slug']), r['url'], r['error'], r['failed_weeks'], (r.get('first_failed_at') or '—')[:10],
+                'yes, set by an earlier run: ' + r['closed_at'] if r.get('closed_at') else 'no', r.get('interval_baseline_at') or '—')) + ' |')
+        L.append('')
     table('Revived', rep['revived'], [('entry', lambda r: pg(r['slug'])), ('url', lambda r: r['url']), ('HTTP', lambda r: r['status'])])
     table('Recovered (was suspected)', rep['recovered'], [('entry', lambda r: pg(r['slug'])), ('failed weeks before', lambda r: r['was_failed_weeks'])])
     table('Redirects to another domain (flag only, data unchanged)', rep['moved'], [('entry', lambda r: pg(r['slug'])), ('status', lambda r: r['status']), ('canonical', lambda r: r['canonical']), ('now ends at', lambda r: r['final_url']), ('previously seen', lambda r: r['previous'] or '—')])
-    table('Number changes (re-observations; old value kept in claim history)', rep['numbers'], [('entry', lambda r: pg(r['slug'])), ('claim', lambda r: r['id']), ('basis', lambda r: r['basis']), ('change', lambda r: r['action']), ('old', lambda r: '—' if r['old'] is None else fmt_value(r['old'])), ('new', lambda r: fmt_value(r['new'])), ('unit', lambda r: r['unit']), ('source', lambda r: r['source'])])
+    moved_basis = sum(1 for r in rep['numbers'] if r.get('comparison') not in (None, 'same'))
+    if moved_basis:
+        L += [f'**{moved_basis} of {len(rep["numbers"])} number changes below read the figure from a different source URL or with a different window label than the record they replace '
+              '(column "like for like"). Do not read old to new as growth or decline for those; the old value, source and window stay in the claim history.**', '']
+    table('Number changes (re-observations; old value kept in claim history)', rep['numbers'], [('entry', lambda r: pg(r['slug'])), ('claim', lambda r: r['id']), ('basis', lambda r: r['basis']), ('change', lambda r: r['action']),
+          ('like for like', lambda r: {None: '—', 'same': 'yes'}.get(r.get('comparison'), 'no: ' + str(r.get('comparison')) + ' changed')), ('old', lambda r: '—' if r['old'] is None else fmt_value(r['old'])), ('new', lambda r: fmt_value(r['new'])), ('unit', lambda r: r['unit']), ('source', lambda r: r['source'])])
     L.append(replications_md(rep, heading=False))
     if rep['notes']:
         L.append('### Needs a human'); L.append(''); L += [f'- {n}' for n in rep['notes']]; L.append('')
