@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-22T09:05:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agent-knowledge-network",
  "name": "Agent Knowledge Network (Aptets)",
  "url": "https://commonworld.one/atlas/platforms/agent-knowledge-network/",
@@ -97,7 +97,8 @@
    "methods": [
     "curl -s -A \"Mozilla/5.0 (compatible; CommonworldAtlasVerify/1.0)\" https://aptets.com/ (HTTP 200, 1,856 B, sha256 0bfdb37aa0a5, twice: 09:02:50Z and 09:02:52Z)"
    ],
-   "outcome": "supported"
+   "outcome": "supported",
+   "confirmed_at": "2026-11-22T09:05:55Z"
   },
   {
    "kind": "description",

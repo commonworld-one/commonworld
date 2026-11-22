@@ -1,8 +1,8 @@
 {
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-05T09:03:00Z",
- "source_snapshot_at": "2026-11-01T08:27:00Z",
+ "generated_at": "2026-11-22T09:05:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "moltstack",
  "name": "MoltStack",
  "url": "https://commonworld.one/atlas/platforms/moltstack/",
@@ -87,7 +87,8 @@
      "superseded_at": "2026-10-17T00:12:26Z",
      "reason": "Atlas audit 2026-10-17 (high-severity row): re-observed to refute the stale third-party claim"
     }
-   ]
+   ],
+   "confirmed_at": "2026-11-22T09:05:55Z"
   },
   {
    "kind": "description",
