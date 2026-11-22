@@ -50,14 +50,40 @@ class OlderCounts(unittest.TestCase):
 
     def test_older_counts_are_not_called_first_week(self):
         md, state = summary_of({'bountybook': dict(self.OLD), 'opentask': dict(self.FIRST)})
-        first, older = md.split('### Older failed weeks on record')
+        first, older = md.split('### Failed weeks on record (2 or more)')
         self.assertIn('### Suspected down (first failed week; nothing published)', first)
         self.assertIn('opentask', first)
         self.assertNotIn('bountybook', first.split('### Suspected down')[1], 'a 3-week record must not sit under the first-week heading')
         self.assertIn('bountybook', older)
-        self.assertIn('| 3 | 2026-11-01 | yes, set by an earlier run: 2026-11-21T19:10:54Z | ' + NOW + ' |', older)
+        self.assertIn('| 3 | 2026-11-01 | none recorded | ' + NOW + ' (set this run) | 2026-11-21T19:10:54Z |', older)
         self.assertIn('| suspected down (1st failed week) | 1 |', md)
-        self.assertIn('| older failed weeks on record, not counted this run, not closed | 1 |', md)
+        self.assertIn('| 2 or more failed weeks on record, not counted this run, not closed | 1 |', md)
+        self.assertNotIn('earlier counting rule', md, 'the label is derived from fields, not a blanket legacy claim')
+
+    def test_unreadable_last_count_is_shown_as_such(self):
+        bad = dict(self.OLD, last_counted_at='not-a-time')
+        md, _ = summary_of({'bountybook': bad})
+        self.assertIn('| unreadable: not-a-time |', md)
+        self.assertNotIn('none recorded |', md.split('### Failed weeks on record (2 or more)')[1].split('\n\n')[2])
+
+    def test_row_with_a_valid_last_count_shows_it_not_none_recorded(self):
+        """A 2+ week record that does carry a valid last count time (possible in a hand-built report) must not be described as unknown."""
+        rep = {'run_at': NOW, 'counts': {'fail': 1}, 'died': [], 'recovered': [], 'revived': [], 'moved': [], 'closed_responding': [],
+               'suspected': [{'slug': 'demo', 'url': 'https://d.example', 'error': 'x', 'methods': [], 'failed_weeks': 2,
+                              'first_failed_at': '2026-11-01T08:27:19Z', 'closed_at': None, 'interval_baseline_at': None,
+                              'last_counted_at': '2026-11-20T08:00:00Z'}],
+               'numbers': [], 'number_errors': [], 'note_drift': [], 'notes': [], 'replications': [], 'confirmed': []}
+        md = refresh.summary_md(rep, None)
+        row = [l for l in md.splitlines() if l.startswith('| [demo]')][0]
+        self.assertIn('| 2026-11-20T08:00:00Z | — | — |', row)
+        self.assertNotIn('none recorded', row)
+        self.assertNotIn('set this run', row)
+
+    def test_earlier_baseline_is_not_called_set_this_run(self):
+        md, _ = summary_of({'bountybook': dict(self.OLD, interval_baseline_at='2026-11-20T00:00:00Z')})
+        row = [l for l in md.splitlines() if l.startswith('| [bountybook]')][0]
+        self.assertIn('| 2026-11-20T00:00:00Z |', row)
+        self.assertNotIn('set this run', row)
 
     def test_report_wording_changes_no_counter(self):
         _, state = summary_of({'bountybook': dict(self.OLD)})
@@ -68,7 +94,7 @@ class OlderCounts(unittest.TestCase):
 
     def test_no_older_section_when_there_are_none(self):
         md, _ = summary_of({'opentask': dict(self.FIRST)})
-        self.assertNotIn('Older failed weeks on record', md)
+        self.assertNotIn('Failed weeks on record (2 or more)', md)
 
 
 def claim(**kw):
@@ -110,16 +136,17 @@ class Comparison(unittest.TestCase):
         what, _ = refresh.apply_number(e, mapping(), 2, 'q', ['GET'], NOW)
         self.assertEqual((what, refresh.comparison_of(e['claims'][0], what)), ('new', None))
 
-    def test_summary_flags_not_like_for_like(self):
+    def test_summary_flags_label_differences(self):
         rep = {'run_at': NOW, 'counts': {'ok': 2}, 'died': [], 'suspected': [], 'recovered': [], 'revived': [], 'moved': [], 'closed_responding': [],
                'numbers': [{'slug': 'a', 'id': 'i1', 'kind': 'metric', 'basis': 'direct_observation', 'unit': 'u', 'old': 1, 'new': 2, 'action': 'changed', 'source': 'https://s', 'comparison': 'same'},
                            {'slug': 'b', 'id': 'i2', 'kind': 'metric', 'basis': 'direct_observation', 'unit': 'u', 'old': 5, 'new': 9, 'action': 'changed', 'source': 'https://s', 'comparison': 'source+window'}],
                'number_errors': [], 'note_drift': [], 'notes': [], 'replications': [], 'confirmed': []}
         md = refresh.summary_md(rep, None)
-        self.assertIn('| of which source or window label changed (not like for like) | 1 |', md)
+        self.assertIn('| of which source URL or window text differs from the replaced record | 1 |', md)
         self.assertIn('**1 of 2 number changes below', md)
         self.assertIn('| yes |', md)
-        self.assertIn('| no: source+window changed |', md)
+        self.assertIn('| no: source+window differs |', md)
+        self.assertIn('does not show the measurement changed', md)
 
     def test_all_same_prints_no_warning(self):
         rep = {'run_at': NOW, 'counts': {'ok': 1}, 'died': [], 'suspected': [], 'recovered': [], 'revived': [], 'moved': [], 'closed_responding': [],
