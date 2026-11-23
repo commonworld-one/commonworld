@@ -18,6 +18,9 @@ copied or pushed; every problem is reported (not only the first):
              / shot_url https URLs, http_status an int 100..599 (not a bool) or null (screens.py stores None when
              page.goto() timed out but the page still rendered and passed its checks: no response, no status),
              title a string, captured_at YYYY-MM-DDTHH:MM:SSZ, width 1200, height 750, bytes a positive int;
+             imported_capture_metadata optional: strict stored-webp-import/1 provenance for imported captures only;
+             null HTTP status means not recorded for this explicit format, not a claimed navigation timeout.
+             Its dhash is checked against decoded stored WebP bytes and computed_at records the new computation.
              confirmed_at optional (issue #273): YYYY-MM-DDTHH:MM:SSZ, not earlier than captured_at, not in the future.
   images     every <slug>.webp in the artifact is at most MAX_BYTES (stat before opening, bounded read), is a
              structurally valid WebP (webp_problem below, stdlib: RIFF size, chunk walk, VP8 / VP8L / VP8X headers,
@@ -373,10 +376,18 @@ def record_problems(slug, r):
         return [f'manifest: {slug}: entry is {type(r).__name__}, not an object']
     out = []
     keys = set(r)
+    imported = r.get('imported_capture_metadata')
+    if 'imported_capture_metadata' in r:
+        if not isinstance(imported, dict) or set(imported) != {'format', 'http_status_reason', 'dhash_basis', 'computed_at'} or imported.get('format') != 'stored-webp-import/1' or imported.get('http_status_reason') != 'not-recorded-in-retained-capture-evidence' or imported.get('dhash_basis') != 'decoded-stored-webp' or not _real_utc(imported.get('computed_at')) or imported.get('computed_at', '') > _utc_now(FUTURE_SLACK_S):
+            out.append(f'manifest: {slug}: invalid imported capture metadata')
+        if isinstance(imported, dict) and _real_utc(imported.get('computed_at')) and _real_utc(r.get('captured_at')) and imported['computed_at'] < r['captured_at']:
+            out.append(f'manifest: {slug}: imported computation predates capture')
+        if r.get('http_status') is not None:
+            out.append(f'manifest: {slug}: imported unknown HTTP status must be null')
     if REQUIRED - keys:
         out.append(f'manifest: {slug}: missing fields {", ".join(sorted(REQUIRED - keys))}')
-    if keys - REQUIRED - OPTIONAL:
-        out.append(f'manifest: {slug}: unexpected fields {", ".join(sorted(keys - REQUIRED - OPTIONAL))}')
+    if keys - REQUIRED - OPTIONAL - {'imported_capture_metadata'}:
+        out.append(f'manifest: {slug}: unexpected fields {", ".join(sorted(keys - REQUIRED - OPTIONAL - {"imported_capture_metadata"}))}')
     checks = {
         'file': lambda v: v == f'{slug}.webp',
         'sha256': lambda v: isinstance(v, str) and HEX64.fullmatch(v),
@@ -558,6 +569,9 @@ def check(artifact, base=None, cards=None):
         r = good.get(slug)
         if r is None:
             continue
+        problem = imported_hash_problem(b, r)
+        if problem:
+            out.append(f'images: screens/{slug}.webp {problem}')
         if hashlib.sha256(b).hexdigest() != r['sha256']:
             out.append(f'images: screens/{slug}.webp sha256 differs from the manifest')
         if len(b) != r['bytes']:
@@ -612,6 +626,32 @@ def check(artifact, base=None, cards=None):
     return out
 
 
+def stored_webp_dhash(b):
+    """Hash decoded stored bytes, never claim to recover the pre-encode capture hash."""
+    Image = _pillow()
+    if Image is None:
+        raise ValueError('Pillow required for imported stored-WebP hash')
+    with Image.open(io.BytesIO(b), formats=['WEBP']) as im:
+        g = im.convert('L').resize((9, 8), Image.Resampling.LANCZOS)
+        px = g.tobytes()
+        bits = 0
+        for y in range(8):
+            for x in range(8):
+                bits = (bits << 1) | (px[y * 9 + x] > px[y * 9 + x + 1])
+        return f'{bits:016x}'
+
+
+def imported_hash_problem(b, r):
+    if 'imported_capture_metadata' not in r:
+        return None
+    try:
+        if stored_webp_dhash(b) != r['dhash']:
+            return 'imported stored-WebP dhash differs from decoded bytes'
+    except Exception as ex:
+        return 'cannot verify imported stored-WebP dhash: ' + type(ex).__name__
+    return None
+
+
 def stored_problems(d):
     """-> [problem] for a stored atlas/screens directory (the atlas-screens commit pinned in atlas/screens.lock): its
     manifest.json (bounded read) is valid and every entry's <slug>.webp is a regular file within MAX_BYTES, structurally
@@ -647,6 +687,9 @@ def stored_problems(d):
             prob = decode_problem(b, (r['width'], r['height']))
             if prob:
                 out.append(f'stored: {slug}.webp is not a decodable WebP image ({prob})'[:300])
+        problem = imported_hash_problem(b, r)
+        if problem:
+            out.append(f'stored: {slug}.webp {problem}')
         if hashlib.sha256(b).hexdigest() != r['sha256'] or len(b) != r['bytes']:
             out.append(f'stored: {slug}.webp sha256 or size differs from the manifest')
     return out

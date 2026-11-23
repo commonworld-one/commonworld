@@ -1,6 +1,6 @@
 {
-  "manifest_sha256": "a0f5a9b2619f4480ebf88dd473ba43786eeb10f62f8718835c14fe5b3fe810f7",
-  "source": "Exact reviewed348 capture manifest; image package merged through PR #317 at atlas-screens commit 3e75274034c11b7afbe81389c26843ccc813a876. Main code publication and release remain unapproved.",
+  "manifest_sha256": "75834dc7a9634aed9b0c8941a070f4f9e8a70c4a27001f9ba431640d78336a8a",
+  "source": "Exact capture manifest metadata repair merged through PR #319 at atlas-screens commit 05ae69ab103a273b6f8a0de2fac68d0ef1eebabb. All image bytes and original capture fields are unchanged from image PR #317. No new capture or source visit.",
   "capture_dates_unchanged": true,
   "botnet_derivation_receipt": "provenance/botnet-derivative.json"
 }

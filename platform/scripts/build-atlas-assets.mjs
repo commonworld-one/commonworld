@@ -17,6 +17,7 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { hasAtlasCsp } from './atlas-csp-check.mjs';
 
 const here = path.dirname(new URL(import.meta.url).pathname);
 const v1 = path.resolve(here, '..');
@@ -58,7 +59,7 @@ const rules = headers.split('\n').filter((l) => l && !/^\s/.test(l) && !l.starts
 if (rules.length > 100) fail(`_headers has ${rules.length} rules (max 100)`);
 const long = headers.split('\n').find((l) => l.length > 2000);
 if (long) fail(`_headers line longer than 2000 characters: ${long.slice(0, 80)}…`);
-if (!/^\/\*\n(?:\s+.*\n)*?\s+Content-Security-Policy: [^\n]*script-src 'self'/m.test(headers)) fail("_headers /* has no Content-Security-Policy with script-src 'self' (the nonce step needs it)");
+if (!hasAtlasCsp(headers)) fail("_headers /* has no Content-Security-Policy with script-src 'self' (the nonce step needs it)");
 const redirects = fs.existsSync(path.join(out, '_redirects')) ? fs.readFileSync(path.join(out, '_redirects'), 'utf8').split('\n').filter((l) => l.trim() && !l.startsWith('#')).length : 0;
 if (redirects > 2000) fail(`_redirects has ${redirects} rules (max 2000 static)`);
 let files = 0; let bytes = 0;
