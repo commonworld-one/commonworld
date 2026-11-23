@@ -395,9 +395,9 @@ def page(site, *, path, title, description, body, active, ld=(), og_type='websit
                   f'<a href="{API_DOCS}">API</a><a href="{b}/data/snapshot.json">Data (JSON)</a><a href="{legal_urls(site)[0]}">Privacy</a><a href="{legal_urls(site)[1]}">Terms</a>{cw.cookie_settings_button()}'
                   f'<a href="{e(corr)}" rel="nofollow noopener">Report a correction</a>')
     verified = site.latest.strftime('%Y-%m-%d') if site.latest else ''
-    footer_label = 'Commonworld / Atlas of Agent Platforms · overview working version' if getattr(site, 'catalogue_mode', False) else f'Commonworld / Atlas of Agent Platforms · verified {verified}'
+    footer_label = ('Commonworld / Atlas of Agent Platforms · overview working version' if getattr(site, 'overview_preview', False) else 'Commonworld / Atlas of Agent Platforms · dated source overviews') if getattr(site, 'catalogue_mode', False) else f'Commonworld / Atlas of Agent Platforms · verified {verified}'
     announcement = ('<div class="overview-legacy-note">Atlas overview working version. Drafts are not accepted visits.</div>'
-                    if getattr(site, 'catalogue_mode', False) else cw.announcement_bar(cfg))
+                    if getattr(site, 'overview_preview', False) else ('' if getattr(site, 'catalogue_mode', False) else cw.announcement_bar(cfg)))
     html_doc = f"""<!doctype html>
 <html lang="en">
 <head>

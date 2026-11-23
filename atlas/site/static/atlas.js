@@ -117,7 +117,7 @@
     var by = state.sort, l = baseOrder.slice();
     var name = function (a, b) { return a._name < b._name ? -1 : a._name > b._name ? 1 : 0; };
     if (by === 'claims') l.sort(function (a, b) { return (+b.dataset.claims) - (+a.dataset.claims) || name(a, b); });
-    else if (by === 'recent') l.sort(function (a, b) { return (+b.dataset.ver) - (+a.dataset.ver) || name(a, b); });
+    else if (by === 'recent') l.sort(function (a, b) { return Number(b.dataset.ver || 0) - Number(a.dataset.ver || 0) || name(a, b); });
     else l.sort(name);
     return l;
   }
