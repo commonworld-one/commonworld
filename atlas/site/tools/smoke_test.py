@@ -20,6 +20,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, '..'))
 import serve  # noqa: E402
 import json  # noqa: E402
+from smoke_urls import exact_https_url, caption_source_matches, share_target_matches
 _SNAP = json.load(open(os.path.join(HERE, '..', 'dist', 'atlas', 'data', 'snapshot.json')))['platforms']  # counts follow the built data
 CATALOGUE = any(c.get('overview') for c in _SNAP)
 CURRENT_COUNTS = json.load(open(os.path.join(HERE, '..', 'dist', 'api', 'v1', 'atlas', 'index.json'))).get('current_counts', {})
@@ -301,12 +302,15 @@ with sync_playwright() as p:
             check('share bar: in the header card next to Visit, visible on landing, only one; sponsored slot still above facts', sp.evaluate(
                 "(() => { const bars = document.querySelectorAll('.cw-share'), b = bars[0], h = document.querySelector('.entry-head'), f = document.getElementById('h-claims') || document.querySelector('.entry .cw-panel'), s = document.querySelector('[data-ad-slot=\"atlas-platform-top\"]');"
                 " const r = b && b.getBoundingClientRect();"
-                " return bars.length === 1 && h.contains(b) && !!h.querySelector('.entry-actions .actions a[href^=\"https://thecolony.ai\"]') && r.bottom <= innerHeight && !!s"
+                " return bars.length === 1 && h.contains(b) && !!h.querySelector('.entry-actions .actions a') && r.bottom <= innerHeight && !!s"
                 " && !!(s.compareDocumentPosition(f) & Node.DOCUMENT_POSITION_FOLLOWING); })()"))
+            check('header Visit has exact parsed HTTPS source host and root path',
+                  exact_https_url(sp.get_attribute('.entry-actions .actions a', 'href'), 'https://thecolony.ai/'))
             nets = sp.evaluate("Array.from(document.querySelectorAll('.cw-share [data-share]')).filter(b => !b.hidden).map(b => b.dataset.share).join(',')")
             check(f'share: networks shown on desktop, native hidden ({nets})', nets == 'x,linkedin,telegram,reddit,facebook,email,copy')
-            check('share: every link carries the canonical URL', sp.evaluate(
-                f"Array.from(document.querySelectorAll('.cw-share a[data-share]')).every(a => decodeURIComponent(a.href).includes({canon!r}))"))
+            share_links = sp.locator('.cw-share a[data-share]').evaluate_all('(xs)=>xs.map(a=>({network:a.dataset.share,href:a.href}))')
+            check('share: every service parameter carries the exact parsed canonical URL',
+                  len(share_links) == 6 and all(share_target_matches(x['href'], x['network'], canon) for x in share_links))
             check('share: buttons have aria-labels', sp.evaluate("Array.from(document.querySelectorAll('.cw-share [data-share]')).every(b => b.getAttribute('aria-label'))"))
         sp.focus('.cw-share [data-share="copy"]'); sp.keyboard.press('Enter'); sp.wait_for_timeout(200)
         clip = sp.evaluate('navigator.clipboard.readText()')
@@ -350,7 +354,7 @@ with sync_playwright() as p:
             " && !document.querySelector('.entry > dl.facts') && !document.getElementById('h-claims'); })()"))
         check('current card: dated overview, disclosure and exact source caption visible',
               'Visit for this overview:' in m.inner_text('.entry-head') and 'Commonworld participates in this project.' in m.inner_text('.entry-head')
-              and 'https://thecolony.ai/' in m.inner_text('figure.entry-shot figcaption'))
+              and caption_source_matches(m.inner_text('figure.entry-shot figcaption'), 'https://thecolony.ai/'))
     else:
         check('platform page: sponsored banner directly under the header, then the screenshot figure, then the facts', m.evaluate(
             "(() => { const s = document.querySelector('[data-ad-slot=\"atlas-platform-top\"]'), f = document.getElementById('h-claims'), h = document.querySelector('.entry-head'), d = document.querySelector('.entry > dl.facts');"
