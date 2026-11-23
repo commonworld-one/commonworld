@@ -62,6 +62,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "YourAITools combines a directory advertised as 520 tools across 14 categories with 144-plus first-party kits and 24 operator-owned APIs. It discloses that its own tools pay its own wallet and are separate from independent listings. Directory order is alphabetical, paid placements are labelled and an optional Most used sort counts outbound clicks, not paid usage. Availability checks and trust scores do not establish output quality or security. Download refunds are conditional on a fault the team cannot fix; USDC-bought usage credits are nonrefundable, while unused card-paid credit has a separate 14-day refund policy with bonuses forfeited.",
+  "visited_at": "2026-11-23T00:18:37Z",
+  "sources": [
+   "https://youraitools.co/"
+  ],
+  "revision": "bf7beec9dc95ff3d887ad002e87ebcb579ab37a2f8a4c49cd89ea54b9ab3bc05"
+ },
  "badge_status": "Verified · 2026-10-31",
  "badge_svg": "https://commonworld.one/atlas/badge/youraitools.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/youraitools-dark.svg",

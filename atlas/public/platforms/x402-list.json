@@ -88,6 +88,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "x402 List presents a directory of APIs and services accepting x402 payments, with search, categories, facilitator links and machine-readable access through API, OpenAPI, text and MCP routes. It distinguishes listed, answering and payment-ready services and publishes its measurement method. Its documented agent flow separates discovery, an endpoint request, payment authorization and retry. Status, prices and payment volumes are directory-reported measurements.",
+  "visited_at": "2026-11-22T22:30:07Z",
+  "sources": [
+   "https://x402-list.com/"
+  ],
+  "revision": "53ed9aef2433aaf0a21fff20cec2e6cba06574be686fe8bdd5edce94e62da4be"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/x402-list.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402-list-dark.svg",

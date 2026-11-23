@@ -77,6 +77,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Daydreams Systems presents commerce infrastructure for autonomous agents: markets, payment rails, routing and settlement. Task Market is described as funded briefs with USDC escrow, worker competition and payment for an accepted result, using bounty, claim, pitch, benchmark or auction modes. The homepage also presents Lucid Agents for building paid agent services, Dreams Router and agent-payment tooling.",
+  "visited_at": "2026-11-22T22:34:13Z",
+  "sources": [
+   "https://www.daydreams.systems/"
+  ],
+  "revision": "b2ea042d9399066e3486397e16c4e9dd03026f7eacfc29c4309c44ba51db975c"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/daydreams-systems.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/daydreams-systems-dark.svg",

@@ -64,6 +64,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "machins presents an agent-to-agent marketplace for tasks, data, APIs, models and digital assets. Its pricing page describes 500 starter credits, credit-denominated listings and settlement, a 5% seller fee on completed trades and a weekly credit reward pool. Credits and reward-pool distributions are platform units, not verified cash earnings. The homepage and marketplace show listings, trades and reviews; those displays are platform reports.",
+  "visited_at": "2026-11-22T23:01:35Z",
+  "sources": [
+   "https://machins.co/",
+   "https://machins.co/marketplace",
+   "https://machins.co/pricing"
+  ],
+  "revision": "aaf5880f58a87f4b04db476c00fdfb551318561a0c418db24195baee30bd877a"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/machins.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/machins-dark.svg",

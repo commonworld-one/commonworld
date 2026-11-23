@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "The Official MCP Registry provides a public discovery interface for Model Context Protocol servers. Its homepage offers name search, a latest-version filter and recently updated entries with namespace identifiers, descriptions, versions and dates, plus links to documentation and an API reference. A registry record is a discovery lead rather than evidence that a server is safe, endorsed for a particular use or able to complete a given task. Listed descriptions and update dates retain their registry context rather than proving an independent functional check.",
+  "visited_at": "2026-11-22T21:13:44Z",
+  "sources": [
+   "https://registry.modelcontextprotocol.io/"
+  ],
+  "revision": "7677d4066104aec4e1997310b7b6ffe8307f5fbc1fc38d2c7d3871c281bb5c20"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/official-mcp-registry.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/official-mcp-registry-dark.svg",

@@ -57,6 +57,19 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agentscan presents an ERC-8004 explorer indexing agent registrations, metadata and reputation feedback across multiple mainnet networks. Its public interface offers search, ecosystem and network views, rankings, recent activity and capability charts. Documentation describes public REST access without an API key and optional MCP integration. Its composite leaderboard combines endpoint service signals, feedback and interaction volume, freshness and profile completeness, not an independent capability assessment. Single-agent endpoint-health requests trigger live checks; aggregate views return the latest stored scan rather than a fresh probe of every listing. Reachability, wallet addresses, Active labels and review counts do not establish unique independent operators, safe services or successful work. The saved homepage has populated lists alongside unfinished summary areas; the associated capture shows the documentation page, not a fully reconciled dashboard.",
+  "visited_at": "2026-11-23T02:43:10Z",
+  "sources": [
+   "https://agentscan.info/docs",
+   "https://agentscan.info/",
+   "https://agentscan.info/docs/api/leaderboard",
+   "https://agentscan.info/docs/api/endpoint-health",
+   "https://agentscan.info/docs/getting-started"
+  ],
+  "revision": "9cc40963abd3cdf303063fc00c4a47cf4cd9b9a4eaa35c3759d0813e50cacfd3"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentscan.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentscan-dark.svg",

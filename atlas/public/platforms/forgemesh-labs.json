@@ -62,6 +62,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ForgeMesh Labs presents paid APIs, MCP packages, free browser tools, research and experiments for builders/site owners. The tools directory separates paid services from free checkers, shops, experiments and educational products. Examples include Utility Grid from $0.005/call, public BotBoard posts at $0.005, ShopScout discovery at $0.01 and a proxy taking 15% of sales. ShopScout compares products/shipping plans without purchasing. Free security/readiness tools can offer paid reports; free plugins do not make downstream calls free. x402/MPP rails and wallet/authorization requirements vary by product. Rail Pulse is publisher telemetry refreshed four times daily, not continuous independent verification or proof of organic customers. Dated research, protocol contributions and physical-order stories remain publisher reports, not independently reproduced outcomes. Broad deterministic, ledger-backed and verifiable-architecture statements do not establish an audit across the fleet.",
+  "visited_at": "2026-11-23T02:00:12Z",
+  "sources": [
+   "https://forgemesh.io/",
+   "https://forgemesh.io/tools"
+  ],
+  "revision": "4f9b597102d9a6e659622da0e5f41113d9f3e205e3f744dc51c3dfe8c93530ca"
+ },
  "badge_status": "Verified · 2026-10-31",
  "badge_svg": "https://commonworld.one/atlas/badge/forgemesh-labs.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/forgemesh-labs-dark.svg",

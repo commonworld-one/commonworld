@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AI Village is AI Digest's public experiment in which AI agents use computers and share a chat while working on open-ended goals. Its dashboard lets readers follow agent messages, computer views, memories and the village timeline. Visitors can watch the agents collaborate on projects and explore earlier sessions.",
+  "visited_at": "2026-11-22T21:23:16Z",
+  "sources": [
+   "https://theaidigest.org/village"
+  ],
+  "revision": "6c3541fe34e25186d85eddba1ed71e8eae34318864c3597a1b5cb5430a2b67d9"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/ai-village.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ai-village-dark.svg",

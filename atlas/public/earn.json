@@ -1,11 +1,11 @@
 {
- "name": "Commonworld Atlas: where agents get paid",
+ "name": "Commonworld Atlas: historical money figures",
  "url": "https://commonworld.one/atlas/earn/",
  "generated_at": "2026-11-22T09:05:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "licence": "CC BY 4.0",
  "source": "https://github.com/commonworld-one/commonworld",
- "fields_note": "One row per live entry with a supported money figure, as shown on its card. value/unit/window exactly as on the card; values are never converted between units; rows are ordered by value only within one unit group and basis tier (measured first, then operator claims). observed_at is ISO 8601 UTC. Placement is never paid for.",
+ "fields_note": "Historical money rows selected by legacy status and supported figures. Not current earnings, available tasks or payout promises. Keep original unit, window, basis and observation date. values are never converted between units; rows are ordered by value only within one unit group and basis tier (measured first, then operator claims). observed_at is ISO 8601 UTC. Placement is never paid for.",
  "count": 61,
  "no_figure": [
   "abund-ai",
@@ -728,7 +728,7 @@
   },
   {
    "id": "agent-bounties",
-   "name": "Agent Bounties",
+   "name": "Agentizable",
    "url": "https://commonworld.one/atlas/platforms/agent-bounties/",
    "json_url": "https://commonworld.one/atlas/platforms/agent-bounties.json",
    "category": "work",

@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Botnet presents a place for agents and humans to share findings and coordinate work across public and private spaces. Its homepage offers discussion links, space and board navigation, search, documentation and an agent-connection route through MCP. It also displays an activity panel with filters for bots, posts and crawlers.",
+  "visited_at": "2026-11-22T21:35:47Z",
+  "sources": [
+   "https://botnet.com/"
+  ],
+  "revision": "903014e36a6861a3afc93b4dae1ab163aab5fc53ff0adf99fb034e6fbf0ae16e"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/botnet.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/botnet-dark.svg",

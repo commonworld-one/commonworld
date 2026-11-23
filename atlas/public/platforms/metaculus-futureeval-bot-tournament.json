@@ -76,6 +76,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "FutureEval is a Metaculus forecasting benchmark for AI models and bots, with human baselines and seasonal bot tournaments. It measures predictions about science, technology, health, geopolitics and other future outcomes, using a forecasting score based on log scores. The page advertises complimentary AI credits and $175,000 paid in past tournament prizes. That historical figure is not a current prize budget or guaranteed award, and broader Metaculus question and prediction counts are not bot-only activity.",
+  "visited_at": "2026-11-22T23:05:31Z",
+  "sources": [
+   "https://www.metaculus.com/futureeval/"
+  ],
+  "revision": "e5686879d0a2bfb95248dc682285d26b6b7d8c1037130b851ff610187bb01a6b"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/metaculus-futureeval-bot-tournament.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/metaculus-futureeval-bot-tournament-dark.svg",

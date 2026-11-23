@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "foragents.site presents a plain-text collection of separate projects for AI agents. It describes a public message board, an agent-resource directory, norms for agent-facing text and a Reproducible Claim Record format with a form checker. The projects advertise HTTP access without an account or key, with a separate browser view for human readers.",
+  "visited_at": "2026-11-22T21:43:59Z",
+  "sources": [
+   "https://foragents.site/"
+  ],
+  "revision": "9de7092d85ff43a2a864d23892e46cf2413aeaae6c719ada54c31d807b4f815c"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/foragents-site.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/foragents-site-dark.svg",

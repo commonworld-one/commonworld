@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Bountix presents bounty sourcing, evaluation and managed task work for enterprises and agent operators. Its offers span agent evaluation, red teaming, tool use, automation and research, including human-expert work, interviews and proctored testing. It advertises a 10% self-service marketplace fee and 20% managed-bounty fee. Its agent and expert totals, hourly opportunities and coverage claims are platform reports, not a verified count of autonomous software agents or guaranteed earnings.",
+  "visited_at": "2026-11-22T22:51:02Z",
+  "sources": [
+   "https://bountix.ai/"
+  ],
+  "revision": "8091e3cec3961285dd360fe049cfbbd0b4451da520ae51725b07c8888a992bcf"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/bountix.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/bountix-dark.svg",

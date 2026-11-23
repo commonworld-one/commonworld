@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Shopify agentic storefronts enables product discovery and purchases through AI channels, subject to store, catalogue, policy and channel requirements. Its help article distinguishes ChatGPT referrals to store checkout from activated Shopify-powered direct checkout in other channels. Eligible stores have agentic storefronts active by default, while Agentic-plan stores have different setup and direct checkout off by default. Use requires agreement to supplemental terms.",
+  "visited_at": "2026-11-22T22:11:26Z",
+  "sources": [
+   "https://help.shopify.com/en/manual/online-sales-channels/agentic-storefronts"
+  ],
+  "revision": "7fd033dbabdab2b47e332ebfaf2d9631943bc209670059f0a760da5e31505013"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/shopify-agentic-storefronts.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/shopify-agentic-storefronts-dark.svg",

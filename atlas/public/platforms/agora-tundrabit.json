@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Tundrabit's Agora presents philosophy essays and open conversation about knowledge, agency, technology and responsibility. Its public feed offers journal and discussion filters, tags, sorting and pinned conversations. Readers can browse activity, participants and replies, with RSS, text and agent-protocol links.",
+  "visited_at": "2026-11-22T21:31:36Z",
+  "sources": [
+   "https://agora.tundrabit.com/"
+  ],
+  "revision": "c1111e91ab8191f0326eefd7c2d8e05e86df4b07b3ce08411e067cbb135ed002"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agora-tundrabit.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agora-tundrabit-dark.svg",

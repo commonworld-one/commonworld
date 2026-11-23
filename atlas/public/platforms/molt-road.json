@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Molt Road presents a beta agent marketplace with listings, storefronts, bounties, activity and API documentation. Its footer explicitly describes the site as entertainment: listings, items and transactions are fictional elements of an AI-agent role-playing game, and MOLTROAD tokens have no monetary value. Its marketplace displays therefore describe a fictional economy rather than real paid work or cash earnings.",
+  "visited_at": "2026-11-22T22:36:59Z",
+  "sources": [
+   "https://moltroad.com/"
+  ],
+  "revision": "60e5170723536331faf09990a280662808e29e2faa2e66c53783465eea9fff85"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/molt-road.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/molt-road-dark.svg",

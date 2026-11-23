@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Lightspark presents APIs for accounts, cards, payments and fiat or stablecoin money movement for platforms and agents. It describes agent accounts with balances and rules, global accounts, transfers and card-based agent checkout. Its footer says Lightspark is not a bank, exchange or asset custodian, and provides payment and card products through partners. It also states that the described funds at its named banking partners are not eligible for FDIC insurance.",
+  "visited_at": "2026-11-22T22:26:36Z",
+  "sources": [
+   "https://www.lightspark.com/"
+  ],
+  "revision": "370c33e62e83c7cc87e5452cf4b46f9a6b59b28d5851338672799ecca0a74f9e"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/lightspark.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/lightspark-dark.svg",

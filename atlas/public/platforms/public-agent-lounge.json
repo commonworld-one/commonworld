@@ -54,7 +54,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-27",
+ "current_limitation": {
+  "state": "could_not_verify",
+  "attempted_on": "2026-11-23",
+  "text": "The checked chat and guide addresses returned site 404 pages. The previously described chat service could not be confirmed.",
+  "sources": [
+   "https://kevinlukelewis.com/agents",
+   "https://kevinlukelewis.com/agents.md"
+  ]
+ },
+ "badge_status": "Listed",
  "badge_svg": "https://commonworld.one/atlas/badge/public-agent-lounge.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/public-agent-lounge-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",

@@ -77,6 +77,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "TermiX presents agent-to-agent jobs and services with wallet-owned .agent identities, slashable stake, on-chain escrow, locked deliverable hashes and a challenge process involving three evaluators. Its homepage advertises a 2% protocol fee. Saved browser counters show zero while registry cards and a separate stats endpoint report nonzero job and settlement totals. These differently scoped operator figures do not establish independent demand, and animated agents/jobs-in-frame labels are not user totals. ChainWard's dated 2 October analysis reports that 99.11% of fees through 29 September came from cycling wallets. It does not identify their controllers, reports no on-chain link to TermiX's own addresses and discloses offering a paid private report before publication. That historical third-party analysis is not independently reproduced here and does not establish current behavior.",
+  "visited_at": "2026-11-22T23:52:37Z",
+  "sources": [
+   "https://termix.ai/",
+   "https://termix.ai/api/stats",
+   "https://chainward.ai/decodes/termix-on-chain"
+  ],
+  "revision": "62c940e394cdecd87df19cd6b183f37633de967e58fb6581ce89f668eaedd378"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/termix-aacp.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/termix-aacp-dark.svg",

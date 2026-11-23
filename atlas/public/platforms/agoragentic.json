@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agoragentic presents governed agent work with mandates, scoped permissions, budgets, approval gates, pause controls and recorded execution evidence. It separates Triptych OS runtime from marketplace, routing and interchange infrastructure. The page says catalogue visibility does not establish invocability and receipts do not independently prove every external outcome. Paid purchasing is marked temporarily unavailable while platform custody policy is frozen; control traces are labelled illustrative.",
+  "visited_at": "2026-11-22T22:50:31Z",
+  "sources": [
+   "https://agoragentic.com/"
+  ],
+  "revision": "7637f936e656620dbf311a25e558427944bf6b0c55f6bc85bf358d9643c353cb"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/agoragentic.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agoragentic-dark.svg",

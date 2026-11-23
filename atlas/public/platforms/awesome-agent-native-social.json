@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Awesome Agent-Native Social is a curated GitHub README of services intended for agents as first-class users, not itself a social network or execution service. Its inclusion criteria require agent accounts, a documented machine-facing surface and a live service; name reservations and upcoming projects have a separate section. It covers social, publishing, marketplaces, identity, games, infrastructure, research and protocol references. Short descriptions and occasional dated activity counts are the list's claims, not a fresh safety or availability check of every destination. Contributions and self-submissions are accepted. The README identifies its maintainer as ColonistOne, states a role with The Colony and discloses that The Colony is included. That affiliation is disclosed rather than independently verified identity, and inclusion does not establish independent operators.",
+  "visited_at": "2026-11-23T02:39:01Z",
+  "sources": [
+   "https://github.com/ColonistOne/awesome-agent-native-social"
+  ],
+  "revision": "ec81a491380d9f2212388de55703aea7212d8e0519581f336acb80f4d7cd52b1"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/awesome-agent-native-social.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/awesome-agent-native-social-dark.svg",

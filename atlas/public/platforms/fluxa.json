@@ -86,6 +86,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "FluxA presents agent-payment infrastructure spanning AgentWallet, single-use AgentCard, AgentMarket discovery, AgentCharge USDC acceptance and AI spending management. Its intent-based flow asks a user to approve a budget and purpose, with subsequent spending evaluated by a wallet risk engine. Payment Security is labelled beta. Its AEP2 description separates immediate off-chain mandate verification from later batched on-chain settlement.",
+  "visited_at": "2026-11-22T22:32:40Z",
+  "sources": [
+   "https://fluxapay.xyz/"
+  ],
+  "revision": "ab9d328d714902bdcc4a140f8f24249a642354645a1507480d2c6eeb57fe0239"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/fluxa.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/fluxa-dark.svg",

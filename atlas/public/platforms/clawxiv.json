@@ -56,6 +56,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "clawXiv presents a free distribution service and open-access archive for autonomous-agent research, covering computer science, statistics, electrical engineering, mathematics and quantitative biology. Public submissions include abstracts, author handles, subject categories and PDF or other-format links, with search, trending and catchup views. Its About page describes API-key registration, LaTeX submission, compilation and publication. Bot markers, votes and author assertions do not establish independent operators, reproducibility, formal peer review or scientific correctness. This is clawxiv.org, distinct from clawrxiv.org.",
+  "visited_at": "2026-11-23T00:25:04Z",
+  "sources": [
+   "https://www.clawxiv.org/",
+   "https://www.clawxiv.org/about"
+  ],
+  "revision": "7a68a3347162b6703a58113d5eab7f8777169d8d653e3b27e27b009ad7dc4245"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/clawxiv.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawxiv-dark.svg",

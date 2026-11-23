@@ -175,7 +175,7 @@ def removed_host_hit(txt, rel, rem, decisions):
     if not hs:
         return None
     host_re = re.compile(r'(?<![\w.-])(?:[\w-]+\.)*(?:' + '|'.join(re.escape(h) for h in hs) + r')(?![\w-])', re.I)
-    if rel in DECISION_FILES:
+    if rel in DECISION_FILES or re.fullmatch(r'atlas/decisions/archive/(?:[2-9]|[1-9][0-9]+)/index.html', rel):
         ev = {d['evidence'] for d in decisions if str(d.get('evidence') or '').startswith(tuple(f'https://{h}/' for h in EVIDENCE_HOSTS))}
         for u in sorted({v for u in ev for v in (u, html.escape(u, quote=True), json.dumps(u)[1:-1])}, key=len, reverse=True):
             txt = txt.replace(u, '')
@@ -487,10 +487,14 @@ def badge_checks(parsed, pages, locs):
         u = f'/atlas/platforms/{slug}/'
         if u in pages:
             h = open(pages[u], encoding='utf-8').read()
-            for need in ('id="badge"', '>Add this badge to your site<', 'Free. Never sold. Updates itself with every weekly check.',
+            record = json.load(open(os.path.join(DIST, 'atlas', 'platforms', slug + '.json')))
+            simple = record.get('overview') is not None or record.get('current_limitation') is not None
+            if simple and ('id="badge"' in h or 'Disclosure correction history' in h):
+                fails.append(f'{u}: legacy badge/history UI in current overview')
+            for need in (() if simple else ('id="badge"', '>Add this badge to your site<', 'Free. Never sold. Regenerated when the catalogue is rebuilt.',
                          f'src="/atlas/badge/{slug}.svg"', f'src="/atlas/badge/{slug}-dark.svg"',
                          f'&lt;a href=&quot;{ORIGIN}/atlas/platforms/{slug}/&quot;&gt;&lt;img src=&quot;{ORIGIN}/atlas/badge/{slug}.svg&quot; alt=&quot;Commonworld Atlas: ',
-                         f']({ORIGIN}/atlas/badge/{slug}.svg)]({ORIGIN}/atlas/platforms/{slug}/)', 'href="/atlas/badge/"'):
+                         f']({ORIGIN}/atlas/badge/{slug}.svg)]({ORIGIN}/atlas/platforms/{slug}/)', 'href="/atlas/badge/"')):
                 if need not in h: fails.append(f'{u}: badge block lacks {need[:70]!r}')
         else:
             fails.append(f'card page missing for badge {slug}')
@@ -580,7 +584,8 @@ def paged_json_checks(docs, legacy_list, cats):
             if k is not None: exp |= {'category': k}
             bad = {f: (d.get(f), v) for f, v in exp.items() if d.get(f) != v}
             if bad: fails.append(f'paged json {p}: {bad}')
-            if not 0 < len(items) <= PAGE_SIZE: fails.append(f'paged json {p}: {len(items)} records (allowed 1..{PAGE_SIZE})')
+            if not (0 < len(items) <= PAGE_SIZE or (not want_ids and n == 1 and m == 1 and not items)):
+                fails.append(f'paged json {p}: invalid empty/nonempty page size {len(items)}')
             if not os.path.isfile(os.path.join(DIST, html_list_path(first_html, n).lstrip('/'), 'index.md')): fails.append(f'paged json {p}: md_url missing in dist')
             for r in items:
                 if rec.get(r.get('id')) != r: fails.append(f'paged json {p}: record {r.get("id")} differs from platforms.json'); break
@@ -777,7 +782,7 @@ def paged_list_checks(parsed, pages, locs):
     # a card rendered from its index row (atlas.js renderCard mirrors build.card_from_row) is the same card as on page 1
     sys.path.insert(0, HERE)
     import build
-    head = {k: si.get(k) for k in ('card_base', 'tag_href', 'thumb', 'cat_labels', 'reach_text', 'tag_limit')}
+    head = {k: si.get(k) for k in ('card_base', 'tag_href', 'thumb', 'cat_labels', 'reach_text', 'tag_limit', 'limited_ids', 'overview_ids')}
     grid = idx[idx.find('id="grid"'):]
     for r in si.get('cards', [])[:PAGE_SIZE]:
         if len(r) != len(build.SEARCH_FIELDS): fails.append(f'search-index.json: row {r[:1]} has {len(r)} fields, expected {len(build.SEARCH_FIELDS)}'); break
@@ -1061,7 +1066,12 @@ def screens_checks(pages):
     if 'preview' not in next(iter(recs.values()), {}):
         fails.append('platforms.json: records lack the preview field')
     if os.environ.get('CW_SCREENS_REQUIRED') == '1' and not with_prev:
-        fails.append('screens: CW_SCREENS_REQUIRED=1 but no card has a preview (branch atlas-screens not fetched?)')
+        try:
+            import screens, catalogue_safety
+            source = os.environ.get('CW_SCREENS_DIR') or os.path.join(screens.CACHE, 'branch')
+            catalogue_safety.verify_source_package(os.path.join(HERE, '..', 'catalogue'), source, {r['slug'] for r in load_removed()})
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            fails.append('screens: exact source package required for zero published previews: ' + str(exc))
     if set(man) != with_prev:
         fails.append(f'screens: manifest vs preview drift: no preview {sorted(set(man) - with_prev)[:5]}, no manifest record {sorted(with_prev - set(man))[:5]}')
     files = {f[:-5] for f in os.listdir(sdir) if f.endswith('.webp')} if os.path.isdir(sdir) else set()
@@ -1105,12 +1115,18 @@ def screens_checks(pages):
         u = f'/atlas/platforms/{k}/'
         if u not in pages: continue
         h = open(pages[u], encoding='utf-8').read()
+        if r.get('current_limitation') is not None:
+            if 'entry-shot' in h or '<figure' in h:
+                fails.append(f'{u}: limitation must not imply a current product screenshot')
+            continue
         figs = re.findall(r'<figure class="entry-shot[^"]*">.*?</figure>', h, re.S)
         if len(figs) != 1:
             fails.append(f'{u}: {len(figs)} figure.entry-shot'); continue
         f = figs[0]
         hd = h.find('</header>', h.find('<header class="entry-head"'))
-        fi, fa = h.find('<figure class="entry-shot'), h.find('<dl class="facts">')
+        fi = h.find('<figure class="entry-shot')
+        simple = r.get('overview') is not None or r.get('current_limitation') is not None
+        fa = h.find('<section class="cw-panel') if simple else h.find('<dl class="facts">')
         ad = h.find('data-ad-slot="atlas-platform-top"')
         if not (hd < fi < fa) or (ad != -1 and not (hd < ad < fi)):
             fails.append(f'{u}: order must be header, sponsored slot, screenshot, facts')
@@ -1344,11 +1360,11 @@ def closure_checks(pages):
     """Closure wording matches atlas/refresh.py: two routes (human review / automated weekly check), auto-closed cards labelled."""
     fails = []
     ch = open(pages['/atlas/closed/'], encoding='utf-8').read()
-    for need in ('Human review:', 'Automated weekly check:', '2 consecutive weekly checks', 'reopen automatically if the site answers again',
+    for need in ('Human review:', 'Automated weekly check:', '2 consecutive weekly checks', 'not a current schedule or service-state promise', 'Periodic cutover remains open',
                  'never reopened automatically', 'A single failed page load is never treated as proof.'):
         if need not in ch: fails.append(f'/atlas/closed/: lacks {need!r}')
     ab = open(pages['/atlas/about/'], encoding='utf-8').read()
-    for need in ('id="closures"', 'Automated weekly check', 'Human review', 'A single failed page load is never treated as proof'):
+    for need in (('id="closures"', 'A single failed page load is never treated as proof') if 'data-catalogue-overviews' in ab else ('id="closures"', 'Automated weekly check', 'Human review', 'A single failed page load is never treated as proof')):
         if need not in ab: fails.append(f'/atlas/about/: closure section lacks {need!r}')
     if 'a failed page load alone is never treated as proof' in ch: fails.append('/atlas/closed/: old one-route closure wording')
     for c in json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms']:
@@ -1366,7 +1382,9 @@ def _share_expectations():
     snap = json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms']
     exp = {}
     for c in snap:
-        if c.get('status') == 'closed':
+        if c.get('overview') or c.get('current_limitation'):
+            t = f"{c['name']} on Commonworld Atlas"
+        elif c.get('status') == 'closed':
             t = f"{c['name']} (closed) — history on Commonworld Atlas"
         elif c.get('verdict') == 'include_verified':
             t = f"{c['name']} — verified on Commonworld Atlas"
@@ -1659,6 +1677,21 @@ def decisions_checks(parsed, pages, locs):
     if u not in parsed:
         return [f'missing {u} (link safety decision log)']
     p, h = parsed[u], open(pages[u], encoding='utf-8').read()
+    archive_urls = sorted((x for x in parsed if re.fullmatch(r'/atlas/decisions/archive/(?:[2-9]|[1-9][0-9]+)/', x)), key=lambda x: int(x.rstrip('/').split('/')[-1]))
+    expected_pages = max(1, (len(decs) + 79) // 80)
+    expected_archives = [f'/atlas/decisions/archive/{n}/' for n in range(2,expected_pages+1)]
+    if archive_urls != expected_archives: fails.append('decision archive pages missing, extra or noncontiguous')
+    for path_ in [u] + archive_urls:
+        text_ = open(pages[path_], encoding='utf-8').read()
+        if len(re.findall(r'<tr><td><time datetime=', text_)) > 80: fails.append(f'{path_}: decision page exceeds80rows')
+    all_html = h + ''.join(open(pages[x], encoding='utf-8').read() for x in archive_urls)
+    for path_ in archive_urls:
+        if ORIGIN + path_ not in locs: fails.append(f'{path_}: missing sitemap entry')
+        if parsed[path_].canon != ORIGIN + path_: fails.append(f'{path_}: incorrect canonical')
+        if 'noindex' in (parsed[path_].meta.get('robots') or ''): fails.append(f'{path_}: must remain indexable')
+        cp_ = next((json.loads(raw) for raw in parsed[path_].ld if json.loads(raw).get('@type') == 'CollectionPage'), {})
+        if cp_.get('url') != ORIGIN + path_: fails.append(f'{path_}: CollectionPage URL differs')
+        if cp_.get('name') != "Link safety decision log, page " + path_.rstrip('/').split('/')[-1]: fails.append(f'{path_}: CollectionPage name differs')
     if 'noindex' in (p.meta.get('robots') or ''): fails.append(f'{u}: must be indexable')
     if ORIGIN + u not in locs: fails.append(f'{u}: not in the sitemap')
     mdp = os.path.join(DIST, 'atlas', 'decisions', 'index.md')
@@ -1673,11 +1706,11 @@ def decisions_checks(parsed, pages, locs):
     hosts = {d.get('host') for d in decs if d.get('host')}
     for d in rows:
         dh = (d.get('host') or '').replace('.', '[.]')
-        for where, txt in (('page', h), ('index.md', md)):
+        for where, txt in (('paginated pages', all_html), ('index.md', md)):
             for need in (d.get('slug'), d.get('on'), d.get('by'), dh, d.get('evidence')):
                 if need and html.escape(need, quote=True) not in txt and need not in txt:
                     fails.append(f"decision log {where}: lacks {need!r} of {d.get('action')} {d.get('slug')}")
-    trs = re.findall(r'<tr><td><time datetime="(\d{4}-\d{2}-\d{2})"', h)
+    trs = re.findall(r'<tr><td><time datetime="(\d{4}-\d{2}-\d{2})"', all_html)
     if len(trs) != len(rows): fails.append(f'{u}: {len(trs)} table rows != {len(rows)} decisions in removed.json')
     if trs != sorted(trs, reverse=True): fails.append(f'{u}: decisions are not newest first')
     want = [{'on': d.get('on'), 'action': d.get('action'), 'slug': d.get('slug'), 'by': d.get('by'), 'evidence': d.get('evidence')} for d in rows]
@@ -1688,7 +1721,7 @@ def decisions_checks(parsed, pages, locs):
     if [a.get('id') for a in (dj.get('trust_roles') or {}).get('actors') or []] != [a.get('id') for a in roles.get('actors') or []]:
         fails.append('/atlas/decisions.json: trust_roles actors differ from atlas/data/trust-roles.json')
     if not ((dj.get('link_safety') or {}).get('rule')): fails.append('/atlas/decisions.json: lacks link_safety.rule')
-    for tag, href, rel in p.links:
+    for tag, href, rel in [link for path_ in [u] + archive_urls for link in parsed[path_].links]:
         if tag != 'a' or not href.startswith(('http://', 'https://', '//')):
             continue
         if any(re.search(r'(?:^|//|\.)' + re.escape(x) + r'(?:[:/]|$)', href.split('?')[0], re.I) for x in hosts):
@@ -1859,7 +1892,8 @@ def replications_checks(pages):
     fails = []
     pdir = os.path.join(DIST, 'atlas', 'platforms')
     recs = {fn[:-5]: json.load(open(os.path.join(pdir, fn), encoding='utf-8')) for fn in sorted(os.listdir(pdir)) if fn.endswith('.json')}
-    cards = repl.load()
+    gone = {r['slug'] for r in load_removed()}
+    cards = {s: r for s, r in repl.load().items() if s not in gone}
     fails += repl.validate(cards, set(recs))
     for slug, r in recs.items():
         w = f'replications: {slug}'
@@ -1870,6 +1904,10 @@ def replications_checks(pages):
         h = open(pages[u], encoding='utf-8').read() if u in pages else ''
         mdp = os.path.join(DIST, 'atlas', 'platforms', slug, 'index.md')
         md = open(mdp, encoding='utf-8').read() if os.path.exists(mdp) else ''
+        if r.get('overview') is not None or r.get('current_limitation') is not None:
+            if 'id="h-repl"' in h:
+                fails.append(f'{w}: legacy history block in current overview')
+            continue
         if ('id="h-repl"' in h) != bool(want): fails.append(f'{w}: card page Replications block out of step with the record')
         if ('## Replications' in md) != bool(want): fails.append(f'{w}: Markdown twin Replications section out of step')
         if want:
@@ -1893,7 +1931,8 @@ def reachability_checks(pages):
     fails = []
     pdir = os.path.join(DIST, 'atlas', 'platforms')
     recs = {fn[:-5]: json.load(open(os.path.join(pdir, fn), encoding='utf-8')) for fn in sorted(os.listdir(pdir)) if fn.endswith('.json')}
-    cards = reach.load()
+    gone = {r['slug'] for r in load_removed()}
+    cards = {s: r for s, r in reach.load().items() if s not in gone}
     fails += reach.validate(cards, {s for s, r in recs.items() if r.get('status') == 'live'}, set(recs))
     for slug, r in recs.items():
         w = f'reachability: {slug}'
@@ -1904,6 +1943,10 @@ def reachability_checks(pages):
         h = open(pages[u], encoding='utf-8').read() if u in pages else ''
         mdp = os.path.join(DIST, 'atlas', 'platforms', slug, 'index.md')
         md = open(mdp, encoding='utf-8').read() if os.path.exists(mdp) else ''
+        if r.get('overview') is not None or r.get('current_limitation') is not None:
+            if 'id="h-reach"' in h:
+                fails.append(f'{w}: legacy history block in current overview')
+            continue
         if ('id="h-reach"' in h) != bool(want): fails.append(f'{w}: card page Reachability block out of step with the record')
         if ('## Reachability' in md) != bool(want): fails.append(f'{w}: Markdown twin Reachability section out of step')
         if want:
@@ -1932,7 +1975,10 @@ def cards_v2_checks(pages):
     for fn in sorted(os.listdir(pdir)):
         if fn.endswith('.json'):
             recs[fn[:-5]] = json.load(open(os.path.join(pdir, fn), encoding='utf-8'))
-    curated, tasks, evo = cv2.load_keys_books(), cv2.load_first_tasks(), cv2.load_evidence_overrides()
+    gone = {r['slug'] for r in load_removed()}
+    # Preserve stored curation/history, suppress only explicit safety removals.
+    active = lambda rows: {s: r for s, r in rows.items() if s not in gone}
+    curated, tasks, evo = active(cv2.load_keys_books()), active(cv2.load_first_tasks()), active(cv2.load_evidence_overrides())
     fails += cv2.validate_keys_books(curated, recs)
     fails += cv2.validate_evidence_overrides(evo, recs)
     fails += cv2.validate_first_tasks(tasks, set(recs))
@@ -1959,6 +2005,32 @@ def cards_v2_checks(pages):
         u = f'/atlas/platforms/{slug}/'
         if u not in pages: fails.append(f'{w}: no card page'); continue
         h = open(pages[u], encoding='utf-8').read()
+        if r.get('current_limitation') is not None:
+            limited = r['current_limitation']
+            mdp = os.path.join(DIST, 'atlas', 'platforms', slug, 'index.md')
+            md = open(mdp, encoding='utf-8').read()
+            for value in (limited['text'], limited['attempted_on'], 'Could not verify'):
+                if html.escape(value) not in h or value not in md:
+                    fails.append(f'{w}: bounded note differs between HTML, Markdown and JSON')
+            for forbidden in ('chip live', 'Last verified', 'Verified facts', 'id="badge"', 'lastReviewed'):
+                if forbidden in h:
+                    fails.append(f'{w}: obsolete verified/live presentation in limitation')
+            if 'Source check attempted:' not in h:
+                fails.append(f'{w}: source attempt mislabeled as completed visit')
+            continue
+        if r.get('overview') is not None:
+            ov = r['overview']
+            mdp = os.path.join(DIST, 'atlas', 'platforms', slug, 'index.md')
+            md = open(mdp, encoding='utf-8').read() if os.path.exists(mdp) else ''
+            if html.escape(ov['text']) not in h or ov['text'] not in md:
+                fails.append(f'{w}: overview differs between HTML, Markdown and JSON')
+            if 'id="h-claims"' in h or '## Verified facts' in md:
+                fails.append(f'{w}: obsolete claim UI in simple overview')
+            if ov.get('visited_at') and ov['visited_at'] not in md:
+                fails.append(f'{w}: overview visit missing from Markdown')
+            if ov.get('state') != 'reviewed' and 'noindex' not in h:
+                fails.append(f'{w}: draft overview is indexable')
+            continue
         m = re.search(r'<section class="cw-panel v2-panel".*?</section>', h, re.S)
         if not m: fails.append(f'{w}: card page lacks the evidence / keys-and-books panel'); continue
         panel = re.sub(r'<a [^>]*>Source:[^<]*</a>', '', m.group(0))
@@ -1986,8 +2058,9 @@ def cards_v2_checks(pages):
 
 
 def main():
-    global SHARE_LIVE, SHARE_ENTRY
+    global SHARE_LIVE, SHARE_ENTRY, SHARE_LIMITED
     SHARE_LIVE, SHARE_ENTRY = _share_expectations()
+    SHARE_LIMITED = any(c.get('current_limitation') for c in json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms'])
     fails, pages, parsed = [], {}, {}
     for root, _, files in os.walk(DIST):
         for f in files:
@@ -2088,7 +2161,7 @@ def main():
                 if burl != p.canon: fails.append(f'{u}: share bar url {burl} != canonical')
                 want_txt = {'/': 'Commonworld — A shared world for humans and agents',
                             '/about/': 'About Commonworld — A shared world for humans and agents',
-                            '/atlas/': f'Atlas of Agent Platforms: {SHARE_LIVE} places where AI agents work and get paid',
+                            '/atlas/': (f'Commonworld Atlas: {len(SHARE_ENTRY)} entries, with dated overviews and source-check limitations' if SHARE_LIMITED else f'Atlas of Agent Platforms: {SHARE_LIVE} places where AI agents work and get paid'),
                             '/atlas/earn/': 'Where AI agents get paid — Commonworld Atlas'}.get(u) or SHARE_ENTRY.get(u)
                 if not btext or btext != want_txt: fails.append(f'{u}: share text {btext!r} != {want_txt!r}')
             enc = quote(p.canon or '', safe='')
@@ -2277,9 +2350,13 @@ def main():
     if xr < 0 or 'href="/about/">Read about Commonworld</a>' not in atl_about[xr:xr + 400] or xr > atl_about.find('<h1>'):
         fails.append('/atlas/about/: no top line linking /about/')
     about = atl_about
-    for need in ('<h1>How the Atlas works</h1>', 'open, source-checked catalog', 'downloadable JSON', 'coordinating agent', 'written protocol',
-                 'not confirmed; they are labelled as such', 'We plan to re-check the whole catalog weekly', '15 Oct 2026 census'):
-        if need not in about: fails.append(f'about page lacks {need!r}')
+    if 'data-catalogue-overviews' in about:
+        for need in ('<h1>How the Atlas works</h1>', 'source links', 'separate review', 'weekly', 'GitHub', 'capture date'):
+            if need not in about: fails.append(f'overview about page lacks {need!r}')
+    else:
+        for need in ('<h1>How the Atlas works</h1>', 'open, source-checked catalog', 'downloadable JSON', 'coordinating agent', 'written protocol',
+                     'not confirmed; they are labelled as such', 'We plan to re-check the whole catalog weekly', '15 Oct 2026 census'):
+            if need not in about: fails.append(f'about page lacks {need!r}')
     for bad in ('disagreements go to a human', 'Outbound source links are marked nofollow', 'open JSON', '2026-10-15 census'):
         if bad in about: fails.append(f'about page still has {bad!r}')
     if CFG['contact']['general'] not in about: fails.append('about page lacks contact.general')

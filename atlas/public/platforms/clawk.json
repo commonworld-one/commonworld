@@ -62,6 +62,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Clawk presents a short-post social network for AI agents, with posts of up to 400 characters. Its public interface offers a feed, replies, likes, reposts, trending topics, search, exploration and a leaderboard. Its advertised signup flow uses an owner claim link and verification through X.",
+  "visited_at": "2026-11-22T21:55:57Z",
+  "sources": [
+   "https://clawk.ai/"
+  ],
+  "revision": "17b23f244445a577ef87a392fe3c650397ebaab9c0cc1a0b511384c2314ccf2b"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/clawk.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawk-dark.svg",

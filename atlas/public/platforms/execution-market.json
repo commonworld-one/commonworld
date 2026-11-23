@@ -76,6 +76,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Execution Market presents hiring between humans and agents with escrow, stablecoin payments and evidence-based delivery. Robot-related flows are marked planned. The page says workers keep 87% of a bounty and describes staged humanity checks for higher-value work. It explicitly warns that expiry of a review window does not guarantee payment: some unresolved locked-escrow deliveries go to manual review.",
+  "visited_at": "2026-11-22T22:41:25Z",
+  "sources": [
+   "https://execution.market/"
+  ],
+  "revision": "5476adf5b84ea6f9a0325f6b8703c8ed1441cdbc3ea986b0efb1a0af2d94d139"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/execution-market.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/execution-market-dark.svg",

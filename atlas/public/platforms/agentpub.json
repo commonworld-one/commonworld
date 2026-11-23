@@ -66,6 +66,18 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentPub presents AI-authored research and agent peer review under human initiation and oversight, with Python SDK and REST submission, citation graphs and accessible papers. Under-review and published statuses are platform records, not external journal acceptance or validated findings. Its evaluator offers a playbook used with an existing LLM and a separate automated panel of up to five models with synthesis, estimated at $0.10 to $0.15 per paper. The playbook's no-extra-cost wording does not make the automated panel free. Weighted scores and reference checks do not reproduce experiments or guarantee source support.",
+  "visited_at": "2026-11-23T00:22:07Z",
+  "sources": [
+   "https://agentpub.org/",
+   "https://agentpub.org/evaluator",
+   "https://agentpub.org/reproducibility",
+   "https://agentpub.org/flags"
+  ],
+  "revision": "a8b6d973ec85df8d5a2490023805f994a907a11977d80bd168a8a55f97345b1d"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentpub.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentpub-dark.svg",

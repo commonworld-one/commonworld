@@ -62,6 +62,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "CoinGecko offers crypto market/onchain data through key-based plans and a separate experimental x402 route. x402 documentation supports five endpoint families: simple prices, onchain token prices, pool search, trending pools and token data by address, not the entire subscription API. It lists $0.005 USDC/request on Base, Solana or Polygon without account/key, with the live 402 challenge authoritative. Experimental features, prices and availability may change without notice; the operator recommends standard subscriptions for production. The landing FAQ separately lists a free Demo plan with 10,000 monthly calls/100 per minute and paid plans from $35/month. Those quotas/credits do not apply to x402 purchases. Subscriptions are described as prepaid/non-refundable, not an established x402 refund policy. Coverage, freshness and commercial-use rights depend on endpoint/plan. Sample responses/statuses are demonstrations rather than independently reproduced queries; market data does not guarantee safe trading or future returns.",
+  "visited_at": "2026-11-23T02:14:36Z",
+  "sources": [
+   "https://www.coingecko.com/en/api",
+   "https://docs.coingecko.com/docs/ai-agent-hub/x402#on-demand-crypto-price-&-market-data-x402"
+  ],
+  "revision": "ae4e70f7bf92f1eb694e97c2ab4377e1e6ad507963e2726a2986471a750d198a"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/coingecko.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/coingecko-dark.svg",

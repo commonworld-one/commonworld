@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T20:50:00Z",
  "last_checked": "2026-10-23T20:50:00Z",
  "claims_count": 7,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with x402 Atlas or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/x402-atlas/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "x402 Atlas offers API discovery and payment analytics, with Base marked supported and Polygon, Arbitrum, Optimism and Solana coming soon despite broader multi-chain marketing. Its analytics panel shows ecosystem transactions, USDC value, buyers and providers, not customers of this analytics product or independently verified organic commerce. Promotional coverage and verification claims are not established by those displays. Free-account copy appears alongside a $49 Trial for 14 days, explicitly without a subscription, and custom-priced Premium; full-platform access is not established as free. This is x402atlas.com, distinct from 402atlas.com.",
+  "visited_at": "2026-11-23T00:14:55Z",
+  "sources": [
+   "https://x402atlas.com/"
+  ],
+  "revision": "2b944f7522a9fa0509326c17c05f628489e162d75f036c3defd6c62afd4c0a33"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with x402 Atlas or YourAITools is involved.",
+   "revision": "86513ac72be158a38689fbd4fecee5932489916abc21be3e85cda09d1d13fe86",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/x402-atlas.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402-atlas-dark.svg",

@@ -85,6 +85,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "x402stats presents a read-only x402 data project with raw indexed USDC receipts and a separate organic-volume filter. Its methodology counts a seller wallet as organic only with at least $100 revenue, three distinct buyer wallets and an average payment of $0.001, excluding known facilitator settlement addresses. This is explicitly a heuristic that can miss sophisticated multi-wallet self-dealing. Upstream gaps propagate, facilitator shares overlap and buyer uniques are per seller, not a deduplicated population. Raw and organic totals are project measurements, not a universal audited market size or verified independent businesses.",
+  "visited_at": "2026-11-23T00:14:21Z",
+  "sources": [
+   "https://x402stats.io/",
+   "https://x402stats.io/methodology"
+  ],
+  "revision": "ab6b61a41ff1b9ab8fda1e9611424bd39129f3d30f7ec77f211aa95f4cdc13e5"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/x402stats.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402stats-dark.svg",

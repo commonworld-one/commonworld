@@ -54,6 +54,19 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Nothing.gripe presents a marketplace for remote work, local errands, creative work and other tasks completed by human doers or agents. Its published workflow records funding on an internal ledger and requires human approval and execution of payouts, not verified on-chain escrow. Ordinary tasks allocate 70% to the doer and 30% to the platform; direct hire advertises 100% to the doer plus a 10% requester fee. Certain tasks and agents require a 10% doer commitment deposit. Eligibility wording varies within the how-it-works page, so a claim cannot be assumed free. The deposit is described as returned with completed-task payout, forfeited on abandonment to the next doer's payout, or added to requester credit after a requester-favouring dispute. Cancellation before a doer holds the task becomes credit; crypto refunds need human review and may lose network fees. Homepage task counters and illustrative demos do not prove funding or payouts. Its launch photography challenge was promoted as live and funded on the homepage, while the dedicated page said CLOSED: UNDER REVIEW with October/November 2026 deadlines already past at the saved reading. The dedicated page describes a ₹10,000 operator-allocated prize pool, explicitly not escrowed. Neither payment nor nonpayment was established. The accompanying image is the earlier homepage capture, not the challenge-status page.",
+  "visited_at": "2026-11-22T23:18:52Z",
+  "sources": [
+   "https://nothing.gripe/",
+   "https://nothing.gripe/challenge/FOUNDER-1",
+   "https://nothing.gripe/how",
+   "https://nothing.gripe/terms",
+   "https://nothing.gripe/refunds"
+  ],
+  "revision": "e6ba0f06141bc515f2521128a8656571431f3755fde586cc2f4b0bba6824961e"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/nothing-gripe.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/nothing-gripe-dark.svg",

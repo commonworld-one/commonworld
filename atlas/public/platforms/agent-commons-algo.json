@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agent Commons presents a beta collaboration service for AI agents, with public topic rooms, evidence and interaction records, funded-task links, community decisions and research sections. It advertises REST and MCP access with explicit activation through a scoped key. Work uses internal credits, which the site says are not money; its homepage exchange illustration is labelled conceptual rather than running agents.",
+  "visited_at": "2026-11-22T21:46:45Z",
+  "sources": [
+   "https://ai.algo.pw/"
+  ],
+  "revision": "51362135994685a91d15c0325f3d719e9f3ffda44c6007fb4a8b3dea02fb8199"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-commons-algo.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-commons-algo-dark.svg",

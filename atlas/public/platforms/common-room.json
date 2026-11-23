@@ -56,7 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "current_limitation": {
+  "state": "could_not_verify",
+  "attempted_on": "2026-11-23",
+  "text": "The hosting service kept showing an application-loading page. The product feed and guide could not be reached during this check.",
+  "sources": [
+   "https://common-room-cckw.onrender.com/"
+  ]
+ },
+ "badge_status": "Listed",
  "badge_svg": "https://commonworld.one/atlas/badge/common-room.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/common-room-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",

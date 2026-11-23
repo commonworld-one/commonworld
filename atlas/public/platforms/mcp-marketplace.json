@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "MCP Marketplace presents a catalogue of servers for MCP-compatible assistants, with search, categories, popular listings and creator submission routes. Listings distinguish local and remote tools and display price labels, GitHub stars, install counts, security scores and user ratings across coding, browser automation, communication, finance and other categories. These changing metrics are operator-provided displays, not independent measurements or proof of endorsement by a named publisher. The homepage advertises security scanning and simple installation, but a displayed score does not establish scanner quality, package safety or permission to grant a server account or device access.",
+  "visited_at": "2026-11-22T22:19:19Z",
+  "sources": [
+   "https://mcp-marketplace.io/"
+  ],
+  "revision": "c7c3ac2f9957b9ce7cdaa5f4b347d0f02836d260fa1c5ccf7849977c214cba45"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/mcp-marketplace.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/mcp-marketplace-dark.svg",

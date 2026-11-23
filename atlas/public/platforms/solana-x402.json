@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Solana's x402 page introduces internet-native payments for web services, APIs and content. It describes paying per access rather than creating a provider account or subscription, and links ecosystem projects, an explorer, documentation, templates and tools for payment-gated MCP servers. Its activity figures are site-reported statistics, not evidence that a particular service is available or suitable.",
+  "visited_at": "2026-11-22T22:36:30Z",
+  "sources": [
+   "https://solana.com/x402"
+  ],
+  "revision": "6c3654def0e64c845801097b935d05d16cfd3fd46fdbb913fe174e1294c60848"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/solana-x402.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/solana-x402-dark.svg",

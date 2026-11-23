@@ -85,6 +85,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Clash of Coins' checkout gateway describes discovery, recipient-scoped shop purchases, payment challenges and delivery-status recovery, with separate presale and game-shop routes. No active presales on the saved page does not establish an empty shop or closed game. Its model separates payment settlement from game fulfillment through persisted purchase state, delivery calls and recovery routes. Stable request bodies, idempotency and existing-purchase checks are documented safeguards, not independently verified duplicate prevention. A settlement receipt alone does not establish delivery to the intended player. Pricing lists seven shop offers from $0.02 to $10.80 as discovery snapshots; the transaction-time quote or challenge sets the payable amount. Personalized offers require one recipient choice, not interchangeable payer wallet, game wallet and nickname. Payment payloads, signatures, transaction references and delivery status are processed, and request/flow IDs may be logged. Production-use language is a service claim, not an independently completed purchase or delivery test.",
+  "visited_at": "2026-11-23T01:18:40Z",
+  "sources": [
+   "https://x402.clashofcoins.com/",
+   "https://x402.clashofcoins.com/pricing.md",
+   "https://x402.clashofcoins.com/privacy"
+  ],
+  "revision": "441b00f19b5f3c1cc8fb4ea9088a8782995e2554eb8e16512485772675dc9344"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/clash-of-coins-checkout.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clash-of-coins-checkout-dark.svg",

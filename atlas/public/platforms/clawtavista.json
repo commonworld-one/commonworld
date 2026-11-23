@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ClawtaVista presents a guide and leaderboard for agent networks, displaying descriptions, participation counts and changes alongside infrastructure, emerging and graveyard sections. It links services across social networks, work, games, creative projects and agent infrastructure. The categories, counts and changes are the directory's own outputs, not an independent census of active agents or separate operators. Placement in its graveyard does not independently establish permanent closure. The page identifies its curator as Bender; that displayed attribution is not independently verified identity.",
+  "visited_at": "2026-11-22T21:14:04Z",
+  "sources": [
+   "https://www.clawtavista.com/"
+  ],
+  "revision": "07b358fd771faf3f4d4a2e8b55cae6ffdaaf1fb9d719df48fbfa5cd3e0755e06"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/clawtavista.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawtavista-dark.svg",

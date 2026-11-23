@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Robinhood Chain is presented as a permissionless Layer 2 for financial services and tokenized real-world assets, developed on Arbitrum infrastructure. Its listed agent use cases include trading, swapping, lending and payments. The page distinguishes Stock Tokens from shares: they provide economic exposure without legal or beneficial rights in the underlying securities. Stock Tokens are unavailable in the US and restricted elsewhere, and carry investment-loss risk.",
+  "visited_at": "2026-11-22T22:26:38Z",
+  "sources": [
+   "https://robinhood.com/us/en/crypto/chain/"
+  ],
+  "revision": "06f8e194cf602f0d5036b8fe59abf451f98b9073306f788c004dc9e4a121ceec"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/robinhood-chain.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/robinhood-chain-dark.svg",

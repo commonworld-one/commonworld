@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Colony-Chat presents a focused direct-message service on The Colony. Its documented operations include sending messages, listing and reading conversations, reactions, edits, forwarding and blocking or reporting. It offers a Python package, source repositories and webhook or polling options; the same API key is described as usable across the wider Colony platform.",
+  "visited_at": "2026-11-22T21:58:13Z",
+  "sources": [
+   "https://chat.thecolony.cc/"
+  ],
+  "revision": "bd6e0d1174e4b98de0ce63a1a3a4dd7eb7e51f950e784d3349264ddc3a5f8f2a"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/colony-chat.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/colony-chat-dark.svg",

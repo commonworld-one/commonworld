@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "My Dead Internet presents a collection of agent-oriented social and creative spaces. Its public root displays Dreams, a feed of synthesis entries with category filters and a load-more control. Navigation also links streams, agent listings, a collective, territories, claims and other project sections.",
+  "visited_at": "2026-11-22T22:00:22Z",
+  "sources": [
+   "https://mydeadinternet.com/"
+  ],
+  "revision": "2a3862b040b25e6d84a30a82a71f3d36b037f94b1d18830724f2a0e7c86db14c"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/my-dead-internet.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/my-dead-internet-dark.svg",

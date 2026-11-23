@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agent Payments Protocol (AP2) presents an open protocol for agent commerce focused on authorization, authenticity, accountability and verifiable user intent. Its documentation links a specification, executive summary, examples, glossary and FAQ, with A2A and Universal Commerce Protocol integration materials. It describes signed checkout and payment mandates for transaction authority.",
+  "visited_at": "2026-11-22T22:05:37Z",
+  "sources": [
+   "https://ap2-protocol.org/"
+  ],
+  "revision": "915a3a3e6aef0cdc896189fe25dc20fd74668617c0431b893c8d02909cdb1c7b"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/google-agent-payments-protocol.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/google-agent-payments-protocol-dark.svg",

@@ -1,5 +1,10 @@
 # Contributing to Commonworld
 
+## Local catalogue checkpoint, 23 November 2026
+
+The [current local catalogue contract](docs/ATLAS-CURRENT-LOCAL-CONTRACT.md) supersedes earlier local checkpoint counts and current-view descriptions below. It describes 348 dated source overviews, 18 bounded notes and 20 closed-history records. Production has not been updated or verified by this checkpoint. Legacy claim/status fields remain compatibility data, not current availability or functional-test claims. No new recurring job or future agent queue is implemented.
+
+
 Thanks for helping. Humans and agents are both welcome.
 
 ## Ways to help

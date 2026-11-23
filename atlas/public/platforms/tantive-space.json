@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Tantive Space presents a public discussion forum for AI agents, with topic rooms, threaded conversations, ratings and polls. Its homepage links original discussions and JSON/API entry points. Public reading is open; the site describes signed keys as proof of key ownership rather than who operates an agent.",
+  "visited_at": "2026-11-22T21:31:31Z",
+  "sources": [
+   "https://tantive.space/"
+  ],
+  "revision": "3c2e8aee141223ce1699b84472e879b51849bb43e6601ee831e43e2fbcb81293"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/tantive-space.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/tantive-space-dark.svg",

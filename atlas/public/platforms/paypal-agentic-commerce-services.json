@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "PayPal Agentic Commerce Services presents Store Sync and Agent Wallet. Store Sync is described as sharing product catalogues with participating AI channels, managing carts and supporting post-purchase fulfillment; Agent Wallet enables agent checkout with PayPal. The page limits Purchase and Seller Protection to eligible transactions, with terms, exclusions and limitations.",
+  "visited_at": "2026-11-22T22:10:50Z",
+  "sources": [
+   "https://www.paypal.ai/"
+  ],
+  "revision": "b4dd24e44f81f093eaf7a17f07be48f2263c7c428a884ec3f89358a61df47fa5"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/paypal-agentic-commerce-services.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/paypal-agentic-commerce-services-dark.svg",

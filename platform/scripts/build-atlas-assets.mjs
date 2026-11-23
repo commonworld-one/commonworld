@@ -7,7 +7,7 @@
  *
  *   --src    cw-public checkout (default: $CW_PUBLIC_DIR, else the repository root, the parent of platform/)
  *   --dist   an already built dist directory (CI: the artifact of cw-public's CI job); default <src>/atlas/site/dist
- *   --build  run `python3 atlas/site/build.py` and `python3 atlas/site/check.py` in <src> first
+ *   --build  run `python3 atlas/tools/catalogue_build.py --mode accepted` and `python3 atlas/site/check.py` in <src> first
  *
  * What it changes in the copy (never in cw-public): adds .assetsignore (drops the Pages-only _routes.json) and one
  * host-scoped _headers rule that keeps staging.commonworld.one static files out of search engines (it does nothing
@@ -17,6 +17,7 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { hasAtlasCsp } from './atlas-csp-check.mjs';
 
 const here = path.dirname(new URL(import.meta.url).pathname);
 const v1 = path.resolve(here, '..');
@@ -29,9 +30,13 @@ const fail = (msg) => { console.error(`atlas:build: ${msg}`); process.exit(1); }
 
 if (args.includes('--build')) {
   if (!fs.existsSync(path.join(src, 'atlas', 'site', 'build.py'))) fail(`no cw-public checkout at ${src}`);
-  execFileSync('python3', ['atlas/site/build.py'], { cwd: src, stdio: 'inherit' });
+  execFileSync('python3', ['atlas/tools/catalogue_build.py', '--mode', 'accepted'], { cwd: src, stdio: 'inherit' });
   execFileSync('python3', ['atlas/site/check.py'], { cwd: src, stdio: 'inherit' });
 }
+// A draft preview is intentionally not a deployable artifact. Guard before the
+// fresh copy, including explicit --dist calls, so a local handoff cannot be
+// mistaken for staging/production assets.
+if (fs.existsSync(path.join(dist, 'atlas/data/local-preview-marker.json'))) fail('refusing local draft preview assets; prepare an accepted release build');
 if (!fs.existsSync(path.join(dist, 'atlas', 'index.html'))) fail(`no Atlas build at ${dist} (run with --build, or build cw-public first)`);
 
 // fresh copy
@@ -54,7 +59,7 @@ const rules = headers.split('\n').filter((l) => l && !/^\s/.test(l) && !l.starts
 if (rules.length > 100) fail(`_headers has ${rules.length} rules (max 100)`);
 const long = headers.split('\n').find((l) => l.length > 2000);
 if (long) fail(`_headers line longer than 2000 characters: ${long.slice(0, 80)}…`);
-if (!/^\/\*\n(?:\s+.*\n)*?\s+Content-Security-Policy: [^\n]*script-src 'self'/m.test(headers)) fail("_headers /* has no Content-Security-Policy with script-src 'self' (the nonce step needs it)");
+if (!hasAtlasCsp(headers)) fail("_headers /* has no Content-Security-Policy with script-src 'self' (the nonce step needs it)");
 const redirects = fs.existsSync(path.join(out, '_redirects')) ? fs.readFileSync(path.join(out, '_redirects'), 'utf8').split('\n').filter((l) => l.trim() && !l.startsWith('#')).length : 0;
 if (redirects > 2000) fail(`_redirects has ${redirects} rules (max 2000 static)`);
 let files = 0; let bytes = 0;

@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "t2000 presents a USDC labour marketplace for humans, agents and robots, with jobs, services and MCP access. It describes locking a job budget, free posting and claiming, first-claim selection and buyer approval before settlement, with approximately 5% deducted from the worker payout. The $8 job and $7.60 payout shown are examples, not observed earnings. Refunds for unclaimed or late work are advertised terms, not a tested recovery route. Its homepage open-work section shows nothing open in the saved view, which does not establish that every job or service route is empty.",
+  "visited_at": "2026-11-22T23:48:42Z",
+  "sources": [
+   "https://t2000.ai/"
+  ],
+  "revision": "58a4dbe73308ffaafcc4089f78446a664684ba61ccdf7bd792c5574abfc1e9a5"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/t2000.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/t2000-dark.svg",

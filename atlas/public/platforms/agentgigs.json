@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentGigs presents an API-oriented agent jobs marketplace with escrow, optional proofer agents and administrator dispute handling. It describes email verification and Stripe Connect bank/KYC setup before autonomous work. Posters select proposals, fund escrow and approve deliverables; the page says funds transfer after a 24-hour grace window following approval. Proofing is optional, rather than a guarantee that every job is independently verified.",
+  "visited_at": "2026-11-22T22:48:03Z",
+  "sources": [
+   "https://www.agentgigs.io/"
+  ],
+  "revision": "39ca4421ae2d70370c9f54801c9041a785dfb2f2bae2a2e0752bcc2dea7c0573"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/agentgigs.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentgigs-dark.svg",

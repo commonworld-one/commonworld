@@ -20,7 +20,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, '..'))
 import serve  # noqa: E402
 import json  # noqa: E402
+from smoke_urls import exact_https_url, caption_source_matches, share_target_matches
 _SNAP = json.load(open(os.path.join(HERE, '..', 'dist', 'atlas', 'data', 'snapshot.json')))['platforms']  # counts follow the built data
+CATALOGUE = any(c.get('overview') for c in _SNAP)
+CURRENT_COUNTS = json.load(open(os.path.join(HERE, '..', 'dist', 'api', 'v1', 'atlas', 'index.json'))).get('current_counts', {})
+N_DATED = sum(bool(c.get('overview')) for c in _SNAP)
+N_LIMITED = sum(bool(c.get('current_limitation')) for c in _SNAP)
 N_ALL, N_CLOSED = len(_SNAP), sum(1 for c in _SNAP if c.get('status') == 'closed')
 N_PAY = sum(1 for c in _SNAP if c.get('category') == 'payments')
 PAGE_SIZE = 50  # cards per list page (D4)
@@ -137,8 +142,17 @@ with sync_playwright() as p:
     pg.click('[data-cookie-settings]'); pg.click('[data-consent="granted"]'); pg.wait_for_timeout(300)
     check('accept loads gtag.js G-9QB65R36K6', any('gtag/js?id=G-9QB65R36K6' in u for u in ga))
     check('consent update granted in dataLayer', pg.evaluate("JSON.stringify(dataLayer).includes('\"analytics_storage\":\"granted\"')"))
-    pg.click('.cw-announce-x'); pg.reload()
-    check('announcement dismissed and remembered', not pg.is_visible('.cw-announce'))
+    if CATALOGUE:
+        check('accepted catalogue: no draft warning or stale verification announcement',
+              pg.locator('.overview-draft').count() == 0 and pg.locator('body > .overview-legacy-note').count() == 0
+              and pg.locator('.cw-announce').count() == 0 and 'working version' not in pg.inner_text('.cw-foot')
+              and 'dated source overviews' in pg.inner_text('.cw-foot'))
+        pg.reload()
+        check('accepted catalogue stays free of draft/stale announcement after reload',
+              pg.locator('.cw-announce').count() == 0 and pg.locator('body > .overview-legacy-note').count() == 0)
+    else:
+        pg.click('.cw-announce-x'); pg.reload()
+        check('announcement dismissed and remembered', not pg.is_visible('.cw-announce'))
 
     # catalog: /atlas/ is page 1 of the list (50 cards + pager); search, filters, sort and counters run on the whole Atlas
     v, a, good = pg.evaluate(ADS_OK)
@@ -152,9 +166,17 @@ with sync_playwright() as p:
     n = pg.evaluate(VIS)
     check(f'search "termix" ({n})', 1 <= n <= 3)
     check('pager hidden while searching, page noindex', not pg.is_visible('#pager') and pg.get_attribute('meta[name="robots"]', 'content') == 'noindex,follow')
-    pg.fill('#q', 'Lightning sats'); pg.wait_for_timeout(600)
-    n = pg.evaluate(VIS)
-    check(f'search reaches claim statements ("Lightning sats" -> {n})', n >= 1 and pg.evaluate("!document.querySelector('[data-slug=\"the-colony\"]').hidden"))
+    if CATALOGUE:
+        pg.fill('#q', 'portable identity'); pg.wait_for_timeout(600)
+        check('search reaches current overview text, not the old claim requirement',
+              pg.evaluate(VIS) >= 1 and pg.evaluate("!!document.querySelector('[data-slug=\"the-colony\"]:not([hidden])')"))
+        pg.fill('#q', 'Lightning sats'); pg.wait_for_timeout(600)
+        check('legacy-only claim words do not match the current Colony overview',
+              pg.evaluate("!document.querySelector('[data-slug=\"the-colony\"]:not([hidden])')"))
+    else:
+        pg.fill('#q', 'Lightning sats'); pg.wait_for_timeout(600)
+        n = pg.evaluate(VIS)
+        check(f'search reaches claim statements ("Lightning sats" -> {n})', n >= 1 and pg.evaluate("!document.querySelector('[data-slug=\"the-colony\"]').hidden"))
     pg.fill('#q', ''); pg.wait_for_timeout(250)
     check(f'empty search: back to page 1 ({pg.evaluate(VIS)} cards, pager, indexable)', pg.evaluate(VIS) == N_PAGE1 and (N_PAGES == 1 or pg.is_visible('#pager'))
           and pg.get_attribute('meta[name="robots"]', 'content').startswith('index,follow'))
@@ -165,11 +187,28 @@ with sync_playwright() as p:
     check(f'native ad re-inserted after filter ({v} cards, {a} ads, expect {N_CLOSED // 12})', good and a == N_CLOSED // 12)
     check('list count updates', pg.inner_text('#list-count') == f'{N_CLOSED} of {N_ALL}')
     pg.click('#f-reset')
-    pg.click('[data-filter="feat:money"]')
-    nm = pg.evaluate(VIS)
-    pg.click('[data-f-type="platform"]')
-    nmt = pg.evaluate(VIS)
-    check(f'stat tile "money flow" ({nm}) AND type platform ({nmt})', 0 < nmt <= nm < N_ALL)
+    if CATALOGUE:
+        check('catalogue status groups match the current-view dataset',
+              CURRENT_COUNTS == {'dated_overviews': N_DATED, 'could_not_verify': N_LIMITED, 'closed_history': N_CLOSED})
+        for token, count in [('live', N_DATED), ('limited', N_LIMITED), ('closed', N_CLOSED)]:
+            pg.click(f'[data-filter="status:{token}"]')
+            check(f'catalogue stat {token}: exact count {count}', pg.evaluate(VIS) == count)
+            if token == 'limited':
+                check('bounded notes remain distinct from reviewed overviews', pg.evaluate(
+                    "Array.from(document.querySelectorAll('#grid .cw-card[data-slug]:not([hidden])')).every(c => c.dataset.s === 'limited')"))
+            pg.click('#f-reset')
+        pg.click('[data-filter="status:live"]')
+        nm = pg.evaluate(VIS)
+        pg.click('[data-f-type="platform"]')
+        nmt = pg.evaluate(VIS)
+        expected = sum(bool(c.get('overview')) and c.get('entity_type') == 'platform' for c in _SNAP)
+        check(f'dated overview AND platform type: exact {expected}', nm == N_DATED and nmt == expected)
+    else:
+        pg.click('[data-filter="feat:money"]')
+        nm = pg.evaluate(VIS)
+        pg.click('[data-f-type="platform"]')
+        nmt = pg.evaluate(VIS)
+        check(f'stat tile "money flow" ({nm}) AND type platform ({nmt})', 0 < nmt <= nm < N_ALL)
     cnt = pg.inner_text('[data-f-status="live"] span')
     check(f'chip counts follow other filters (live={cnt})', int(cnt) <= nmt)
     pg.click('#f-reset')
@@ -190,10 +229,22 @@ with sync_playwright() as p:
     pg.click('.cw-tags-more')
     open_h = pg.evaluate("document.getElementById('tagcloud').clientHeight")
     check(f'tag shelf expands ({shelf_h}px -> {open_h}px)', shelf_h <= 120 and open_h > shelf_h and 'collapse' in pg.inner_text('.cw-tags-more'))
-    pg.select_option('#f-sort', 'claims')
-    first = pg.evaluate("+document.querySelector('#grid .cw-card[data-slug]:not([hidden])').dataset.claims")
-    mx = pg.evaluate("Math.max(...Array.from(document.querySelectorAll('#grid .cw-card[data-slug]')).map(c=>+c.dataset.claims))")
-    check('sort by most claims', first == mx)
+    if CATALOGUE:
+        check('catalogue sorts expose source-view date and name, not legacy claim rank',
+              pg.locator('#f-sort option').evaluate_all('(opts)=>opts.map(o=>o.value)') == ['name', 'recent'])
+        pg.select_option('#f-sort', 'recent')
+        check('source-view date sort is descending for the whole catalogue', pg.evaluate(
+            "(() => { const xs = Array.from(document.querySelectorAll('#grid .cw-card[data-slug]:not([hidden])')).map(c=>Number(c.dataset.ver || 0)); return xs.length === document.querySelectorAll('#grid .cw-card[data-slug]').length && xs.length > 50 && xs.some(v=>v===0) && xs.some(v=>v>0) && xs.every((v,i)=>i===0 || xs[i-1]>=v); })()"))
+        pg.select_option('#f-sort', 'name')
+        pg.click('[data-f-type="platform"]')
+        check('name sort orders the filtered catalogue', pg.evaluate(
+            "(() => { const xs = Array.from(document.querySelectorAll('#grid .cw-card[data-slug]:not([hidden])')).map(c=>c._name); return xs.length>1 && xs.every((v,i)=>i===0 || xs[i-1]<=v); })()"))
+        pg.click('#f-reset')
+    else:
+        pg.select_option('#f-sort', 'claims')
+        first = pg.evaluate("+document.querySelector('#grid .cw-card[data-slug]:not([hidden])').dataset.claims")
+        mx = pg.evaluate("Math.max(...Array.from(document.querySelectorAll('#grid .cw-card[data-slug]')).map(c=>+c.dataset.claims))")
+        check('sort by most claims', first == mx)
     pg.select_option('#f-sort', 'name'); pg.click('#f-reset')
     check(f'reset + default sort: page 1 again ({pg.evaluate(VIS)} cards)', pg.evaluate(VIS) == N_PAGE1 and pg.inner_text('#list-count').startswith('Showing 1–'))
     pg.goto(B + '/atlas/?status=closed&type=platform&q=x')
@@ -249,14 +300,17 @@ with sync_playwright() as p:
         sp.goto(B + '/atlas/platforms/the-colony/')
         if consent == 'denied':
             check('share bar: in the header card next to Visit, visible on landing, only one; sponsored slot still above facts', sp.evaluate(
-                "(() => { const bars = document.querySelectorAll('.cw-share'), b = bars[0], h = document.querySelector('.entry-head'), f = document.getElementById('h-claims'), s = document.querySelector('[data-ad-slot=\"atlas-platform-top\"]');"
+                "(() => { const bars = document.querySelectorAll('.cw-share'), b = bars[0], h = document.querySelector('.entry-head'), f = document.getElementById('h-claims') || document.querySelector('.entry .cw-panel'), s = document.querySelector('[data-ad-slot=\"atlas-platform-top\"]');"
                 " const r = b && b.getBoundingClientRect();"
-                " return bars.length === 1 && h.contains(b) && !!h.querySelector('.entry-actions .visit') && r.bottom <= innerHeight && !!s"
+                " return bars.length === 1 && h.contains(b) && !!h.querySelector('.entry-actions .actions a') && r.bottom <= innerHeight && !!s"
                 " && !!(s.compareDocumentPosition(f) & Node.DOCUMENT_POSITION_FOLLOWING); })()"))
+            check('header Visit has exact parsed HTTPS source host and root path',
+                  exact_https_url(sp.get_attribute('.entry-actions .actions a', 'href'), 'https://thecolony.ai/'))
             nets = sp.evaluate("Array.from(document.querySelectorAll('.cw-share [data-share]')).filter(b => !b.hidden).map(b => b.dataset.share).join(',')")
             check(f'share: networks shown on desktop, native hidden ({nets})', nets == 'x,linkedin,telegram,reddit,facebook,email,copy')
-            check('share: every link carries the canonical URL', sp.evaluate(
-                f"Array.from(document.querySelectorAll('.cw-share a[data-share]')).every(a => decodeURIComponent(a.href).includes({canon!r}))"))
+            share_links = sp.locator('.cw-share a[data-share]').evaluate_all('(xs)=>xs.map(a=>({network:a.dataset.share,href:a.href}))')
+            check('share: every service parameter carries the exact parsed canonical URL',
+                  len(share_links) == 6 and all(share_target_matches(x['href'], x['network'], canon) for x in share_links))
             check('share: buttons have aria-labels', sp.evaluate("Array.from(document.querySelectorAll('.cw-share [data-share]')).every(b => b.getAttribute('aria-label'))"))
         sp.focus('.cw-share [data-share="copy"]'); sp.keyboard.press('Enter'); sp.wait_for_timeout(200)
         clip = sp.evaluate('navigator.clipboard.readText()')
@@ -278,7 +332,7 @@ with sync_playwright() as p:
     check('mobile: native Share button visible where navigator.share exists', mp.is_visible('.cw-share [data-share="native"]'))
     check('mobile: share row is in the header card', mp.evaluate("document.querySelector('.entry-head').contains(document.querySelector('.cw-share'))"))
     mp.tap('.cw-share [data-share="native"]'); mp.wait_for_timeout(200)
-    check('mobile: native share gets canonical URL + text', mp.evaluate(f"window.__shared && window.__shared.url === {canon!r} && window.__shared.text === 'The Colony — verified on Commonworld Atlas'"))
+    check('mobile: native share gets canonical URL + text', mp.evaluate(f"window.__shared && window.__shared.url === {canon!r} && window.__shared.text === {('The Colony on Commonworld Atlas' if CATALOGUE else 'The Colony — verified on Commonworld Atlas')!r}"))
     check('mobile: share bar fits (no horizontal overflow)', mp.evaluate("document.documentElement.scrollWidth <= innerWidth"))
     mc.close()
 
@@ -290,12 +344,24 @@ with sync_playwright() as p:
     check('mobile: drawer opens', m.is_visible('.cw-side .cw-nav') and m.get_attribute('.cw-menu', 'aria-expanded') == 'true')
     m.keyboard.press('Escape'); m.wait_for_timeout(300)
     check('mobile: Escape closes drawer', m.get_attribute('.cw-menu', 'aria-expanded') == 'false')
-    check('platform page: sponsored banner directly under the header, then the screenshot figure, then the facts', m.evaluate(
-        "(() => { const s = document.querySelector('[data-ad-slot=\"atlas-platform-top\"]'), f = document.getElementById('h-claims'), h = document.querySelector('.entry-head'), d = document.querySelector('.entry > dl.facts');"
-        " return !!s && s.classList.contains('cw-ad-banner') && s.querySelector('.cw-ad-label').textContent === 'Sponsored'"
-        " && /sponsored/.test(s.querySelector('a').rel) && /nofollow/.test(s.querySelector('a').rel)"
-        " && !!(h.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING) && h.nextElementSibling === s && s.nextElementSibling.matches('figure.entry-shot') && s.nextElementSibling.nextElementSibling === d"
-        " && !!(s.compareDocumentPosition(f) & Node.DOCUMENT_POSITION_FOLLOWING); })()"))
+    if CATALOGUE:
+        check('current card: header, sponsored slot, screenshot, sources; no legacy facts', m.evaluate(
+            "(() => { const h=document.querySelector('.entry-head'), s=document.querySelector('[data-ad-slot=\"atlas-platform-top\"]'), fig=document.querySelector('figure.entry-shot'), sources=document.querySelector('.entry .cw-panel');"
+            " return !!h && !!s && !!fig && !!sources && h.nextElementSibling===s && s.nextElementSibling===fig && fig.nextElementSibling===sources"
+            " && s.classList.contains('cw-ad-banner') && s.querySelector('.cw-ad-label').textContent==='Sponsored'"
+            " && /sponsored/.test(s.querySelector('a').rel) && /nofollow/.test(s.querySelector('a').rel)"
+            " && sources.textContent.includes('Sources') && !!sources.querySelector('a[href=\"https://thecolony.ai/\"]')"
+            " && !document.querySelector('.entry > dl.facts') && !document.getElementById('h-claims'); })()"))
+        check('current card: dated overview, disclosure and exact source caption visible',
+              'Visit for this overview:' in m.inner_text('.entry-head') and 'Commonworld participates in this project.' in m.inner_text('.entry-head')
+              and caption_source_matches(m.inner_text('figure.entry-shot figcaption'), 'https://thecolony.ai/'))
+    else:
+        check('platform page: sponsored banner directly under the header, then the screenshot figure, then the facts', m.evaluate(
+            "(() => { const s = document.querySelector('[data-ad-slot=\"atlas-platform-top\"]'), f = document.getElementById('h-claims'), h = document.querySelector('.entry-head'), d = document.querySelector('.entry > dl.facts');"
+            " return !!s && s.classList.contains('cw-ad-banner') && s.querySelector('.cw-ad-label').textContent === 'Sponsored'"
+            " && /sponsored/.test(s.querySelector('a').rel) && /nofollow/.test(s.querySelector('a').rel)"
+            " && !!(h.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING) && h.nextElementSibling === s && s.nextElementSibling.matches('figure.entry-shot') && s.nextElementSibling.nextElementSibling === d"
+            " && !!(s.compareDocumentPosition(f) & Node.DOCUMENT_POSITION_FOLLOWING); })()"))
     check('mobile: no horizontal overflow', m.evaluate("document.documentElement.scrollWidth <= innerWidth"))
     if os.path.exists(os.path.join(HERE, '..', 'dist', 'atlas', 'screens', 'manifest.json')):  # previews published (branch atlas-screens fetched)
         m.goto(B + '/atlas/')

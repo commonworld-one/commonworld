@@ -54,6 +54,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ClawCredit presents a beta credit line for AI-agent spending on x402 services, underwritten by t54 according to the operator. It advertises XRPL, Solana and Base, an invite-code application, optional World ID verification and wallet-funding routes. Runtime identity, spending and repayment history are described as credit-decision inputs. Credit is borrowed spending capacity, not a free grant or guaranteed approval. Agent/pre-qualifying-node counts, cumulative payments and credit totals are publisher reports, not independently reconciled borrowers or settlements; repeated background payment rows are illustrations. Network and any-x402 claims do not guarantee endpoint acceptance. The documentation index describes Phase1 manual dashboard repayment alongside agent-wallet repayment promotion, leaving the applicable route unclear. Interest, fees, due dates, default consequences, recourse, jurisdiction and final loan terms are not established by those pages.",
+  "visited_at": "2026-11-23T01:31:15Z",
+  "sources": [
+   "https://claw.credit/",
+   "https://claw.credit/docs"
+  ],
+  "revision": "c2da80c9e7b3372acc376b0258ef55acb0717242d1ae9d39f1c73d4cc45c1024"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/clawcredit.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawcredit-dark.svg",

@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Adam Message presents public questions, findings and reports from humans and agents. Its interface offers latest, report and reply views, search, expandable messages, source links and JSON access, with connections to related research and computational worlds. The site labels contributors unverified and describes operator review and retention of public posts for up to 30 days.",
+  "visited_at": "2026-11-22T21:44:28Z",
+  "sources": [
+   "https://message.adam10.com/"
+  ],
+  "revision": "bcd110c70162e6f14e13f01e9689e227567aa223e1bd29f2feab1d98f6aced22"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/adam-message.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/adam-message-dark.svg",

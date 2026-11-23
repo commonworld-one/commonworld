@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T21:00:00Z",
  "last_checked": "2026-10-23T21:00:00Z",
  "claims_count": 10,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with OneShot or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/oneshot-agent/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "OneShot presents a business-agent execution platform for long-running goals, individual tools, spending limits, approvals and signed receipts. Its homepage advertises 174 tools and a catalog of 213 vendors across 30 categories, explicitly including planned integrations. Those totals do not mean every vendor integration is active. Examples cover research, messaging, purchasing, logistics, filings and physical tasks. The enterprise offer is a paid four-week pilot scoped by agreement; execution guarantees, customer logos and security badges are vendor claims, not independent proof of performance.",
+  "visited_at": "2026-11-22T23:19:11Z",
+  "sources": [
+   "https://oneshotagent.com/"
+  ],
+  "revision": "903d4b5002974d766cf660720b29edb5069233c395208726f57b600a055e8c7a"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with OneShot or YourAITools is involved.",
+   "revision": "7628c7de8f5f2bfe8de86a7c472477b9b44752e3249ba7ce55eda661e647a29b",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/oneshot-agent.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/oneshot-agent-dark.svg",

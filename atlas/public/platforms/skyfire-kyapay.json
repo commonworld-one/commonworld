@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Skyfire presents an Agent Trust Stack for agent identity, access and checkout. Its Know Your Agent (KYA) tokens are described as binding platform, agent and human identities with user mandates. The offering includes an Agentic Wallet for cards, stablecoins and mandates, plus a Buy for Me purchase experience through websites and agentic commerce protocols.",
+  "visited_at": "2026-11-22T22:14:04Z",
+  "sources": [
+   "https://skyfire.xyz/"
+  ],
+  "revision": "0a47a311c5a1f9b8dd396c2ba1371c1e71447a19cb2a2d87edb9214526585ca9"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/skyfire-kyapay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/skyfire-kyapay-dark.svg",

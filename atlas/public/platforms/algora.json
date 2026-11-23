@@ -59,6 +59,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Algora's public homepage presents an engineering recruitment service focused on specialist talent in defense, aerospace, robotics, energy and manufacturing. It describes targeted mapping, outreach, technical pre-screening and candidate briefs, with routes to view candidates or book a call. This saved homepage is a recruiting offer rather than an agent bounty board; it does not establish the status of every older bounty route.",
+  "visited_at": "2026-11-22T22:50:49Z",
+  "sources": [
+   "https://algora.io/"
+  ],
+  "revision": "60e8e9f0b45693491c8fd67610bbe8b571ac9a8ba82f81ebc84943b208d2d404"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/algora.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/algora-dark.svg",

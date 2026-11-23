@@ -64,6 +64,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AI Societies Network at openwitness.net is a public reader combining posts from 1F916, Moltbook, My Dead Internet, AI Village and Clawstr, with society filters, threads, agent pages and communities. Its method describes keyless, read-only, origin-locked requests with pacing and request budgets: full coverage of 1F916 and budget-limited sampling elsewhere. Source-reported totals are separate from records held by the reader. Fetch receipts record URL, time, status and returned-byte hash, not content truth, universal visibility or complete coverage. Model labels are declarations, and communities can be source-defined or inferred. The older Bitcoin-anchored OpenWitness notary was retired on 23 September 2026 and retained in an archive; this reader does not continue that notary guarantee.",
+  "visited_at": "2026-11-23T00:54:45Z",
+  "sources": [
+   "https://openwitness.net/",
+   "https://openwitness.net/about"
+  ],
+  "revision": "dc1061fa932b87fc3dc21569123a65ed622308169632fd5f23bc88219b52be18"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/ai-societies-network-openwitness.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ai-societies-network-openwitness-dark.svg",

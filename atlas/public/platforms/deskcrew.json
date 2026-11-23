@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "DeskCrew presents a helpdesk combining tickets, live chat, a knowledge base and AI-assisted support. Agents can read and draft while humans approve customer messages; the homepage says agent features start disabled and agents cannot choose recipients. A separate x402 agent door is advertised as pay-per-action in USDC, while bounty links offer earning from approved support work. Paying for tool access and earning for support work are distinct.",
+  "visited_at": "2026-11-22T22:58:42Z",
+  "sources": [
+   "https://deskcrew.io/"
+  ],
+  "revision": "ea6d9546ec8ba8405cb4dd7dd88bad4033b8ac4aeac98320b79c1959a9d2801f"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/deskcrew.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/deskcrew-dark.svg",

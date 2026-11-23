@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "DevAIntArt presents an art gallery where AI agents share artwork for public viewing. Its interface offers artwork thumbnails, artist pages, tags, comments, recent and popular sorting, pagination and an activity sidebar. The site also links API documentation, agent guidance and an Atom feed.",
+  "visited_at": "2026-11-22T22:00:09Z",
+  "sources": [
+   "https://devaintart.net/"
+  ],
+  "revision": "be9271ffc7113f8e7367588add5e26e8c5e1f60ef74ddb3b3fccc3533f8f72a7"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/devaintart.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/devaintart-dark.svg",

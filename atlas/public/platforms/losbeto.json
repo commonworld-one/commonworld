@@ -62,6 +62,18 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Losbeto presents market data, Brazilian macro archives, wallet/counterparty heuristics, payment diagnostics and OpenAI-compatible inference. Its saved homepage lists 124 endpoints while pricing says 114, not a reconciled catalogue total. Inference lists $0.005 per call with beta capacity limits, third-party failover and no streaming, tools or vision. USDC payment is advertised on Base, Solana, Algorand and Polygon; accountless calls are distinct from prepaid keys. A $0.10 bundle grants $0.11 credit for 14 days; other credit bundles expire and unlimited passes are time-limited. Plans are one-time purchases, not automatic renewals. Selected delayed samples do not establish unrestricted free access. The operator says most settlements are its own tests, not outside demand. Selected routing/batch failures are described as refunded in credit rather than returned cash. Signed receipts and ERC-8004 registration do not independently validate forecasts, identity, quality or compliance conclusions.",
+  "visited_at": "2026-11-23T01:47:25Z",
+  "sources": [
+   "https://api.losbeto.xyz/",
+   "https://api.losbeto.xyz/llms.txt",
+   "https://api.losbeto.xyz/pricing",
+   "https://api.losbeto.xyz/about"
+  ],
+  "revision": "6cf1758ddea0e27f2d5843d3a5d9047c0841ab405763522f5aebfefebc56c85f"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/losbeto.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/losbeto-dark.svg",

@@ -84,6 +84,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "X Pay presents pay-per-request utility APIs using x402 and USDC on Base through public Swagger documentation. Utilities include time, UUID and random generation, requester IP, echo, hashes, Base64 and word counts, generally labelled 0.005 USDC each, including ping, status and quote. AI-route labels differ materially: summarization is 0.01 USDC; rewrite, sentiment and keywords are 10 USDC each; classify and outline are 20 USDC each. These are documentation prices, not verified live quotes, and the low utility price does not apply to every route.",
+  "visited_at": "2026-11-23T00:14:00Z",
+  "sources": [
+   "https://www.api-xpay.com/api/docs/",
+   "https://www.api-xpay.com/"
+  ],
+  "revision": "430d1e4e7e8aabcbdf05f0661bc5a98cdf01543f0f5989ae553cc159713ff2b0"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/x-pay-api-xpay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x-pay-api-xpay-dark.svg",

@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T21:00:00Z",
  "last_checked": "2026-10-23T21:00:00Z",
  "claims_count": 10,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Mycelia Signal or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/mycelia-signal/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Mycelia Signal advertises cryptographically signed data over HTTP, from raw measurements to market-state summaries and cross-domain financial signals. Payment routes are USDC on Base through x402 and Lightning sats through L402, with spot-price examples at $0.01 or 10 sats. Its 176-endpoint, four-layer headline includes a fourth layer still marked coming soon with an expected September 2026 date, already past at the recorded visit. The page describes Ed25519 signatures on Base and secp256k1 ECDSA on Lightning. Signatures do not by themselves establish data accuracy.",
+  "visited_at": "2026-11-22T23:14:15Z",
+  "sources": [
+   "https://myceliasignal.com/"
+  ],
+  "revision": "4fe0ff99cbf231ba0c571014522616281989f8eafa4b38e664e76c7ed156d2a7"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Mycelia Signal or YourAITools is involved.",
+   "revision": "2e2b1583ba45907d98a54ae43f4a945171b904d6ac06f0dad967b6280a5ae875",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/mycelia-signal.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/mycelia-signal-dark.svg",

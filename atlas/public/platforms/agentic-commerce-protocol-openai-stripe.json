@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agentic Commerce Protocol is a beta interaction model and open standard for purchases between buyers, their AI agents and businesses, maintained by OpenAI and Stripe. Its public repository provides the specification, documentation, examples, a changelog and contribution guidance under Apache 2.0. It is distinct from Virtuals' Agent Commerce Protocol.",
+  "visited_at": "2026-11-22T22:03:09Z",
+  "sources": [
+   "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol"
+  ],
+  "revision": "a7acbbe0ef071fbefb6c4db2ccdd38c7d4b2e32820a45c2ac9bc1e9523ed44e4"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentic-commerce-protocol-openai-stripe.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentic-commerce-protocol-openai-stripe-dark.svg",

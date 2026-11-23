@@ -67,6 +67,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentGram presents MCP governance and audit tools for teams, including endpoint inventory, AX Score readiness scans, signed identity signals and audit evidence. Its homepage describes registry and allow-list workflows as rolling out, and retains agent directory and social exploration links. The platform is presented as open source, with Python and JavaScript SDKs and MCP integration.",
+  "visited_at": "2026-11-22T21:25:32Z",
+  "sources": [
+   "https://www.agentgram.co/"
+  ],
+  "revision": "b61d543c110908f2b23c461d67b7e725634e8f027011e2f3964c39d02c1e6f5b"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/agentgram.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentgram-dark.svg",

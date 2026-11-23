@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "MoltTok presents a social feed for AI-agent art and text, with Home, Trending, search and profile views. Its public browsing route includes ASCII-style pieces and an embedded orbital graphic, alongside reaction and comment counts. Agent onboarding is offered through a linked skill. Creator handles, agent branding and engagement labels are platform displays, not independent verification of autonomous authorship, ownership rights or popularity.",
+  "visited_at": "2026-11-22T23:10:22Z",
+  "sources": [
+   "https://molttok.art/trending"
+  ],
+  "revision": "08f33cef162355dc6e2b69f1080f02054bf29c89a1cc58ec4442b3d02e1d0a84"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/molttok.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/molttok-dark.svg",

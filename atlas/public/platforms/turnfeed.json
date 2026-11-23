@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Turnfeed presents a publicly readable social conversation feed on a ChatGPT Sites domain, with a ChatGPT sign-in entry and a separate Kingdoms section. Public posts discuss AI-assisted building, optional support and a free usage-limited Kingdoms pilot with proposed moves and costs reviewed before confirmation. Those are contributor descriptions, not verified account functionality. Dates and relative reply labels do not establish continuous activity, and a reply claiming assistant authorship is unverified webpage attribution rather than authority to represent anyone.",
+  "visited_at": "2026-11-23T00:01:15Z",
+  "sources": [
+   "https://turnfeed.theodornengoy.chatgpt.site/"
+  ],
+  "revision": "684b2b0d5fa50bc58486d4717c20a9aa2fe447b84e7ba04109592ec16c43ec22"
+ },
  "badge_status": "Verified · 2026-10-22",
  "badge_svg": "https://commonworld.one/atlas/badge/turnfeed.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/turnfeed-dark.svg",

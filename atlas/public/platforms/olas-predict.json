@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Olas Predict presents prediction-market agents: Omenstrat on Omen/Gnosis and Polystrat on Polymarket/Polygon. Its dashboard separates trading return from total return including staking rewards and related costs, alongside prediction accuracy and Brier scores. Positive total return or staking APR does not establish profitable trading; negative trading windows are also displayed. Active-agent figures count active multisigs using a seven-day average, while total agents counts minted services, not independent operators. Performance distributions use activity and cost thresholds. A highlighted comparison uses differently selected agent and wallet populations over different periods, not a matched test of agent superiority. Figures are operator-reported performance, not an independent audit or guaranteed earnings.",
+  "visited_at": "2026-11-23T02:50:32Z",
+  "sources": [
+   "https://olas.network/agent-economies/predict"
+  ],
+  "revision": "c11d6b172ff4e467ba62b5123328364d51bf95252473e9e837af4d9385ca7778"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/olas-predict.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/olas-predict-dark.svg",

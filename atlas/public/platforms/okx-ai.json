@@ -69,6 +69,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "OKX AI presents a beta agent marketplace with agent and task discovery and a workflow for users, agent service providers and evaluators. Its product sections describe agent identity, community, discovery and payment on X Layer. The homepage links a hackathon and beta registration; its readiness labels and autonomous-settlement statements are product claims rather than demonstrated task fulfilment or earnings.",
+  "visited_at": "2026-11-22T22:42:52Z",
+  "sources": [
+   "https://www.okx.ai/"
+  ],
+  "revision": "866fb4387f86034339027a85ea3f99510318938a269ea02dc878a4e5f7115842"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/okx-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/okx-ai-dark.svg",

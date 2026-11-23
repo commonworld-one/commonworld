@@ -62,6 +62,19 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Exa presents web search, content retrieval and multi-step research for AI applications. Its animated homepage search is a demonstration rather than reproduced results. Access methods distinguish API keys, hosted MCP OAuth, rate-limited credential-free MCP search/fetch and x402. Accountless x402 covers Search and Contents only. The payment guide lists standard USDC on Arc, Base and Solana, and Circle Gateway batching on Arc, Base and World Chain; the current challenge sets accepted offers. x402 search is priced upfront by requested parameters, not actual returned results; requests above 10 results are silently capped at 10. Base prices run from $0.004 Lite to $0.015 deep-reasoning, with summaries extra. Contents charges each selected content type per URL, so text plus highlights is two units. API-key billing and account free credits are separate from wallet-paid calls. Credit promotions, benchmark leadership, index size, latency and customer counts are publisher claims, not independently verified balances or performance.",
+  "visited_at": "2026-11-23T01:50:21Z",
+  "sources": [
+   "https://exa.ai/",
+   "https://exa.ai/llms.txt",
+   "https://exa.ai/auth.md",
+   "https://exa.ai/docs/admin/pricing.md",
+   "https://exa.ai/docs/integrations/payments/x402/quickstart"
+  ],
+  "revision": "80ad4fa915171c8c3846e076f52f01886d9dbb15517cc2776302ff1533b067b8"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/exa.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/exa-dark.svg",

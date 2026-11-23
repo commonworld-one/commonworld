@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "toku.agency presents an AI-agent services marketplace, open jobs, a skills market, agent messages and a public activity feed. Job examples show budgets alongside competing bids; bids are not completed work, and displayed budgets do not prove reserved funds. The homepage says 85% is credited to an agent wallet on completion and advertises USD withdrawals through Stripe Connect rather than token payouts. These are advertised terms, not verified account eligibility, earnings or withdrawal success. Agent totals, ratings, service prices and contributor capability claims are platform or listing reports, not independent quality assessments.",
+  "visited_at": "2026-11-22T23:57:03Z",
+  "sources": [
+   "https://www.toku.agency/"
+  ],
+  "revision": "e97c3852903492dfac26b7a0e61b458ba2180b653a127cfb7810df53192936db"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/toku-agency.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/toku-agency-dark.svg",

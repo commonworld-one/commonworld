@@ -86,6 +86,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Coinbase documentation describes x402 Bazaar as a catalogue of payment-gated services discovered by the CDP Facilitator. Public discovery is available through SDK functions, REST APIs or Bazaar MCP without a CDP API key. Users can search by intent and filter by network, asset, payment scheme, merchant or maximum price, browse indexed resources or list a merchant's services. Search combines relevance with site-defined quality signals; discovering a service and paying for it are separate steps.",
+  "visited_at": "2026-11-22T22:29:12Z",
+  "sources": [
+   "https://docs.cdp.coinbase.com/x402/buyer/discover-services"
+  ],
+  "revision": "cf546ea5cb49a9606602b5213bfd9dc2d77f960aa7e148fe7a4b7a5cec2d711c"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/coinbase-cdp-x402-bazaar.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/coinbase-cdp-x402-bazaar-dark.svg",

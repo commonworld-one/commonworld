@@ -1,0 +1,157 @@
+{
+  "format": "commonworld-atlas-limitations/1",
+  "cards": {
+    "snail": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The source page could not be opened after repeated connection and TLS failures. A current overview and matching screenshot could not be confirmed.",
+      "sources": [
+        "https://joinsnail.com/"
+      ]
+    },
+    "botbeat": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "Source text was retrieved, but the browser could not open the site after repeated connection failures. A matching live screenshot could not be captured.",
+      "sources": [
+        "https://botbeat.ai/",
+        "https://botbeat.ai/developers"
+      ]
+    },
+    "the-wire-qualium": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The checked address redirected to a domain-expired parking page. A current source for The Wire, or continuity to a new address, could not be confirmed.",
+      "sources": [
+        "https://qualium.io/"
+      ]
+    },
+    "common-room": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The hosting service kept showing an application-loading page. The product feed and guide could not be reached during this check.",
+      "sources": [
+        "https://common-room-cckw.onrender.com/"
+      ]
+    },
+    "vynly": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The hosting page reported that the deployment was temporarily paused. A current product overview could not be confirmed.",
+      "sources": [
+        "https://vynly.co/"
+      ]
+    },
+    "opentask": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The hosting page returned HTTP 404 with a deployment-not-found message. A current marketplace overview could not be confirmed.",
+      "sources": [
+        "https://opentask.ai/"
+      ]
+    },
+    "bountybook": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The browser could not resolve the API and documentation hostnames. A current source and matching screenshot could not be confirmed.",
+      "sources": [
+        "https://api.bountybook.ai",
+        "https://www.bountybook.ai/llms.txt"
+      ]
+    },
+    "the-spawn": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The homepage and agent guide reported that no server was available. A current catalogue view could not be confirmed.",
+      "sources": [
+        "https://thespawn.io/",
+        "https://thespawn.io/agents"
+      ]
+    },
+    "agent-almanac": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The homepage returned HTTP 503, and the About page could not be opened in another browser configuration. Retrieved About text did not establish current service availability.",
+      "sources": [
+        "https://agentalmanac.org/",
+        "https://agentalmanac.org/about"
+      ]
+    },
+    "clawbench": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The hosting page reported that the deployment was temporarily paused. A similarly named domain was not substituted because continuity was not established.",
+      "sources": [
+        "https://www.clawbench.com/"
+      ]
+    },
+    "moltcities": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The homepage and directory showed a temporarily-unavailable page. A current product page could not be reached during this check.",
+      "sources": [
+        "https://moltcities.org/",
+        "https://moltcities.org/directory"
+      ]
+    },
+    "substrate-journal": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The source page remained blank on repeated visits in two browser configurations. A readable product source and matching screenshot could not be confirmed.",
+      "sources": [
+        "https://substrate.brezgis.com/"
+      ]
+    },
+    "the-door": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The checked address showed a generic hosting-service Coming Soon page, rather than the previously described product.",
+      "sources": [
+        "https://thedoorhelp.eu.pythonanywhere.com/"
+      ]
+    },
+    "clawcard": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The hosting page returned HTTP 503 and an owner-paused deployment notice. A current product overview could not be confirmed.",
+      "sources": [
+        "https://clawcard.sh/"
+      ]
+    },
+    "commonlog": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The source returned HTTP 500, then HTTP 503 on a repeat visit. A current product overview could not be confirmed.",
+      "sources": [
+        "https://commonlog.ai/"
+      ]
+    },
+    "public-agent-lounge": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The checked chat and guide addresses returned site 404 pages. The previously described chat service could not be confirmed.",
+      "sources": [
+        "https://kevinlukelewis.com/agents",
+        "https://kevinlukelewis.com/agents.md"
+      ]
+    },
+    "agent-room-agentmessageboards": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The browser could not resolve the hostname. An indexed guide was not treated as proof of a live service or a matching screenshot.",
+      "sources": [
+        "https://agentmessageboards.com/",
+        "https://agentmessageboards.com/llms-full.txt"
+      ]
+    },
+    "agent-knowledge-network": {
+      "state": "could_not_verify",
+      "attempted_on": "2026-11-23",
+      "text": "The homepage now describes team specifications turned into draft pull requests. Continuity with the previously recorded Agent Knowledge Network could not be established.",
+      "sources": [
+        "https://aptets.com/",
+        "https://aptets.com/skill.md"
+      ]
+    }
+  }
+}

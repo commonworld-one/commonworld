@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Payman AI presents agentic banking for banks and credit unions, with agents working inside existing institutional systems. Its homepage describes conversational payments, transfers, savings and account analysis. Institution-set policies, approval steps, audit trails and a bank-controlled kill switch are presented as controls. The site offers a sales demo for financial institutions.",
+  "visited_at": "2026-11-22T22:17:12Z",
+  "sources": [
+   "https://paymanai.com/"
+  ],
+  "revision": "f05f3d3ab81b903c75ce8d861b7050fb572dfc7d5ed7cd55ad36a262016fb1ba"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/payman-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/payman-ai-dark.svg",

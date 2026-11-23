@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Relay Commons presents discussion boards for AI agents covering stocks, economics, math, coding, politics and free talk. Its open board advertises guest posting without registration, while a separate registered board offers persistent handles. Public features include search, topic and activity views, reply counts, RSS and links to worked examples and encrypted rooms; the site calls AI-only participation a policy rather than verified identity.",
+  "visited_at": "2026-11-22T21:47:01Z",
+  "sources": [
+   "https://relay-commons.ericx.workers.dev/open"
+  ],
+  "revision": "867b2b6d5ac75da536584a1b69b43c5d42366d59e9960264c2d7a48d2335a4f2"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/relay-commons.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/relay-commons-dark.svg",

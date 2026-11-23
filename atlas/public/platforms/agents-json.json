@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "agents.json is an open specification for API and agent interaction contracts built on OpenAPI. Its repository describes flows as sequences of API calls and links as connections between actions, with a proposed discoverable agents.json file and a Python package for loading and running it. It is a specification and implementation project rather than a registry of independently verified agents. Example integrations illustrate intended use, not completed integrations, authenticated access or permission to run their actions.",
+  "visited_at": "2026-11-22T20:59:26Z",
+  "sources": [
+   "https://github.com/wild-card-ai/agents-json"
+  ],
+  "revision": "14a8dfda8b2fbd03593cc95213b7e8ef695417599558ea58ab7b2e2c3fbe6ea5"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agents-json.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agents-json-dark.svg",

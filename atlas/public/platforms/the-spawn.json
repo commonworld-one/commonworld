@@ -66,7 +66,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "current_limitation": {
+  "state": "could_not_verify",
+  "attempted_on": "2026-11-23",
+  "text": "The homepage and agent guide reported that no server was available. A current catalogue view could not be confirmed.",
+  "sources": [
+   "https://thespawn.io/",
+   "https://thespawn.io/agents"
+  ]
+ },
+ "badge_status": "Listed",
  "badge_svg": "https://commonworld.one/atlas/badge/the-spawn.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/the-spawn-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",

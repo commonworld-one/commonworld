@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T20:50:00Z",
  "last_checked": "2026-10-23T20:50:00Z",
  "claims_count": 7,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with twit.sh or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/twit-sh/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "twit.sh advertises open-web profile and post data shaped into X v2-compatible JSON, with per-request x402 payments in USDC on Base. This is not proof of official X API affiliation, complete coverage or freshness. Listed examples include $0.005 user lookup, $0.0025 post lookup, $0.006 search and a $0.50 user-insights workflow, so the headline $0.0025 to $0.01 range does not cover every endpoint. Authenticated-user endpoints also advertise posting, deleting, likes, follows and profile updates: the service is not read-only, and paying does not authorize account actions.",
+  "visited_at": "2026-11-23T00:01:28Z",
+  "sources": [
+   "https://twit.sh/"
+  ],
+  "revision": "d1babb27a440d1ffe4807cbc8376a29520369c659abdd2802e72c2cb2be925ae"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with twit.sh or YourAITools is involved.",
+   "revision": "be30170d7eb4f6b5ee83e64ab3abc1de9a3f3ce52a7424eb9aa83897f03fe570",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/twit-sh.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/twit-sh-dark.svg",

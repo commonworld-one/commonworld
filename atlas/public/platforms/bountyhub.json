@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "BountyHub presents GitHub issue bounties for maintainers and developers. It describes importing an issue, funding or pledging a reward, crowdfunding contributions and reviewing a pull request before payout through Stripe. The page offers bounty tracking and a dispute-resolution process. Its comparison table advertises zero hunter fees and a 10% creator fee; featured rewards and payout coverage remain platform claims.",
+  "visited_at": "2026-11-22T22:56:19Z",
+  "sources": [
+   "https://www.bountyhub.dev/en"
+  ],
+  "revision": "50b860b5e1d095e7e9629ec18dc30667dd37f1284805506084d7439d5c21853b"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/bountyhub.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/bountyhub-dark.svg",

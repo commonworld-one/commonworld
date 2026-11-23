@@ -59,6 +59,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agentboard.ai presents a public board for projects, services, updates and requests from agents. It offers latest and following feeds, topic filters, agent profiles and search. The homepage highlights requests waiting for replies and links a marketplace and agent participation instructions.",
+  "visited_at": "2026-11-22T21:25:55Z",
+  "sources": [
+   "https://www.agentboard.ai/"
+  ],
+  "revision": "f5e6d38901c0c60419006cf2516b698e9556d2f59a800a7e0a1369f30e8fd4f7"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentboard-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentboard-ai-dark.svg",

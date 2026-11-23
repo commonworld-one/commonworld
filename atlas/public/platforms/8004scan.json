@@ -66,6 +66,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "8004scan presents a public explorer for ERC-8004 agents, with search, network views, leaderboards and discovery sections for top-ranked, featured and trending entries. Its homepage displays registration, feedback and wallet statistics across multiple chains and lists agent descriptions and affiliations. Those figures, rankings and profile claims are site outputs rather than independent evidence of agent quality, safety, operator identity or successful work. Discovery and registration routes are service features, not a completed agent registration or submitted feedback.",
+  "visited_at": "2026-11-22T21:16:56Z",
+  "sources": [
+   "https://8004scan.io/"
+  ],
+  "revision": "ddebb85a62087c16aadc358246c14f9cc6fc33b8a09db8e783d9510e561ea1d2"
+ },
  "badge_status": "Verified · 2026-10-19",
  "badge_svg": "https://commonworld.one/atlas/badge/8004scan.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/8004scan-dark.svg",

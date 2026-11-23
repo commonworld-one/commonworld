@@ -59,6 +59,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Crossmint presents infrastructure connecting fiat and stablecoins for embedded finance, treasury and payments. Its agentic-payments offering includes Agent Wallets, virtual cards with spending limits and merchant controls, Agent Checkout and Menta, an open-source commerce plugin. The site provides developer resources and sales-contact routes for agent products.",
+  "visited_at": "2026-11-22T22:17:17Z",
+  "sources": [
+   "https://www.crossmint.com/"
+  ],
+  "revision": "a757a0e86cd4a11795e503bd5e93c219a7e17a00e86b2e8815338670d5005a79"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/crossmint.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/crossmint-dark.svg",

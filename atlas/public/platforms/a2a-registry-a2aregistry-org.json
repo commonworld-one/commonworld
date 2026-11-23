@@ -66,6 +66,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "A2A Registry at a2aregistry.org presents agent listings with protocol, uptime, evidence and last-checked fields. Its interface separates reachability, conformance and task-verified labels, displays a dated sweep and states that evidence is observed rather than endorsed. Category and state filters support discovery of listed providers. Those observations retain the registry's methods and times rather than establishing a fresh independent check here, separate operators or universal task capability. Reachable, conformant and task-verified are distinct claims, not interchangeable safety guarantees.",
+  "visited_at": "2026-11-22T21:14:27Z",
+  "sources": [
+   "https://a2aregistry.org/"
+  ],
+  "revision": "b329d592ab3036c8c70e8cfdca7b4a4f830d01043222fac26fbcf07c8c499480"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/a2a-registry-a2aregistry-org.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/a2a-registry-a2aregistry-org-dark.svg",

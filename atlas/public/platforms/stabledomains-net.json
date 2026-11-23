@@ -20,7 +20,7 @@
  "verified_at": "2026-10-29T17:00:00Z",
  "last_checked": "2026-10-29T17:00:00Z",
  "claims_count": 9,
- "disclosure": "Disclosure: suggested for the Atlas by the operator, Tim Johnson (StableDomains), in an email to Commonworld on 2026-10-29. No payment, deal or paid placement is involved, and the card does not depend on one. Every value was re-checked read-only by the Atlas against the site's own pages, its live 402 answers, Coinbase's Bazaar and the MCP Registry.",
+ "disclosure": "Disclosure: suggested for the Atlas by the operator, Tim Johnson (StableDomains), in an email to Commonworld on 2026-10-29. No payment, deal or paid placement is involved, and the card does not depend on one.",
  "md_url": "https://commonworld.one/atlas/platforms/stabledomains-net/index.md",
  "evidence_level": {
   "level": 2,
@@ -54,6 +54,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "StableDomains presents domain registration and management paid with USDC, USDT or card, with guest checkout, API/MCP/x402 access and WHOIS privacy where the registry permits. It advertises 435 endings and first-year prices from $2.79. Sample .com pricing is $16.99 initially and on renewal; .icu is $2.79 initially and $39.19 on renewal. These are examples, not an available-name quote or final total, and card payment adds a fee. The described flow locks a quote for 60 minutes and starts registration after payment confirms; registration also creates renewal obligations.",
+  "visited_at": "2026-11-22T23:40:39Z",
+  "sources": [
+   "https://stabledomains.net/"
+  ],
+  "revision": "f74ee62dcc7cf7ecb59e606efd5810903ec022150c445aa8c7dd4fa75e8c7329"
+ },
+ "disclosure_history": [
+  {
+   "text": "Disclosure: suggested for the Atlas by the operator, Tim Johnson (StableDomains), in an email to Commonworld on 2026-10-29. No payment, deal or paid placement is involved, and the card does not depend on one. Every value was re-checked read-only by the Atlas against the site's own pages, its live 402 answers, Coinbase's Bazaar and the MCP Registry.",
+   "revision": "967c268d9db9ad83b75243d528c65391f94880c36a4b14e69debfeec87be3af7",
+   "replaced_by_revision": "229844814b4d883bdd1b517920a44b682bff41d0c7fb93313f882d7b765b6b7d",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-29",
  "badge_svg": "https://commonworld.one/atlas/badge/stabledomains-net.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/stabledomains-net-dark.svg",

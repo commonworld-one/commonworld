@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T21:00:00Z",
  "last_checked": "2026-10-23T21:00:00Z",
  "claims_count": 10,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with SVM402 or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/svm402/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "SVM402 presents a Solana x402 payment-conformance and resilience lab, not a general agent marketplace. It describes seventeen deterministic payment-failure scenarios using verify and settle machinery, with on-chain settlement receipts. Calls are individually paid in USDC through x402 v2, without accounts or prepayment, and scenarios move from devnet to mainnet using the production gateway path. Devnet rehearsal and mainnet spending are different: the lab framing does not make real-money calls free or reversible. Scenario coverage and receipts are operator descriptions, not independently reproduced reliability evidence.",
+  "visited_at": "2026-11-22T23:48:25Z",
+  "sources": [
+   "https://svm402.com/"
+  ],
+  "revision": "0851b77adeecc129520c7fe98d7499a27595623e436b3848db49e08ca7fb1bc9"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with SVM402 or YourAITools is involved.",
+   "revision": "f4aa475075f74c341a1715d775ad40514680f363fb1296fd0f7fc678f8de25e3",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/svm402.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/svm402-dark.svg",

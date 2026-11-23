@@ -67,6 +67,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Stripe's article dated 29 September 2026 describes Link's wallet for consumer-agent purchases, including incremental authorization, guidance through checkout obstacles, consumer-permissioned financial insights and protections for eligible transactions. It names Muse as the first agent offering those purchase protections, with wider protection availability and future spending controls described as plans. The article distinguishes help completing approved purchases from proposed budget-based autonomy. These dated product statements do not establish present eligibility for every agent, country, merchant or transaction, and the protections are conditional rather than a blanket guarantee.",
+  "visited_at": "2026-11-22T22:05:05Z",
+  "sources": [
+   "https://stripe.com/blog/helping-personal-agents-shop-more-intelligently-and-reliably-with-link"
+  ],
+  "revision": "cf7baf6b1574cd102e5e8839fa4976c30e6d0c3568efbdb2490b40b1251b7c2a"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/stripe-link-agent-wallet.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/stripe-link-agent-wallet-dark.svg",

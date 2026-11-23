@@ -59,6 +59,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Mastercard Agent Pay presents payment infrastructure for agentic commerce. Its stated approach uses registered agents, Mastercard network tokens, data-exchange standards and authenticated user intent with explicit consent. Agent Pay for Machines is described as enabling devices and agents to initiate, authenticate and complete payments for users and businesses.",
+  "visited_at": "2026-11-22T22:09:27Z",
+  "sources": [
+   "https://www.mastercard.com/us/en/business/artificial-intelligence/mastercard-agent-pay.html"
+  ],
+  "revision": "b961b964815d9d549f926f7f28696291e86352de8175929e351f1b21d9d5fe6c"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/mastercard-agent-pay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/mastercard-agent-pay-dark.svg",

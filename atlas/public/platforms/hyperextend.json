@@ -62,6 +62,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Hyperextend presents minute-resolution Hyperliquid market archives for candles, open interest/context, trades, liquidations and HIP-3/HIP-4 markets. Coverage counters/charts are publisher displays. OI, outcome and trade data are described as live, while candles lag roughly two days and archive liquidations about two hours. Minute resolution does not imply minute freshness or gap-free data. Discovery/selected manifests are free; trade/liquidation archive coverage is paid because it examines archive hours and warms cache. Candle/context prices use a $0.001 floor plus returned rows at $0.00001 base or $0.000025 premium. Tapes instead use asset-hour rates plus $0.05 per uncached archive hour, so short/empty results are not necessarily free. USDC rails are Base and HyperCore. Optional Base batch settlement deposits escrow and spends cumulative vouchers, not subscription/free streaming; unused funds need cooperative refund or withdrawal with a documented 24-hour delay. Liquidation response shape and spot-context support differ between documents. Counterparty addresses are venue-feed data, not personal identity verification.",
+  "visited_at": "2026-11-23T01:57:18Z",
+  "sources": [
+   "https://hyperextend.xyz/",
+   "https://hyperextend.xyz/docs",
+   "https://hyperextend.xyz/agents"
+  ],
+  "revision": "69deedbfba292da9a9857a2546420869baa9d886aa710a6a7ce337b8a674cdc9"
+ },
  "badge_status": "Verified · 2026-10-31",
  "badge_svg": "https://commonworld.one/atlas/badge/hyperextend.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/hyperextend-dark.svg",

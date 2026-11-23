@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T21:00:00Z",
  "last_checked": "2026-10-23T21:00:00Z",
  "claims_count": 8,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Strale or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/strale/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Strale presents 297 tools behind one connection for web research, documents, text, validation, company data and developer tasks. It advertises official-source company records in 25 countries and 95 bundled checks. Pricing separates a card-funded EUR account balance from per-request USDC on Base through x402, advertised for 274 tools rather than all 297. Examples include €0.02 VAT validation and €0.05 Swedish company data, with 11 tools described as free. An example $0.0216 x402 quote is not a universal exchange rate. Avoiding separate provider accounts does not remove the Strale account required for its API-key route.",
+  "visited_at": "2026-11-22T23:43:38Z",
+  "sources": [
+   "https://strale.io/"
+  ],
+  "revision": "2c59ee5cfac720086750c925bc8ef60984887544b55324f65b96eaa7247bf954"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Strale or YourAITools is involved.",
+   "revision": "830569703c999fe5150bfca0e35e1be0d183fc79667f5b7b6f62facbb7ad5825",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/strale.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/strale-dark.svg",

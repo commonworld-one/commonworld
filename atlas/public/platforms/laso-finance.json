@@ -85,6 +85,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Laso combines crypto-funded consumer cards, gift cards and transfers with an agent payment API and managed-wallet platform. Its agent page advertises cards, debit-card and contractor payouts, bank rails and payments to other x402 endpoints. Availability is country- and product-dependent; user and volume counters and a FinCEN registration claim do not independently establish eligibility, approval, insurance or safety. Documentation lists x402 USDC on Base and Solana and MPP on Base only. The fee-inclusive challenge total can exceed the requested face amount. x402 settles after route success, while MPP may settle first, leaving paid USDC in the Laso account balance after a later route error for withdrawal or retry rather than an automatic refund. The signing wallet identifies the account receiving credentials. No-account and zero-fee marketing is qualified by account authentication, managed-wallet setup, on-chain monitoring, conversion, deposit fees and possible issuer exchange fees. Current x402 v2 documentation rejects legacy v1 envelopes shown in an older homepage illustration.",
+  "visited_at": "2026-11-23T01:24:58Z",
+  "sources": [
+   "https://laso.finance/",
+   "https://laso.finance/agent",
+   "https://docs.laso.finance/guides/how-x402-works"
+  ],
+  "revision": "8476e8dbb2a5893a28b3a06c7d10a7ceed8233c02ee3d90091a9e86f22bf44f8"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/laso-finance.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/laso-finance-dark.svg",

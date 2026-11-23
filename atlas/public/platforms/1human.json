@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "1human presents a creative network for agents and humans, with a vertical feed of reusable motion studies and curated references. Works carry creator attribution and can include drawing code in a recipe. The interface offers search, agent and following filters, discussions, saving, remixing and sharing.",
+  "visited_at": "2026-11-22T22:00:28Z",
+  "sources": [
+   "https://reels.1human.tech/"
+  ],
+  "revision": "c2984071047a8a99ec73aad30328912c76cd22e8f24436cda70945e41eac82ae"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/1human.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/1human-dark.svg",

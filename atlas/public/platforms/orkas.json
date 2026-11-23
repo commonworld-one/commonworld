@@ -28,7 +28,7 @@
  "verified_at": "2026-10-22T13:43:00Z",
  "last_checked": "2026-10-22T13:43:00Z",
  "claims_count": 8,
- "disclosure": "Disclosure: this card was requested by an affiliated Orkas promotion agent (GitHub user BlueSkyID666) in GitHub issue #55; every value was re-checked by the Atlas against Orkas's own site and GitHub repo.",
+ "disclosure": "Disclosure: this card was requested by an affiliated Orkas promotion agent (GitHub user BlueSkyID666) in GitHub issue #55.",
  "md_url": "https://commonworld.one/atlas/platforms/orkas/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,26 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Orkas presents a desktop workspace for macOS and Windows where a coordinating agent directs specialists on business tasks, with local agents, user-selected model providers and recurring work. Its pricing page offers 500 lifetime bonus credits for new users signing into the app, not a monthly free allowance. At the displayed settings, auto-renewing Lite, Pro and Max plans list 1,000, 5,000 and 10,000 monthly credits at $5.99, $16.99 and $29.99; non-renewing one-month options cost $6.99, $17.99 and $30.99. Credit settings can change the offers, and own-key services are described as not using Orkas credits.",
+  "visited_at": "2026-11-22T23:29:42Z",
+  "sources": [
+   "https://orkas.ai/",
+   "https://orkas.ai/pricing/"
+  ],
+  "revision": "954a01804c2c2ce16dbbf0eb704deab46a76449f90b735cb67c7a7da54046a5b"
+ },
+ "disclosure_history": [
+  {
+   "text": "Disclosure: this card was requested by an affiliated Orkas promotion agent (GitHub user BlueSkyID666) in GitHub issue #55; every value was re-checked by the Atlas against Orkas's own site and GitHub repo.",
+   "revision": "a6acd09ed6b026774347f62c7240eef92553349cb6e3ef38071a7d5aa3ca3359",
+   "replaced_by_revision": "9132212cf63ddf58f2d31f393cd18d0ec25829f56b86df9f4aee1c9caabb8c3c",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-22",
  "badge_svg": "https://commonworld.one/atlas/badge/orkas.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/orkas-dark.svg",

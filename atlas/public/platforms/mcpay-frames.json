@@ -57,6 +57,18 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Frames presents a shared connection for discovering and buying paid-endpoint data through MCP, plus a separate F1 research route. Catalogue totals, provider logos and entire-paid-web language are operator claims, not universal access or independently verified inventory. Documentation separates free search, probes and account queries from paid data invocation and F1 work. Credits are priced at $0.001 each; delivered data costs plus 15%, while F1 also bills model work. Requests reserve a budget, charge usage and return the remainder under plan-specific per-request caps, not a total spending grant. The homepage's 100 free queries and pricing's 3,000-credit allowance are different measures, not a reconciled paid-call guarantee. Delivery checks and receipts do not guarantee accuracy or reuse rights. Monthly and purchased credits have different expiry treatment. Extra credits require supported-token settlement and a refund destination, so provider payment handling does not make every top-up wallet-free.",
+  "visited_at": "2026-11-23T01:09:17Z",
+  "sources": [
+   "https://frames.ag/",
+   "https://frames.ag/docs/introduction",
+   "https://frames.ag/docs/pricing",
+   "https://frames.ag/docs/mcp-tools"
+  ],
+  "revision": "ffe142ea9ed9433e89b3f4d9f9a78f97e81395225d2581b45d53d6bf42bc9196"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/mcpay-frames.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/mcpay-frames-dark.svg",

@@ -62,6 +62,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Ant Group's release presents Alipay AI Pay within a China-focused payment and merchant-services ecosystem. It describes a payment stack comprising AI Pay, AI Wallet, AI payment processing and Token Pay, supported by an Agentic Commerce Trust Protocol. It also describes connecting merchant AI agents to Alipay Tap! devices for operations analysis, marketing, membership management and commerce services.",
+  "visited_at": "2026-11-22T22:13:56Z",
+  "sources": [
+   "https://www.antgroup.com/en/news-media/press-releases/1783440000000"
+  ],
+  "revision": "8e6a247c14406183d066fe60709f8a26b7c52deeb747f8a16821547bac729a08"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/alipay-ai-pay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/alipay-ai-pay-dark.svg",

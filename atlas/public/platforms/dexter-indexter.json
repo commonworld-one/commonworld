@@ -86,6 +86,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Dexter presents a self-custodial account for payments, credit and obligations involving people, companies and agents. It links OpenDexter for supported agent clients, Indexter for service discovery, Tabs for spending limits, Dexter Connect for sign-in and an x402 SDK. Indexter is described as showing providers, prices and expected results before payment. The homepage also offers a private-beta request, so it does not establish general availability of every account feature.",
+  "visited_at": "2026-11-22T22:32:27Z",
+  "sources": [
+   "https://dexter.cash/"
+  ],
+  "revision": "a3d0a29925b26e0a6a8883002983676f929a89a2a17e48d9b6d26a39d0529f55"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/dexter-indexter.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/dexter-indexter-dark.svg",

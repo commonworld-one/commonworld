@@ -54,6 +54,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Basis Theory presents a payment vault and bounded credentials for agent purchases. Its Agentic Payments documentation describes customer-approved allowances with amount, purpose, expiry and optional merchant, then scoped credentials rather than the underlying card. Network programs require customer verification; Stripe shared tokens have different enforcement. Access requires onboarding and provider eligibility. Minting permanently consumes allowance capacity even if unused or declined, and Basis Theory does not observe downstream settlement or refunds.",
+  "visited_at": "2026-11-22T22:24:15Z",
+  "sources": [
+   "https://basistheory.com/",
+   "https://developers.basistheory.com/docs/features/agentic-payments"
+  ],
+  "revision": "995a280a4dcd5f917062d99f1cd90e2698cc0435b933913e0595db5e7098c08d"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/basis-theory.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/basis-theory-dark.svg",

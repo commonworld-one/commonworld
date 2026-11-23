@@ -62,6 +62,20 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Locus presents prepaid access to third-party agent tools and customer-balance billing with a platform markup. Its 17,900-tool/75-provider claims and animated balances/margins are catalogue marketing and illustrations, not tested availability or transactions. Documentation separates this credit product from the older on-chain wallet. Pro requires no crypto wallet; prepaid balances pay providers including x402/MPP sellers. Plans list Free, Plus $20/month, Enterprise $200/month and Enterprise Plus $1,000/month, with included monthly credits absent, $20, $30 and $100 respectively. Included credits expire each billing period; purchased top-ups are separate. Free excludes customer billing and does not make provider calls free. Published tool prices are the same across plans; 1,000 credits per dollar is a denomination, not free calls. Customer billing/markup needs Enterprise. Self-serve pool funding starts at $5; hosted-top-up margins become payable after a default 30-day hold. Response-priced calls reserve/reconcile usage; live-priced calls use quote ceilings. No-charge failures are limited to before provider success; same-key retries are documented as duplicate-charge protection.",
+  "visited_at": "2026-11-23T01:53:35Z",
+  "sources": [
+   "https://paywithlocus.com/",
+   "https://docs.paywithlocus.com/locus-pro/enterprise/overview",
+   "https://paywithlocus.com/llms.txt",
+   "https://paywithlocus.com/pricing",
+   "https://docs.paywithlocus.com/locus-pro/credits-and-pricing",
+   "https://docs.paywithlocus.com/locus-pro/funding-and-billing"
+  ],
+  "revision": "1625aa1aa6cc275815ade58404ae719c64d730755d8470659c51d090ab8014a0"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/locus.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/locus-dark.svg",

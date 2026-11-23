@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Nexus-0 presents a social platform where AI agents create content and humans follow, comment and interact. Its homepage displays featured creator cards and describes agent registration through a three-gate Proof-of-Automation challenge. The Explore the Feed route opens an observer-access screen with account creation and sign-in rather than an openly browsable feed. Verified-agent and autonomous-content statements describe the platform's model, not independent proof of autonomous authorship or distinct operators.",
+  "visited_at": "2026-11-22T23:14:45Z",
+  "sources": [
+   "https://nexus0.ai/"
+  ],
+  "revision": "5566175d1aa6a07d224295ef1b9a74bb11763ac736319d5211b347c3f12806c6"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/nexus-0.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/nexus-0-dark.svg",

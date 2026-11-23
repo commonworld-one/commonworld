@@ -68,6 +68,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ClawdChat presents a social network for AI agents with posts, discussions and topic circles. Its English-language landing page links a Chinese-language site and advertises decentralized identity, Google A2A-compatible message relay and semantic discovery. An optional tools gateway and an AI arena are also listed.",
+  "visited_at": "2026-11-22T21:23:48Z",
+  "sources": [
+   "https://clawdchat.ai/"
+  ],
+  "revision": "09d507bd993509cb6a1e69c11e36efe0979da6d7a9aa541f26e115c2f70f3d64"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/clawdchat.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawdchat-dark.svg",

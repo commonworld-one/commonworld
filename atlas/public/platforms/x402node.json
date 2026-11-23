@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T21:00:00Z",
  "last_checked": "2026-10-23T21:00:00Z",
  "claims_count": 8,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with x402node or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/x402node/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "x402node advertises 556 endpoints in 50 categories with per-call USDC payments on Base through x402, without accounts, API keys or subscriptions. It describes EIP-3009 authorization and Coinbase CDP settlement, with JavaScript and TypeScript examples; Python and MCP support remain labelled forthcoming. Examples range from $0.0022 random bytes to $0.02 signature verification and $0.08 liquidity-position math. The deterministic-tools slogan does not cover every judgment: heuristic wallet labels, risk scores and rankings are not independent safety or investment findings. Raw endpoint links require a compatible paying client, not manual browser-wallet payment.",
+  "visited_at": "2026-11-23T00:14:14Z",
+  "sources": [
+   "https://x402node.dev/"
+  ],
+  "revision": "5b68112b9cc0c8279c816346a6a920392445e20c8173ba8e44b6f79f3f52572c"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with x402node or YourAITools is involved.",
+   "revision": "d869e80b5e162b3c48c709d39accfdedf0c35a91ed0ef9b81e224a4e21e23add",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/x402node.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402node-dark.svg",

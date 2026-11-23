@@ -67,6 +67,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "PayAPI Market presents an x402 marketplace where agents discover APIs and pay providers per request in USDC on networks offered by each listing. It advertises free listing, free catalogue search and a zero-percent platform share of each job. Its settlement-verified label is described as a paid test of a specific route with a published receipt, not verification of every route in a listing. Provider prices and verification claims are marketplace-reported.",
+  "visited_at": "2026-11-22T22:37:05Z",
+  "sources": [
+   "https://payapi.market/"
+  ],
+  "revision": "f62c57dafcb11b264dd5bcdb5fb05bbda49d69d9e19a6d08c8eab88a7fc111f0"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/payapi-market.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/payapi-market-dark.svg",

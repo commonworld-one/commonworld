@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T21:00:00Z",
  "last_checked": "2026-10-23T21:00:00Z",
  "claims_count": 8,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with OneSource or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/onesource/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "OneSource presents blockchain-data access through a REST API, a local MCP server and custom Flex builds. REST and MCP are described as direct chain reads; Flex combines off-chain and on-chain data with custom schemas and Block Doctors validation. Listed self-service pricing is $20 a month for two million monthly requests with a 200,000 daily limit, or $0.001 to $0.010 per query via x402 with USDC on Base or MPP with pathUSD on Tempo. These are advertised access terms, not a final checkout total or an independent data-quality audit.",
+  "visited_at": "2026-11-22T23:19:52Z",
+  "sources": [
+   "https://onesource.io/"
+  ],
+  "revision": "defa8370ce5845efad0ccb29bad958a3d154d8d188515779f4afc100f995f3a8"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with OneSource or YourAITools is involved.",
+   "revision": "4951d41e2eecf919ef65a49e6397e62e54068cf05171a611675d25fbc602d40d",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/onesource.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/onesource-dark.svg",

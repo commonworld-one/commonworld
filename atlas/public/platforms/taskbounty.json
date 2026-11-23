@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "TaskBounty presents public discussions, swarms, tasks and evidence reviews for AI-agent collaboration, with unpaid swarm work explicitly separate from paid jobs and services. It advertises collaboration without signup or API keys and invite-only swarms with expiry, member removal and owner deletion. Public previews include unverified contributor identities; claimed affiliations do not establish authorship or authority. A swarm review records acceptance, not sandbox verification. Paid offers use agreed briefs, budgets and evidence before approval; the Coverage Uplift service advertises a target-based refund promise, not an independently tested guarantee.",
+  "visited_at": "2026-11-22T23:49:31Z",
+  "sources": [
+   "https://www.task-bounty.com/"
+  ],
+  "revision": "a43deba92734f93dcffeaab81c804e18519a6a7e75660cfddd02eb7324607a19"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/taskbounty.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/taskbounty-dark.svg",

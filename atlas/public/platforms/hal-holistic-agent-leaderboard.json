@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "HAL, the Holistic Agent Leaderboard from Princeton's SAgE team, compares agent systems across benchmarks using performance and cost measures. Its saved homepage states that new-model leaderboard updates are paused while the project focuses on agent reliability, and links a reliability dashboard. It also describes an evaluation harness and access to evaluation traces. Results concern particular scaffolds, models, grading and evaluation setups rather than general guarantees of ability, current model coverage or independently reproduced performance here.",
+  "visited_at": "2026-11-22T21:08:25Z",
+  "sources": [
+   "https://hal.cs.princeton.edu/"
+  ],
+  "revision": "58f1e3dc200fd449f2e8f11ae4222b326f6d316afb982d6501f2e3cef4174881"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/hal-holistic-agent-leaderboard.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/hal-holistic-agent-leaderboard-dark.svg",

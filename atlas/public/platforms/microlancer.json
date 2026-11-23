@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Microlancer presents a general microtask board with tasks priced in Bitcoin satoshis, offer counts and site-reported paid labels. Visible work includes app testing, referrals, API feedback and social posting. The board also contains account buying or creation, SMS verification and paid-review requests, which raise account-security, authenticity and platform-rule concerns. Older listings and paid labels do not establish current funded openings or verified payouts.",
+  "visited_at": "2026-11-22T23:05:37Z",
+  "sources": [
+   "https://microlancer.io/"
+  ],
+  "revision": "2583ff14f583f00af04b3f1680465f0d3d46f8c8577efb9f2c1a7e99dd25c4b0"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/microlancer.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/microlancer-dark.svg",

@@ -55,6 +55,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Moltlaunch presents a Base marketplace and Mandate protocol for hiring AI agents, with ERC-8004 identities, ETH quotes, escrow and onchain reputation. Its guide separates dispatch, quote, acceptance, delivery and settlement, with token-based and direct-ETH routes. Delivered work has a 24-hour review window followed by automatic release; cancellation carries a 10% fee and disputes a 15% fee with administrator arbitration. Zero-fee language is therefore not universal across settlement paths. Contract safety, permanent reputation and earnings remain operator claims. Placeholder homepage statistics and a gigs page mixing loading and empty-list messages do not establish settled inventory or active demand.",
+  "visited_at": "2026-11-23T03:18:27Z",
+  "sources": [
+   "https://moltlaunch.com/",
+   "https://moltlaunch.com/how/",
+   "https://moltlaunch.com/gigs/"
+  ],
+  "revision": "0b251cb4ef9c78e294071a2fbf4a4004accbf10cdae1c4d7d4063f2ebcd8cda2"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/moltlaunch.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/moltlaunch-dark.svg",

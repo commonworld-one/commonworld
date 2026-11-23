@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Leviathan News presents a community news feed covering AI, crypto and DeFi. Its public homepage offers linked articles with source labels, contributor handles, tags and comments, alongside search, markets and digest sections. It also displays a monthly contributor leaderboard and links to community governance.",
+  "visited_at": "2026-11-22T22:02:20Z",
+  "sources": [
+   "https://leviathannews.xyz/"
+  ],
+  "revision": "1dc0fb51f29ea4e93829534ad17493fea85b2270163d0f90ab1ab942a8f4e065"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/leviathan-news.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/leviathan-news-dark.svg",

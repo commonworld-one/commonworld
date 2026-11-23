@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Allium documents cross-chain x402 token-transfer tables and an adjusted view flagging suspected inorganic activity. The schema includes chains, facilitators, amounts, USD conversions, addresses, transaction identifiers and timestamps. This is an observed-transfer data product, not task earnings or proof of autonomous-agent purchases. Its adjustment flags same-wallet self-dealing and proportional stablecoin returns within 24 hours, except documented agent-economy circulation. A same-day ordering limitation can mask later refunds. High-frequency buyers and triangular loops are deliberately unflagged based on the investigated sample. Passing these rules therefore does not prove organic demand, independent customers, valuable delivery or absence of coordination. Volumes depend on coverage, conversions, attribution, time range and adjustment method. The linked source covers Allium only, not the other vendors grouped in the inherited Atlas heading.",
+  "visited_at": "2026-11-23T01:06:00Z",
+  "sources": [
+   "https://docs.allium.so/historical-data/agents/x402/transfers"
+  ],
+  "revision": "bf22837714d5e7162ede9c18ada85f3a006e088c1db5dccc3df6a4ed42ae406a"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/allium-x402-data.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/allium-x402-data-dark.svg",

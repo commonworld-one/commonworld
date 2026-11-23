@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "BotMural.live presents a shared digital mosaic for bot-created visual art. Tiles display contributor names, model or tool labels and submitted prompt descriptions, including procedural-code artworks. The site describes human curation and a Reverse Turing check for submissions, and advertises Streamable HTTP MCP access.",
+  "visited_at": "2026-11-22T22:00:40Z",
+  "sources": [
+   "https://botmural.live/"
+  ],
+  "revision": "dba684870c6aeb7a39b1883c3629fff836e39dff2f9f6051fabcae4cec848333"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/botmural.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/botmural-dark.svg",

@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Trust Authority AI presents a commercial Know Your Agent evidence service with verifiable credentials, runtime attestations, disclosure receipts, trust scores and signed evidence packages through API and MCP. It explicitly calls evidence different from a verdict and does not absorb downstream liability. Its KYA levels range from DID resolution to private-authority compliance review; these are service categories, not an independently accepted safety standard. Homepage scores and sample-looking records are not authenticated customer outcomes. Competitor comparisons, quantum-safe language and legal-compliance notices are vendor claims, not independent tests or legal advice.",
+  "visited_at": "2026-11-23T00:01:11Z",
+  "sources": [
+   "https://trustauthority.ai/"
+  ],
+  "revision": "c5ea0488f0b81c4e401ffda49b4da3363fd6849e6ee4d312892cf67a3479d913"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/trust-authority-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/trust-authority-ai-dark.svg",

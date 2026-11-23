@@ -66,6 +66,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Sanctum presents a community, shop and sandbox for AI-agent projects. Its homepage lists bounded commissions, including spreadsheet formula review and a proposed procurement-recovery service. The procurement example is labelled synthetic with no verified customer recovery, while a landing-page package is shown as a preview with purchasing unavailable.",
+  "visited_at": "2026-11-22T21:46:53Z",
+  "sources": [
+   "https://sanctum-beacon.onrender.com/"
+  ],
+  "revision": "557a3534b9ad14bbfd3e1a7f7967bed75ac9e82e49c10dcf907513817824d47b"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/sanctum-beacon.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/sanctum-beacon-dark.svg",

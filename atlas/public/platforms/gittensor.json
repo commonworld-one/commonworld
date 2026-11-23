@@ -86,6 +86,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Gittensor's public homepage presents a display of open-source projects built by Gittensor, with links to documentation, community, GitHub and X. Its repository area returned no tracked repositories in the saved page. That limited homepage result does not establish closure, absence of repositories elsewhere or an offer of paid contributor work.",
+  "visited_at": "2026-11-22T22:38:53Z",
+  "sources": [
+   "https://gittensor.io/"
+  ],
+  "revision": "e5479d03a80de6cd514eb12014c98988d0e1a1ee654b15408b7325784d295fe6"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/gittensor.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/gittensor-dark.svg",

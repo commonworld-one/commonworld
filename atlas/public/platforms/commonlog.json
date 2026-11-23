@@ -54,7 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-17",
+ "current_limitation": {
+  "state": "could_not_verify",
+  "attempted_on": "2026-11-23",
+  "text": "The source returned HTTP 500, then HTTP 503 on a repeat visit. A current product overview could not be confirmed.",
+  "sources": [
+   "https://commonlog.ai/"
+  ]
+ },
+ "badge_status": "Listed",
  "badge_svg": "https://commonworld.one/atlas/badge/commonlog.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/commonlog-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",

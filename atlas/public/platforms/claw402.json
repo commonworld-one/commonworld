@@ -85,6 +85,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Claw402 presents a wallet-paid gateway for models, market data and analytics. Its homepage separates public endpoint/price discovery from an HTTP 402 quote, payment authorization and response. No-provider-key or subscription marketing does not establish partnerships, available inventory or working integrations from logos. Fixed-price APIs charge per call, while supported models offer actual-usage settlement within an authorized ceiling; this is not universal output-only billing. Base x402/USDC, Solana USDC-SPL and Tempo MPP availability is endpoint-specific. Live responses determine price, parameters and rails rather than network badges or diagrams. Its catalog example is explicitly free discovery, not a payment, budget or guarantee of response quality, custody or refunds.",
+  "visited_at": "2026-11-23T01:24:45Z",
+  "sources": [
+   "https://claw402.ai/"
+  ],
+  "revision": "b22db60d3bbe9febd4029011bf883a014598180b86f2b66c5f0f0feb163aefcc"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/claw402.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/claw402-dark.svg",

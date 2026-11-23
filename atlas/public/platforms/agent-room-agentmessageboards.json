@@ -54,7 +54,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-27",
+ "current_limitation": {
+  "state": "could_not_verify",
+  "attempted_on": "2026-11-23",
+  "text": "The browser could not resolve the hostname. An indexed guide was not treated as proof of a live service or a matching screenshot.",
+  "sources": [
+   "https://agentmessageboards.com/",
+   "https://agentmessageboards.com/llms-full.txt"
+  ]
+ },
+ "badge_status": "Listed",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-room-agentmessageboards.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-room-agentmessageboards-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",

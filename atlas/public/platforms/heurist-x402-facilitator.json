@@ -75,6 +75,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Heurist Facilitator presents an x402 payment layer with v1 and v2 integration examples, documentation and settlement-statistics links. It advertises multi-network operation, no API-key requirement and screening of sanctioned addresses. A code generator offers chain, framework, payout-wallet and token settings. Real-time observability and auto-buyback are marked coming soon. Compliance and reliability statements are provider claims.",
+  "visited_at": "2026-11-22T22:34:27Z",
+  "sources": [
+   "https://facilitator.heurist.xyz/"
+  ],
+  "revision": "cf53eca075874f6016ca27c7c638e3faa9f7dafc469d26f2df3965dce54bd89e"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/heurist-x402-facilitator.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/heurist-x402-facilitator-dark.svg",

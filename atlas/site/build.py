@@ -17,6 +17,7 @@ import math
 import argparse, base64, hashlib, html, json, os, re, shutil, sys, unicodedata
 from collections import Counter, defaultdict
 from html.parser import HTMLParser
+from urllib.parse import urlparse
 from datetime import datetime, timedelta, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +31,8 @@ import screens  # noqa: E402  (homepage screenshots from the orphan branch atlas
 import events as atlas_events  # noqa: E402  (public events log: atlas/data/events.jsonl)
 import cards_v2 as cv2  # noqa: E402  (cards v2: evidence ladder, keys and books, first task; atlas/CURATION.md)
 import replications as repl  # noqa: E402  (replication counts on a card: atlas/data/replications.json)
+import limitations
+import overviews  # simple editorial source; legacy snapshot stays API-compatible
 import reachability as reach  # noqa: E402  (stale / challenge-walled notes on live cards: atlas/data/reachability.json)
 
 e = cw.e
@@ -275,11 +278,19 @@ def keynum_html(c):
     return f'<div class="keynum"><b>{fmt_num(x["value"])}</b><span>{e(" · ".join(b for b in bits if b))}</span></div>'
 
 
+def display_status(c):
+    return 'limited' if c.get('_limitation') else c['status']
+
+
 def status_chip(c):
+    if c.get('_limitation'):
+        return limitations.CHIP
     if c['status'] == 'closed':
         return '<span class="chip closed"><i class="dot closed"></i>closed</span>'
     r = c.get('_reach')
     note = (f'<span class="chip reach {r["state"]}" title="{e(reach.STATE_TEXT[r["state"]])}">{e(r["label"])}</span>' if r else '')
+    if c.get('_overview'):
+        return '<span class="chip live"><i class="dot"></i>dated overview</span>'
     return '<span class="chip live"><i class="dot"></i>live</span>' + note
 
 
@@ -319,7 +330,7 @@ def sidebar(site, active):
         act = 'page' if active == 'cat:' + k else (True if active == 'in:' + k else False)
         dirs.append((f'{b}/categories/{k}/', CAT_LABEL[k], len(site.by_cat[k]), act, {'data-cat': k}))
     secs = [(f'{b}/#catalog', 'Catalog', None, False, None),
-            (f'{b}/earn/', 'Where agents get paid', len(site.earn['rows']) if getattr(site, 'earn', None) else None, 'page' if active == 'earn' else False, None),
+            (f'{b}/earn/', 'Historical money figures' if getattr(site, 'catalogue_mode', False) else 'Where agents get paid', len(site.earn['rows']) if getattr(site, 'earn', None) else None, 'page' if active == 'earn' else False, None),
             (f'{b}/closed/', 'Closed history', closed, 'page' if active == 'closed' else False, None),
             (f'{b}/about/', 'How the Atlas works', None, 'page' if active == 'about' else False, None)]
     sc = site.cfg['site']
@@ -358,13 +369,19 @@ SEARCH_PLACEHOLDER = 'Search: name, category, description, numbers…'
 def page(site, *, path, title, description, body, active, ld=(), og_type='website', noindex=False, lastmod=None, index_search=False, og=None, alt_json=None, alt_md=None,
          alt_json_title='This entry (JSON: claims and sources)', prev=None, nxt=None):
     """og: (image name, spec dict, alt text) -> /atlas/og/<name>.png rendered by og_images.py (static og-atlas.png without Pillow)."""
+    if getattr(site, 'catalogue_mode', False):
+        title = title.replace('verified catalog', 'dated catalogue').replace('verified entries', 'catalogue entries').replace('verified AI-agent entries', 'AI-agent entries')
+        description = description.replace('each checked against its own sources, with dated numbers you can trace', 'with dated source overviews and bounded source-check notes').replace('each checked against its own sources', 'with dated sources and explicit limits')
+    if getattr(site, 'overview_preview', False):
+        noindex = True
+        body = '<p class="overview-draft" role="note"><b>Local working preview.</b> Not a published update.</p>' + body
     cfg = site.cfg
     canon = site.abs(path)
     b = site.base
     description = trim(description, 160)  # search snippets: <=160 chars, cut at a word boundary
     robots = 'noindex,follow' if noindex else 'index,follow,max-image-preview:large'
     og_img = site.abs(f'{b}/assets/og-atlas.png')
-    og_alt = 'Commonworld Atlas: verified catalog of AI-agent platforms'
+    og_alt = 'Commonworld Atlas: dated catalogue of AI-agent platforms' if getattr(site, 'catalogue_mode', False) else 'Commonworld Atlas: verified catalog of AI-agent platforms'
     if og and site.og_enabled and not noindex:
         name, spec, og_alt = og
         if name in site.og_jobs:
@@ -378,6 +395,9 @@ def page(site, *, path, title, description, body, active, ld=(), og_type='websit
                   f'<a href="{API_DOCS}">API</a><a href="{b}/data/snapshot.json">Data (JSON)</a><a href="{legal_urls(site)[0]}">Privacy</a><a href="{legal_urls(site)[1]}">Terms</a>{cw.cookie_settings_button()}'
                   f'<a href="{e(corr)}" rel="nofollow noopener">Report a correction</a>')
     verified = site.latest.strftime('%Y-%m-%d') if site.latest else ''
+    footer_label = ('Commonworld / Atlas of Agent Platforms · overview working version' if getattr(site, 'overview_preview', False) else 'Commonworld / Atlas of Agent Platforms · dated source overviews') if getattr(site, 'catalogue_mode', False) else f'Commonworld / Atlas of Agent Platforms · verified {verified}'
+    announcement = ('<div class="overview-legacy-note">Atlas overview working version. Drafts are not accepted visits.</div>'
+                    if getattr(site, 'overview_preview', False) else ('' if getattr(site, 'catalogue_mode', False) else cw.announcement_bar(cfg)))
     html_doc = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -421,7 +441,7 @@ def page(site, *, path, title, description, body, active, ld=(), og_type='websit
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-{cw.announcement_bar(cfg)}
+{announcement}
 <div class="cw-shell">
 {sidebar(site, active)}
 <div class="cw-col">
@@ -429,7 +449,7 @@ def page(site, *, path, title, description, body, active, ld=(), og_type='websit
 <main id="main">
 {body}
 </main>
-{cw.footer(f'Commonworld / Atlas of Agent Platforms · verified {verified}', foot_links, OFFICIAL_LINKS)}
+{cw.footer(footer_label, foot_links, OFFICIAL_LINKS)}
 </div>
 </div>
 {cw.consent_banner(cfg)}
@@ -444,6 +464,8 @@ def page(site, *, path, title, description, body, active, ld=(), og_type='websit
 
 # ---------------------------------------------------------------- Open Graph image specs + share text
 def share_text_index(site):
+    if getattr(site, 'catalogue_mode', False):
+        return f'Commonworld Atlas: {len(site.cards)} entries, with dated overviews and source-check limitations'
     live = sum(1 for c in site.cards if c['status'] == 'live')
     return f'Atlas of Agent Platforms: {live} places where AI agents work and get paid'
 
@@ -452,6 +474,8 @@ SHARE_TEXT_EARN = 'Where AI agents get paid — Commonworld Atlas'
 
 
 def share_text_entry(c):
+    if c.get('_limitation'):
+        return overviews.share_text(c)
     """Share text by badge status: only verified cards say 'verified'."""
     tone = badges.status_of(c)[0]
     if tone == 'verified':
@@ -462,13 +486,15 @@ def share_text_entry(c):
 
 
 def og_foot(site, dt=None):
+    if getattr(site, 'catalogue_mode', False):
+        return 'Dated sources; see each entry'
     dt = dt or site.latest
     return f'verified {fmt_date(dt)}' if dt else ''
 
 
-def og_generic(site, name, title, desc, chips=(), kicker='Atlas', bar=None, alt=None):
+def og_generic(site, name, title, desc, chips=(), kicker='Atlas', bar=None, alt=None, foot=None):
     spec = {'kind': 'page', 'title': title, 'kicker': kicker, 'chips': [{'text': t, 'tone': tone} for t, tone in chips],
-            'desc': trim(desc, 200), 'bar': bar or [[len(site.by_cat[k]), CAT_COLOR[k]] for k in site.cats], 'foot_right': og_foot(site)}
+            'desc': trim(desc, 200), 'bar': bar or [[len(site.by_cat[k]), CAT_COLOR[k]] for k in site.cats], 'foot_right': og_foot(site) if foot is None else foot}
     return (name, spec, alt or f'{title}: Commonworld Atlas')
 
 
@@ -534,24 +560,45 @@ def shot_figure(site, c):
         return f'<figure class="entry-shot is-empty"><div class="ph">{txt}</div></figure>'
     r = site.shots[c['slug']]
     dt = parse_time(r['captured_at'])
-    alt = f"Homepage of {c['name']} ({domain(c.get('canonical_url') or r['source_url'])}), screenshot captured {dt.strftime('%Y-%m-%d')}"
-    href = c.get('canonical_url') or r['source_url']
+    source_path = urlparse(r["source_url"]).path.rstrip("/")
+    source_label = (r.get("title") or "Source page") if source_path else "Homepage"
+    alt = f"{source_label} of {c['name']} ({r['source_url']}), screenshot captured {dt.strftime('%Y-%m-%d')}"
+    href = r['source_url']
     lead = (f'<b>Last captured {time_tag(dt)}</b>, before the site was marked closed. Kept as history.' if closed
-            else f'Homepage as captured {time_tag(dt)} from {e(domain(r["source_url"]))}{confirmed_html(r, "captured_at")}.')
+            else f'{e(source_label)} as captured {time_tag(dt)} from {e(r["source_url"])}{confirmed_html(r, "captured_at")}.')
     return (f'<figure class="entry-shot{" is-closed" if closed else ""}"><a href="{e(href)}" rel="nofollow noopener">'
             f'<img src="{p[0]}" width="{screens.SHOT_W}" height="{screens.SHOT_H}" loading="lazy" decoding="async" alt="{e(alt)}"></a>'
             f'<figcaption>{lead} Screenshot © the site owner, not part of the CC BY data.</figcaption></figure>')
 
 
+def overview_of(site, c):
+    return getattr(site, 'overviews', {}).get(c['slug'])
+
+
+def display_date(site, c):
+    if c.get('_limitation'):
+        return None
+    r = overview_of(site, c)
+    return parse_time(r.get('visited_at')) if r is not None else c['_verified']
+
+
+def display_desc(site, c):
+    if c.get('_limitation'):
+        r = c['_limitation']
+        return 'Attempt ' + r['attempted_on'] + ': ' + r['text']
+    r = overview_of(site, c)
+    return r['text'] if r is not None else c['_desc']
+
+
 def card_html(site, c, data=False, note=''):
     d = None
     if data:
-        d = {'data-slug': c['slug'], 'data-c': c['category'], 'data-s': c['status'], 'data-t': c['entity_type'],
+        d = {'data-slug': c['slug'], 'data-c': c['category'], 'data-s': display_status(c), 'data-t': c['entity_type'],
              'data-money': '1' if c['_money'] else None, 'data-num': '1' if c['_num'] else None,
-             'data-claims': len(c.get('claims', [])), 'data-ver': int(c['_verified'].timestamp()) if c['_verified'] else 0,
+             'data-claims': len(c.get('claims', [])), 'data-ver': int(display_date(site, c).timestamp()) if display_date(site, c) else 0,
              'data-tags': ' '.join(c['_tags']) or None}
     return cw.card(href=c['_url'], name=c['name'], cat_label=CAT_LABEL[c['category']], cat_color='k-' + c['category'],
-                   status_chip=status_chip(c), desc=note + trim(c['_desc'], 150 - len(note)), keynum=keynum_html(c),
+                   status_chip=status_chip(c), desc=note + trim(display_desc(site, c), 150 - len(note)), keynum='' if overview_of(site, c) is not None or c.get('_limitation') else keynum_html(c),
                    tags_html=cw.tag_chips(c['_tags'], lambda t: tag_href(site, t)), closed=c['status'] == 'closed', data=d,
                    thumb=thumb_html(site, c))
 
@@ -580,11 +627,15 @@ def dataset_ld(site, cards, *, name, description, url, downloads, keywords):
          'sameAs': REPO_URL, 'creator': {'@type': 'Organization', 'name': 'Commonworld', 'url': site.abs('/')},
          'publisher': {'@type': 'Organization', 'name': 'Commonworld', 'url': site.abs('/')},
          'isAccessibleForFree': True, 'inLanguage': 'en', 'keywords': keywords,
-         'dateModified': lm.strftime('%Y-%m-%d') if lm else None,
+         'dateModified': (lm or site.source_generated).strftime('%Y-%m-%d') if (lm or site.source_generated) else None,
          'variableMeasured': ['category', 'status (live or closed)', 'entity type', 'verified claims (statement, value, unit, basis, outcome)',
                               'source URL of each claim', 'observation date of each claim', 'money flow figures'],
          'size': f'{len(cards)} entries ({live} live, {len(cards) - live} closed)',
          'distribution': [{'@type': 'DataDownload', 'name': n, 'encodingFormat': f, 'contentUrl': site.abs(path)} for path, f, n in downloads]}
+    if getattr(site, 'catalogue_mode', False):
+        d['description'] = f'{len(cards)} entries. Catalogue records with dated overviews and bounded source-check notes. Legacy claim/status fields retain their original observation scope.'
+        d['size'] = f'{len(cards)} entries'
+        d['variableMeasured'][1] = 'legacy status (not current availability)'
     if obs:
         d['temporalCoverage'] = f"{min(obs).strftime('%Y-%m-%d')}/{max(obs).strftime('%Y-%m-%d')}"
     if lic:
@@ -662,8 +713,8 @@ def list_md(site, *, title, path, intro, cs, n, m, first, json_path, total):
     previous / next page and to the JSON page."""
     A = site.abs
     a, z = page_range(n, total)
-    rows = '\n'.join(f"| {a + i} | [{md_cell(c['name'])}]({A(c['_url'])}) | {md_cell(CAT_LABEL[c['category']])} | {c['status']} | "
-                     f"{md_cell(trim(c['_desc'], 160))} | [Markdown]({A(c['_url'] + 'index.md')}) |" for i, c in enumerate(cs))
+    rows = '\n'.join(f"| {a + i} | [{md_cell(c['name'])}]({A(c['_url'])}) | {md_cell(CAT_LABEL[c['category']])} | {display_status(c)} | "
+                     f"{md_cell(trim(display_desc(site, c), 160))} | [Markdown]({A(c['_url'] + 'index.md')}) |" for i, c in enumerate(cs))
     nav = ' · '.join(x for x in (f'Previous page: {A(list_path(first, n - 1))}' if n > 1 else '',
                                  f'Next page: {A(list_path(first, n + 1))}' if n < m else '') if x)
     return (f'# {title}\n\nCanonical page: {A(path)}\n\n{intro}\n\n'
@@ -690,9 +741,13 @@ def build_index(site):
         (f'{n - live:,}', 'closed (history) · filter', {'data-filter': 'status:closed'}, 'closed', True),
         (f'{money:,}', 'with money flow · filter', {'data-filter': 'feat:money'}, 'money', True),
         (f'{nums:,}', 'with numbers · filter', {'data-filter': 'feat:num'}, 'num', True)], label='Atlas summary')
+    if getattr(site, 'catalogue_mode', False):
+        stats = cw.stats_strip([(f'{n:,}', 'entries · show all', {'data-filter': 'reset'}, None, True), (f'{len(site.overviews):,}', 'dated overviews', {'data-filter': 'status:live'}, 'live', True), (f'{len(getattr(site, "limitations", {})):,}', 'could not verify', {'data-filter': 'status:limited'}, None, True), (f'{sum(c["status"] == "closed" for c in cards):,}', 'closed history', {'data-filter': 'status:closed'}, 'closed', True)], label='Atlas summary')
     bar = cw.catbar([(len(site.by_cat[k]), 'k-' + k, f'{CAT_LABEL[k]}: {len(site.by_cat[k])}') for k in site.cats])
     leg = cw.legend([(CAT_LABEL[k], len(site.by_cat[k]), sum(1 for c in site.by_cat[k] if c['status'] == 'live'), 'k-' + k,
                       {'data-cat': k}) for k in site.cats])
+    if getattr(site, 'catalogue_mode', False):
+        leg = cw.legend([(CAT_LABEL[k], len(site.by_cat[k]), sum(1 for c in site.by_cat[k] if c['slug'] in site.overviews), 'k-' + k, {'data-cat': k}) for k in site.cats]).replace(' live', ' dated').replace('title="live"', 'title="dated overviews"')
     verified = site.latest.strftime('%Y-%m-%d') if site.latest else ''
     corr = cfg['site']['corrections_url']
     box = cw.info_box('live', f'{n} entries', 'verified',
@@ -701,14 +756,18 @@ def build_index(site):
     hero = cw.hero(f'Commonworld · Atlas · verified {verified}', 'Atlas of Agent Platforms',
                    '<p>Where AI agents talk, work, get paid, compete and publish research. Every card is checked against its own sources: '
                    'what it is, whether it’s live, and dated numbers you can trace.</p>', box)
+    if getattr(site, 'catalogue_mode', False):
+        hero = cw.hero('Commonworld · Atlas', 'Atlas of Agent Platforms', '<p>Short overviews, source links and dated public source-page screenshots. A visit dates one whole overview, not an individual number.</p>', small=True)
     default_count = f'Showing 1–{len(pages[0])} of {n}' if m > 1 else f'{n} of {n}'
     tabs = cw.tabs([('All', n, {'data-cat': ''}, True)] + [(CAT_LABEL[k], len(site.by_cat[k]), {'data-cat': k}, False) for k in site.cats])
-    st = Counter(c['status'] for c in cards)
+    st = Counter(display_status(c) for c in cards)
     ty = Counter(c['entity_type'] for c in cards)
     def pill(attr, k, label, count, dot=None):
         d = f'<i class="dot {dot}"></i>' if dot else ''
         return f'<button class="pill" type="button" {attr}="{k}" aria-pressed="false">{d}{e(label)}<span>{count}</span></button>'
-    status_pills = pill('data-f-status', 'live', 'live', st['live'], 'live') + pill('data-f-status', 'closed', 'closed', st['closed'], 'closed')
+    status_pills = pill('data-f-status', 'live', 'dated overview' if getattr(site, 'catalogue_mode', False) else 'live', st['live'], 'live') + pill('data-f-status', 'closed', 'closed', st['closed'], 'closed')
+    if getattr(site, 'catalogue_mode', False):
+        status_pills += pill('data-f-status', 'limited', 'could not verify', st['limited'])
     type_pills = ''.join(pill('data-f-type', k, TYPE_LABEL.get(k, k).lower(), ty[k]) for k in ('platform', 'project', 'tool_catalog', 'protocol') if ty[k])
     feat_pills = pill('data-f-feat', 'money', 'has money flow', money, 'money') + pill('data-f-feat', 'num', 'has numbers', nums, 'num')
     tagc = Counter(t for c in cards for t in c['_tags'])
@@ -720,16 +779,17 @@ def build_index(site):
 {cw.share_bar(cfg, site.abs(f'{b}/'), share_text_index(site), cls='cw-share-index')}
 {cw.ad_slot(cfg, 'atlas-index-top', 'cw-ad-banner')}
 <div id="catalog-top">{tabs}</div>
-<section class="cw-panel atlas-catalog" id="catalog" aria-labelledby="list-title" data-search-index="{b}/data/search-index.json" data-total="{n}">
+<section class="cw-panel atlas-catalog" id="catalog" aria-labelledby="list-title" data-search-index="{b}/data/search-index.json" data-total="{n}" data-current-view="{1 if getattr(site, 'catalogue_mode', False) else 0}">
 <div class="cw-panel-head"><h2 id="list-title">All platforms</h2><span class="muted" id="list-count" aria-live="polite">{default_count}</span><span class="spacer"></span><button class="text-btn" id="f-reset" type="button">Reset filters</button></div>
 <div class="cw-panel-body">
 <div class="cw-filterbar">
 <div class="cw-filtergroup" role="group" aria-label="Status"><span class="lbl">Status</span>{status_pills}</div>
 <div class="cw-filtergroup" role="group" aria-label="Type"><span class="lbl">Type</span>{type_pills}</div>
-<div class="cw-filtergroup" role="group" aria-label="Features"><span class="lbl">Features</span>{feat_pills}</div>
-<div class="cw-sort"><label for="f-sort">Sort</label><select id="f-sort"><option value="name">by name</option><option value="claims">most claims</option><option value="recent">recently verified</option></select></div>
+{'' if getattr(site, 'catalogue_mode', False) else chr(60)+'div class="cw-filtergroup" role="group" aria-label="Features"><span class="lbl">Features</span>'+feat_pills+'</div>'}
+<div class="cw-sort"><label for="f-sort">Sort</label><select id="f-sort"><option value="name">by name</option>{'' if getattr(site, 'catalogue_mode', False) else '<option value="claims">most claims</option>'}<option value="recent">{'source-view date' if getattr(site, 'catalogue_mode', False) else 'recently verified'}</option></select></div>
 </div>
 {shelf}
+<p class="muted">Dated overviews record source visits, not a guarantee of current availability or tested functionality. Could not verify records a bounded attempt. Legacy API status fields keep their original meaning.</p>
 <div class="cw-active" id="active"><span>Click tags, statuses or tabs to narrow the list. Tags combine with AND.</span></div>
 <div class="cw-grid" id="grid">{cards_with_ads(site, pages[0], data=True)}<p class="cw-empty" id="f-empty" hidden>Nothing found. Remove a tag or clear the search.</p></div>
 {pager_html(f'{b}/', 1, m)}
@@ -753,10 +813,10 @@ def build_index(site):
                                  f'for each fact; closed platforms are kept as history.',
                      downloads=[(f'{b}/data/snapshot.json', 'application/json', 'Full published dataset (snapshot.json)'),
                                 (f'{b}/platforms.json', 'application/json', 'All entries with stable fields (platforms.json)'),
-                                (f'{b}/earn.json', 'application/json', 'Where agents get paid: sourced money figures (earn.json)'),
+                                (f'{b}/earn.json', 'application/json', 'Historical money figures (earn.json)'),
                                 (api_v1.API_BASE + '/atlas/platforms.json', 'application/json', 'API v1: all entries'),
                                 (f'{b}/llms.txt', 'text/plain', 'Atlas guide for AI agents (llms.txt)'),
-                                (SAFETY_PATH, 'application/json', 'Link safety report: trust engine status of every linked domain, with each source\'s answer (safety.json)'),
+                                (SAFETY_PATH, 'application/json', 'Link safety report: stored provider results and dates, not blanket current coverage (safety.json)'),
                                 (DECISIONS_JSON, 'application/json', 'Link safety decision log: every removal and return with who, why and evidence (decisions.json)'),
                                 ('/llms-full.txt', 'text/plain', 'One line per entry (llms-full.txt)')])]
     return page(site, path=f'{b}/', title='Atlas of Agent Platforms: verified catalog | Commonworld',
@@ -765,9 +825,9 @@ def build_index(site):
                 description=f'{n} places where AI agents talk, work, get paid, compete and publish research, each checked against its own sources, with dated numbers you can trace.',
                 body=body, active='index', ld=ld, index_search=True,
                 og=og_generic(site, 'atlas', 'Atlas of Agent Platforms',
-                              'Where AI agents talk, work, get paid, compete and publish research. Every card is checked against its own sources.',
-                              [(f'{n} entries', 'olive'), (f'{live} live', 'live'), (f'{n - live} closed', 'closed'), (f'{len(site.cats)} directions', None)],
-                              kicker='VERIFIED CATALOG', alt=f'Commonworld Atlas of Agent Platforms: {n} verified entries, {live} live'))
+                              'Dated source overviews and bounded source-check notes. Not a guarantee of service availability or functionality.',
+                              [(f'{n} entries', 'olive'), ((f'{len(site.overviews)} dated overviews' if getattr(site, 'catalogue_mode', False) else f'{live} live'), 'live'), (f'{len(getattr(site, "limitations", {}))} could not verify', None), (f'{sum(c["status"] == "closed" for c in cards)} closed', 'closed'), (f'{len(site.cats)} directions', None)],
+                              kicker='CATALOGUE' if getattr(site, 'catalogue_mode', False) else 'VERIFIED CATALOG', alt=(f'Commonworld Atlas: {n} entries with dated overviews and bounded source-check notes' if getattr(site, 'catalogue_mode', False) else f'Commonworld Atlas of Agent Platforms: {n} verified entries, {live} live')))
 
 
 def index_page_text(site, n, m, cs):
@@ -777,8 +837,8 @@ def index_page_text(site, n, m, cs):
     h1 = f'All entries, page {n} of {m}'
     title = f'Atlas of Agent Platforms: page {n} of {m} | Commonworld'
     desc = (f'Page {n} of {m} of the Commonworld Atlas: entries {a}–{z} of {total}, A to Z ({cs[0]["name"]} to {cs[-1]["name"]}), '
-            f'each checked against its own sources.')
-    lead = f'Entries {a}–{z} of {total}, A to Z: {cs[0]["name"]} to {cs[-1]["name"]}. Every card is checked against its own sources.'
+            f'with dated source overviews and explicit check limits.')
+    lead = f'Entries {a}–{z} of {total}, A to Z: {cs[0]["name"]} to {cs[-1]["name"]}. Cards link to dated sources; a source visit is not an availability or functionality guarantee.'
     return h1, title, desc, lead
 
 
@@ -816,11 +876,17 @@ def build_index_md(site, n, pages):
                  f'(HTML). Categories: {site.abs(b + "/categories/")}.')
     else:
         title, intro = index_page_text(site, n, m, cs)[0], index_page_text(site, n, m, cs)[3]
+    if getattr(site, 'catalogue_mode', False) and n == 1:
+        intro = f'Dated source catalogue: {len(site.overviews)} source overviews, {len(site.limitations)} bounded notes and {sum(c["status"] == "closed" for c in site.cards)} closed-history records. A source visit is not a functionality or availability guarantee. Read current_limitation first, otherwise overview. Search and filters: {site.abs(b + chr(47))}'
     return list_md(site, title=title, path=list_path(f'{b}/', n), intro=intro, cs=cs, n=n, m=m, first=f'{b}/',
                    json_path=api_v1.page_json(n), total=len(site.cards))
 
 
 def build_platform(site, c):
+    if c.get('_limitation'):
+        return limitations.render_html(site, c, sys.modules[__name__])
+    if c.get('_overview') is not None:
+        return overviews.render_html(site, c, sys.modules[__name__])
     b = site.base
     cat = c['category']
     crumbs, crumb_ld = breadcrumbs(site, [('Atlas', f'{b}/'), (CAT_LABEL[cat], f'{b}/categories/{cat}/'), (c['name'], c['_url'])])
@@ -1044,6 +1110,10 @@ def md_cell(v):
 
 
 def build_platform_md(site, c):
+    if c.get('_limitation'):
+        return limitations.render_md(site, c)
+    if c.get('_overview') is not None:
+        return overviews.render_md(site, c)
     """Markdown twin of a card page (<card>/index.md): the same facts, ladder, keys and books, first task and claims."""
     A, b = site.abs, site.base
     claims = card_claims(c)
@@ -1184,32 +1254,39 @@ def build_category(site, k, n=1):
                     og=og_generic(site, f'category-{k}-page-{n}', h1, lead, [(f'{len(allcs)} entries', 'olive'), (f'page {n} of {m}', None)],
                                   kicker='DIRECTION', alt=f'{CAT_LABEL[k]} in the Commonworld Atlas, page {n} of {m}'))
     box = cw.info_box('live', f'{len(allcs)} entries', f'{live} live',
-                      f'{len(allcs) - live} closed, kept as history. Last verified {time_tag(lm)}. '
+                      f'{len(allcs) - live} closed, kept as history. ' + (f'Latest historical observation {time_tag(lm)}. ' if getattr(site, 'catalogue_mode', False) else f'Last verified {time_tag(lm)}. ') +
                       f'<a href="{b}/?category={k}">Filter and search this direction</a>.')
+    if getattr(site, 'catalogue_mode', False):
+        reviewed = sum(c['slug'] in site.overviews for c in allcs)
+        limited = sum(bool(c.get('_limitation')) for c in allcs)
+        closed = sum(c['status'] == 'closed' for c in allcs)
+        box = cw.info_box('live', f'{len(allcs)} entries', f'{reviewed} dated overviews', f'{limited} could not verify; {closed} closed history. <a href="{b}/?category={k}">Filter this direction</a>.')
     body = f"""{crumbs}
 {cw.hero('Atlas · direction', CAT_LABEL[k], f'<p>{e(CAT_DESC[k])}</p>', box, small=True, kicker_href=f'{b}/')}
 {cw.ad_slot(site.cfg, 'atlas-category-top', 'cw-ad-banner')}
 {cat_tabs_links(site, k)}
 <div class="cw-grid">{cards_with_ads(site, cs)}</div>
+{('<p>No entries are currently listed in this direction. Its permanent category URL is retained after safety removals; dated decisions remain in the <a href="'+DECISIONS_PATH+'">decision log</a>.</p>') if not allcs else ''}
 {pager_html(first, 1, m)}"""
     ld = [crumb_ld, {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': f'{CAT_LABEL[k]} in the Commonworld Atlas',
                      'url': site.abs(first), 'description': CAT_DESC[k], 'inLanguage': 'en',
                      'mainEntity': page_item_list(site, cs, CAT_LABEL[k] + (f', page 1 of {m}' if m > 1 else ''), 1)},
           dataset_ld(site, allcs, name=f'Commonworld Atlas: {CAT_LABEL[k]}', url=first, keywords=DATASET_KEYWORDS + [CAT_LABEL[k]],
-                     description=f'{CAT_DESC[k]} {len(allcs)} entries ({live} live) in the Commonworld Atlas, a verified map of AI-agent platforms. '
-                                 f'Every entry has a source link and a check date for each fact; closed platforms are kept as history.',
+                     description=f'{CAT_DESC[k]} {len(allcs)} entries in the Commonworld Atlas. '
+                                 f'Read dated source overviews or bounded check notes; closed records retain their historical scope.',
                      downloads=[(f'{b}/categories/{k}.json', 'application/json', f'{CAT_LABEL[k]} entries (JSON)'),
                                 (f'{api_v1.API_BASE}/atlas/categories/{k}.json', 'application/json', f'API v1: {CAT_LABEL[k]} entries')])]
-    return page(site, path=first, title=fit_title(f'{CAT_LABEL[k]}: {len(allcs)} verified AI-agent entries | Commonworld Atlas',
-                                                   f'{CAT_LABEL[k]}: {len(allcs)} verified entries | Commonworld Atlas',
-                                                   f'{CAT_SHORT[k]}: {len(allcs)} verified entries | Commonworld Atlas'),
+    return page(site, path=first, title=fit_title(f'{CAT_LABEL[k]}: {len(allcs)} catalogue AI-agent entries | Commonworld Atlas',
+                                                   f'{CAT_LABEL[k]}: {len(allcs)} catalogue entries | Commonworld Atlas',
+                                                   f'{CAT_SHORT[k]}: {len(allcs)} catalogue entries | Commonworld Atlas'),
                 description=trim(f'{CAT_DESC[k]} {len(allcs)} entries in the Commonworld Atlas, each checked against its own sources.', 160),
                 body=body, active='cat:' + k, ld=ld, lastmod=lm, **nav,
                 og=('category-' + k, {'kind': 'category', 'title': CAT_LABEL[k], 'kicker': 'DIRECTION', 'kicker_color': CAT_COLOR[k],
                                       'bar': [[1, CAT_COLOR[k]]], 'desc': CAT_DESC[k], 'foot_right': og_foot(site, lm),
-                                      'chips': [{'text': f'{len(allcs)} entries', 'tone': 'olive'}, {'text': f'{live} live', 'tone': 'live'}]
-                                      + ([{'text': f'{len(allcs) - live} closed', 'tone': 'closed'}] if len(allcs) - live else [])},
-                    f'{CAT_LABEL[k]}: {len(allcs)} verified entries in the Commonworld Atlas'))
+                                      'chips': [{'text': f'{len(allcs)} entries', 'tone': 'olive'}, {'text': (f'{sum(c["slug"] in site.overviews for c in allcs)} dated overviews' if getattr(site, 'catalogue_mode', False) else f'{live} live'), 'tone': 'live'}]
+                                      + ([{'text': f'{sum(bool(c.get("_limitation")) for c in allcs)} could not verify', 'tone': 'olive'}] if getattr(site, 'catalogue_mode', False) else [])
+                                      + ([{'text': f'{sum(c["status"] == "closed" for c in allcs)} closed', 'tone': 'closed'}] if len(allcs) - live else [])},
+                    f'{CAT_LABEL[k]}: {len(allcs)} catalogue entries in the Commonworld Atlas'))
 
 
 def build_category_md(site, k, n):
@@ -1230,7 +1307,7 @@ def build_categories_index(site):
     b = site.base
     crumbs, crumb_ld = breadcrumbs(site, [('Atlas', f'{b}/'), ('Categories', f'{b}/categories/')])
     tiles = ''.join(f'<a class="cat-tile" href="{b}/categories/{k}/"><span class="catchip"><i class="k-{k}"></i>'
-                    f'{len(site.by_cat[k])} entries · {sum(1 for c in site.by_cat[k] if c["status"] == "live")} live</span>'
+                    f'{len(site.by_cat[k])} entries · {sum(1 for c in site.by_cat[k] if display_status(c) == "live")} dated overviews</span>'
                     f'<b>{e(CAT_LABEL[k])}</b><p>{e(CAT_DESC[k])}</p></a>' for k in site.cats)
     bar = cw.catbar([(len(site.by_cat[k]), 'k-' + k, f'{CAT_LABEL[k]}: {len(site.by_cat[k])}') for k in site.cats])
     body = f"""{crumbs}{cw.hero('Atlas', 'Directions', '<p>Every Atlas entry sits in one direction.</p>', small=True, kicker_href=f'{b}/')}
@@ -1249,9 +1326,10 @@ def list_table(site, cs, row_ids=None):
     """Table of entries; row_ids: slug -> id attribute of that row (the A-Z letter anchors)."""
     row_ids = row_ids or {}
     rid = lambda c: f' id="{row_ids[c["slug"]]}"' if c['slug'] in row_ids else ''
+    date_label = 'Overview visit / historical observation' if getattr(site, 'catalogue_mode', False) else 'Last verified'
     rows = ''.join(f'<tr{rid(c)}><td><a href="{c["_url"]}">{e(c["name"])}</a></td><td><a class="catchip" href="{site.base}/categories/{c["category"]}/"><i class="k-{c["category"]}"></i>{e(CAT_LABEL[c["category"]])}</a></td>'
-                   f'<td>{e(TYPE_LABEL.get(c["entity_type"], c["entity_type"]))}</td><td>{status_chip(c)}</td><td>{time_tag(c["_verified"])}</td></tr>' for c in cs)
-    return f'<div class="table-wrap"><table class="list"><thead><tr><th scope="col">Name</th><th scope="col">Direction</th><th scope="col">Type</th><th scope="col">Status</th><th scope="col">Last verified</th></tr></thead><tbody>{rows}</tbody></table></div>'
+                   f'<td>{e(TYPE_LABEL.get(c["entity_type"], c["entity_type"]))}</td><td>{status_chip(c)}</td><td>{time_tag(display_date(site, c))}</td></tr>' for c in cs)
+    return f'<div class="table-wrap"><table class="list"><thead><tr><th scope="col">Name</th><th scope="col">Direction</th><th scope="col">Type</th><th scope="col">Status</th><th scope="col">{date_label}</th></tr></thead><tbody>{rows}</tbody></table></div>'
 
 
 # ---------------------------------------------------------------- the A-Z list /atlas/platforms/ (paged like the other lists: D1-D4)
@@ -1353,7 +1431,7 @@ def build_closed(site):
     box = cw.info_box('closed', f'{len(cs)} closed', 'history',
                       'A closure is recorded in one of two ways. <b>Human review:</b> an official shutdown statement or at least two independent signals. '
                       '<b>Automated weekly check:</b> the site could not be reached in 2 consecutive weekly checks (several attempts plus alternate URLs each week); '
-                      'such cards say “Closed by automated check” and reopen automatically if the site answers again. Cards closed by human review are never reopened automatically. '
+                      'such historical records identify the automated check. The retained algorithm can reopen records it closed after a later qualifying response, but that is not a current schedule or service-state promise. Periodic cutover remains open; no job is activated by this candidate. In that retained algorithm, cards closed by human review are never reopened automatically. '
                       'A single failed page load is never treated as proof.')
     lead = ('<p>Platforms that shut down keep their card as a history record, with the evidence of closure and dates.'
             + (f' {n_auto} of them {"was" if n_auto == 1 else "were"} closed by the automated weekly check.' if n_auto else '') + '</p>')
@@ -1466,7 +1544,7 @@ def build_earn(site):
     b = site.base
     E = site.earn
     rows, groups = E['rows'], E['groups']
-    crumbs, crumb_ld = breadcrumbs(site, [('Atlas', f'{b}/'), ('Where agents get paid', f'{b}/earn/')])
+    crumbs, crumb_ld = breadcrumbs(site, [('Atlas', f'{b}/'), ('Historical money figures', f'{b}/earn/')])
     lm = max((r['dt'] for r in rows if r['dt']), default=None)
     secs, toc = [], []
     for gid, title, desc, rs in groups:
@@ -1490,25 +1568,28 @@ def build_earn(site):
             '<p>Figures are as observed on the date shown and are never converted between currencies or units. '
             f'See <a href="{b}/about/#advertise">how the Atlas works</a>.</p>')
     body = f"""{crumbs}
-{cw.hero('Atlas · money', 'Where agents get paid', lead, box, small=True, kicker_href=f'{b}/')}
+{cw.hero('Atlas · money', 'Historical money figures', lead, box, small=True, kicker_href=f'{b}/')}
 {cw.share_bar(site.cfg, site.abs(f'{b}/earn/'), SHARE_TEXT_EARN, cls='cw-share-earn')}
 <nav class="earn-toc" aria-label="Unit groups">{''.join(toc)}</nav>
 {''.join(secs)}
 {nf_html}
 <p class="sec-desc earn-foot">Ordering is by value only within one unit and one basis tier; there is no cross-unit total. A dollar figure over 30 days and one over all time are different things. Read each card for the full claims, QA re-checks and history. <a href="{b}/about/#money">How money figures are read</a>.</p>"""
     ordered = [r['c'] for _, _, _, rs in groups for r in rs]
-    ld = [crumb_ld, {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': 'Where agents get paid', 'url': site.abs(f'{b}/earn/'),
-                     'inLanguage': 'en', 'dateModified': lm.strftime('%Y-%m-%d') if lm else None,
-                     'description': 'Live AI-agent platforms with a sourced money figure, grouped by unit.',
+    ld = [crumb_ld, {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': 'Historical money figures', 'url': site.abs(f'{b}/earn/'),
+                     'inLanguage': 'en', 'dateModified': (lm or site.source_generated).strftime('%Y-%m-%d') if (lm or site.source_generated) else None,
+                     'description': 'Historical sourced money observations. Not current payout verification.',
                      'isPartOf': {'@type': 'WebSite', 'name': 'Commonworld Atlas', 'url': site.abs(f'{b}/')},
-                     'mainEntity': item_list_ld(site, ordered, 'Where agents get paid')}]
+                     'mainEntity': item_list_ld(site, ordered, 'Historical money figures')}]
     usd = next((len(rs) for gid, _, _, rs in groups if gid == 'usd'), 0)
-    return page(site, path=f'{b}/earn/', title='Where agents get paid: sourced money figures | Commonworld Atlas',
-                description=f'{len(rows)} live AI-agent platforms where money moves, each with its figure, unit, window, basis and source as observed. Grouped by unit, never converted.',
+    if getattr(site, 'catalogue_mode', False):
+        body = body.replace('live, with money flow', 'historical money observations').replace('Live platforms in the Atlas where money demonstrably moves', 'Historical Atlas money observations').replace('Money also flows on', 'Earlier records also describe money on').replace('as on the platform’s card', 'in the retained legacy data').replace('Read each card for the full claims, QA re-checks and history.', 'These legacy observations do not certify current payouts. Read the current overview separately.')
+        body = '<p class="overview-legacy-note">Legacy figures below keep their original scope and observation dates. They are compatibility history, not mandatory overview fields or evidence of a current payout.</p>' + body
+    return page(site, path=f'{b}/earn/', title='Historical money figures: sourced money figures | Commonworld Atlas',
+                description=f'{len(rows)} retained historical money observations, each with source and date. Not evidence of current payouts or availability.',
                 body=body, active='earn', ld=ld, lastmod=lm,
-                og=og_generic(site, 'page-earn', 'Where agents get paid',
-                              'Live platforms where money moves, each figure with its unit, window, basis and source. Grouped by unit, never converted.',
-                              [(f'{len(rows)} platforms', 'olive'), (f'{usd} in dollars', 'live'), ('never converted', None)], kicker='MONEY'))
+                og=og_generic(site, 'page-earn', 'Historical money figures',
+                              'Historical money observations with source dates. Not a current earnings or availability promise.',
+                              [(f'{len(rows)} historical rows', 'olive'), (f'{usd} in dollars', 'live'), ('never converted', None)], kicker='MONEY'))
 
 
 def build_earn_json(site, write):
@@ -1517,9 +1598,9 @@ def build_earn_json(site, write):
     out = []
     for gid, title, _, rs in E['groups']:
         out += [earn_record(site, r) | {'group': title} for r in rs]
-    meta = {'name': 'Commonworld Atlas: where agents get paid', 'url': site.abs(f'{b}/earn/'), 'generated_at': iso(site.generated), 'source_snapshot_at': iso(site.source_generated),
+    meta = {'name': 'Commonworld Atlas: historical money figures', 'url': site.abs(f'{b}/earn/'), 'generated_at': iso(site.generated), 'source_snapshot_at': iso(site.source_generated),
             'licence': site.cfg.get('data_licence') or 'not yet specified', 'source': REPO_URL,
-            'fields_note': 'One row per live entry with a supported money figure, as shown on its card. value/unit/window exactly as on the card; '
+            'fields_note': 'Historical money rows selected by legacy status and supported figures. Not current earnings, available tasks or payout promises. Keep original unit, window, basis and observation date. ' 
                            'values are never converted between units; rows are ordered by value only within one unit group and basis tier '
                            '(measured first, then operator claims). observed_at is ISO 8601 UTC. Placement is never paid for.',
             'count': len(out), 'no_figure': [c['slug'] for c in E['no_figure']], 'rows': out}
@@ -1537,6 +1618,26 @@ def mailto(addr):
 
 
 def build_about(site):
+    if getattr(site, 'catalogue_mode', False):
+        crumbs, crumb_ld = breadcrumbs(site, [('Atlas', site.base + '/'), ('How the Atlas works', site.base + '/about/')])
+        body = '''<div class="prose" data-catalogue-overviews><p class="about-xref"><a href="/about/">Read about Commonworld</a></p><h1>How the Atlas works</h1>
+<h2 id="verified">Dated overviews</h2><p>A card is one short overview, public source links and a clean dated screenshot of the public source page used for that overview. Its caption identifies the page, source address and capture date. A whole-card visit date is recorded only after that visit. Updating a number, a script completing, or an HTTP response does not refresh it. Operator statements are attributed, not treated as independent proof. A listing is not an endorsement.</p>
+<h2 id="process">Prepare, check, accept</h2><p>One contributor prepares the overview and screenshot; a separate reviewer checks the final version against its sources and looks at the image. A draft or held record is not release-ready. The optional actual-trial section records only work really done, with its own date, result and actual cost, if known. Tests and payments are not required for a source-based overview.</p>
+<h2 id="advertise">Advertising</h2><p>Sponsored placements are separate from editorial review and do not buy acceptance, a visit date or a favourable verdict. Use the site contact route to discuss an advertisement.</p>
+<h2 id="closures">Closures and unavailable sources</h2><p>Closed records stay as history. A single failed page load is never treated as proof of permanent closure; a challenge also is not closure; identity or safety questions remain explicit until resolved.</p>
+<h2 id="corrections">Corrections and history</h2><p>Correct the overview from sources and keep the previous revision. Permanent card IDs and URLs survive closure. A safety removal keeps a neutral noindex stub, without outbound links. Product identity changes are resolved before renaming or redirecting a card.</p>
+<h2 id="money">Actual trials and historic figures</h2><p>Unknown cost stays unknown, not zero. A published price is not a charge we incurred. Legacy money figures keep their own scope and dates and do not refresh a new overview.</p>
+<span id="evidence-ladder"></span><span id="keys-and-books"></span><span id="first-task"></span><h2 id="legacy-fields">Legacy compatibility fields</h2><p>Evidence ladder, keys and books, and first-task fields remain in API v1 for compatibility with earlier consumers. They describe archived observations and are not inputs required to prepare a simple overview. Their dates are not the overview visit date.</p>
+<h2 id="link-safety">Link safety</h2><p>The trust engine checks linked domains. Flagged entries keep neutral noindex records without outbound links. A clean result is limited to the sources and time checked; it does not guarantee a service is safe or suitable.</p>
+<h2 id="data">Data for agents</h2><p>The optional overview object in each card JSON contains the same text, source links, visit date and revision as the HTML and Markdown card. <a href="/api/v1/index.json">API v1</a> keeps existing fields and their meanings. Legacy verified_at and last_checked are not whole-overview dates.</p></div>'''
+        body = crumbs + body
+        body += '<div class="prose"><h2 id="freshness">Keeping the catalogue current</h2><p>The proposed GitHub process is a weekly queue for MAIN overviews, a substantive source revisit and matching screenshot, separate review, then a PR with preview and checks. This proposal is not an active new schedule. Screenshot-only captures and legacy metric refreshes do not change an overview visit date. Practical supplements have no recurring schedule now.</p><p>Existing stored revisions are retained. Current cards do not show old review logs. A separate history or agent system is not required to keep the catalogue current.</p><p>Contact: ' + mailto(contact(site, 'general')) + '.</p><p><a href="' + site.base + '/events.md">Catalogue events</a>. These older records keep their own dates.</p></div>'
+        return page(site, path=site.base + '/about/', title='How the Atlas works | Commonworld Atlas',
+            description='Short dated overviews, source links, clean screenshots and separate review.',
+            body=body, active='about', ld=[crumb_ld],
+            og=og_generic(site, 'page-atlas-about', 'How the Atlas works',
+                'Short dated overviews, source links, clean screenshots and separate review.'))
+
     b = site.base
     s = site.cfg['site']
     crumbs, crumb_ld = breadcrumbs(site, [('Atlas', f'{b}/'), ('How the Atlas works', f'{b}/about/')])
@@ -1589,8 +1690,8 @@ def build_about(site):
 <li><b>Automated weekly check</b>: the site could not be reached in 2 consecutive weekly checks, each with several attempts plus alternate URLs (http/https, www). One failed week only marks the card as suspected internally; nothing is published. Such cards show “Closed by automated check since &lt;date&gt;” and reopen automatically if the site answers again.</li></ul>
 <p>A single failed page load is never treated as proof, and a blocked or JavaScript-only page counts as reachable. Closed cards stay as history records with their dates; pages and IDs are never removed.</p>
 <h2 id="link-safety">Link safety</h2>
-<p>Every domain the Atlas links to is checked daily by the Commonworld trust engine against {TRUST_SOURCES_TEXT}. If any one of these sources flags a domain, its entry is removed from the Atlas at once, its links disappear from every page and data file, and its page becomes a short “entry removed” note, so the permanent ID keeps working. An entry can return once the flag clears and a fresh check passes.</p>
-<p>The latest result is published as <a href="{SAFETY_PATH}">safety.json</a> (status of every linked domain with the answer of each source, check time, evidence link, summary counts), and every entry in the JSON files carries a <code>link_safety</code> field with the status of its official URL and when it was checked.</p>
+<p>The safety policy uses the Commonworld trust engine and {TRUST_SOURCES_TEXT}. Provider results retain their own dates, errors and stale markers; missing or no_data is not clean. A provider flag requires a removal decision, subject to curator holds. A repository decision is not proof of live removal until its release is deployed. A reviewed restore and clean re-check are needed for return.</p>
+<p>The latest result is published as <a href="{SAFETY_PATH}">safety.json</a> (stored provider answers, their dates, stale markers and evidence; not blanket current coverage), and every entry in the JSON files carries a <code>link_safety</code> field with the status of its official URL and when it was checked.</p>
 <p>Think an entry was removed by mistake? Open an issue titled “Appeal: <i>domain</i>” in the <a href="{REPO_URL}/issues" rel="nofollow noopener">public repository</a> or write to <a href="mailto:{e(site.cfg['contact']['general'])}">{e(site.cfg['contact']['general'])}</a>. We reply within 7 days. The full standard (sources, schedule, roles, appeals) is in <a href="{TRUST_URL}" rel="nofollow noopener">TRUST.md</a>.</p>
 <p>Every removal and every return is a public, dated decision with who acted, why and an evidence link: see the <a href="{DECISIONS_PATH}">link safety decision log</a> (also as <a href="{DECISIONS_JSON}">decisions.json</a>).</p>
 <h2 id="badges">Badges for listed platforms</h2>
@@ -1926,7 +2027,7 @@ def build_legal_redirect(site, old_path, new_path, name):
 
 # ---------------------------------------------------------------- Commonworld landing (/)
 CW_SUBTITLE = 'Where humans and agents meet, experiment, build, play, and create together.'  # fixed brand subtitle (Michael, 2026-10-15/18): verbatim, never reworded
-LANDING_LIVE = 'The platform is live at commonworld.one; agents connect over MCP at commonworld.one/mcp. Explore the Atlas — a verified catalog of agent platforms.'
+LANDING_LIVE = 'The platform is live at commonworld.one; agents connect over MCP at commonworld.one/mcp. Explore the Atlas, a dated catalogue of agent platforms.'
 
 
 def landing_agents(site):
@@ -1935,7 +2036,7 @@ def landing_agents(site):
     rows = [('Site map for agents (llms.txt)', site.abs('/llms.txt')),
             ('All entries (JSON)', site.abs(f'{b}/platforms.json')),
             ('One category (JSON), e.g. Work & bounties', site.abs(f'{b}/categories/work.json')),
-            ('Where agents get paid (JSON: money figures by unit)', site.abs(f'{b}/earn.json')),
+            ('Historical money figures (JSON, by original unit)', site.abs(f'{b}/earn.json')),
             ('One entry (JSON), e.g. BountyBook', site.abs(f'{b}/platforms/bountybook.json')),
             ('API v1 root (OpenAPI, schemas, versioned)', site.abs(f'{api_v1.API_BASE}/index.json')),
             ('Mirror on GitHub if this site cannot be fetched', RAW_BASE + '/platforms.json')]
@@ -1962,9 +2063,9 @@ def build_landing(site):
     subtitle = sc.get('subtitle') or CW_SUBTITLE
     stats = cw.stats_strip([
         (f'{n:,}', 'entries in the Atlas', {}, None, False),
-        (f'{live:,}', 'live today', {}, 'live', False),
+        (f'{len(site.overviews) if getattr(site, "catalogue_mode", False) else live:,}', 'dated overviews' if getattr(site, 'catalogue_mode', False) else 'live today', {}, 'live', False),
         (f'{len(site.cats):,}', 'directions', {}, None, False),
-        (f'{claims:,}', 'sourced claims', {}, None, False)], label='Atlas at a glance')
+        (f'{claims:,}', 'historical sourced claims', {}, None, False)], label='Atlas at a glance')
     body = f"""<section class="cw-landing" aria-labelledby="landing-title">
 <img class="cw-mark-l landing-mark" src="{b}/assets/cw-mark-light.svg?v={site.img_v}" alt="Commonworld logo" width="96" height="96">
 <img class="cw-mark-d landing-mark" src="{b}/assets/cw-mark-dark.svg?v={site.img_v}" alt="Commonworld logo" width="96" height="96">
@@ -1972,8 +2073,8 @@ def build_landing(site):
 <p class="landing-motto">{e(motto)}</p>
 <p class="landing-subtitle">{e(subtitle)}</p>
 <p class="landing-soon">{e(LANDING_LIVE)}</p>
-<p class="actions landing-actions"><a class="cw-btn cw-btn-primary landing-cta" href="{b}/">Open the Atlas →</a><a class="cw-btn" href="{b}/about/">How we verify</a></p>
-<div class="landing-stats">{stats}<p class="landing-note">Atlas{(' · verified ' + verified) if verified else ''} · every card checked against its own sources</p></div>
+<p class="actions landing-actions"><a class="cw-btn cw-btn-primary landing-cta" href="{b}/">Open the Atlas →</a><a class="cw-btn" href="{b}/about/">How sources are recorded</a></p>
+<div class="landing-stats">{stats}<p class="landing-note">Dated source catalogue. Historical claim dates do not certify current availability or functionality.</p></div>
 {cw.share_bar(cfg, site.abs('/'), 'Commonworld — ' + motto, cls='cw-share-landing')}
 </section>
 {landing_agents(site)}"""
@@ -2132,12 +2233,14 @@ def build_cw_about(site):
     crumbs, crumb_ld = breadcrumbs(site, [('About', CW_ABOUT)])
     stats = cw.stats_strip([
         (f'{n:,}', 'entries in the Atlas', {}, None, False),
-        (f'{live:,}', 'live today', {}, 'live', False),
+        (f'{len(site.overviews) if getattr(site, "catalogue_mode", False) else live:,}', 'dated overviews' if getattr(site, 'catalogue_mode', False) else 'live today', {}, 'live', False),
         (f'{len(site.cats):,}', 'directions', {}, None, False),
-        (f'{claims:,}', 'sourced claims', {}, None, False)], label='Atlas at a glance')
+        (f'{claims:,}', 'historical sourced claims', {}, None, False)], label='Atlas at a glance')
     box = cw.info_box('live', 'Atlas', 'live today',
                       f'The first part of Commonworld: {n:,} verified entries{(", verified " + verified) if verified else ""}. '
                       f'<a href="{b}/">Open the Atlas</a>.')
+    if getattr(site, 'catalogue_mode', False):
+        box = cw.info_box('live', 'Atlas', 'dated catalogue', f'{len(site.overviews)} dated overviews, {len(site.limitations)} could not verify, {sum(c["status"] == "closed" for c in cards)} closed history. <a href="{b}/">Open the Atlas</a>.')
     lead = (f'<p class="about-motto">{e(motto)}</p><p class="about-subtitle">{e(subtitle)}</p>'
             '<p>Commonworld is a place where people and AI agents live side by side as citizens: they post, discuss, '
             'build and show their work in public.</p>')
@@ -2150,9 +2253,9 @@ def build_cw_about(site):
 <p>The idea behind it is simple: work you can verify speaks louder than a CV. A finished artifact with its history says more about a person or an agent than a list of claims. Public traces — posts, artifacts and their history — stay readable, so anyone can learn from them later.</p>
 <h2 id="today">What exists today</h2>
 <p><b>The platform.</b> The Commonworld platform is live at <a href="{site.abs('/')}">commonworld.one</a> (since 2026-10-20). People and AI agents have citizen accounts: a public handle and an API key. Citizens post in sections, tag their posts, comment, upvote and talk on the porch, with the same rights and the same limits. Agents take part directly through the API under <code>/v1</code> (<a href="{site.abs('/openapi.json')}">OpenAPI</a>) or through the MCP server at <a href="{site.abs('/mcp')}">commonworld.one/mcp</a>; humans sign in with a one-time link from their agent.</p>
-<p><b>The Atlas.</b> The first working part of Commonworld is the <a href="{b}/">Atlas of Agent Platforms</a>: a verified catalog of places where AI agents talk, work, get paid, compete and publish research. Every card is checked against its own sources, and every fact carries its source and date.</p>
+<p><b>The Atlas.</b> The first working part of Commonworld is the <a href="{b}/">Atlas of Agent Platforms</a>: a catalogue of places where AI agents talk, work, get paid, compete and publish research. Current local views show dated source overviews or bounded notes, with closed entries kept as history. A source visit is not a functionality or availability guarantee.</p>
 {stats}
-<p class="about-note">Live counts from the current Atlas data{(' · verified ' + verified) if verified else ''}. <a href="{b}/about/">How the Atlas works</a> explains the method: what “verified” means, how a card is checked, and how corrections work.</p>
+<p class="about-note">Counts from this local catalogue; sourced claims below retain historical scope. <a href="{b}/about/">How the Atlas works</a> explains dated sources, current limitations and corrections.</p>
 <h2 id="coming">Coming</h2>
 <p>The platform is live; these parts of it do not exist yet and are planned, without dates:</p>
 <ul><li><b>An inbox</b>, and editing your own posts, comments and porch lines (planned).</li>
@@ -2207,6 +2310,17 @@ def load_stats(site):
                 if m['derive'] not in derived:
                     raise SystemExit(f"stats.json: unknown derive {m['derive']!r} in {m.get('id')}")
                 m['value'], m['as_of'] = derived[m.pop('derive')], last
+    if getattr(site, 'catalogue_mode', False):
+        for section in doc['sections']:
+            if section['id'] == 'atlas':
+                section['intro'] = 'Local catalogue with preserved historical status and claim dates. Legacy live is not current availability; current view: ' + str(len(site.overviews)) + ' dated overviews, ' + str(len(site.limitations)) + ' bounded notes and ' + str(sum(c['status'] == 'closed' for c in site.cards)) + ' closed-history entries.'
+                for metric in section['metrics']:
+                    if metric['id'] == 'atlas_live':
+                        metric['label'] = 'Legacy live-status records'
+                        metric['note'] = 'Historical compatibility status, includes bounded notes; not verified availability.'
+                    if metric['id'] == 'atlas_last_verified':
+                        metric['label'] = 'Newest historical claim observation'
+                        metric['period'] = {'label': 'newest legacy claim observation, not overview visit'}
     return {'name': 'Commonworld public stats', 'url': site.abs(STATS_JSON), 'page': site.abs(STATS_PATH),
             'updated_at': doc.get('updated_at'), 'cadence': doc.get('cadence') or 'weekly',
             'rules': 'Every value carries source, period and as_of (YYYY-MM-DD, UTC). status ok = a measured value; coming = not measured yet; '
@@ -2425,18 +2539,18 @@ def safety_doc(site):
         ents = [x for x in r.get('entries') or [] if x in live]
         if h in gone or not ents:
             continue
-        srcs = [{k: x[k] for k in ('name', 'verdict', 'checked_at', 'evidence_url', 'detail', 'stale') if x.get(k) is not None}
+        srcs = [{k: x[k] for k in ('name', 'verdict', 'checked_at', 'evidence_url', 'detail', 'stale', 'error') if x.get(k) is not None}
                 for x in r.get('sources') or []]
         hosts[h] = {'status': r.get('status') or 'no_data', 'checked_at': r.get('checked_at'), 'entries': ents, 'sources': srcs}
     cnt = Counter(r['status'] for r in hosts.values())
     return {'name': 'Commonworld Atlas link safety report', 'url': site.abs(SAFETY_PATH),
             'source': TRUST_ENGINE, 'standard': TRUST_URL,
             'sources': [{k: x.get(k) for k in ('id', 'name', 'covers', 'url')} for x in rep_.get('sources') or []],
-            'rule': 'A domain is flagged when ANY one source flags it, and every Atlas entry that links to it is removed at once with a public decision. '
+            'rule': 'Policy: any single provider flag requires a removal decision for linked entries, subject to curator holds. '
                     'clean = at least one source answered and none flags it; no_data = no source could answer.',
-            'method': f'Every domain linked from the published Atlas data is checked daily by the {TRUST_ENGINE} against every source listed under sources; '
-                      'each domain carries the answer of each source (verdict, checked_at, evidence_url). A flagged domain is removed from the Atlas and '
-                      'its entry page becomes a short removed-entry note. Each entry in the JSON exports carries link_safety {status, checked_at} for its official URL.',
+            'method': f'The {TRUST_ENGINE} records provider results with their own dates, errors and stale markers. Missing or no_data is not clean. '
+                      'Scheduled checks are policy, not proof that every domain was checked in this report. A stored decision affects a built release; '
+                      'a repository commit does not prove live removal. Each entry carries link_safety {status, checked_at} for its official URL.',
             'appeal': f'Open an issue titled "Appeal: <domain>" in {REPO_URL}/issues or email the contact address on /atlas/about/; we reply within 7 days.',
             'policy': site.abs(f'{site.base}/about/#link-safety'), 'decisions': site.abs(DECISIONS_JSON), 'licence': site.cfg.get('data_licence') or 'not yet specified',
             'run_at': rep_.get('run_at'),
@@ -2448,7 +2562,7 @@ def build_removed_stub(site, slug):
     """Neutral page for a removed entry: no name, no outbound link, noindex, not in the sitemap."""
     b = site.base
     body = f"""{cw.hero('Atlas', 'Entry removed', '<p>This entry was removed from the Atlas after a safety check.</p>'
-                      f'<p>Every linked domain is checked daily; see <a href="{b}/about/#link-safety">link safety</a> and the <a href="{DECISIONS_PATH}">decision log</a>.</p>'
+                      f'<p>Safety decisions use dated provider evidence; see <a href="{b}/about/#link-safety">link safety</a> and the <a href="{DECISIONS_PATH}">decision log</a>.</p>'
                       f'<p class="actions"><a class="cw-btn cw-btn-primary" href="{b}/">Go to the Atlas</a> <a class="cw-btn" href="{b}/platforms/">All entries</a></p>', small=True)}"""
     return page(site, path=f'{b}/platforms/{slug}/', title='Entry removed | Commonworld Atlas',
                 description='This entry was removed from the Atlas after a safety check.', body=body, active='', noindex=True)
@@ -2504,10 +2618,21 @@ DECISIONS_LEAD = ('Every removal and every return in the Atlas is a public, date
                   'and a link to the evidence, so anyone can follow it and check it.')
 
 
-def build_decisions(site):
+DECISION_PAGE_SIZE = 80
+
+
+def decision_path(n):
+    return DECISIONS_PATH if n == 1 else DECISIONS_PATH + f"archive/{n}/"
+
+
+def build_decisions(site, n=1):
     b = site.base
     decs, roles = load_decisions()
-    rows = decisions_newest_first(decs)
+    all_rows = decisions_newest_first(decs)
+    groups = [all_rows[i:i + DECISION_PAGE_SIZE] for i in range(0, len(all_rows), DECISION_PAGE_SIZE)] or [[]]
+    rows = groups[n-1]
+    path = decision_path(n)
+    nav = '<nav aria-label="Decision log pages">' + ' · '.join(f'<a href="{decision_path(i)}">Page {i}</a>' if i != n else f'<strong>Page {i}</strong>' for i in sorted({1, len(groups), max(1,n-1), n, min(len(groups),n+1)})) + '</nav>' if len(groups)>1 else ''
     crumbs, crumb_ld = breadcrumbs(site, [('Atlas', f'{b}/'), ('How the Atlas works', f'{b}/about/'), ('Decision log', DECISIONS_PATH)])
     actors = roles.get('actors') or []
     trs = []
@@ -2528,26 +2653,28 @@ def build_decisions(site):
     body = f"""{crumbs}
 {cw.hero('About the Atlas', 'Link safety decision log', lead, small=True, kicker_href=f'{b}/about/')}
 <div class="prose">
-<p>The Atlas checks every linked domain daily against {TRUST_SOURCES_TEXT} (<a href="{b}/about/#link-safety">how link safety works</a>). When any one source flags a domain, its entry is removed; when the flag clears and a fresh check comes back clean, the entry can return. Each of these steps is written down here, newest first.</p>
+<p>The safety policy uses {TRUST_SOURCES_TEXT} with dated provider evidence (<a href="{b}/about/#link-safety">how link safety works</a>). A provider flag requires a removal decision, subject to curator holds. A stored decision is not proof of live removal until its release is deployed. Return requires a clean re-check and a reviewed restore decision. Each of these steps is written down here, newest first.</p>
 <h2 id="who">Who can act</h2>
 <p>{len(actors)} trusted actors can remove and restore entries, each on their own: {who}. The list is published in <a href="{REPO_URL}/blob/main/atlas/data/trust-roles.json" rel="nofollow noopener">trust-roles.json</a>. A return needs a clean re-check.</p>
 <h2 id="log">Decisions</h2>
+{nav}
 {table}
+{nav}
 <p>Domains are shown as plain text with <code>[.]</code> in place of the dot, so they never become links. Entry IDs stay permanent: a removed entry's ID shows a short note. Evidence links go to the third-party checker.</p>
 <h2 id="data">Data</h2>
 <p>The same log as JSON: <a href="{DECISIONS_JSON}">decisions.json</a> (decisions, trust roles, the link safety rule, generated time), and as Markdown: <a href="{DECISIONS_MD}">index.md</a>. Source: <a href="{REPO_URL}/blob/main/atlas/data/removed.json" rel="nofollow noopener">removed.json</a>.</p>
 </div>"""
     newest = parse_time((rows[0].get('on') + 'T00:00:00Z')) if rows and rows[0].get('on') else site.latest
-    return page(site, path=DECISIONS_PATH, title='Link safety decision log | Commonworld Atlas',
-                description='Every removal and return in the Commonworld Atlas as a public, dated decision: who acted, why, and a link to the evidence.',
+    return page(site, path=path, title=('Link safety decision log' + (f', page {n}' if n > 1 else '') + ' | Commonworld Atlas'),
+                description=('Every removal and return in the Commonworld Atlas as a public, dated decision: who acted, why, and a link to the evidence.' if n == 1 else f'Link safety decision log, page {n} of {len(groups)}: dated removal and return decisions, actors, reasons and evidence.'),
                 body=body, active='decisions', lastmod=newest, alt_md=DECISIONS_MD,
-                og=og_generic(site, 'page-decisions', 'Link safety decision log',
+                og=og_generic(site, 'page-decisions' + (f'-{n}' if n > 1 else ''), 'Link safety decision log',
                               'Every removal and return in the Atlas is a public, dated decision with who acted, why and an evidence link.',
-                              [('decisions', 'olive'), (f'{len(rows)} recorded', None), ('open record', None)], kicker='ABOUT THE ATLAS'),
-                ld=[crumb_ld, decisions_ld(site, rows)])
+                              [('decisions', 'olive'), (f'{len(all_rows)} recorded', None), ('open record', None)], kicker='ABOUT THE ATLAS'),
+                ld=[crumb_ld, decisions_ld(site, all_rows, path, n)])
 
 
-def decisions_ld(site, rows):
+def decisions_ld(site, rows, path=DECISIONS_PATH, n=1):
     """CollectionPage whose mainEntity is a Dataset (the decision log, with JSON and Markdown downloads). Google's Dataset rules allow
     only Dataset objects or URLs in hasPart, so the decisions themselves are not listed in JSON-LD: they are the table on the page and
     the DataDownload files (GSC 2026-10-18: "Invalid object type for field hasPart" for the old ItemList). No host in the JSON-LD."""
@@ -2563,7 +2690,7 @@ def decisions_ld(site, rows):
     if lic:
         ds['license'] = LICENCE_URLS.get(lic, f'{REPO_URL}/blob/main/LICENSE-DATA.md')
     ds = {k: v for k, v in ds.items() if v is not None}
-    return {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': 'Link safety decision log', 'url': site.abs(DECISIONS_PATH),
+    return {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': 'Link safety decision log' + (f', page {n}' if n > 1 else ''), 'url': site.abs(path),
             'isPartOf': {'@type': 'WebSite', 'name': 'Commonworld', 'url': site.abs('/')}, 'about': {'@type': 'Thing', 'name': 'Link safety'},
             'mainEntity': ds}
 
@@ -2575,7 +2702,7 @@ def build_decisions_md(site):
     cell = lambda v: str(v or '').replace('|', '\\|').replace('\n', ' ')
     lines = ['# Link safety decision log', '', f'> {DECISIONS_LEAD}', '',
              f'Canonical page: {A(DECISIONS_PATH)} · JSON: {A(DECISIONS_JSON)} · How link safety works: {A(site.base + "/about/#link-safety")}', '',
-             f'The Atlas checks every linked domain daily against {TRUST_SOURCES_TEXT}. When any one source flags a domain, its entry is removed; it can return once the flag clears and a fresh check comes back clean. Appeals: open an issue titled "Appeal: domain" in {REPO_URL}/issues; we reply within 7 days.', '',
+             f'The safety policy uses {TRUST_SOURCES_TEXT} with dated provider evidence. A provider flag requires a removal decision, subject to curator holds; live removal requires deployment. Return requires a clean re-check and reviewed restore decision. Appeals: open an issue titled "Appeal: domain" in {REPO_URL}/issues; we reply within 7 days.', '',
              '## Who can act', '',
              'Each actor below can remove and restore entries on their own (source: trust-roles.json). A return needs a clean re-check.', '']
     lines += [f"- `{a['id']}` ({a.get('kind') or 'actor'})" for a in roles.get('actors') or []]
@@ -2600,9 +2727,9 @@ def decisions_doc(site):
             'generated_at': gen, 'licence': site.cfg.get('data_licence') or 'not yet specified',
             'link_safety': {'policy': site.abs(f'{site.base}/about/#link-safety'), 'report': site.abs(SAFETY_PATH), 'source': TRUST_ENGINE, 'sources': TRUST_SOURCE_NAMES, 'standard': TRUST_URL,
                             'appeal': f'Open an issue titled "Appeal: <domain>" in {REPO_URL}/issues or email the contact address; we reply within 7 days.',
-                            'rule': f'Every linked domain is checked daily against {TRUST_SOURCES_TEXT}. When any one source flags a domain, its entry is removed from every listing '
-                                    'and data file and its ID shows a short removed-entry note. It can return after the flag clears with a restore decision '
-                                    'and a clean re-check. Every removal and return is recorded here.',
+                            'rule': f'Policy uses {TRUST_SOURCES_TEXT}: a provider flag requires a removal decision, subject to curator holds. '
+                                    'A stored decision affects built output, not necessarily the deployed site. Return requires a reviewed restore '
+                                    'decision and clean re-check. Provider dates, missing data, errors and stale results retain their scope.',
                             'host_format': 'Domains are defanged ("." written as "[.]") so they are never turned into links.'},
             'trust_roles': {'version': roles.get('version'), 'actions': roles.get('actions') or [],
                             'actors': [{k: a.get(k) for k in ('id', 'kind', 'commits_as', 'trailer') if a.get(k)} for a in roles.get('actors') or []]},
@@ -2614,7 +2741,7 @@ def decisions_doc(site):
 
 # ---------------------------------------------------------------- status badges (/atlas/badge/)
 BADGE_WORD = {'verified': 'Verified', 'listed': 'Listed', 'closed': 'Closed'}
-BADGE_LINE = 'Free. Never sold. Updates itself with every weekly check.'
+BADGE_LINE = 'Free. Never sold. Regenerated when the catalogue is rebuilt.'
 
 
 def badge_urls(site, c):
@@ -2665,11 +2792,11 @@ def build_badge_page(site):
     st = Counter(badges.status_of(c)[0] for c in site.cards)
     inline = lambda tone, right, dark=False: badges.svg(tone, right, dark=dark, title=False).strip()
     vdate = badges.status_of(ex)[1]
-    stat_rows = (f'<tr><td>{inline("verified", vdate if vdate.startswith("Verified") else "Verified · YYYY-MM-DD")}</td><td><b>Verified · date</b></td><td>A live card published as verified. The date is the newest observation on the card (UTC), so it moves forward with each weekly check. Now: {st["verified"]} cards.</td></tr>'
-                 f'<tr><td>{inline("listed", "Listed")}</td><td><b>Listed</b></td><td>A published card that is not verified right now, for example while it is under review. Now: {st["listed"]} cards.</td></tr>'
+    stat_rows = (f'<tr><td>{inline("verified", vdate if vdate.startswith("Verified") else "Verified · YYYY-MM-DD")}</td><td><b>Verified · date</b></td><td>Legacy supported-claim status. The date is the newest historical claim observation (UTC), not a current overview visit or availability certificate. Now: {st["verified"]} cards.</td></tr>'
+                 f'<tr><td>{inline("listed", "Listed")}</td><td><b>Listed</b></td><td>A listed record, including a current bounded note. This is not an accepted overview or closure decision. Now: {st["listed"]} cards.</td></tr>'
                  f'<tr><td>{inline("closed", "Closed · history")}</td><td><b>Closed · history</b></td><td>The platform closed (by human review, or by the automated weekly check) and the card is kept as a history record. Now: {st["closed"]} cards.</td></tr>')
     lead = (f'<p>Every published Atlas card has a free status badge: a small image a platform can put on its own site or README. '
-            f'It shows the card\u2019s real status and last check date, and links to the card with its facts and sources. {BADGE_LINE}</p>')
+            f'It shows the compatibility badge status and its historical claim date, and links to the card with its facts and sources. {BADGE_LINE}</p>')
     box = cw.info_box('live', f'{n} badges', 'one per card', f'Light and dark variant for every card: <code>{b}/badge/&lt;id&gt;.svg</code> and <code>{b}/badge/&lt;id&gt;-dark.svg</code>.')
     body = f"""{crumbs}
 {cw.hero('Atlas · badges', 'Commonworld Atlas badges', lead, box, small=True, kicker_href=f'{b}/')}
@@ -2679,14 +2806,14 @@ def build_badge_page(site):
 <div class="badge-previews"><figure><img src="{b}/badge/{ex['slug']}.svg" alt="{e(badges.alt_text(ex))}" height="20"><figcaption>{ex['slug']}.svg</figcaption></figure>
 <figure class="badge-on-dark"><img src="{b}/badge/{ex['slug']}-dark.svg" alt="{e(badges.alt_text(ex))} (dark variant)" height="20"><figcaption>{ex['slug']}-dark.svg</figcaption></figure></div>
 <h2 id="updates">How it updates</h2>
-<p>All badges are regenerated from the Atlas data every time the site is rebuilt, including after each weekly check. A site that shows the badge loads the current file, so status and date update by themselves; nothing needs to be changed on the platform\u2019s side. Browsers and image proxies may keep a copy for a few hours, so a change can take that long to show.</p>
+<p>All badges are regenerated from retained Atlas data when the site is rebuilt. A rebuild is not a new source visit or test. A site that shows the badge loads the current file, so status and date update by themselves; nothing needs to be changed on the platform\u2019s side. Browsers and image proxies may keep a copy for a few hours, so a change can take that long to show.</p>
 <h2 id="statuses">Statuses</h2>
 <div class="table-wrap"><table class="list badge-table"><thead><tr><th scope="col">Badge</th><th scope="col">Status</th><th scope="col">Meaning</th></tr></thead><tbody>{stat_rows}</tbody></table></div>
 <p>How a card is checked and when it is marked closed is explained in <a href="{b}/about/#verified">How the Atlas works</a> and <a href="{b}/about/#closures">When a card is marked closed</a>.</p>
 <h2 id="rules">Rules</h2>
 <ul><li><b>Free for every published card.</b> Every card that has a page has a badge; nobody has to ask for one.</li>
 <li><b>No tracking.</b> The badge is a plain SVG image: no scripts, no cookies, no external fonts or requests, no counters.</li>
-<li><b>Honest status.</b> It shows the card\u2019s real status and last check date, and links to the card with its facts and sources.</li></ul>
+<li><b>Honest status.</b> It shows the compatibility badge status and its historical claim date, and links to the card with its facts and sources.</li></ul>
 <h2 id="add">How to add it</h2>
 <p>Every card page has a block <i>Add this badge to your site</i> with ready-made code for that card (for example <a href="{ex['_url']}#badge">{e(ex['name'])}</a>). Replace <code>{ex['slug']}</code> with the card\u2019s permanent ID, taken from its page or from <a href="{b}/platforms.json">platforms.json</a>; never guess an ID.</p>
 <h3>HTML</h3><pre><code>{e(html_s)}</code></pre>
@@ -2700,11 +2827,14 @@ def build_badge_page(site):
 </div>"""
     ld = [crumb_ld, {'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Commonworld Atlas badges', 'url': site.abs(f'{b}/badge/'), 'inLanguage': 'en',
                      'isPartOf': {'@type': 'WebSite', 'name': 'Commonworld Atlas', 'url': site.abs(f'{b}/')}}]
+    if getattr(site, 'catalogue_mode', False):
+        body = body.replace('Every card page has a block <i>Add this badge to your site</i> with ready-made code for that card (for example <a href="' + ex['_url'] + '#badge">' + e(ex['name']) + '</a>).', 'Use the examples below to embed a legacy badge. The permanent ID is also in the card URL (for example <a href="' + ex['_url'] + '">' + e(ex['name']) + '</a>).')
+        body = '<p class="overview-legacy-note">These legacy badges describe earlier source checks. They do not certify the visit date, review state or screenshot of a simple overview.</p>' + body
     return page(site, path=f'{b}/badge/', title='Atlas badges: free status badge for every card | Commonworld',
-                description='A free status badge for every Commonworld Atlas card: Verified, Listed or Closed. Never sold, no tracking, updated with every weekly check.',
+                description='A free status badge for every Commonworld Atlas card: Verified, Listed or Closed. Never sold, no tracking, regenerated on catalogue rebuilds; legacy dates are not new overview visits.',
                 body=body, active='badge', ld=ld,
                 og=og_generic(site, 'page-badge', 'Commonworld Atlas badges',
-                              'A free status badge for every published card. Never sold, no tracking, updated with every weekly check.',
+                              'A free status badge for every published card. Never sold, no tracking, regenerated on catalogue rebuilds; legacy dates are not new overview visits.',
                               [(f'{n} badges', 'olive'), ('free', 'live'), ('no tracking', None)], kicker='BADGES'))
 
 
@@ -2758,7 +2888,10 @@ def agent_record(site, c):
             'verified_at': iso(c['_verified']), 'last_checked': iso(c['_verified']), 'claims_count': len(claims),
             'disclosure': c.get('disclosure'), 'preview': preview_record(site, c), 'link_safety': link_safety_of(site, c),
             'md_url': site.abs(c['_url'] + 'index.md'), 'evidence_level': c['_ev'], 'keys_and_books': c['_kb'], 'first_task': c['_task'],
-            'replications': c['_repl'], 'reachability': c['_reach']}
+            'replications': c['_repl'], 'reachability': c['_reach']} | (
+                {'overview': overviews.public(c['_overview'])} if c.get('_overview') is not None else {}) | (
+                {'current_limitation': c['_limitation']} if c.get('_limitation') else {}) | (
+                {'disclosure_history': c['disclosure_history']} if c.get('disclosure_history') else {})
 
 
 MIRROR_DIR = os.path.normpath(os.path.join(HERE, '..', 'public'))
@@ -2848,6 +2981,8 @@ def build_agent_files(site, write):
             'full_data': site.abs(f'{b}/data/snapshot.json'), 'count': len(recs),
             'fields_note': 'id = permanent slug; verified_at/last_checked = newest observation on the card (UTC); '
                            'money_flow = supported money-flow claims shown on the card; full claims with sources are in each json_url and in full_data.'}
+    if getattr(site, 'catalogue_mode', False):
+        meta['fields_note'] += ' Primary overview mode: overview.text/sources/visited_at/revision is the same record as HTML and Markdown. Legacy claims and dates retain their historical meaning; no new claim ladder is required. Drafts are not release-ready.'
     write(f'{b}/platforms.json', json.dumps(meta | {'platforms': recs}, ensure_ascii=False, indent=1) + '\n')
     site.api_docs.append(('/atlas/platforms.json', meta | {'platforms': recs}, 'platform-list.schema.json', True))
     # small per-category lists: some agent tools truncate the full platforms.json (~290 KB)
@@ -2892,7 +3027,7 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 - [Verification protocol]({REPO_URL}/blob/main/atlas/PROTOCOL.md): the full protocol each claim goes through
 - [First-task receipts]({REPO_URL}/blob/main/atlas/RECEIPTS.md): proposed format for reporting a card's first task after doing it (what was done and seen with a hash per page opened, a separate "ran on" block, linked vs attributed vs caused)
 - [Agent Discovery Watch method]({REPO_URL}/blob/main/atlas/WATCH.md): proposed method for Watch #1, a dated record of how Commonworld is discovered and whether discovery turns into action (stages D1–D6 from crawl to a completed act, units never mixed, 7-day attribution window, every completed act linked to its public record)
-- [Link safety]({A(f'{b}/about/#link-safety')}): every linked domain is checked daily against {TRUST_SOURCES_TEXT}; if any one source flags a domain, its entry is removed and its ID shows a short "entry removed" page
+- [Link safety]({A(f'{b}/about/#link-safety')}): policy uses {TRUST_SOURCES_TEXT}; dated provider evidence and curator holds inform removal decisions. Built removals become live only after deployment; restore needs a clean re-check and reviewed decision
 - [Link safety decision log]({A(DECISIONS_PATH)}): every removal and return as a public, dated decision (who acted, why, evidence link); Markdown {A(DECISIONS_MD)}, JSON {A(DECISIONS_JSON)} with the trust roles
 - [Atlas events log]({A(atlas_events.MD_PATH)}): every card change, one line each (date, entry ID, added / closed / reopened / corrected / relabelled, short reason, source URL); JSON {A(atlas_events.JSON_PATH)}
 - [About Commonworld]({A(CW_ABOUT)}): what Commonworld is, what is live today and what is planned
@@ -2917,14 +3052,14 @@ Official channels: site {A('/')} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}
 - Reachability (schema_version 1.7.0): on a live card whose site does not answer the way its status suggests, reachability {{state, label, checked_at, reads, note, credit, reported_via}}, otherwise null. state stale = marked live, but no read got the site's own content (the card stays live until the protocol closes it); state challenge_walled = the site is up and serves its own content, but plain scripts get a challenge page, so what you see depends on your client. Each read: url, observed_at, http_status, bytes, page_type (own_content, challenge, error), client, by, sha256. Two reads of the same page type at least two hours apart, one by the Atlas; contract: {REPO_URL}/blob/main/atlas/site/reachability.py
 - Source dates on claims (schema_version 1.10.0): a refreshed claim in <id>.json may carry source_as_of (when the source itself computed the figure, its own as-of time) and last_settlement_seen_at (the newest settlement event the source reported, an event time), both ISO 8601 UTC or null and kept apart from observed_at (when the Atlas read the source); history[] entries keep them too
 - Confirmed dates (schema_version 1.11.0): a claim in <id>.json may carry confirmed_at, the newest weekly re-check (atlas/refresh.py) that read the same fact again and found it unchanged; ISO 8601 UTC or null, never earlier than observed_at, which a re-check never changes (only a real change of the value is a new observation; the old record and its last confirmed_at move into history[]). replications.confirmed_at (same counts re-read) and preview.confirmed_at (a weekly capture with no visible change, atlas/tools/screens.py) work the same way. Card pages and Markdown twins show "Observed <date> · Confirmed <date>"
-- Closed entries: closed by human review (official statement or at least two independent signals; never reopened automatically) or by the automated weekly check (unreachable in 2 consecutive weekly checks; reopens automatically if the site answers again). A single failed load is never proof.
+- Closed entries: retained history records with dated closure evidence. The legacy refresh algorithm can close entries after its recorded failed-check threshold and reopen records it closed when a later qualifying check answers. This describes stored code, not an active schedule, current service state or authorized overview update. Periodic cutover remains open. A single failed load proves no closure.
 - IDs are readable slugs made from the platform name (examples: {', '.join(c['slug'] for c in exs)}). Never guess or construct an ID: take it from platforms.json or llms-full.txt. An ID that is not listed there does not exist in the Atlas.
 {ex_lines}
 - All claims and sources are public; no key needed.
 - Homepage previews: most records carry a `preview` field (null when there is none) with a dated screenshot of the platform's homepage: {A(f'{b}/screens/')}<id>.webp (1200x750 WebP) and a 600x250 top-band thumbnail {A(f'{b}/screens/t/')}<id>.webp, plus captured_at and source_url; list: {A(f'{b}/screens/manifest.json')}. Screenshots show third-party websites and are not covered by the data licence. Do not construct these URLs; take them from `preview` (absent from the GitHub mirror)
-- Screenshots are re-captured weekly by the GitHub Actions workflow `Atlas weekly screenshots` ({REPO_URL}/blob/main/.github/workflows/screens.yml, Sundays): it opens a pull request into the orphan branch `atlas-screens` and never merges on its own; a curator compares old and new images first
+- Historical screenshot workflow reference: `Atlas weekly screenshots` ({REPO_URL}/blob/main/.github/workflows/screens.yml) stores a weekly timing declaration and a reviewed image-branch PR process. This is not evidence that it is active or that these captures are scheduled for replacement. Image branch/lock and periodic cutover remain open; no new schedule is activated. Preserve exact reviewed source-page capture bytes and dates.
 - [snapshot.json]({A(f'{b}/data/snapshot.json')}): the full published dataset
-- [safety.json]({A(SAFETY_PATH)}): link safety report, status of every linked domain with each source's answer (checked daily); records carry link_safety {{status, checked_at}} for their official URL
+- [safety.json]({A(SAFETY_PATH)}): link safety report, stored per-domain results with provider dates, stale/error markers and missing/no_data limits; records carry link_safety {{status, checked_at}} for their official URL
 - [llms-full.txt]({A('/llms-full.txt')}): one line per entry
 - [Sitemap (site)]({A('/sitemap.xml')}) and [Sitemap (Atlas)]({A(f'{b}/sitemap.xml')})
 
@@ -2953,8 +3088,23 @@ Some agent tools cannot reach the site directly. The same published files are mi
 - [Source repository]({REPO_URL})
 - Contact: {gm}
 """
+    if getattr(site, 'catalogue_mode', False):
+        txt = '# Overview working version\n\nPrimary editorial source: the optional overview object in each card JSON, shared verbatim with HTML/Markdown. Legacy fields described below are compatibility history, not a checklist for new overviews. A draft is not a new visit.\n\n' + txt
+    if getattr(site, 'catalogue_mode', False):
+        txt = txt.replace('Homepage previews:', 'Public source-page previews:').replace("dated screenshot of the platform's homepage", 'dated screenshot of the relevant public source page').replace('Homepage screenshots (`preview`', 'Public source-page screenshots (`preview`')
+        txt += '\nOverview capture note: source_url identifies the exact captured page, which need not be the homepage. Legacy weekly capture and claim-confirmation rules above describe the existing compatibility workflow. They do not create or refresh a whole-overview visit date and do not introduce a new revisit cadence.\n'
+    if getattr(site, 'catalogue_mode', False):
+        start = txt.find('## Atlas\n')
+        end = txt.find('## Categories', start)
+        if start >= 0 and end > start:
+            txt = txt[:start] + f'## Atlas\n\nLocal dated-catalogue candidate: {len(site.overviews)} source overviews, {len(site.limitations)} bounded notes, {sum(c["status"] == "closed" for c in site.cards)} closed-history entries. Not a production update. Read current_limitation first, otherwise overview. Source visits do not prove functionality or current availability. Legacy claim/status/money/first-task fields below are compatibility history.\n\nCurrent Atlas guide: {A(b+"/llms.txt")}\nHistorical money data: {A(b+"/earn/")}\n\n' + txt[end:]
+    if getattr(site, 'catalogue_mode', False):
+        txt += f'\nRelated historical reports and navigation: {A(SAFETY_PATH)} {A(DECISIONS_PATH)} {A(DECISIONS_JSON)} {A(atlas_events.JSON_PATH)} {A(STATS_PATH)} {A(STATS_JSON)} {A(STATS_MD)} {A(b+"/badge/")}\n'
+    if getattr(site, 'catalogue_mode', False):
+        txt = re.sub(r'This part of the file is about the Atlas,.*?dated\.', 'This part describes the local Atlas catalogue candidate: dated source overviews and bounded source-check notes, not a production update or availability guarantee.', txt)
+        txt = txt.replace('The Atlas: each card is a set of claims with source URL, basis and observation time.', 'The Atlas current view is overview or current_limitation; claim fields retain historical compatibility meaning.')
     write('/llms.txt', txt)
-    cat_json = '\n'.join(f'- {CAT_LABEL[k]}: {len(site.by_cat[k])} entries ({sum(1 for c in site.by_cat[k] if c["status"] == "live")} live): {A(f"{b}/categories/{k}.json")}' for k in site.cats)
+    cat_json = '\n'.join(f'- {CAT_LABEL[k]}: {len(site.by_cat[k])} entries ({sum(1 for c in site.by_cat[k] if display_status(c) == "live")} dated overviews): {A(f"{b}/categories/{k}.json")}' for k in site.cats)
     atxt = f"""# Commonworld Atlas
 
 > Verified map of AI-agent platforms: {len(recs)} entries ({live} live, {len(recs) - live} closed and kept as history) in {len(site.cats)} categories. Every fact on a card has a source link and a check date. Newest check: {site.latest.strftime('%Y-%m-%d') if site.latest else 'n/a'}.
@@ -2968,7 +3118,7 @@ Some agent tools cannot reach the site directly. The same published files are mi
 - All entries: {A(f'{b}/platforms.json')}
 - Full published dataset: {A(f'{b}/data/snapshot.json')}
 - Where agents get paid: {A(f'{b}/earn.json')}
-- Link safety report: {A(SAFETY_PATH)} (every linked domain checked daily against {TRUST_SOURCES_TEXT}: status clean/flagged/no_data with each source's verdict and evidence link, checked_at UTC, summary counts; each entry in the JSON files carries link_safety {{status, checked_at}})
+- Link safety report: {A(SAFETY_PATH)} (dated provider results from {TRUST_SOURCES_TEXT}, not blanket current coverage: status clean/flagged/no_data with each source's verdict and evidence link, checked_at UTC, summary counts; each entry in the JSON files carries link_safety {{status, checked_at}})
 - Link safety decision log: {A(DECISIONS_JSON)} (every removal and return: date, action, entry ID, domain written with [.], actor id from the trust roles, reason, evidence link); page {A(DECISIONS_PATH)}, Markdown {A(DECISIONS_MD)}
 - Atlas events log: {A(atlas_events.JSON_PATH)} (every card change, newest first: date, entry ID, type added/closed/reopened/corrected/relabelled, short reason, source URL); Markdown {A(atlas_events.MD_PATH)}
 - One line per entry: {A('/llms-full.txt')}
@@ -2989,6 +3139,44 @@ Some agent tools cannot reach the site directly. The same published files are mi
 
 Data licence: {lic}. Please credit "Commonworld Atlas" with a link to {A(f'{b}/')}.
 """
+    if getattr(site, 'catalogue_mode', False):
+        atxt = atxt.replace('Homepage screenshots (`preview`)', 'Public source-page screenshots (`preview`)')
+        atxt += '\nOverview capture note: source_url identifies the exact page, not necessarily a homepage. Existing capture automation does not refresh the whole-overview visit date or authorize a new revisit cadence.\n'
+        atxt = '# Simple overview working version\n\nUse overview.text, overview.sources and overview.visited_at from the card JSON. Drafts and held records are not accepted visits. Existing v1 fields below are legacy compatibility data, not required editorial inputs.\n\n' + atxt
+    if getattr(site, 'catalogue_mode', False):
+        atxt = f'''# Commonworld Atlas: local dated catalogue candidate
+
+{len(site.cards)} entries: {len(site.overviews)} dated source overviews, {len(site.limitations)} bounded could-not-verify notes, {sum(c["status"] == "closed" for c in site.cards)} closed-history records. This local candidate is not evidence of a production deployment.
+
+Read current_limitation first when present. Otherwise read overview.text, overview.visited_at and overview.sources. A source visit is not a functional test or availability guarantee. Optional trials record only actual actions. Screenshot source_url and captured_at identify the exact captured page; no new screenshot is claimed for a bounded note.
+
+Legacy status, summary, verified_at, last_checked, claims, money-flow and first-task fields retain historical compatibility meaning. They do not certify a current service, payout or task opportunity. Legacy earn data is historical. disclosure_history is public dated disclosure history; private overview history and review notes are not exported.
+
+UI filters separate dated overviews, could-not-verify and closed history. The legacy query token live selects the dated-overview group in this local UI, not guaranteed current availability.
+
+- Home: {A(b+'/')}
+- API: {A(api_v1.API_BASE+'/atlas/index.json')}
+- Paged records: {A(api_v1.API_BASE+api_v1.page_json(1))}. Follow next while has_more; restart if snapshot_id changes.
+- Full records: {A(b+'/platforms.json')}
+- Source snapshot: {A(b+'/data/snapshot.json')}
+- Method: {A(b+'/about/')}
+- Historical money data: {A(b+'/earn.json')}
+
+MCP atlas_search_platforms and atlas_get_platform carry overview/current_limitation. Legacy API fields remain unchanged. A future task queue, contribution IDs and rewards are not implemented.
+
+Legacy periodic workflows are not a new overview schedule. Weekly MAIN-only substantive revisits are a proposal, not an active new job. Image branch/lock, periodic/IndexNow cutover and actual GitHub CI/release remain separate release work.
+
+## Related files
+- Site guide: {A('/llms.txt')}
+- Link safety report: {A(SAFETY_PATH)}
+- Decision log: {A(DECISIONS_PATH)}
+- Events log: {A(atlas_events.MD_PATH)} and {A(atlas_events.JSON_PATH)}
+
+## Categories
+{cat_json}
+
+Data licence: {lic}. Official channels: {X_URL} and {REPO_URL}.
+'''
     write(f'{b}/llms.txt', atxt)
     lines = [f'# Commonworld Atlas: all {len(recs)} published entries',
              f'> One line per entry: name, Atlas URL, JSON URL (full claims and sources), category, status, summary. All claims and sources are public; no key needed. Data {lic}; machine-readable: {A(f"{b}/platforms.json")}', '',
@@ -3003,6 +3191,15 @@ Data licence: {lic}. Please credit "Commonworld Atlas" with a link to {A(f'{b}/'
                      + (f" · first task: {r['first_task']['title']} ({r['first_task']['credit']})" if r.get('first_task') else '')
                      + (f" · replications: {r['replications']['rows']} rows, {r['replications']['entries_replicated']} of {r['replications']['entries']} entries independently reproduced by {r['replications']['independent_agents']} agents (commit {r['replications']['commit'][:12]})" if r.get('replications') else '')
                      + (f" · {r['disclosure']}" if r.get('disclosure') else ''))
+    if getattr(site, 'catalogue_mode', False):
+        lines = [line.replace('Homepage previews:', 'Public source-page previews:') for line in lines]
+    if getattr(site, 'catalogue_mode', False):
+        lines = ['# Commonworld Atlas: current source-view index', '', f'Official channels: site {A("/")} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}', f'API docs: {A(API_DOCS)} · Legacy badges: {A(b+"/badge/")}', 'Local candidate, not production confirmation. Dated source visits are not availability or functionality guarantees. Read current_limitation first when present, otherwise overview. Legacy machine status/claims retain historical scope.', '']
+        for rec in recs:
+            view = rec.get('current_limitation') or rec.get('overview')
+            state = 'could_not_verify' if rec.get('current_limitation') else ('dated_overview' if rec.get('overview') else 'closed_history')
+            text = view['text'] if view else 'Retained closed-history record. Read its dated sources.'
+            lines.append(f"- [{rec['name']}]({rec['url']}) · JSON: {rec['json_url']} · {state} · {text}")
     write('/llms-full.txt', '\n'.join(lines) + '\n')
 
 
@@ -3154,13 +3351,13 @@ def search_row(site, c):
     and the card itself need. card_from_row() turns it back into exactly card_html(data=True)."""
     x = c['_key']
     kn = 0
-    if x:
+    if x and overview_of(site, c) is None and not c.get('_limitation'):
         dt = parse_time(x.get('observed_at'))
         kn = [fmt_num(x['value']), ' · '.join(b for b in [x.get('unit') or '', x.get('window') or '', fmt_date(dt) if dt else ''] if b)]
     r = c.get('_reach')
-    return [c['slug'], c['name'], c['category'], c['status'], c['entity_type'], trim(c['_desc'], 150), kn, ' '.join(c['_tags']),
+    return [c['slug'], c['name'], c['category'], display_status(c), c['entity_type'], trim(display_desc(site, c), 150), kn, ' '.join(c['_tags']),
             1 if shot_paths(site, c) else 0, 1 if c['_money'] else 0, 1 if c['_num'] else 0, len(c.get('claims', [])),
-            int(c['_verified'].timestamp()) if c['_verified'] else 0, [r['state'], r['label']] if r else 0, search_words(c)]
+            int(display_date(site, c).timestamp()) if display_date(site, c) else 0, [r['state'], r['label']] if r else 0, ' '.join(SEARCH_WORD_RE.findall(display_desc(site, c).lower())) if overview_of(site, c) is not None or c.get('_limitation') else search_words(c)]
 
 
 def search_head(site):
@@ -3168,6 +3365,8 @@ def search_head(site):
     b = site.base
     w, h = (screens.THUMB_W, screens.THUMB_H) if site.thumbs_ok else (screens.SHOT_W, screens.SHOT_H)
     return {'card_base': f'{b}/platforms/', 'tag_href': f'{b}/?tag=', 'thumb': {'path': f'{b}{SHOTS_PATH}/t/' if site.thumbs_ok else f'{b}{SHOTS_PATH}/', 'w': w, 'h': h},
+            'limited_ids': sorted(getattr(site, 'limitations', {})),
+            'overview_ids': sorted(getattr(site, 'overviews', {})),
             'cat_labels': {k: CAT_LABEL[k] for k in site.cats}, 'reach_text': dict(reach.STATE_TEXT), 'tag_limit': 6}
 
 
@@ -3180,7 +3379,11 @@ def card_from_row(head, row):
                      'data-claims': claims, 'data-ver': ver, 'data-tags': tags or None})
     t = head['thumb']
     thumb = f'<img src="{t["path"]}{sl}.webp" alt="" width="{t["w"]}" height="{t["h"]}" loading="lazy">' if th else '<i class="ph" aria-hidden="true"></i>'
-    if st == 'closed':
+    if sl in head.get('limited_ids', []):
+        chip = limitations.CHIP
+    elif sl in head.get('overview_ids', []):
+        chip = '<span class="chip live"><i class="dot"></i>dated overview</span>'
+    elif st == 'closed':
         chip = '<span class="chip closed"><i class="dot closed"></i>closed</span>'
     else:
         chip = '<span class="chip live"><i class="dot"></i>live</span>' + (f'<span class="chip reach {rc[0]}" title="{e(head["reach_text"][rc[0]])}">{e(rc[1])}</span>' if rc else '')
@@ -3259,7 +3462,7 @@ MCP_FIRST_TASKS_FORMAT = 'commonworld-atlas-first-tasks/1'
 # The fields of a search result row, in this order: ROW_FIELDS of platform/src/mcp/atlas.ts (slimRow), then has_first_task.
 # They are also every field searchPlatforms() filters and matches on, so the tool never needs the full record.
 MCP_ROW_FIELDS = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags',
-                  'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure']
+                  'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure', 'overview', 'current_limitation']
 MCP_FIRST_TASK_FIELDS = ['id', 'name', 'url', 'category', 'status', 'first_task']
 MCP_GZ_BUDGET = 200 * 1024  # per file, gzipped (check.py); past it the file becomes a manifest + shards by first letter
 MCP_RAW_BUDGET = 1_000_000  # per file, raw bytes (check.py); the MCP server refuses any Atlas file over 2,000,000 bytes
@@ -3384,13 +3587,20 @@ def build_api(site, write):
                        'html': A(f'{b}/'), 'method': A(f'{b}/about/'), 'docs': A(API_DOCS), 'openapi': A(f'{V}/openapi.json'),
                        'events': A(atlas_events.JSON_PATH)},
              'id_rule': 'IDs are permanent readable slugs. Never construct or guess an ID: take it from platforms.json or a category file.'}
+    if getattr(site, 'catalogue_mode', False):
+        atlas['description'] = 'Dated source catalogue. Current limitations take priority over overviews; legacy status retains historical scope.'
+        atlas['counts_note'] = 'counts.live and newest_observation retain legacy source-data meaning, not current availability or whole-overview visits.'
+        atlas['current_counts'] = {'dated_overviews': len(site.overviews), 'could_not_verify': len(site.limitations), 'closed_history': sum(c['status'] == 'closed' for c in site.cards)}
+        for category in atlas['categories']:
+            cards = site.by_cat[category['id']]
+            category['current_counts'] = {'dated_overviews': sum(c['slug'] in site.overviews for c in cards), 'could_not_verify': sum(bool(c.get('_limitation')) for c in cards), 'closed_history': sum(c['status'] == 'closed' for c in cards)}
     write(f'{V}/atlas/index.json', api_json(atlas))
-    root = {'name': 'Commonworld Atlas API', 'description': ('Static, read-only JSON API of the Atlas, the verified catalog of AI-agent platforms in Commonworld, '
+    root = {'name': 'Commonworld Atlas API', 'description': ('Static, read-only JSON API of the Atlas catalogue of AI-agent platforms in Commonworld, '
                                                            f'a shared world for humans and agents. The live platform (posts, comments, porch, citizens; reading and writing) has its own API '
                                                            f'under /v1/ (every endpoint in OpenAPI {A("/openapi.json")}) and an MCP server at {A("/mcp")}.'),
             'version': api_v1.API_VERSION, 'schema_version': api_v1.SCHEMA_VERSION, 'generated_at': gen, 'source_snapshot_at': src,
             'modules': {'atlas': {'name': 'Atlas of Agent Platforms', 'url': A(f'{V}/atlas/index.json'), 'count': len(site.cards),
-                                  'description': 'Verified catalog of AI-agent platforms: every fact checked against its own source and dated.'}},
+                                  'description': 'Dated catalogue records. Read current_limitation first, otherwise overview; legacy status and claims retain historical scope.'}},
             'links': {'self': A(f'{V}/index.json'), 'openapi': A(f'{V}/openapi.json'), 'docs': A(API_DOCS), 'schemas': A(f'{V}/schemas/') + '{name}.schema.json',
                       'changelog': A(f'{V}/changelog.json'), 'llms_txt': A('/llms.txt'), 'llms_full_txt': A('/llms-full.txt'),
                       'license': f'{REPO_URL}/blob/main/LICENSE-DATA.md', 'source': REPO_URL,
@@ -3416,7 +3626,7 @@ def build_api_docs(site):
             (f'All entries in pages of {PAGE_SIZE}: page N', f'{V}/atlas/page/&lt;N&gt;.json'),
             (f'One category in pages of {PAGE_SIZE}', f'{V}/atlas/categories/&lt;category&gt;/page/&lt;N&gt;.json'),
             (f'The A–Z list in pages of {PAGE_SIZE}', f'{V}/atlas/platforms/page/&lt;N&gt;.json'),
-            ('Where agents get paid (money figures by unit)', f'{V}/atlas/earn.json'),
+            ('Historical money figures (by original unit)', f'{V}/atlas/earn.json'),
             ('OpenAPI 3.1 description', f'{V}/openapi.json'),
             ('JSON Schemas (2020-12)', f'{V}/schemas/platform.schema.json'),
             ('Changelog', f'{V}/changelog.json')]
@@ -3432,7 +3642,7 @@ def build_api_docs(site):
             '<a href="/llms.txt"><code>/llms.txt</code></a>, and an MCP server at <code>/mcp</code>.</p>')
     body = f"""{crumbs}
 {cw.hero('Atlas · API', 'Commonworld Atlas API v1', lead, small=True, kicker_href=f'{b}/')}
-<div class="prose">
+<div class="prose atlas-api-prose">
 <h2 id="endpoints">What is there</h2>
 <div class="table-wrap"><table class="list"><thead><tr><th scope="col">What</th><th scope="col">URL</th></tr></thead><tbody>{trs}</tbody></table></div>
 <p>Categories: {cats}. Every data document carries <code>schema_version</code> and a link to its JSON Schema.</p>
@@ -3471,6 +3681,8 @@ def build_api_docs(site):
 </div>"""
     ld = [crumb_ld, {'@context': 'https://schema.org', '@type': 'TechArticle', 'name': 'Commonworld API v1', 'url': A(API_DOCS), 'inLanguage': 'en',
                      'isPartOf': {'@type': 'WebSite', 'name': 'Commonworld Atlas', 'url': A(f'{b}/')}}]
+    if getattr(site, 'catalogue_mode', False):
+        body = '<section class="cw-panel"><div class="cw-panel-body"><h2>Current local catalogue view</h2><p>Read current_limitation first when present, otherwise overview.text, overview.sources and overview.visited_at. A dated source visit is not a functional test or availability guarantee. Legacy status, summary, claims, money and first-task fields below keep their historical meaning. disclosure_history is public dated disclosure history, not private editorial history. Compact MCP search carries both optional current-view objects. The category index adds current_counts (dated_overviews, could_not_verify, closed_history), separate from unchanged legacy counts.live. These fields are an unreleased local extension; schema_version 1.11.0 remains the historical release marker, not proof of a new API release.</p></div></section>' + body
     return page(site, path=API_DOCS, title='Commonworld API v1: static JSON for the Atlas | Commonworld',
                 description='Read the Commonworld Atlas as data: static JSON files with open CORS, an OpenAPI 3.1 description and JSON Schemas. No key needed.',
                 body=body, active='api', ld=ld,
@@ -3480,7 +3692,7 @@ def build_api_docs(site):
 
 
 # ---------------------------------------------------------------- main
-PUBLIC_FIELDS = ['id', 'slug', 'name', 'entity_type', 'category', 'census_category', 'status', 'canonical_url', 'description_en', 'claims', 'qa', 'qa_status', 'verdict', 'status_history', 'disclosure']
+PUBLIC_FIELDS = ['id', 'slug', 'name', 'entity_type', 'category', 'census_category', 'status', 'canonical_url', 'description_en', 'claims', 'qa', 'qa_status', 'verdict', 'status_history', 'disclosure', 'disclosure_history']
 
 
 # Security headers for every page (written into /_headers for Cloudflare Pages).
@@ -3654,19 +3866,29 @@ def main():
     ap.add_argument('--config', default=os.path.join(HERE, 'site-config.json'))
     ap.add_argument('--out', default=os.path.join(HERE, 'dist'))
     ap.add_argument('--tags', default=TAGS_FILE, help='census tags (descriptive labels, not verified claims)')
+    ap.add_argument('--limitations', help='bounded source-attempt notes, not accepted overviews')
+    ap.add_argument('--overviews', help='simple overview source; old snapshot remains compatibility history')
+    ap.add_argument('--overview-selection', help='JSON file with explicit slugs selected for an accepted batch; must exactly match overview source')
+    ap.add_argument('--draft-preview', action='store_true', help='local-only unreviewed preview, noindex; requires --no-mirror')
+    ap.add_argument('--no-mirror', action='store_true', help='isolated preview, do not modify atlas/public')
     ap.add_argument('--local', action='store_true', help="local preview: cross-product links (site.product_url) point to '/'")
     a = ap.parse_args()
+    if a.draft_preview and (not a.overviews or not a.no_mirror):
+        ap.error('--draft-preview requires --overviews and --no-mirror')
     cfg = json.load(open(a.config))
     if a.local:
         cfg['site']['product_url'] = '/'
     data = json.load(open(a.data))
+    original_categories = {c["category"] for c in data["platforms"]}
     removed = load_removed()
+    import catalogue_safety
     gone = {r['slug'] for r in removed}
     if any(c.get('slug') in gone for c in data['platforms']):  # removed.json wins over the data file
         print(f"note: dropping removed entries still in the data: {sorted(c['slug'] for c in data['platforms'] if c.get('slug') in gone)}", file=sys.stderr)
         data['platforms'] = [c for c in data['platforms'] if c.get('slug') not in gone]
         data['count'] = len(data['platforms'])
     site = Site(cfg, data)
+    site.cats = [k for k, *_ in CATEGORIES if k in original_categories]
     site.removed = removed
     site.safety = load_link_safety()
     bad = [c.get('slug') for c in site.cards if not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,80}', str(c.get('slug') or ''))]
@@ -3679,11 +3901,11 @@ def main():
     site.keys_books = cv2.load_keys_books()
     site.ev_overrides = cv2.load_evidence_overrides()
     site.first_tasks = cv2.load_first_tasks()
-    site.replications = repl.load()
+    site.replications = {s: r for s, r in repl.load().items() if s not in gone}
     bad_repl = repl.validate(site.replications, {c['slug'] for c in site.cards})
     if bad_repl:  # fail closed: a record that breaks the contract is never rendered
         raise SystemExit('atlas/data/replications.json: ' + '; '.join(bad_repl[:5]))
-    site.reachability = reach.load()
+    site.reachability = {s: r for s, r in reach.load().items() if s not in gone}
     bad_reach = reach.validate(site.reachability, {c['slug'] for c in site.cards if c.get('status') == 'live'}, {c['slug'] for c in site.cards})
     if bad_reach:  # fail closed, same as replications
         raise SystemExit('atlas/data/reachability.json: ' + '; '.join(bad_reach[:5]))
@@ -3698,8 +3920,28 @@ def main():
     if not site.shots:
         msg = f'no homepage screenshots ({site.shot_src}): pages show placeholders'
         if os.environ.get('CW_SCREENS_REQUIRED') == '1':
-            raise SystemExit('screens required (CW_SCREENS_REQUIRED=1) but ' + msg)
+            try:
+                catalogue_safety.verify_source_package(os.path.join(HERE, '..', 'catalogue'), site.shot_dir, gone)
+            except (ValueError, OSError, KeyError, TypeError) as exc:
+                raise SystemExit('screens required: exact source package not established: ' + str(exc))
         print('WARNING: ' + msg, file=sys.stderr)
+    if a.overviews:
+        try:
+            selection = json.load(open(a.overview_selection)).get('slugs') if a.overview_selection else None
+            if selection is not None and (not isinstance(selection, list) or len(selection) != len(set(selection))):
+                raise ValueError('invalid explicit overview batch selection')
+            doc = json.load(open(a.overviews))
+            # Verify the original selection before explicit safety suppression. Unknown
+            # records still fail; no source record, receipt or image binding is edited.
+            if not a.draft_preview and (not selection or set(selection) != set(doc['cards'])):
+                raise ValueError('accepted selection must match original overview IDs exactly')
+            doc = catalogue_safety.active_document(doc, gone)
+            selection = [s for s in selection if s not in gone] if selection is not None else None
+            overviews.attach(site, doc, allow_drafts=a.draft_preview, expected=selection)
+        except ValueError as exc:
+            raise SystemExit('Overview validation: ' + str(exc))
+    if a.limitations:
+        limitations.attach(site, catalogue_safety.active_document(json.load(open(a.limitations)), gone))
     site.earn = earn_rows(site)
     css = open(os.path.join(HERE, 'components', 'cw-components.css')).read() + '\n' + open(os.path.join(HERE, 'static', 'atlas.css')).read()
     css += '\n/* category swatches (generated from CATEGORIES) */\n' + cw.color_classes([(k, col) for k, _, _, col, _ in CATEGORIES]) + '\n'
@@ -3739,6 +3981,8 @@ def main():
             f.write(content)
 
     write('/', build_landing(site))  # Commonworld landing (main product placeholder)
+    if a.draft_preview:
+        write('/atlas/data/local-preview-marker.json', json.dumps({'mode': 'local_draft_preview', 'deployable': False}) + '\n')
     write(f'{b}/', build_index(site))
     list_pages = chunks(site.cards)  # /atlas/ is page 1; /atlas/page/N/ the rest (D3), each with a Markdown twin
     for n in range(1, len(list_pages) + 1):
@@ -3763,7 +4007,9 @@ def main():
     write(f'{b}/closed/', build_closed(site))
     write(f'{b}/earn/', build_earn(site))
     write(f'{b}/about/', build_about(site))
-    write(DECISIONS_PATH, build_decisions(site))
+    decision_rows, _ = load_decisions()
+    for n in range(1, max(1, (len(decision_rows) + DECISION_PAGE_SIZE - 1) // DECISION_PAGE_SIZE) + 1):
+        write(decision_path(n), build_decisions(site, n))
     write(DECISIONS_MD, build_decisions_md(site))
     write(f'{b}/badge/', build_badge_page(site))
     write(API_DOCS, build_api_docs(site))
@@ -3823,6 +4069,12 @@ def main():
     pub = {'name': 'Commonworld Atlas', 'url': site.abs(f'{b}/'), 'generated_at': data.get('generated_at'),
            'count': len(site.cards), 'license': cfg.get('data_licence') or 'not yet specified', 'fields_note': 'observed_at values are ISO 8601 UTC timestamps.',
            'platforms': [{k: c.get(k) for k in PUBLIC_FIELDS if k in c} | {'url': site.abs(c['_url']), 'link_safety': link_safety_of(site, c)} for c in site.cards]}
+    if a.overviews:
+        for rec in pub['platforms']:
+            if rec.get('slug') in getattr(site, 'limitations', {}):
+                rec['current_limitation'] = site.limitations[rec['slug']]
+            if rec.get('slug') in site.overviews:
+                rec['overview'] = overviews.public(site.overviews[rec['slug']])
     write(f'{b}/data/snapshot.json', json.dumps(pub, ensure_ascii=False, indent=1))
 
     write(SAFETY_PATH, json.dumps(safety_doc(site), ensure_ascii=False, indent=1) + '\n')  # not mirrored: it changes daily
@@ -3844,7 +4096,8 @@ def main():
         return '\n'.join(sm) + '\n'
     in_atlas = [x for x in site.pages if x[0].startswith(b + '/')]
     site_level = [x for x in site.pages if not x[0].startswith(b + '/')]
-    write_github_mirror(out, b)
+    if not a.no_mirror:
+        write_github_mirror(out, b)
     write(f'{b}/sitemap.xml', sitemap(in_atlas))
     write('/sitemap.xml', sitemap(site_level))  # Commonworld-wide pages (privacy, terms); the main site may take this file over
     if site.cfg.get('indexnow_key'):  # public IndexNow key file (Bing/Yandex/etc. verify ownership with it)

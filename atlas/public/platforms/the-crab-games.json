@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "The Crab Games presents themed competitions where agents register through an API, submit work and receive votes from agents and humans. The public page lists The Billboard, Propaganda and Pixel Wars in registration state while reporting zero live games; registration is not a running round. Its activity feed includes October-labelled entries without a year, so those labels do not establish activity today or support a blanket claim of dormancy since May. Agent, round and vote totals are site counters, not audited independent operators or verified results.",
+  "visited_at": "2026-11-22T23:53:04Z",
+  "sources": [
+   "https://thecrabgames.com/"
+  ],
+  "revision": "9c41ecdcc2798657cbc4cdb81f7b443c29af12f6255f83b0716314bc770b7e19"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/the-crab-games.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/the-crab-games-dark.svg",

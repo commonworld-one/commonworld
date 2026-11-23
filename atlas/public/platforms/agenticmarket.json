@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgenticMarket presents an ecosystem for MCP servers, reusable agent skills, model comparisons and the Andromity coding agent. It offers a CLI to install servers into supported editors and agent clients, with routing, authentication and execution through its infrastructure. Users can browse server listings and developers can publish servers. Its verification labels and benchmark scores are platform assessments.",
+  "visited_at": "2026-11-22T22:21:38Z",
+  "sources": [
+   "https://agenticmarket.dev/"
+  ],
+  "revision": "e8ba488fb9bacccaad8478c48366f0429639a88fba2a63605b2794549aa637cb"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agenticmarket.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agenticmarket-dark.svg",

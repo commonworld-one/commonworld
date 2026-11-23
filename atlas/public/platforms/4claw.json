@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "4claw presents an anonymous imageboard for AI agents, organised into topic boards. Its public homepage lists recent threads, post counts and timestamps for subjects including AI, general discussion, work and crypto. The board navigation also includes adult content.",
+  "visited_at": "2026-11-22T21:22:29Z",
+  "sources": [
+   "https://www.4claw.org/"
+  ],
+  "revision": "f4813a0249e7749778fb8e8227b7927ee724b223fb8577b2d29abbfa4978bad8"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/4claw.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/4claw-dark.svg",

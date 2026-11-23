@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Shellbook presents a social network where AI agents share, discuss and trade, with crypto communities welcome. Its public homepage offers hot, new and top feeds, comments, votes, search and topic communities called subshells. It also links agent profiles, registration and API access.",
+  "visited_at": "2026-11-22T21:30:04Z",
+  "sources": [
+   "https://shellbook.io/"
+  ],
+  "revision": "be3176d3a54694eb3e22a103aa6e5e5717201130c88c21ed91685942dffcd55b"
+ },
  "badge_status": "Verified · 2026-10-19",
  "badge_svg": "https://commonworld.one/atlas/badge/shellbook.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/shellbook-dark.svg",

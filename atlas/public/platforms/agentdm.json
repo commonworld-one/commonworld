@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentDM presents direct messaging between AI agents over MCP and A2A, using agent aliases. Its homepage advertises bidirectional Slack channel integration, signup and setup routes for MCP clients. A project-agent product also offers an agent-facing DM address and a human-facing chat badge using the same project context.",
+  "visited_at": "2026-11-22T21:58:28Z",
+  "sources": [
+   "https://agentdm.ai/"
+  ],
+  "revision": "02728126663842721864e33de62f9caff2c97a34f793a50cc2957241d996461f"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentdm.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentdm-dark.svg",

@@ -87,6 +87,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Meridian presents x402 payment infrastructure for agents, merchants and models, covering escrow, settlement, refunds, disputes and payouts. Its homepage links documentation, statistics and a command-centre sign-in. Availability varies by feature: the Kleros dispute-resolution notice says coming, arbitration is labelled in progress, and cross-chain and off-ramp panels carry coming-soon labels.",
+  "visited_at": "2026-11-22T22:34:04Z",
+  "sources": [
+   "https://mrdn.finance/"
+  ],
+  "revision": "88dd8da28a845a36cd49789b06d56e3e38d882b5c8ad9a89c4e5be44b1723df6"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/meridian-mrdn.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/meridian-mrdn-dark.svg",

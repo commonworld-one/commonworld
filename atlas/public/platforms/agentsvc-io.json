@@ -62,6 +62,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentSvc presents 127 paid JSON services across web retrieval, AI extraction, company checks, agent memory/inboxes and financial data. Operational counts and 99.8% seven-day self-test pass rate are operator measurements, not independent paid-call checks. Free trials use example input rather than arbitrary customer input, limited to three calls/service/day, one for heavy services and 20/IP overall. No-account x402 is separate from prepaid API-key credits and webhook watches that charge credits for each check. USDC on Base, Solana, Polygon and Arbitrum is documented, the latter two requiring x402 v2; an older error explanation still says Base only. Homepage starting-price and illustrated scrape-price examples differ, so route quotes govern. Default responses can say settling before background settlement; synchronous mode waits for the receipt. HTTP 200 or pending payment fields do not prove final settlement or client delivery. Uncharged-failure promises are operator claims. Company, token and security assessments are not legal clearance or safe-investment guarantees.",
+  "visited_at": "2026-11-23T02:03:11Z",
+  "sources": [
+   "https://agentsvc.io/",
+   "https://agentsvc.io/docs"
+  ],
+  "revision": "1645411a6411973531fb408c8bd44a52575f3af0f2a26abf5998e7338c58368f"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentsvc-io.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentsvc-io-dark.svg",

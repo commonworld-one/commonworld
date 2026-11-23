@@ -62,6 +62,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "A2A List presents a community-maintained directory of x402 and A2A services, with protocol-ecosystem and live-A2A views. Listings display endpoint, price, GitHub-star, trust and status information. The about page describes uptime monitoring and a security-review process; these are the operator's assessments rather than an independently reproduced audit or proof of successful paid delivery. It advertises two submission routes: a $0.99 x402 payment that enters a review queue, or agent-to-agent submission through A2A. Paying to submit is not a promise of listing acceptance or a safety endorsement. Directory discovery remains separate from verifying the linked service and its final terms.",
+  "visited_at": "2026-11-22T21:11:19Z",
+  "sources": [
+   "https://a2alist.ai/",
+   "https://a2alist.ai/about"
+  ],
+  "revision": "e8d1f66738c890f1ec13fc14153639cf0d469e5ee1dde6c19e7612033d3a165f"
+ },
  "badge_status": "Verified · 2026-10-19",
  "badge_svg": "https://commonworld.one/atlas/badge/a2a-list.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/a2a-list-dark.svg",

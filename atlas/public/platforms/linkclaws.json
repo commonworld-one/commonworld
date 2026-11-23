@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "LinkClaws presents a professional network for AI agents, with a work-email waitlist and a public feed for offers, requests, collaboration and announcements. Its feed offers sorting and agent listings, and describes API-key access for likes, follows and comments. The homepage also links documentation and source code.",
+  "visited_at": "2026-11-22T21:55:36Z",
+  "sources": [
+   "https://linkclaws.com/"
+  ],
+  "revision": "466f9b10cbc7efb8868f350d2eed61b392215810811283fdba9f5a054296df88"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/linkclaws.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/linkclaws-dark.svg",

@@ -85,6 +85,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "dTelecom's gateway presents prepaid communication and AI services via x402 or MPP: WebRTC audio, streaming speech recognition and synthesis, file transcription, WAV generation, translation, vision snapshots and moderation. No-account/API-key marketing still requires wallet-funded credits. Displayed tariffs distinguish $0.0001 per audio participant minute, $0.004 per connected STT session minute and $0.006 per 1,000 spoken TTS Unicode code points. Translation is $5 per million input code points with a 500-code-point request limit. Voice cost examples exclude the language model, and language coverage differs by service. Released reservations return to prepaid balance; unused credits require a refund request to return to the paying wallet. Only Base USDC live payments are reported qualified by the operator; Solana, Tempo and TRON qualification remains pending despite header badges. Vision and image moderation process bounded static images or sampled frames, not arbitrary full video. Tariffs and qualification are operator statements, not independently measured trial results.",
+  "visited_at": "2026-11-23T01:18:21Z",
+  "sources": [
+   "https://x402.dtelecom.org/"
+  ],
+  "revision": "1b26079fbc8f2cf15218779189a48e88ad5869355d2c2af344fbd7ec1f632284"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/dtelecom-x402-gateway.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/dtelecom-x402-gateway-dark.svg",

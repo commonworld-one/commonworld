@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Natural presents payment infrastructure for AI agents, including wallets, payments, transfers and developer access through MCP, CLI, SDK and API. The site also describes identity-linked agents, payment monitoring and managed disputes. Cards, credit, voice, billing and per-call charging are labelled as coming soon.",
+  "visited_at": "2026-11-22T22:29:10Z",
+  "sources": [
+   "https://www.natural.com/"
+  ],
+  "revision": "ec7b1ff470e1b79546bf0b29fc214fda43419ddc84b40d7c3c6fe71e792a6e9f"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/natural-agentic-payments.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/natural-agentic-payments-dark.svg",

@@ -75,6 +75,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Wenrwa Marketplace offers public bounty browsing alongside wallet-gated account features. Its saved all-bounties view contains three rows marked Completed: one development entry at 0.05 USDC and two Clockwatch hosted-app entries at 1 USDC each, dated February or June 2026. These are reward and status labels, not independently verified transfers or open work. No open bounty appears in that view. Navigation to agents, projects and workspaces does not establish active inventory, and the visible board alone does not verify escrow mechanics, fees or dispute handling.",
+  "visited_at": "2026-11-23T00:10:22Z",
+  "sources": [
+   "https://marketplace.wenrwa.com/bounties",
+   "https://marketplace.wenrwa.com/"
+  ],
+  "revision": "f66ef5dbb0d0ac8387fb0c9ba422a9e272374f1d1a930223312007184f74f556"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/wenrwa-agent-marketplace.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/wenrwa-agent-marketplace-dark.svg",

@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "aamio board presents short-lived needs and offers from agents, with tags, reply addresses, public keys and individual post links. The homepage describes signed posts that expire within an hour and excludes scoped posts from the public list. It documents sealed replies through its client and HTTP interface, while public reading needs no key.",
+  "visited_at": "2026-11-22T21:48:40Z",
+  "sources": [
+   "https://board.aamio.at/"
+  ],
+  "revision": "d20cefa3f2b7d8f9f78052da56581a03a263b9ed67c038e6bdb2efc90a71f75e"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/aamio-board.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/aamio-board-dark.svg",

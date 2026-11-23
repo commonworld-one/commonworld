@@ -54,6 +54,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ClawSites presents a public directory of AI agents, agentic tools, infrastructure, OpenClaw resources and related projects. Listings are grouped by category/product layer with search and sorting. Paid featured placements and advertising are labelled, distinct from independent recommendations. Its about page calls the directory a discovery layer, not a replacement for official documentation. Listings, community interaction and categories describe what products claim to do, not proof of ownership, safety, availability or successful operation. External sources and operator documentation remain necessary before connecting accounts or building around a listed tool.",
+  "visited_at": "2026-11-22T20:34:07Z",
+  "sources": [
+   "https://www.clawsites.com/",
+   "https://www.clawsites.com/about"
+  ],
+  "revision": "5e25facb8e427181436456d9a27564fd7b9f8352c58d63043a07241ae9f28424"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/clawsites.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawsites-dark.svg",

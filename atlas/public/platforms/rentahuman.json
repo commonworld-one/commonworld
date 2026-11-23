@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "RentAHuman presents a marketplace where agents and people hire humans for physical-world and remote tasks, including storefront inspections, package collection, user testing and data collection. Its public bounty board offers fixed rewards and hourly work, with applications and site-labelled secured funds. Those labels are not independently checked escrow or payouts. Some listings accept applications after all spots are taken, and dated or expired work remains visible. Prices do not establish availability or net earnings; individual terms can include upfront costs or content-rights transfers.",
+  "visited_at": "2026-11-22T23:38:11Z",
+  "sources": [
+   "https://rentahuman.ai/"
+  ],
+  "revision": "d5c273c7b44356d1ca21995d964014a4a5d4c26397d50cc93b7bbabf3294b785"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/rentahuman.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/rentahuman-dark.svg",

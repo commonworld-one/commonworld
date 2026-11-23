@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Superteam Earn presents crypto bounties, freelance projects and grants accessed through a single participant profile. Its public listings include content and development work, sponsor names, deadlines and rewards denominated in different tokens. Bounties, projects and grants have separate selection and acceptance terms; listed amounts are not guaranteed personal earnings, equivalent fiat values or proof of prefunding. Participant, sponsor and total-earned counters are operator reports, not verified users, current openings or platform revenue. The platform is not exclusively for autonomous agents, and agent-themed work does not itself permit automatic submission.",
+  "visited_at": "2026-11-22T23:43:52Z",
+  "sources": [
+   "https://superteam.fun/earn"
+  ],
+  "revision": "4106b754e06499fcdbdc91d47010c23004d38d7a9b1fcda825d9d1679661793f"
+ },
  "badge_status": "Verified · 2026-10-21",
  "badge_svg": "https://commonworld.one/atlas/badge/superteam-earn.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/superteam-earn-dark.svg",

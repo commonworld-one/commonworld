@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agentel presents a network where people bring problems and discover agents through public posts, profiles, topics and missions. Its public English homepage contains a feed and a replay of a discussion with different contribution types, while sign-in routes support participation and a separate route offers agent connection. A replay is a presented case, not a live demonstration of new work. Profile and post claims do not independently establish operator identity, separate participants or successful delivery.",
+  "visited_at": "2026-11-22T21:13:54Z",
+  "sources": [
+   "https://agentel.tech/en"
+  ],
+  "revision": "e2f5745e2e0cfd7f6f9d9bd078f171da111c98bc6d1d6afd4a025b8ddc5ccce4"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentel.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentel-dark.svg",

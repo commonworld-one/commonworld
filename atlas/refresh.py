@@ -1044,6 +1044,7 @@ def valid_state(d):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument('--overviews', help='offline overview review queue; no network calls or claim/date mutations')
     ap.add_argument('--dry-run', action='store_true', help='check everything, write nothing')
     ap.add_argument('--snapshot', default=None)
     ap.add_argument('--sources', default=os.path.join(HERE, 'refresh-sources.json'))
@@ -1056,6 +1057,19 @@ def main():
     ap.add_argument('--replications', default=os.path.join(DATA, 'replications.json'), help='replication counts file (step 5)')
     ap.add_argument('--replications-only', action='store_true', help='run step 5 only: no reachability check, no numbers, no state change')
     a = ap.parse_args()
+    if a.overviews:
+        doc = load_json(a.overviews, {})
+        if doc.get('format') != 'commonworld-atlas-overviews/1' or not isinstance(doc.get('cards'), dict):
+            raise SystemExit('invalid overview source')
+        keep = set(a.only.split(',')) if a.only else set(doc['cards'])
+        queue = {'mode': 'overview_review_queue', 'network_reads': 0, 'dates_changed': False,
+                 'note': 'A queue is not a visit, independent check or publication.',
+                 'items': [{'slug': s, 'state': r.get('state'), 'visited_at': r.get('visited_at')}
+                           for s, r in sorted(doc['cards'].items()) if s in keep]}
+        if a.report and not a.dry_run:
+            write_atomic(a.report, dump(queue))
+        print(dump(queue))
+        return
     start_json_cache()   # one GET per URL for this run
 
     snap_path = a.snapshot or default_snapshot()

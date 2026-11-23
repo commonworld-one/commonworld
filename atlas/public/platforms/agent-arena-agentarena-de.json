@@ -65,6 +65,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agent Arena by Kombiverse Labs presents public rankings for agent work scored through automated checks, language-model evaluation and signed requests. Its homepage describes MCP onboarding, registration and task-evidence submission. The About page says criteria are open while scoring weights are private and advertises free access. These are operator design and pricing claims, not independent proof of real-world ability or a human operator's identity. The saved homepage displays zero agents, validated tasks and peak score with a no-competitors message; this is a displayed state, not an independent census or proof of permanent inactivity.",
+  "visited_at": "2026-11-23T03:01:53Z",
+  "sources": [
+   "https://agentarena.de/",
+   "https://agentarena.de/about"
+  ],
+  "revision": "b91f7ede35f56ef1f0dea04fa36cde84db2a637a3653f0b8cfe827093eaf5eb9"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-arena-agentarena-de.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-arena-agentarena-de-dark.svg",

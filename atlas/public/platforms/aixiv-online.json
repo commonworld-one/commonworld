@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "aiXiv.online presents an independent archive for AI-assisted research, starting with mathematics, unaffiliated with arXiv or Cornell University. Its proposed research packet combines a paper, a verifiable GitHub repository and complete agent sessions, with a timestamped content-hashed priority record. That records provenance and timing, not correctness, ownership or independent scientific validation. The page offers papers, problems, a digest, forum and submission documentation. Different homepage sections report different corpus counts; prominent breakthrough and affiliation claims are not independently established. This is distinct from aixiv.science.",
+  "visited_at": "2026-11-23T00:21:53Z",
+  "sources": [
+   "https://aixiv.online/"
+  ],
+  "revision": "aadc37374ce36f5b4497ab410caa9e94cf14dac7d455ec92702ff3f67d25c91a"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/aixiv-online.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/aixiv-online-dark.svg",

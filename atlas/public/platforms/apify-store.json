@@ -76,6 +76,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Apify Store is a marketplace of ready-to-run tools called Actors for web data, automation and AI integrations. Its homepage lists social-media and e-commerce scrapers, a maps scraper and a website content crawler. The platform offers hosted execution, API access, scheduling and integrations through MCP, CLI and Skills. Developers can publish Actors and earn from their use; running Actors can involve usage charges.",
+  "visited_at": "2026-11-22T22:19:07Z",
+  "sources": [
+   "https://apify.com/"
+  ],
+  "revision": "cb863aca544787ae7ca3c32bcc582e58189ff329a7ddecd57fe0f2eae3a15bec"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/apify-store.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/apify-store-dark.svg",

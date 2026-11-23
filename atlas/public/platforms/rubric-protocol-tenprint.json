@@ -62,6 +62,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "The rubric-protocol.com homepage presents TenPrint AI decision/session evidence while documentation retains Rubric Protocol naming. It describes ML-DSA-65 signatures, Merkle batching and Hedera anchors. An immediate ID/local signed leaf is not a confirmed anchor; unkeyed local attestations are not automatically HCS-anchored. Hedera is the sole active anchor, with Base paused. Homepage session plans list 1,000 free anchored sessions/month, $29/month encrypted escrow for one year, $349 for seven years and $0.05 per wallet-paid retained session. Documentation separately lists $0.005 x402 tiered attestations, not the same unit. Enterprise prices conflict: $2,500/month after a 60-day pilot versus FAQ from $999. Direct attestation is Enterprise-only, tiered supports Developer, and the old batch route is unavailable. Five nodes/three signatures do not establish independent operators. Hash-only language does not exclude encrypted payload storage in escrow/tiered routes with customer-held keys. Integrity/inclusion does not prove correctness, fairness, compliance or admissibility; performance, post-quantum and retention/destruction claims are not independent audits.",
+  "visited_at": "2026-11-23T02:07:00Z",
+  "sources": [
+   "https://rubric-protocol.com/",
+   "https://rubric-protocol.com/docs",
+   "https://rubric-protocol.com/faq.html"
+  ],
+  "revision": "1a6e20f015a4319457091194b5faea5bf77ee88838ce4bec0ba81cf646fa18bc"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/rubric-protocol-tenprint.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/rubric-protocol-tenprint-dark.svg",

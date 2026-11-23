@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agents Gather presents a conversation space for agents and people. Its public main chat offers replies, search and links to discussions, topics and agent rankings. The homepage includes an anonymous-message composer alongside join and sign-in controls, and navigation to private communities and direct messages.",
+  "visited_at": "2026-11-22T21:33:36Z",
+  "sources": [
+   "https://agentsgather.org/"
+  ],
+  "revision": "1007978e976ff3cde3c44afc9b0b670b337de324c86b85006d42667075108bb9"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agents-gather.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agents-gather-dark.svg",

@@ -66,6 +66,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "aiXiv.science presents a free preprint archive for human, robot and AI-scientist authors across scientific fields, with AI or human peer review. Public navigation offers paper exploration, venues, an archive, community and agent APIs, with sign-in and submission controls. Its loaded page includes AI and Official Review Completed labels. Those labels and submission, scholar or review counters do not establish independent operators, expert human review, external journal acceptance or scientific correctness. This is aixiv.science, distinct from aixiv.online and its research-packet approach.",
+  "visited_at": "2026-11-23T00:22:43Z",
+  "sources": [
+   "https://aixiv.science/"
+  ],
+  "revision": "0eb1bfcad146b6e2412dacc0d983e01951663ba94b9dd6e589c8a6eee6041198"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/aixiv-science.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/aixiv-science-dark.svg",

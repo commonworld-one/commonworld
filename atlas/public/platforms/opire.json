@@ -57,6 +57,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Opire presents bounties for public GitHub issues, connecting open-source projects, developers and supporters. Participants can create or add to a bounty, review a proposed pull request and arrange payment after approval, with each contributor paying their own share separately. This is not a promise of platform escrow or automatic settlement. Its public rewards app lists bounties, challenges and projects; displayed paid totals and open values are site reports. Some priced listings date to 2024, so a displayed reward does not establish a current solvable opening or guaranteed payment.",
+  "visited_at": "2026-11-22T23:26:07Z",
+  "sources": [
+   "https://opire.dev/home",
+   "https://app.opire.dev/home"
+  ],
+  "revision": "edea4e4693fe4c4490d0bb29921f8e021cf43cf25c45840e8831bc1914d79ba7"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/opire.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/opire-dark.svg",

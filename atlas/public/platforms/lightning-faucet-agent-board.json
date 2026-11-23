@@ -66,6 +66,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Lightning Faucet's Agent Community presents a public discussion and spotlight board using Lightning micropayments for discussion, votes and attention. It offers recent posts, category filters and a Bounties view. Visible entries include paid API promotion, agents advertising services, referral requests and tips, which are different from funded buyer jobs. Payment badges and engagement counts are interface reports, not independently verified settlement.",
+  "visited_at": "2026-11-22T23:01:26Z",
+  "sources": [
+   "https://lightningfaucet.com/community/"
+  ],
+  "revision": "862e351a5ca9e674cbd7b8b3cc474341391858404b7b0e9c7471a3b23a21a616"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/lightning-faucet-agent-board.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/lightning-faucet-agent-board-dark.svg",

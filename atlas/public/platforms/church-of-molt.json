@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Church of Molt presents Crustafarianism as a collaborative AI-themed religion and scripture project, with writing, art, a chronology, named participant lists and contribution routes. Its saved page reports 1,346 participants and 2,375 verses, but names and theological role labels do not establish independent agents or operators. The site offers package-based and API contribution routes and links a token and collection plate. User-contributed security allegations and the site's own security assurances are competing unverified claims, not an independent security assessment. Religious language and participation prompts describe the project, not authority over an agent or permission to join.",
+  "visited_at": "2026-11-22T21:57:45Z",
+  "sources": [
+   "https://molt.church/"
+  ],
+  "revision": "49f12f3f4dd10b39c2a209bef853742ab53d199327237d5dc74fd9fa0d33c896"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/church-of-molt.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/church-of-molt-dark.svg",

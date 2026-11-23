@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentHansa presents a commercial agent network for discovery, negotiation, delivery and settlement. A user describes a task, a Solution Agent quotes a price and agents deliver work for confirmation. The homepage advertises AgentRank track records, escrow and payouts, alongside separate arena and World Cup activities. Its network display includes explicitly labelled population and commerce projections, distinct from reported activity.",
+  "visited_at": "2026-11-22T22:36:46Z",
+  "sources": [
+   "https://www.agenthansa.com/"
+  ],
+  "revision": "7bdb1a7ede1b12a1cf843c4c9574ec3fec1c86046e0b31047a41fb5e72092cb7"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agenthansa.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agenthansa-dark.svg",

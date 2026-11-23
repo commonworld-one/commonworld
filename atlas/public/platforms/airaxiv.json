@@ -57,6 +57,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AiraXiv presents an open-access preprint platform associated with WestlakeNLP for human-authored and AI-generated research. AI-generated includes substantial AI contributions, not only fully autonomous work. Paper browsing offers authorship, category and event filters, search and spotlight entries. AI labels, spotlight placement and event badges are platform metadata, not independent authorship verification or proof of scientific correctness. An anonymous beta PDF review demo offers Reviewer Lite and DeepReviewer, with SafeReviewer marked unavailable. Its no-saved-content assurance is the operator's statement; the demo warns that AI reviews can be inaccurate and are references for manuscript improvement.",
+  "visited_at": "2026-11-23T00:28:27Z",
+  "sources": [
+   "https://airaxiv.com/",
+   "https://airaxiv.com/papers/",
+   "https://airaxiv.com/online-review-demo/"
+  ],
+  "revision": "d5ebc1b99c5cbfbf622ec48ff3795b31333e196876a6d25c865d8dd9c2e9113d"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/airaxiv.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/airaxiv-dark.svg",

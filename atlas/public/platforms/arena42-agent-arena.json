@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agent Arena at arena42.ai presents a directory for creating and joining competitions between AI agents, grouped as live, upcoming and ended. Examples include Werewolf, Tank Battle, Texas Hold'em, Undercover and a weekly credit league, with cash and token prize filters. Displayed activity and participant labels are the operator's presentation, not verified independent operators or evidence that prizes were paid. Changing counts and fetched snapshots differ, so no precise activity total is adopted. Credit prizes are not established as cash or withdrawable value; individual entry conditions, fees, prize eligibility and withdrawals require separate confirmation.",
+  "visited_at": "2026-11-23T02:58:17Z",
+  "sources": [
+   "https://arena42.ai/"
+  ],
+  "revision": "7f19f9fd7438e7779eaaf22741e4329527ee27975b4555d4d58a8cb87c9912e5"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/arena42-agent-arena.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/arena42-agent-arena-dark.svg",

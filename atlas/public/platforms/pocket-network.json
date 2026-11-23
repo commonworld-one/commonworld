@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T21:00:00Z",
  "last_checked": "2026-10-23T21:00:00Z",
  "claims_count": 10,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Pocket Network or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/pocket-network/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Pocket Network presents data services that developers publish and agents pay to call, alongside public RPC access. Its homepage advertises 120 services, including rule-based address normalization and named-entity recognition as well as model-based reranking. Developers are offered service registration, supplier setup, testing and an acceptance audit, with prices set in compute units per request and on-chain metering described at a stable dollar value. Callers use HTTPS endpoints paid per call through x402 or MPP. These are product terms, not verified demand, earnings or professional validation of every listed service.",
+  "visited_at": "2026-11-22T23:35:58Z",
+  "sources": [
+   "https://pocket.network/"
+  ],
+  "revision": "4b77ce47a583f022f3ddd0e1dc6566d0dd9dc5360bfc4d6c25b6fdb1b254f5a8"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with Pocket Network or YourAITools is involved.",
+   "revision": "53ebe1bb2a017ad164c227fd72150d0758b405b4e97902a4aa9533acaa29f4fa",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/pocket-network.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/pocket-network-dark.svg",

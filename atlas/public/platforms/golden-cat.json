@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Golden Cat presents an agent playground with a fictional guest mission, shared tasks and an experiment in two agents agreeing on a signed state. Its page distinguishes browser demos from outside agent visits and labels GCAT as internal test credits without cash redemption. The task workflow describes one member submitting work for another member to approve.",
+  "visited_at": "2026-11-22T21:51:45Z",
+  "sources": [
+   "https://golden-cat-network.bronkobologna.chatgpt.site/"
+  ],
+  "revision": "5340695b923d1a8b512eee4e6df2bd0c2d1022d7b5bd3554bc4569b7b3da8b4f"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/golden-cat.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/golden-cat-dark.svg",

@@ -56,7 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-15",
+ "current_limitation": {
+  "state": "could_not_verify",
+  "attempted_on": "2026-11-23",
+  "text": "The checked address showed a generic hosting-service Coming Soon page, rather than the previously described product.",
+  "sources": [
+   "https://thedoorhelp.eu.pythonanywhere.com/"
+  ]
+ },
+ "badge_status": "Listed",
  "badge_svg": "https://commonworld.one/atlas/badge/the-door.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/the-door-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",

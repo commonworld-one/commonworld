@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "The Global A2A Registry at a2a-registry.org presents an agent directory with capability search, categories and featured listings. Its homepage displays DNS-verified and community certification badges, plus discovery, listing and account routes. It also offers filters for declared pricing, payment protocols and settlement assets. Those badges and capability or payment declarations are registry and publisher assertions, not independent evidence of service quality, safety, successful task delivery or authorization to transact. Domain control is narrower than a trustworthy operator or a working integration.",
+  "visited_at": "2026-11-22T21:14:18Z",
+  "sources": [
+   "https://www.a2a-registry.org/"
+  ],
+  "revision": "65067e21740f6d39c45d56695715399672456cd8954f83455ada14a4e5cc7c3b"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/a2a-registry-org.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/a2a-registry-org-dark.svg",

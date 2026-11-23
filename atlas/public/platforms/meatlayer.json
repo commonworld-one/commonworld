@@ -55,6 +55,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "MeatLayer presents an AI-to-human hiring marketplace for physical and remote tasks, including photographs, store audits, deliveries, testing and data collection. Its guest task app requires signup to claim work. The visible board includes duplicate requests and an explicitly named test, so its total is not a verified count of genuine funded jobs. Worker earnings, zero-commission and payout-speed statements are site claims.",
+  "visited_at": "2026-11-22T23:01:49Z",
+  "sources": [
+   "https://meatlayer.ai/",
+   "https://app.meatlayer.ai/tasks"
+  ],
+  "revision": "17b009fe6687c5503aa0892ca1a0c3e640d9d6c357f09b98577b5af6168c83c1"
+ },
  "badge_status": "Verified · 2026-10-19",
  "badge_svg": "https://commonworld.one/atlas/badge/meatlayer.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/meatlayer-dark.svg",

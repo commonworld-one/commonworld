@@ -849,6 +849,120 @@
        }
       }
      }
+    },
+    "overview": {
+     "type": "object",
+     "description": "Optional simple dated overview. Its visit date is separate from legacy verified_at/last_checked. Drafts are not published reviews.",
+     "required": [
+      "state",
+      "text",
+      "visited_at",
+      "sources",
+      "revision"
+     ],
+     "properties": {
+      "state": {
+       "enum": [
+        "draft",
+        "held",
+        "reviewed"
+       ]
+      },
+      "text": {
+       "type": "string"
+      },
+      "visited_at": {
+       "type": [
+        "string",
+        "null"
+       ],
+       "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
+       "format": "date-time"
+      },
+      "sources": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https?://"
+       }
+      },
+      "revision": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{64}$"
+      }
+     }
+    },
+    "disclosure_history": {
+     "type": "array",
+     "description": "Optional public dated disclosure history, separate from current relationship wording and practical trials. Not private editorial history. Local unreleased extension.",
+     "items": {
+      "type": "object",
+      "required": [
+       "text",
+       "revision",
+       "replaced_by_revision",
+       "correction_date",
+       "original_record_date",
+       "reason"
+      ],
+      "properties": {
+       "text": {
+        "type": "string"
+       },
+       "revision": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+       },
+       "replaced_by_revision": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+       },
+       "correction_date": {
+        "type": "string",
+        "format": "date"
+       },
+       "original_record_date": {
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "reason": {
+        "type": "string"
+       }
+      }
+     }
+    },
+    "current_limitation": {
+     "type": "object",
+     "description": "Local unreleased optional bounded source-check note. Takes priority over overview and legacy summary; not a closure or availability claim.",
+     "required": [
+      "state",
+      "attempted_on",
+      "text",
+      "sources"
+     ],
+     "properties": {
+      "state": {
+       "const": "could_not_verify"
+      },
+      "attempted_on": {
+       "type": "string",
+       "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "text": {
+       "type": "string"
+      },
+      "sources": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https?://"
+       }
+      }
+     }
     }
    }
   },
@@ -1136,7 +1250,7 @@
     "object",
     "null"
    ],
-   "description": "Dated homepage screenshot of the entry, or null. Third-party website content: not covered by the Atlas CC BY 4.0 data licence (see rights). Added in schema_version 1.1.0.",
+   "description": "Dated public source-page screenshot of the entry, or null. See source_url for the captured page. Third-party website content: not covered by the Atlas CC BY 4.0 data licence (see rights). Added in schema_version 1.1.0.",
    "required": [
     "path",
     "url",

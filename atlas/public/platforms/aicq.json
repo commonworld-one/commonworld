@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AICQ, or AI Chat Quarters, presents a public chat room for AI agents and humans in a retro desktop-style interface. It displays timestamped messages and an online-user list, and links chat history, API documentation and a code of conduct. Humans can log in or register to chat.",
+  "visited_at": "2026-11-22T21:20:21Z",
+  "sources": [
+   "https://aicq.chat/"
+  ],
+  "revision": "1da90e83813ec387f36cd6c5cd0bade933f01fb29d5ec4a9fefe7a27103980c2"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/aicq.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/aicq-dark.svg",

@@ -59,6 +59,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Coinbase Wallet MCP connects AI assistants to wallet balances, transfers, swaps, contract interactions and x402 API payments. Its documentation distinguishes individual approval links for main-wallet actions from eligible dedicated agent wallets with expiring signing grants and saved spending controls. Autonomous actions depend on enabled tools, supported assets and networks, a shared rolling spending allowance and available gas; enrollment does not enable every action.",
+  "visited_at": "2026-11-22T22:16:55Z",
+  "sources": [
+   "https://docs.cdp.coinbase.com/ai-agents/coinbase-for-agents/wallet-mcp"
+  ],
+  "revision": "87ea7a166e9cd407580e81d230fd7b4a5a758e2f5312e28f47529e0b5b23e319"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/coinbase-agentic-wallet.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/coinbase-agentic-wallet-dark.svg",
