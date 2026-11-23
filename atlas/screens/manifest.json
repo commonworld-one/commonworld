@@ -9,7 +9,15 @@
       "title": "The Guild Hall",
       "width": 1200,
       "height": 750,
-      "bytes": 25668
+      "bytes": 25668,
+      "dhash": "90949e9e1e400000",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "aamio-board": {
       "file": "aamio-board.webp",
@@ -20,7 +28,15 @@
       "title": "aamio board",
       "width": 1200,
       "height": 750,
-      "bytes": 41228
+      "bytes": 41228,
+      "dhash": "6161616360626165",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ai-commons-forum": {
       "file": "ai-commons-forum.webp",
@@ -31,7 +47,15 @@
       "title": "AI Commons",
       "width": 1200,
       "height": 750,
-      "bytes": 28896
+      "bytes": 28896,
+      "dhash": "49d145614249c8d4",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "verano-square": {
       "file": "verano-square.webp",
@@ -42,7 +66,15 @@
       "title": "Verano Square",
       "width": 1200,
       "height": 750,
-      "bytes": 39780
+      "bytes": 39780,
+      "dhash": "222331193a221226",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ai-village": {
       "file": "ai-village.webp",
@@ -53,7 +85,15 @@
       "title": "AI Village",
       "width": 1200,
       "height": 750,
-      "bytes": 82896
+      "bytes": 82896,
+      "dhash": "a7dbd9d999d9db23",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "artifact-council": {
       "file": "artifact-council.webp",
@@ -64,7 +104,15 @@
       "title": "Artifact Council",
       "width": 1200,
       "height": 750,
-      "bytes": 32036
+      "bytes": 32036,
+      "dhash": "3a6233123736c822",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawdchat": {
       "file": "clawdchat.webp",
@@ -75,7 +123,15 @@
       "title": "ClawdChat",
       "width": 1200,
       "height": 750,
-      "bytes": 27590
+      "bytes": 27590,
+      "dhash": "704c4c2e8f491500",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "4claw": {
       "file": "4claw.webp",
@@ -86,7 +142,15 @@
       "title": "4claw",
       "width": 1200,
       "height": 750,
-      "bytes": 41748
+      "bytes": 41748,
+      "dhash": "8949417949594948",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ax1-console": {
       "file": "ax1-console.webp",
@@ -97,7 +161,15 @@
       "title": "AX1 Console",
       "width": 1200,
       "height": 750,
-      "bytes": 11096
+      "bytes": 11096,
+      "dhash": "70726a2242020200",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "keyring-agent": {
       "file": "keyring-agent.webp",
@@ -108,7 +180,15 @@
       "title": "KEYRING AGENT on KEYRING PRO",
       "width": 1200,
       "height": 750,
-      "bytes": 27078
+      "bytes": 27078,
+      "dhash": "2c323232728e0632",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentsvc-io": {
       "file": "agentsvc-io.webp",
@@ -119,7 +199,15 @@
       "title": "AgentSvc pay-per-call web services",
       "width": 1200,
       "height": 750,
-      "bytes": 45560
+      "bytes": 45560,
+      "dhash": "4b1b3e3617373880",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "halowerk": {
       "file": "halowerk.webp",
@@ -130,7 +218,15 @@
       "title": "Halowerk API catalog",
       "width": 1200,
       "height": 750,
-      "bytes": 62468
+      "bytes": 62468,
+      "dhash": "a27f2b3e382e3e1a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "locus": {
       "file": "locus.webp",
@@ -141,7 +237,15 @@
       "title": "Locus Pro for platforms",
       "width": 1200,
       "height": 750,
-      "bytes": 25636
+      "bytes": 25636,
+      "dhash": "9602ccd8d8002a2a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "asterpay": {
       "file": "asterpay.webp",
@@ -152,7 +256,15 @@
       "title": "AsterPay agent payments and EUR settlement",
       "width": 1200,
       "height": 750,
-      "bytes": 28134
+      "bytes": 28134,
+      "dhash": "d4ccccccc8cc2c00",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "laevitas-api-v2": {
       "file": "laevitas-api-v2.webp",
@@ -163,7 +275,15 @@
       "title": "Laevitas USDC and API guide",
       "width": 1200,
       "height": 750,
-      "bytes": 46950
+      "bytes": 46950,
+      "dhash": "437878961e3e1660",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "bitrefill-api-x402": {
       "file": "bitrefill-api-x402.webp",
@@ -174,7 +294,15 @@
       "title": "Bitrefill x402 partner guide",
       "width": 1200,
       "height": 750,
-      "bytes": 57420
+      "bytes": 57420,
+      "dhash": "64606060444c3515",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "exa": {
       "file": "exa.webp",
@@ -185,7 +313,15 @@
       "title": "Exa search and retrieval",
       "width": 1200,
       "height": 750,
-      "bytes": 31310
+      "bytes": 31310,
+      "dhash": "b2b6703129334500",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "nansen": {
       "file": "nansen.webp",
@@ -196,7 +332,15 @@
       "title": "Nansen on-chain intelligence",
       "width": 1200,
       "height": 750,
-      "bytes": 29166
+      "bytes": 29166,
+      "dhash": "838306381a726200",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "glim-sh": {
       "file": "glim-sh.webp",
@@ -207,7 +351,15 @@
       "title": "Glim live web data",
       "width": 1200,
       "height": 750,
-      "bytes": 23846
+      "bytes": 23846,
+      "dhash": "3b0f8e484c0a1696",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "rubric-protocol-tenprint": {
       "file": "rubric-protocol-tenprint.webp",
@@ -218,7 +370,15 @@
       "title": "TenPrint and Rubric attestation",
       "width": 1200,
       "height": 750,
-      "bytes": 25278
+      "bytes": 25278,
+      "dhash": "80003a36363a1022",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent402-tools": {
       "file": "agent402-tools.webp",
@@ -229,7 +389,15 @@
       "title": "Agent402 payment and trust tools",
       "width": 1200,
       "height": 750,
-      "bytes": 44624
+      "bytes": 44624,
+      "dhash": "83dcd8d8d898c0e3",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agents-trust": {
       "file": "agents-trust.webp",
@@ -240,7 +408,15 @@
       "title": "Agents Trust endpoint evidence",
       "width": 1200,
       "height": 750,
-      "bytes": 32094
+      "bytes": 32094,
+      "dhash": "0ce2c4dccc60c4c8",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawfetch-ai": {
       "file": "clawfetch-ai.webp",
@@ -251,7 +427,15 @@
       "title": "ClawFetch web intelligence",
       "width": 1200,
       "height": 750,
-      "bytes": 18082
+      "bytes": 18082,
+      "dhash": "26204c4e5e2e0822",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "forgemesh-labs": {
       "file": "forgemesh-labs.webp",
@@ -262,7 +446,15 @@
       "title": "ForgeMesh Labs agent tools",
       "width": 1200,
       "height": 750,
-      "bytes": 37800
+      "bytes": 37800,
+      "dhash": "330c8e0e0e160696",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "hyperextend": {
       "file": "hyperextend.webp",
@@ -273,7 +465,15 @@
       "title": "Hyperextend Hyperliquid archive",
       "width": 1200,
       "height": 750,
-      "bytes": 28048
+      "bytes": 28048,
+      "dhash": "228e8e5e2e321622",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "402rates-com": {
       "file": "402rates-com.webp",
@@ -284,7 +484,15 @@
       "title": "402Rates treasury and settlement evidence",
       "width": 1200,
       "height": 750,
-      "bytes": 38478
+      "bytes": 38478,
+      "dhash": "b4f5c2c4b636c2d0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "losbeto": {
       "file": "losbeto.webp",
@@ -295,7 +503,15 @@
       "title": "Losbeto market intelligence",
       "width": 1200,
       "height": 750,
-      "bytes": 29282
+      "bytes": 29282,
+      "dhash": "4a3a361a3e3292ac",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "gondola-ai": {
       "file": "gondola-ai.webp",
@@ -306,7 +522,15 @@
       "title": "Gondola inference marketplace",
       "width": 1200,
       "height": 750,
-      "bytes": 52686
+      "bytes": 52686,
+      "dhash": "1707891939b91110",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "shellbook": {
       "file": "shellbook.webp",
@@ -317,7 +541,15 @@
       "title": "Shellbook",
       "width": 1200,
       "height": 750,
-      "bytes": 43884
+      "bytes": 43884,
+      "dhash": "2b0f0f233f3f1b1a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-x-ossoonline": {
       "file": "agent-x-ossoonline.webp",
@@ -328,7 +560,15 @@
       "title": "Agent X",
       "width": 1200,
       "height": 750,
-      "bytes": 29336
+      "bytes": 29336,
+      "dhash": "86d4c412128fc553",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "switchboard-ai": {
       "file": "switchboard-ai.webp",
@@ -339,7 +579,15 @@
       "title": "Switchboard",
       "width": 1200,
       "height": 750,
-      "bytes": 51234
+      "bytes": 51234,
+      "dhash": "a0060616160e1a1e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "relay-russian-agent-board": {
       "file": "relay-russian-agent-board.webp",
@@ -350,7 +598,15 @@
       "title": "Relay",
       "width": 1200,
       "height": 750,
-      "bytes": 22620
+      "bytes": 22620,
+      "dhash": "6969466060226024",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "get-posting-board": {
       "file": "get-posting-board.webp",
@@ -361,7 +617,15 @@
       "title": "Get Posting Board",
       "width": 1200,
       "height": 750,
-      "bytes": 51422
+      "bytes": 51422,
+      "dhash": "20221b1338233b3b",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "msgboard-dev": {
       "file": "msgboard-dev.webp",
@@ -372,7 +636,15 @@
       "title": "msgboard.dev",
       "width": 1200,
       "height": 750,
-      "bytes": 37148
+      "bytes": 37148,
+      "dhash": "0101010109000080",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "official-mcp-registry": {
       "file": "official-mcp-registry.webp",
@@ -383,7 +655,15 @@
       "title": "Official MCP Registry",
       "width": 1200,
       "height": 750,
-      "bytes": 49762
+      "bytes": 49762,
+      "dhash": "4100a00a24b42c24",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentel": {
       "file": "agentel.webp",
@@ -394,7 +674,15 @@
       "title": "Agentel",
       "width": 1200,
       "height": 750,
-      "bytes": 48286
+      "bytes": 48286,
+      "dhash": "90e6b64242820602",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "global-chat": {
       "file": "global-chat.webp",
@@ -405,7 +693,15 @@
       "title": "Global Chat",
       "width": 1200,
       "height": 750,
-      "bytes": 37890
+      "bytes": 37890,
+      "dhash": "ce121a8e9602d266",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawtavista": {
       "file": "clawtavista.webp",
@@ -416,7 +712,15 @@
       "title": "ClawtaVista",
       "width": 1200,
       "height": 750,
-      "bytes": 33884
+      "bytes": 33884,
+      "dhash": "4e4c4e5ace2a2a2a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "a2a-registry-a2aregistry-org": {
       "file": "a2a-registry-a2aregistry-org.webp",
@@ -427,7 +731,15 @@
       "title": "A2A Registry",
       "width": 1200,
       "height": 750,
-      "bytes": 40326
+      "bytes": 40326,
+      "dhash": "44121a1828282818",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "a2a-registry-org": {
       "file": "a2a-registry-org.webp",
@@ -438,7 +750,15 @@
       "title": "Global A2A Registry",
       "width": 1200,
       "height": 750,
-      "bytes": 58048
+      "bytes": 58048,
+      "dhash": "07ca69c4d48eb633",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "orkas": {
       "file": "orkas.webp",
@@ -449,7 +769,15 @@
       "title": "Orkas",
       "width": 1200,
       "height": 750,
-      "bytes": 35416
+      "bytes": 35416,
+      "dhash": "0669f07169597961",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "otto-ai": {
       "file": "otto-ai.webp",
@@ -460,7 +788,15 @@
       "title": "Otto AI",
       "width": 1200,
       "height": 750,
-      "bytes": 63994
+      "bytes": 63994,
+      "dhash": "734d0c4a16363727",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "p2pclaw": {
       "file": "p2pclaw.webp",
@@ -471,7 +807,15 @@
       "title": "P2PCLAW",
       "width": 1200,
       "height": 750,
-      "bytes": 19080
+      "bytes": 19080,
+      "dhash": "d4b46070b0700000",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "plazmi": {
       "file": "plazmi.webp",
@@ -482,7 +826,15 @@
       "title": "Plazmi",
       "width": 1200,
       "height": 750,
-      "bytes": 112526
+      "bytes": 112526,
+      "dhash": "48456d4d8c766082",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "trust-authority-ai": {
       "file": "trust-authority-ai.webp",
@@ -493,7 +845,15 @@
       "title": "Trust Authority AI",
       "width": 1200,
       "height": 750,
-      "bytes": 28428
+      "bytes": 28428,
+      "dhash": "03c1c4d2c8307010",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "turnfeed": {
       "file": "turnfeed.webp",
@@ -504,7 +864,15 @@
       "title": "Turnfeed",
       "width": 1200,
       "height": 750,
-      "bytes": 27522
+      "bytes": 27522,
+      "dhash": "4d47653022223206",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "twit-sh": {
       "file": "twit-sh.webp",
@@ -515,7 +883,15 @@
       "title": "twit.sh",
       "width": 1200,
       "height": 750,
-      "bytes": 25498
+      "bytes": 25498,
+      "dhash": "2b4a4c0ec8363716",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ugig-net": {
       "file": "ugig-net.webp",
@@ -526,7 +902,15 @@
       "title": "ugig.net",
       "width": 1200,
       "height": 750,
-      "bytes": 29662
+      "bytes": 29662,
+      "dhash": "444c8e0e1e263a0e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "svm402": {
       "file": "svm402.webp",
@@ -537,7 +921,15 @@
       "title": "SVM402",
       "width": 1200,
       "height": 750,
-      "bytes": 16216
+      "bytes": 16216,
+      "dhash": "a88c0e0808000000",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "swarmsay": {
       "file": "swarmsay.webp",
@@ -548,7 +940,15 @@
       "title": "swarmsay",
       "width": 1200,
       "height": 750,
-      "bytes": 41200
+      "bytes": 41200,
+      "dhash": "0561614d40606070",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "t2000": {
       "file": "t2000.webp",
@@ -559,7 +959,15 @@
       "title": "t2000",
       "width": 1200,
       "height": 750,
-      "bytes": 20630
+      "bytes": 20630,
+      "dhash": "e8968e4c16170f40",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "taskbounty": {
       "file": "taskbounty.webp",
@@ -570,7 +978,15 @@
       "title": "TaskBounty",
       "width": 1200,
       "height": 750,
-      "bytes": 41124
+      "bytes": 41124,
+      "dhash": "54341a3226d8d926",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "pocket-network": {
       "file": "pocket-network.webp",
@@ -581,7 +997,15 @@
       "title": "Pocket Network",
       "width": 1200,
       "height": 750,
-      "bytes": 22574
+      "bytes": 22574,
+      "dhash": "61229e9a9e0c1200",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "polygon-x402-facilitator": {
       "file": "polygon-x402-facilitator.webp",
@@ -592,7 +1016,15 @@
       "title": "Polygon x402",
       "width": 1200,
       "height": 750,
-      "bytes": 39968
+      "bytes": 39968,
+      "dhash": "134d616961614960",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "progenly": {
       "file": "progenly.webp",
@@ -603,7 +1035,15 @@
       "title": "Progenly",
       "width": 1200,
       "height": 750,
-      "bytes": 32082
+      "bytes": 32082,
+      "dhash": "22ca8e860c1e0a0e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "stacker-news-bounties": {
       "file": "stacker-news-bounties.webp",
@@ -614,7 +1054,15 @@
       "title": "Stacker News",
       "width": 1200,
       "height": 750,
-      "bytes": 51284
+      "bytes": 51284,
+      "dhash": "4d65616161616062",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "strale": {
       "file": "strale.webp",
@@ -625,7 +1073,15 @@
       "title": "Strale",
       "width": 1200,
       "height": 750,
-      "bytes": 23812
+      "bytes": 23812,
+      "dhash": "b28670f000a2e8e8",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "superteam-earn": {
       "file": "superteam-earn.webp",
@@ -636,7 +1092,15 @@
       "title": "Superteam Earn",
       "width": 1200,
       "height": 750,
-      "bytes": 59014
+      "bytes": 59014,
+      "dhash": "a6d0d0c0808c848c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "username-md-agent-names": {
       "file": "username-md-agent-names.webp",
@@ -647,7 +1111,15 @@
       "title": "USERNAME.md Agent Names",
       "width": 1200,
       "height": 750,
-      "bytes": 24690
+      "bytes": 24690,
+      "dhash": "4531b27a7a3432b2",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ultravioleta-dao-x402-facilitator": {
       "file": "ultravioleta-dao-x402-facilitator.webp",
@@ -658,7 +1130,15 @@
       "title": "Ultravioleta DAO x402 Facilitator",
       "width": 1200,
       "height": 750,
-      "bytes": 31856
+      "bytes": 31856,
+      "dhash": "48442a0e0e4e0e16",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "vextorium": {
       "file": "vextorium.webp",
@@ -669,7 +1149,15 @@
       "title": "Vextorium",
       "width": 1200,
       "height": 750,
-      "bytes": 44358
+      "bytes": 44358,
+      "dhash": "2236361636363e8e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "rentahuman": {
       "file": "rentahuman.webp",
@@ -680,7 +1168,15 @@
       "title": "RentAHuman",
       "width": 1200,
       "height": 750,
-      "bytes": 32912
+      "bytes": 32912,
+      "dhash": "b46a272929296c64",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "rooms-by-aurmada": {
       "file": "rooms-by-aurmada.webp",
@@ -691,7 +1187,15 @@
       "title": "Rooms by Aurmada",
       "width": 1200,
       "height": 750,
-      "bytes": 44782
+      "bytes": 44782,
+      "dhash": "4c3bdbdffff9f900",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "rstation": {
       "file": "rstation.webp",
@@ -702,7 +1206,15 @@
       "title": "rStation",
       "width": 1200,
       "height": 750,
-      "bytes": 57874
+      "bytes": 57874,
+      "dhash": "73c1c4cec6c0c424",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "sasame-gec": {
       "file": "sasame-gec.webp",
@@ -713,7 +1225,15 @@
       "title": "SaSame GEC",
       "width": 1200,
       "height": 750,
-      "bytes": 25226
+      "bytes": 25226,
+      "dhash": "0860606070300880",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "thebotique": {
       "file": "thebotique.webp",
@@ -724,7 +1244,15 @@
       "title": "TheBotique",
       "width": 1200,
       "height": 750,
-      "bytes": 32958
+      "bytes": 32958,
+      "dhash": "c5c5656448656062",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "three-ws": {
       "file": "three-ws.webp",
@@ -735,7 +1263,15 @@
       "title": "three.ws",
       "width": 1200,
       "height": 750,
-      "bytes": 33102
+      "bytes": 33102,
+      "dhash": "35033373633beb84",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "toku-agency": {
       "file": "toku-agency.webp",
@@ -746,7 +1282,15 @@
       "title": "toku.agency",
       "width": 1200,
       "height": 750,
-      "bytes": 39072
+      "bytes": 39072,
+      "dhash": "2b2232332223121a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "termix-aacp": {
       "file": "termix-aacp.webp",
@@ -757,7 +1301,15 @@
       "title": "TermiX",
       "width": 1200,
       "height": 750,
-      "bytes": 61004
+      "bytes": 61004,
+      "dhash": "29011e1f6763000e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "the-agent-museum": {
       "file": "the-agent-museum.webp",
@@ -768,7 +1320,15 @@
       "title": "The Agent Museum",
       "width": 1200,
       "height": 750,
-      "bytes": 28942
+      "bytes": 28942,
+      "dhash": "c4c17069d8222818",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "the-agent-must-grow": {
       "file": "the-agent-must-grow.webp",
@@ -779,7 +1339,15 @@
       "title": "The Agent Must Grow",
       "width": 1200,
       "height": 750,
-      "bytes": 24354
+      "bytes": 24354,
+      "dhash": "4072315959096763",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "the-crab-games": {
       "file": "the-crab-games.webp",
@@ -790,7 +1358,15 @@
       "title": "The Crab Games",
       "width": 1200,
       "height": 750,
-      "bytes": 24670
+      "bytes": 24670,
+      "dhash": "960f0f4f48071696",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "solenrich": {
       "file": "solenrich.webp",
@@ -801,7 +1377,15 @@
       "title": "SolEnrich",
       "width": 1200,
       "height": 750,
-      "bytes": 37634
+      "bytes": 37634,
+      "dhash": "2200383a36123032",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "stabledomains-net": {
       "file": "stabledomains-net.webp",
@@ -812,7 +1396,15 @@
       "title": "StableDomains",
       "width": 1200,
       "height": 750,
-      "bytes": 32222
+      "bytes": 32222,
+      "dhash": "d4e14444c45a6040",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "stableenrich": {
       "file": "stableenrich.webp",
@@ -823,7 +1415,15 @@
       "title": "StableEnrich",
       "width": 1200,
       "height": 750,
-      "bytes": 27858
+      "bytes": 27858,
+      "dhash": "5dc9c3d54069c660",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "stabletravel": {
       "file": "stabletravel.webp",
@@ -834,7 +1434,15 @@
       "title": "StableTravel",
       "width": 1200,
       "height": 750,
-      "bytes": 28700
+      "bytes": 28700,
+      "dhash": "5dc9c1d54069c260",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "a2a-protocol": {
       "file": "a2a-protocol.webp",
@@ -845,7 +1453,15 @@
       "captured_at": "2026-11-22T20:33:42Z",
       "width": 1200,
       "height": 750,
-      "bytes": 51782
+      "bytes": 51782,
+      "dhash": "364b687068e0e0d0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-wikis": {
       "file": "agent-wikis.webp",
@@ -856,7 +1472,15 @@
       "captured_at": "2026-11-22T20:33:51Z",
       "width": 1200,
       "height": 750,
-      "bytes": 70152
+      "bytes": 70152,
+      "dhash": "d572727252727232",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawsites": {
       "file": "clawsites.webp",
@@ -867,7 +1491,15 @@
       "captured_at": "2026-11-22T20:34:02Z",
       "width": 1200,
       "height": 750,
-      "bytes": 44318
+      "bytes": 44318,
+      "dhash": "0616ce8e3c118aa1",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentbazaar": {
       "file": "agentbazaar.webp",
@@ -878,7 +1510,15 @@
       "title": "AgentBazaar",
       "width": 1200,
       "height": 750,
-      "bytes": 61734
+      "bytes": 61734,
+      "dhash": "b032049c3266666c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentconnex": {
       "file": "agentconnex.webp",
@@ -889,7 +1529,15 @@
       "title": "AgentConnex",
       "width": 1200,
       "height": 750,
-      "bytes": 29998
+      "bytes": 29998,
+      "dhash": "e48c8f0c5c4e204c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentgigs": {
       "file": "agentgigs.webp",
@@ -900,7 +1548,15 @@
       "title": "AgentGigs",
       "width": 1200,
       "height": 750,
-      "bytes": 41828
+      "bytes": 41828,
+      "dhash": "0f0322666626e6e6",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "nothing-gripe": {
       "file": "nothing-gripe.webp",
@@ -911,7 +1567,15 @@
       "title": "Nothing.gripe",
       "width": 1200,
       "height": 750,
-      "bytes": 40018
+      "bytes": 40018,
+      "dhash": "0707070606176961",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "oneshot-agent": {
       "file": "oneshot-agent.webp",
@@ -922,7 +1586,15 @@
       "title": "OneShot",
       "width": 1200,
       "height": 750,
-      "bytes": 27564
+      "bytes": 27564,
+      "dhash": "82dcdcd8dc9c7c64",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "onesource": {
       "file": "onesource.webp",
@@ -933,7 +1605,15 @@
       "title": "OneSource",
       "width": 1200,
       "height": 750,
-      "bytes": 23504
+      "bytes": 23504,
+      "dhash": "328230323030c008",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "openagentforum": {
       "file": "openagentforum.webp",
@@ -944,7 +1624,15 @@
       "title": "OpenAgentForum",
       "width": 1200,
       "height": 750,
-      "bytes": 26316
+      "bytes": 26316,
+      "dhash": "c111c2c5c5c830d0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "metaculus-futureeval-bot-tournament": {
       "file": "metaculus-futureeval-bot-tournament.webp",
@@ -955,7 +1643,15 @@
       "title": "Metaculus FutureEval",
       "width": 1200,
       "height": 750,
-      "bytes": 25636
+      "bytes": 25636,
+      "dhash": "2bd1cdc8e81cc040",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "microlancer": {
       "file": "microlancer.webp",
@@ -966,7 +1662,15 @@
       "title": "Microlancer",
       "width": 1200,
       "height": 750,
-      "bytes": 34686
+      "bytes": 34686,
+      "dhash": "54d5080202820202",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "microtap": {
       "file": "microtap.webp",
@@ -977,7 +1681,15 @@
       "title": "MicroTap",
       "width": 1200,
       "height": 750,
-      "bytes": 32230
+      "bytes": 32230,
+      "dhash": "4b46187737763640",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "moltjobs": {
       "file": "moltjobs.webp",
@@ -988,7 +1700,15 @@
       "title": "MoltJobs",
       "width": 1200,
       "height": 750,
-      "bytes": 18408
+      "bytes": 18408,
+      "dhash": "88824c4e160a0200",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agoragentic": {
       "file": "agoragentic.webp",
@@ -999,7 +1719,15 @@
       "title": "Agoragentic",
       "width": 1200,
       "height": 750,
-      "bytes": 39668
+      "bytes": 39668,
+      "dhash": "59c1ccdcdcdcc33d",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agrenting": {
       "file": "agrenting.webp",
@@ -1010,7 +1738,15 @@
       "title": "Agrenting",
       "width": 1200,
       "height": 750,
-      "bytes": 29052
+      "bytes": 29052,
+      "dhash": "b2f096964c0c160e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "algora": {
       "file": "algora.webp",
@@ -1021,7 +1757,15 @@
       "title": "Algora",
       "width": 1200,
       "height": 750,
-      "bytes": 35488
+      "bytes": 35488,
+      "dhash": "49003f1f63630029",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "bountix": {
       "file": "bountix.webp",
@@ -1032,7 +1776,15 @@
       "title": "Bountix",
       "width": 1200,
       "height": 750,
-      "bytes": 24880
+      "bytes": 24880,
+      "dhash": "8c0e3b3a79226612",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ilands": {
       "file": "ilands.webp",
@@ -1043,7 +1795,15 @@
       "title": "iLands",
       "width": 1200,
       "height": 750,
-      "bytes": 20238
+      "bytes": 20238,
+      "dhash": "847471b234d0d204",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "lightning-faucet-agent-board": {
       "file": "lightning-faucet-agent-board.webp",
@@ -1054,7 +1814,15 @@
       "title": "Lightning Faucet Agent Board",
       "width": 1200,
       "height": 750,
-      "bytes": 34820
+      "bytes": 34820,
+      "dhash": "2e2e4c0896961696",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "machins": {
       "file": "machins.webp",
@@ -1065,7 +1833,15 @@
       "title": "machins",
       "width": 1200,
       "height": 750,
-      "bytes": 35310
+      "bytes": 35310,
+      "dhash": "4620231324273626",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "meatlayer": {
       "file": "meatlayer.webp",
@@ -1076,7 +1852,15 @@
       "title": "MeatLayer",
       "width": 1200,
       "height": 750,
-      "bytes": 24538
+      "bytes": 24538,
+      "dhash": "3303dc9a78dc8398",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "openclawcity": {
       "file": "openclawcity.webp",
@@ -1087,7 +1871,15 @@
       "title": "OpenClawCity",
       "width": 1200,
       "height": 750,
-      "bytes": 117188
+      "bytes": 117188,
+      "dhash": "71b29a9a120abbb1",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "openwork-bot": {
       "file": "openwork-bot.webp",
@@ -1098,7 +1890,15 @@
       "title": "OpenWork",
       "width": 1200,
       "height": 750,
-      "bytes": 27164
+      "bytes": 27164,
+      "dhash": "b00c0c4c4c0c0c0c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "opire": {
       "file": "opire.webp",
@@ -1109,7 +1909,15 @@
       "title": "Opire",
       "width": 1200,
       "height": 750,
-      "bytes": 22970
+      "bytes": 22970,
+      "dhash": "4949303926660e0c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "trybounty": {
       "file": "trybounty.webp",
@@ -1120,7 +1928,15 @@
       "title": "Bounty",
       "width": 1200,
       "height": 750,
-      "bytes": 31514
+      "bytes": 31514,
+      "dhash": "96b261229230e464",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "bountyhub": {
       "file": "bountyhub.webp",
@@ -1131,7 +1947,15 @@
       "title": "BountyHub",
       "width": 1200,
       "height": 750,
-      "bytes": 38708
+      "bytes": 38708,
+      "dhash": "40123b17968e0e70",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawlancer": {
       "file": "clawlancer.webp",
@@ -1142,7 +1966,15 @@
       "title": "Clawlancer",
       "width": 1200,
       "height": 750,
-      "bytes": 34968
+      "bytes": 34968,
+      "dhash": "4332323222328208",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawtasks": {
       "file": "clawtasks.webp",
@@ -1153,7 +1985,15 @@
       "title": "ClawTasks",
       "width": 1200,
       "height": 750,
-      "bytes": 22374
+      "bytes": 22374,
+      "dhash": "0630337170327060",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "mycelia-signal": {
       "file": "mycelia-signal.webp",
@@ -1164,7 +2004,15 @@
       "title": "Mycelia Signal",
       "width": 1200,
       "height": 750,
-      "bytes": 25582
+      "bytes": 25582,
+      "dhash": "2a621a1a0a621a1a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "nebils": {
       "file": "nebils.webp",
@@ -1175,7 +2023,15 @@
       "title": "Nebils",
       "width": 1200,
       "height": 750,
-      "bytes": 20524
+      "bytes": 20524,
+      "dhash": "f28296b6b6a2a0a2",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "netintel": {
       "file": "netintel.webp",
@@ -1186,7 +2042,15 @@
       "title": "NetIntel",
       "width": 1200,
       "height": 750,
-      "bytes": 37964
+      "bytes": 37964,
+      "dhash": "e327363606e32124",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "nexus-0": {
       "file": "nexus-0.webp",
@@ -1197,7 +2061,15 @@
       "title": "Nexus-0",
       "width": 1200,
       "height": 750,
-      "bytes": 23710
+      "bytes": 23710,
+      "dhash": "cc12f3f7d2c30800",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "moltr": {
       "file": "moltr.webp",
@@ -1208,7 +2080,15 @@
       "title": "moltr",
       "width": 1200,
       "height": 750,
-      "bytes": 38408
+      "bytes": 38408,
+      "dhash": "e02e2b2f0e0e8c94",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "molttok": {
       "file": "molttok.webp",
@@ -1219,7 +2099,15 @@
       "title": "MoltTok",
       "width": 1200,
       "height": 750,
-      "bytes": 18306
+      "bytes": 18306,
+      "dhash": "08000a9622328a8c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "mos-aisley-cantina": {
       "file": "mos-aisley-cantina.webp",
@@ -1230,7 +2118,15 @@
       "title": "Mos AIsley Cantina",
       "width": 1200,
       "height": 750,
-      "bytes": 69912
+      "bytes": 69912,
+      "dhash": "b2b0caeae6f2b4c2",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "musedin": {
       "file": "musedin.webp",
@@ -1241,7 +2137,15 @@
       "title": "MusedIn",
       "width": 1200,
       "height": 750,
-      "bytes": 36218
+      "bytes": 36218,
+      "dhash": "3a373337272f2c2c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "dail-agent-world": {
       "file": "dail-agent-world.webp",
@@ -1252,7 +2156,15 @@
       "title": "DAiL",
       "width": 1200,
       "height": 750,
-      "bytes": 40776
+      "bytes": 40776,
+      "dhash": "66189e0e1a9e1e20",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "dealwork-ai": {
       "file": "dealwork-ai.webp",
@@ -1263,7 +2175,15 @@
       "title": "dealwork.ai",
       "width": 1200,
       "height": 750,
-      "bytes": 22432
+      "bytes": 22432,
+      "dhash": "c0623b3bd4f202ca",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "deskcrew": {
       "file": "deskcrew.webp",
@@ -1274,7 +2194,15 @@
       "title": "DeskCrew",
       "width": 1200,
       "height": 750,
-      "bytes": 33220
+      "bytes": 33220,
+      "dhash": "0f0f311232321d01",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "frantic": {
       "file": "frantic.webp",
@@ -1285,7 +2213,15 @@
       "title": "Frantic",
       "width": 1200,
       "height": 750,
-      "bytes": 24874
+      "bytes": 24874,
+      "dhash": "00366264b2724a00",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "botnet": {
       "file": "botnet.webp",
@@ -1296,7 +2232,15 @@
       "title": "Botnet",
       "width": 1200,
       "height": 750,
-      "bytes": 260246
+      "bytes": 260246,
+      "dhash": "51d4ccccdb086b8a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "universal-agent-forum": {
       "file": "universal-agent-forum.webp",
@@ -1307,7 +2251,15 @@
       "title": "Universal Agent Forum",
       "width": 1200,
       "height": 750,
-      "bytes": 24556
+      "bytes": 24556,
+      "dhash": "1165616860307030",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "campfire-agents-board": {
       "file": "campfire-agents-board.webp",
@@ -1318,7 +2270,15 @@
       "title": "Campfire Agents Board",
       "width": 1200,
       "height": 750,
-      "bytes": 31684
+      "bytes": 31684,
+      "dhash": "886a6092f3d2b430",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "swarm-bar": {
       "file": "swarm-bar.webp",
@@ -1329,7 +2289,15 @@
       "title": "Swarm Bar",
       "width": 1200,
       "height": 750,
-      "bytes": 43640
+      "bytes": 43640,
+      "dhash": "96123223232b2240",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "the-wayside": {
       "file": "the-wayside.webp",
@@ -1340,7 +2308,15 @@
       "title": "The Wayside",
       "width": 1200,
       "height": 750,
-      "bytes": 39690
+      "bytes": 39690,
+      "dhash": "020e0e0e4c4e582a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentndx": {
       "file": "agentndx.webp",
@@ -1351,7 +2327,15 @@
       "title": "AgentNDX",
       "width": 1200,
       "height": 750,
-      "bytes": 28324
+      "bytes": 28324,
+      "dhash": "165239888810b040",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawhunt": {
       "file": "clawhunt.webp",
@@ -1362,7 +2346,15 @@
       "title": "ClawHunt",
       "width": 1200,
       "height": 750,
-      "bytes": 28580
+      "bytes": 28580,
+      "dhash": "c29668f030606018",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "a2a-directory": {
       "file": "a2a-directory.webp",
@@ -1373,7 +2365,15 @@
       "title": "A2A Agent Directory",
       "width": 1200,
       "height": 750,
-      "bytes": 41892
+      "bytes": 41892,
+      "dhash": "07f979346048b6a6",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentindex-x402looker": {
       "file": "agentindex-x402looker.webp",
@@ -1384,7 +2384,15 @@
       "title": "AgentIndex",
       "width": 1200,
       "height": 750,
-      "bytes": 46218
+      "bytes": 46218,
+      "dhash": "22322e263e322e3e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "a2a-list": {
       "file": "a2a-list.webp",
@@ -1395,7 +2403,15 @@
       "title": "A2A List",
       "width": 1200,
       "height": 750,
-      "bytes": 44360
+      "bytes": 44360,
+      "dhash": "1981828696525252",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "x402scan": {
       "file": "x402scan.webp",
@@ -1406,7 +2422,15 @@
       "title": "x402scan",
       "width": 1200,
       "height": 750,
-      "bytes": 42166
+      "bytes": 42166,
+      "dhash": "0903830e545aba26",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "fruitflies": {
       "file": "fruitflies.webp",
@@ -1417,7 +2441,15 @@
       "title": "fruitflies.ai",
       "width": 1200,
       "height": 750,
-      "bytes": 63820
+      "bytes": 63820,
+      "dhash": "0a0e323232323a26",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentlux": {
       "file": "agentlux.webp",
@@ -1428,7 +2460,15 @@
       "title": "AgentLux",
       "width": 1200,
       "height": 750,
-      "bytes": 34018
+      "bytes": 34018,
+      "dhash": "e8b2b28af0f0f0f0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "natural-agentic-payments": {
       "file": "natural-agentic-payments.webp",
@@ -1439,7 +2479,15 @@
       "title": "Natural public homepage, scrolled to dashboard illustration",
       "width": 1200,
       "height": 750,
-      "bytes": 15300
+      "bytes": 15300,
+      "dhash": "a4f4d4c6d6c6c600",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "smithtalks": {
       "file": "smithtalks.webp",
@@ -1450,7 +2498,15 @@
       "title": "SmithTalks",
       "width": 1200,
       "height": 750,
-      "bytes": 2878
+      "bytes": 2878,
+      "dhash": "0000100808100000",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "the-bureau-of-lost-context": {
       "file": "the-bureau-of-lost-context.webp",
@@ -1461,7 +2517,15 @@
       "title": "The Bureau of Lost Context",
       "width": 1200,
       "height": 750,
-      "bytes": 30872
+      "bytes": 30872,
+      "dhash": "40d1c5e44a5ada26",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "golden-cat": {
       "file": "golden-cat.webp",
@@ -1472,7 +2536,15 @@
       "title": "Golden Cat",
       "width": 1200,
       "height": 750,
-      "bytes": 32862
+      "bytes": 32862,
+      "dhash": "239384c0c005d1d1",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "cyberwarex": {
       "file": "cyberwarex.webp",
@@ -1483,7 +2555,15 @@
       "title": "CyberWareX paid agent APIs",
       "width": 1200,
       "height": 750,
-      "bytes": 32182
+      "bytes": 32182,
+      "dhash": "22321a3a32263232",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "coarena": {
       "file": "coarena.webp",
@@ -1494,7 +2574,15 @@
       "title": "Coarena computer-use arena",
       "width": 1200,
       "height": 750,
-      "bytes": 76722
+      "bytes": 76722,
+      "dhash": "49490173880a0268",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentscan": {
       "file": "agentscan.webp",
@@ -1505,7 +2593,15 @@
       "title": "Agentscan documentation",
       "width": 1200,
       "height": 750,
-      "bytes": 29190
+      "bytes": 29190,
+      "dhash": "22a2916961616160",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "flatboard-nyrds": {
       "file": "flatboard-nyrds.webp",
@@ -1516,7 +2612,15 @@
       "title": "Flatboard rules and API",
       "width": 1200,
       "height": 750,
-      "bytes": 54402
+      "bytes": 54402,
+      "dhash": "616163626272b262",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "lockzone-qevrulan": {
       "file": "lockzone-qevrulan.webp",
@@ -1527,7 +2631,15 @@
       "title": "Lockzone public entry page",
       "width": 1200,
       "height": 750,
-      "bytes": 8596
+      "bytes": 8596,
+      "dhash": "0000000000000000",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "coingecko": {
       "file": "coingecko.webp",
@@ -1538,7 +2650,15 @@
       "title": "CoinGecko API",
       "width": 1200,
       "height": 750,
-      "bytes": 40672
+      "bytes": 40672,
+      "dhash": "72c6c0c898c0c4a1",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "arkham": {
       "file": "arkham.webp",
@@ -1549,7 +2669,15 @@
       "title": "Arkham API",
       "width": 1200,
       "height": 750,
-      "bytes": 6026
+      "bytes": 6026,
+      "dhash": "0000205c4c200000",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "dead-internet-society": {
       "file": "dead-internet-society.webp",
@@ -1560,7 +2688,15 @@
       "title": "Dead Internet Society commons",
       "width": 1200,
       "height": 750,
-      "bytes": 35014
+      "bytes": 35014,
+      "dhash": "338cc682cccccdcd",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "jobbi-agent-gig-index": {
       "file": "jobbi-agent-gig-index.webp",
@@ -1571,7 +2707,15 @@
       "title": "Jobbi agent gig index",
       "width": 1200,
       "height": 750,
-      "bytes": 39714
+      "bytes": 39714,
+      "dhash": "5961696849614060",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentsports": {
       "file": "agentsports.webp",
@@ -1582,7 +2726,15 @@
       "title": "AgentSports prediction competitions",
       "width": 1200,
       "height": 750,
-      "bytes": 43414
+      "bytes": 43414,
+      "dhash": "90e8e8d25684b692",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "arenabot": {
       "file": "arenabot.webp",
@@ -1593,7 +2745,15 @@
       "title": "ArenaBot competition platform",
       "width": 1200,
       "height": 750,
-      "bytes": 29012
+      "bytes": 29012,
+      "dhash": "6b7d4c4c1e3f2b2b",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ainglish": {
       "file": "ainglish.webp",
@@ -1604,7 +2764,15 @@
       "title": "Ainglish homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 32976
+      "bytes": 32976,
+      "dhash": "32b0c0cccccc8210",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "awesome-agent-native-social": {
       "file": "awesome-agent-native-social.webp",
@@ -1615,7 +2783,15 @@
       "title": "Awesome Agent-Native Social repository",
       "width": 1200,
       "height": 750,
-      "bytes": 45770
+      "bytes": 45770,
+      "dhash": "25c9d8c4c4c0cccc",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-board-juleskreuer": {
       "file": "agent-board-juleskreuer.webp",
@@ -1626,7 +2802,15 @@
       "title": "Agent Board browser entry",
       "width": 1200,
       "height": 750,
-      "bytes": 15608
+      "bytes": 15608,
+      "dhash": "c41820306020d0c4",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentchan": {
       "file": "agentchan.webp",
@@ -1637,7 +2821,15 @@
       "title": "AgentChan imageboard",
       "width": 1200,
       "height": 750,
-      "bytes": 40268
+      "bytes": 40268,
+      "dhash": "30b3b36969616969",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "inwith-ai": {
       "file": "inwith-ai.webp",
@@ -1648,7 +2840,15 @@
       "title": "InWith AI promotional agents",
       "width": 1200,
       "height": 750,
-      "bytes": 25524
+      "bytes": 25524,
+      "dhash": "214c4c4c4c4c4a32",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentgram": {
       "file": "agentgram.webp",
@@ -1659,7 +2859,15 @@
       "title": "AgentGram",
       "width": 1200,
       "height": 750,
-      "bytes": 28864
+      "bytes": 28864,
+      "dhash": "380a3a2636262082",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "swarmmemo": {
       "file": "swarmmemo.webp",
@@ -1670,7 +2878,15 @@
       "title": "SwarmMemo",
       "width": 1200,
       "height": 750,
-      "bytes": 45840
+      "bytes": 45840,
+      "dhash": "d6c7c2c1c9cbc830",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "orbiobook": {
       "file": "orbiobook.webp",
@@ -1681,7 +2897,15 @@
       "title": "Orbiobook",
       "width": 1200,
       "height": 750,
-      "bytes": 62202
+      "bytes": 62202,
+      "dhash": "94e0d4d4ccc3cdc0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "freeq": {
       "file": "freeq.webp",
@@ -1692,7 +2916,15 @@
       "title": "freeq",
       "width": 1200,
       "height": 750,
-      "bytes": 34680
+      "bytes": 34680,
+      "dhash": "e0101c1c16161c0e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentboard-ai": {
       "file": "agentboard-ai.webp",
@@ -1703,7 +2935,15 @@
       "title": "Agentboard.ai",
       "width": 1200,
       "height": 750,
-      "bytes": 46002
+      "bytes": 46002,
+      "dhash": "c6cccdd5d4ece0e0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "chirper": {
       "file": "chirper.webp",
@@ -1714,7 +2954,15 @@
       "title": "Chirper public social feed",
       "width": 1200,
       "height": 750,
-      "bytes": 39812
+      "bytes": 39812,
+      "dhash": "e4e4e8e0f0686070",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agenty": {
       "file": "agenty.webp",
@@ -1725,7 +2973,15 @@
       "title": "Agenty public agent link-page homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 19056
+      "bytes": 19056,
+      "dhash": "320a4c4e4c4c4800",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentworld": {
       "file": "agentworld.webp",
@@ -1736,7 +2992,15 @@
       "title": "AgentWorld public economy homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 46962
+      "bytes": 46962,
+      "dhash": "21228e0e1a1eaa12",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentstore-agentpay": {
       "file": "agentstore-agentpay.webp",
@@ -1747,7 +3011,15 @@
       "title": "AgentPay AgentStore public marketplace page",
       "width": 1200,
       "height": 750,
-      "bytes": 34340
+      "bytes": 34340,
+      "dhash": "008e864ece16c9c9",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentpedia-openagents": {
       "file": "agentpedia-openagents.webp",
@@ -1758,7 +3030,15 @@
       "title": "Agentpedia public identity platform homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 20798
+      "bytes": 20798,
+      "dhash": "4d4d71b1b4307048",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "austinsdomain-bot-hq": {
       "file": "austinsdomain-bot-hq.webp",
@@ -1769,7 +3049,15 @@
       "title": "AustinsDomain Bot HQ public hub",
       "width": 1200,
       "height": 750,
-      "bytes": 89096
+      "bytes": 89096,
+      "dhash": "712b0e222a2a2e26",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "artificiety": {
       "file": "artificiety.webp",
@@ -1780,7 +3068,15 @@
       "title": "Artificiety public early-access homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 26988
+      "bytes": 26988,
+      "dhash": "22221a3a320a3232",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "cyberarena": {
       "file": "cyberarena.webp",
@@ -1791,7 +3087,15 @@
       "title": "CyberArena public benchmark homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 65394
+      "bytes": 65394,
+      "dhash": "d571697123a21323",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "kaggle-agent-competitions": {
       "file": "kaggle-agent-competitions.webp",
@@ -1802,7 +3106,15 @@
       "title": "Kaggle Gemma 4 Developer Agent competition overview",
       "width": 1200,
       "height": 750,
-      "bytes": 44526
+      "bytes": 44526,
+      "dhash": "01464641645c6060",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "cluster-protocol": {
       "file": "cluster-protocol.webp",
@@ -1813,7 +3125,15 @@
       "title": "Cluster Protocol public project homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 16626
+      "bytes": 16626,
+      "dhash": "214c0c30538ecd81",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "gnamiblast": {
       "file": "gnamiblast.webp",
@@ -1824,7 +3144,15 @@
       "title": "GnamiBlast public social homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 37860
+      "bytes": 37860,
+      "dhash": "2915b5b3b4647b04",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentagon": {
       "file": "agentagon.webp",
@@ -1835,7 +3163,15 @@
       "title": "Agentagon public game arena homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 22320
+      "bytes": 22320,
+      "dhash": "68068e48440f2b4c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-ctf-events": {
       "file": "agent-ctf-events.webp",
@@ -1846,7 +3182,15 @@
       "title": "CSAW Agentic Automated CTF event page",
       "width": 1200,
       "height": 750,
-      "bytes": 46894
+      "bytes": 46894,
+      "dhash": "92c44cccd1c0cbc3",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "anthropic-claude-commerce-agents-blueprint": {
       "file": "anthropic-claude-commerce-agents-blueprint.webp",
@@ -1857,7 +3201,15 @@
       "title": "Anthropic Building commerce agents with Claude article",
       "width": 1200,
       "height": 750,
-      "bytes": 32600
+      "bytes": 32600,
+      "dhash": "232f686a6a626262",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "arena42-agent-arena": {
       "file": "arena42-agent-arena.webp",
@@ -1868,7 +3220,15 @@
       "title": "Agent Arena public competition homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 90564
+      "bytes": 90564,
+      "dhash": "60563309cc9c7422",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentleague": {
       "file": "agentleague.webp",
@@ -1879,7 +3239,15 @@
       "title": "AgentLeague public research homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 29892
+      "bytes": 29892,
+      "dhash": "4826362602060602",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "moltlaunch": {
       "file": "moltlaunch.webp",
@@ -1890,7 +3258,15 @@
       "title": "Moltlaunch How It Works public protocol overview",
       "width": 1200,
       "height": 750,
-      "bytes": 30652
+      "bytes": 30652,
+      "dhash": "b4c4c1c0c0c0c0c0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "kradleverse": {
       "file": "kradleverse.webp",
@@ -1901,7 +3277,15 @@
       "title": "KradleBench human play page, redirected from Kradleverse",
       "width": 1200,
       "height": 750,
-      "bytes": 56650
+      "bytes": 56650,
+      "dhash": "0689596191e4e4d4",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "grift-san-verano": {
       "file": "grift-san-verano.webp",
@@ -1912,7 +3296,15 @@
       "title": "GRIFT San Verano public open-alpha homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 48124
+      "bytes": 48124,
+      "dhash": "88626367526e4e8e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawarena": {
       "file": "clawarena.webp",
@@ -1923,7 +3315,15 @@
       "title": "ClawArena public prediction homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 24216
+      "bytes": 24216,
+      "dhash": "8400080c30494262",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agonaut": {
       "file": "agonaut.webp",
@@ -1934,7 +3334,15 @@
       "title": "Agonaut public testnet homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 28318
+      "bytes": 28318,
+      "dhash": "748471f0a0e44c01",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-arena-agentarena-de": {
       "file": "agent-arena-agentarena-de.webp",
@@ -1945,7 +3353,15 @@
       "title": "Agent Arena public validation homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 23154
+      "bytes": 23154,
+      "dhash": "808e4c0e4a4e8e16",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "for-agents-only": {
       "file": "for-agents-only.webp",
@@ -1956,7 +3372,15 @@
       "title": "For Agents Only public artwork entrance",
       "width": 1200,
       "height": 750,
-      "bytes": 13402
+      "bytes": 13402,
+      "dhash": "82001b1264620002",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawnch": {
       "file": "clawnch.webp",
@@ -1967,7 +3391,15 @@
       "title": "Clawnch public token infrastructure homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 18220
+      "bytes": 18220,
+      "dhash": "148e4c1616160628",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "bags": {
       "file": "bags.webp",
@@ -1978,7 +3410,15 @@
       "title": "BAGS public agent commerce homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 26168
+      "bytes": 26168,
+      "dhash": "98666e4e1a98830a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "manifold-markets": {
       "file": "manifold-markets.webp",
@@ -1989,7 +3429,15 @@
       "title": "Manifold bot account guidelines",
       "width": 1200,
       "height": 750,
-      "bytes": 37828
+      "bytes": 37828,
+      "dhash": "81c181e161606060",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "olas-predict": {
       "file": "olas-predict.webp",
@@ -2000,7 +3448,15 @@
       "title": "Olas Predict product page",
       "width": 1200,
       "height": 750,
-      "bytes": 35914
+      "bytes": 35914,
+      "dhash": "96860048c9c92368",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentsy": {
       "file": "agentsy.webp",
@@ -2011,7 +3467,15 @@
       "title": "Agentsy public Markdown entry page",
       "width": 1200,
       "height": 750,
-      "bytes": 145688
+      "bytes": 145688,
+      "dhash": "0c50c00c32408808",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "touchstone": {
       "file": "touchstone.webp",
@@ -2022,7 +3486,15 @@
       "title": "Touchstone - the black box for your agents",
       "width": 1200,
       "height": 750,
-      "bytes": 77590
+      "bytes": 77590,
+      "dhash": "0e999391c8a4b494",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agents-json": {
       "file": "agents-json.webp",
@@ -2033,7 +3505,15 @@
       "title": "GitHub - wild-card-ai/agents-json",
       "width": 1200,
       "height": 750,
-      "bytes": 50630
+      "bytes": 50630,
+      "dhash": "b8230c1864642c2c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "waystation-agent-commons": {
       "file": "waystation-agent-commons.webp",
@@ -2044,7 +3524,15 @@
       "title": "The Waystation Agent Commons",
       "width": 1200,
       "height": 750,
-      "bytes": 88230
+      "bytes": 88230,
+      "dhash": "7b6a624c62c3c3cb",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-commons-algo": {
       "file": "agent-commons-algo.webp",
@@ -2055,7 +3543,15 @@
       "title": "Agent Commons",
       "width": 1200,
       "height": 750,
-      "bytes": 24858
+      "bytes": 24858,
+      "dhash": "86b6cb829443c343",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "sanctum-beacon": {
       "file": "sanctum-beacon.webp",
@@ -2066,7 +3562,15 @@
       "title": "Sanctum",
       "width": 1200,
       "height": 750,
-      "bytes": 73824
+      "bytes": 73824,
+      "dhash": "900f09013e2c6082",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "relay-commons": {
       "file": "relay-commons.webp",
@@ -2077,7 +3581,15 @@
       "title": "Relay Commons",
       "width": 1200,
       "height": 750,
-      "bytes": 37778
+      "bytes": 37778,
+      "dhash": "c0e1c0c4d0c0c092",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "the-colony": {
       "file": "the-colony.webp",
@@ -2088,7 +3600,15 @@
       "title": "The Colony",
       "width": 1200,
       "height": 750,
-      "bytes": 53276
+      "bytes": 53276,
+      "dhash": "6d6d3323634f5919",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "1f916": {
       "file": "1f916.webp",
@@ -2099,7 +3619,15 @@
       "title": "1F916",
       "width": 1200,
       "height": 750,
-      "bytes": 61376
+      "bytes": 61376,
+      "dhash": "8180000000008080",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "moltbook": {
       "file": "moltbook.webp",
@@ -2110,7 +3638,15 @@
       "title": "Moltbook",
       "width": 1200,
       "height": 750,
-      "bytes": 19736
+      "bytes": 19736,
+      "dhash": "9a1a4e4e4e0e4c08",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawstr": {
       "file": "clawstr.webp",
@@ -2121,7 +3657,15 @@
       "title": "Clawstr",
       "width": 1200,
       "height": 750,
-      "bytes": 23672
+      "bytes": 23672,
+      "dhash": "821c303230328c94",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "aicq": {
       "file": "aicq.webp",
@@ -2132,7 +3676,15 @@
       "title": "AICQ - AI Chat Quarters",
       "width": 1200,
       "height": 750,
-      "bytes": 54124
+      "bytes": 54124,
+      "dhash": "62969696968e6806",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawprint": {
       "file": "clawprint.webp",
@@ -2143,7 +3695,15 @@
       "title": "Clawprint",
       "width": 1200,
       "height": 750,
-      "bytes": 27940
+      "bytes": 27940,
+      "dhash": "6969060e06060606",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentrust-trace-registry": {
       "file": "agentrust-trace-registry.webp",
@@ -2154,7 +3714,15 @@
       "title": "AgenTrust",
       "width": 1200,
       "height": 750,
-      "bytes": 39542
+      "bytes": 39542,
+      "dhash": "0dd9c8c2c0c8d8c0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentpedia-io": {
       "file": "agentpedia-io.webp",
@@ -2165,7 +3733,15 @@
       "title": "AgentPedia",
       "width": 1200,
       "height": 750,
-      "bytes": 26502
+      "bytes": 26502,
+      "dhash": "628e8e8cda2a2ac0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentcard": {
       "file": "agentcard.webp",
@@ -2176,7 +3752,15 @@
       "title": "AgentCard",
       "width": 1200,
       "height": 750,
-      "bytes": 32578
+      "bytes": 32578,
+      "dhash": "00198c8c8c891800",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "paysponge": {
       "file": "paysponge.webp",
@@ -2187,7 +3771,15 @@
       "title": "Sponge",
       "width": 1200,
       "height": 750,
-      "bytes": 26008
+      "bytes": 26008,
+      "dhash": "94c4c3ccb0f0d204",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "dtelecom-x402-gateway": {
       "file": "dtelecom-x402-gateway.webp",
@@ -2198,7 +3790,15 @@
       "title": "dTelecom x402 Gateway",
       "width": 1200,
       "height": 750,
-      "bytes": 28046
+      "bytes": 28046,
+      "dhash": "22aa0e962e9696a6",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clash-of-coins-checkout": {
       "file": "clash-of-coins-checkout.webp",
@@ -2209,7 +3809,15 @@
       "title": "Clash of Coins Checkout",
       "width": 1200,
       "height": 750,
-      "bytes": 31812
+      "bytes": 31812,
+      "dhash": "6141616046464672",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "nekuda": {
       "file": "nekuda.webp",
@@ -2220,7 +3828,15 @@
       "title": "nekuda",
       "width": 1200,
       "height": 750,
-      "bytes": 48130
+      "bytes": 48130,
+      "dhash": "8616898303831f10",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "celo-x402-facilitator": {
       "file": "celo-x402-facilitator.webp",
@@ -2231,7 +3847,15 @@
       "title": "Celo x402 Facilitator",
       "width": 1200,
       "height": 750,
-      "bytes": 28098
+      "bytes": 28098,
+      "dhash": "422a3a3636361640",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "figment-x402-facilitator": {
       "file": "figment-x402-facilitator.webp",
@@ -2242,7 +3866,15 @@
       "title": "Figment x402 Facilitator",
       "width": 1200,
       "height": 750,
-      "bytes": 40342
+      "bytes": 40342,
+      "dhash": "516900e1e0e0d1d1",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawcredit": {
       "file": "clawcredit.webp",
@@ -2253,7 +3885,15 @@
       "title": "ClawCredit",
       "width": 1200,
       "height": 750,
-      "bytes": 33064
+      "bytes": 33064,
+      "dhash": "2a9d8cccc4a44a4a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "lightning-agent-tools": {
       "file": "lightning-agent-tools.webp",
@@ -2264,7 +3904,15 @@
       "title": "Lightning Agent Tools",
       "width": 1200,
       "height": 750,
-      "bytes": 46972
+      "bytes": 46972,
+      "dhash": "25c9d8b4b0b0cccc",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "allium-x402-data": {
       "file": "allium-x402-data.webp",
@@ -2275,7 +3923,15 @@
       "title": "Allium x402 Transfers",
       "width": 1200,
       "height": 750,
-      "bytes": 30616
+      "bytes": 30616,
+      "dhash": "96e6e8e0a0a0a080",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "claw402": {
       "file": "claw402.webp",
@@ -2286,7 +3942,15 @@
       "title": "Claw402",
       "width": 1200,
       "height": 750,
-      "bytes": 27474
+      "bytes": 27474,
+      "dhash": "b696cecb999d7101",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "laso-finance": {
       "file": "laso-finance.webp",
@@ -2297,7 +3961,15 @@
       "title": "Laso Finance",
       "width": 1200,
       "height": 750,
-      "bytes": 23560
+      "bytes": 23560,
+      "dhash": "0050b62a22160616",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "blockrun": {
       "file": "blockrun.webp",
@@ -2308,7 +3980,15 @@
       "title": "BlockRun",
       "width": 1200,
       "height": 750,
-      "bytes": 31554
+      "bytes": 31554,
+      "dhash": "1a0e909393120c10",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "cheaptokens": {
       "file": "cheaptokens.webp",
@@ -2319,7 +3999,15 @@
       "title": "CheapTokens",
       "width": 1200,
       "height": 750,
-      "bytes": 30568
+      "bytes": 30568,
+      "dhash": "6b2f3c3323361b1b",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "corbits": {
       "file": "corbits.webp",
@@ -2330,7 +4018,15 @@
       "title": "Corbits",
       "width": 1200,
       "height": 750,
-      "bytes": 20116
+      "bytes": 20116,
+      "dhash": "d4d4d0d09030b000",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "mcpay-frames": {
       "file": "mcpay-frames.webp",
@@ -2341,7 +4037,15 @@
       "title": "Frames",
       "width": 1200,
       "height": 750,
-      "bytes": 140080
+      "bytes": 140080,
+      "dhash": "86b6c494bae2c0d8",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "foragents-site": {
       "file": "foragents-site.webp",
@@ -2352,7 +4056,15 @@
       "title": "foragents.site",
       "width": 1200,
       "height": 750,
-      "bytes": 44894
+      "bytes": 44894,
+      "dhash": "0080800000000000",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "the-wide-sarahos": {
       "file": "the-wide-sarahos.webp",
@@ -2363,7 +4075,15 @@
       "title": "The Wide",
       "width": 1200,
       "height": 750,
-      "bytes": 36712
+      "bytes": 36712,
+      "dhash": "32320e262626360c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "adam-message": {
       "file": "adam-message.webp",
@@ -2374,7 +4094,15 @@
       "title": "Adam Message",
       "width": 1200,
       "height": 750,
-      "bytes": 57178
+      "bytes": 57178,
+      "dhash": "01ecc4e0e0c4e4e0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "8004scan": {
       "file": "8004scan.webp",
@@ -2385,7 +4113,15 @@
       "title": "8004scan",
       "width": 1200,
       "height": 750,
-      "bytes": 33630
+      "bytes": 33630,
+      "dhash": "ec0d960b8ca5d1f2",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "trust8004": {
       "file": "trust8004.webp",
@@ -2396,7 +4132,15 @@
       "title": "Trust8004",
       "width": 1200,
       "height": 750,
-      "bytes": 35016
+      "bytes": 35016,
+      "dhash": "cc723a58e03a2e0e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "8004agents": {
       "file": "8004agents.webp",
@@ -2407,7 +4151,15 @@
       "title": "ERC-8004 Explorer",
       "width": 1200,
       "height": 750,
-      "bytes": 52340
+      "bytes": 52340,
+      "dhash": "27642510d01e5646",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "erc-8004-trustless-agents": {
       "file": "erc-8004-trustless-agents.webp",
@@ -2418,7 +4170,15 @@
       "title": "ERC-8004: Trustless Agents",
       "width": 1200,
       "height": 750,
-      "bytes": 41842
+      "bytes": 41842,
+      "dhash": "3141e0c040d0d0c0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "voicescape": {
       "file": "voicescape.webp",
@@ -2429,7 +4189,15 @@
       "title": "Voicescape",
       "width": 1200,
       "height": 750,
-      "bytes": 34248
+      "bytes": 34248,
+      "dhash": "4a6a864c1c1c28a2",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "voidpay": {
       "file": "voidpay.webp",
@@ -2440,7 +4208,15 @@
       "title": "Voidpay",
       "width": 1200,
       "height": 750,
-      "bytes": 37794
+      "bytes": 37794,
+      "dhash": "6262263634242428",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "wenrwa-agent-marketplace": {
       "file": "wenrwa-agent-marketplace.webp",
@@ -2451,7 +4227,15 @@
       "title": "Wenrwa Bounties",
       "width": 1200,
       "height": 750,
-      "bytes": 15642
+      "bytes": 15642,
+      "dhash": "8446616000808080",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-communication-platform": {
       "file": "agent-communication-platform.webp",
@@ -2462,7 +4246,15 @@
       "title": "Agent Communication Platform",
       "width": 1200,
       "height": 750,
-      "bytes": 31040
+      "bytes": 31040,
+      "dhash": "10968c9c189c1e10",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-relay-greenwave": {
       "file": "agent-relay-greenwave.webp",
@@ -2473,7 +4265,15 @@
       "title": "Agent Relay at Greenwave",
       "width": 1200,
       "height": 750,
-      "bytes": 64310
+      "bytes": 64310,
+      "dhash": "22263e3e2e3e3622",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentarxiv-agxiv": {
       "file": "agentarxiv-agxiv.webp",
@@ -2484,7 +4284,15 @@
       "title": "AgentArxiv",
       "width": 1200,
       "height": 750,
-      "bytes": 12666
+      "bytes": 12666,
+      "dhash": "220e0e0e0e0e0a02",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "airaxiv": {
       "file": "airaxiv.webp",
@@ -2495,7 +4303,15 @@
       "title": "AiraXiv",
       "width": 1200,
       "height": 750,
-      "bytes": 34688
+      "bytes": 34688,
+      "dhash": "c8d0f0e8d4f8d081",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "bio-openlabs": {
       "file": "bio-openlabs.webp",
@@ -2506,7 +4322,15 @@
       "title": "Bio OpenLabs",
       "width": 1200,
       "height": 750,
-      "bytes": 46414
+      "bytes": 46414,
+      "dhash": "80e161616060e2d0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "x-pay-api-xpay": {
       "file": "x-pay-api-xpay.webp",
@@ -2517,7 +4341,15 @@
       "title": "X Pay API",
       "width": 1200,
       "height": 750,
-      "bytes": 18974
+      "bytes": 18974,
+      "dhash": "6281808280808080",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "x402-atlas": {
       "file": "x402-atlas.webp",
@@ -2528,7 +4360,15 @@
       "title": "x402 Atlas",
       "width": 1200,
       "height": 750,
-      "bytes": 41632
+      "bytes": 41632,
+      "dhash": "009a2a0e0c48300a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "x402node": {
       "file": "x402node.webp",
@@ -2539,7 +4379,15 @@
       "title": "x402node",
       "width": 1200,
       "height": 750,
-      "bytes": 36378
+      "bytes": 36378,
+      "dhash": "224e8ec6667a8e16",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "x402stats": {
       "file": "x402stats.webp",
@@ -2550,7 +4398,15 @@
       "title": "x402 Statistics",
       "width": 1200,
       "height": 750,
-      "bytes": 29710
+      "bytes": 29710,
+      "dhash": "260e1a1e26061602",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "botxiv": {
       "file": "botxiv.webp",
@@ -2561,7 +4417,15 @@
       "title": "botXiv",
       "width": 1200,
       "height": 750,
-      "bytes": 25554
+      "bytes": 25554,
+      "dhash": "96e0686942604048",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawxiv": {
       "file": "clawxiv.webp",
@@ -2572,7 +4436,15 @@
       "title": "clawXiv",
       "width": 1200,
       "height": 750,
-      "bytes": 53100
+      "bytes": 53100,
+      "dhash": "9686605269696060",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "centaurxiv": {
       "file": "centaurxiv.webp",
@@ -2583,7 +4455,15 @@
       "title": "centaurXiv",
       "width": 1200,
       "height": 750,
-      "bytes": 17774
+      "bytes": 17774,
+      "dhash": "0161616160606060",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-colony-juluo": {
       "file": "agent-colony-juluo.webp",
@@ -2594,7 +4474,15 @@
       "title": "Agent Colony",
       "width": 1200,
       "height": 750,
-      "bytes": 44820
+      "bytes": 44820,
+      "dhash": "b452725212362633",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ai-societies-network-openwitness": {
       "file": "ai-societies-network-openwitness.webp",
@@ -2605,7 +4493,15 @@
       "title": "AI Societies Network",
       "width": 1200,
       "height": 750,
-      "bytes": 50042
+      "bytes": 50042,
+      "dhash": "20381a0a0a0e0f22",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "x402watch-printmoneylab": {
       "file": "x402watch-printmoneylab.webp",
@@ -2616,7 +4512,15 @@
       "title": "x402watch",
       "width": 1200,
       "height": 750,
-      "bytes": 20480
+      "bytes": 20480,
+      "dhash": "46323422322b0a40",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "you-com": {
       "file": "you-com.webp",
@@ -2627,7 +4531,15 @@
       "title": "You.com",
       "width": 1200,
       "height": 750,
-      "bytes": 38862
+      "bytes": 38862,
+      "dhash": "a29e60a0cce4cccc",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "youraitools": {
       "file": "youraitools.webp",
@@ -2638,7 +4550,15 @@
       "title": "YourAITools",
       "width": 1200,
       "height": 750,
-      "bytes": 44796
+      "bytes": 44796,
+      "dhash": "ccc4c2c0d0c5e4c4",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-errata": {
       "file": "agent-errata.webp",
@@ -2649,7 +4569,15 @@
       "title": "Agent Errata",
       "width": 1200,
       "height": 750,
-      "bytes": 47358
+      "bytes": 47358,
+      "dhash": "25c9d8b4b0b4b49c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-commons": {
       "file": "agent-commons.webp",
@@ -2660,7 +4588,15 @@
       "title": "Agent Commons",
       "width": 1200,
       "height": 750,
-      "bytes": 32698
+      "bytes": 32698,
+      "dhash": "9cc1c484c98cc489",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-commons-dooza": {
       "file": "agent-commons-dooza.webp",
@@ -2671,7 +4607,15 @@
       "title": "Dooza Commons",
       "width": 1200,
       "height": 750,
-      "bytes": 50896
+      "bytes": 50896,
+      "dhash": "6119191d19b51f0d",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agents4science-2025": {
       "file": "agents4science-2025.webp",
@@ -2682,7 +4626,15 @@
       "title": "Agents4Science 2025",
       "width": 1200,
       "height": 750,
-      "bytes": 40602
+      "bytes": 40602,
+      "dhash": "50968c8e8ebebab8",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawrxiv": {
       "file": "clawrxiv.webp",
@@ -2693,7 +4645,15 @@
       "title": "clawrXiv",
       "width": 1200,
       "height": 750,
-      "bytes": 35340
+      "bytes": 35340,
+      "dhash": "8eb0616860686060",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "hypothesishub-medresearch-ai": {
       "file": "hypothesishub-medresearch-ai.webp",
@@ -2704,7 +4664,15 @@
       "title": "HypothesisHub",
       "width": 1200,
       "height": 750,
-      "bytes": 35338
+      "bytes": 35338,
+      "dhash": "94dece8c8ccc3230",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent4science": {
       "file": "agent4science.webp",
@@ -2715,7 +4683,15 @@
       "title": "Agent4Science",
       "width": 1200,
       "height": 750,
-      "bytes": 23792
+      "bytes": 23792,
+      "dhash": "90b133343432b3c9",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "aixiv-online": {
       "file": "aixiv-online.webp",
@@ -2726,7 +4702,15 @@
       "title": "aiXiv.online",
       "width": 1200,
       "height": 750,
-      "bytes": 52496
+      "bytes": 52496,
+      "dhash": "32e3c0c0c0e0d0f4",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "aixiv-science": {
       "file": "aixiv-science.webp",
@@ -2737,7 +4721,15 @@
       "title": "aiXiv.science",
       "width": 1200,
       "height": 750,
-      "bytes": 33696
+      "bytes": 33696,
+      "dhash": "8ccc0e36ca54d402",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentpub": {
       "file": "agentpub.webp",
@@ -2748,7 +4740,15 @@
       "title": "AgentPub",
       "width": 1200,
       "height": 750,
-      "bytes": 42984
+      "bytes": 42984,
+      "dhash": "c434363e3e7ed4d4",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "moltbot-den": {
       "file": "moltbot-den.webp",
@@ -2759,7 +4759,15 @@
       "title": "Moltbot Den",
       "width": 1200,
       "height": 750,
-      "bytes": 27198
+      "bytes": 27198,
+      "dhash": "632b1c1f27274208",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "abund-ai": {
       "file": "abund-ai.webp",
@@ -2770,7 +4778,15 @@
       "title": "Abund.ai",
       "width": 1200,
       "height": 750,
-      "bytes": 29112
+      "bytes": 29112,
+      "dhash": "0951606179b1b448",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "hivebook": {
       "file": "hivebook.webp",
@@ -2781,7 +4797,15 @@
       "title": "Hivebook - The Knowledge Base for AI Agents",
       "width": 1200,
       "height": 750,
-      "bytes": 45870
+      "bytes": 45870,
+      "dhash": "e80c96869e173333",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-memory-wiki": {
       "file": "agent-memory-wiki.webp",
@@ -2792,7 +4816,15 @@
       "title": "Agent Memory Wiki",
       "width": 1200,
       "height": 750,
-      "bytes": 37978
+      "bytes": 37978,
+      "dhash": "19411884a4849e40",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "hal-holistic-agent-leaderboard": {
       "file": "hal-holistic-agent-leaderboard.webp",
@@ -2803,7 +4835,15 @@
       "title": "HAL: Holistic Agent Leaderboard",
       "width": 1200,
       "height": 750,
-      "bytes": 53484
+      "bytes": 53484,
+      "dhash": "0636c0c0cccc9898",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "open-agent-leaderboard-exgentic": {
       "file": "open-agent-leaderboard-exgentic.webp",
@@ -2814,7 +4854,15 @@
       "title": "Open Agent Leaderboard",
       "width": 1200,
       "height": 750,
-      "bytes": 42178
+      "bytes": 42178,
+      "dhash": "3254686168586260",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agents-gather": {
       "file": "agents-gather.webp",
@@ -2825,7 +4873,15 @@
       "title": "Agents Gather",
       "width": 1200,
       "height": 750,
-      "bytes": 33238
+      "bytes": 33238,
+      "dhash": "0206018141010303",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "sssnack": {
       "file": "sssnack.webp",
@@ -2836,7 +4892,15 @@
       "title": "Sssnack",
       "width": 1200,
       "height": 750,
-      "bytes": 21946
+      "bytes": 21946,
+      "dhash": "0161797969694d43",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ai-agent-message-board": {
       "file": "ai-agent-message-board.webp",
@@ -2847,7 +4911,15 @@
       "title": "AI Agent Message Board",
       "width": 1200,
       "height": 750,
-      "bytes": 42498
+      "bytes": 42498,
+      "dhash": "0fcbc3b544b614c5",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-tavern": {
       "file": "agent-tavern.webp",
@@ -2858,7 +4930,15 @@
       "title": "Agent Tavern",
       "width": 1200,
       "height": 750,
-      "bytes": 28412
+      "bytes": 28412,
+      "dhash": "168e1e9e1e968e06",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "material-model": {
       "file": "material-model.webp",
@@ -2869,7 +4949,15 @@
       "title": "Material Model",
       "width": 1200,
       "height": 750,
-      "bytes": 42564
+      "bytes": 42564,
+      "dhash": "b2b2969e9e9e9630",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "mcpize": {
       "file": "mcpize.webp",
@@ -2880,7 +4968,15 @@
       "title": "MCPize",
       "width": 1200,
       "height": 750,
-      "bytes": 33284
+      "bytes": 33284,
+      "dhash": "6158232727361622",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agenticmarket": {
       "file": "agenticmarket.webp",
@@ -2891,7 +4987,15 @@
       "title": "AgenticMarket",
       "width": 1200,
       "height": 750,
-      "bytes": 32574
+      "bytes": 32574,
+      "dhash": "75017a7b33336080",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "cloudflare-monetization-gateway": {
       "file": "cloudflare-monetization-gateway.webp",
@@ -2902,7 +5006,15 @@
       "title": "Cloudflare Monetization Gateway beta",
       "width": 1200,
       "height": 750,
-      "bytes": 34938
+      "bytes": 34938,
+      "dhash": "b0a662623030a080",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "microsoft-copilot-checkout": {
       "file": "microsoft-copilot-checkout.webp",
@@ -2913,7 +5025,15 @@
       "title": "Microsoft Agentic Commerce and Copilot Checkout",
       "width": 1200,
       "height": 750,
-      "bytes": 55260
+      "bytes": 55260,
+      "dhash": "829cdc9c9cd0a8a0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agent-bounties": {
       "file": "agent-bounties.webp",
@@ -2924,7 +5044,15 @@
       "title": "Agentizable.ai",
       "width": 1200,
       "height": 750,
-      "bytes": 141980
+      "bytes": 141980,
+      "dhash": "f1cd8e8dcc0d4d92",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "claw-earn": {
       "file": "claw-earn.webp",
@@ -2935,7 +5063,15 @@
       "title": "Claw Earn",
       "width": 1200,
       "height": 750,
-      "bytes": 43082
+      "bytes": 43082,
+      "dhash": "01e5f0d0f0f0f0f8",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "execution-market": {
       "file": "execution-market.webp",
@@ -2946,7 +5082,15 @@
       "title": "Execution Market",
       "width": 1200,
       "height": 750,
-      "bytes": 25790
+      "bytes": 25790,
+      "dhash": "2b33106661796060",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "okx-ai": {
       "file": "okx-ai.webp",
@@ -2957,7 +5101,15 @@
       "title": "OKX AI",
       "width": 1200,
       "height": 750,
-      "bytes": 56196
+      "bytes": 56196,
+      "dhash": "0e1e63675e52e362",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "meridian-mrdn": {
       "file": "meridian-mrdn.webp",
@@ -2968,7 +5120,15 @@
       "title": "Meridian public payment rails homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 25654
+      "bytes": 25654,
+      "dhash": "71334d697bbf3e3e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "daydreams-systems": {
       "file": "daydreams-systems.webp",
@@ -2979,7 +5139,15 @@
       "title": "Daydreams public agentic commerce homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 25304
+      "bytes": 25304,
+      "dhash": "86c8c9d4d4d4d4d4",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "thirdweb-x402": {
       "file": "thirdweb-x402.webp",
@@ -2990,7 +5158,15 @@
       "title": "thirdweb public x402 Payments documentation",
       "width": 1200,
       "height": 750,
-      "bytes": 36452
+      "bytes": 36452,
+      "dhash": "45321f1c1816100c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "heurist-x402-facilitator": {
       "file": "heurist-x402-facilitator.webp",
@@ -3001,7 +5177,15 @@
       "title": "Heurist public x402 facilitator homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 30496
+      "bytes": 30496,
+      "dhash": "584223232d65a31c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "perplexity-instant-buy-paypal": {
       "file": "perplexity-instant-buy-paypal.webp",
@@ -3012,7 +5196,15 @@
       "title": "Perplexity Shopping",
       "width": 1200,
       "height": 750,
-      "bytes": 39894
+      "bytes": 39894,
+      "dhash": "84e4226169696982",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "basis-theory": {
       "file": "basis-theory.webp",
@@ -3023,7 +5215,15 @@
       "title": "Basis Theory",
       "width": 1200,
       "height": 750,
-      "bytes": 20698
+      "bytes": 20698,
+      "dhash": "8494c0c8c0002a2a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "payos": {
       "file": "payos.webp",
@@ -3034,7 +5234,15 @@
       "title": "PayOS",
       "width": 1200,
       "height": 750,
-      "bytes": 34070
+      "bytes": 34070,
+      "dhash": "01c6828ab080c018",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "402atlas": {
       "file": "402atlas.webp",
@@ -3045,7 +5253,15 @@
       "title": "402atlas public paid-test directory homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 27146
+      "bytes": 27146,
+      "dhash": "6169736260066161",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "dexter-indexter": {
       "file": "dexter-indexter.webp",
@@ -3056,7 +5272,15 @@
       "title": "Dexter public account and wallet homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 30834
+      "bytes": 30834,
+      "dhash": "a2acc3c3cc98c4c0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "payai": {
       "file": "payai.webp",
@@ -3067,7 +5291,15 @@
       "title": "PayAI public x402 facilitator homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 31884
+      "bytes": 31884,
+      "dhash": "828ec48c8c9c4480",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "fluxa": {
       "file": "fluxa.webp",
@@ -3078,7 +5310,15 @@
       "title": "FluxA public payment infrastructure homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 27162
+      "bytes": 27162,
+      "dhash": "89a9c0c8c878c010",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "olas-mech-marketplace": {
       "file": "olas-mech-marketplace.webp",
@@ -3089,7 +5329,15 @@
       "title": "Olas Mech Marketplace",
       "width": 1200,
       "height": 750,
-      "bytes": 29012
+      "bytes": 29012,
+      "dhash": "9e860c4ccd076868",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "near-ai-agent-market": {
       "file": "near-ai-agent-market.webp",
@@ -3100,7 +5348,15 @@
       "title": "NEAR AI Agent Market",
       "width": 1200,
       "height": 750,
-      "bytes": 28964
+      "bytes": 28964,
+      "dhash": "3b43c0c55b9ac153",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentbadge-agent-venue": {
       "file": "agentbadge-agent-venue.webp",
@@ -3111,7 +5367,15 @@
       "title": "Agent Venue on Arc",
       "width": 1200,
       "height": 750,
-      "bytes": 25710
+      "bytes": 25710,
+      "dhash": "e29c9ec696b6c202",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "basedagents": {
       "file": "basedagents.webp",
@@ -3122,7 +5386,15 @@
       "title": "BasedAgents",
       "width": 1200,
       "height": 750,
-      "bytes": 23396
+      "bytes": 23396,
+      "dhash": "2b27163436963c18",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ramp-agent-cards": {
       "file": "ramp-agent-cards.webp",
@@ -3133,7 +5405,15 @@
       "title": "Ramp Agents",
       "width": 1200,
       "height": 750,
-      "bytes": 22984
+      "bytes": 22984,
+      "dhash": "3317697014303244",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "lightspark": {
       "file": "lightspark.webp",
@@ -3144,7 +5424,15 @@
       "title": "Lightspark",
       "width": 1200,
       "height": 750,
-      "bytes": 35616
+      "bytes": 35616,
+      "dhash": "8e9332b64959b4b4",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "open-standard-ousd": {
       "file": "open-standard-ousd.webp",
@@ -3155,7 +5443,15 @@
       "title": "Open Standard OUSD",
       "width": 1200,
       "height": 750,
-      "bytes": 112142
+      "bytes": 112142,
+      "dhash": "99d9dad8da9ada5a",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "robinhood-chain": {
       "file": "robinhood-chain.webp",
@@ -3166,7 +5462,15 @@
       "title": "Robinhood Chain",
       "width": 1200,
       "height": 750,
-      "bytes": 29152
+      "bytes": 29152,
+      "dhash": "b8080c0c0c16004c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "slop-cash": {
       "file": "slop-cash.webp",
@@ -3177,7 +5481,15 @@
       "title": "Slop",
       "width": 1200,
       "height": 750,
-      "bytes": 26590
+      "bytes": 26590,
+      "dhash": "2b632c2e2c2b2b2c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "gittensor": {
       "file": "gittensor.webp",
@@ -3188,7 +5500,15 @@
       "title": "Gittensor",
       "width": 1200,
       "height": 750,
-      "bytes": 5420
+      "bytes": 5420,
+      "dhash": "0c08000000100008",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "taskmarket-daydreams": {
       "file": "taskmarket-daydreams.webp",
@@ -3199,7 +5519,15 @@
       "title": "Taskmarket",
       "width": 1200,
       "height": 750,
-      "bytes": 26540
+      "bytes": 26540,
+      "dhash": "03237321607371b1",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "aibtc-bounty-board": {
       "file": "aibtc-bounty-board.webp",
@@ -3210,7 +5538,15 @@
       "title": "AIBTC Bounties",
       "width": 1200,
       "height": 750,
-      "bytes": 56014
+      "bytes": 56014,
+      "dhash": "203930343626e627",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "solana-x402": {
       "file": "solana-x402.webp",
@@ -3221,7 +5557,15 @@
       "title": "x402 on Solana",
       "width": 1200,
       "height": 750,
-      "bytes": 13808
+      "bytes": 13808,
+      "dhash": "59003860600c5879",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "payapi-market": {
       "file": "payapi-market.webp",
@@ -3232,7 +5576,15 @@
       "title": "PayAPI Market",
       "width": 1200,
       "height": 750,
-      "bytes": 43510
+      "bytes": 43510,
+      "dhash": "4b71a0e0c0c124b4",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agenthansa": {
       "file": "agenthansa.webp",
@@ -3243,7 +5595,15 @@
       "title": "AgentHansa",
       "width": 1200,
       "height": 750,
-      "bytes": 33394
+      "bytes": 33394,
+      "dhash": "3939b23049b23230",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "molt-road": {
       "file": "molt-road.webp",
@@ -3254,7 +5614,15 @@
       "title": "Molt Road",
       "width": 1200,
       "height": 750,
-      "bytes": 24750
+      "bytes": 24750,
+      "dhash": "322626363f2b1f0f",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "x402-foundation": {
       "file": "x402-foundation.webp",
@@ -3265,7 +5633,15 @@
       "title": "x402 Foundation public homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 24590
+      "bytes": 24590,
+      "dhash": "9c952cccc0e0c440",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "coinbase-cdp-x402-bazaar": {
       "file": "coinbase-cdp-x402-bazaar.webp",
@@ -3276,7 +5652,15 @@
       "title": "Coinbase docs: Discover services (Bazaar)",
       "width": 1200,
       "height": 750,
-      "bytes": 44032
+      "bytes": 44032,
+      "dhash": "96a6b0a4a8a0a080",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentic-market": {
       "file": "agentic-market.webp",
@@ -3287,7 +5671,15 @@
       "title": "Agentic Market public catalog and payment charts",
       "width": 1200,
       "height": 750,
-      "bytes": 36192
+      "bytes": 36192,
+      "dhash": "6b62232727363323",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "x402-list": {
       "file": "x402-list.webp",
@@ -3298,7 +5690,15 @@
       "title": "x402 List public directory homepage",
       "width": 1200,
       "height": 750,
-      "bytes": 38294
+      "bytes": 38294,
+      "dhash": "4a36360632223a18",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "stoa": {
       "file": "stoa.webp",
@@ -3309,7 +5709,15 @@
       "title": "Stoa",
       "width": 1200,
       "height": 750,
-      "bytes": 7674
+      "bytes": 7674,
+      "dhash": "02020a4e0e0e2202",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "matrix-agent-net": {
       "file": "matrix-agent-net.webp",
@@ -3320,7 +5728,15 @@
       "title": "MatrixAgentNet",
       "width": 1200,
       "height": 750,
-      "bytes": 28436
+      "bytes": 28436,
+      "dhash": "620f0d2a3f273a3c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "tantive-space": {
       "file": "tantive-space.webp",
@@ -3331,7 +5747,15 @@
       "title": "Tantive Space",
       "width": 1200,
       "height": 750,
-      "bytes": 51722
+      "bytes": 51722,
+      "dhash": "81dcfcc4cfcccc4c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agora-burmaster": {
       "file": "agora-burmaster.webp",
@@ -3342,7 +5766,15 @@
       "title": "Agora (Burmaster)",
       "width": 1200,
       "height": 750,
-      "bytes": 45646
+      "bytes": 45646,
+      "dhash": "622e1a120a123232",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agora-tundrabit": {
       "file": "agora-tundrabit.webp",
@@ -3353,7 +5785,15 @@
       "title": "Agora (Tundrabit)",
       "width": 1200,
       "height": 750,
-      "bytes": 27196
+      "bytes": 27196,
+      "dhash": "131bcb43031b0704",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "ai-agents-hotline": {
       "file": "ai-agents-hotline.webp",
@@ -3364,7 +5804,15 @@
       "title": "AI Agents Hotline",
       "width": 1200,
       "height": 750,
-      "bytes": 51936
+      "bytes": 51936,
+      "dhash": "49c9c9c0c8c9e040",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "northreach": {
       "file": "northreach.webp",
@@ -3375,7 +5823,15 @@
       "title": "Northreach Interactive",
       "width": 1200,
       "height": 750,
-      "bytes": 34024
+      "bytes": 34024,
+      "dhash": "632a1e2626262a30",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "the-continental": {
       "file": "the-continental.webp",
@@ -3386,7 +5842,15 @@
       "title": "The Continental",
       "width": 1200,
       "height": 750,
-      "bytes": 61898
+      "bytes": 61898,
+      "dhash": "6561606060616060",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "moltchan": {
       "file": "moltchan.webp",
@@ -3397,7 +5861,15 @@
       "title": "Moltchan",
       "width": 1200,
       "height": 750,
-      "bytes": 38146
+      "bytes": 38146,
+      "dhash": "2261696161616160",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "payman-ai": {
       "file": "payman-ai.webp",
@@ -3408,7 +5880,15 @@
       "title": "Payman AI",
       "width": 1200,
       "height": 750,
-      "bytes": 21796
+      "bytes": 21796,
+      "dhash": "0e606138b2f28f70",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "crossmint": {
       "file": "crossmint.webp",
@@ -3419,7 +5899,15 @@
       "title": "Crossmint",
       "width": 1200,
       "height": 750,
-      "bytes": 38690
+      "bytes": 38690,
+      "dhash": "94ccb3b2b660f024",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "coinbase-agentic-wallet": {
       "file": "coinbase-agentic-wallet.webp",
@@ -3430,7 +5918,15 @@
       "title": "Coinbase Wallet MCP documentation",
       "width": 1200,
       "height": 750,
-      "bytes": 56334
+      "bytes": 56334,
+      "dhash": "96a6a0a0a0a0a48c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "circle-agent-stack": {
       "file": "circle-agent-stack.webp",
@@ -3441,7 +5937,15 @@
       "title": "Circle Agent Stack",
       "width": 1200,
       "height": 750,
-      "bytes": 28974
+      "bytes": 28974,
+      "dhash": "c4d4d979b2f2b7ff",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "stripe-link-agent-wallet": {
       "file": "stripe-link-agent-wallet.webp",
@@ -3452,7 +5956,15 @@
       "title": "Link Wallet for Agents",
       "width": 1200,
       "height": 750,
-      "bytes": 29710
+      "bytes": 29710,
+      "dhash": "c4d430e0f0b0b430",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "tempo-machine-payments-protocol": {
       "file": "tempo-machine-payments-protocol.webp",
@@ -3463,7 +5975,15 @@
       "title": "Tempo and Machine Payments Protocol",
       "width": 1200,
       "height": 750,
-      "bytes": 17936
+      "bytes": 17936,
+      "dhash": "d44c32b231a8b898",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "google-agent-payments-protocol": {
       "file": "google-agent-payments-protocol.webp",
@@ -3474,7 +5994,15 @@
       "title": "Agent Payments Protocol (AP2)",
       "width": 1200,
       "height": 750,
-      "bytes": 41892
+      "bytes": 41892,
+      "dhash": "3ca1e05860707000",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "universal-commerce-protocol": {
       "file": "universal-commerce-protocol.webp",
@@ -3485,7 +6013,15 @@
       "title": "Universal Commerce Protocol (UCP)",
       "width": 1200,
       "height": 750,
-      "bytes": 32716
+      "bytes": 32716,
+      "dhash": "c8e9e4e460687830",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawk": {
       "file": "clawk.webp",
@@ -3496,7 +6032,15 @@
       "title": "Clawk",
       "width": 1200,
       "height": 750,
-      "bytes": 33892
+      "bytes": 33892,
+      "dhash": "330a4b1b1b8b2233",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "clawcaster": {
       "file": "clawcaster.webp",
@@ -3507,7 +6051,15 @@
       "title": "Clawcaster",
       "width": 1200,
       "height": 750,
-      "bytes": 53518
+      "bytes": 53518,
+      "dhash": "1e361216b29218b2",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "linkclaws": {
       "file": "linkclaws.webp",
@@ -3518,7 +6070,15 @@
       "title": "LinkClaws",
       "width": 1200,
       "height": 750,
-      "bytes": 28446
+      "bytes": 28446,
+      "dhash": "c5e131b371687060",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "moltstack": {
       "file": "moltstack.webp",
@@ -3529,7 +6089,15 @@
       "title": "MoltStack",
       "width": 1200,
       "height": 750,
-      "bytes": 31228
+      "bytes": 31228,
+      "dhash": "2b1f9e4c322b232b",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "leviathan-news": {
       "file": "leviathan-news.webp",
@@ -3540,7 +6108,15 @@
       "title": "Leviathan News",
       "width": 1200,
       "height": 750,
-      "bytes": 33390
+      "bytes": 33390,
+      "dhash": "6264046656660456",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "virtuals-agent-commerce-protocol": {
       "file": "virtuals-agent-commerce-protocol.webp",
@@ -3551,7 +6127,15 @@
       "title": "Virtuals Agent Commerce Protocol",
       "width": 1200,
       "height": 750,
-      "bytes": 30568
+      "bytes": 30568,
+      "dhash": "647cab50919695d5",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentic-commerce-protocol-openai-stripe": {
       "file": "agentic-commerce-protocol-openai-stripe.webp",
@@ -3562,7 +6146,15 @@
       "title": "Agentic Commerce Protocol",
       "width": 1200,
       "height": 750,
-      "bytes": 56886
+      "bytes": 56886,
+      "dhash": "b090040c66646464",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "stripe-agentic-commerce-suite": {
       "file": "stripe-agentic-commerce-suite.webp",
@@ -3573,7 +6165,15 @@
       "title": "Stripe Agentic Commerce",
       "width": 1200,
       "height": 750,
-      "bytes": 53242
+      "bytes": 53242,
+      "dhash": "13616164607c6464",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "catena-labs": {
       "file": "catena-labs.webp",
@@ -3584,7 +6184,15 @@
       "title": "Catena",
       "width": 1200,
       "height": 750,
-      "bytes": 65604
+      "bytes": 65604,
+      "dhash": "4139e7e3183a6292",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "kite-ai": {
       "file": "kite-ai.webp",
@@ -3595,7 +6203,15 @@
       "title": "Kite",
       "width": 1200,
       "height": 750,
-      "bytes": 150168
+      "bytes": 150168,
+      "dhash": "b6183969c290982d",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "apify-store": {
       "file": "apify-store.webp",
@@ -3606,7 +6222,15 @@
       "title": "Apify Store",
       "width": 1200,
       "height": 750,
-      "bytes": 39918
+      "bytes": 39918,
+      "dhash": "2b0a86061a2b0848",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "mcp-marketplace": {
       "file": "mcp-marketplace.webp",
@@ -3617,7 +6241,15 @@
       "title": "MCP Marketplace",
       "width": 1200,
       "height": 750,
-      "bytes": 19418
+      "bytes": 19418,
+      "dhash": "290f4c0c4c0f2a00",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "church-of-molt": {
       "file": "church-of-molt.webp",
@@ -3628,7 +6260,15 @@
       "title": "Church of Molt",
       "width": 1200,
       "height": 750,
-      "bytes": 17034
+      "bytes": 17034,
+      "dhash": "12088e96ce8a0c0e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "moltexchange": {
       "file": "moltexchange.webp",
@@ -3639,7 +6279,15 @@
       "title": "MoltExchange",
       "width": 1200,
       "height": 750,
-      "bytes": 19896
+      "bytes": 19896,
+      "dhash": "44b2b2b204323008",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "agentdm": {
       "file": "agentdm.webp",
@@ -3650,7 +6298,15 @@
       "title": "AgentDM",
       "width": 1200,
       "height": 750,
-      "bytes": 28936
+      "bytes": 28936,
+      "dhash": "ccd432f030e0e000",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "colony-chat": {
       "file": "colony-chat.webp",
@@ -3661,7 +6317,15 @@
       "title": "Colony-Chat",
       "width": 1200,
       "height": 750,
-      "bytes": 36400
+      "bytes": 36400,
+      "dhash": "32968e4a8eb6b606",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "meta-muse": {
       "file": "meta-muse.webp",
@@ -3672,7 +6336,15 @@
       "title": "Meta Muse",
       "width": 1200,
       "height": 750,
-      "bytes": 11880
+      "bytes": 11880,
+      "dhash": "b2b205b2704cd070",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "alipay-ai-pay": {
       "file": "alipay-ai-pay.webp",
@@ -3683,7 +6355,15 @@
       "title": "Alipay AI Pay",
       "width": 1200,
       "height": 750,
-      "bytes": 47886
+      "bytes": 47886,
+      "dhash": "0c50c0f0f1f1d1d0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "skyfire-kyapay": {
       "file": "skyfire-kyapay.webp",
@@ -3694,7 +6374,15 @@
       "title": "Skyfire Agent Trust Stack",
       "width": 1200,
       "height": 750,
-      "bytes": 34980
+      "bytes": 34980,
+      "dhash": "048c3236161632f0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "nevermined": {
       "file": "nevermined.webp",
@@ -3705,7 +6393,15 @@
       "title": "Nevermined",
       "width": 1200,
       "height": 750,
-      "bytes": 30810
+      "bytes": 30810,
+      "dhash": "82d4f8f8d4c4c800",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "visa-intelligent-commerce": {
       "file": "visa-intelligent-commerce.webp",
@@ -3716,7 +6412,15 @@
       "title": "Visa Intelligent Commerce",
       "width": 1200,
       "height": 750,
-      "bytes": 44586
+      "bytes": 44586,
+      "dhash": "029a267474789a02",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "mastercard-agent-pay": {
       "file": "mastercard-agent-pay.webp",
@@ -3727,7 +6431,15 @@
       "title": "Mastercard Agent Pay",
       "width": 1200,
       "height": 750,
-      "bytes": 55172
+      "bytes": 55172,
+      "dhash": "140537330006c9c0",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "paypal-agentic-commerce-services": {
       "file": "paypal-agentic-commerce-services.webp",
@@ -3738,7 +6450,15 @@
       "title": "PayPal Agentic Commerce Services",
       "width": 1200,
       "height": 750,
-      "bytes": 29896
+      "bytes": 29896,
+      "dhash": "06ce1e96960e080c",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "shopify-agentic-storefronts": {
       "file": "shopify-agentic-storefronts.webp",
@@ -3749,7 +6469,15 @@
       "title": "Shopify Agentic Storefronts",
       "width": 1200,
       "height": 750,
-      "bytes": 70292
+      "bytes": 70292,
+      "dhash": "1bc3c0c8d0c0c845",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "devaintart": {
       "file": "devaintart.webp",
@@ -3760,7 +6488,15 @@
       "title": "DevAIntArt",
       "width": 1200,
       "height": 750,
-      "bytes": 45674
+      "bytes": 45674,
+      "dhash": "524e486706071716",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "my-dead-internet": {
       "file": "my-dead-internet.webp",
@@ -3771,7 +6507,15 @@
       "title": "My Dead Internet",
       "width": 1200,
       "height": 750,
-      "bytes": 24616
+      "bytes": 24616,
+      "dhash": "11090c4c4d272727",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "1human": {
       "file": "1human.webp",
@@ -3782,7 +6526,15 @@
       "title": "1human",
       "width": 1200,
       "height": 750,
-      "bytes": 36826
+      "bytes": 36826,
+      "dhash": "0373626262626462",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "botmural": {
       "file": "botmural.webp",
@@ -3793,7 +6545,15 @@
       "title": "BotMural.live",
       "width": 1200,
       "height": 750,
-      "bytes": 106878
+      "bytes": 106878,
+      "dhash": "cc72ecccf3328e0e",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "fork-zone": {
       "file": "fork-zone.webp",
@@ -3804,7 +6564,15 @@
       "title": "fork-zone",
       "width": 1200,
       "height": 750,
-      "bytes": 50154
+      "bytes": 50154,
+      "dhash": "8e8e869e9ca28a96",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "amazon-alexa-for-shopping": {
       "file": "amazon-alexa-for-shopping.webp",
@@ -3815,7 +6583,15 @@
       "title": "amazon-alexa-for-shopping",
       "width": 1200,
       "height": 750,
-      "bytes": 35582
+      "bytes": 35582,
+      "dhash": "1cc8d0c400b2a2a2",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     },
     "memecorp": {
       "file": "memecorp.webp",
@@ -3826,7 +6602,15 @@
       "title": "memecorp",
       "width": 1200,
       "height": 750,
-      "bytes": 152436
+      "bytes": 152436,
+      "dhash": "2144c06000100020",
+      "http_status": null,
+      "imported_capture_metadata": {
+        "format": "stored-webp-import/1",
+        "http_status_reason": "not-recorded-in-retained-capture-evidence",
+        "dhash_basis": "decoded-stored-webp",
+        "computed_at": "2026-11-23T21:34:47Z"
+      }
     }
   }
 }
