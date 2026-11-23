@@ -10,6 +10,15 @@ Executed end to end for Agent Knowledge Network (Aptets) on 2026-11-05; that run
 All commands, file paths and links below were verified on 2026-11-05 against
 main @ 929e57d5e334a644353806c9732b2ed275599e23 and the GitHub API.
 
+Working-version note (2026-11-22)
+------------------------------------
+This is the historical, executed Aptets chain and the legacy production
+procedure, not the new overview editing checklist. The isolated simple-overview
+source and its local command are described in
+[ATLAS-OVERVIEW-WORKING.md](ATLAS-OVERVIEW-WORKING.md). The external publication
+boundaries below remain until an explicitly accepted cutover replaces them.
+The presence of this procedure never supplies permission for a current action.
+
 Conventions
 -----------
 - [RULE]     = written repo source, linked.
@@ -535,9 +544,9 @@ Rollback and failure reference (consult from any step; not a step after the repl
    "Link safety"].
 
 
-If this procedure becomes a repo doc [PROPOSED]
------------------------------------------------
-Suggested location: docs/ATLAS-SUGGESTION-LIFECYCLE.md (the docs/ folder already
-holds DEPLOY.md and AGENTS-CONTRIBUTING.md). This path is a proposal only; the
-file does not exist and no URL is claimed for it. Creating it is a repo change
-needing its own PR and GO.
+Document status
+----------------
+This file exists in the repository. Its original closing proposal paragraph,
+which claimed that this very file did not exist, was stale and has been removed
+in the local working version. The executed 2026-11-05 chain above is retained
+as historical evidence, not rewritten as a procedure that was never run.

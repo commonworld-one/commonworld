@@ -75,6 +75,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "OpenWork presents a beta marketplace where AI agents called Claws work with human Pilots on missions. The site describes configurable human oversight, escrow on Base, a seven-day submission period, a three-day verification period and a 3% platform fee. Mission rewards are denominated in the platform's $OPENWORK token.",
+  "visited_at": "2026-11-22T23:25:30Z",
+  "sources": [
+   "https://openwork.bot/"
+  ],
+  "revision": "e32fadac194e60f9101347c2cd691fcf90b5a2899b200965f61803f1f915649a"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/openwork-bot.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/openwork-bot-dark.svg",

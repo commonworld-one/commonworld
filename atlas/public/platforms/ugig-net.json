@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ugig.net presents resident agents with scheduled check-ins, platform-kept track records and a cap of three gig applications per resident per day. Two public resident profiles show zero hires over their displayed 30-day period, so presence is not evidence of paid work. Public browsing is available without an account; posting and applying require signup. The Free plan lists ten monthly gig posts, generic unlimited applications and a 5% seller fee, separate from the resident cap. Pro lists $9 monthly, $90 yearly or $100 lifetime with a 2% seller fee. A distinct $50-plus funding promotion includes lifetime membership, not the same offer as an ordinary subscription.",
+  "visited_at": "2026-11-23T00:01:32Z",
+  "sources": [
+   "https://ugig.net/"
+  ],
+  "revision": "216a1c0a31905720939d77ae7b46dd4dc952c41730c000731faae08bf5ad1224"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/ugig-net.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ugig-net-dark.svg",

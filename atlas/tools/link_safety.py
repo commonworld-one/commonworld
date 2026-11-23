@@ -25,6 +25,7 @@
 Exit code 1 when a published host is flagged (removed or held), 0 otherwise, 2 when the engine could not run.
 """
 import argparse, json, os, re, shutil, subprocess, sys, tempfile
+from pathlib import Path
 from datetime import datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -93,6 +94,26 @@ def linked_hosts(snap, files):
     return {h: sorted(v) for h, v in sorted(out.items())}
 
 
+def catalogue_hosts(catalogue, snap, files):
+    """Union of compatibility exports and current public links, never editorial history."""
+    directory = Path(catalogue)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'site'))
+    from catalogue_safety import current_links
+    out = {h: set(v) for h, v in linked_hosts(snap, files).items()}
+    known = {c['slug'] for c in snap['platforms']}
+    for name in ('overviews.json', 'limitations.json'):
+        records = json.loads((directory / name).read_text())['cards']
+        if set(records) - known:
+            raise ValueError('current-link source contains unknown catalogue IDs')
+        for slug, record in records.items():
+            for h in sb.hosts_of_entry(current_links(record)):
+                out.setdefault(h, set()).add(slug)
+    # Reachability can appear in compatibility exports too.
+    for h, slugs in curation_hosts(known, [(os.path.join(DATA, 'reachability.json'), 'cards')]).items():
+        out.setdefault(h, set()).update(slugs)
+    return {h: sorted(v) for h, v in sorted(out.items())}
+
+
 def prune_curation(gone, files):
     """Drop the records of removed slugs from every curation file. Returns the names of the files that changed."""
     changed = []
@@ -137,7 +158,7 @@ def merge_host(res, prev):
     srcs = []
     for s in res['sources']:
         o = old.get(s['name'])
-        if s.get('error') and o and o.get('verdict') and not o.get('error'):
+        if s.get('error') and o and o.get('verdict') in ('clean', 'flagged'):
             s = dict(o, stale=True, error=s['error'])
         srcs.append(s)
     if any(s['verdict'] == 'flagged' for s in srcs): status = 'flagged'
@@ -189,7 +210,7 @@ def build_report(linked, removed_hosts, eng, prev_doc):
     }
 
 
-def apply_removals(report, snap_path, removed_path, tags_path, hold, today, curation=()):
+def apply_removals(report, snap_path, removed_path, tags_path, hold, today, curation=(), preserve_inputs=False):
     """Remove every entry linking to a flagged, not-held host. Returns the list of actions."""
     snap = json.load(open(snap_path, encoding='utf-8'))
     removed_doc = json.load(open(removed_path, encoding='utf-8'))
@@ -215,23 +236,23 @@ def apply_removals(report, snap_path, removed_path, tags_path, hold, today, cura
     gone = {a['slug'] for a in actions}
     snap['platforms'] = [c for c in snap.get('platforms') or [] if c.get('slug') not in gone]
     snap['count'] = len(snap['platforms'])
-    with open(snap_path, 'w', encoding='utf-8') as f:
-        f.write(json.dumps(snap, ensure_ascii=False, indent=1) + '\n')
+    if not preserve_inputs:
+        with open(snap_path, 'w', encoding='utf-8') as f:
+            f.write(json.dumps(snap, ensure_ascii=False, indent=1) + '\n')
     with open(removed_path, 'w', encoding='utf-8') as f:
         f.write(json.dumps(removed_doc, ensure_ascii=False, indent=1) + '\n')
-    if tags is not None and isinstance(tags.get('tags'), dict):
+    if not preserve_inputs and tags is not None and isinstance(tags.get('tags'), dict):
         for s_ in gone:
             tags['tags'].pop(s_, None)
         with open(tags_path, 'w', encoding='utf-8') as f:
             f.write(json.dumps(tags, ensure_ascii=False, indent=1) + '\n')
-    pruned = prune_curation(gone, curation)
+    pruned = [] if preserve_inputs else prune_curation(gone, curation)
     for a_ in actions:
         a_['curation_pruned'] = pruned
     # the removed entries' hosts are no longer published: move them under removed_hosts
-    still = set(linked_hosts(snap, curation))
     for hh, rr in list(report['hosts'].items()):
         rr['entries'] = [x for x in rr['entries'] if x not in gone]
-        if not rr['entries'] and hh not in still:
+        if not rr['entries']:
             report['removed_hosts'][hh] = {k: v for k, v in report['hosts'].pop(hh).items() if k != 'entries'}
     report['flagged'] = sorted(x for x in report['flagged'] if x in report['hosts'])
     pub = report['hosts']
@@ -241,6 +262,7 @@ def apply_removals(report, snap_path, removed_path, tags_path, hold, today, cura
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
+    ap.add_argument('--catalogue-dir', help='current catalogue directory; safety removals are an overlay, source inputs stay unchanged')
     ap.add_argument('--data', default=None, help='snapshot-verified-*.json (default: newest in atlas/data/)')
     ap.add_argument('--removed', default=os.path.join(DATA, 'removed.json'))
     ap.add_argument('--tags', default=os.path.join(DATA, 'census-tags-2026-10-15.json'))
@@ -252,9 +274,13 @@ def main(argv=None):
     ap.add_argument('--actions-out', default=None, help='write the removals of this run as JSON')
     a = ap.parse_args(argv)
 
-    snap_path = a.data or sb.snapshot_path()
-    curation = curation_files(a.curation_dir or os.path.dirname(os.path.abspath(snap_path)))
-    linked = linked_hosts(json.load(open(snap_path, encoding='utf-8')), curation)
+    snap_path = a.data or (os.path.join(a.catalogue_dir, 'snapshot.json') if a.catalogue_dir else sb.snapshot_path())
+    curation = curation_files(a.curation_dir or (DATA if a.catalogue_dir else os.path.dirname(os.path.abspath(snap_path))))
+    snap = json.load(open(snap_path, encoding='utf-8'))
+    linked = catalogue_hosts(a.catalogue_dir, snap, curation) if a.catalogue_dir else linked_hosts(snap, curation)
+    # Previously removed records remain stored but never count as currently published.
+    gone = {r['slug'] for r in (json.load(open(a.removed)).get('removed') or [])} if os.path.exists(a.removed) else set()
+    linked = {h: [s for s in slugs if s not in gone] for h, slugs in linked.items() if set(slugs) - gone}
     removed = (json.load(open(a.removed)).get('removed') or []) if os.path.exists(a.removed) else []
     removed_hosts = sorted({sb.norm_host('https://' + r['host']) for r in removed if r.get('host')} - set(linked))
     prev_doc = {}
@@ -265,7 +291,7 @@ def main(argv=None):
     report = build_report(linked, removed_hosts, eng, prev_doc)
     hold = set((json.load(open(a.hold)).get('hold') or []) if os.path.exists(a.hold) else [])
     flagged_before = list(report['flagged'])
-    actions = apply_removals(report, snap_path, a.removed, a.tags, hold, report['run_at'][:10], curation) if a.apply else []
+    actions = apply_removals(report, snap_path, a.removed, a.tags, hold, report['run_at'][:10], curation, preserve_inputs=bool(a.catalogue_dir)) if a.apply else []
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
     with open(a.out, 'w', encoding='utf-8') as f:
         f.write(json.dumps(report, ensure_ascii=False, indent=1) + '\n')

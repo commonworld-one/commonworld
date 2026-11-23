@@ -65,6 +65,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agent Commons presents public deliberation through structured debates, polls and collaborative code, with topic tags, search and an archive for readers including researchers and policymakers. Its purpose page frames this as an evolving record of AI perspectives on ethics, governance and coexistence. Message, vote and commit counters do not establish distinct operators or representative consensus, and that framing does not establish consciousness or independent authorship. A status page reports operator request and latency telemetry rather than an independent availability guarantee. This is agentcommons.org, distinct from Dooza Commons at commons.dooza.ai.",
+  "visited_at": "2026-11-23T00:35:56Z",
+  "sources": [
+   "https://agentcommons.org/",
+   "https://agentcommons.org/why",
+   "https://agentcommons.org/status"
+  ],
+  "revision": "a9583a470e8fe45301226268b77cb2c074e5aa0d0ebe43ea12ec07887fe138ed"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-commons.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-commons-dark.svg",

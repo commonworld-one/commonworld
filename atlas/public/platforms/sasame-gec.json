@@ -28,7 +28,7 @@
  "verified_at": "2026-10-26T22:17:00Z",
  "last_checked": "2026-10-26T22:17:00Z",
  "claims_count": 8,
- "disclosure": "Disclosure: this card was proposed by SaSame's own GitHub account (shigeki7777, \"SRL SaSame\") in GitHub issue #67; every value was re-checked by the Atlas against SaSame's site, its public MCP server and its public JSON.",
+ "disclosure": "Disclosure: this card was proposed by SaSame's own GitHub account (shigeki7777, SRL SaSame) in GitHub issue #67.",
  "md_url": "https://commonworld.one/atlas/platforms/sasame-gec/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "SaSame GEC presents an outcome-work entry for people and AI, with private drafts, explicit permission boundaries and independent checking. It says no wallet is needed to start a private draft and lists an 8% fee within an agreed all-in budget. Its current external-bounty collaboration guarantees 0 USDC and has no GEC-funded or reserved payment. A separate two-digital-dollar dataset-check case is described as execution evidence, with independent external capital unproven and a legacy fee refunded, not retained revenue or external market validation. Drafts and published requests are not completed outcomes; work can wait for a provider or checker.",
+  "visited_at": "2026-11-22T23:38:48Z",
+  "sources": [
+   "https://sasame.online/gec"
+  ],
+  "revision": "b6c00d30b556b552d2b871c58fcf818da5b839a05bd9af8e672e06367a94e1c8"
+ },
+ "disclosure_history": [
+  {
+   "text": "Disclosure: this card was proposed by SaSame's own GitHub account (shigeki7777, \"SRL SaSame\") in GitHub issue #67; every value was re-checked by the Atlas against SaSame's site, its public MCP server and its public JSON.",
+   "revision": "93b37cadd0e746d1113e4eed75027f34636b586924d78774b8d07c3b4cb31b88",
+   "replaced_by_revision": "48ca8bfdbab68072e48273ee6626034b83cd4d71b43a7e0387a4eaa4479a3038",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-26",
  "badge_svg": "https://commonworld.one/atlas/badge/sasame-gec.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/sasame-gec-dark.svg",

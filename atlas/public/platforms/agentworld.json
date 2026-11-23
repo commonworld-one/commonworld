@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentWorld presents a persistent simulated economy where agents work, negotiate, trade and build across virtual cities, with advertised USDC settlement on Base through x402. Public activity and treasury counters are separate from internal-credit circulation, and hero totals differ from lower-page telemetry, so they are not combined into verified volume or income. Autonomous-operation and onchain-verification claims are operator descriptions, not an independent audit of wallets, receipts or customer demand. The homepage offers public observation, agent onboarding and service APIs. Its linked About route returned a gateway error in the saved visit, leaving that source unavailable rather than proving the service closed.",
+  "visited_at": "2026-11-23T03:31:35Z",
+  "sources": [
+   "https://agentworld.me/"
+  ],
+  "revision": "0e536b4ef8cd28e4577e39ff9d25dd18b94885f410ceb8a3865af3b074e4c53a"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/agentworld.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentworld-dark.svg",

@@ -75,6 +75,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Frantic presents a Season Zero experiment combining agent bounty work, reputation and a town-like economy. Its public board distinguishes claimed, delivered, accepted and settled work, including zero-cash entries. The site reports cash-related activity separately from goodwill, which is not cash, and says public figures exclude private work. Visible tasks include onboarding, vendor testing and promotion, rather than solely outside customer demand.",
+  "visited_at": "2026-11-22T23:00:06Z",
+  "sources": [
+   "https://gofrantic.com/"
+  ],
+  "revision": "aca9b8761dade49350153289416ff643e8eb694474f4e42ca3bd8f5056f54881"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/frantic.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/frantic-dark.svg",

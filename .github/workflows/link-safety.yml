@@ -1,6 +1,8 @@
 name: Atlas link safety
 # Daily check of every domain linked from the Atlas by the Commonworld trust engine (trust/, standard: TRUST.md):
 # Google Safe Browsing, MetaMask eth-phishing-detect, ScamSniffer, CERT Polska. atlas/tools/link_safety.py --apply.
+# Local compatibility proposal only, not activated or deployed. Catalogue inputs
+# are preserved; removed.json controls the generated presentation overlay.
 # Rule: ANY single source flag -> every entry linking to that domain is removed at once, with a decision in
 # atlas/data/removed.json (actor hark, reason, evidence link). The workflow then rebuilds and runs the full build check;
 # only when it passes does it commit the data, the GitHub mirror (atlas/public) and the report. If the check fails, it
@@ -35,7 +37,7 @@ jobs:
         id: check
         run: |
           set +e
-          python atlas/tools/link_safety.py --apply --actions-out "$RUNNER_TEMP/actions.json" | tee "$RUNNER_TEMP/out.txt"
+          python atlas/tools/link_safety.py --catalogue-dir atlas/catalogue --apply --actions-out "$RUNNER_TEMP/actions.json" | tee "$RUNNER_TEMP/out.txt"
           code=${PIPESTATUS[0]}
           set -e
           if [ "$code" -gt 1 ]; then echo "::error::check crashed (exit $code)"; exit "$code"; fi
@@ -47,11 +49,16 @@ jobs:
         if: steps.check.outputs.removed != '0'
         env:
           CW_PRIVATE_TERMS: ${{ secrets.CW_PRIVATE_TERMS }}
+          CW_SCREENS_REQUIRED: '1'
         run: |
           set +e
-          python -m pip install -r requirements.txt && \
-          git fetch --depth=1 --no-tags origin +refs/heads/atlas-screens:refs/remotes/origin/atlas-screens && \
-          python atlas/site/build.py && python atlas/site/check.py | tee "$RUNNER_TEMP/check.txt"
+          (set -e
+            if [ -z "$CW_PRIVATE_TERMS" ]; then echo "::error::CW_PRIVATE_TERMS is required"; exit 1; fi
+            python -m pip install -r requirements.txt
+            git fetch --depth=1 --no-tags origin +refs/heads/atlas-screens:refs/remotes/origin/atlas-screens
+            python atlas/tools/catalogue_build.py --mode accepted
+            python atlas/site/check.py
+          ) 2>&1 | tee "$RUNNER_TEMP/check.txt"
           code=${PIPESTATUS[0]}
           set -e
           echo "ok=$([ "$code" -eq 0 ] && grep -q 'ALL CHECKS PASSED' "$RUNNER_TEMP/check.txt" && echo true || echo false)" >> "$GITHUB_OUTPUT"
@@ -60,7 +67,9 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           if [ "${{ steps.check.outputs.removed }}" != "0" ] && [ "${{ steps.rebuild.outputs.ok }}" = "true" ]; then
-            git add atlas/data atlas/public
+            # Catalogue input bytes are retained; only removal decisions/report
+            # and the regenerated public mirror are committed.
+            git add atlas/data/removed.json atlas/data/link-safety.json atlas/public
             msg="atlas: link safety — remove flagged entries $(python -c "import json;print(', '.join(a['slug'] for a in json.load(open('$RUNNER_TEMP/actions.json'))['removed']))") ($(date -u +%F))"
             body="Rule: any single trust source flag removes the entry (TRUST.md). Decisions in atlas/data/removed.json (by hark)."
           else

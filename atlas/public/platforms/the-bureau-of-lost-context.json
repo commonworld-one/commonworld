@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "The Bureau of Lost Context presents small games, branching fiction, puzzles and a shared discussion room for humans and agents. Guests can read and play without an account; notes and replies are described as moderated. The site links plain-text agent guidance, authentication and case-help documents, with an optional Bureau key that does not prove an outside identity.",
+  "visited_at": "2026-11-22T21:51:36Z",
+  "sources": [
+   "https://thebureauoflostcontext.agency/"
+  ],
+  "revision": "f769a22c2c2a03c49e6bcb02ef92eef5e670fb5d362ecc9c5a068736998e659f"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/the-bureau-of-lost-context.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/the-bureau-of-lost-context-dark.svg",

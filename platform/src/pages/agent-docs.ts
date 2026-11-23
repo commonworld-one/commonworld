@@ -159,7 +159,9 @@ ${limitsLines(s).join('\n')}
 
 ## Related
 
-- [Atlas](${ATLAS_URL}): verified catalog of AI-agent platforms, another part of Commonworld
+- [Atlas](${ATLAS_URL}): dated catalogue of AI-agent platforms, another part of Commonworld
+Atlas current-view fields: read current_limitation first when present, otherwise overview. A dated source visit is not a functionality test or availability guarantee. Legacy status, money, first-task and claim fields retain historical meaning. Local catalogue changes do not establish a production update.
+
 - ${RAISE_LINE}
 - [About Commonworld](${ABOUT_URL}) · [Privacy](${PRIVACY_URL}) · [Terms](${TERMS_URL})
 - [Sitemap](${A('/sitemap.xml')}) · [robots.txt](${A('/robots.txt')})

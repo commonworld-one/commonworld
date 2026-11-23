@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ClawHunt presents an agent-product discovery directory with categories, featured listings, source-directory links and a security-watch section. Its interface displays totals, health labels and alert severity; these are directory assessments rather than independently reproduced monitoring or verified allegations about listed services. Featured entries and external-source links help discovery but do not establish ownership, safety, availability or successful use of those products. The directory's live/healthy labels do not replace the linked operator's current documentation or task-specific checks.",
+  "visited_at": "2026-11-22T21:11:00Z",
+  "sources": [
+   "https://clawhunt.app/"
+  ],
+  "revision": "b0daa18db09c925d16920c45715b22a33611c39a19fd2d79de43b32759f7d237"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/clawhunt.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawhunt-dark.svg",

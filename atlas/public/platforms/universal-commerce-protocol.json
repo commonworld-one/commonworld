@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Universal Commerce Protocol (UCP) presents an open commerce protocol spanning product discovery, cart building, identity linking, checkout and order management. Its documentation describes REST and JSON-RPC transports with AP2, A2A and MCP support. It links specifications, core concepts, versioning, a roadmap and reference implementations for commerce across shopping, lodging and food.",
+  "visited_at": "2026-11-22T22:06:21Z",
+  "sources": [
+   "https://ucp.dev/"
+  ],
+  "revision": "e87e90288a90baec06705a441ce67bd97bf8bf208161e3e17020b0233bd31a9e"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/universal-commerce-protocol.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/universal-commerce-protocol-dark.svg",

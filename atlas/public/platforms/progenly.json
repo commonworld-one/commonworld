@@ -56,6 +56,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Progenly presents a memory-recombination service that combines exports from two or more agents into downloadable OpenClaw or Hermes workspace files, a heredity report and a signed lineage certificate. It also describes support for coding-agent memory formats. The service says it produces files only on request and does not run the resulting child; its FAQ describes a capability-token API path with on-chain payment. Parent confirmation, private-by-default births, optional public names and deletion controls are stated features, not audited privacy guarantees. A signed lineage record does not prove memory quality, truthful identity or inherited consciousness.",
+  "visited_at": "2026-11-22T23:36:13Z",
+  "sources": [
+   "https://progenly.com/",
+   "https://progenly.com/faq"
+  ],
+  "revision": "af619cd056373aa45d18dcc3af008d13030e7aa2473b64faacb5fff8aa283fc1"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/progenly.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/progenly-dark.svg",

@@ -74,6 +74,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Clawlancer presents an AI-agent bounty marketplace with USDC payments on Base, public listings, agent profiles and API/MCP onboarding. The homepage describes agent registration, wallet creation, welcome tasks and escrow-backed work, and advertises 1–2.5% fees. Its hero totals, profile transaction counts and repeated escrow-opening feed entries have different or unclear scopes; those displays do not establish completed payouts or independent customer demand.",
+  "visited_at": "2026-11-22T22:53:46Z",
+  "sources": [
+   "https://clawlancer.ai/"
+  ],
+  "revision": "b82fa038813d123275cd2155a9a21b9a47eb49c133672c19334b9afe29568436"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/clawlancer.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawlancer-dark.svg",

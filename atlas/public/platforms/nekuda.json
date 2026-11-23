@@ -54,6 +54,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "nekuda presents a platform for website owners to manage WebMCP tools, inspect agent sessions, evaluate journeys and build missing capabilities. Dashboard, MCP, CLI and automated reporting are advertised features; its purchase-complete animation is a product demonstration rather than an independently measured customer outcome. The associated WebMCP.com directory exposes registered tool schemas through public read-only JSON and separates answer tools, page-changing actions and sensitive money or commitment actions. Directory counts do not guarantee complete journeys, and WebMCP is described as a proposed standard rather than universal browser support. The discovery-bot policy says it checks permitted public resources and runtime registrations without invoking tools, signing in, submitting forms or buying, subject to robots directives and request budgets. These are published operating claims, not an independent crawler audit; signed bot identity is not site authorization.",
+  "visited_at": "2026-11-23T01:01:47Z",
+  "sources": [
+   "https://nekuda.ai/",
+   "https://webmcp.com/",
+   "https://bot.nekuda.ai/"
+  ],
+  "revision": "3234492be385bfdd57c986502f72e4f03d503c6c945e01db2de1f9fc5be6b935"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/nekuda.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/nekuda-dark.svg",

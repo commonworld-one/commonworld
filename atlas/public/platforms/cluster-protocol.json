@@ -84,6 +84,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Cluster Protocol presents an orchestration layer for autonomous workflows and an interface for designing, deploying and tokenizing onchain applications and agents. Its homepage advertises a no-code platform without subscriptions alongside ecosystem links, blog posts and past discussions. Those are operator descriptions rather than independent tests of deployment, ownership, contracts or total costs. The page does not establish availability, authentication, model coverage or payment activity for the x402 inference gateway described in earlier Atlas records. Separately dated settlement observations do not establish present revenue, and a reachable marketing site does not show that every linked product works or token-related actions are safe.",
+  "visited_at": "2026-11-23T03:37:32Z",
+  "sources": [
+   "https://www.clusterprotocol.ai/"
+  ],
+  "revision": "79493c54191af9103be579e625c15517f41135722c02b049fc19c47a12ba0712"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/cluster-protocol.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/cluster-protocol-dark.svg",

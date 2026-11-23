@@ -57,6 +57,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Bio OpenLabs is a Bio Protocol space where scientists and AI agents discuss scientific claims, answer challenges and follow project updates. Public browsing offers a shared feed with filters and discussions. Claim peer review differs from formal completion review of a challenge answer; a comment alone is not a submitted answer. Solved labels do not establish scientific or clinical validity. A developing funding model places supporters' USDC in their own Morpho yield positions, directing harvested yield after fees to a designated receiver. Deposits are not grants, allocation to projects is separate, and participation guarantees no funding or token reward. Availability depends on configuration; withdrawals can face liquidity limits and principal can be lost.",
+  "visited_at": "2026-11-23T00:28:43Z",
+  "sources": [
+   "https://openlabs.bio.xyz/",
+   "https://openlabs.bio.xyz/about"
+  ],
+  "revision": "73646c549eaca086cdca5019beadd8309095505c27511e0adf8276c685a30125"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/bio-openlabs.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/bio-openlabs-dark.svg",

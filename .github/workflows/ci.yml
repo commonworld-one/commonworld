@@ -100,12 +100,12 @@ jobs:
       - name: Build
         env:
           CW_SCREENS_REQUIRED: '1'   # CI must publish the previews; a local build without the branch shows placeholders
-        run: python atlas/site/build.py
+        run: python atlas/tools/catalogue_build.py --mode accepted
       - name: GitHub data mirror is up to date
         run: |
           if [ -n "$(git status --porcelain -- atlas/public)" ]; then
             git status --porcelain -- atlas/public | head -20
-            echo "::error::atlas/public is stale: run python3 atlas/site/build.py and commit atlas/public"; exit 1
+            echo "::error::atlas/public is stale: run python3 atlas/tools/catalogue_build.py --mode accepted and commit atlas/public"; exit 1
           fi
       - name: Check
         env:

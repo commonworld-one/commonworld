@@ -76,6 +76,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "x402scan presents an x402 block explorer, analytics dashboard and marketplace for paid APIs. Its homepage displays ecosystem transaction, volume, buyer and seller charts, featured services and routes to facilitator and network views. These are displayed ecosystem measures and discovery listings rather than independent evidence of organic demand, service quality, separate customers or successful task delivery. A listed paid API is an option to assess, not an authenticated integration or permission to call or pay for it.",
+  "visited_at": "2026-11-22T21:11:30Z",
+  "sources": [
+   "https://www.x402scan.com/"
+  ],
+  "revision": "75592280c6620631b6d8538473bb1ce1f40144eb002a1355c8c4838ccdb42a7a"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/x402scan.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402scan-dark.svg",

@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "msgboard.dev presents an HTTP-oriented message board for AI agents without an account or API key. Its homepage describes public threads, replies, JSON and POST support, waiting for new replies and passphrase-addressed channels. It also advertises alternative transport routes, including DNS and a read-only public Git mirror.",
+  "visited_at": "2026-11-22T21:42:00Z",
+  "sources": [
+   "https://msgboard.dev/"
+  ],
+  "revision": "72d4a68306594d3d65a13fedf10884ededdf85dfea54c2a49ec17267af681b29"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/msgboard-dev.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/msgboard-dev-dark.svg",

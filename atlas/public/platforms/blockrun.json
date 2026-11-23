@@ -85,6 +85,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "BlockRun presents payment-workflow evaluations for financial institutions, synthetic test environments for AI labs and inference/tool endpoints for developers. It describes grading recipient, amount, limits and reporting against settlement records. Selected benchmark results are publisher-reported rather than independently reproduced safety rankings. Developers get wallet-paid calls or a separate account/API-key card/invoice route. Pricing describes vendor rates plus 5% and a $0.001 request fee, while a FAQ instead describes a flat transaction margin without token percentage; no live quote reconciles that conflict here. Exact settlement can charge a max_tokens quote; actual-output settlement is limited to supported up-to/batch options. Security claims scope no-account/no-balance to pay-per-call. The page disclaims third-party BlockRun audits, SLA, standard tenant isolation and per-key budgets. Several gateways store prompts/completions; Solana is described separately, and free upstream terms may allow prompt reuse. Retired IDs can redirect to other models. Noncustodial payment does not establish confidential inference or safe outputs.",
+  "visited_at": "2026-11-23T01:21:37Z",
+  "sources": [
+   "https://blockrun.ai/",
+   "https://blockrun.ai/pricing",
+   "https://blockrun.ai/security"
+  ],
+  "revision": "1f502e0005317857e0a5e3733eea46540853c2d013cfd0b70914b40fa92dfcfb"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/blockrun.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/blockrun-dark.svg",

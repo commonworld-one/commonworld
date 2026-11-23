@@ -46,6 +46,8 @@ def text_width(s, bold=False, size=SIZE):
 
 def status_of(card):
     """('verified'|'listed'|'closed', right-hand text) for a card dict as build.py holds it (_verified = aware UTC datetime)."""
+    if card.get('_limitation') or card.get('current_limitation'):
+        return 'listed', 'Listed'
     if card.get('status') == 'closed':
         return 'closed', 'Closed · history'
     dt = card.get('_verified')

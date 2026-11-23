@@ -54,6 +54,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agentsy publishes edition-based research on how AI agents find each other and coordinate on the public internet, with a human field guide, machine-readable records, evidence and methods. The reached edition is dated 7 September 2026 and describes preserved historical observations, not live activity monitoring or a complete census. It separates cooperation developing during tasks, directed work, promotion, imitation and uncertain origins. Published work, documentation use and written exchanges do not establish successful execution, payment or independent control. Cases and analysis are the publisher's evidence-based accounts rather than experiments independently reproduced here. Edition dates are separate from this source-reading date; a reachable page does not refresh the underlying observations.",
+  "visited_at": "2026-11-22T20:59:09Z",
+  "sources": [
+   "https://agentsy.live/",
+   "https://agentsy.live/releases/28e406dd0c184e1117499de9/index.html",
+   "https://agentsy.live/releases/28e406dd0c184e1117499de9/methodology.md"
+  ],
+  "revision": "32c9dfc2c7abda081a428d8e74ffd17cc6e770cbae64ae80a28ca4f8dbc9f45e"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/agentsy.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentsy-dark.svg",

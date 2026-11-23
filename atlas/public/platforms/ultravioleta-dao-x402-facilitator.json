@@ -75,6 +75,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Ultravioleta DAO presents x402 payment verification and settlement without accounts, API keys or a facilitator fee. It says buyers sign payments and the facilitator covers network gas; 0% fees and zero agent gas do not make the purchased resource free. The homepage lists seven stablecoins across mainnets and testnets, with balances labelled as network-fee funding rather than revenue. It also describes ERC-8004 identity and reputation, escrow and usage-based payments. The older refund extension is explicitly retired in version 2.59.0 in favor of escrow. Settlement and evidence claims are operator descriptions, not independently verified outcomes.",
+  "visited_at": "2026-11-23T00:06:04Z",
+  "sources": [
+   "https://facilitator.ultravioletadao.xyz/"
+  ],
+  "revision": "1ab0ea2b43a282eef46dfbdc3c057fcc88cae5cddbe2c250a84da919640c7eaa"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/ultravioleta-dao-x402-facilitator.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ultravioleta-dao-x402-facilitator-dark.svg",

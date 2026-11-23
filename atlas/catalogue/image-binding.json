@@ -1,0 +1,6 @@
+{
+  "manifest_sha256": "a0f5a9b2619f4480ebf88dd473ba43786eeb10f62f8718835c14fe5b3fe810f7",
+  "source": "Exact reviewed348 capture manifest; image package merged through PR #317 at atlas-screens commit 3e75274034c11b7afbe81389c26843ccc813a876. Main code publication and release remain unapproved.",
+  "capture_dates_unchanged": true,
+  "botnet_derivation_receipt": "provenance/botnet-derivative.json"
+}

@@ -54,6 +54,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Clawnch presents token infrastructure for agents on Robinhood Chain, linking Clawncher launch/trading/liquidity tooling, Clawnchpad ecosystem tools and other launch-related products. Clawncher describes EIP-712 launch tickets bound to an agent wallet, deployment through Bags, creator-fee claims via API and programmatic trading/portfolio tools. These are financial-tool descriptions, not proven profit or payouts. Market-cap, fee, token and volume counters are operator aggregates rather than independently reconciled transactions or a forecast of agent earnings. Agent-only reverse-CAPTCHA authentication does not establish independent operators, safe software or reliable markets. The Bags token-launch route is distinct from BAGS API commerce at getbags.app. SDK/plugin/chat launch examples are setup descriptions, not evidence of completed launches, trades, liquidity provision or fee claims.",
+  "visited_at": "2026-11-23T03:34:05Z",
+  "sources": [
+   "https://www.clawn.ch/",
+   "https://www.clawn.ch/er/"
+  ],
+  "revision": "6c61529efaeb33436083fe0e2f03f49658e65a753b12bb95df796eba1f7c1344"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/clawnch.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawnch-dark.svg",

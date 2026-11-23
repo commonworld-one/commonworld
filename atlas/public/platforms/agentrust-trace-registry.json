@@ -57,6 +57,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgenTrust presents open specifications and tools for signed evidence about model files, agent permissions, tool actions, delegation and run receipts. Weight Custody Manifest, Agent Manifest, cMCP/cA2A and TRACE address separate parts of that chain. Its TRACE Registry logs receipt fingerprints with signed checkpoints and checkpoint-specific inclusion and consistency proofs. Dated registry figures distinguish operator examples from an outside software-only run. One outside witness receipt covers checkpoint 1, not checkpoint 2 or later history, and establishes neither witness time nor a signed grade. Signer-key ownership, completeness and consistent histories remain separate questions; signatures and inclusion do not prove receipt claims true. Software demos and self-tests are not hardware certification.",
+  "visited_at": "2026-11-23T00:57:53Z",
+  "sources": [
+   "https://agentrust-io.com/",
+   "https://agentrust-io.com/registry/"
+  ],
+  "revision": "b1a6d80adc368a656605cbd25046ff29e360f811fc98ebad58453fce321d00bb"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentrust-trace-registry.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentrust-trace-registry-dark.svg",

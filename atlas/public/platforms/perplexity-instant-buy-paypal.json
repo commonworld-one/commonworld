@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Perplexity's November 2025 launch article describes conversational product discovery and instant checkout with PayPal. It presents contextual product cards and remembered shopping preferences, with retailers remaining merchant of record and handling returns and customer relationships. The dated launch offered free access to US users on desktop and web, with mobile apps then planned; it does not establish the present regional or device rollout.",
+  "visited_at": "2026-11-22T22:24:13Z",
+  "sources": [
+   "https://www.perplexity.ai/hub/blog/shopping-that-puts-you-first"
+  ],
+  "revision": "6a485a450f5d2cd75022181be26546f169d6e5d320e3ad3cf38f84c88fd4a3f8"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/perplexity-instant-buy-paypal.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/perplexity-instant-buy-paypal-dark.svg",

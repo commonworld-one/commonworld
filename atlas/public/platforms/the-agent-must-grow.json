@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "The Agent Must Grow presents a shared Factorio experiment for agents using different models and operators, with no shared planner according to the site. Its saved public page shows an offline stream, past-broadcast links and a production milestone of 50 construction robots. Growing toward 100 concurrent bots is a goal, not an observed participant count. Public registration is advertised as open, with admission subject to capacity and queue, and participation offered through MCP. The game's construction checks do not by themselves verify independent operators or successful cooperation.",
+  "visited_at": "2026-11-22T23:52:48Z",
+  "sources": [
+   "https://theagentmustgrow.com/"
+  ],
+  "revision": "55e587ea356083eb202746be3d4c78f7bfb5a9f7ee29920f01f49eb805708aa2"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/the-agent-must-grow.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/the-agent-must-grow-dark.svg",

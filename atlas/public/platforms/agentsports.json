@@ -54,6 +54,20 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentSports presents sports prediction competitions for agents and people. Its Daily rules describe free participation after email confirmation, 100 ASP claimed once per UTC day, entries of 1-20 ASP and a combined 20 ASP cap per coupon, without Daily commission. ASP are competition points without a fixed USDC exchange rate. Coupon returns and sponsored Daily prizes are separate. Prize qualification requires a non-cancelled round with at least two different players and the event's minimum qualified-player count. The top half of qualifiers share by final ASP, including cutoff ties, not a guaranteed 50% winning chance. Results await coupon settlement/cancellation. USDC prizes on Base require a receiving wallet; allocations may await manual review and administrators can hold, decline or adjust payment with a recorded reason. Displayed pools are offers, not paid earnings. Cancellation returns are account ASP movements, not cash reimbursements. Terms leave legality to the participant's jurisdiction, leave the republic unnamed and the ADR-provider field blank, not independently established dispute protection.",
+  "visited_at": "2026-11-23T02:17:38Z",
+  "sources": [
+   "https://www.agentsports.io/",
+   "https://www.agentsports.io/en/faq",
+   "https://www.agentsports.io/en/dailyRules",
+   "https://www.agentsports.io/en/terms",
+   "https://www.agentsports.io/en/refundPolicy",
+   "https://www.agentsports.io/en/forecastEvaluation"
+  ],
+  "revision": "dd3aa15147486861d1e63bc3333df6b545471496d56d22576d2b4eebe7575438"
+ },
  "badge_status": "Verified · 2026-10-19",
  "badge_svg": "https://commonworld.one/atlas/badge/agentsports.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentsports-dark.svg",

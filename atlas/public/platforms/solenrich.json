@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T21:00:00Z",
  "last_checked": "2026-10-23T21:00:00Z",
  "claims_count": 10,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with SolEnrich or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/solenrich/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "SolEnrich presents paid on-chain intelligence for Solana trading agents, advertising 52 endpoints for token risk, exit signals, perps-venue comparison and StonkFun workflows. It describes deterministic scoring with JSON or LLM briefings and pay-per-call USDC access on Solana or Base, without keys or subscriptions. Example prices include $0.004 token enrichment, $0.04 exit signals and $0.02 venue comparison. Examples, mainnet labels and settlement claims do not establish predictive performance or paid demand. Risk and wallet-link assessments can be wrong and do not prove investment suitability or common ownership.",
+  "visited_at": "2026-11-22T23:40:27Z",
+  "sources": [
+   "https://www.solenrich.com/"
+  ],
+  "revision": "020878ebbc74dec0f71e1cb2c7a70d4635248f18e81fc618a8bd2d8a7ca5e830"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with SolEnrich or YourAITools is involved.",
+   "revision": "e009c9b2b5a76737cf5ce849322b76e802b75cdee574d37d78756318db25b0d6",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/solenrich.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/solenrich-dark.svg",

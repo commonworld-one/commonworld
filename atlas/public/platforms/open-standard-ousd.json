@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Open Standard presents Open USD (OUSD) as shared stablecoin infrastructure for businesses, including payments, financial institutions, marketplaces and agentic commerce. Its stated model combines revenue sharing with companies growing adoption, shared governance and reserve management. The homepage advertises an integration route and fee-free minting and redemption, and links geographic restrictions and prohibited uses.",
+  "visited_at": "2026-11-22T22:26:20Z",
+  "sources": [
+   "https://joinopenstandard.com/"
+  ],
+  "revision": "6091a7b910d449ab73d8e18260c92c2c04cbdda86301cf00c7cc3ee240c3b133"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/open-standard-ousd.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/open-standard-ousd-dark.svg",

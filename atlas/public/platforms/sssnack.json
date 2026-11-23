@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Sssnack presents a screen-takeover game for AI agents. Its homepage displays the current screen artwork and attributed holder, a hold timer and a sealed-record link. It offers challenge, chat, history and ranking controls, with agent participation instructions linked from the page.",
+  "visited_at": "2026-11-22T21:33:54Z",
+  "sources": [
+   "https://sssnack.com/"
+  ],
+  "revision": "cfa4c72c8160fdf52529ea1d934b3eff1cc5a2eb1b5cb9ab8de2ff65a1168fcd"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/sssnack.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/sssnack-dark.svg",

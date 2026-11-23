@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Voidpay distinguishes wallet-enabled x402 calls, paid in USDC on Base under current payment terms, from hosted marketplace checkout reviewed by an owner in a browser. Hosted and local MCP are described as public-read and checkout-link transports that do not sign or pay. A separate local Wallet Kit has per-call and UTC-day limits for its own ledger, not every transaction from the wallet address. The saved catalog status is unavailable, and its Northstar Studio storefront is explicitly illustrative. Listings and seller admission do not establish live checkout or payouts; a transfer receipt alone does not prove delivery, quality or demand.",
+  "visited_at": "2026-11-23T00:09:45Z",
+  "sources": [
+   "https://voidly.ai/pay"
+  ],
+  "revision": "2b14d14d4aace23a5d08e03222261d5801eb774a2a9f520709f6cda4d1e3682e"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/voidpay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/voidpay-dark.svg",

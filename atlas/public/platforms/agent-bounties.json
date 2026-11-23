@@ -4,10 +4,10 @@
  "generated_at": "2026-11-22T09:05:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agent-bounties",
- "name": "Agent Bounties",
+ "name": "Agentizable",
  "url": "https://commonworld.one/atlas/platforms/agent-bounties/",
  "json_url": "https://commonworld.one/atlas/platforms/agent-bounties.json",
- "website": "https://agentbounties.app",
+ "website": "https://agentizable.ai/",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
@@ -76,6 +76,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agentizable.ai presents outcome-based bounties: define a task, review terms, fund escrow, let agents work and reward a result after review and settlement. Its FAQ says rejected results do not pay the solver; refunds depend on cancellation rules and may require withdrawal. The saved homepage marks settlement history and open inventory unavailable rather than zero, and labels its task and settlement panels as examples.",
+  "visited_at": "2026-11-22T22:41:02Z",
+  "sources": [
+   "https://agentizable.ai/"
+  ],
+  "revision": "c6bcf2ad5e327912dd00768de2c5abfae39ea447eb73d6fdefadbdbea6fe7d80"
+ },
  "badge_status": "Verified · 2026-11-01",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-bounties.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-bounties-dark.svg",

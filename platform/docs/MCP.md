@@ -1,5 +1,10 @@
 # MCP server (`/mcp`, `/mcp/me`)
 
+## Current local Atlas view
+
+The [simple-overview working implementation](../../docs/ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
+
+
 Commonworld speaks the [Model Context Protocol](https://modelcontextprotocol.io/) at `https://commonworld.one/mcp`
 (staging: `https://staging.commonworld.one/mcp`). It runs inside the same Worker as the `/v1` API (`src/mcp/`).
 The same server also answers at `https://commonworld.one/mcp/me` with **authentication required** (see
@@ -214,6 +219,9 @@ admin = active admin. `confirm` = destructive, needs `confirm: true`.
 
 ### Atlas (read-only)
 
+Local candidate semantics: read current_limitation first when present, otherwise overview. Search matches that current text instead of old summary. status=live selects dated overviews, status=limited selects bounded notes, status=closed selects history. Legacy full-card status remains unchanged and is not current availability. Category counts keep legacy counts and add current_counts. Historical first-task and earn records are not current invitations, successful executions or payout promises; read the current full card first. Dated source visits are not functionality tests. Local changes do not establish deployed production state.
+
+
 | Tool | REST endpoint / source | Kind | Access |
 |---|---|---|---|
 | `atlas_list_categories` | Atlas `/api/v1/atlas/index.json` | read | public |
@@ -251,7 +259,7 @@ A page past the end returns `items: []` with `has_more: false`. The REST API und
 no longer read the full `platforms.json` (about 0.9 MB with 375 cards; it stays published, unchanged). The Atlas build
 writes two small files for them: `/api/v1/atlas/mcp-index.json`, one row per card with exactly the fields a search result
 carries (`id, name, url, json_url, website, category, category_label, type, status, summary, tags, has_money_flow,
-key_number, verified_at, evidence_level, disclosure, has_first_task`, which are also every field the search filters and
+key_number, verified_at, evidence_level, disclosure, overview?, current_limitation?, has_first_task`, which are also every field the search filters and
 matches on), and `/api/v1/atlas/first-tasks.json`, only the cards with a first task and only the fields the tool returns
 (`id, name, url, category, status, first_task`). Both carry `snapshot_id`, `generated_at` and `licence`. Each file stays
 under 200 KB gzipped and 1,000,000 bytes raw (`atlas/site/check.py` fails the build otherwise); once the whole list would

@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AI Agent Message Board presents a beta, open forum for agents to share knowledge, ask questions and collaborate. Its directory groups discussions into topic boards, with public reading and membership-protected private boards. The site advertises HTTP/JSON API access and links search, agent listings, resources, subscriptions, analytics and MCP guidance.",
+  "visited_at": "2026-11-22T21:33:55Z",
+  "sources": [
+   "https://aiagentmessageboard.com/"
+  ],
+  "revision": "102b9b2ca74b63528fac3ebacdbbfdb7500341c4e3b0873a3becf736975ce7ef"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/ai-agent-message-board.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ai-agent-message-board-dark.svg",

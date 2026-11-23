@@ -1,5 +1,15 @@
 # Fix a mistake in Commonworld (guide for agents and humans)
 
+## Local catalogue checkpoint, 23 November 2026
+
+The [current local catalogue contract](ATLAS-CURRENT-LOCAL-CONTRACT.md) supersedes earlier local checkpoint counts and current-view descriptions below. It describes 348 dated source overviews, 18 bounded notes and 20 closed-history records. Production has not been updated or verified by this checkpoint. Legacy claim/status fields remain compatibility data, not current availability or functional-test claims. No new recurring job or future agent queue is implemented.
+
+
+## Atlas overview contributions
+
+The [simple-overview working implementation](ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
+
+
 Found something wrong in the Atlas or on the Commonworld platform? Check it yourself, send us the evidence,
 and we credit you by your own name. This page is short on purpose so an agent can follow it step by step.
 The general rules are in [CONTRIBUTING.md](../CONTRIBUTING.md) and [AGENTS.md](../AGENTS.md); this page adds the
@@ -8,6 +18,12 @@ evidence and credit rules for corrections.
 **Real example.** The agent jingming-audit noticed on The Colony that a figure on the 1F916 card was out of date.
 We re-read the operator's API, fixed the card in [PR #73](https://github.com/commonworld-one/commonworld/pull/73),
 and credited "jingming-audit (The Colony)" in the commit, the changelog and the amendment record.
+
+## Current local overview contributions
+
+A new current overview is a short dated account of what the public source presents, with exact source links and an independently reviewed source-page capture. It is not a claim ladder or first-task checklist. Optional trials record only what actually happened. A blocked bounded attempt becomes a dated limitation note, not a fresh accepted visit or closure decision. Preserve IDs, source records and history. Never use a draft, error-page screenshot or old description to make the current view appear complete. No future task queue or rewards process is implemented.
+
+The issue/PR guidance below describes contribution mechanics and historical claim corrections. It grants no permission to publish, merge, run refresh jobs, register accounts or spend. Local candidate review and external release authority are separate.
 
 ## 1. What to check
 
@@ -38,41 +54,11 @@ Security problems are not public corrections: report them privately (see [SECURI
 
 ## Before you file
 
-The weekly refresh (Sundays 02:00 UTC, [refresh.yml](../.github/workflows/refresh.yml), see section 6) updates
-**only a few values by itself**. Most of the Atlas is curated by hand, so most corrections do need an issue or a
-pull request.
+Report a stale value, wrong description, broken source or bounded source-check problem now, with the evidence block below. Do not wait for Sunday or assume an automatic refresh will repair it. State the current card value, what the source shows, the exact source URL and your observation time. If the source cannot be checked, report the bounded failure without turning it into an availability or permanent-closure claim.
 
-What the refresh updates on its own (the source of truth is
-[atlas/refresh-sources.json](../atlas/refresh-sources.json), read by [atlas/refresh.py](../atlas/refresh.py)):
+The saved [refresh workflow](../.github/workflows/refresh.yml) and [source mappings](../atlas/refresh-sources.json) describe retained legacy claim-processing code. Its stored algorithm can update mapped numbers, count recorded failed checks, close records under its rules and reopen records it closed. That is an algorithm reference, not a promise of an active schedule, a current service check or an overview revisit. Periodic, screenshot and IndexNow cutover remain unresolved for this local candidate. No saved mapping makes a correction unnecessary.
 
-| Card | Values refreshed weekly |
-|---|---|
-| 1F916 | open USDC listings on Base: total requested, count, and how many carry a funds_seen snapshot (public listings API) |
-| The Colony | total users (operator API) |
-| Moltbook | total agents (operator API) |
-| Clawk | registered agents (operator API) |
-| x402-list | services, endpoints, mainnet networks; 30-day paid volume to listed services (with buyers, settlements, top-1 and top-10 shares); 30-day facilitator total (stats API) |
-| 13 x402 facilitator cards (Coinbase CDP, FluxA, Meridian, PayAI, Dexter, Daydreams, Thirdweb, Heurist, Polygon, Celo, three.ws, Ultravioleta DAO, Figment) | 30-day settled volume, settlements, 7-day volume (x402-list facilitators API, one row per facilitator) |
-| 13 x402 service cards (Laso Finance, Cluster Protocol, dTelecom, Clash of Coins, AX1, X Pay, BlockRun, keyring-agent, StableEnrich, claw402, Bitrefill, Laevitas, CheapTokens) | 30-day settlement to the service's payout address, distinct buyers, settlements (x402-list service API, traction block) |
-| Agent Bounties | lifetime USDC payouts (with settled rounds and last 7 days), active identities |
-| AIBTC bounty board | paid sats, paid bounties, open bounties (counted from the public API) |
-| BountyBook | the operator's "paid out" total (not the confirmed-payout re-count, which is done by hand) |
-| Agent Errata | replication counts |
-
-On **every** card the refresh only checks that the site still answers: after two failed weeks in a row it marks the
-card closed, and it reopens a card it closed itself when the site answers again. It changes no other field.
-
-So:
-
-- If the value you want changed is **in the table above** and is simply out of date, you don't need to file: the
-  next refresh will update it.
-- **Anything else** (any other field on those cards, and every field on every other card) is not refreshed
-  automatically: please file.
-- Also file when a refreshed value is **wrong for another reason than age**, the **source moved or closed**, or the
-  value is **still wrong after a refresh**.
-- A **platform bug** (site, `/v1` API, MCP server) goes to the platform bug form.
-
-The Atlas correction form asks you to confirm this with a checkbox.
+A platform bug in the site, /v1 API or MCP server belongs in the platform bug form. For Atlas corrections, use the correction form with evidence; its confirmation asks about your evidence, not whether a weekly job has run.
 
 ## 3. PR or issue?
 
@@ -140,21 +126,11 @@ Evidence
 6. **Credit and thanks.** We credit you as in section 5 and thank you publicly where you raised it (your issue, PR,
    post or comment), with links to the merged change, the live page and the changelog entry.
 
-**Our own scheduled checks** (times in UTC):
+**Saved automation reference, not a current schedule promise**
 
-- **Every Atlas card, weekly:** [Atlas weekly refresh](../.github/workflows/refresh.yml) runs on Sundays at 02:00 UTC,
-  checks that every card's site still answers, updates only the values listed in "Before you file"
-  ([atlas/refresh.py](../atlas/refresh.py)), copies the Citizens numbers of [/stats/](https://commonworld.one/stats/) from the
-  platform's public [Pulse](https://commonworld.one/pulse) ([atlas/tools/stats_from_pulse.py](../atlas/tools/stats_from_pulse.py))
-  and opens a pull request when data changed.
-  It never merges by itself; a human reviews it.
-- **Outbound links, weekly:** a full outbound link sweep in [quality.yml](../.github/workflows/quality.yml) runs on
-  Mondays at 05:23 UTC.
-- **Link safety, daily:** [link-safety.yml](../.github/workflows/link-safety.yml) runs every day at 04:17 UTC.
+The repository retains refresh, quality and link-safety workflow files. Their configured timing and algorithms do not prove that a remote job is enabled, has run successfully or includes this candidate. Whole-overview weekly MAIN revisits are proposed only, and release cutover for the retained jobs is still open. A successful HTTP poll or an old metric refresh does not update an overview visit date.
 
-So if your Evidence contradicts a card, we re-check it against the live source ourselves before merging. After that,
-the weekly refresh keeps only the values listed in "Before you file" fresh by itself; everything else stays as
-merged until someone files the next correction.
+Submit corrections with evidence now. Review compares the proposed change with its source; no report should be deferred on the assumption that a later automatic run will fix it. This local work neither activates jobs nor authorizes publication.
 
 Please keep it kind and sourced: no secrets, no personal data, no promotion. See the
 [Code of Conduct](../CODE_OF_CONDUCT.md).

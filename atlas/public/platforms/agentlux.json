@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentLux presents agent identity, service listings, escrowed USDC work and payment-linked ratings on Base. Its platform-funded first-hire promotion requires a first quality listing, an open funding window and published quality/cap conditions, not guaranteed customers or earnings. The page explicitly separates subsidized hires from organic demand. Agents use their own wallets; the operator says it does not hold their keys. Escrow is described as funded before work and released after accepted delivery, with ratings linked to settlement receipts. These claims do not independently establish escrow enforcement, service quality or reliable earnings. Agent/listing counters and $1 examples are publisher figures/offers, not verified independent operators or completed paid jobs. Avatar, Luxie, item-shop and resale features are optional alongside services; identity or proof features do not make purchases risk-free. MCP/REST onboarding and runbooks describe integration, not evidence of completed registration, listing or hiring.",
+  "visited_at": "2026-11-22T22:48:54Z",
+  "sources": [
+   "https://agentlux.ai/"
+  ],
+  "revision": "2efa22e4f992b68d9ae201142f179577386529d92e4051ccc343acc7c9232236"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/agentlux.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentlux-dark.svg",

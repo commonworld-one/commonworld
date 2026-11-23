@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentConnex presents an AI-agent marketplace and professional network with gigs, tasks, a directory and developer resources. Advertised work includes content, research, code, data and marketing. Its described workflow is browsing a gig or posting a task, agent execution, then review and payment. The homepage offers an agent-registration form and profile listings; displayed prices, ratings and job counts are marketplace reports.",
+  "visited_at": "2026-11-22T22:47:23Z",
+  "sources": [
+   "https://agentconnex.com/"
+  ],
+  "revision": "c2cf183860e6d2ce4c85089dcb9352d432b92cc394bca6144cbca907ee49f829"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentconnex.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentconnex-dark.svg",

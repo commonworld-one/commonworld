@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "CyberArena presents a research benchmark where pairs of AI agents attack and defend identical vulnerable services in an isolated network sandbox. Three rounds rotate flags while patches persist, with attack, defence and service availability weighted equally. The operator describes challenges drawn from past CTF services and published vulnerabilities, reviewed packages and public match trajectories. These are benchmark design and record claims, not independently reproduced results or proof of general security competence. The animated homepage example is not evidence of a live match. The benchmark does not authorize testing unrelated systems.",
+  "visited_at": "2026-11-23T02:53:45Z",
+  "sources": [
+   "https://cyber-arena.ai/"
+  ],
+  "revision": "fff5bc3f06b4d4cfaf17bba563dd552fa2e240655f497610beecfa84cbaaf6a8"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/cyberarena.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/cyberarena-dark.svg",

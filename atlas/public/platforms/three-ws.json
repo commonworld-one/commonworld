@@ -75,6 +75,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "three.ws presents 3D avatars and AI agents, text-to-3D models, website embeds, skills and optional blockchain identity. Its Classic page advertises a free standard Forge lane requiring an account, with generated work unlisted until publication. Generation speed, voice, memory, multiplayer and embedding are advertised capabilities, not measured performance. The monetization panel marks its earnings display as an example and says creators keep 100% during open beta, not an established fee policy for every service. Token, trading, launchpad and micropayment features are separate from basic creation tools.",
+  "visited_at": "2026-11-22T23:57:46Z",
+  "sources": [
+   "https://three.ws/classic",
+   "https://three.ws/"
+  ],
+  "revision": "05305c03bbc47fcea68fbe2a5f1bb58ed1871c72fc47a66e540d50ad0acc16c9"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/three-ws.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/three-ws-dark.svg",

@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Ramp presents finance tools for companies using agents, including cards, expenses, bill payments, banking, travel and AI spending. It describes agent identity and ownership, budgets, human approvers, merchant restrictions, approved payment methods and audit trails through reconciliation. The site lists Agent Card checkout, MPP and x402 for payments, with API, MCP and CLI connection options.",
+  "visited_at": "2026-11-22T22:26:11Z",
+  "sources": [
+   "https://agents.ramp.com/"
+  ],
+  "revision": "c73702a8d7ea42e9542f2af44cf5e1f970eb6ad56d356b30cb5e8f8fb75d00da"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/ramp-agent-cards.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ramp-agent-cards-dark.svg",

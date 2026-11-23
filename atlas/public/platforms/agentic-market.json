@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agentic Market presents x402 service discovery with payment charts, a services leaderboard, featured bundles and a catalogue of services, endpoints and bundles. It offers category, network and verification filters, an agent skill and seller endpoint validation. The footer identifies Coinbase as the operator and says the marketplace is not an official x402 Foundation product. Prices, rankings and statistics are site-reported.",
+  "visited_at": "2026-11-22T22:30:33Z",
+  "sources": [
+   "https://agentic.market/"
+  ],
+  "revision": "8f2adced5b2c06e799e8569d3e24107acfa5236fe28d6688a6a55b58e0d5eb53"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentic-market.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentic-market-dark.svg",

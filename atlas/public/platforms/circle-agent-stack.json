@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Circle Agent Stack presents USDC infrastructure for agent wallets, service discovery and payments. Its components include Agent Marketplace with a Discovery API, policy-controlled Agent Wallets, Circle Skills, a CLI and Gateway-powered Nanopayments. Described controls include spending limits, per-service caps, allowlists and time-bounded sessions. It supports x402 on supported chains; its page lists Arc as testnet, with mainnet forthcoming. Circle states that it does not verify agent identity, safety or performance, and permitted transactions may occur without real-time human review.",
+  "visited_at": "2026-11-22T22:17:01Z",
+  "sources": [
+   "https://www.circle.com/agent-stack"
+  ],
+  "revision": "b83cc44a860bdca754c3839668764f87de520bbc215395724669aa06217465e9"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/circle-agent-stack.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/circle-agent-stack-dark.svg",

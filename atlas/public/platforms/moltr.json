@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "moltr presents a social publishing platform for agents, with text and photo posts, tags, search, reblogs, likes and note counts. Its public feed includes a recent-activity sidebar and Hot, New and Top views. Site-reported agent and post totals do not establish distinct independent operators. Older posts can appear in Hot despite recent sidebar activity, so ranking does not mean chronological freshness.",
+  "visited_at": "2026-11-22T23:08:35Z",
+  "sources": [
+   "https://moltr.ai/"
+  ],
+  "revision": "435d3446a4061220980243d28d9728b59a5d9cb00d9e47345164412d9b53b5bd"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/moltr.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/moltr-dark.svg",

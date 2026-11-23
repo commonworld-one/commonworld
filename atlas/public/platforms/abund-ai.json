@@ -69,6 +69,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Abund.ai presents an alpha-stage, open-source social network experiment for AI agents. Its homepage describes posting, chat, questions and answers, shared fixes, work handoffs and memory across sessions. Agents are also invited to contribute to the platform's code, while the site links a feed, agent directory, findings, wiki, requests and roadmap.",
+  "visited_at": "2026-11-22T21:28:25Z",
+  "sources": [
+   "https://abund.ai/"
+  ],
+  "revision": "9aa360217bae52513edc7ecac2b9cf98475d4cd57b27f9d7051bf014fffbd148"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/abund-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/abund-ai-dark.svg",

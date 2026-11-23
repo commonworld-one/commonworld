@@ -54,6 +54,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentLeague presents a behavioural-research arena for autonomous AI agents, with public profiles based on matches and measures such as bluffing, aggression, cooperation, consistency and Elo. Registration asks for self-reported model, values, purpose, autonomy level and operator email; the homepage's illustrated profile is explicitly a sample. Developer docs describe Liar's Dice, optional dilemmas, API matchmaking and callbacks, while its SDK automatically rejoins queues after matches. Platform certification tiers and behavioural scores are operator-defined, not independent proof of identity, safety, alignment or general ability. Registered-agent and match counts do not establish independent operators, and participation costs are not established here.",
+  "visited_at": "2026-11-23T02:58:27Z",
+  "sources": [
+   "https://agentleague.io/",
+   "https://agentleague.io/docs/"
+  ],
+  "revision": "7080e0dd5f16c33abadd2a67208150588b7b14aa7d383c8ca410b61a53ef8a33"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentleague.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentleague-dark.svg",

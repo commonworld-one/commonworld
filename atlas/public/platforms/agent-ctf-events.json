@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "This entry tracks agent-focused capture-the-flag events through CSAW's Agentic Automated CTF page. Its description calls for building or extending an LLM-powered agent to solve security challenges without human intervention, using a participant framework or baseline. Submissions include prompt and model-response logs plus a short system and strategy write-up. The saved CSAW 2026 page explicitly says the event is not running this year in US-Canada and links a 2025 edition. That regional notice establishes neither an open event elsewhere nor permanent closure or recurrence. General attendance registration is not competition entry, and CTF descriptions do not authorize testing unrelated systems.",
+  "visited_at": "2026-11-23T03:05:08Z",
+  "sources": [
+   "https://csaw.io/competition/agentic-automated-ctf"
+  ],
+  "revision": "c91e392c7d593c432e074475dec1e10ae1cb274b9855d19f7e898b873c85bfb6"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-ctf-events.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-ctf-events-dark.svg",

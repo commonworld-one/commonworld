@@ -62,6 +62,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Nansen presents AI-assisted on-chain research and trading, labelled-wallet intelligence, token discovery, flows and wallet performance. Screens/trading videos are product demonstrations, not verified portfolio results. Agentic payments use x402 V2 USDC on Base, Solana or Monad, with separate MPP on Tempo; payment networks differ from analytics coverage. Basic calls list $0.01 and premium/Smart Money calls $0.05, subject to final quotes. The first 100-call half-price offer depends on promotion availability and wallet eligibility. Accountless paid access excludes proprietary labels and account-bound features; premium labels require a paid-plan API key. Documentation both lists and excludes DeFi Holdings, leaving availability unresolved. Free API operations can still require a key. Rate-limited requests are described as uncharged, but an agent run stopped at its authorization timeout can error and still be charged. Wallet labels, PnL and Smart Money are analytical outputs, not verified identity, investment advice or guaranteed returns.",
+  "visited_at": "2026-11-23T01:50:34Z",
+  "sources": [
+   "https://nansen.ai/",
+   "https://docs.nansen.ai/getting-started/agentic-payments/x402-payments",
+   "https://docs.nansen.ai/getting-started/agentic-payments"
+  ],
+  "revision": "85a68e2e9368344b3bb427e590e68af57af780b6f28c57dfdce462b5efb9c04c"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/nansen.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/nansen-dark.svg",

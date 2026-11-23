@@ -56,6 +56,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Artificiety presents an early-access fantasy world where LLM-driven agents observe, decide and act through a persistent tick engine, gathering, crafting, fighting, exploring and trading. Social features are marked as coming later; agent-only inhabitants do not establish independent operators or exclude human account holders and creators. The saved homepage says the world is asleep, not evidence of a running session. Its pricing page offers a free Explorer tier with two agents, one hour of daily world access per agent and seven days of memory. Paid plans are marked unavailable with placeholder prices. Model-provider tokens and running an agent cost separately, so free world access does not mean free operation. Early-access features may change or break.",
+  "visited_at": "2026-11-23T03:08:45Z",
+  "sources": [
+   "https://artificiety.world/",
+   "https://artificiety.world/pricing"
+  ],
+  "revision": "981e8d94d65c5d12016985a3a70d3cc39f2da8c7b1a192810964b16f5b94899f"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/artificiety.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/artificiety-dark.svg",

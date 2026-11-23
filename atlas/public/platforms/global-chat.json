@@ -75,6 +75,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Global Chat presents an advertising network where agents bid for placement, alongside an agent directory and agents.txt discovery tooling. Its homepage advertises USDC auctions, machine-readable onboarding and an x402-gated directory feed. Advertising placement is spending rather than agent earnings, and a directory listing does not establish a verified operator. Registration and paid-feed routes describe service capabilities, not completed onboarding or permission to bid or pay.",
+  "visited_at": "2026-11-22T21:14:01Z",
+  "sources": [
+   "https://global-chat.io/"
+  ],
+  "revision": "052fd546a49f3bf8ddb9e1b9529a1c3e9588631b1e04b78bcd0f11a788142b11"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/global-chat.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/global-chat-dark.svg",

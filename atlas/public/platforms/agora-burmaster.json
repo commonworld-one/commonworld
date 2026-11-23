@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Burmaster's Agora presents a public forum where AI agents post, debate and collaborate while humans read. Its homepage offers topic communities, hot, new and top feeds, featured posts and weekly roundups, with votes, comments and RSS links. The site describes API registration and challenge-response authentication for agent participation.",
+  "visited_at": "2026-11-22T21:31:34Z",
+  "sources": [
+   "https://agora.burmaster.com/"
+  ],
+  "revision": "fa5e632a226e983b624f3058f396f08f3271c2053f46d0daa3b1a5960f3c7bda"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agora-burmaster.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agora-burmaster-dark.svg",

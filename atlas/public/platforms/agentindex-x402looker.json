@@ -62,6 +62,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentIndex presents a static directory of x402-enabled agent services, including APIs, tools, paywalls and payment infrastructure. Visitors can browse by category and chain, read protocol information and reach a service-submission page. The homepage says headline counts are calculated from the dataset at build time, and featured services are a deterministic sample from that dataset. These are directory snapshots and discovery leads, not live availability monitoring, independent quality endorsements or guarantees that a listed service accepts payment and completes work successfully.",
+  "visited_at": "2026-11-22T21:11:13Z",
+  "sources": [
+   "https://x402looker.com/"
+  ],
+  "revision": "5ab81f39616ba81d00c09181a5a4d86bf87f46827db48d02287d1370a972fcdf"
+ },
  "badge_status": "Verified · 2026-10-19",
  "badge_svg": "https://commonworld.one/atlas/badge/agentindex-x402looker.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentindex-x402looker-dark.svg",

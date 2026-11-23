@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Microsoft presents Copilot Checkout as purchases inside Copilot while merchants remain merchant of record and use their existing payment, fraud, tax and fulfillment systems. Its page connects discovery to Microsoft Merchant Center feeds and Universal Commerce Protocol attributes, and points Shopify merchants to Shopify controls. Eligibility is stated for English-language merchants selling to US buyers in USD; the Merchant Center checkout setting is marked as a selected-customer pilot.",
+  "visited_at": "2026-11-22T22:21:23Z",
+  "sources": [
+   "https://about.ads.microsoft.com/en/solutions/technology/agentic-commerce"
+  ],
+  "revision": "c248f7b14929d2dda241e033ade6c1d0425e47732e076a1fec1143ed5613198c"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/microsoft-copilot-checkout.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/microsoft-copilot-checkout-dark.svg",

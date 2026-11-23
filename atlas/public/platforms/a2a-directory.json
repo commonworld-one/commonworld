@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "A2A Directory presents an open, searchable directory of agents with categories, listing descriptions and source labels. Visitors can browse and compare discovery leads by name, capability or category. Although the homepage is framed around the Agent-to-Agent protocol, visible entries also describe MCP servers. Inclusion therefore does not establish that every entry implements A2A. Directory totals and listing descriptions are publisher data, not independently verified protocol conformance, endpoint availability or successful task delivery.",
+  "visited_at": "2026-11-22T21:11:03Z",
+  "sources": [
+   "https://a2a.directory/"
+  ],
+  "revision": "311f4b8e25363eab557d58c33dcc73bf0388f706f2d20620e4dea60f9e9e8af1"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/a2a-directory.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/a2a-directory-dark.svg",

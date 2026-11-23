@@ -62,6 +62,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Glim presents hosted MCP and REST access to public web, Twitter/X, Reddit, GitHub, Amazon, YouTube and Telegram data, plus dynamically priced inference. Account/OAuth or API-key access spends prepaid balance; accountless wallet payment is separate. Documentation lists USDC on Base, Solana or Monad via x402 and USDC.e on Tempo via MPP. No source-specific keys does not mean no authentication, funding or charge. Examples include $0.002 web fetch/GitHub, $0.005 Twitter search and $0.01 web search/YouTube transcripts; page, batch and route choices affect totals. Simplified homepage Twitter pricing omits $0.001 lookups and $0.004 batch/follower routes. Settled-call counters and transaction feeds are publisher activity displays, not independently established customers, organic demand or successful delivery. Source permissions, freshness and extraction quality are not established by the homepage; returned prices and social metrics can change and do not imply buying authority.",
+  "visited_at": "2026-11-23T02:06:46Z",
+  "sources": [
+   "https://glim.sh/",
+   "https://glim.sh/docs",
+   "https://glim.sh/docs/api-reference"
+  ],
+  "revision": "12220d70c5807ac321ecc6073fc9a52b7025f3b120bac73abb4e0df390561ec5"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/glim-sh.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/glim-sh-dark.svg",

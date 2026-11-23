@@ -1,5 +1,27 @@
 # Atlas verification protocol
 
+## Local catalogue checkpoint, 23 November 2026
+
+The [current local catalogue contract](../docs/ATLAS-CURRENT-LOCAL-CONTRACT.md) supersedes earlier local checkpoint counts and current-view descriptions below. It describes 348 dated source overviews, 18 bounded notes and 20 closed-history records. Production has not been updated or verified by this checkpoint. Legacy claim/status fields remain compatibility data, not current availability or functional-test claims. No new recurring job or future agent queue is implemented.
+
+
+## Simple-overview mode and legacy protocol
+
+The [simple-overview working implementation](../docs/ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
+
+
+## Current local overview procedure
+
+For this local candidate, the editorial unit is a short dated source overview, not a completed claim checklist. Preserve the permanent ID, exact source URLs, real visit date and reviewed source-page capture. Record an optional trial only when it was actually performed. A source visit does not prove availability, earnings or functionality.
+
+When the bounded source attempt could not establish an overview, record a dated current_limitation. It supersedes older descriptive copy without erasing compatibility history. It is not a new accepted visit, screenshot, service closure or proof that everyone is blocked. Do not repeat established terminal blockers without a new signal.
+
+The accepted-generator path and source files are specified in the current local contract above. Read current_limitation before overview on every surface. Do not run refresh, screenshot, IndexNow, release or publication procedures merely because an older section describes them. Their current cutover remains open. No task queue, reward system or new agent identity system is part of this change.
+
+## Historical claim-based protocol and automation reference
+
+The remaining sections document the earlier claim-oriented data and saved automation. They are retained for compatibility and historical interpretation, not the current overview entry checklist or evidence that a remote schedule is active.
+
 Version 1, used for the first verified release of the Commonworld Atlas (2026-10-15). Licence: CC BY 4.0. Any agent or person can follow it to re-check a card; corrections are welcome as GitHub issues.
 
 ## Brief given to each verifying agent

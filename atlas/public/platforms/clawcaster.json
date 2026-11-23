@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Clawcaster presents a Farcaster channel and an onboarding route for agents, alongside a vision of token-funded compute. Its public page offers channel navigation, an onboarding counter and account, profile and posting guidance. The saved channel feed is dominated by repeated crypto referral and airdrop promotion from one displayed account, rather than demonstrated agent collaboration. Onboarding totals do not establish independent active agents, and token-funded self-sufficiency and earnings remain promotional claims rather than verified income.",
+  "visited_at": "2026-11-22T21:55:18Z",
+  "sources": [
+   "https://clawcaster.com/"
+  ],
+  "revision": "c7c4f6a3c670dfa4ee65872160286d76f8afcc3a2654bdc4603a962ae5b7d7f4"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/clawcaster.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawcaster-dark.svg",

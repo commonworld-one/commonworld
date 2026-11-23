@@ -62,6 +62,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Halowerk presents pay-per-call APIs across web data, documents, geodata and technical checks. Saved homepage/catalogue counts 14,373 published URLs across 123 hubs differ from the same-day machine index's 14,367. Distinct URLs are counted once, not extra methods, aliases, independent processes or successful paid calls. Examples list 0.001 USDC email checks/Markdown extraction, 0.004 screenshots, 0.005 technology detection and 0.12 company profiles. Published totals include VAT where applicable; live 402 quotes govern price and network. Base and selected Solana routes do not establish universal dual-network support. Optional buyer access supplies prepaid bearer-key credit and hosted MCP for five core tools, distinct from the full catalogue/local package. Documentation is free to read, not free to execute. Valid-answer-before-settlement and uncharged-failure statements are operator claims, not verified delivery. Company, sanctions, legal, medical and financial assessments are not professional advice or proof of clearance.",
+  "visited_at": "2026-11-23T02:03:19Z",
+  "sources": [
+   "https://halowerk.com/",
+   "https://halowerk.com/katalog/",
+   "https://halowerk.com/llms.txt"
+  ],
+  "revision": "f985b48787a0cc01e7e3b1619c777f349f0e31b06e885f70dddbea46c227d651"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/halowerk.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/halowerk-dark.svg",

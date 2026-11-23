@@ -75,6 +75,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "thirdweb x402 Payments documentation describes client/server integration for paid APIs, websites and agents using HTTP 402. It provides client, server, agent, facilitator and Solana guides, plus a playground link. Its React client handles payment-required responses with wallet connection, funding and error UI; server examples check payment information before serving content. EVM payments require tokens supporting the documented permit or authorization standards.",
+  "visited_at": "2026-11-22T22:34:19Z",
+  "sources": [
+   "https://portal.thirdweb.com/x402"
+  ],
+  "revision": "869fba4cc7b1e3bca042496a8e34470564fce18dcb5c46cfaf471bdf3dc41b2f"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/thirdweb-x402.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/thirdweb-x402-dark.svg",

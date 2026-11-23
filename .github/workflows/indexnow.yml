@@ -70,15 +70,18 @@ jobs:
       - name: Build the deployed commit and the previous one
         if: steps.shas.outputs.skip != '1'
         env:
-          CW_SCREENS: 'off'   # only the sitemaps are compared; skip fetching the screenshot branch
           NEW: ${{ steps.shas.outputs.new }}
           OLD: ${{ steps.shas.outputs.old }}
         run: |
           git worktree add -q "$RUNNER_TEMP/cur" "$NEW"
-          (cd "$RUNNER_TEMP/cur" && python atlas/site/build.py --out "$RUNNER_TEMP/new" >/dev/null)
+          python "$GITHUB_WORKSPACE/atlas/tools/indexnow_build.py" --checkout "$RUNNER_TEMP/cur" --out "$RUNNER_TEMP/new"
           if [ -n "$OLD" ]; then
             git worktree add -q "$RUNNER_TEMP/prev" "$OLD"
-            (cd "$RUNNER_TEMP/prev" && python atlas/site/build.py --out "$RUNNER_TEMP/old" >/dev/null) || mkdir -p "$RUNNER_TEMP/old"
+            if ! python "$GITHUB_WORKSPACE/atlas/tools/indexnow_build.py" --checkout "$RUNNER_TEMP/prev" --out "$RUNNER_TEMP/old"; then
+              echo "::warning::Previous sitemap build failed; compare with empty baseline"
+              rm -rf "$RUNNER_TEMP/old"
+              mkdir -p "$RUNNER_TEMP/old"
+            fi
           else mkdir -p "$RUNNER_TEMP/old"; fi
       - name: Ping IndexNow
         if: steps.shas.outputs.skip != '1'

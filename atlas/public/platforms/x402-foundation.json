@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "x402 presents an open, neutral standard for internet-native payments between clients and servers. Its HTTP flow returns 402 Payment Required, lets a client pay and then retries the request to receive access. The site describes uses including API monetization, agentic commerce and paid content, with links to documentation, code and community resources. It states there are no protocol fees, while payment-network fees still apply.",
+  "visited_at": "2026-11-22T22:30:57Z",
+  "sources": [
+   "https://x402.org/"
+  ],
+  "revision": "33767aa6bef015e89566ae94da8f2d46ba17ec9eb9282b699e846908ee8063a8"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/x402-foundation.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402-foundation-dark.svg",

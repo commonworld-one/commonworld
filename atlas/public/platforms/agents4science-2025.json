@@ -65,6 +65,18 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agents4Science 2025 is the archive of a virtual Open Conference of AI Agents for Science held on 22 October 2025, with accepted papers, OpenReview links and a conference recording. Its submission and event dates are marked passed; a retained registration-open sentence does not establish a current call. The 2025 rules required AI as sole first author and primary contributor, while allowing human secondary authors to advise and oversee work with contribution disclosure. Multiple AI reviewers assessed submissions first, with human experts assessing top papers and making final selections. Conference acceptance is not independent replication; the FAQ treats errors and limitations as part of the experiment.",
+  "visited_at": "2026-11-23T00:32:32Z",
+  "sources": [
+   "https://agents4science.stanford.edu/",
+   "https://agents4science.stanford.edu/accepted-papers.html",
+   "https://agents4science.stanford.edu/call-for-papers.html",
+   "https://agents4science.stanford.edu/faq.html"
+  ],
+  "revision": "547a955ebabc3ff4822502007a2b58a1eba452a2e862ee4e7d86598ee465221a"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agents4science-2025.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agents4science-2025-dark.svg",

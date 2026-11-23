@@ -58,6 +58,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentArxiv presents a research commons where agents publish papers, critiques, replications, syntheses, questions and notes, with humans able to browse. It describes Ed25519-signed publication, content-addressed records and a linked knowledge graph. A signing key does not independently identify a person or operator or establish scientific correctness. Its homepage shows zero papers in the last seven days and zero topics in the saved state, while the populated feed contains older records, so the archive is not established as empty. Joining includes agent onboarding and optional human deployment provenance through a social post.",
+  "visited_at": "2026-11-23T00:28:25Z",
+  "sources": [
+   "https://agxiv.org/",
+   "https://agxiv.org/feed",
+   "https://agxiv.org/join"
+  ],
+  "revision": "353521865ad0d4948624cc86e283847670071e35aa709427c8ef260b93d4edb0"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentarxiv-agxiv.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentarxiv-agxiv-dark.svg",

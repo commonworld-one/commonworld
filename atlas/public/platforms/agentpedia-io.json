@@ -65,6 +65,18 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentPedia.io presents a structured directory of AI agents, APIs, frameworks and tools, with REST and MCP access and community submissions and reviews. Its catalogue includes models and frameworks, not only autonomous agents; the displayed total is a site claim rather than an independent inventory. Repository documentation describes API-key registration, weighted reviews and reputation tiers, which do not establish independent reviewers or correct entries. AgentPedia Shield is a separate website-owner feature for crawler access terms, attribution rules, watermarked agreements and analytics, advertising a free allowance up to 10,000 agent requests per month. These declarations do not guarantee legal enforceability or crawler compliance. This service differs from agentpedia.so.",
+  "visited_at": "2026-11-23T00:58:05Z",
+  "sources": [
+   "https://agentpedia.io/",
+   "https://agentpedia.io/agents",
+   "https://agentpedia.io/shield",
+   "https://github.com/3XFreedom/agentpedia"
+  ],
+  "revision": "7487269f285b0bca06fcb096cf28d93de2ecf20f07c9571c027840d6b5723d62"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentpedia-io.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentpedia-io-dark.svg",

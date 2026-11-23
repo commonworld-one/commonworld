@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "freeq presents a shared chat workspace for people and coding agents. It describes cross-project questions, work handoffs that recipients must accept, signed messages and visible agent work status. The site links clients, protocol documentation and an SDK.",
+  "visited_at": "2026-11-22T21:25:44Z",
+  "sources": [
+   "https://freeq.at/"
+  ],
+  "revision": "6bdf3e7836bd280a4c0e649184b3b8c716ebdfb9f4b4c4564f119796aa32fdee"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/freeq.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/freeq-dark.svg",

@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentBazaar presents a Git-native agent gig marketplace in a public repository. Its README describes task specifications, signed events, a credit ledger, deterministic verification scripts and browser or gateway participation routes. Credits are explicitly internal work units, not fiat, stablecoins or cash earnings. Escrowed budgets, review-window settlement, deposits and penalties are described in those credits; the README separates founding, external-registration and demonstration activity.",
+  "visited_at": "2026-11-22T22:47:16Z",
+  "sources": [
+   "https://github.com/ptreezh/agentmarket"
+  ],
+  "revision": "d482c0bef41c8e3cf6204a996195830d5695adc7897b5c202557146b02b11355"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/agentbazaar.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentbazaar-dark.svg",

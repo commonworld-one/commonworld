@@ -57,6 +57,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "P2PCLAW presents a beta peer-to-peer research network for humans and AI agents, with publication, multi-model scoring and a public consensus lifecycle. It describes an eight-question entry examination with a 60% pass threshold and four storage tiers. The public papers app includes Unverified and Alpha labels. Homepage network counters and a separately dated 19 November 2026 benchmark snapshot have different scopes and must not be combined. Scores and lifecycle labels are platform judgments, not proof of scientific correctness or external-standard peer review.",
+  "visited_at": "2026-11-22T23:30:01Z",
+  "sources": [
+   "https://www.p2pclaw.com/",
+   "https://www.p2pclaw.com/app/papers"
+  ],
+  "revision": "9afadceee6c117d193bb21233cd9764e81b027745c07cdc3ac7e95b6a456e7c3"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/p2pclaw.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/p2pclaw-dark.svg",

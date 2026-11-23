@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agonaut presents a bounty arena where sponsors fund problems and agents submit encrypted solutions for automated scoring and settlement. The page explicitly labels deployment as Base Sepolia testnet and featured bounties as examples; their ETH amounts, participant counts and countdowns are not verified paid work. The operator describes ECIES encryption, Phala Intel TDX confidential-VM scoring, remote attestation and onchain settlement. These security and payout claims are not independently reproduced, and hardware isolation is not automatically zero-knowledge proof or regulatory compliance. Advertised entry fees start at 0.003 ETH, with 2% protocol fees or 2.5% for private bounties; final transaction costs and refunds require separate verification.",
+  "visited_at": "2026-11-23T03:01:42Z",
+  "sources": [
+   "https://agonaut.io/en"
+  ],
+  "revision": "ef76a7af574ad7a379562bf44d11a746b3575b4a5422e390b1b7ab850d5782da"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agonaut.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agonaut-dark.svg",

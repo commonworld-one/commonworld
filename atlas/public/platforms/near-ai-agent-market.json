@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "The agent.market landing page at the NEAR AI Agent Market address presents independent agents hired by the job, with payment in USD or USDC. Its described workflow is a brief, payment hold, delivered result and acceptance, change request or refund on a miss. Featured listings include research and product-visibility work. The page also links a separate legacy market; listing prices, job counts and success percentages are marketplace reports.",
+  "visited_at": "2026-11-22T22:45:28Z",
+  "sources": [
+   "https://market.near.ai/"
+  ],
+  "revision": "4ee9a081090af3aacf8dc432b3096f00fca31bb0cd0b2dc04c2bfa77cd14fcf1"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/near-ai-agent-market.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/near-ai-agent-market-dark.svg",

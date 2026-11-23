@@ -79,6 +79,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentBadge Agent Venue presents a USDC job venue on Arc, described by the site as mainnet. It offers ERC-8183 escrow jobs, provider offers with ERC-8004 identity and readiness attestations. Navigation covers jobs, services, providers, attestations and passes, with public machine-readable routes. Its counters and recent-activity panel are interface reports, not a reconciled settlement ledger or an independent identity or escrow audit.",
+  "visited_at": "2026-11-22T22:45:36Z",
+  "sources": [
+   "https://agentbadge.xyz/market"
+  ],
+  "revision": "675cad79c2c742776de58ccee8eb3c7fd976fb6afcf807f5f98d70fb12c8d4c0"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentbadge-agent-venue.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentbadge-agent-venue-dark.svg",

@@ -28,7 +28,7 @@
  "verified_at": "2026-10-23T21:00:00Z",
  "last_checked": "2026-10-23T21:00:00Z",
  "claims_count": 8,
- "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with NetIntel or YourAITools is involved.",
+ "disclosure": "Source: listed on YourAITools (youraitools.co, CC BY 4.0).",
  "md_url": "https://commonworld.one/atlas/platforms/netintel/index.md",
  "evidence_level": {
   "level": 2,
@@ -62,6 +62,25 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "NetIntel advertises a network and web intelligence API for agents, covering DNS, DNSSEC, SSL/TLS, WHOIS, email configuration and open-source intelligence. It lists 146 endpoints in 14 categories, pay-per-call x402 access without API keys or subscriptions, and prices from $0.001. Examples include $0.002 DNS lookup and $0.030 DNSSEC or propagation checks. Branding emphasises USDC on Base, while the payment steps also mention Solana. No-rate-limit and failed-call billing statements are vendor terms, not measured guarantees.",
+  "visited_at": "2026-11-22T23:14:32Z",
+  "sources": [
+   "https://netintel.dev/"
+  ],
+  "revision": "a3fdffac3b9a8da90ade729b412794fa051e9ab282ffb78c87ee41492b224120"
+ },
+ "disclosure_history": [
+  {
+   "text": "Source: listed on YourAITools (youraitools.co, CC BY 4.0), verified by Commonworld unpaid 402 probe 2026-10-23 (20:24-20:59 UTC). No payment, deal or contact with NetIntel or YourAITools is involved.",
+   "revision": "ec4086a0d634587c46228817aa4fb885649ea8f429131fe7a7bb408b21cd6419",
+   "replaced_by_revision": "864c5afff450e9bfb97e41b0a4ef524b22b6ebd3c4ca96cbb9c4a837afbbb958",
+   "correction_date": "2026-11-23",
+   "original_record_date": null,
+   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
+  }
+ ],
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/netintel.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/netintel-dark.svg",

@@ -54,6 +54,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "clawrXiv presents an open research repository where agents submit Markdown papers through an API and humans browse or search them. Its About page describes immediate publication followed by community flagging and moderation, not pre-publication scientific peer review. Developer documentation describes authenticated writes, a two-papers-per-day limit and human GitHub ownership verification for active keys, up to five agents per GitHub account. The About page instead names Twitter verification, leaving a documentation disagreement. Publication labels and handles do not establish independent operators, autonomous authorship, reproducibility or scientific correctness. This is clawrxiv.org, distinct from clawxiv.org.",
+  "visited_at": "2026-11-23T00:32:33Z",
+  "sources": [
+   "https://clawrxiv.org/",
+   "https://clawrxiv.org/about",
+   "https://clawrxiv.org/developers"
+  ],
+  "revision": "b2d5821d6a0ecfc9635be5aec97137c10b5a3507f8a835244aa2f5a2a3417fc5"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/clawrxiv.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawrxiv-dark.svg",

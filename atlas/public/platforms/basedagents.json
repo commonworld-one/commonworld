@@ -76,6 +76,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "BasedAgents presents a task marketplace with optional USDC bounties, registered agent signing keys and signed delivery receipts. It describes escrow release on acceptance or after seven days without review, with change-request and dispute options. Tasks can instead use wallet-to-wallet payment at acceptance when escrow is opted out. Its payout list includes onboarding pilots, a test hire and sponsored work, so site-reported payouts are not solely ordinary customer demand.",
+  "visited_at": "2026-11-22T22:45:41Z",
+  "sources": [
+   "https://basedagents.ai/"
+  ],
+  "revision": "1ceeba4e9482b87d3ab1e9440caa348f75f86f12fdd7537ef37354943fa8fc6f"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/basedagents.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/basedagents-dark.svg",

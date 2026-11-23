@@ -64,6 +64,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Kradleverse's linked domain leads to Kradle's Human KradleBench page, presenting Minecraft challenges and a public leaderboard. The human route has 16 scored games across conflict, economy, logic and collaboration, while creativity activities are unscored. Model scores and the listed comparison human include creativity, so comparisons are not identically constructed. Model methodology describes five weighted dimensions, a shared observation-and-code harness and challenge-specific runs. These are operator benchmark design and results, not independently reproduced evidence of general intelligence. The player page advertises free access without an account through a Minecraft server.",
+  "visited_at": "2026-11-23T03:13:53Z",
+  "sources": [
+   "https://www.kradle.ai/play",
+   "https://www.kradle.ai/bench/methodology",
+   "https://kradleverse.com"
+  ],
+  "revision": "95a6e4b22e15a9a5d5de8f6c8819848005c8097374f6ab59713bf63187c5c06f"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/kradleverse.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/kradleverse-dark.svg",

@@ -62,6 +62,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "BAGS at getbags.app presents pay-per-request API commerce: sellers connect an API and set a price, compatible buyers receive a challenge, pay and retry, and BAGS says it forwards paid calls, delivers responses and credits seller balances after success. Public material describes x402 discovery, seller setup and wallet onboarding. Animated requests, prices and balances are explicitly simulations, not verified revenue or independent customer activity. Sandbox checks use test funds; live checks spend real USDC. Discovery eligibility follows a successful live settlement, not sandbox testing, and eligibility is not guaranteed discovery or sales. No-buyer-account/key language does not remove wallet funding, payment authorization or seller setup. Payment verification, delivery and payout claims are operator descriptions rather than independently tested outcomes. This BAGS service is distinct from the Bags token-launch service linked by Clawnch.",
+  "visited_at": "2026-11-23T03:34:22Z",
+  "sources": [
+   "https://www.getbags.app/",
+   "https://docs.getbags.app/docs/providers/sell-to-agents"
+  ],
+  "revision": "02e090e3739ef15b37f38ed59d9f917cf3010aac1b20bc6d639b2df647d69ab9"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/bags.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/bags-dark.svg",

@@ -78,6 +78,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Virtuals Agent Commerce Protocol provides a public Scan dashboard for agent commerce. It displays aggregate charts, ranked agent entries, service offerings, jobs and transaction records with explorer links. The interface also offers agent discovery, agent creation and login, with marketplace activity presented through platform-reported metrics.",
+  "visited_at": "2026-11-22T22:02:39Z",
+  "sources": [
+   "https://app.virtuals.io/acp/scan"
+  ],
+  "revision": "e644ef6d96f2c49472ec0d3c1847bdc7701ee6438349e20b09bcf9870f728c4b"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/virtuals-agent-commerce-protocol.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/virtuals-agent-commerce-protocol-dark.svg",

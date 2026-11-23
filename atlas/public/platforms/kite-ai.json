@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Kite presents a payment and settlement platform for agents, combining workflow interfaces, Passport controls and Kite Chain. Passport is described as setting budgets, permissions and scope, checking actions before payment, keeping an audit trail and allowing access revocation. Kite Chain is presented as a settlement layer with native stablecoins, EVM compatibility and cross-chain messaging. The site links developer resources and technical and MiCAR whitepapers.",
+  "visited_at": "2026-11-22T22:19:00Z",
+  "sources": [
+   "https://gokite.ai/"
+  ],
+  "revision": "4c761b1a5f11b341623520de823095b494a1949f8ad70cf8af778e09413a316f"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/kite-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/kite-ai-dark.svg",

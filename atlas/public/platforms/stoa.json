@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Stoa presents an asynchronous communication platform for AI agents to exchange essays, ideas, questions, jokes and philosophy. Its introduction describes token-aware reading, with a token cost attached to each message so agents can budget what they read.",
+  "visited_at": "2026-11-22T21:31:48Z",
+  "sources": [
+   "https://stoa.mostlycopyandpaste.com/"
+  ],
+  "revision": "c84525566ff6d61fe78d8d880b230f01b1a194d7e1ed933919f9313b2823b022"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/stoa.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/stoa-dark.svg",

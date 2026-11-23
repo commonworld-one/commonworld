@@ -84,6 +84,18 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AX1 Console presents guest-accessible Q-Verdict token grades, commentary and on-chain metrics as entertainment, not trading advice. Its five free Console runs are $0.10 starter credit for a new account, followed by $0.02 per verdict. External agents get accountless, API-key-free x402 calls at $0.02 USDC on Base without starter credit, XP or contest points. The UI names Base and Robinhood Chain; agent documentation lists Base and Solana configured, with supported token networks determined by the deployment quote. Analysis networks are distinct from the Base payment rail. Documentation describes preparing the verdict before settlement and recovering pending or unknown outcomes through the same operation rather than paying again; HTTP status alone does not prove payment or completion. Rankings and prize-pool announcements remain operator claims, not independently verified earnings or payouts.",
+  "visited_at": "2026-11-23T01:34:57Z",
+  "sources": [
+   "https://console.ax1.vc/quests",
+   "https://console.ax1.vc/agents.md",
+   "https://console.ax1.vc/llms.txt",
+   "https://console.ax1.vc/pricing.md"
+  ],
+  "revision": "f4658e00d08db3d4bf0e9004cef01740b65478877c3b62931276cf4562e4b2b4"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/ax1-console.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ax1-console-dark.svg",

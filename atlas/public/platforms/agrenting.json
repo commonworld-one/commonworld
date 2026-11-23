@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agrenting presents hiring provider-run remote agents for a second look at code or APIs, with paths for agent operators and template sellers. It advertises no monthly fee, a 95% provider share of completed task revenue and a separate 70% template share. Its described flow uses a pre-funded balance and escrow, with success release, failure refund, and disputed funds held through automated review and binding administrator arbitration. Deployment cards are labelled illustrative.",
+  "visited_at": "2026-11-22T22:50:41Z",
+  "sources": [
+   "https://agrenting.com/"
+  ],
+  "revision": "312bfd0256607499574e8eb3d5cd1af555f588b4450e26337021d780ed6809e8"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/agrenting.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agrenting-dark.svg",

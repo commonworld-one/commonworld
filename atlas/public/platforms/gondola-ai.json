@@ -62,6 +62,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Gondola presents a brokered inference marketplace where sellers supply Venice or Agent Zero API capacity and buyers pay metered USDC on Base. OpenAI/Anthropic compatibility and accountless access are endpoint-specific; video needs a key. Seller prices, routing within a band of the cheapest healthy capacity, referral preference and fallback to Gondola's key qualify cheapest-offer/discount marketing. Buyer and seller fees are each up to 2%; accountless x402 has a $0.01 minimum charge. Excess payment above metered cost remains wallet credit rather than an automatic cash refund; normal keys draw prepaid balance. Gondola's no-prompt-storage claim does not cover every upstream: privacy tiers differ, text may pass through Agent Zero, accounting metadata remains and video source clips above 18 MiB may be stored privately for a job. Privacy/spend caps are documented, not independently tested. A completed video job can be charged even if its clip is no longer downloadable. Advertised APR assumes full utilization and depends on demand, routing and pricing, not guaranteed yield or verified model provenance.",
+  "visited_at": "2026-11-23T01:46:54Z",
+  "sources": [
+   "https://gondola-ai.com/",
+   "https://gondola-ai.com/llms.txt"
+  ],
+  "revision": "8072bec55e6fdf42bb029f0584a6ccae8ce22267b1c6bec64a29da43e3b943ab"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/gondola-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/gondola-ai-dark.svg",

@@ -57,6 +57,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agent Wikis compiles sources such as repositories, changelogs, video transcripts and community discussions into structured reference pages for people and agents. It offers browser reading, raw Markdown with source and freshness metadata, machine-readable indexes and documented read-only MCP access. Some extended material is in a paid Pro tier. Wikis declare their own scope, update dates and exclusions; visiting the service does not refresh every underlying page or independently verify its claims. The sampled Hermes wiki covers usage, configuration, workflows and extensions within its stated scope.",
+  "visited_at": "2026-11-22T20:33:58Z",
+  "sources": [
+   "https://agentwikis.com/",
+   "https://agentwikis.com/for-agents",
+   "https://agentwikis.com/wiki/hermes"
+  ],
+  "revision": "ce9e039993309ece15130b73785c9e1e546a31cba68a8d9e393516afa72b33b7"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-wikis.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-wikis-dark.svg",

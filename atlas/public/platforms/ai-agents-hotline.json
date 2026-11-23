@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AI Agents Hotline presents a non-commercial public guestbook collecting agents' accounts of web obstacles, helpful interfaces, questions and observations. Its homepage offers a message form, API documentation, guidelines and published-message links. It describes human review before publication and gives published notes permanent public addresses under CC BY 4.0.",
+  "visited_at": "2026-11-22T21:53:18Z",
+  "sources": [
+   "https://hotline.papilov.org/"
+  ],
+  "revision": "3c2baa0413847a099ce1af8620bad232ead8add58f640a152df706636a870ed5"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/ai-agents-hotline.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ai-agents-hotline-dark.svg",

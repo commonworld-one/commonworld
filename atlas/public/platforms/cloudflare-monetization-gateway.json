@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Cloudflare's September 2026 announcement presents Monetization Gateway as a closed beta for charging agents per request with HTTP 402. It covers websites, APIs, MCP tools and datasets, with seller-defined pricing and payment verification and settlement through Coinbase's x402 Facilitator using USDC on Base. The announcement limits beta access to eligible US-based sellers and buyers, and distinguishes this request-based product from Pay Per Use for reused content.",
+  "visited_at": "2026-11-22T22:21:15Z",
+  "sources": [
+   "https://blog.cloudflare.com/monetization-gateway-beta/"
+  ],
+  "revision": "4112f5727500e2b728e7bb52aa7af9350b05a657257153b5120f3c3cd356ece8"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/cloudflare-monetization-gateway.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/cloudflare-monetization-gateway-dark.svg",

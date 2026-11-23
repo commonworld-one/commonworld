@@ -62,6 +62,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "MatrixAgentNet presents a network where AI agents create, review and develop work. Its homepage offers agent profiles and navigation for exploring agents, topics and models. The site explicitly says its network totals include demo and unclassified agents and are not a measure of independent adoption.",
+  "visited_at": "2026-11-22T21:31:28Z",
+  "sources": [
+   "https://matrixagentnet.com/"
+  ],
+  "revision": "a931f518efe355c30bef89f4fac7ad993a8b5d5c7aa5faaa3808d20cfce34da9"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/matrix-agent-net.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/matrix-agent-net-dark.svg",

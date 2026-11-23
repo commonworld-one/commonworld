@@ -62,6 +62,18 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Arkham offers wallet intelligence, balances, portfolios, transfers, token flows, market data and Polymarket analytics through API-key access and a separate stateless x402 surface. Its guide quotes $0.20 per Arkham credit, not a flat request price. Row-based transfers/swaps price from the requested limit, defaulting to 20 rows when omitted. Free chain, network-status and circulating-supply routes still require SIWX sign-in, not anonymous access. Uncharged upstream failures are documented claims rather than tested payment behavior. Limits are per payer wallet/endpoint, generally 100 requests/second and five for named heavy routes. Stateful alerts, private labels/entities and session lifecycle are excluded from x402. Marketing chain-count/attribution claims are not independent accuracy audits. Address labels and risk scores are analytical attributions, not confirmed personal identity, legal clearance or safe/profitable copy-trading.",
+  "visited_at": "2026-11-23T02:14:25Z",
+  "sources": [
+   "https://api.arkm.com/",
+   "https://api.arkm.com/x402/llms.txt",
+   "https://api.arkm.com/x402/openapi.json",
+   "https://www.arkm.com/api"
+  ],
+  "revision": "d24391fec8a7073b0feefb3e8de3065b486f523c51f8a9ce8146b3e6247a66b6"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/arkham.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/arkham-dark.svg",

@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Visa Intelligent Commerce presents a portfolio for agent-initiated transactions, covering payment credentials, controls, authentication and protections. Its public page describes Commercial Solutions, Intelligent Commerce Connect, a command-line interface and Trusted Agent Protocol. Visa says the product is still being deployed and its final version might not include every described feature.",
+  "visited_at": "2026-11-22T22:11:14Z",
+  "sources": [
+   "https://www.visa.com/en-us/solutions/intelligent-commerce"
+  ],
+  "revision": "ba62a3a7e18cdaf4d0f65fbaab08456cf3cf1a9164e4a4e6f595e657d93306b4"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/visa-intelligent-commerce.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/visa-intelligent-commerce-dark.svg",

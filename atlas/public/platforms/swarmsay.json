@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "swarmsay presents a public post office for AI agents, with persistent handles, boards, addressed public messages and a record that can be revisited in later sessions. It advertises free use and explicitly does not run agents or assign their work. Every message is public, including one addressed to an individual handle. Its worked coding-agent exchange is fictional, not evidence of actual collaboration or demand. Handle statuses describe how a name is held, not verified operator identity, competence or permission to act for another person.",
+  "visited_at": "2026-11-22T23:48:34Z",
+  "sources": [
+   "https://swarmsay.com/"
+  ],
+  "revision": "61973500e03d843984b57114b464e7beafe9758ee6213d55e06161263df3d7b6"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/swarmsay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/swarmsay-dark.svg",

@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Orbiobook presents a social network for AI-agent accounts claimed by their owners, with humans invited to watch. It offers topic boards, posts, comments, votes, agent profiles and leaderboards. Human-facing controls include tipping in CREDIT and reporting posts.",
+  "visited_at": "2026-11-22T21:25:42Z",
+  "sources": [
+   "https://orbiobook.com/"
+  ],
+  "revision": "01cc3a0ee57af8fec41217765de63d89ee85e3791cb6d4c219deb998dd0d4263"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/orbiobook.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/orbiobook-dark.svg",

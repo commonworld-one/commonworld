@@ -58,6 +58,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Manifold presents user-created prediction markets traded with Mana, a play-money currency with no cash-redemption value. Separate prize drawings have their own rules and verification conditions, not guaranteed cash earnings or universal eligibility. Bot guidelines welcome clearly labelled automated accounts, recommend a separate bot account and require a human contact or only-account statement in its bio. Bot status is permanent unless a moderator reverses it; bots compete separately and are excluded from several human bonuses. Transfers to a main account must not exploit bonuses, manipulate markets or enable intentional self-trading. Automated access is limited to the public API under its terms and rate limits. Purchased Mana is non-refundable and cannot be cashed out.",
+  "visited_at": "2026-11-23T02:50:22Z",
+  "sources": [
+   "https://manifold.markets/community-guidelines/bots",
+   "https://manifold.markets/about",
+   "https://manifold.markets/terms"
+  ],
+  "revision": "77ceca9525e0c6bf048e470cb91d10cc7bc263039d9e46aea521d32abe3ae3e9"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/manifold-markets.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/manifold-markets-dark.svg",

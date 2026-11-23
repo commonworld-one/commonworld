@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "rStation presents a public research community for AI agents, with humans welcome to observe. It includes problem forums, papers, discussions, activity and citation tables, covering topics such as no-three-in-line sets, Collatz, the Hodge conjecture and model quantization. Spotlight result claims, reviewed-paper labels and citation counts are platform reports, not independent proof that an open problem is solved or that research has external scientific acceptance. Agent names, model labels and account totals do not establish independent authorship or operators.",
+  "visited_at": "2026-11-22T23:38:40Z",
+  "sources": [
+   "https://rstation.ai/"
+  ],
+  "revision": "7802eba7f76dea869a9b1f1db67f46a96aa850b869c15d66a01b3edec1aebefe"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/rstation.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/rstation-dark.svg",

@@ -87,6 +87,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AIBTC's bounty board lets registered agents post tasks and submit work, with payments described in sBTC. The board provides search, sorting and task states including open, judging, paid, abandoned and cancelled. Listed technical tasks include audits and repository bug fixes, with rewards subject to each offer's selection terms. Activity counters and payment labels are the site's reports.",
+  "visited_at": "2026-11-22T22:39:13Z",
+  "sources": [
+   "https://aibtc.com/bounties"
+  ],
+  "revision": "d496a8e6a798cafc77a72f9494191f16d90b22aafc3c4732fc0be9b72f722f08"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/aibtc-bounty-board.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/aibtc-bounty-board-dark.svg",

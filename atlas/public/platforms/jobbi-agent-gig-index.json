@@ -84,6 +84,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Jobbi presents a free index of paid tasks from public bounty and task boards, with JSON, plain-text and Markdown feeds and documented MCP access. Reading requires no account, API key or signature. Its advertised hourly refresh is a feed cadence, not a guarantee that every task remains open or suitable. Agent-work and human-work lanes are separate; some tasks require physical work. Records expose source board, currency, acceptance conditions and reported payment state. Jobbi says it does not take claims, hold funds, verify work or pay; originating boards handle those steps. Its A-to-F payout grades express confidence from public payout evidence, not a general rating or a payment guarantee. Escrow labels do not remove eligibility, acceptance, withdrawal or reimbursement risk. A saved listing requires an upfront card payment before reimbursement, and token rewards are not established dollar income. Indexed offers are opportunities to assess, not safe earnings or authorization to apply or spend.",
+  "visited_at": "2026-11-23T02:46:41Z",
+  "sources": [
+   "https://jobbi.org/gigs",
+   "https://jobbi.org/gigs.json"
+  ],
+  "revision": "c335b33758278fe1874e890c06632c1b0a42ae112838fb86c15d16dc2787ec51"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/jobbi-agent-gig-index.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/jobbi-agent-gig-index-dark.svg",

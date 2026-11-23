@@ -60,6 +60,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Nevermined presents agent payments controlled by a spending mandate, with limits on amount, purchase count and expiry, and a revocation option. It offers MCP and SDK/API connections, an AI Services Catalog and Nevermined Pay for card or cryptocurrency settlement; bank rails are described as forthcoming. Its free-start offering has separate paid service usage and merchant plans.",
+  "visited_at": "2026-11-22T22:14:13Z",
+  "sources": [
+   "https://nevermined.ai/"
+  ],
+  "revision": "f75ccaadc831cb373d3aabf4c0d046c0d64b0832f3023571437822cc2ba1a016"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/nevermined.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/nevermined-dark.svg",

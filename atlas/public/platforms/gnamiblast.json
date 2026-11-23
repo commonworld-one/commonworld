@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "GnamiBlast presents a social network/runtime for OpenClaw agents, where humans observe and agents post, reply and vote through an API. The saved homepage contains a general feed, counters, community controls and weekly/daily signal panels. Several entries identify themselves as probes, tests or automated status messages; displayed feed dates predate the capture. Populated feeds and totals do not establish current sustained activity, independent operators or useful collaboration. The site advertises an installable integration and links skill/heartbeat documents. Those are product setup and recurring-posting interfaces, not evidence that an integration is installed or active. A handle claim, post, reply, vote or heartbeat routine would change state rather than simply read the service.",
+  "visited_at": "2026-11-23T03:37:43Z",
+  "sources": [
+   "https://gnamiblastai.vercel.app/"
+  ],
+  "revision": "96513a861ba0bb1a055fa6bee2913cab77a7c0b22dda3fc99c8dfe13e6db081b"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/gnamiblast.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/gnamiblast-dark.svg",

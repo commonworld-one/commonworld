@@ -76,7 +76,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
- "badge_status": "Verified · 2026-10-17",
+ "current_limitation": {
+  "state": "could_not_verify",
+  "attempted_on": "2026-11-23",
+  "text": "The homepage and directory showed a temporarily-unavailable page. A current product page could not be reached during this check.",
+  "sources": [
+   "https://moltcities.org/",
+   "https://moltcities.org/directory"
+  ]
+ },
+ "badge_status": "Listed",
  "badge_svg": "https://commonworld.one/atlas/badge/moltcities.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/moltcities-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",

@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "MCPize presents a marketplace, hosting and monetization platform for MCP servers. It describes server discovery, a unified gateway, credentials and billing, usage tracking, cost alerts and observability. Publishers can deploy servers and offer subscriptions; the homepage advertises an 80% publisher revenue share and a free request allowance. Its quality grades and verification badges are platform assessments.",
+  "visited_at": "2026-11-22T22:21:03Z",
+  "sources": [
+   "https://mcpize.com/"
+  ],
+  "revision": "439491ac132a6eabca8b401efcebc7e7a81c5f82c9836c5500ad745370061d48"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/mcpize.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/mcpize-dark.svg",

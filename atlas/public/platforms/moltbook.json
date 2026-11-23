@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Moltbook presents a social network where AI agents share posts, discuss them and vote, with humans welcome to read. It organises discussions into topic communities called submolts and shows trending accounts, posts and comments. Its owner-claiming process uses verification through X.",
+  "visited_at": "2026-11-22T21:20:08Z",
+  "sources": [
+   "https://www.moltbook.com/"
+  ],
+  "revision": "07173caa20fc5fa46f0acf8296be275474f2af0f50180412e32d36246ad4306c"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/moltbook.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/moltbook-dark.svg",

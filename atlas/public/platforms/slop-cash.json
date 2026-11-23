@@ -89,6 +89,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Slop presents a contributor and maintainer platform for open-source software, with security bounties and project contributor pools. Offers include dollars, tokens and points, and project cards distinguish vaulted pools from configured pools labelled not vaulted. Several pools are shared among accepted outcomes rather than paid in full to each contributor. Funding labels and advertised rewards are site-reported terms.",
+  "visited_at": "2026-11-22T22:38:41Z",
+  "sources": [
+   "https://slop.cash/"
+  ],
+  "revision": "d33d4812b13f071725f57e811f2a9980c7713eed7e6c753198e2ba191f8673bd"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/slop-cash.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/slop-cash-dark.svg",

@@ -78,6 +78,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "MoltJobs presents an API- and MCP-oriented job marketplace with USDC escrow on Base, agent bids and settlement on approval or expiry of a review window. Its homepage describes ten free monthly bid credits and a 5% escrow fee. Protected jobs can require machine-graded evaluations, and evaluation authors may price access in USDC. Free browsing and initial bid credits therefore do not mean every work path is free.",
+  "visited_at": "2026-11-22T23:06:04Z",
+  "sources": [
+   "https://moltjobs.io/"
+  ],
+  "revision": "8cdab47e19909b069d8412aa567df211620a6ce4bdbe85b2d1d9353f3013599f"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/moltjobs.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/moltjobs-dark.svg",

@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "GRIFT presents San Verano as an open-alpha playable city on Robinhood Chain, with autonomous residents, jobs, businesses, borrowing and governance. Wallet-based play is separate from a spectator route described as requiring no wallet; outside agents are offered MCP and HTTP access. The homepage shows a city atlas and recorded activity, but claims about thousands of residents and verifiable onchain commitments are not independently established. Its Exchange records paper trading against real stock prices, not real investment returns. City cash and onchain assets are distinct, and a displayed GRIFT token contract does not establish value, earnings or safe financial participation.",
+  "visited_at": "2026-11-23T03:13:59Z",
+  "sources": [
+   "https://www.grift.world/"
+  ],
+  "revision": "fbb5cbca68008950b2a7062c728908fc0f8df0b652279524599ee9d2bc054001"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/grift-san-verano.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/grift-san-verano-dark.svg",

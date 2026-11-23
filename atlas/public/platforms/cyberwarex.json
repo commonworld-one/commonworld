@@ -62,6 +62,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "CyberWareX presents eight service groups and 54 endpoints covering public web/Telegram access, search, video transcripts, weather, chain data, token checks, transaction previews and sanctions screening. Counts are operator catalogue claims, not tested services. Six-chain analysis coverage differs from USDC-on-Base payment. Route examples range from $0.001 page text/weather through $0.003 transcripts, $0.00435 search, $0.005 sanctions screening and $0.02 transaction safety assessment. Seven groups advertise limited three-per-day trials; web access lists none. Optional $1-$50 prepaid bundles with 10% extra credit and a reusable key are distinct from individual x402 payments. Video batches describe failed-item returns as prepaid credit, not automatic wallet refunds. The manifest pairs x402 v2 with an X-PAYMENT header, leaving client compatibility unestablished. Token grades, simulation and sanctions/risk labels are bounded assessments, not safe-trading or legal-clearance guarantees, and do not authorize a transaction.",
+  "visited_at": "2026-11-23T02:10:31Z",
+  "sources": [
+   "https://cyberwarex.com/",
+   "https://cyberwarex.com/.well-known/x402"
+  ],
+  "revision": "f2869bcfb352189a526e3a32b946ddb3a2c57c8738d0bdc5b60684a283c32fdf"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/cyberwarex.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/cyberwarex-dark.svg",

@@ -219,3 +219,50 @@ describe('Atlas read limit', () => {
     await expect(readAtlasJson({ ASSETS: streamed } as any, ATLAS_FILES.earn)).rejects.toMatchObject({ status: 503, code: 'atlas_unavailable' });
   });
 });
+
+
+describe('current Atlas view semantics', () => {
+  it('keeps bounded notes in search results and out of the dated-overview group', () => {
+    const row = {id:'snail', name:'SNAIL', status:'live', summary:'old unsupported summary', current_limitation:{state:'could_not_verify', attempted_on:'2026-11-23',text:'Connection failed',sources:['https://joinsnail.com/']}};
+    expect(searchPlatforms([row],{status:'live'}).total).toBe(0);
+    expect(searchPlatforms([row],{status:'limited'}).items[0].current_limitation).toEqual(row.current_limitation);
+    expect(searchPlatforms([row],{query:'unsupported'}).total).toBe(0);
+    expect(searchPlatforms([row],{query:'connection'}).total).toBe(1);
+  });
+  it('matches current overview text instead of the legacy summary', () => {
+    const row={id:'x',name:'X',status:'live',summary:'old-phrase',overview:{text:'current-phrase'}};
+    expect(searchPlatforms([row],{query:'current-phrase'}).total).toBe(1);
+    expect(searchPlatforms([row],{query:'old-phrase'}).total).toBe(0);
+  });
+});
+
+describe('Atlas historical tool guidance', () => {
+  it('does not advertise current work or successful first-task runs', () => {
+    for (const name of ['atlas_earn','atlas_first_tasks']) {
+      const tool=TOOL_BY_NAME.get(name)!;
+      expect(tool.description).toMatch(/Historical/);
+      expect(tool.description).toMatch(/current/);
+    }
+  });
+  it('labels category counts and exposes additive current counts', async () => {
+    const counts={platforms:386,live:366,closed:20};
+    const current_counts={dated_overviews:348,could_not_verify:18,closed_history:20};
+    const a=assets({[ATLAS_FILES.index]:JSON.stringify({counts,current_counts,categories:[]})});
+    const tool=TOOL_BY_NAME.get('atlas_list_categories')!;
+    const res=await tool.atlas!({ASSETS:a} as any,{}) as any;
+    expect(res.counts).toEqual(counts);
+    expect(res.current_counts).toEqual(current_counts);
+    expect(res.counts_note).toMatch(/Legacy/);
+  });
+});
+
+
+describe('historical Atlas boolean filters', () => {
+  it('scopes each parameter itself, not only the tool preamble', () => {
+    const props=TOOL_BY_NAME.get('atlas_search_platforms')!.inputSchema.properties as any;
+    expect(props.has_money_flow.description).toMatch(/Historical compatibility filter/);
+    expect(props.has_money_flow.description).toMatch(/Not current earnings/);
+    expect(props.has_first_task.description).toMatch(/Historical compatibility filter/);
+    expect(props.has_first_task.description).toMatch(/Not current task availability/);
+  });
+});

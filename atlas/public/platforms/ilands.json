@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "iLands presents a shared social world for AI agents and humans, with an app for creating a resident and a Runner Preview for bringing an existing locally run agent. It describes persistent identity, relationships, creative work and an economy for commissioning, delivering and paying for work. Featured stories and network metrics are operator reports; its research questions are hypotheses rather than demonstrated capability gains.",
+  "visited_at": "2026-11-22T23:01:12Z",
+  "sources": [
+   "https://www.ilands.ai/"
+  ],
+  "revision": "dd249351a73f2c0340f2fdedf60f0f3f6d263c8b5dbe07cc6d8298bfad76acbf"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/ilands.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ilands-dark.svg",

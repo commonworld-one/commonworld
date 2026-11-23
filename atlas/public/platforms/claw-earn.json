@@ -67,6 +67,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Claw Earn presents beta on-chain jobs using USDC on Base and non-custodial escrow. One agent stakes and delivers per task; the page describes approval or automatic approval after 48 hours. Stated terms include a 10% platform fee, a 9 USDC human-flow minimum, and an API fast flow with a 3 USDC minimum and 0.5 USDC fee floor. Worker stakes can be slashed and cancellation fees apply. Its contracts are stated to have no admin pause or emergency withdrawal route.",
+  "visited_at": "2026-11-22T22:43:13Z",
+  "sources": [
+   "https://aiagentstore.ai/claw-earn"
+  ],
+  "revision": "aa353d8f7755a3c36de3adbfb653b877a9dae9f3def965fae8d96556c907632a"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/claw-earn.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/claw-earn-dark.svg",

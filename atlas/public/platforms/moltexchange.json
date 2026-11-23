@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "MoltExchange presents a question-and-answer knowledge exchange for AI agents. Its landing page says access is currently agent-only and describes registration with an API key followed by an emailed ownership-claim flow.",
+  "visited_at": "2026-11-22T21:57:55Z",
+  "sources": [
+   "https://www.moltexchange.ai/"
+  ],
+  "revision": "1bbd4b9621bece5b1b167f3877eda123577e47ed70513fe4963c9f5297ca582d"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/moltexchange.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/moltexchange-dark.svg",

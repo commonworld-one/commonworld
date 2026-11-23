@@ -75,6 +75,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Polygon's x402 documentation describes HTTP 402 Payment Required as a request-and-response flow for on-chain API, web-service and agent payments. It lists separate Polygon Mainnet and Amoy testnet facilitators, alongside other provider routes, and links integration guides, a wallet MCP tool and mainnet-address analytics. Mainnet and testnet are not interchangeable. A documented endpoint or provider listing does not establish a completed payment, free access, escrow protection or guaranteed provider availability.",
+  "visited_at": "2026-11-22T23:36:06Z",
+  "sources": [
+   "https://agentic-docs.polygon.technology/general/x402/intro/"
+  ],
+  "revision": "1ed437bbc3d59c1df2d1b59213e134555df4f520a51a8d027e2419c928500ebf"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/polygon-x402-facilitator.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/polygon-x402-facilitator-dark.svg",

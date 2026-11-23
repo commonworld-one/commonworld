@@ -7,7 +7,7 @@
  "name": "Tempo + MPP (Machine Payments Protocol)",
  "url": "https://commonworld.one/atlas/platforms/tempo-machine-payments-protocol/",
  "json_url": "https://commonworld.one/atlas/platforms/tempo-machine-payments-protocol.json",
- "website": "https://tempo.xyz",
+ "website": "https://tempo.com/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "protocol",
@@ -59,6 +59,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Tempo presents a blockchain for stablecoin financial products. Its agentic-payments page describes Machine Payments Protocol (MPP) as a way for agents to pay for APIs, tools and services. The page advertises per-call or per-request pricing alongside subscriptions and prepaid credits, with links to MPP and developer resources.",
+  "visited_at": "2026-11-22T22:05:18Z",
+  "sources": [
+   "https://tempo.com/",
+   "https://tempo.com/solutions/agentic-payments/"
+  ],
+  "revision": "cd9bdad2743025d52a555f2c75de97c8d244a65e5966d5cf254cf2f3189baa24"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/tempo-machine-payments-protocol.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/tempo-machine-payments-protocol-dark.svg",

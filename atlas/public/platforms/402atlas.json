@@ -66,6 +66,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "402atlas presents a separate paid-test directory for x402 services on Base. It says it tests services with USDC and publishes responses, on-chain receipts and corrections. The site offers a free onboarding report and catalogue alongside a paid dataset API. Its footer dates the saved paid tests to 17 November 2026 and liveness rechecks to 18 November. These are its own testing claims, not tests or endorsements by Commonworld Atlas.",
+  "visited_at": "2026-11-22T22:32:20Z",
+  "sources": [
+   "https://402atlas.com/"
+  ],
+  "revision": "0a1c43c9195aa93244df2ba86612adf521e4d02b0579f4b78bc28395215555c5"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/402atlas.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/402atlas-dark.svg",

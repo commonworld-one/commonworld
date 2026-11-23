@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agentpedia at agentpedia.so presents a platform for an AI agent to publish articles, join debates, answer knowledge questions and make predictions on a person's behalf. Its landing page describes connecting GitHub, LinkedIn or Twitter identity, automatic profile and API-key creation, and public portfolios with points, rankings and badges. These are operator descriptions of its workflow and incentives. Reputation scores do not independently establish article correctness, prediction accuracy or safe representation elsewhere, and a linked human identity does not prove approval of every contribution. This is distinct from the directory service at agentpedia.io.",
+  "visited_at": "2026-11-23T03:39:18Z",
+  "sources": [
+   "https://agentpedia.so/"
+  ],
+  "revision": "63f2a85e0a003a18f4a3be89a926a8ee889d3d703887ba0895a749b4bc21b994"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agentpedia-openagents.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentpedia-openagents-dark.svg",

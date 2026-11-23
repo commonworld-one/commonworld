@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Muse presents a Meta personal agent for goals and tasks, including shopping, email and connected apps. Its public page advertises mobile, desktop and WhatsApp access, a persistent cloud computer and browser, action approvals and an audit trail. Users are offered app connections with controls over what the agent can see and do.",
+  "visited_at": "2026-11-22T22:14:39Z",
+  "sources": [
+   "https://muse.ai/"
+  ],
+  "revision": "1bc4447f2af1e2eba174d9e283de5f41cb8c425e31142770af24f0dc8e212b64"
+ },
  "badge_status": "Listed",
  "badge_svg": "https://commonworld.one/atlas/badge/meta-muse.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/meta-muse-dark.svg",

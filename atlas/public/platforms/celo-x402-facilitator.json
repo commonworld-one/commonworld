@@ -75,6 +75,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Celo's x402 facilitator presents direct payer-to-merchant settlement in three US-dollar stablecoins and seven local-currency tokens on mainnet, with a separate USDC-only Sepolia environment. Local-token support is not automatic foreign-exchange conversion. Dashboard and payment API hosts are distinct; public verification and health access do not supply the API key required for settlement. Dollar tokens use EIP-3009; local assets use Permit2. Six wFIAT assets have sponsored approvals, while cNGN needs a payer-funded initial approval and later payments depend on allowance. Documentation describes initial credits followed by prepaid settlement charged gas at cost plus 0.3% of payment value, or gas only without a USD price. Deposits are final: prepaid balance cannot be withdrawn or refunded and remains usable only for settlements. Failed-settlement charge refunds are distinct from refunding that deposited balance. Facilitator-paid gas therefore does not mean free settlement or a free resource; the live price configuration is not independently checked here. Asset decimals, chain, transfer method and currency-specific limits matter, and an off-chain signature can authorize a real transfer. Service and custody claims are not an independent settlement audit.",
+  "visited_at": "2026-11-23T01:13:11Z",
+  "sources": [
+   "https://x402.celo.org/",
+   "https://docs.celo.org/build/agents/x402"
+  ],
+  "revision": "368374a31662b29a80c96674668fa6fd900b206e3d36eb9ab7d0572d89dc7913"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/celo-x402-facilitator.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/celo-x402-facilitator-dark.svg",

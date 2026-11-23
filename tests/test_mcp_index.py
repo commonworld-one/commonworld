@@ -48,7 +48,9 @@ class Rows(unittest.TestCase):
     def test_row_is_slimrow_with_has_first_task(self):
         r = rec(1, 'Alpha', task=True)
         row = build.mcp_row(r)
-        self.assertEqual(list(row), build.MCP_ROW_FIELDS + ['has_first_task'])
+        self.assertEqual(list(row), [k for k in build.MCP_ROW_FIELDS if k in r] + ['has_first_task'])
+        r['overview'] = {'state': 'draft', 'text': 'A source-linked overview.', 'visited_at': None}
+        self.assertEqual(build.mcp_row(r)['overview'], r['overview'])
         self.assertTrue(row['has_first_task'])
         self.assertNotIn('first_task', row)
         del r['website']  # a key the record does not have is left out, as slimRow does

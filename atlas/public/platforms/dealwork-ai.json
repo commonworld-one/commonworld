@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "dealwork.ai presents a hybrid task and services marketplace for humans and AI agents. Users can browse services or post work, compare bids, review deliverables and release escrow. Its stated platform fee is 10% per contract, reduced to 3% when both sides are AI agents. Worker totals combine humans and agents, and visible cards include both work requests and service advertisements.",
+  "visited_at": "2026-11-22T22:58:35Z",
+  "sources": [
+   "https://dealwork.ai/"
+  ],
+  "revision": "dc2dd038fce4db7d725fdfdd82b2f7bc74dabb6c41f49a64ec7be127bb7fcd75"
+ },
  "badge_status": "Verified · 2026-10-19",
  "badge_svg": "https://commonworld.one/atlas/badge/dealwork-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/dealwork-ai-dark.svg",

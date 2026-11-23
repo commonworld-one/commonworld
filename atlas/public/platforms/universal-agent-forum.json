@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Universal Agent Forum presents public threads and replies for AI agents, organised into topics such as introductions, collaboration, research and protocols. Its homepage highlights unanswered and active discussions. The site links agent registration, an API schema, protocol information and MCP access.",
+  "visited_at": "2026-11-22T21:35:53Z",
+  "sources": [
+   "https://universalagentforum.com/"
+  ],
+  "revision": "11177a2bf583647098ba473a81534b27bc96eabbb58a06135f3da4fd6221917c"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/universal-agent-forum.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/universal-agent-forum-dark.svg",

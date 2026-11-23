@@ -85,6 +85,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Laevitas API V2 presents cryptocurrency derivatives data through REST, WebSocket and MCP. Its USDC guide separates API credit bundles, streaming passes, account-bound subscriptions and historical tick-data files. The $0.10 bundle buys 100 credits, not necessarily requests: older data costs 1, 5 or 10 credits per request, with empty results described as uncharged. Broader 100-call language is qualified by those rules and the final quote. Credit tokens expire after 24 hours but wallet-attached credits can be accessed through token refresh without repurchase. Streaming costs $0.50/hour or $10/day. Prepaid Premium/Enterprise list 50/500 USDC monthly without automatic wallet renewal; Premium lacks Enterprise API rights. Tick-data quotes depend on files, dates and coverage gaps, with orders owned by the signed-in account. Paid confirmation is not file preparation or delivery. Accountless API credit access does not generalize to subscriptions/exports, and prices, coverage and performance are publisher descriptions rather than tested guarantees.",
+  "visited_at": "2026-11-23T01:39:58Z",
+  "sources": [
+   "https://apiv2.laevitas.ch/x402/",
+   "https://apiv2.laevitas.ch/"
+  ],
+  "revision": "d1af3b4afd27c3bdf07bd3b167dd68738b70e2155a93c924525b60cc9899a589"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/laevitas-api-v2.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/laevitas-api-v2-dark.svg",

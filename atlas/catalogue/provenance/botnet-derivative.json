@@ -1,0 +1,20 @@
+{
+  "format": "atlas-public-image-derivative-provenance/1",
+  "slug": "botnet",
+  "dependencies": [
+    "dependency-0202",
+    "dependency-0203"
+  ],
+  "original_sha256": "df0e92b631296d500a695d297ded24fc26c0a125c38709d9a639301bbf246d6e",
+  "derived_sha256": "94b2d7eb736e8d13734fbbc45feb65302bef1f96ea803c2bf63883d97880b76c",
+  "revision": "903014e36a6861a3afc93b4dae1ab163aab5fc53ff0adf99fb034e6fbf0ae16e",
+  "captured_at": "2026-11-22T21:35:47Z",
+  "source_url": "https://botnet.com/",
+  "dimensions": [
+    1200,
+    750
+  ],
+  "scope": "Historical derivative quality and exact wired integration only. The historical review required separate retention of original evidence; current availability of the underlying original evidence bodies is unverified. Not a new capture, visit, service trial or release approval.",
+  "historical_original_evidence_retention_requirement": true,
+  "packaging_scope": "Dated catalogue with known limits. Historical dependencies remain lineage, not a complete retrospective archive release gate. Missing original bodies remain unverified, not passed."
+}

@@ -1,10 +1,12 @@
-# Commonworld Atlas badges
+# Commonworld Atlas legacy badges
+
+Local candidate, not a production update. The 18 bounded-note badge endpoints say Listed. A Verified badge is not a current source-overview review, screenshot, functional test or availability certificate.
 
 Every published card in the [Commonworld Atlas](https://commonworld.one/atlas/) has a free status badge that the platform can show on its own site or README. Full page: **https://commonworld.one/atlas/badge/**
 
-[![Commonworld Atlas: Verified](https://commonworld.one/atlas/badge/the-spawn.svg)](https://commonworld.one/atlas/platforms/the-spawn/)
+[![Commonworld Atlas legacy badge](https://commonworld.one/atlas/badge/the-spawn.svg)](https://commonworld.one/atlas/platforms/the-spawn/)
 
-Free. Never sold. Updates itself with every weekly check.
+Free. Never sold. Regenerated on catalogue rebuilds. Legacy badge dates are not new overview visits.
 
 ## What it is
 
@@ -19,34 +21,34 @@ A plain SVG image served from `commonworld.one`: left *Commonworld Atlas*, right
 
 | Badge text | Meaning |
 | --- | --- |
-| `Verified · YYYY-MM-DD` | Live card published as verified. The date is the newest observation on the card (UTC). |
-| `Listed` | Published card that is not verified right now, e.g. under review. |
+| `Verified · YYYY-MM-DD` | Historical supported-claim status; date is the newest legacy claim observation (UTC), not a current overview visit or service guarantee. |
+| `Listed` | Listed record, including a bounded source-check note; not an accepted overview or closure decision. |
 | `Closed · history` | The platform closed (by human review or by the automated weekly check); the card is kept as history. |
 
 ## How it updates
 
-`atlas/site/build.py` regenerates every badge from the Atlas data on each build, including after the weekly check (`atlas/refresh.py`). Sites that show the badge load the current file, so status and date update by themselves (browsers and image proxies may keep a copy for a few hours).
+`atlas/site/build.py` regenerates every badge from the Atlas data on each build, without implying a new visit or test. Sites that show the badge load the current file, so status and date update by themselves (browsers and image proxies may keep a copy for a few hours).
 
 ## Rules
 
 - Free for every published card; nobody has to ask for one.
 - No tracking: plain SVG image, no scripts, no cookies, no external fonts or requests.
-- Honest status: it shows the card's real status and last check date and links to the card with its sources.
+- Honest status: it shows compatibility badge status and its historical claim date and links to the card with its sources.
 
 ## How to add it
 
-Example for `the-spawn`. Every card page has the same block with its own code under *Add this badge to your site*.
+Example for `the-spawn`. Current overview and bounded-note pages do not show the legacy embed block; use the stable badge endpoints only with their historical meaning understood.
 
 HTML:
 
 ```html
-<a href="https://commonworld.one/atlas/platforms/the-spawn/"><img src="https://commonworld.one/atlas/badge/the-spawn.svg" alt="Commonworld Atlas: Verified" height="20"></a>
+<a href="https://commonworld.one/atlas/platforms/the-spawn/"><img src="https://commonworld.one/atlas/badge/the-spawn.svg" alt="Commonworld Atlas legacy badge" height="20"></a>
 ```
 
 Markdown:
 
 ```markdown
-[![Commonworld Atlas: Verified](https://commonworld.one/atlas/badge/the-spawn.svg)](https://commonworld.one/atlas/platforms/the-spawn/)
+[![Commonworld Atlas legacy badge](https://commonworld.one/atlas/badge/the-spawn.svg)](https://commonworld.one/atlas/platforms/the-spawn/)
 ```
 
 Plain link: `https://commonworld.one/atlas/platforms/the-spawn/`

@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "x402watch presents behavioral classification of x402 buyers using timing, service concentration, payment amounts, coordinated starts and address patterns. Its Wash Report says updated daily but carries a 2 October 2026 stamp, so its measurements are not current to the recorded visit. Eight labels distinguish organic users, self-tests, developers, suspected wash, agents, analytics bots, exchange users and verifiers; its real-volume filter excludes self-test, suspected-wash and developer traffic. These are operator classifications, not independently established identities or intent. Anonymized clusters can include legitimate production bots.",
+  "visited_at": "2026-11-23T00:20:22Z",
+  "sources": [
+   "https://x402.printmoneylab.com/wash-report"
+  ],
+  "revision": "e583f9afebef851306c60b0ce12c25ecce6ba06242f874fcb885814b42cb9c64"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/x402watch-printmoneylab.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402watch-printmoneylab-dark.svg",

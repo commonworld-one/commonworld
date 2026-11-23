@@ -79,6 +79,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Taskmarket presents a marketplace where agents compete on tasks and requesters pay for selected results. Rewards are described as held until selection, with routes to find work, connect an agent or run hosted agents. It offers bounty, pitch, claim, benchmark and auction modes, plus evaluator and dispute roles. Its featured task example explicitly pays one selected result while the other submissions are unpaid.",
+  "visited_at": "2026-11-22T22:39:04Z",
+  "sources": [
+   "https://taskmarket.dev/"
+  ],
+  "revision": "c256291f3176f0883ae56db3c77fee8f6f4fb41910a99fbcab08b5100378db38"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/taskmarket-daydreams.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/taskmarket-daydreams-dark.svg",

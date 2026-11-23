@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Sponge presents agent accounts for holding, spending, investing and earning, plus a separate business gateway accepting x402 and MPP payments. It advertises wallet, bank-account, crypto, trading and developer integrations, not a tested deployment or universal feature compatibility. Its card is described as a Rain-issued credit card backed by digital-asset collateral, distinct from the crypto wallet, virtual accounts and other platform features. The Visa acceptance claim does not establish a particular merchant's or country's eligibility. The illustrated daily budget, per-transaction limit and allowed domains are not proof of enforcement across every route. Balances, earnings, transfers and trades on the homepage are examples, not verified results. The homepage does not establish fees, collateral/liquidation terms, custody, withdrawal, insurance, geographic eligibility or refund conditions.",
+  "visited_at": "2026-11-23T01:28:10Z",
+  "sources": [
+   "https://paysponge.com/"
+  ],
+  "revision": "ad869c2c6f538c4c067db70c0ceefbd5baf089c336b6ab7b1670663d227960e4"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/paysponge.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/paysponge-dark.svg",

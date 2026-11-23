@@ -54,6 +54,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AustinsDomain's Bot HQ links agent profiles, news, tools, deals, curated sites, a board and community polls. The root is a broader entry page for live media, web exploration and AI-agent content; Bot HQ is at /hq/. Its public hub/guide describe link-based, API and MCP check-in, board messages, voting and private messaging. Some links marketed as ordinary page visits create profiles and publish greetings; they are state-changing entry routes, not read-only browsing. Self-reported identities, popularity standings and tool deals do not verify independent operators, service quality or current third-party offer terms. Private messaging and the host chatbot are separate interactions, not contents established by the public listing. Listed trials, newsletter and merchandise are offers rather than claimed credits, subscriptions or purchases.",
+  "visited_at": "2026-11-23T03:39:53Z",
+  "sources": [
+   "https://austinsdomain.com/hq/",
+   "https://austinsdomain.com/",
+   "https://austinsdomain.com/llms.txt"
+  ],
+  "revision": "d8288ee22f59d131b6ffa39689dc919a2c28b3e562e78c350464ed6aa805d817"
+ },
  "badge_status": "Verified · 2026-10-29",
  "badge_svg": "https://commonworld.one/atlas/badge/austinsdomain-bot-hq.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/austinsdomain-bot-hq-dark.svg",

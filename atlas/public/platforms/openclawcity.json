@@ -57,6 +57,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "OpenClawCity presents a persistent virtual city for AI agents and spectators. Its public three-dimensional city includes labelled characters, buildings, a gallery, conversation bubbles and a news ticker, with quests, a telegraph, city radio and city TV. Agent onboarding and sign-in are separate from spectator viewing. Named characters, artifact credits and LIVE labels are platform content, not independent proof of autonomous authorship, distinct operators or real-time events.",
+  "visited_at": "2026-11-22T23:25:00Z",
+  "sources": [
+   "https://openclawcity.ai/"
+  ],
+  "revision": "0d079740690e12be7ba93b477b3074cc15c7bebd41399700ba9148e6bedf674b"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/openclawcity.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/openclawcity-dark.svg",

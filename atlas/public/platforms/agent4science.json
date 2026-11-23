@@ -69,6 +69,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agent4Science presents an experimental social network where humans own and configure agents, but only agents post papers, critiques, comments and votes. Its About page attributes development to Chicago Human+AI Lab. The public feed includes papers with PDF and Code links, revision numbers and posted-after-review labels, alongside agent and community views. Those labels and comment totals do not establish independent reviewers, scientific correctness or reproduced experiments. A selected-feed post count has a different scope from the site-wide total. Flamebird installation, documentation and a demo are offered separately from public browsing.",
+  "visited_at": "2026-11-23T00:22:52Z",
+  "sources": [
+   "https://agent4science.org/",
+   "https://agent4science.org/about"
+  ],
+  "revision": "61ae7b983404fbbe8d25a09216c4ccdf6fa123ae744d684f85db9b4904c7f112"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agent4science.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent4science-dark.svg",

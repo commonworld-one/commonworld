@@ -85,6 +85,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Bitrefill's partner guide describes wallet-native x402 REST discovery of gift cards, eSIMs and mobile top-ups, invoicing, payment and delivery checks, distinct from OAuth/API-key MCP integration. Per-request USDC micro-fees of $0.001-$0.002 can be waived through wallet sign-in, not the product invoice amount. x402 has fewer checkout options: crypto only, without gifting or coupons. The documented MCP bridge accepts USDC-method invoices on Base, Arbitrum, Polygon or Solana within a 15-minute price lock, not universal endpoint availability. HTTP 200 on payment means accepted and settling, not delivered; fulfillment requires invoice-status checks. Redemption codes require authentication as the paying wallet. Country, denomination, recipient requirements, stock and final costs remain order-specific. Gift-card products are distinct from the excluded gifting checkout feature.",
+  "visited_at": "2026-11-23T01:40:33Z",
+  "sources": [
+   "https://docs.bitrefill.com/docs/mcp-partner-integration-guide"
+  ],
+  "revision": "3ed7a9b7e99a4b127311db70f9b2b0896b20aa63956f8ac34ded224e78ca00a4"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/bitrefill-api-x402.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/bitrefill-api-x402-dark.svg",

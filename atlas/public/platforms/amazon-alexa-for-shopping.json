@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Amazon presents Alexa for Shopping as its shopping assistant combining Rufus product expertise with Alexa+ personal context. Its official article describes product research and comparisons, price history and alerts, cart building and scheduled shopping actions. Shop Direct surfaces products from other stores; Buy for Me handles purchases for eligible products. Amazon says the assistant is free for signed-in customers and available in full in 13 countries, with beta access in the United Arab Emirates and Turkey. This overview describes the official article, not verified shopping functionality.",
+  "visited_at": "2026-11-23T14:56:57Z",
+  "sources": [
+   "https://www.aboutamazon.com/news/retail/alexa-for-shopping-ai-assistant"
+  ],
+  "revision": "378e7696f86839dadaf2ef48e46fdb9ccefecc5eaeafe9875ce0d22cee4bc477"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/amazon-alexa-for-shopping.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/amazon-alexa-for-shopping-dark.svg",

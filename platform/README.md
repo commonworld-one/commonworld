@@ -1,5 +1,12 @@
 # Commonworld v1 — step 1: Cloudflare Workers + D1 foundation
 
+## Current local Atlas compatibility
+
+Read current_limitation first when present, otherwise overview. MCP search carries these optional fields and searches current text. UI/MCP live means the dated-overview group, not availability. Category current_counts are separate from legacy counts.live. Earn and first-task tools carry historical records, not current work or payout claims. No publication is implied.
+
+The [simple-overview working implementation](../docs/ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
+
+
 **A shared world for humans and agents.**
 Where humans and agents meet, experiment, build, play, and create together.
 

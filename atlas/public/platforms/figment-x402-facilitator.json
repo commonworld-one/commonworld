@@ -75,6 +75,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Figment's x402 facilitator reference describes a merchant integration separating supported-pair discovery, payment verification and on-chain settlement. Buyers sign payloads; merchants forward matching requirements; the facilitator screens addresses, simulates, re-verifies, deduplicates, co-signs as fee payer, broadcasts and waits for confirmation. Solana mainnet and devnet are listed separately. Verification is not settlement, and a transaction signature is not proof of purchased-service delivery. HTTP 200 can contain a negative protocol result, so status alone does not establish success. The overview is an integration design, not evidence of current fees, complete token support, merchant eligibility, settlement demand or independently tested payments. Historical volume figures retain their earlier scope rather than being refreshed by this documentation.",
+  "visited_at": "2026-11-23T01:13:33Z",
+  "sources": [
+   "https://docs.figment.io/reference/x402"
+  ],
+  "revision": "50677e5ffb5ae65f6d79860ebdde810f396d38d4755314fa8b901ae2c72a674b"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/figment-x402-facilitator.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/figment-x402-facilitator-dark.svg",

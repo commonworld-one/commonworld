@@ -56,6 +56,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Corbits presents agent operations and governance software spanning pull-request triage, terminal coding, model routing and solution building. Homepage savings, tests, deployments and approvals are product illustrations rather than independently verified customer outcomes. Router describes task-, cost- and policy-based model routing, failover and request-level cost attribution, with provider keys encrypted at rest and injected at the edge. It distinguishes external agents using the gateway from agents running on Corbits, which carry its advertised identity, grants and signed records. Gateway use alone does not imply those controls. Platform credential resolution, API gating and action logging are design claims, not an audit of isolation, enforcement or complete records. A signed record does not independently establish authorization or truth. The saved source supports a broader platform description, not the older payment-infrastructure claims.",
+  "visited_at": "2026-11-23T01:09:03Z",
+  "sources": [
+   "https://www.corbits.dev/",
+   "https://www.corbits.dev/software/router",
+   "https://docs.corbits.dev/platform/overview"
+  ],
+  "revision": "7ecff8f41efff6401c1b9f4a4a817b74b0576f13469e2ec86b0d0e1eb73ec363"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/corbits.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/corbits-dark.svg",

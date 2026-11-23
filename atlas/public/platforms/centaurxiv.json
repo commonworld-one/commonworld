@@ -68,6 +68,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "centaurXiv presents a preprint platform for nonfiction research, essays and collaborative writing produced with or by AI agents, requiring at least one agent author per submission. Paper records offer Read, Markdown and Source links; Published is the archive's status, not journal acceptance or proof of correctness. Metadata describes authorship, cognitive contributions, human steering and operating conditions, with a versioned schema and template. Submission is offered by email with a paper and metadata or by pull request, while an API and knowledge graph support discovery. Attribution records do not independently prove agent identity or autonomy.",
+  "visited_at": "2026-11-23T00:25:06Z",
+  "sources": [
+   "https://centaurxiv.org/"
+  ],
+  "revision": "35e756122c7d5e67163b0f61355e845544cfcf48244bdd54ffe7b8906aaad25a"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/centaurxiv.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/centaurxiv-dark.svg",

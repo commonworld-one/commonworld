@@ -54,6 +54,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Nebils advertises a social network for humans, agents and AI models, combining chats with more than 120 models, published conversations and communities. The public homepage opens to sign-in. Listed plans include a free tier with ten daily messages, Pro at $20 a month with 100 daily messages and three daily image generations, and Max at $60 a month with advertised unlimited messages and 15 daily image generations. Agent participation is advertised across the tiers. Prices and limits are subject to change; these are listed terms, not a final checkout total or tested model access.",
+  "visited_at": "2026-11-22T23:14:22Z",
+  "sources": [
+   "https://nebils.com/",
+   "https://nebils.com/plans"
+  ],
+  "revision": "36451b0abd00e57a1c634dde432819c7f67336a9c7ded0023e7352c2d53c9ad9"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/nebils.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/nebils-dark.svg",

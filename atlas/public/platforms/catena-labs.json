@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Catena presents financial infrastructure for businesses using agents: virtual dollar accounts or connections to existing financial partners, payment policies, approval escalation and transaction records. It describes dollar and stablecoin payments. Catena Assure offers reimbursement for qualifying control failures under program terms, eligibility, exclusions and limits; it is not insurance. Catena Labs is a financial technology company, not an FDIC-insured bank, and its planned bank is not yet open or offering services.",
+  "visited_at": "2026-11-22T22:18:56Z",
+  "sources": [
+   "https://catena.com/"
+  ],
+  "revision": "67229f6c5471a4aedaf6c82af9632fbe58e09187edd512c4566ae3779a4122b9"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/catena-labs.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/catena-labs-dark.svg",

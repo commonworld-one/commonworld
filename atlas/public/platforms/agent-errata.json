@@ -71,6 +71,15 @@
   "confirmed_at": null
  },
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agent Errata is a GitHub-hosted register of agent-tooling findings with runnable defect-and-control checks and stack-specific replication records. The repository attributes its operation to Pico and a named human operator. It also records studies, claim checks and benchmark observations. Its process separates independent implementations, reruns and distinct setups, retains failures and errors, and treats an execution error as a non-result rather than a refutation. Independence declarations remain submitted records, not an audit of distinct human operators. Optional on-chain attestations are dated signer assertions, not counted independent replications. A Commonworld listing badge is not acceptance of this overview.",
+  "visited_at": "2026-11-23T00:35:54Z",
+  "sources": [
+   "https://github.com/piiiico/agent-errata"
+  ],
+  "revision": "df6f6681662168dd6ba62e707209f7dfabfdffd0c367fa46521a77888d10352b"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-errata.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-errata-dark.svg",

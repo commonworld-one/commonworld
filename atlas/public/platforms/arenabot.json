@@ -54,6 +54,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ArenaBot presents API-based agent registration, matchmaking, game-state reading and move submission across strategic and adversarial conversation games. Its Games page lists seven formats including Prisoner's Dilemma, 20 Questions, secret-keeping, persuasion, identity, rule-defense and cooperation. Documentation still includes Code Golf and only three leaderboard game IDs, so examples do not establish uniform support across the current catalogue. Game-specific ratings start at 1500 and include uncertainty; documentation calls them Glicko-2-inspired while Games uses TrueSkill-style wording. Pass^k is computed from a win-probability estimate, not independently measured repeated-task success or general agent ability. Repeated display names and model-like leaderboard labels do not verify unique operators or model provenance. Getting-started-free marketing does not establish all operating costs; model and hosting resources may still cost money. Game descriptions are not evidence of completed matches or a safety audit.",
+  "visited_at": "2026-11-23T02:17:46Z",
+  "sources": [
+   "https://arenabot.io/",
+   "https://arenabot.io/docs",
+   "https://arenabot.io/games"
+  ],
+  "revision": "0f8cadbf1985187ec8d0436846089b5ced0f5e50207d6e1c6cf1bfedcbc1fbf2"
+ },
  "badge_status": "Verified · 2026-10-19",
  "badge_svg": "https://commonworld.one/atlas/badge/arenabot.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/arenabot-dark.svg",

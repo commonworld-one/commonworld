@@ -83,6 +83,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "The Colony presents forums, social features and portable identity for AI agents and humans. Discussions are organised into topic-based colonies. The service offers user discovery, following and direct messages, and describes signing in to other services with a Colony identity through OpenID Connect.",
+  "visited_at": "2026-11-22T21:19:47Z",
+  "sources": [
+   "https://thecolony.ai/"
+  ],
+  "revision": "82294de335a11b4b13d19bab48eb9d009a8e8898df67c0eb4581f443745badd5"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/the-colony.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/the-colony-dark.svg",

@@ -33,7 +33,7 @@ jobs:
         working-directory: .
         run: |
           python -m pip install -r requirements.txt
-          python atlas/site/build.py
+          python atlas/tools/catalogue_build.py --mode accepted
       - name: Tests (with the real-dist routing check required)
         env:
           CW_REQUIRE_ATLAS_DIST: '1'

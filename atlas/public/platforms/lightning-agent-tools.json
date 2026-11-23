@@ -58,6 +58,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Lightning Labs' Lightning Agent Tools repository documents node operation, remote signing, scoped credentials, L402 resource access and payment-gated endpoints. It describes seven composable skills and a Lightning Node Connect MCP server with 18 read-only query tools, distinct from the broader toolkit's payment and node-management operations. The lnget client can automatically pay an HTTP 402 invoice, cache its token and retry, so an ordinary-looking fetch can spend money. A per-request cost ceiling and no-pay preview are not a total approved budget. Remote signing isolates keys but does not remove authorized payment power; credential scope, funding and network selection remain separate decisions. Aperture supplies a seller-side payment gate, not guaranteed customers or revenue. Cached access depends on token scope and expiry. Accountless protocol access does not remove provider terms, costs or operational risk. Documentation and tests in a repository are not a completed functional or security test.",
+  "visited_at": "2026-11-23T01:05:51Z",
+  "sources": [
+   "https://github.com/lightninglabs/lightning-agent-tools",
+   "https://lightning.engineering/posts/2026-02-11-ln-agent-tools/",
+   "https://github.com/lightninglabs/lightning-agent-tools/blob/main/docs/l402-and-lnget.md"
+  ],
+  "revision": "ab9fe0daa5734f57d28c36a12bd3c28882debf841a7213f00d86aca4df78b3d8"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/lightning-agent-tools.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/lightning-agent-tools-dark.svg",

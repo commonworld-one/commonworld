@@ -54,6 +54,18 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Coarena by Coasty presents computer/phone-agent comparisons, benchmark pages and a separate model API. Preference rankings, full-history completion/speed/cost and recent trajectory measures use different windows and denominators. Completion is agent-reported, not verified task success; recovery is a next-action proxy. Phone rankings are separate: documentation says all phone battles rated through 25 October 2026 came from an operator-planned campaign and phone runs are excluded from datasets. Estimated inference costs include failed runs but exclude infrastructure and discounts. API docs list 24 model IDs versus 20 advertised on the homepage; a free key does not mean unlimited free model use. Provider provenance is not independently established. Privacy terms allow indefinite retention and dataset licensing of ordinary task prompts, files, screens and judging data. Desktop/phone screenshots lack structural masking and providers receive raw screens. Saved-sign-in battles have a separate private exception; ordinary submissions do not inherit it. Withdrawal removes records from future datasets/rankings but does not erase retained records or recall delivered datasets. Public aggregate benchmark downloads exclude private prompts/recordings.",
+  "visited_at": "2026-11-23T02:10:41Z",
+  "sources": [
+   "https://coarena.ai/",
+   "https://coarena.ai/benchmark/methodology",
+   "https://coarena.ai/docs",
+   "https://coarena.ai/privacy"
+  ],
+  "revision": "0539598f335909a13a937e1f0ceb5bc6a2c5db5b342aa41692ec02375fd3fd27"
+ },
  "badge_status": "Verified · 2026-10-19",
  "badge_svg": "https://commonworld.one/atlas/badge/coarena.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/coarena-dark.svg",

@@ -58,6 +58,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "A2A is an open protocol for communication between agents built with different frameworks or vendors. Its documentation describes Agent Cards for discovering an agent's capabilities, endpoints and authentication requirements, alongside messages, tasks and returned artifacts. The homepage identifies A2A as part of the Agentic AI Foundation.",
+  "visited_at": "2026-11-22T20:33:46Z",
+  "sources": [
+   "https://a2a-protocol.org/latest/",
+   "https://a2a-protocol.org/latest/topics/what-is-a2a/",
+   "https://a2a-protocol.org/latest/topics/key-concepts/"
+  ],
+  "revision": "4a04e29f36b159c6a9b95039cab2b110faaba54437f83b6385d4c7410b630d6b"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/a2a-protocol.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/a2a-protocol-dark.svg",

@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "MoltStack presents a publishing platform where AI agents create newsletters and share publications. Its public homepage highlights featured publications and recent posts, with links to publication discovery, agent registration and a dashboard.",
+  "visited_at": "2026-11-22T21:55:43Z",
+  "sources": [
+   "https://moltstack.net/"
+  ],
+  "revision": "1b7eca66a06371ac2ca93f169e7f717a0efb0cafc5c77354041699962c73d0b3"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/moltstack.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/moltstack-dark.svg",

@@ -58,6 +58,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Stacker News is a public link-and-discussion community organized into territories, including jobs, AI, development and Bitcoin. Its FAQ describes Lightning-based zaps, daily rewards and referrals. Without an attached receiving wallet, zap recipients earn cowboy credits accepted for site payments at a stated 1:1 ratio with sats; those credits are not automatically withdrawable Bitcoin. Daily reward sats are described as a separate route that does not require an attached wallet. Posting and commenting can incur territory-dependent fees. Displayed post amounts are not a verified open bounty or guaranteed worker compensation.",
+  "visited_at": "2026-11-22T23:43:31Z",
+  "sources": [
+   "https://stacker.news/",
+   "https://stacker.news/faq"
+  ],
+  "revision": "b3259442f4eb9db9d846cfd15d4a9147cb0e2e4126da6daece80abfdea26fdec"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/stacker-news-bounties.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/stacker-news-bounties-dark.svg",

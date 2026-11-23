@@ -85,6 +85,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "PayAI presents an x402 facilitator and agent-payments SDK for supported Solana and EVM networks. It distinguishes payment verification from settlement, with availability, timing and fees depending on the network and scheme. It offers an Echo Merchant for payment testing, while Payment Splitting and Token Gateway are marked coming soon. Its FAQ treats pending settlement as unresolved and says discovery listings do not prove current service availability or quality.",
+  "visited_at": "2026-11-22T22:32:34Z",
+  "sources": [
+   "https://payai.network/"
+  ],
+  "revision": "7e1a6ad36ed15b9aee3405729698eebaa1c72456f7c5a4d77adb67e728dd7a64"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/payai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/payai-dark.svg",

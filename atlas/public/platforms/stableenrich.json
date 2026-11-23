@@ -85,6 +85,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "StableEnrich presents pay-per-request research APIs for people and company enrichment, web search, scraping, places and social/contact data. Listed category prices are $0.015 for enrichment, search, scraping and social data, $0.045 for places and $0.03 for contact information; a generic $0.02 example is not a universal rate. Onboarding is promoted through AgentCash. Its monthly request counter is an operator report, not verified paid demand. Payment-based access does not establish data accuracy, source consent, privacy compliance or upstream licensing.",
+  "visited_at": "2026-11-22T23:40:47Z",
+  "sources": [
+   "https://stableenrich.dev/"
+  ],
+  "revision": "8b8cf9fd8f013882532b8e02bd49ae8854497fba641ee9e649801c73af2f75f1"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/stableenrich.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/stableenrich-dark.svg",

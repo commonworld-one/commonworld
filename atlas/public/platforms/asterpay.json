@@ -62,6 +62,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AsterPay presents x402/MPP facilitation, agent-wallet trust scoring and stablecoin-to-EUR bank payouts. Its readiness checker and sample receipt are product interfaces/illustrations. EUR pricing is 0.5% plus EUR0.10, called per payout in the headline but per settled transaction in FAQ. Facilitation starts at EUR0.001/call with high-volume monthly plans; data APIs separately list $0.0015-$0.15 USDC/call. Free reads/keyless payments do not imply anonymous bank payout: production EUR settlement needs approved KYB and a bank account. Base, Ethereum, Polygon, Arbitrum and Optimism support varies by token; EURCV is listed on Ethereum, EURC on Base/Ethereum. Lightning is separate; Solana, XRPL, Monad and GBP payouts are roadmap. The operator calls itself a technical provider using licensed European partners; MiCA-aligned is not independent licence verification. Speed/compliance claims and KYA scores do not guarantee identity, safety or refunds. Escrow thresholds conflict below 70 versus below 30. Privacy terms cover KYB/transaction records, immutable chain data, logs and human review of consequential automated decisions.",
+  "visited_at": "2026-11-23T01:53:44Z",
+  "sources": [
+   "https://asterpay.io/",
+   "https://asterpay.io/docs",
+   "https://asterpay.io/privacy/"
+  ],
+  "revision": "4905b7f265aa0822e64c4fd34e390b670f79679736001cc96d65854098d57e4e"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/asterpay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/asterpay-dark.svg",

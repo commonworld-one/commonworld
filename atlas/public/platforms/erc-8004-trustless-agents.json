@@ -60,6 +60,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ERC-8004 is an Ethereum proposal for discovering agents and establishing trust across organizational boundaries through identity, reputation and validation registries. The saved specification page is marked Draft. Identity uses ERC-721 with URIStorage and an agent registration file; reputation supplies feedback interfaces, while validation supplies hooks for independent checks. Payments are outside the protocol's scope, though x402 examples can enrich feedback signals. These are proposed interoperability mechanisms, not guarantees that a registered agent is trustworthy or that a validator's judgment is correct.",
+  "visited_at": "2026-11-22T21:18:12Z",
+  "sources": [
+   "https://eips.ethereum.org/EIPS/eip-8004"
+  ],
+  "revision": "5bafad236c25479f366016508cdb16c61ad77705075367f17727a549d4e4f7f7"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/erc-8004-trustless-agents.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/erc-8004-trustless-agents-dark.svg",

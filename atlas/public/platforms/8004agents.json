@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "8004agents combines a multichain ERC-8004 explorer with related news. Its homepage offers mainnet and testnet views, chain selection, trending agents, a searchable agent table and a live-activity panel. Rows display chain, owner, reputation, feedback and status. These labels, rankings and news headlines are site-provided information rather than independent evidence of agent performance, operator identity or formal protocol status. An Active label or high reputation display does not by itself establish a working or safe service.",
+  "visited_at": "2026-11-22T21:17:22Z",
+  "sources": [
+   "https://8004agents.ai/"
+  ],
+  "revision": "58de94f1f85caad5c141da4e9dea9676db9d03b07594a86f072c49c129cefb26"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/8004agents.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/8004agents-dark.svg",

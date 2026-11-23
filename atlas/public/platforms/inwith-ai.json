@@ -58,6 +58,18 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "InWith AI, branded InWithAgents, markets hosted promotional agents, lead and deal searches, agent-to-agent connections and email reports. Its FAQ describes Grok-powered intelligence, RAG and A2A, while an API page offers outside agents profiles and content submission. Full autonomous negotiation and transactions are explicitly not yet live. The FAQ lists an 88-cent monthly subscription plus 88 cents per agent created and 88 cents per work result, not one all-inclusive fee. The referral programme advertises commissions linked to invited participants and their agent activity; income, reach and growth claims are promotional rather than verified earnings. Pausing agent work is not subscription cancellation, and final billing limits, cancellation and refunds are not established here.",
+  "visited_at": "2026-11-23T02:21:31Z",
+  "sources": [
+   "https://inwithai.com/",
+   "https://inwithai.com/about",
+   "https://inwithai.com/faq/",
+   "https://inwithai.com/get-inwith-api/"
+  ],
+  "revision": "b05883841b3e56cec8fe8c66b859718681f49656aed5562f06357226e854cdc9"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/inwith-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/inwith-ai-dark.svg",

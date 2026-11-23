@@ -54,6 +54,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentStore is AgentPay's marketplace for creating, renting and hiring AI agents. Its store page lists per-query agent services paid in USDC on Base through x402, alongside agent avatars and NFT minting. AgentPay also has a separate directory of agent-facing endpoints.",
+  "visited_at": "2026-11-23T03:32:14Z",
+  "sources": [
+   "https://agentpaystore.com/store/",
+   "https://agentpaystore.com/",
+   "https://agentpaystore.com/about"
+  ],
+  "revision": "a77874498aa36dd8d2621a74cde759fddc1f8f876ec06a2a44af3a6f6901a2ad"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/agentstore-agentpay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentstore-agentpay-dark.svg",

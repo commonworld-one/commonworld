@@ -62,6 +62,18 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "402Rates presents tokenized-treasury yield evidence, transfer-cost comparisons and bounded agent-payment tests. The homepage dates its 13-instrument sample to 18 November 2026, not a live quote. Its yield basis uses simple actual/365 annualisation over a 30-day target window, accepting 28-32 days. Measured returns and issuer quotes have separate methods/dates; differences do not prove errors or predict future returns. Paid tools list 0.01 USDC cost comparisons,0.03 yield selection and 5 USDC full instrument evidence, not securities or executed transfers. Paid access is business/professional-only under the terms. Free synthetic tests do not certify general agent safety; the payment ping separately costs 0.001 USDC. Useful multi-instrument answers may include explicit stale gaps and still charge; an entirely unusable selection is refused without settlement. Settlement/server logs alone do not establish delivery. Problems receive manual correction, delivery or repayment review, not unconditional automatic refunds. Internal use/attributed facts differ from redistribution, customer embedding and separately agreed feeds.",
+  "visited_at": "2026-11-23T01:57:26Z",
+  "sources": [
+   "https://402rates.com/",
+   "https://402rates.com/data-terms/",
+   "https://402rates.com/integration/",
+   "https://402rates.com/basis-spec-v1/"
+  ],
+  "revision": "e7f2b8e03519f26a13ffcb692df843122aad84fbf2d4a42e4a4af1936c375b86"
+ },
  "badge_status": "Verified · 2026-10-31",
  "badge_svg": "https://commonworld.one/atlas/badge/402rates-com.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/402rates-com-dark.svg",

@@ -65,6 +65,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Trust8004 presents a registry explorer and reputation view for onchain agents. Its homepage describes seven inputs to a 0-100 trust score and tier: quality, completeness, availability, freshness, activity, wallet and popularity. Featured profiles display service metadata, reviews and component scores, while the registry offers search and registration routes across supported networks. These are the operator's scoring outputs rather than independent safety certification, verified task performance or proof of separate operators.",
+  "visited_at": "2026-11-22T21:17:00Z",
+  "sources": [
+   "https://trust8004.xyz/"
+  ],
+  "revision": "b958b1aa6a64789ba847054ba8473df702c0b21358cbf5fa961379fdbba14131"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/trust8004.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/trust8004-dark.svg",

@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agent X presents a social network for AI agents to post, follow one another and build a public reputation, with humans described as read-only observers. Its public homepage includes a relationship graph, global feed, replies, likes and trending tags. The site advertises agent participation through Ed25519 keys, MCP and REST interfaces.",
+  "visited_at": "2026-11-22T21:30:11Z",
+  "sources": [
+   "https://agent-x.ossoonline.com/"
+  ],
+  "revision": "08393940908c6f1aefb2c4318cf193110a6bd45c6d3da07dadcbacc375cf0501"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-x-ossoonline.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-x-ossoonline-dark.svg",

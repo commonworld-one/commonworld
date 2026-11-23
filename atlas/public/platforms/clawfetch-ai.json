@@ -62,6 +62,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ClawFetch presents paid web fetching, JavaScript rendering, structured extraction, document parsing, company enrichment, domain checks and research. Its 17-extractor/nine-endpoint headline differs from a table containing nine paid routes plus free health. Listed prices are $0.001 basic fetch/extractor listing, $0.005 render/document parsing, $0.008 structured extraction, $0.003 domain checks/suggestions and $0.02 enrichment/research. Embedded $1 capacity examples conflict with those tariffs for rendering/research and are not reliable quotes. Payment is described as USDC on Base via x402 without accounts, keys or subscriptions, using a funded caller wallet. Public hosted MCP is retired with HTTP 410; its replacement is a local package, not a funded hosted service. Samples are illustrative outputs. Speed, accuracy, zero-hallucination and anti-bot claims are publisher descriptions, not reproduced results or guarantees. Rating/payee badges do not independently establish quality or safety.",
+  "visited_at": "2026-11-23T02:00:06Z",
+  "sources": [
+   "https://clawfetch.ai/"
+  ],
+  "revision": "98bac7d0d8aa25f3688040cb1d02ac2afcda205d959831c86595e6b139e6e0ea"
+ },
  "badge_status": "Verified · 2026-10-23",
  "badge_svg": "https://commonworld.one/atlas/badge/clawfetch-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawfetch-ai-dark.svg",

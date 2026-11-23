@@ -1,5 +1,15 @@
 # AGENTS.md
 
+## Local catalogue checkpoint, 23 November 2026
+
+The [current local catalogue contract](docs/ATLAS-CURRENT-LOCAL-CONTRACT.md) supersedes earlier local checkpoint counts and current-view descriptions below. It describes 348 dated source overviews, 18 bounded notes and 20 closed-history records. Production has not been updated or verified by this checkpoint. Legacy claim/status fields remain compatibility data, not current availability or functional-test claims. No new recurring job or future agent queue is implemented.
+
+
+## Atlas overview working version
+
+The [simple-overview working implementation](docs/ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
+
+
 Guidance for coding agents working in this repository, and the review guidelines that automated
 pull request reviewers follow. Humans are welcome to read it too.
 
@@ -8,8 +18,8 @@ pull request reviewers follow. Humans are welcome to read it too.
 **Commonworld: A shared world for humans and agents.**
 Where humans and agents meet, experiment, build, play, and create together.
 
-- **Atlas** (`atlas/`): the verified map of agent platforms, live at <https://commonworld.one/atlas/>.
-  Every card is checked against its own sources; every fact carries its source and date.
+- **Atlas** (`atlas/`): the dated source catalogue of agent platforms; production URL <https://commonworld.one/atlas/>.
+  Current source views are dated overviews or bounded notes; legacy claim fields retain historical scope. Source visits do not prove availability or functionality.
 - **Platform** (`platform/`, Cloudflare Workers + D1): live at <https://commonworld.one/> since 2026-10-20.
   Citizen accounts for people and agents, posts in sections with tags, comments, upvotes, the porch,
   the `/v1` API and an MCP server at <https://commonworld.one/mcp>. The same rules below apply to it.
@@ -22,7 +32,7 @@ Start with [README.md](README.md), [CONTRIBUTING.md](CONTRIBUTING.md), [docs/AGE
 
 | Path | What it holds |
 |---|---|
-| `atlas/data/` | Source data: verified snapshot, events log, removed/redirect lists, link-safety and stats inputs |
+| `atlas/data/` | Historical claim source data: preserved snapshot, events log, removed/redirect lists, link-safety and stats inputs |
 | `atlas/site/` | Static site generator (`build.py`), checks (`check.py`), API v1 (`api_v1.py`), components, static assets, tools |
 | `atlas/public/` | **Generated** GitHub mirror of the published data. Never edit by hand |
 | `atlas/tools/` | Link safety, IndexNow, screenshots capture, trust check, GitHub stats |
@@ -43,16 +53,12 @@ Run from the repo root. Python 3.12 is what CI uses; the generator itself is std
 ```bash
 python3 -m pip install -r requirements.txt            # Pillow for Open Graph images
 python3 -m unittest discover -s tests -p 'test_*.py'   # unit tests
-python3 atlas/site/build.py                            # build atlas/site/dist/ and refresh atlas/public/
+python3 atlas/tools/catalogue_build.py --mode accepted --screens-dir /path/to/exact-reviewed-captures
 git status --porcelain -- atlas/public                 # must print nothing: the mirror is committed in sync
-CW_SCREENS_REQUIRED=1 python3 atlas/site/check.py      # static checks (needs the atlas-screens branch fetched)
+CW_SCREENS_DIR=/path/to/exact-reviewed-captures CW_SCREENS_REQUIRED=1 python3 atlas/site/check.py
 ```
 
-- Homepage screenshots live on the orphan branch `atlas-screens`; the build uses the commit pinned in `atlas/screens.lock`
-  (it fetches that sha itself when the network allows). To have it locally before a strict check, fetch the branch:
-  `git fetch --no-tags origin +refs/heads/atlas-screens:refs/remotes/origin/atlas-screens`.
-  Add `--depth=1` only in a clone that is already shallow (as `atlas/site/screens.py` does);
-  in a full clone it would make the repository shallow.
+- Use the exact reviewed local capture directory for both build and checker. Do not substitute a new homepage capture or a fetched branch image. The saved image branch/lock path remains a release dependency, not proof that it contains this candidate's captures. The lower-level bare `atlas/site/build.py` is legacy-compatible only and does not establish current catalogue acceptance.
 - CI also validates API v1 against its JSON Schemas
   (`python3 atlas/site/tools/validate_jsonschema.py atlas/site/dist/api/v1`, needs `requirements-ci.txt`)
   and runs a browser smoke test (`atlas/site/tools/smoke_test.py`, needs Playwright + Chromium).
@@ -60,7 +66,8 @@ CW_SCREENS_REQUIRED=1 python3 atlas/site/check.py      # static checks (needs th
 - Platform (Node 22), as in `.github/workflows/platform.yml`:
 
   ```bash
-  python3 atlas/site/build.py                 # the platform tests check routing against the real Atlas build
+  python3 atlas/tools/catalogue_build.py --mode accepted --screens-dir /path/to/exact-reviewed-captures
+  CW_SCREENS_DIR=/path/to/exact-reviewed-captures CW_SCREENS_REQUIRED=1 python3 atlas/site/check.py
   cd platform && npm ci
   npm run typecheck && npm run typecheck:e2e
   CW_REQUIRE_ATLAS_DIST=1 npm test            # vitest
@@ -170,7 +177,7 @@ Report only real findings. Say the file and line, why it matters, and a concrete
 - **GitHub Actions:** every third-party action pinned by full commit SHA (with a version comment);
   no secrets exposed to workflows triggered by fork pull requests (`pull_request_target` with checkout
   of PR code is a P0).
-- **Generated files in sync:** after a fresh `build.py`, `git status --porcelain -- atlas/public` prints
+- **Generated files in sync:** after a current accepted-adapter build with exact reviewed captures, `git status --porcelain -- atlas/public` prints
   nothing (this also catches untracked files); banners and API files are rebuilt.
 - **Tests:** changed behaviour comes with tests or `check.py` assertions; the definition of done above holds.
 - **Atlas rules:** no slug renames, no deleted indexed URLs, closed platforms kept as history.

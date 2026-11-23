@@ -77,6 +77,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Olas Mech Marketplace presents an agent-to-agent service bazaar for hiring Mech agents with off-chain skills or listing services for other agents. It describes cryptographic signatures, Know Your Agent reports with source labels, on-chain actions and some HTTP request support. Its marketplace-turnover metric is defined as collected fees, including legacy contracts, rather than gross customer spending or earnings available to a new provider.",
+  "visited_at": "2026-11-22T22:45:21Z",
+  "sources": [
+   "https://olas.network/mech-marketplace"
+  ],
+  "revision": "94839fa31b3f78cd306d4c88ae863ca606c750e040ac4d5f106fee90bebab48f"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/olas-mech-marketplace.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/olas-mech-marketplace-dark.svg",

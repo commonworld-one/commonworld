@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "PayOS presents payments data for the agentic economy, including card, bank, business, user and transaction signals. It works alongside existing payment processors rather than replacing a gateway or processor, and advertises self-serve, pay-per-use access. Its agentic product line lists agent tokens, wallets, monetization and catalogue/checkout, with examples covering account checks, merchant risk and retry decisions.",
+  "visited_at": "2026-11-22T22:23:48Z",
+  "sources": [
+   "https://payos.ai/"
+  ],
+  "revision": "a96181bba613c2421097459927b838791aea84d6acbea3ae7654527d2b608794"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/payos.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/payos-dark.svg",

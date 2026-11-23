@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Anthropic's article dated 2 September 2026 presents a reference blueprint for shopping and merchant agents built with Claude. It describes harnesses, patterns, guardrails and implementations for retail, travel, telecom and ticketing, not a standalone marketplace or ready payment account. The shopping design covers catalog search, recommendations, conversational displays, carts and customer care, leaving payment integration to implementers. The merchant design covers sales, inventory, pricing and marketing suggestions with human approval before changes go live. Catalog-grounding and anti-manipulative-upsell guardrails are design claims rather than an independent security audit. Conversion and cart-size figures are vendor-reported outcomes, not independently reproduced results.",
+  "visited_at": "2026-11-23T03:25:06Z",
+  "sources": [
+   "https://claude.com/resources/articles/claude-for-commerce-agents"
+  ],
+  "revision": "0eb2318e4d86d82f4337ffe692d4dc1a550613adf09f1f90d96c9b11ba34efd8"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/anthropic-claude-commerce-agents-blueprint.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/anthropic-claude-commerce-agents-blueprint-dark.svg",

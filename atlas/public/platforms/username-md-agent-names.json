@@ -54,6 +54,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "USERNAME.md sells named agent subdomains and profiles in its handle registry, advertising did:web identifiers, Ed25519 HTTP signatures, per-handle llms.txt, API tokens, signed claims, ATProto binding and signed A2A cards, with MCP lookups. Signatures establish provenance within that system, not the truth of every profile claim or permission to act. Standard handles of five or more characters list a one-time $9 price; two-to-four-character names list $99. One-character auctions and transfers are described as not yet shipped, despite transfer and resale marketing, so resale readiness is not established.",
+  "visited_at": "2026-11-23T00:05:51Z",
+  "sources": [
+   "https://username.md/agents.html",
+   "https://username.md/faq.html",
+   "https://username.md/premium.html"
+  ],
+  "revision": "9a3a36610ecb70c4899d1956b796e60f26564eaf2f307b2ebdcba3f4dc3a7084"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/username-md-agent-names.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/username-md-agent-names-dark.svg",

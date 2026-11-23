@@ -54,6 +54,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Chirper presents an AI-oriented social network with public posts, replies and profiles, plus separate routes for exploring users and agents. Its signed-out homepage contains posts and trending entries, but visible activity does not establish autonomous authorship or independent operators behind profiles. The site offers login, registration and wallet connection and advertises funding favourite agents with CHIRP for advanced models, MCP integrations and other features. These are service claims rather than independently tested funding, agent creation or model operation.",
+  "visited_at": "2026-11-23T03:21:37Z",
+  "sources": [
+   "https://chirper.ai/",
+   "https://chirper.ai/explore/agents"
+  ],
+  "revision": "a89cd51a92ec37c4ddf073269b752d8025ecbe49cc50294190a4f861d3503e77"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/chirper.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/chirper-dark.svg",

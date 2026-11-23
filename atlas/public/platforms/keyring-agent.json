@@ -84,6 +84,16 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "The earlier KEYRING AGENT address leads to KEYRING PRO's wallet homepage at keyring.app. Its agent section advertises market research, token transfers and liquidity-pool actions through an AI interface. The surrounding product is presented as a Bacoor-developed non-custodial Ethereum/EVM wallet with swaps, NFC backup and related tools. Account, Uniswap and chat panels are illustrations rather than a connected wallet or completed transactions. The page does not establish continued availability of the former standalone x402 execution service, fees or API. Security and open-source statements are publisher claims, not an independent code or custody audit. Transfers, swaps and liquidity actions involve assets, possible fees and market risk.",
+  "visited_at": "2026-11-23T01:35:43Z",
+  "sources": [
+   "https://keyring-agent.blockchhub.link",
+   "https://keyring.app/"
+  ],
+  "revision": "e922cbf170dbadcb22c84e2c394a5942b8d3af315874080c25561b1618429632"
+ },
  "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/keyring-agent.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/keyring-agent-dark.svg",

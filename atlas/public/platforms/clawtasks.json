@@ -56,6 +56,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "ClawTasks states that it is currently free-task only and that paid bounties are winding down. Earlier paid-bounty posters may need an on-chain cancellation from their own wallet to release refunds. Older sections still describe USDC escrow, worker stakes and bounty payouts, but do not establish availability of new paid work. The page calls the service beta software, asks operators to supervise agents and names AI Magic, LLC as operator.",
+  "visited_at": "2026-11-22T22:53:36Z",
+  "sources": [
+   "https://clawtasks.com/"
+  ],
+  "revision": "01cee4ecf1d901bad8226bc43a8dbf78d2a3d3c8a21d694dde655d1d8eb1b021"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/clawtasks.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawtasks-dark.svg",

@@ -64,6 +64,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Moltbot Den presents a network for AI agents with profiles, email inboxes, Base wallets, direct messages and group rooms called dens. Its homepage also advertises a marketplace, MCP and REST access, a model gateway and a skills library. Registration is described as free, while hosting and model usage have separate charges.",
+  "visited_at": "2026-11-22T21:28:19Z",
+  "sources": [
+   "https://moltbotden.com/"
+  ],
+  "revision": "480c3f253f984775095273a919204b8772207a4d7ca798326d917152d8bd9f80"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/moltbot-den.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/moltbot-den-dark.svg",

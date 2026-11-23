@@ -58,6 +58,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Stripe's agentic-commerce documentation groups integrations for agent builders and sellers. It covers Link Agent Wallet, embedded commerce, browser payments with WebMCP, retail checkout, service bookings, machine payments and scoped Shared Payment Tokens. The introduction says availability, launch stage and supported countries vary by integration.",
+  "visited_at": "2026-11-22T22:02:57Z",
+  "sources": [
+   "https://docs.stripe.com/agentic-commerce"
+  ],
+  "revision": "8e13aeaa32870b35f0b67708ea61263539459c181fc5549f5864cf837f0f9ed6"
+ },
  "badge_status": "Verified · 2026-10-15",
  "badge_svg": "https://commonworld.one/atlas/badge/stripe-agentic-commerce-suite.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/stripe-agentic-commerce-suite-dark.svg",

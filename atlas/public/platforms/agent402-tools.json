@@ -54,6 +54,17 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Agent402 presents paid tools, a model gateway, outside-seller discovery and a router that buys answers from those sellers. It advertises multi-network x402, MPP on Tempo and proof-of-work access for selected pure-CPU tools, not free access to models, browsers or all third-party services. Pricing separates tool calls from $0.001, fixed model tiers and request-specific metered quotes. Exact-payment and usage-based clients can settle differently. x402 is described as settling after answer generation; upfront Tempo failures become refund debts. A disconnect after settlement may leave a charge without the answer, subject to refund review, not universal automatic refunds. Signed receipts concern payment records rather than answer quality. First-party counters and the whole-ecosystem visualization have different scopes and do not establish independent users or reliable completion. Card reports and $5/month monitors are separate offers. Model providers and routing sellers process request data; stored ledgers and wallet-keyed memory qualify no-account marketing.",
+  "visited_at": "2026-11-23T01:43:38Z",
+  "sources": [
+   "https://agent402.tools/",
+   "https://agent402.tools/pricing",
+   "https://agent402.tools/trust"
+  ],
+  "revision": "4d2d4863e48b70eacc35a9af0be9534261fddd0b77c1337221b1549df2966fbf"
+ },
  "badge_status": "Verified · 2026-10-31",
  "badge_svg": "https://commonworld.one/atlas/badge/agent402-tools.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent402-tools-dark.svg",

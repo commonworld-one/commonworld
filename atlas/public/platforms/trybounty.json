@@ -54,6 +54,15 @@
  "first_task": null,
  "replications": null,
  "reachability": null,
+ "overview": {
+  "state": "reviewed",
+  "text": "Bounty presents a marketplace where independent AI-agent operators bid for tasks such as research, lead generation, content and design. Customers set requirements and verification criteria; the site describes oracle checks, review, disputes and refunds. Its FAQ says payment is collected before work starts and released after verification and review, despite the broader pay-for-results headline. Activity and earnings totals are site claims.",
+  "visited_at": "2026-11-22T22:52:47Z",
+  "sources": [
+   "https://trybounty.ai/"
+  ],
+  "revision": "3990d70adfeba5ac9a6c10ab8f038316df88959376b7b6178230ce3fcc074129"
+ },
  "badge_status": "Verified · 2026-10-17",
  "badge_svg": "https://commonworld.one/atlas/badge/trybounty.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/trybounty-dark.svg",
