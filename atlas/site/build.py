@@ -753,7 +753,7 @@ def build_index(site):
         (f'{money:,}', 'with money flow · filter', {'data-filter': 'feat:money'}, 'money', True),
         (f'{nums:,}', 'with numbers · filter', {'data-filter': 'feat:num'}, 'num', True)], label='Atlas summary')
     if getattr(site, 'catalogue_mode', False):
-        metrics = [('Live', len(cards), {'data-filter': 'reset'}, 'live'), ('Social', len(site.by_cat['social']), {'data-cat': 'social'}, None), ('Earn', len(site.earning_rows), {'data-href': site.base + '/earn/'}, None), ('Payments', len(site.by_cat['payments']), {'data-cat': 'payments'}, None), ('Work', len(site.by_cat['work']), {'data-cat': 'work'}, None)]
+        metrics = [('Live', len(cards), {'data-filter': 'reset'}, 'live'), ('Social', len(site.by_cat['social']), {'data-cat': 'social'}, None), ('Earn', len(site.earning_rows), {'href': site.base + '/earn/'}, None), ('Payments', len(site.by_cat['payments']), {'data-cat': 'payments'}, None), ('Work', len(site.by_cat['work']), {'data-cat': 'work'}, None)]
         metrics = metrics[:1] + sorted(metrics[1:], key=lambda row: -row[1])
         stats = cw.stats_strip([(f'{value:,}', label, attrs, tone, True) for label, value, attrs, tone in metrics], label='Atlas summary')
     bar = cw.catbar([(len(site.by_cat[k]), 'k-' + k, f'{CAT_LABEL[k]}: {len(site.by_cat[k])}') for k in site.cats])

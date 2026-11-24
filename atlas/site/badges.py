@@ -13,6 +13,8 @@ the DejaVu Sans advance-width tables below (11 px), and every text run carries t
 whatever font the viewer falls back to. Same input -> byte-identical file (build.py rebuilds them on every refresh).
 """
 from xml.sax.saxutils import escape
+from datetime import datetime
+import re
 
 # palette: og_images.py / cw-components.css light tokens
 BG, INK, ACCENT, OLIVE, LIVE, DEAD = '#f4f1ea', '#202522', '#bf472c', '#63705b', '#2f7d4f', '#a24e3d'
@@ -46,12 +48,25 @@ def text_width(s, bold=False, size=SIZE):
 
 def status_of(card):
     """('verified'|'listed'|'closed', right-hand text) for a card dict as build.py holds it (_verified = aware UTC datetime)."""
-    if card.get('_overview') and card.get('status') != 'closed':
-        return 'verified', 'Verified · ' + card['_overview']['visited_at'][:10]
-    if card.get('_limitation') or card.get('current_limitation'):
-        return 'listed', 'Listed'
     if card.get('status') == 'closed':
         return 'closed', 'Closed · history'
+    if card.get('_overview') is not None:
+        from api_v1 import UTC_PATTERN
+        overview = card['_overview']
+        value = overview.get('visited_at')
+        visit = None
+        if isinstance(value, str) and re.fullmatch(UTC_PATTERN, value):
+            try:
+                whole = value[:-1].split('.', 1)[0]
+                visit = datetime.strptime(whole, '%Y-%m-%dT%H:%M' if len(whole) == 16 else '%Y-%m-%dT%H:%M:%S')
+            except ValueError:
+                pass
+        if overview.get('state') == 'reviewed' and visit:
+            return 'verified', 'Verified · ' + visit.strftime('%Y-%m-%d')
+        # Pending or undated overviews never inherit a legacy Verified verdict.
+        return 'listed', 'Listed'
+    if card.get('_limitation') or card.get('current_limitation'):
+        return 'listed', 'Listed'
     dt = card.get('_verified')
     if card.get('verdict') == 'include_verified' and dt:
         return 'verified', 'Verified · ' + dt.strftime('%Y-%m-%d')

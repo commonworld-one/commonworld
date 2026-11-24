@@ -378,6 +378,3 @@
       track('api_use', { method: 'open', item_id: a.pathname });
   });
 })();
-
-// Current earning counter shares the existing broad selection.
-document.querySelectorAll('[data-href]').forEach(function(el){el.addEventListener('click',function(){window.location.href=el.getAttribute('data-href');});});

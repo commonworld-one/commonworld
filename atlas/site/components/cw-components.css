@@ -116,7 +116,8 @@ h2 { font-size:20px; letter-spacing:-.04em; margin:0; }
 /* ---------- stats strip ---------- */
 .cw-stats { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin:18px 0 2px; }
 .cw-stat { background:var(--paper); padding:13px 14px; border:0; text-align:left; color:var(--ink); border-radius:0; }
-button.cw-stat:hover { background:var(--soft); }
+a.cw-stat { text-decoration:none; }
+button.cw-stat:hover, a.cw-stat:hover { background:var(--soft); }
 .cw-stat b { display:block; font-size:20px; letter-spacing:-.05em; line-height:1.3; }
 .cw-stat span { display:block; color:var(--muted); font-size:10px; margin-top:4px; }
 .cw-stat.active, .cw-stat[aria-pressed="true"] { background:var(--soft); box-shadow:inset 0 -2px 0 var(--accent); }

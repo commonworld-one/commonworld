@@ -222,7 +222,8 @@ def render_html(site, c, b):
         paragraphs = [' '.join(sentences[i:i+2]) for i in range(0, len(sentences), 2)]
     description_html = ''.join('<p class="cw-lead">' + e(text) + '</p>' for text in paragraphs)
     tags = b.cw.tag_chips(c['_tags'], lambda t: b.tag_href(site, t), limit=99)
-    identity = '<dl class="facts"><div><dt>Permanent ID</dt><dd><code>' + e(c['slug']) + '</code> · <a href="' + compat + '">JSON</a></dd></div><div><dt>Type</dt><dd>' + e(b.TYPE_LABEL.get(c['entity_type'], c['entity_type'])) + '</dd></div><div><dt>Status</dt><dd>Live · Verified</dd></div></dl>'
+    current_status = 'Draft · not verified' if pending else 'Live · Verified'
+    identity = '<dl class="facts"><div><dt>Permanent ID</dt><dd><code>' + e(c['slug']) + '</code> · <a href="' + compat + '">JSON</a></dd></div><div><dt>Type</dt><dd>' + e(b.TYPE_LABEL.get(c['entity_type'], c['entity_type'])) + '</dd></div><div><dt>Status</dt><dd>' + current_status + '</dd></div></dl>'
     related = [x for x in site.by_cat[c['category']] if x['slug'] != c['slug'] and x.get('_overview')][:6]
     related_html = ('<section class="related"><div class="sec-head"><h2>More in ' + e(b.CAT_LABEL[c['category']]) + '</h2></div><div class="cw-grid">' + ''.join(b.card_html(site, x) for x in related) + '</div></section>') if related else ''
     correction = '<aside class="correction"><h2>Something wrong or out of date?</h2><p><a href="' + e(site.cfg['site']['corrections_url']) + '" rel="nofollow noopener">Report a correction</a> with a source showing the right information.</p></aside>'
@@ -244,7 +245,7 @@ def render_html(site, c, b):
         ld=ld, lastmod=date_obj, noindex=pending,
         alt_json=site.abs(compat), alt_md=c['_url'] + 'index.md',
         og=b.og_generic(site, c['slug'], c['name'], r['text'],
-            [('Live · Verified', 'olive')], kicker=b.CAT_LABEL[c['category']].upper(),
+            [(current_status, 'olive')], kicker=b.CAT_LABEL[c['category']].upper(),
             alt=c['name'] + ': dated overview in Commonworld Atlas',
             foot=('Overview visit ' + b.fmt_date(date_obj)) if date_obj else 'Overview date not established'))
 

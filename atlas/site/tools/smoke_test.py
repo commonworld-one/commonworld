@@ -150,6 +150,14 @@ with sync_playwright() as p:
     pg.click('.cw-announce-x'); pg.reload()
     check('announcement dismissal persists for configured ID', not pg.is_visible('.cw-announce'))
 
+    if CATALOGUE:
+        earn_tile = pg.locator('.cw-stats a.cw-stat[href="/atlas/earn/"]')
+        check('Earn counter is a native internal link, not a DOM redirect',
+              earn_tile.count() == 1 and 'Earn' in earn_tile.inner_text() and pg.locator('[data-href]').count() == 0)
+        earn_tile.focus(); pg.keyboard.press('Enter'); pg.wait_for_url('**/atlas/earn/')
+        check('Earn counter keyboard navigation opens the earning list', pg.locator('.earning-current').count() == 1)
+        pg.goto(B + '/atlas/')
+
     # catalog: /atlas/ is page 1 of the list (50 cards + pager); search, filters, sort and counters run on the whole Atlas
     v, a, good = pg.evaluate(ADS_OK)
     check(f'page 1 shows {v} cards (of {N_ALL}), {a} native ads after every 12', v == N_PAGE1 and good)
