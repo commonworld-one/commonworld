@@ -1,165 +1,143 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "paylobster",
  "name": "PayLobster",
  "url": "https://commonworld.one/atlas/platforms/paylobster/",
  "json_url": "https://commonworld.one/atlas/platforms/paylobster.json",
- "website": "https://www.paylobster.com/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "closed",
- "summary": "Former payments layer for AI agents on Base: USDC escrow between agents, onchain reputation and credit scoring, x402 paid calls and spending mandates, through an SDK, CLI and MCP tools. The site no longer serves the service (checked 2026-10-22).",
- "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-22T19:52:00Z",
- "last_checked": "2026-10-22T19:52:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/paylobster/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "recorded",
-   "value": "smart_contract",
-   "label": "The operator says a smart contract holds the funds",
-   "source_url": "https://www.paylobster.com/",
-   "quote": "escrow, reputation, and credit scoring — on-chain",
-   "basis": "operator_says"
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/paylobster.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/paylobster-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://www.paylobster.com/ is the official site (page title \"PayLobster — The Financial OS for AI Agents\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.paylobster.com/",
-   "quote": "PayLobster — The Financial OS for AI Agents",
-   "observed_at": "2026-10-17T00:23:00Z",
-   "methods": [
-    "web_fetch https://www.paylobster.com/ (HTTP 200, page text; title \"PayLobster — The Financial OS for AI Agents\")",
-    "curl -sL https://www.paylobster.com/ from the sandbox: no response at 00:15 and 00:19 UTC (HTTP 503 seen once in the 2026-10-17 discovery pass)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "The site no longer serves the service: www.paylobster.com presents a TLS certificate that expired on 2026-05-05, and both www.paylobster.com and paylobster.com answer HTTP 503 with the Vercel page \"The deployment is currently unavailable\" (DEPLOYMENT_PAUSED).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://paylobster.com/",
-   "quote": "The deployment is currently unavailable DEPLOYMENT_PAUSED",
-   "observed_at": "2026-10-22T19:52:00Z",
-   "methods": [
-    "curl -sS https://www.paylobster.com/ (TLS certificate expired: Let's Encrypt R12, notAfter May 5 21:41:41 2026 GMT)",
-    "curl -skL https://www.paylobster.com/ and curl -sL https://paylobster.com/ (HTTP 503, Vercel page \"The deployment is currently unavailable\", DEPLOYMENT_PAUSED)",
-    "openssl s_client -connect www.paylobster.com:443 -servername www.paylobster.com | openssl x509 -noout -dates"
-   ],
-   "outcome": "contradicted",
-   "history": [
+ "closed_recorded_at": "2026-10-22T19:52:00Z",
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 347,
+   "name": "PayLobster",
+   "slug": "paylobster",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//www[.]paylobster[.]com/",
+   "description_en": "Former payments layer for AI agents on Base: USDC escrow between agents, onchain reputation and credit scoring, x402 paid calls and spending mandates, through an SDK, CLI and MCP tools. The site no longer serves the service (checked 2026-10-22).",
+   "claims": [
     {
+     "kind": "canonical_url",
+     "statement": "https[:]//www[.]paylobster[.]com/ is the official site (page title \"PayLobster — The Financial OS for AI Agents\").",
      "value": null,
      "unit": null,
      "window": null,
-     "statement": "Home page serves real content (HTTP 200 via web_fetch).",
-     "quote": "PayLobster — The Financial OS for AI Agents",
-     "source_url": "https://www.paylobster.com/",
-     "observed_at": "2026-10-17T00:23:00Z",
      "basis": "direct_observation",
-     "outcome": "supported",
-     "superseded_at": "2026-10-22T19:52:00Z",
-     "reason": "Recheck 2026-10-22: the 2026-10-17 observation came from web_fetch, which can serve an indexed copy of a page; from the sandbox the site did not answer then either, and now both hosts fail."
+     "source_url": "https[:]//www[.]paylobster[.]com/",
+     "quote": "PayLobster — The Financial OS for AI Agents",
+     "observed_at": "2026-10-17T00:23:00Z",
+     "methods": [
+      "web_fetch https[:]//www[.]paylobster[.]com/ (HTTP 200, page text; title \"PayLobster — The Financial OS for AI Agents\")",
+      "curl -sL https[:]//www[.]paylobster[.]com/ from the sandbox: no response at 00:15 and 00:19 UTC (HTTP 503 seen once in the 2026-10-17 discovery pass)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "The site no longer serves the service: www[.]paylobster[.]com presents a TLS certificate that expired on 2026-05-05, and both www[.]paylobster[.]com and paylobster[.]com answer HTTP 503 with the Vercel page \"The deployment is currently unavailable\" (DEPLOYMENT_PAUSED).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//paylobster[.]com/",
+     "quote": "The deployment is currently unavailable DEPLOYMENT_PAUSED",
+     "observed_at": "2026-10-22T19:52:00Z",
+     "methods": [
+      "curl -sS https[:]//www[.]paylobster[.]com/ (TLS certificate expired: Let's Encrypt R12, notAfter May 5 21:41:41 2026 GMT)",
+      "curl -skL https[:]//www[.]paylobster[.]com/ and curl -sL https[:]//paylobster[.]com/ (HTTP 503, Vercel page \"The deployment is currently unavailable\", DEPLOYMENT_PAUSED)",
+      "openssl s_client -connect www[.]paylobster[.]com:443 -servername www[.]paylobster[.]com | openssl x509 -noout -dates"
+     ],
+     "outcome": "contradicted",
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "Home page serves real content (HTTP 200 via web_fetch).",
+       "quote": "PayLobster — The Financial OS for AI Agents",
+       "source_url": "https[:]//www[.]paylobster[.]com/",
+       "observed_at": "2026-10-17T00:23:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-22T19:52:00Z",
+       "reason": "Recheck 2026-10-22: the 2026-10-17 observation came from web_fetch, which can serve an indexed copy of a page; from the sandbox the site did not answer then either, and now both hosts fail."
+      }
+     ]
+    },
+    {
+     "kind": "description",
+     "statement": "Operator's own description of PayLobster.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//www[.]paylobster[.]com/",
+     "quote": "PayLobster adds escrow, reputation, and credit scoring — on-chain.",
+     "observed_at": "2026-10-17T00:23:00Z",
+     "methods": [
+      "web_fetch https[:]//www[.]paylobster[.]com/ (HTTP 200, page text; title \"PayLobster — The Financial OS for AI Agents\")",
+      "curl -sL https[:]//www[.]paylobster[.]com/ from the sandbox: no response at 00:15 and 00:19 UTC (HTTP 503 seen once in the 2026-10-17 discovery pass)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest dated sign of life from the operator: the npm SDK package pay-lobster was last modified on 2026-02-25 (CLI @paylobster/cli on 2026-02-17).",
+     "value": "2026-02-25",
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//registry[.]npmjs[.]org/pay-lobster",
+     "quote": "\"dist-tags\":{\"latest\":\"4.8.0\"} ... \"modified\": 2026-02-25",
+     "observed_at": "2026-10-22T19:52:00Z",
+     "methods": [
+      "curl https[:]//registry[.]npmjs[.]org/pay-lobster (time[.]modified 2026-02-25, latest 4.8.0)",
+      "curl https[:]//registry[.]npmjs[.]org/@paylobster%2Fcli (time[.]modified 2026-02-17, latest 4.6.1)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "No shutdown statement found; closed on two signals per the protocol: the site fails by two methods (expired TLS certificate on www, HTTP 503 DEPLOYMENT_PAUSED on both hosts) and there has been no operator activity for more than 90 days (npm SDK last modified 2026-02-25; the GitHub account and repository linked from the site and the npm package answer 404; the X account @PayLobster has posted only about an unrelated meme coin since 2026-03-18).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "inference",
+     "source_url": "https[:]//x[.]com/PayLobster/status/2034290534051610880",
+     "quote": "DBD47 LIVE DRILL BABY DRILL",
+     "observed_at": "2026-10-22T19:52:00Z",
+     "methods": [
+      "FxTwitter API https[:]//api[.]fxtwitter[.]com/2/profile/paylobster/statuses (newest posts 2026-03-14 to 2026-03-18 UTC; profile name now \"drill baby drill\")",
+      "GitHub API https[:]//api[.]github[.]com/users/paylobster and https[:]//api[.]github[.]com/repos/itsGustav/Pay-Lobster (404 Not Found)",
+      "npm registry as in recent_activity",
+      "site checks as in site_reachable"
+     ],
+     "outcome": "supported"
     }
-   ]
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of PayLobster.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.paylobster.com/",
-   "quote": "PayLobster adds escrow, reputation, and credit scoring — on-chain.",
-   "observed_at": "2026-10-17T00:23:00Z",
-   "methods": [
-    "web_fetch https://www.paylobster.com/ (HTTP 200, page text; title \"PayLobster — The Financial OS for AI Agents\")",
-    "curl -sL https://www.paylobster.com/ from the sandbox: no response at 00:15 and 00:19 UTC (HTTP 503 seen once in the 2026-10-17 discovery pass)"
    ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest dated sign of life from the operator: the npm SDK package pay-lobster was last modified on 2026-02-25 (CLI @paylobster/cli on 2026-02-17).",
-   "value": "2026-02-25",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://registry.npmjs.org/pay-lobster",
-   "quote": "\"dist-tags\":{\"latest\":\"4.8.0\"} ... \"modified\": 2026-02-25",
-   "observed_at": "2026-10-22T19:52:00Z",
-   "methods": [
-    "curl https://registry.npmjs.org/pay-lobster (time.modified 2026-02-25, latest 4.8.0)",
-    "curl https://registry.npmjs.org/@paylobster%2Fcli (time.modified 2026-02-17, latest 4.6.1)"
+   "legacy_diffs": [],
+   "notes": "Reachability varies by network path: web_fetch got the page, sandbox curl did not. Discovered via the ClawSites directory (clawsites[.]com) on 2026-10-17; ClawSites text was not used as evidence, every claim comes from the operator's own pages. 2026-10-22 recheck: www[.]paylobster[.]com has a TLS certificate expired since 2026-05-05 and both hosts answer Vercel HTTP 503 DEPLOYMENT_PAUSED; npm SDK untouched since 2026-02-25, GitHub 404, X account repurposed to a meme coin; closed per protocol step 6 (two signals). Re-open only after a new check if the site serves the service again.",
+   "category": "payments",
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "closed",
+   "status_history": [
+    {
+     "at": "2026-10-22T19:52:00Z",
+     "from": "live",
+     "to": "closed",
+     "by": "hark (human review, atlas/PROTOCOL[.]md step 6)",
+     "reason": "site fails by two methods (expired TLS certificate, HTTP 503 DEPLOYMENT_PAUSED) and no operator activity for 90+ days (npm SDK last modified 2026-02-25; GitHub 404; X account repurposed since 2026-03-18)"
+    }
    ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "No shutdown statement found; closed on two signals per the protocol: the site fails by two methods (expired TLS certificate on www, HTTP 503 DEPLOYMENT_PAUSED on both hosts) and there has been no operator activity for more than 90 days (npm SDK last modified 2026-02-25; the GitHub account and repository linked from the site and the npm package answer 404; the X account @PayLobster has posted only about an unrelated meme coin since 2026-03-18).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://x.com/PayLobster/status/2034290534051610880",
-   "quote": "DBD47 LIVE DRILL BABY DRILL",
-   "observed_at": "2026-10-22T19:52:00Z",
-   "methods": [
-    "FxTwitter API https://api.fxtwitter.com/2/profile/paylobster/statuses (newest posts 2026-03-14 to 2026-03-18 UTC; profile name now \"drill baby drill\")",
-    "GitHub API https://api.github.com/users/paylobster and https://api.github.com/repos/itsGustav/Pay-Lobster (404 Not Found)",
-    "npm registry as in recent_activity",
-    "site checks as in site_reachable"
-   ],
-   "outcome": "supported"
+   "last_observation_at": "2026-10-22T19:52:00Z",
+   "capture": null
   }
- ],
- "qa_status": "not_sampled"
+ },
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

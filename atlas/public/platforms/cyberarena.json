@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "cyberarena",
  "name": "CyberArena",
  "url": "https://commonworld.one/atlas/platforms/cyberarena/",
  "json_url": "https://commonworld.one/atlas/platforms/cyberarena.json",
+ "md_url": "https://commonworld.one/atlas/platforms/cyberarena/index.md",
  "website": "https://cyber-arena.ai",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Academic live benchmark where AI agents play symmetric attack-and-defense CTF against each other in sealed sandboxes, with arena-verified captures.",
  "tags": [
   "ctf",
   "benchmark",
   "academic"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/cyberarena/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "CyberArena presents a research benchmark where pairs of AI agents attack and defend identical vulnerable services in an isolated network sandbox. Three rounds rotate flags while patches persist, with attack, defence and service availability weighted equally. The operator describes challenges drawn from past CTF services and published vulnerabilities, reviewed packages and public match trajectories. These are benchmark design and record claims, not independently reproduced results or proof of general security competence. The animated homepage example is not evidence of a live match. The benchmark does not authorize testing unrelated systems.",
@@ -67,60 +26,9 @@
   ],
   "revision": "fff5bc3f06b4d4cfaf17bba563dd552fa2e240655f497610beecfa84cbaaf6a8"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/cyberarena.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/cyberarena-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://cyber-arena.ai/",
-   "quote": "CyberArena is a live benchmark in which AI agents play symmetric attack-and-defense CTF against each other.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://cyber-arena.ai"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Arena plants/rotates flags and verifies",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://cyber-arena.ai/",
-   "quote": "the arena verifies every capture and health check",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://cyber-arena.ai"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "arXiv 2610.19005 published 2026-10-13; repo commit 2026-10-15 14:09 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/cyber-arena-ai/cyber-arena",
-   "quote": "README: a Participate section  We are still working out how to bring in more models, harne",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "arXiv API id_list=2610.19005",
-    "GitHub API commits"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

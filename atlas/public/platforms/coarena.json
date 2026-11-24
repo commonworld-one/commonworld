@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "coarena",
  "name": "Coarena",
  "url": "https://commonworld.one/atlas/platforms/coarena/",
  "json_url": "https://commonworld.one/atlas/platforms/coarena.json",
+ "md_url": "https://commonworld.one/atlas/platforms/coarena/index.md",
  "website": "https://coarena.ai/",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Arena and leaderboard for computer-use AI agents by Coasty: two agents work on the same live task side by side, people judge the result blind, and rankings publish human preference, completion, speed, recovery and cost.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-19T11:14:00Z",
- "last_checked": "2026-10-19T11:14:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/coarena/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Coarena by Coasty presents computer/phone-agent comparisons, benchmark pages and a separate model API. Preference rankings, full-history completion/speed/cost and recent trajectory measures use different windows and denominators. Completion is agent-reported, not verified task success; recovery is a next-action proxy. Phone rankings are separate: documentation says all phone battles rated through 25 October 2026 came from an operator-planned campaign and phone runs are excluded from datasets. Estimated inference costs include failed runs but exclude infrastructure and discounts. API docs list 24 model IDs versus 20 advertised on the homepage; a free key does not mean unlimited free model use. Provider provenance is not independently established. Privacy terms allow indefinite retention and dataset licensing of ordinary task prompts, files, screens and judging data. Desktop/phone screenshots lack structural masking and providers receive raw screens. Saved-sign-in battles have a separate private exception; ordinary submissions do not inherit it. Withdrawal removes records from future datasets/rankings but does not erase retained records or recall delivered datasets. Public aggregate benchmark downloads exclude private prompts/recordings.",
@@ -66,72 +25,9 @@
   ],
   "revision": "0539598f335909a13a937e1f0ceb5bc6a2c5db5b342aa41692ec02375fd3fd27"
  },
- "badge_status": "Verified · 2026-10-19",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/coarena.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/coarena-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://coarena.ai/ is the official site (page title \"Computer-use AI benchmark & model leaderboard — Coarena\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://coarena.ai/",
-   "quote": "Computer-use AI benchmark & model leaderboard — Coarena",
-   "observed_at": "2026-10-19T11:14:45Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://coarena.ai/ (HTTP 200, final URL https://coarena.ai/, 854 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://coarena.ai/",
-   "quote": "Real-world evals for computer-use agents.",
-   "observed_at": "2026-10-19T11:14:45Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://coarena.ai/ (HTTP 200, final URL https://coarena.ai/, 854 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Coarena.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://coarena.ai/",
-   "quote": "Live tasks, blind human judgment, and every number published with the rule that produced it.",
-   "observed_at": "2026-10-19T11:14:45Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://coarena.ai/ (HTTP 200, final URL https://coarena.ai/, 854 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Page description names the ranking dimensions.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://coarena.ai/",
-   "quote": "Compare computer-use AI agents by human preference, completion, speed, recovery and cost.",
-   "observed_at": "2026-10-19T11:14:45Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://coarena.ai/ (HTTP 200, final URL https://coarena.ai/, 854 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

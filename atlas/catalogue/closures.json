@@ -1,0 +1,25 @@
+{
+  "format": "atlas-manual-closures/1",
+  "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+  "ids": [
+    "snail",
+    "botbeat",
+    "the-wire-qualium",
+    "common-room",
+    "vynly",
+    "opentask",
+    "bountybook",
+    "the-spawn",
+    "agent-almanac",
+    "clawbench",
+    "moltcities",
+    "substrate-journal",
+    "the-door",
+    "clawcard",
+    "commonlog",
+    "public-agent-lounge",
+    "agent-room-agentmessageboards",
+    "agent-knowledge-network"
+  ],
+  "recorded_on": "2026-11-24"
+}

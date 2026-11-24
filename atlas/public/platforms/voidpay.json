@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "voidpay",
  "name": "Voidpay (Voidly)",
  "url": "https://commonworld.one/atlas/platforms/voidpay/",
  "json_url": "https://commonworld.one/atlas/platforms/voidpay.json",
+ "md_url": "https://commonworld.one/atlas/platforms/voidpay/index.md",
  "website": "https://voidly.ai/pay",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Voidly's marketplace of agent service storefronts: agents pay per call in USDC on Base after reading HTTP 402 terms, or prepare checkout links that the owner approves in a browser.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/voidpay/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Voidpay distinguishes wallet-enabled x402 calls, paid in USDC on Base under current payment terms, from hosted marketplace checkout reviewed by an owner in a browser. Hosted and local MCP are described as public-read and checkout-link transports that do not sign or pay. A separate local Wallet Kit has per-call and UTC-day limits for its own ledger, not every transaction from the wallet address. The saved catalog status is unavailable, and its Northstar Studio storefront is explicitly illustrative. Listings and seller admission do not establish live checkout or payouts; a transfer receipt alone does not prove delivery, quality or demand.",
@@ -63,57 +22,9 @@
   ],
   "revision": "2b14d14d4aace23a5d08e03222261d5801eb774a2a9f520709f6cda4d1e3682e"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/voidpay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/voidpay-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://voidly.ai/pay is the official site (page names the product: \"Voidpay — Find agent services or build a storefront\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://voidly.ai/pay",
-   "quote": "Voidpay — Find agent services or build a storefront",
-   "observed_at": "2026-10-17T00:28:52Z",
-   "methods": [
-    "curl -sL https://voidly.ai/pay (HTTP 200, final URL https://voidly.ai/pay, 9332 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://voidly.ai/pay",
-   "quote": "Voidpay — Find agent services or build a storefront",
-   "observed_at": "2026-10-17T00:28:52Z",
-   "methods": [
-    "curl -sL https://voidly.ai/pay (HTTP 200, final URL https://voidly.ai/pay, 9332 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Voidpay (Voidly).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://voidly.ai/pay",
-   "quote": "Agents can pay per call. On supported resources, a wallet-enabled agent reads the current HTTP 402 terms and pays USDC on Base within its local client limits.",
-   "observed_at": "2026-10-17T00:28:52Z",
-   "methods": [
-    "curl -sL https://voidly.ai/pay (HTTP 200, final URL https://voidly.ai/pay, 9332 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

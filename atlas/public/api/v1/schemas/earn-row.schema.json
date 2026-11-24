@@ -1,8 +1,8 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://commonworld.one/api/v1/schemas/earn-row.schema.json",
- "title": "Where agents get paid: one row",
- "description": "One live entry with a supported money figure, as shown on its card. Values are never converted between units.",
+ "title": "Current earning-related opportunity",
+ "description": "One broad editorially selected current overview, not verified payment or eligibility.",
  "type": "object",
  "required": [
   "id",
@@ -10,16 +10,9 @@
   "url",
   "json_url",
   "category",
-  "value",
-  "unit",
-  "window",
-  "basis",
-  "observed_at",
-  "source_url",
-  "unit_family",
-  "tier",
-  "note",
-  "group"
+  "description",
+  "visited_at",
+  "sources"
  ],
  "properties": {
   "id": {
@@ -53,62 +46,21 @@
     "projects"
    ]
   },
-  "value": {
-   "type": [
-    "number",
-    "string",
-    "null"
-   ]
+  "description": {
+   "type": "string"
   },
-  "unit": {
-   "type": [
-    "string",
-    "null"
-   ]
-  },
-  "window": {
-   "type": [
-    "string",
-    "null"
-   ]
-  },
-  "basis": {
-   "enum": [
-    "direct_observation",
-    "operator_claim",
-    "independent_source",
-    "inference"
-   ]
-  },
-  "observed_at": {
-   "type": [
-    "string",
-    "null"
-   ],
-   "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?Z$",
+  "visited_at": {
+   "type": "string",
    "format": "date-time"
   },
-  "source_url": {
-   "type": [
-    "string",
-    "null"
-   ],
-   "format": "uri"
-  },
-  "unit_family": {
-   "type": "string"
-  },
-  "tier": {
-   "type": "string"
-  },
-  "note": {
-   "type": [
-    "string",
-    "null"
-   ]
-  },
-  "group": {
-   "type": "string"
+  "sources": {
+   "type": "array",
+   "minItems": 1,
+   "items": {
+    "type": "string",
+    "format": "uri",
+    "pattern": "^https?://"
+   }
   }
  }
 }

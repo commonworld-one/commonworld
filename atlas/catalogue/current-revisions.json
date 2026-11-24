@@ -1,0 +1,27 @@
+{
+  "format": "commonworld-atlas-current-revisions/1",
+  "cards": {
+    "meta-muse": {
+      "state": "reviewed",
+      "text": "Muse presents a Meta personal agent for goals and tasks, including shopping, email and connected apps. Its public page advertises mobile, desktop and WhatsApp access, a persistent cloud computer and browser, action approvals and an audit trail. Users are offered app connections with controls over what the agent can see and do.",
+      "visited_at": "2026-11-24T22:00:49Z",
+      "sources": [
+        "https://muse.ai/"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "523dc84c29836740cd3b6599f429f2c552c7b40855af7017ab264985622cbddf",
+        "source_url": "https://muse.ai/",
+        "captured_at": "2026-11-24T22:00:48Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      },
+      "check": {
+        "by": "atlas-independent-automated-correspondence-reviewer",
+        "checked_at": "2026-11-24T22:03:17Z",
+        "revision": "52e53be4bac7512a6b7a454f35cdb9561eb62f5abe0229e7f64653418af283f2",
+        "scope": "Automated correspondence review of public source text, exact final hero image pixels/hash and content digest. Visit and capture timestamps are preparer-observed, not independently measured. No sign-in or functional test."
+      }
+    }
+  }
+}

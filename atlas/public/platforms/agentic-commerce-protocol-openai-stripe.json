@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentic-commerce-protocol-openai-stripe",
  "name": "ACP + OpenAI Instant Checkout",
  "url": "https://commonworld.one/atlas/platforms/agentic-commerce-protocol-openai-stripe/",
  "json_url": "https://commonworld.one/atlas/platforms/agentic-commerce-protocol-openai-stripe.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentic-commerce-protocol-openai-stripe/index.md",
  "website": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "protocol",
  "status": "live",
- "summary": "Open specification (maintained by OpenAI and Stripe) for buyers, their AI agents and merchants to complete purchases; homepage agenticcommerce.dev.",
  "tags": [
   "protocol",
   "merchant-side",
   "stripe"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentic-commerce-protocol-openai-stripe/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agentic Commerce Protocol is a beta interaction model and open standard for purchases between buyers, their AI agents and businesses, maintained by OpenAI and Stripe. Its public repository provides the specification, documentation, examples, a changelog and contribution guidance under Apache 2.0. It is distinct from Virtuals' Agent Commerce Protocol.",
@@ -67,84 +26,9 @@
   ],
   "revision": "a7acbbe0ef071fbefb6c4db2ccdd38c7d4b2e32820a45c2ac9bc1e9523ed44e4"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agentic-commerce-protocol-openai-stripe.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentic-commerce-protocol-openai-stripe-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "GitHub spec repo; homepage agenticcommerce.dev",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.github.com/repos/agentic-commerce-protocol/agentic-commerce-protocol",
-   "quote": "\"homepage\":\"https://agenticcommerce.dev\"",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "GitHub API"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Repo live, not archived, 1,574 stars",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol",
-   "quote": "The specification is currently maintained by OpenAI and Stripe.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl repo page (200)",
-    "GitHub API"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Open standard connecting buyers, agents and businesses",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://api.github.com/repos/agentic-commerce-protocol/agentic-commerce-protocol",
-   "quote": "an interaction model and open standard for connecting buyers, their AI agents, and businesses to complete purchases seamlessly",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last push 2026-07-18 04:51 UTC (~3 months quiet)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.github.com/repos/agentic-commerce-protocol/agentic-commerce-protocol",
-   "quote": "pushed_at 2026-07-18",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "description",
-   "statement": "Shopify help confirms ChatGPT is now discovery-focused referrer (checkout on merchant site), consistent with Instant Checkout wind-down",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://help.shopify.com/en/manual/online-sales-channels/agentic-storefronts",
-   "quote": "ChatGPT acts as a discovery-focused referrer platform for customers to find your products.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

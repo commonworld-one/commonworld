@@ -1,71 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "a2a-registry-a2aregistry-org",
  "name": "A2A Registry (a2aregistry.org)",
  "url": "https://commonworld.one/atlas/platforms/a2a-registry-a2aregistry-org/",
  "json_url": "https://commonworld.one/atlas/platforms/a2a-registry-a2aregistry-org.json",
+ "md_url": "https://commonworld.one/atlas/platforms/a2a-registry-a2aregistry-org/index.md",
  "website": "https://a2aregistry.org",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Register of independently operated A2A agents with observed reachability, conformance and task-verified evidence from periodic sweeps.",
  "tags": [
   "a2a",
   "registry",
   "liveness"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 568,
-  "unit": "agents listed (557 reachable)",
-  "window": "sweep 2026-10-15 18:55 UTC",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T20:29:00Z",
-  "source_url": "https://a2aregistry.org/"
- },
- "verified_at": "2026-10-15T20:29:00Z",
- "last_checked": "2026-10-15T20:29:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/a2a-registry-a2aregistry-org/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "A2A Registry at a2aregistry.org presents agent listings with protocol, uptime, evidence and last-checked fields. Its interface separates reachability, conformance and task-verified labels, displays a dated sweep and states that evidence is observed rather than endorsed. Category and state filters support discovery of listed providers. Those observations retain the registry's methods and times rather than establishing a fresh independent check here, separate operators or universal task capability. Reachable, conformant and task-verified are distinct claims, not interchangeable safety guarantees.",
@@ -75,128 +26,9 @@
   ],
   "revision": "b329d592ab3036c8c70e8cfdca7b4a4f830d01043222fac26fbcf07c8c499480"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/a2a-registry-a2aregistry-org.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/a2a-registry-a2aregistry-org-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage served with full list",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://a2aregistry.org/",
-   "quote": "A2A REGISTRY · 566 agents · 556 reachable · sweep 2026-10-15 14:45 UTC",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://a2aregistry.org"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Evidence-based register",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://a2aregistry.org/",
-   "quote": "Register of independently operated A2A agents. Evidence is observed, not endorsed.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://a2aregistry.org"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Listed / reachable agents",
-   "value": 568,
-   "unit": "agents listed (557 reachable)",
-   "window": "sweep 2026-10-15 18:55 UTC",
-   "basis": "operator_claim",
-   "source_url": "https://a2aregistry.org/",
-   "quote": "568 agents · 557 reachable",
-   "observed_at": "2026-10-15T20:29:25.377Z",
-   "methods": [
-    "curl -sL https://a2aregistry.org"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 566,
-     "unit": "agents listed (556 reachable)",
-     "window": "sweep 2026-10-15 14:45 UTC",
-     "statement": "Listed / reachable agents",
-     "quote": "566 agents · 556 reachable",
-     "source_url": "https://a2aregistry.org/",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-b)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:a2a-registry-a2aregistry-org:metric:1",
-    "evidence_attempt_ids": [
-     "qa-agent-b-003"
-    ],
-    "finding": "Current A2A Registry page shows 568 listed and 557 reachable, not 566/556."
-   },
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Sweep at 2026-10-15 18:55 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://a2aregistry.org/",
-   "quote": "sweep 2026-10-15 18:55 UTC",
-   "observed_at": "2026-10-15T20:29:25.377Z",
-   "methods": [
-    "curl -sL https://a2aregistry.org"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "Sweep at 2026-10-15 14:45 UTC",
-     "quote": "sweep 2026-10-15 14:45 UTC",
-     "source_url": "https://a2aregistry.org/",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "direct_observation",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-b)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:a2a-registry-a2aregistry-org:recent_activity:2",
-    "evidence_attempt_ids": [
-     "qa-agent-b-003"
-    ],
-    "finding": "Current page says sweep at 2026-10-15 18:55 UTC, later than the pinned 14:45 UTC observation."
-   },
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

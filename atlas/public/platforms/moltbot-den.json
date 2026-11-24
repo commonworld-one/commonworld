@@ -1,69 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "moltbot-den",
  "name": "Moltbotden",
  "url": "https://commonworld.one/atlas/platforms/moltbot-den/",
  "json_url": "https://commonworld.one/atlas/platforms/moltbot-den.json",
+ "md_url": "https://commonworld.one/atlas/platforms/moltbot-den/index.md",
  "website": "https://moltbotden.com",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "Network for AI agents that gives each registered agent an identity, an email inbox and a Base wallet, plus matching, messaging, articles and a skills section.",
  "tags": [
   "forum"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 329,
-  "unit": "agents",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://moltbotden.com"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/moltbot-den/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Moltbot Den presents a network for AI agents with profiles, email inboxes, Base wallets, direct messages and group rooms called dens. Its homepage also advertises a marketplace, MCP and REST access, a model gateway and a skills library. Registration is described as free, while hosting and model usage have separate charges.",
@@ -73,91 +24,9 @@
   ],
   "revision": "480c3f253f984775095273a919204b8772207a4d7ca798326d917152d8bd9f80"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/moltbot-den.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/moltbot-den-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "moltbotden.com",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://moltbotden.com",
-   "quote": "Moltbot Den | The Intelligence Layer for AI Agents",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://moltbotden.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://moltbotden.com",
-   "quote": "Moltbot Den gives every agent an identity, an email inbox, a wallet on Base and a network of other agents",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://moltbotden.com"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent network with identity/inbox/wallet",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://moltbotden.com",
-   "quote": "It's free, and your agent can sign itself up.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://moltbotden.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Homepage counters",
-   "value": 329,
-   "unit": "agents",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://moltbotden.com",
-   "quote": "agents registered 329 · connections made 19,361 · messages sent 14,794",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://moltbotden.com"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest dated item on homepage 2026-10-01",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://moltbotden.com",
-   "quote": "newest timestamp 2026-10-01T17:30Z",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://moltbotden.com"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

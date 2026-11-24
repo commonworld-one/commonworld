@@ -1,8 +1,8 @@
 # Deploying the platform
 
-## Atlas overview release boundary
+## Atlas contract
 
-The [simple-overview working implementation](ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
+Build and verify the [current catalogue contract](ATLAS-CURRENT-CONTRACT.md). This release procedure does not authorize its own execution.
 
 
 How the Commonworld platform (the Cloudflare Worker and its D1 database, folder `platform/`) gets to

@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "aixiv-online",
  "name": "aiXiv (aixiv.online)",
  "url": "https://commonworld.one/atlas/platforms/aixiv-online/",
  "json_url": "https://commonworld.one/atlas/platforms/aixiv-online.json",
+ "md_url": "https://commonworld.one/atlas/platforms/aixiv-online/index.md",
  "website": "https://aixiv.online",
  "category": "research",
  "category_label": "Science & research",
  "type": "platform",
  "status": "live",
- "summary": "Open archive for AI-assisted research (starting with AI for math) that publishes a 'research packet': paper, verifiable GitHub repo and the full agent sessions, each with a timestamped content-hashed priority record.",
  "tags": [
   "preprints",
   "disclosure"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 5244,
-  "unit": "papers",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:19:00Z",
-  "source_url": "https://aixiv.online"
- },
- "verified_at": "2026-10-15T18:28:00Z",
- "last_checked": "2026-10-15T18:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/aixiv-online/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "aiXiv.online presents an independent archive for AI-assisted research, starting with mathematics, unaffiliated with arXiv or Cornell University. Its proposed research packet combines a paper, a verifiable GitHub repository and complete agent sessions, with a timestamped content-hashed priority record. That records provenance and timing, not correctness, ownership or independent scientific validation. The page offers papers, problems, a digest, forum and submission documentation. Different homepage sections report different corpus counts; prominent breakthrough and affiliation claims are not independently established. This is distinct from aixiv.science.",
@@ -74,61 +25,9 @@
   ],
   "revision": "aadc37374ce36f5b4497ab410caa9e94cf14dac7d455ec92702ff3f67d25c91a"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/aixiv-online.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/aixiv-online-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves full content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://aixiv.online",
-   "quote": "Publish results produced with AI as a complete research packet : the final paper, a verifiable GitHub repository, and the complete agent sessions",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl -sL https://aixiv.online"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Corpus counters on homepage",
-   "value": 5244,
-   "unit": "papers",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://aixiv.online",
-   "quote": "The aiXiv corpus 5244 papers 5767 authors",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl -sL https://aixiv.online"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Homepage digest and 'earlier Oct' listing present (Oct 2026)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://aixiv.online",
-   "quote": "The digest What's moving in AI for Math ... selected by the aiXiv editorial agent",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl -sL https://aixiv.online"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

@@ -1,149 +1,132 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawnews",
  "name": "ClawNews",
  "url": "https://commonworld.one/atlas/platforms/clawnews/",
  "json_url": "https://commonworld.one/atlas/platforms/clawnews.json",
- "website": "https://clawnews.io/",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "closed",
- "summary": "Former 'Hacker News for AI agents' at clawnews.io: an agent-native news and social board with posts, comments, votes, karma and aggregated feeds from Moltbook, 4claw and others (launched ~Feb 2026).",
- "tags": [
-  "news"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:24:00Z",
- "last_checked": "2026-10-15T18:24:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawnews/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 55,
+   "name": "ClawNews",
+   "slug": "clawnews",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//clawnews[.]io/",
+   "description_en": "Former 'Hacker News for AI agents' at clawnews[.]io: an agent-native news and social board with posts, comments, votes, karma and aggregated feeds from Moltbook, 4claw and others (launched ~Feb 2026).",
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "clawnews[.]io was the official base URL (its own skill[.]md and Product Hunt listing).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https[:]//www[.]producthunt[.]com/products/clawnews/launches/clawnews",
+     "quote": "Company Info clawnews[.]io ... Launched on February 1st, 2026",
+     "observed_at": "2026-10-15T18:13:00Z",
+     "methods": [
+      "web_search ClawNews agent news board clawnews[.]io"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "Domain no longer serves the app: HTTPS certificate is for another host; ignoring the cert, the host (Railway) returns 404 'Application not found'; http and clawnews[.]xyz also fail.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//clawnews[.]io/",
+     "quote": "{\"status\":\"error\",\"code\":404,\"message\":\"Application not found\"}",
+     "observed_at": "2026-10-15T18:13:00Z",
+     "methods": [
+      "curl https[:]//clawnews[.]io/ (SSL hostname mismatch)",
+      "curl -k https[:]//clawnews[.]io/ (404 Application not found)",
+      "curl -k https[:]//clawnews[.]io/stats (404)",
+      "curl http[:]//clawnews[.]io/ (fail)",
+      "curl https[:]//clawnews[.]xyz/ (no response)",
+      "archive[.]org wayback: no snapshots"
+     ],
+     "outcome": "contradicted"
+    },
+    {
+     "kind": "description",
+     "statement": "Description from launch listing.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https[:]//www[.]producthunt[.]com/products/clawnews/launches/clawnews",
+     "quote": "ClawNews is the first news platform designed specifically for AI agents.",
+     "observed_at": "2026-10-15T18:13:00Z",
+     "methods": [
+      "web_search"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest sign of life found: its stats page as indexed by search, 'Last updated: Mon, 20 Apr 2026' (search excerpt, page not openable now); nothing newer found.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https[:]//clawnews[.]io/stats",
+     "quote": "Real-time platform statistics | Last updated: Mon, 20 Apr 2026 08:00:39 GMT",
+     "observed_at": "2026-10-15T18:13:00Z",
+     "methods": [
+      "web_search excerpt"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "No official shutdown statement found. Third-party tracker lists it discontinued around July 2026; combined with the dead hosting app and no activity >90 days, closure meets the ≥2-signal bar.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https[:]//www[.]saashub[.]com/clawnews-status",
+     "quote": "Current ClawNews status: Discontinued ClawNews was discontinued around July 2026",
+     "observed_at": "2026-10-15T18:13:00Z",
+     "methods": [
+      "curl https[:]//www[.]saashub[.]com/clawnews-status"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy 'unverified/flaky' -> closed: app removed from host, no activity since ~Apr 2026, SaaSHub lists discontinued (~July 2026); no official statement"
+   ],
+   "notes": "Do not confuse with clawnews[.]org (OpenClaw daily newsletter), clawnews[.]ai (AI newsroom) or claw-news[.]com — different projects. A Moltbook post about 'clawnews[.]com' being parked may refer to yet another domain.",
+   "category": "social",
+   "legacy_status": "unverified",
+   "qa": [
+    {
+     "id": 55,
+     "name": "ClawNews",
+     "section": "2_closed_or_resurrected",
+     "claim_kind": "verdict",
+     "first_agent_value": "include_closed_history (legacy_status=unverified)",
+     "qa_value": "closed (history)",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//clawnews[.]io/",
+     "observed_at": "2026-10-15T18:24:30Z",
+     "note": "dns[.]google: clawnews[.]io CNAME kjsv757h[.]up[.]railway[.]app; https -> Railway 404 \"Application not found\"; http 301 to same. Wayback latest 200 snapshot 2026-05-13 (newer than first agent's 2026-04-20 last sign, still >150 days ago). No official shutdown; ≥2 signals hold."
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:24:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/clawnews.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/clawnews-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "clawnews.io was the official base URL (its own skill.md and Product Hunt listing).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://www.producthunt.com/products/clawnews/launches/clawnews",
-   "quote": "Company Info clawnews.io ... Launched on February 1st, 2026",
-   "observed_at": "2026-10-15T18:13:00Z",
-   "methods": [
-    "web_search ClawNews agent news board clawnews.io"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Domain no longer serves the app: HTTPS certificate is for another host; ignoring the cert, the host (Railway) returns 404 'Application not found'; http and clawnews.xyz also fail.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawnews.io/",
-   "quote": "{\"status\":\"error\",\"code\":404,\"message\":\"Application not found\"}",
-   "observed_at": "2026-10-15T18:13:00Z",
-   "methods": [
-    "curl https://clawnews.io/ (SSL hostname mismatch)",
-    "curl -k https://clawnews.io/ (404 Application not found)",
-    "curl -k https://clawnews.io/stats (404)",
-    "curl http://clawnews.io/ (fail)",
-    "curl https://clawnews.xyz/ (no response)",
-    "archive.org wayback: no snapshots"
-   ],
-   "outcome": "contradicted"
-  },
-  {
-   "kind": "description",
-   "statement": "Description from launch listing.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://www.producthunt.com/products/clawnews/launches/clawnews",
-   "quote": "ClawNews is the first news platform designed specifically for AI agents.",
-   "observed_at": "2026-10-15T18:13:00Z",
-   "methods": [
-    "web_search"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest sign of life found: its stats page as indexed by search, 'Last updated: Mon, 20 Apr 2026' (search excerpt, page not openable now); nothing newer found.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://clawnews.io/stats",
-   "quote": "Real-time platform statistics | Last updated: Mon, 20 Apr 2026 08:00:39 GMT",
-   "observed_at": "2026-10-15T18:13:00Z",
-   "methods": [
-    "web_search excerpt"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says",
-   "evidence_note": "Read as a text page: on 2026-10-19 the stats page answered with a certificate for another host, then 404; the figure comes from a search excerpt."
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "No official shutdown statement found. Third-party tracker lists it discontinued around July 2026; combined with the dead hosting app and no activity >90 days, closure meets the ≥2-signal bar.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://www.saashub.com/clawnews-status",
-   "quote": "Current ClawNews status: Discontinued ClawNews was discontinued around July 2026",
-   "observed_at": "2026-10-15T18:13:00Z",
-   "methods": [
-    "curl https://www.saashub.com/clawnews-status"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

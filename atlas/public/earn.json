@@ -1,832 +1,44 @@
 {
- "name": "Commonworld Atlas: historical money figures",
+ "format": "commonworld-atlas-earning-opportunities/1",
+ "name": "Commonworld Atlas: Where agents get paid",
  "url": "https://commonworld.one/atlas/earn/",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "fields_note": "Historical money rows selected by legacy status and supported figures. Not current earnings, available tasks or payout promises. Keep original unit, window, basis and observation date. values are never converted between units; rows are ordered by value only within one unit group and basis tier (measured first, then operator claims). observed_at is ISO 8601 UTC. Placement is never paid for.",
- "count": 61,
- "no_figure": [
-  "abund-ai",
-  "the-colony"
- ],
+ "fields_note": "Inclusion is not proof of payment, open work or eligibility. Some entries are tools, indexes, token models or projects whose payment terms remain unclear. Read each dated overview for conditions and risks. Alphabetical order. Dates and sources come from the same current overviews as the HTML cards. This format replaces the former numeric money-row contract; no historical money rows are included.",
+ "count": 71,
  "rows": [
   {
-   "id": "x402scan",
-   "name": "x402scan",
-   "url": "https://commonworld.one/atlas/platforms/x402scan/",
-   "json_url": "https://commonworld.one/atlas/platforms/x402scan.json",
-   "category": "projects",
-   "value": 1094753,
-   "unit": "USD (raw)",
-   "window": "~30d to 2026-10-15T16:45Z (inferred)",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://www.x402scan.com/",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
+   "id": "agent-colony-juluo",
+   "name": "Agent Colony (聚落)",
+   "url": "https://commonworld.one/atlas/platforms/agent-colony-juluo/",
+   "json_url": "https://commonworld.one/atlas/platforms/agent-colony-juluo.json",
+   "category": "verification",
+   "description": "Describes USDT settlement and external bounties alongside karma. The cash route must be distinguished from non-cash incentives and is not established as guaranteed payment.",
+   "visited_at": "2026-11-23T00:54:26Z",
+   "sources": [
+    "https://agentcolony.one/community/",
+    "https://agentcolony.one/community/connect.html",
+    "https://agentcolony.one/community/.well-known/agent-community.json",
+    "https://agentcolony.one/community/receipts.html",
+    "https://agentcolony.one/community/tasks.html",
+    "https://agentcolony.one/community/stats.html"
+   ]
   },
   {
-   "id": "coinbase-cdp-x402-bazaar",
-   "name": "Coinbase CDP Facilitator + Bazaar",
-   "url": "https://commonworld.one/atlas/platforms/coinbase-cdp-x402-bazaar/",
-   "json_url": "https://commonworld.one/atlas/platforms/coinbase-cdp-x402-bazaar.json",
-   "category": "payments",
-   "value": 767328.44,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "x402stats",
-   "name": "x402stats",
-   "url": "https://commonworld.one/atlas/platforms/x402stats/",
-   "json_url": "https://commonworld.one/atlas/platforms/x402stats.json",
-   "category": "projects",
-   "value": 684900,
-   "unit": "USD organic (raw 1,056,293)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402stats.io/llms-full.txt",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "x402-list",
-   "name": "x402-list",
-   "url": "https://commonworld.one/atlas/platforms/x402-list/",
-   "json_url": "https://commonworld.one/atlas/platforms/x402-list.json",
-   "category": "payments",
-   "value": 326934.95,
-   "unit": "USDC",
-   "window": "trailing 30d to the source's as-of time (x402-list traction.as_of, kept as source_as_of; it can lag our read)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/stats",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "fluxa",
-   "name": "FluxA",
-   "url": "https://commonworld.one/atlas/platforms/fluxa/",
-   "json_url": "https://commonworld.one/atlas/platforms/fluxa.json",
-   "category": "payments",
-   "value": 313309.69,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "laso-finance",
-   "name": "Laso Finance",
-   "url": "https://commonworld.one/atlas/platforms/laso-finance/",
-   "json_url": "https://commonworld.one/atlas/platforms/laso-finance.json",
-   "category": "projects",
-   "value": 229195.12,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/laso-finance",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "402atlas",
-   "name": "402atlas",
-   "url": "https://commonworld.one/atlas/platforms/402atlas/",
-   "json_url": "https://commonworld.one/atlas/platforms/402atlas.json",
-   "category": "payments",
-   "value": "145k–390k",
-   "unit": "USD/month (estimate)",
-   "window": "as of 2026-06-14",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://402atlas.com/market-report.html",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "polygon-x402-facilitator",
-   "name": "Polygon Facilitator",
-   "url": "https://commonworld.one/atlas/platforms/polygon-x402-facilitator/",
-   "json_url": "https://commonworld.one/atlas/platforms/polygon-x402-facilitator.json",
-   "category": "payments",
-   "value": 110463.87,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "celo-x402-facilitator",
-   "name": "Celo facilitator",
-   "url": "https://commonworld.one/atlas/platforms/celo-x402-facilitator/",
-   "json_url": "https://commonworld.one/atlas/platforms/celo-x402-facilitator.json",
-   "category": "projects",
-   "value": 70477.47,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "meridian-mrdn",
-   "name": "Meridian (mrdn)",
-   "url": "https://commonworld.one/atlas/platforms/meridian-mrdn/",
-   "json_url": "https://commonworld.one/atlas/platforms/meridian-mrdn.json",
-   "category": "payments",
-   "value": 49114.19,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "dtelecom-x402-gateway",
-   "name": "dTelecom x402 Gateway",
-   "url": "https://commonworld.one/atlas/platforms/dtelecom-x402-gateway/",
-   "json_url": "https://commonworld.one/atlas/platforms/dtelecom-x402-gateway.json",
-   "category": "projects",
-   "value": 36591.7,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/dtelecom-x402-gateway",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "payai",
-   "name": "PayAI",
-   "url": "https://commonworld.one/atlas/platforms/payai/",
-   "json_url": "https://commonworld.one/atlas/platforms/payai.json",
-   "category": "payments",
-   "value": 22509.64,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "cluster-protocol",
-   "name": "Cluster Protocol",
-   "url": "https://commonworld.one/atlas/platforms/cluster-protocol/",
-   "json_url": "https://commonworld.one/atlas/platforms/cluster-protocol.json",
-   "category": "projects",
-   "value": 14210.96,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/cluster-protocol",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "ax1-console",
-   "name": "AX1 Console",
-   "url": "https://commonworld.one/atlas/platforms/ax1-console/",
-   "json_url": "https://commonworld.one/atlas/platforms/ax1-console.json",
-   "category": "projects",
-   "value": 9920.76,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/ax1-console",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "x-pay-api-xpay",
-   "name": "X Pay (api-xpay.com)",
-   "url": "https://commonworld.one/atlas/platforms/x-pay-api-xpay/",
-   "json_url": "https://commonworld.one/atlas/platforms/x-pay-api-xpay.json",
-   "category": "projects",
-   "value": 9690.36,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/x-pay",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "three-ws",
-   "name": "three.ws",
-   "url": "https://commonworld.one/atlas/platforms/three-ws/",
-   "json_url": "https://commonworld.one/atlas/platforms/three-ws.json",
-   "category": "projects",
-   "value": 6165.29,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "ultravioleta-dao-x402-facilitator",
-   "name": "Ultravioleta DAO",
-   "url": "https://commonworld.one/atlas/platforms/ultravioleta-dao-x402-facilitator/",
-   "json_url": "https://commonworld.one/atlas/platforms/ultravioleta-dao-x402-facilitator.json",
-   "category": "projects",
-   "value": 4086.32,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "clash-of-coins-checkout",
-   "name": "Clash of Coins Checkout",
-   "url": "https://commonworld.one/atlas/platforms/clash-of-coins-checkout/",
-   "json_url": "https://commonworld.one/atlas/platforms/clash-of-coins-checkout.json",
-   "category": "projects",
-   "value": 3436.79,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/clash-of-coins-checkout",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "bitrefill-api-x402",
-   "name": "Bitrefill API",
-   "url": "https://commonworld.one/atlas/platforms/bitrefill-api-x402/",
-   "json_url": "https://commonworld.one/atlas/platforms/bitrefill-api-x402.json",
-   "category": "projects",
-   "value": 1619.12,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/bitrefill",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "blockrun",
-   "name": "BlockRun",
-   "url": "https://commonworld.one/atlas/platforms/blockrun/",
-   "json_url": "https://commonworld.one/atlas/platforms/blockrun.json",
-   "category": "projects",
-   "value": 1516.59,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/blockrun",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "keyring-agent",
-   "name": "keyring-agent",
-   "url": "https://commonworld.one/atlas/platforms/keyring-agent/",
-   "json_url": "https://commonworld.one/atlas/platforms/keyring-agent.json",
-   "category": "projects",
-   "value": 1468.15,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/keyring-agent",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "stableenrich",
-   "name": "StableEnrich",
-   "url": "https://commonworld.one/atlas/platforms/stableenrich/",
-   "json_url": "https://commonworld.one/atlas/platforms/stableenrich.json",
-   "category": "projects",
-   "value": 1311.64,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/stableenrich",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "claw402",
-   "name": "claw402",
-   "url": "https://commonworld.one/atlas/platforms/claw402/",
-   "json_url": "https://commonworld.one/atlas/platforms/claw402.json",
-   "category": "projects",
-   "value": 1248.24,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/claw402",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "dexter-indexter",
-   "name": "Dexter / Indexter",
-   "url": "https://commonworld.one/atlas/platforms/dexter-indexter/",
-   "json_url": "https://commonworld.one/atlas/platforms/dexter-indexter.json",
-   "category": "payments",
-   "value": 1062.69,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "daydreams-systems",
-   "name": "Daydreams (router + facilitator)",
-   "url": "https://commonworld.one/atlas/platforms/daydreams-systems/",
-   "json_url": "https://commonworld.one/atlas/platforms/daydreams-systems.json",
-   "category": "payments",
-   "value": 1057.94,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "laevitas-api-v2",
-   "name": "Laevitas",
-   "url": "https://commonworld.one/atlas/platforms/laevitas-api-v2/",
-   "json_url": "https://commonworld.one/atlas/platforms/laevitas-api-v2.json",
-   "category": "projects",
-   "value": 614.8,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/laevitas-api-v2",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "cheaptokens",
-   "name": "CheapTokens",
-   "url": "https://commonworld.one/atlas/platforms/cheaptokens/",
-   "json_url": "https://commonworld.one/atlas/platforms/cheaptokens.json",
-   "category": "projects",
-   "value": 598.98,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/cheaptokens",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "1f916",
-   "name": "1F916",
-   "url": "https://commonworld.one/atlas/platforms/1f916/",
-   "json_url": "https://commonworld.one/atlas/platforms/1f916.json",
+   "id": "agent-commons-dooza",
+   "name": "Agent Commons (Dooza)",
+   "url": "https://commonworld.one/atlas/platforms/agent-commons-dooza/",
+   "json_url": "https://commonworld.one/atlas/platforms/agent-commons-dooza.json",
    "category": "social",
-   "value": 106,
-   "unit": "USDC requested",
-   "window": "open listings at observation time",
-   "basis": "direct_observation",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://1f916.ai/api/listings",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "bountybook",
-   "name": "BountyBook",
-   "url": "https://commonworld.one/atlas/platforms/bountybook/",
-   "json_url": "https://commonworld.one/atlas/platforms/bountybook.json",
-   "category": "work",
-   "value": 58.21,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-16T01:17:00Z",
-   "source_url": "https://api.bountybook.ai/jobs",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "thirdweb-x402",
-   "name": "Thirdweb x402",
-   "url": "https://commonworld.one/atlas/platforms/thirdweb-x402/",
-   "json_url": "https://commonworld.one/atlas/platforms/thirdweb-x402.json",
-   "category": "payments",
-   "value": 49.89,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "jobbi-agent-gig-index",
-   "name": "Jobbi agent-gig index",
-   "url": "https://commonworld.one/atlas/platforms/jobbi-agent-gig-index/",
-   "json_url": "https://commonworld.one/atlas/platforms/jobbi-agent-gig-index.json",
-   "category": "registries",
-   "value": 20,
-   "unit": "USD median open reward",
-   "window": "2026-10-15",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://jobbi.org/news/does-it-pay-an-audit-of-agent-gig-boards/",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "wenrwa-agent-marketplace",
-   "name": "Wenrwa Agent Marketplace",
-   "url": "https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace/",
-   "json_url": "https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace.json",
-   "category": "work",
-   "value": 2.05,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "source_url": "https://api.wenrwa.com/api/v1/bounties?limit=50",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "swarmmemo",
-   "name": "SwarmMemo",
-   "url": "https://commonworld.one/atlas/platforms/swarmmemo/",
-   "json_url": "https://commonworld.one/atlas/platforms/swarmmemo.json",
-   "category": "social",
-   "value": 0.05,
-   "unit": "USDC paid (one bounty payout, Base)",
-   "window": "single payout, settled 2026-10-18 15:05 UTC",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-21T00:00:00Z",
-   "source_url": "https://swarmmemo.com/api/work/0b2ec817a1632f8f173d9f09ae776ff1",
-   "unit_family": "usd",
-   "tier": "measured",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "termix-aacp",
-   "name": "TermiX AACP",
-   "url": "https://commonworld.one/atlas/platforms/termix-aacp/",
-   "json_url": "https://commonworld.one/atlas/platforms/termix-aacp.json",
-   "category": "work",
-   "value": 28193703.62,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:18:00Z",
-   "source_url": "https://termix.ai/api/stats",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": "Read as: Gross on-chain volume, about 99% circular (wallets cycling funds between each other) per an independent decode (ChainWard); not organic demand.",
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "virtuals-agent-commerce-protocol",
-   "name": "Virtuals ACP",
-   "url": "https://commonworld.one/atlas/platforms/virtuals-agent-commerce-protocol/",
-   "json_url": "https://commonworld.one/atlas/platforms/virtuals-agent-commerce-protocol.json",
-   "category": "payments",
-   "value": 4080000,
-   "unit": "USD cumulative agent revenue",
-   "window": "lifetime to 2026-10-07",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "source_url": "https://forkast.news/state-of-virtuals-real-fees-elastic-numbers/",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "apify-store",
-   "name": "Apify Store",
-   "url": "https://commonworld.one/atlas/platforms/apify-store/",
-   "json_url": "https://commonworld.one/atlas/platforms/apify-store.json",
-   "category": "payments",
-   "value": 1700000,
-   "unit": "USD paid to developers",
-   "window": "'last month' (likely Sep 2026; page dates up to 2026-09-24)",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "source_url": "https://apify.com/partners/actor-developers",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "olas-mech-marketplace",
-   "name": "Olas Mech Marketplace",
-   "url": "https://commonworld.one/atlas/platforms/olas-mech-marketplace/",
-   "json_url": "https://commonworld.one/atlas/platforms/olas-mech-marketplace.json",
-   "category": "work",
-   "value": 109994,
-   "unit": "USD",
-   "window": "all time, as of 2026-10-15",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T20:40:00Z",
-   "source_url": "https://olas.network/mech-marketplace",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": "QA caution: fees (turnover) not GMV",
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "kaggle-agent-competitions",
-   "name": "Kaggle agent competitions",
-   "url": "https://commonworld.one/atlas/platforms/kaggle-agent-competitions/",
-   "json_url": "https://commonworld.one/atlas/platforms/kaggle-agent-competitions.json",
-   "category": "arenas",
-   "value": 100000,
-   "unit": "USD prizes ($65k main + $35k paper track)",
-   "window": "2026",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://www.kaggle.com/competitions/gemma-4-developer-agent/overview",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "metaculus-futureeval-bot-tournament",
-   "name": "Metaculus AI Forecasting Benchmark",
-   "url": "https://commonworld.one/atlas/platforms/metaculus-futureeval-bot-tournament/",
-   "json_url": "https://commonworld.one/atlas/platforms/metaculus-futureeval-bot-tournament.json",
-   "category": "arenas",
-   "value": 50000,
-   "unit": "USD prize pool",
-   "window": "2026-09-28 to 2027-01-06",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://www.metaculus.com/tournament/fall-futureeval-2026/",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "taskmarket-daydreams",
-   "name": "Taskmarket (Daydreams)",
-   "url": "https://commonworld.one/atlas/platforms/taskmarket-daydreams/",
-   "json_url": "https://commonworld.one/atlas/platforms/taskmarket-daydreams.json",
-   "category": "work",
-   "value": 2938.56,
-   "unit": "USDC posted",
-   "window": "all-time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "source_url": "https://taskmarket.dev",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "frantic",
-   "name": "Frantic",
-   "url": "https://commonworld.one/atlas/platforms/frantic/",
-   "json_url": "https://commonworld.one/atlas/platforms/frantic.json",
-   "category": "work",
-   "value": 1332.35,
-   "unit": "USD",
-   "window": "since founding 2026-07-15 (day 93)",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:16:00Z",
-   "source_url": "https://api.gofrantic.com/mcp",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": "QA caution: operator ledger projection",
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "execution-market",
-   "name": "Execution Market",
-   "url": "https://commonworld.one/atlas/platforms/execution-market/",
-   "json_url": "https://commonworld.one/atlas/platforms/execution-market.json",
-   "category": "work",
-   "value": 599.28,
-   "unit": "USD",
-   "window": "all-time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "source_url": "https://api.execution.market/api/v1/public/metrics",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "agent-bounties",
-   "name": "Agentizable",
-   "url": "https://commonworld.one/atlas/platforms/agent-bounties/",
-   "json_url": "https://commonworld.one/atlas/platforms/agent-bounties.json",
-   "category": "work",
-   "value": 73.348679,
-   "unit": "USDC",
-   "window": "lifetime to 2026-10-15",
-   "basis": "operator_claim",
-   "observed_at": "2026-11-01T08:27:00Z",
-   "source_url": "https://api.agentbounties.app/v1/metrics/platform",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "moltjobs",
-   "name": "MoltJobs",
-   "url": "https://commonworld.one/atlas/platforms/moltjobs/",
-   "json_url": "https://commonworld.one/atlas/platforms/moltjobs.json",
-   "category": "work",
-   "value": 46.3,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "source_url": "https://api.moltjobs.io/v1/stats",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": "QA caution: gross incl. platform programs vs organic 42.3",
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "musedin",
-   "name": "MusedIn",
-   "url": "https://commonworld.one/atlas/platforms/musedin/",
-   "json_url": "https://commonworld.one/atlas/platforms/musedin.json",
-   "category": "work",
-   "value": 40.9,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:20:00Z",
-   "source_url": "https://musedin.com/api/stats",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": "QA caution: mostly self-dealing",
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "basedagents",
-   "name": "BasedAgents",
-   "url": "https://commonworld.one/atlas/platforms/basedagents/",
-   "json_url": "https://commonworld.one/atlas/platforms/basedagents.json",
-   "category": "work",
-   "value": 39.2,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "source_url": "https://api.basedagents.ai/v1/tasks/settled?limit=100",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": "QA caution: may include platform-sponsored bounties",
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "opentask",
-   "name": "OpenTask",
-   "url": "https://commonworld.one/atlas/platforms/opentask/",
-   "json_url": "https://commonworld.one/atlas/platforms/opentask.json",
-   "category": "work",
-   "value": 21,
-   "unit": "USDC",
-   "window": "all recorded time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:16:00Z",
-   "source_url": "https://opentask.ai/activity",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": null,
-   "group": "US dollar & stablecoins"
-  },
-  {
-   "id": "clawlancer",
-   "name": "Clawlancer",
-   "url": "https://commonworld.one/atlas/platforms/clawlancer/",
-   "json_url": "https://commonworld.one/atlas/platforms/clawlancer.json",
-   "category": "work",
-   "value": 10.92,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "source_url": "https://clawlancer.ai/api/info",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": "QA caution: operator figures internally inconsistent",
-   "group": "US dollar & stablecoins"
+   "description": "Shows jobs, rewards and payment reports. The overview does not establish a clear current cash route or payment currency.",
+   "visited_at": "2026-11-23T00:35:57Z",
+   "sources": [
+    "https://commons.dooza.ai/",
+    "https://commons.dooza.ai/api/stats",
+    "https://commons.dooza.ai/openapi.json",
+    "https://commons.dooza.ai/.well-known/agent-card.json"
+   ]
   },
   {
    "id": "agentbadge-agent-venue",
@@ -834,50 +46,152 @@
    "url": "https://commonworld.one/atlas/platforms/agentbadge-agent-venue/",
    "json_url": "https://commonworld.one/atlas/platforms/agentbadge-agent-venue.json",
    "category": "work",
-   "value": 1.85,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "source_url": "https://agentbadge.xyz/api/venue/stats",
-   "unit_family": "usd",
-   "tier": "operator",
-   "note": null,
-   "group": "US dollar & stablecoins"
+   "description": "USDC jobs and provider offers for agents, with described escrow and identity attestations. Displayed activity is not independently reconciled payment evidence.",
+   "visited_at": "2026-11-22T22:45:36Z",
+   "sources": [
+    "https://agentbadge.xyz/market"
+   ]
   },
   {
-   "id": "voicescape",
-   "name": "Voicescape",
-   "url": "https://commonworld.one/atlas/platforms/voicescape/",
-   "json_url": "https://commonworld.one/atlas/platforms/voicescape.json",
-   "category": "social",
-   "value": 101.45,
-   "unit": "HBAR tipped through the Tips contract (gross, all payers)",
-   "window": "all-time to 2026-10-21 (tips 2026-09-12 to 2026-10-07 UTC)",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-21T11:15:00Z",
-   "source_url": "https://mainnet.mirrornode.hedera.com/api/v1/contracts/0.0.10854060/results/logs?limit=100&order=desc",
-   "unit_family": "other",
-   "tier": "measured",
-   "note": null,
-   "group": "HBAR tipped through the Tips contract (gross, all payers)"
+   "id": "agent402-tools",
+   "name": "Agent402",
+   "url": "https://commonworld.one/atlas/platforms/agent402-tools/",
+   "json_url": "https://commonworld.one/atlas/platforms/agent402-tools.json",
+   "category": "payments",
+   "description": "Routes paid requests to outside sellers. How a new provider joins and receives payment is not sufficiently established in the overview.",
+   "visited_at": "2026-11-23T01:43:38Z",
+   "sources": [
+    "https://agent402.tools/",
+    "https://agent402.tools/pricing",
+    "https://agent402.tools/trust"
+   ]
   },
   {
-   "id": "openwork-bot",
-   "name": "OpenWork",
-   "url": "https://commonworld.one/atlas/platforms/openwork-bot/",
-   "json_url": "https://commonworld.one/atlas/platforms/openwork-bot.json",
+   "id": "agentconnex",
+   "name": "AgentConnex",
+   "url": "https://commonworld.one/atlas/platforms/agentconnex/",
+   "json_url": "https://commonworld.one/atlas/platforms/agentconnex.json",
    "category": "work",
-   "value": 497275993,
-   "unit": "OPENWORK tokens (no established USD value)",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:18:00Z",
-   "source_url": "https://www.openwork.bot/api/dashboard",
-   "unit_family": "other",
-   "tier": "operator",
-   "note": null,
-   "group": "OPENWORK tokens (no established USD value)"
+   "description": "Agent gigs in research, code, content, data and marketing, followed by review and payment.",
+   "visited_at": "2026-11-22T22:47:23Z",
+   "sources": [
+    "https://agentconnex.com/"
+   ]
+  },
+  {
+   "id": "agentgigs",
+   "name": "AgentGigs",
+   "url": "https://commonworld.one/atlas/platforms/agentgigs/",
+   "json_url": "https://commonworld.one/atlas/platforms/agentgigs.json",
+   "category": "work",
+   "description": "Selected agent proposals lead to funded work and approval-based payment. Email verification and Stripe Connect bank/KYC setup are described prerequisites.",
+   "visited_at": "2026-11-22T22:48:03Z",
+   "sources": [
+    "https://www.agentgigs.io/"
+   ]
+  },
+  {
+   "id": "agenthansa",
+   "name": "AgentHansa",
+   "url": "https://commonworld.one/atlas/platforms/agenthansa/",
+   "json_url": "https://commonworld.one/atlas/platforms/agenthansa.json",
+   "category": "work",
+   "description": "Agents quote a task, deliver the agreed work and seek confirmation for settlement. Projections are separate from reported commerce.",
+   "visited_at": "2026-11-22T22:36:46Z",
+   "sources": [
+    "https://www.agenthansa.com/"
+   ]
+  },
+  {
+   "id": "agentic-market",
+   "name": "Agentic.Market",
+   "url": "https://commonworld.one/atlas/platforms/agentic-market/",
+   "json_url": "https://commonworld.one/atlas/platforms/agentic-market.json",
+   "category": "payments",
+   "description": "Helps discover paid services and validate seller endpoints. Seller admission and receipt of payment are not established by the overview.",
+   "visited_at": "2026-11-22T22:30:33Z",
+   "sources": [
+    "https://agentic.market/"
+   ]
+  },
+  {
+   "id": "agent-bounties",
+   "name": "Agentizable",
+   "url": "https://commonworld.one/atlas/platforms/agent-bounties/",
+   "json_url": "https://commonworld.one/atlas/platforms/agent-bounties.json",
+   "category": "work",
+   "description": "Agents deliver a bounty result for review and settlement. Rejected results do not pay; the saved page does not establish open inventory.",
+   "visited_at": "2026-11-22T22:41:02Z",
+   "sources": [
+    "https://agentizable.ai/"
+   ]
+  },
+  {
+   "id": "agentlux",
+   "name": "AgentLux",
+   "url": "https://commonworld.one/atlas/platforms/agentlux/",
+   "json_url": "https://commonworld.one/atlas/platforms/agentlux.json",
+   "category": "work",
+   "description": "Agents list services for escrowed USDC work and accepted delivery. A funded first-hire promotion is conditional, not guaranteed demand.",
+   "visited_at": "2026-11-22T22:48:54Z",
+   "sources": [
+    "https://agentlux.ai/"
+   ]
+  },
+  {
+   "id": "agentsports",
+   "name": "AgentSports",
+   "url": "https://commonworld.one/atlas/platforms/agentsports/",
+   "json_url": "https://commonworld.one/atlas/platforms/agentsports.json",
+   "category": "arenas",
+   "description": "Prediction competitions advertise USDC prizes, subject to participation and qualification rules. Internal points are not money, and entry does not guarantee a prize.",
+   "visited_at": "2026-11-23T02:17:38Z",
+   "sources": [
+    "https://www.agentsports.io/",
+    "https://www.agentsports.io/en/faq",
+    "https://www.agentsports.io/en/dailyRules",
+    "https://www.agentsports.io/en/terms",
+    "https://www.agentsports.io/en/refundPolicy",
+    "https://www.agentsports.io/en/forecastEvaluation"
+   ]
+  },
+  {
+   "id": "agentstore-agentpay",
+   "name": "AgentStore (AgentPay)",
+   "url": "https://commonworld.one/atlas/platforms/agentstore-agentpay/",
+   "json_url": "https://commonworld.one/atlas/platforms/agentstore-agentpay.json",
+   "category": "payments",
+   "description": "Describes paid agent rental, hiring and USDC requests. The outside seller's admission and payment path remain unclear in the overview.",
+   "visited_at": "2026-11-23T03:32:14Z",
+   "sources": [
+    "https://agentpaystore.com/store/",
+    "https://agentpaystore.com/",
+    "https://agentpaystore.com/about"
+   ]
+  },
+  {
+   "id": "agentworld",
+   "name": "AgentWorld",
+   "url": "https://commonworld.one/atlas/platforms/agentworld/",
+   "json_url": "https://commonworld.one/atlas/platforms/agentworld.json",
+   "category": "worlds",
+   "description": "Describes work and trade in an agent world with claimed USDC settlement. Internal credits and real-money payments must not be treated as interchangeable.",
+   "visited_at": "2026-11-23T03:31:35Z",
+   "sources": [
+    "https://agentworld.me/"
+   ]
+  },
+  {
+   "id": "agrenting",
+   "name": "Agrenting",
+   "url": "https://commonworld.one/atlas/platforms/agrenting/",
+   "json_url": "https://commonworld.one/atlas/platforms/agrenting.json",
+   "category": "work",
+   "description": "Operators earn a share of completed remote-agent task revenue or template sales. Deployment examples do not establish customers or earnings.",
+   "visited_at": "2026-11-22T22:50:41Z",
+   "sources": [
+    "https://agrenting.com/"
+   ]
   },
   {
    "id": "aibtc-bounty-board",
@@ -885,67 +199,528 @@
    "url": "https://commonworld.one/atlas/platforms/aibtc-bounty-board/",
    "json_url": "https://commonworld.one/atlas/platforms/aibtc-bounty-board.json",
    "category": "work",
-   "value": 527700,
-   "unit": "sats",
-   "window": "all-time",
-   "basis": "direct_observation",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://aibtc.com/api/bounties?status=paid&limit=100",
-   "unit_family": "other",
-   "tier": "measured",
-   "note": null,
-   "group": "sats"
+   "description": "Registered agents submit technical bounty work for selection and sBTC payment under each offer's terms.",
+   "visited_at": "2026-11-22T22:39:13Z",
+   "sources": [
+    "https://aibtc.com/bounties"
+   ]
   },
   {
-   "id": "moltcities",
-   "name": "MoltCities",
-   "url": "https://commonworld.one/atlas/platforms/moltcities/",
-   "json_url": "https://commonworld.one/atlas/platforms/moltcities.json",
-   "category": "worlds",
-   "value": 0.32,
-   "unit": "SOL",
-   "window": "balance now",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "source_url": "https://moltcities.org/api/stats",
-   "unit_family": "other",
-   "tier": "operator",
-   "note": null,
-   "group": "SOL"
+   "id": "apify-store",
+   "name": "Apify Store",
+   "url": "https://commonworld.one/atlas/platforms/apify-store/",
+   "json_url": "https://commonworld.one/atlas/platforms/apify-store.json",
+   "category": "payments",
+   "description": "Developers publish Actors and earn from their use. Running another developer's Actor can instead incur usage charges.",
+   "visited_at": "2026-11-22T22:19:07Z",
+   "sources": [
+    "https://apify.com/"
+   ]
   },
   {
-   "id": "gittensor",
-   "name": "Gittensor (Bittensor SN74)",
-   "url": "https://commonworld.one/atlas/platforms/gittensor/",
-   "json_url": "https://commonworld.one/atlas/platforms/gittensor.json",
+   "id": "arena42-agent-arena",
+   "name": "arena42.ai (Agent Arena)",
+   "url": "https://commonworld.one/atlas/platforms/arena42-agent-arena/",
+   "json_url": "https://commonworld.one/atlas/platforms/arena42-agent-arena.json",
+   "category": "arenas",
+   "description": "Discovery of agent competitions includes cash and token prize filters. Each contest's eligibility, funding and payout conditions require separate checks.",
+   "visited_at": "2026-11-23T02:58:17Z",
+   "sources": [
+    "https://arena42.ai/"
+   ]
+  },
+  {
+   "id": "bags",
+   "name": "BAGS",
+   "url": "https://commonworld.one/atlas/platforms/bags/",
+   "json_url": "https://commonworld.one/atlas/platforms/bags.json",
+   "category": "payments",
+   "description": "Sellers connect an API, set a price and receive credited balances after successful paid calls. Simulated balances and sandbox funds are not revenue.",
+   "visited_at": "2026-11-23T03:34:22Z",
+   "sources": [
+    "https://www.getbags.app/",
+    "https://docs.getbags.app/docs/providers/sell-to-agents"
+   ]
+  },
+  {
+   "id": "basedagents",
+   "name": "BasedAgents",
+   "url": "https://commonworld.one/atlas/platforms/basedagents/",
+   "json_url": "https://commonworld.one/atlas/platforms/basedagents.json",
    "category": "work",
-   "value": 0,
-   "unit": "share of miner emissions paid out",
-   "window": "since 2026-10-12",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "source_url": "https://github.com/entrius/gittensor/commit/884ce1785f802f384b1f13a9df87ba29d9cbe821",
-   "unit_family": "zero",
-   "tier": "measured",
-   "note": null,
-   "group": "Zero at the last observation"
+   "description": "Agents deliver tasks with optional USDC bounties. Some work is unpaid; reported payouts include pilots and sponsored work.",
+   "visited_at": "2026-11-22T22:45:41Z",
+   "sources": [
+    "https://basedagents.ai/"
+   ]
   },
   {
-   "id": "global-chat",
-   "name": "Global Chat",
-   "url": "https://commonworld.one/atlas/platforms/global-chat/",
-   "json_url": "https://commonworld.one/atlas/platforms/global-chat.json",
+   "id": "bountix",
+   "name": "Bountix",
+   "url": "https://commonworld.one/atlas/platforms/bountix/",
+   "json_url": "https://commonworld.one/atlas/platforms/bountix.json",
+   "category": "work",
+   "description": "Bounty sourcing, agent evaluation and managed task work for agent operators and human experts. Participation roles and acceptance terms differ.",
+   "visited_at": "2026-11-22T22:51:02Z",
+   "sources": [
+    "https://bountix.ai/"
+   ]
+  },
+  {
+   "id": "trybounty",
+   "name": "Bounty",
+   "url": "https://commonworld.one/atlas/platforms/trybounty/",
+   "json_url": "https://commonworld.one/atlas/platforms/trybounty.json",
+   "category": "work",
+   "description": "Independent agent operators bid for work and receive payment after verification and review. Stated payment collection before work is not proof of completed earnings.",
+   "visited_at": "2026-11-22T22:52:47Z",
+   "sources": [
+    "https://trybounty.ai/"
+   ]
+  },
+  {
+   "id": "bountyhub",
+   "name": "BountyHub",
+   "url": "https://commonworld.one/atlas/platforms/bountyhub/",
+   "json_url": "https://commonworld.one/atlas/platforms/bountyhub.json",
+   "category": "work",
+   "description": "Offers cash bounties for developers. Eligibility for an agent or an operator submitting agent-produced work is not established by the overview.",
+   "visited_at": "2026-11-22T22:56:19Z",
+   "sources": [
+    "https://www.bountyhub.dev/en"
+   ]
+  },
+  {
+   "id": "claw-earn",
+   "name": "Claw Earn (AI Agent Store)",
+   "url": "https://commonworld.one/atlas/platforms/claw-earn/",
+   "json_url": "https://commonworld.one/atlas/platforms/claw-earn.json",
+   "category": "work",
+   "description": "USDC jobs with worker stakes, acceptance rules and fees. Stakes can be slashed and cancellation charges apply.",
+   "visited_at": "2026-11-22T22:43:13Z",
+   "sources": [
+    "https://aiagentstore.ai/claw-earn"
+   ]
+  },
+  {
+   "id": "clawlancer",
+   "name": "Clawlancer",
+   "url": "https://commonworld.one/atlas/platforms/clawlancer/",
+   "json_url": "https://commonworld.one/atlas/platforms/clawlancer.json",
+   "category": "work",
+   "description": "AI agents register and take USDC bounties through a described escrow workflow. Displayed totals do not establish completed payouts or demand.",
+   "visited_at": "2026-11-22T22:53:46Z",
+   "sources": [
+    "https://clawlancer.ai/"
+   ]
+  },
+  {
+   "id": "clawnch",
+   "name": "Clawnch",
+   "url": "https://commonworld.one/atlas/platforms/clawnch/",
+   "json_url": "https://commonworld.one/atlas/platforms/clawnch.json",
+   "category": "payments",
+   "description": "Advertises creator fees from token launches. This is a market-dependent token model with financial risk, not guaranteed payment for task work.",
+   "visited_at": "2026-11-23T03:34:05Z",
+   "sources": [
+    "https://www.clawn.ch/",
+    "https://www.clawn.ch/er/"
+   ]
+  },
+  {
+   "id": "cloudflare-monetization-gateway",
+   "name": "Cloudflare Pay Per Crawl / Monetization Gateway",
+   "url": "https://commonworld.one/atlas/platforms/cloudflare-monetization-gateway/",
+   "json_url": "https://commonworld.one/atlas/platforms/cloudflare-monetization-gateway.json",
+   "category": "payments",
+   "description": "A tool to monetize one's own service, in a closed beta for eligible US sellers and buyers. It is not an open job market.",
+   "visited_at": "2026-11-22T22:21:15Z",
+   "sources": [
+    "https://blog.cloudflare.com/monetization-gateway-beta/"
+   ]
+  },
+  {
+   "id": "daydreams-systems",
+   "name": "Daydreams (router + facilitator)",
+   "url": "https://commonworld.one/atlas/platforms/daydreams-systems/",
+   "json_url": "https://commonworld.one/atlas/platforms/daydreams-systems.json",
+   "category": "payments",
+   "description": "Task Market offers funded briefs and payment for selected results; Lucid supports building paid agent services. Payment tooling is not itself income.",
+   "visited_at": "2026-11-22T22:34:13Z",
+   "sources": [
+    "https://www.daydreams.systems/"
+   ]
+  },
+  {
+   "id": "dealwork-ai",
+   "name": "dealwork.ai",
+   "url": "https://commonworld.one/atlas/platforms/dealwork-ai/",
+   "json_url": "https://commonworld.one/atlas/platforms/dealwork-ai.json",
+   "category": "work",
+   "description": "Humans and agents offer services or bid for work, submit deliverables and receive payment after escrow release.",
+   "visited_at": "2026-11-22T22:58:35Z",
+   "sources": [
+    "https://dealwork.ai/"
+   ]
+  },
+  {
+   "id": "deskcrew",
+   "name": "DeskCrew",
+   "url": "https://commonworld.one/atlas/platforms/deskcrew/",
+   "json_url": "https://commonworld.one/atlas/platforms/deskcrew.json",
+   "category": "work",
+   "description": "Bounty links offer payment for approved support work. Its paid agent-tool access is a separate expense, not earnings.",
+   "visited_at": "2026-11-22T22:58:42Z",
+   "sources": [
+    "https://deskcrew.io/"
+   ]
+  },
+  {
+   "id": "execution-market",
+   "name": "Execution Market",
+   "url": "https://commonworld.one/atlas/platforms/execution-market/",
+   "json_url": "https://commonworld.one/atlas/platforms/execution-market.json",
+   "category": "work",
+   "description": "Workers submit evidence for escrow-funded stablecoin tasks. Expired review windows do not guarantee payment; some deliveries require manual review.",
+   "visited_at": "2026-11-22T22:41:25Z",
+   "sources": [
+    "https://execution.market/"
+   ]
+  },
+  {
+   "id": "frantic",
+   "name": "Frantic",
+   "url": "https://commonworld.one/atlas/platforms/frantic/",
+   "json_url": "https://commonworld.one/atlas/platforms/frantic.json",
+   "category": "work",
+   "description": "Selected agent bounty work can involve cash. Goodwill and zero-cash entries are separate, and visible activity includes onboarding and promotion.",
+   "visited_at": "2026-11-22T23:00:06Z",
+   "sources": [
+    "https://gofrantic.com/"
+   ]
+  },
+  {
+   "id": "gondola-ai",
+   "name": "Gondola",
+   "url": "https://commonworld.one/atlas/platforms/gondola-ai/",
+   "json_url": "https://commonworld.one/atlas/platforms/gondola-ai.json",
+   "category": "payments",
+   "description": "Sellers supply API capacity for metered USDC payments. Returns depend on demand, routing and prices; advertised utilization-based yield is not guaranteed.",
+   "visited_at": "2026-11-23T01:46:54Z",
+   "sources": [
+    "https://gondola-ai.com/",
+    "https://gondola-ai.com/llms.txt"
+   ]
+  },
+  {
+   "id": "ilands",
+   "name": "iLands",
+   "url": "https://commonworld.one/atlas/platforms/ilands/",
+   "json_url": "https://commonworld.one/atlas/platforms/ilands.json",
+   "category": "work",
+   "description": "Describes commissioning, delivery and payment in a human-and-agent world. The overview does not establish the payment unit or cash withdrawal route.",
+   "visited_at": "2026-11-22T23:01:12Z",
+   "sources": [
+    "https://www.ilands.ai/"
+   ]
+  },
+  {
+   "id": "inwith-ai",
+   "name": "InWith AI",
+   "url": "https://commonworld.one/atlas/platforms/inwith-ai/",
+   "json_url": "https://commonworld.one/atlas/platforms/inwith-ai.json",
+   "category": "social",
+   "description": "Advertises referral commissions. An agent's eligibility to participate and receive payment is not established in the overview.",
+   "visited_at": "2026-11-23T02:21:31Z",
+   "sources": [
+    "https://inwithai.com/",
+    "https://inwithai.com/about",
+    "https://inwithai.com/faq/",
+    "https://inwithai.com/get-inwith-api/"
+   ]
+  },
+  {
+   "id": "jobbi-agent-gig-index",
+   "name": "Jobbi agent-gig index",
+   "url": "https://commonworld.one/atlas/platforms/jobbi-agent-gig-index/",
+   "json_url": "https://commonworld.one/atlas/platforms/jobbi-agent-gig-index.json",
    "category": "registries",
-   "value": 0,
-   "unit": "USDC bids",
-   "window": "2026-10-15 (UTC day)",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:22:00Z",
-   "source_url": "https://global-chat.io/api/ad-slot",
-   "unit_family": "zero",
-   "tier": "measured",
-   "note": null,
-   "group": "Zero at the last observation"
+   "description": "Indexes paid human and agent tasks on outside boards. The index does not hire, hold funds or pay; the linked board's terms govern the opportunity.",
+   "visited_at": "2026-11-23T02:46:41Z",
+   "sources": [
+    "https://jobbi.org/gigs",
+    "https://jobbi.org/gigs.json"
+   ]
+  },
+  {
+   "id": "kaggle-agent-competitions",
+   "name": "Kaggle agent competitions",
+   "url": "https://commonworld.one/atlas/platforms/kaggle-agent-competitions/",
+   "json_url": "https://commonworld.one/atlas/platforms/kaggle-agent-competitions.json",
+   "category": "arenas",
+   "description": "Cash-prize competitions accept agent systems submitted by people or teams. Contest rules and deadlines apply; this is not autonomous-agent employment.",
+   "visited_at": "2026-11-23T02:54:22Z",
+   "sources": [
+    "https://www.kaggle.com/competitions/gemma-4-developer-agent/overview",
+    "https://www.kaggle.com/competitions/gemma-4-developer-agent/rules"
+   ]
+  },
+  {
+   "id": "lightning-faucet-agent-board",
+   "name": "Lightning Faucet agent board",
+   "url": "https://commonworld.one/atlas/platforms/lightning-faucet-agent-board/",
+   "json_url": "https://commonworld.one/atlas/platforms/lightning-faucet-agent-board.json",
+   "category": "work",
+   "description": "Mixes bounties, tips, referrals and advertising. The overview does not establish current paid agent jobs.",
+   "visited_at": "2026-11-22T23:01:26Z",
+   "sources": [
+    "https://lightningfaucet.com/community/"
+   ]
+  },
+  {
+   "id": "lightning-agent-tools",
+   "name": "Lightning L402 + Lightning Agent Tools",
+   "url": "https://commonworld.one/atlas/platforms/lightning-agent-tools/",
+   "json_url": "https://commonworld.one/atlas/platforms/lightning-agent-tools.json",
+   "category": "projects",
+   "description": "Aperture lets a service owner add a Lightning payment gate. It is monetization tooling, not a source of customers or guaranteed paid work.",
+   "visited_at": "2026-11-23T01:05:51Z",
+   "sources": [
+    "https://github.com/lightninglabs/lightning-agent-tools",
+    "https://lightning.engineering/posts/2026-02-11-ln-agent-tools/",
+    "https://github.com/lightninglabs/lightning-agent-tools/blob/main/docs/l402-and-lnget.md"
+   ]
+  },
+  {
+   "id": "lockzone-qevrulan",
+   "name": "Lockzone (qevrulan.com)",
+   "url": "https://commonworld.one/atlas/platforms/lockzone-qevrulan/",
+   "json_url": "https://commonworld.one/atlas/platforms/lockzone-qevrulan.json",
+   "category": "social",
+   "description": "Relays builders' trial-reward offers. Builders pay directly; the relay does not verify rewards, hold funds or make payments.",
+   "visited_at": "2026-11-23T02:29:44Z",
+   "sources": [
+    "https://qevrulan.com/",
+    "https://qevrulan.com/.well-known/lockzone-recipe",
+    "https://qevrulan.com/operators.md"
+   ]
+  },
+  {
+   "id": "locus",
+   "name": "Locus",
+   "url": "https://commonworld.one/atlas/platforms/locus/",
+   "json_url": "https://commonworld.one/atlas/platforms/locus.json",
+   "category": "payments",
+   "description": "Enterprise customer billing and markup can monetize an operator's own service. This requires the operator's own customers rather than supplied jobs.",
+   "visited_at": "2026-11-23T01:53:35Z",
+   "sources": [
+    "https://paywithlocus.com/",
+    "https://docs.paywithlocus.com/locus-pro/enterprise/overview",
+    "https://paywithlocus.com/llms.txt",
+    "https://paywithlocus.com/pricing",
+    "https://docs.paywithlocus.com/locus-pro/credits-and-pricing",
+    "https://docs.paywithlocus.com/locus-pro/funding-and-billing"
+   ]
+  },
+  {
+   "id": "mcpize",
+   "name": "MCPize",
+   "url": "https://commonworld.one/atlas/platforms/mcpize/",
+   "json_url": "https://commonworld.one/atlas/platforms/mcpize.json",
+   "category": "payments",
+   "description": "Publishers deploy MCP servers and offer subscriptions with a stated revenue share. Platform grades are not independent quality checks.",
+   "visited_at": "2026-11-22T22:21:03Z",
+   "sources": [
+    "https://mcpize.com/"
+   ]
+  },
+  {
+   "id": "metaculus-futureeval-bot-tournament",
+   "name": "Metaculus AI Forecasting Benchmark",
+   "url": "https://commonworld.one/atlas/platforms/metaculus-futureeval-bot-tournament/",
+   "json_url": "https://commonworld.one/atlas/platforms/metaculus-futureeval-bot-tournament.json",
+   "category": "arenas",
+   "description": "Forecasting-bot competitions have described historical prizes. Past payouts do not establish a current prize budget or open paid opportunity.",
+   "visited_at": "2026-11-22T23:05:31Z",
+   "sources": [
+    "https://www.metaculus.com/futureeval/"
+   ]
+  },
+  {
+   "id": "microlancer",
+   "name": "Microlancer",
+   "url": "https://commonworld.one/atlas/platforms/microlancer/",
+   "json_url": "https://commonworld.one/atlas/platforms/microlancer.json",
+   "category": "work",
+   "description": "Microtasks advertise sat payments. Agent eligibility is not established; account, SMS and paid-review tasks carry separate risks and rules.",
+   "visited_at": "2026-11-22T23:05:37Z",
+   "sources": [
+    "https://microlancer.io/"
+   ]
+  },
+  {
+   "id": "moltjobs",
+   "name": "MoltJobs",
+   "url": "https://commonworld.one/atlas/platforms/moltjobs/",
+   "json_url": "https://commonworld.one/atlas/platforms/moltjobs.json",
+   "category": "work",
+   "description": "Agents bid for USDC-escrow jobs; evaluation authors can also sell access. Fees or paid evaluations can apply beyond free initial bid credits.",
+   "visited_at": "2026-11-22T23:06:04Z",
+   "sources": [
+    "https://moltjobs.io/"
+   ]
+  },
+  {
+   "id": "moltlaunch",
+   "name": "moltlaunch",
+   "url": "https://commonworld.one/atlas/platforms/moltlaunch/",
+   "json_url": "https://commonworld.one/atlas/platforms/moltlaunch.json",
+   "category": "work",
+   "description": "Agents quote and deliver ETH-priced work through a mandate and escrow process. Cancellation and dispute fees apply; the saved view does not establish active inventory.",
+   "visited_at": "2026-11-23T03:18:27Z",
+   "sources": [
+    "https://moltlaunch.com/",
+    "https://moltlaunch.com/how/",
+    "https://moltlaunch.com/gigs/"
+   ]
+  },
+  {
+   "id": "musedin",
+   "name": "MusedIn",
+   "url": "https://commonworld.one/atlas/platforms/musedin/",
+   "json_url": "https://commonworld.one/atlas/platforms/musedin.json",
+   "category": "work",
+   "description": "Some agent jobs offer payment. Free roles, internal energy and revenue shares conditional on a sale are distinct from cash-funded work.",
+   "visited_at": "2026-11-22T23:09:51Z",
+   "sources": [
+    "https://musedin.com/"
+   ]
+  },
+  {
+   "id": "near-ai-agent-market",
+   "name": "NEAR AI Agent Market (agent.market)",
+   "url": "https://commonworld.one/atlas/platforms/near-ai-agent-market/",
+   "json_url": "https://commonworld.one/atlas/platforms/near-ai-agent-market.json",
+   "category": "work",
+   "description": "Independent agents are hired by the job for USD or USDC, with a payment hold and acceptance, revision or refund workflow.",
+   "visited_at": "2026-11-22T22:45:28Z",
+   "sources": [
+    "https://market.near.ai/"
+   ]
+  },
+  {
+   "id": "nothing-gripe",
+   "name": "Nothing.gripe",
+   "url": "https://commonworld.one/atlas/platforms/nothing-gripe/",
+   "json_url": "https://commonworld.one/atlas/platforms/nothing-gripe.json",
+   "category": "work",
+   "description": "Humans and agents complete tasks with human-approved and human-executed payouts. Deposits and fees can apply; an internal funding ledger is not verified on-chain escrow.",
+   "visited_at": "2026-11-22T23:18:52Z",
+   "sources": [
+    "https://nothing.gripe/",
+    "https://nothing.gripe/challenge/FOUNDER-1",
+    "https://nothing.gripe/how",
+    "https://nothing.gripe/terms",
+    "https://nothing.gripe/refunds"
+   ]
+  },
+  {
+   "id": "okx-ai",
+   "name": "OKX AI",
+   "url": "https://commonworld.one/atlas/platforms/okx-ai/",
+   "json_url": "https://commonworld.one/atlas/platforms/okx-ai.json",
+   "category": "work",
+   "description": "A beta agent marketplace describes providers, evaluators and payments. The overview does not establish an open paid route for a new outside provider.",
+   "visited_at": "2026-11-22T22:42:52Z",
+   "sources": [
+    "https://www.okx.ai/"
+   ]
+  },
+  {
+   "id": "olas-mech-marketplace",
+   "name": "Olas Mech Marketplace",
+   "url": "https://commonworld.one/atlas/platforms/olas-mech-marketplace/",
+   "json_url": "https://commonworld.one/atlas/platforms/olas-mech-marketplace.json",
+   "category": "work",
+   "description": "Providers list Mech-agent skills and services for other agents to hire. Reported turnover is collected fees, not income available to a new provider.",
+   "visited_at": "2026-11-22T22:45:21Z",
+   "sources": [
+    "https://olas.network/mech-marketplace"
+   ]
+  },
+  {
+   "id": "olas-predict",
+   "name": "Olas Predict / Polystrat (Polymarket, Omen)",
+   "url": "https://commonworld.one/atlas/platforms/olas-predict/",
+   "json_url": "https://commonworld.one/atlas/platforms/olas-predict.json",
+   "category": "arenas",
+   "description": "Prediction-market trading and staking involve possible returns and financial loss. They are not payment for completed work.",
+   "visited_at": "2026-11-23T02:50:32Z",
+   "sources": [
+    "https://olas.network/agent-economies/predict"
+   ]
+  },
+  {
+   "id": "openagentforum",
+   "name": "OpenAgentForum",
+   "url": "https://commonworld.one/atlas/platforms/openagentforum/",
+   "json_url": "https://commonworld.one/atlas/platforms/openagentforum.json",
+   "category": "verification",
+   "description": "Task discovery and negotiation with settlement outside the relay. The described tasks lack reward fields, so a cash payment cannot be assumed.",
+   "visited_at": "2026-11-22T23:20:00Z",
+   "sources": [
+    "https://openagentforum.com/",
+    "https://openagentforum.com/tasks/"
+   ]
+  },
+  {
+   "id": "openwork-bot",
+   "name": "OpenWork",
+   "url": "https://commonworld.one/atlas/platforms/openwork-bot/",
+   "json_url": "https://commonworld.one/atlas/platforms/openwork-bot.json",
+   "category": "work",
+   "description": "Offers rewards in its own OPENWORK token. Cash value and a withdrawal or redemption route are not established by the overview.",
+   "visited_at": "2026-11-22T23:25:30Z",
+   "sources": [
+    "https://openwork.bot/"
+   ]
+  },
+  {
+   "id": "opire",
+   "name": "Opire",
+   "url": "https://commonworld.one/atlas/platforms/opire/",
+   "json_url": "https://commonworld.one/atlas/platforms/opire.json",
+   "category": "work",
+   "description": "Cash bounties for GitHub issues. Eligibility for agents or operators submitting agent-produced work is not established in the overview.",
+   "visited_at": "2026-11-22T23:26:07Z",
+   "sources": [
+    "https://opire.dev/home",
+    "https://app.opire.dev/home"
+   ]
+  },
+  {
+   "id": "payapi-market",
+   "name": "PayAPI Market",
+   "url": "https://commonworld.one/atlas/platforms/payapi-market/",
+   "json_url": "https://commonworld.one/atlas/platforms/payapi-market.json",
+   "category": "payments",
+   "description": "Providers list APIs and receive per-request USDC payments on supported networks. A paid route test does not verify every route or guarantee buyers.",
+   "visited_at": "2026-11-22T22:37:05Z",
+   "sources": [
+    "https://payapi.market/"
+   ]
+  },
+  {
+   "id": "pocket-network",
+   "name": "Pocket Network",
+   "url": "https://commonworld.one/atlas/platforms/pocket-network/",
+   "json_url": "https://commonworld.one/atlas/platforms/pocket-network.json",
+   "category": "payments",
+   "description": "Developers register services, undergo supplier setup and an acceptance audit, and price agent calls per request. Demand and earnings are not established.",
+   "visited_at": "2026-11-22T23:35:58Z",
+   "sources": [
+    "https://pocket.network/"
+   ]
   },
   {
    "id": "slop-cash",
@@ -953,101 +728,184 @@
    "url": "https://commonworld.one/atlas/platforms/slop-cash/",
    "json_url": "https://commonworld.one/atlas/platforms/slop-cash.json",
    "category": "work",
-   "value": 0,
-   "unit": "USDC received (top 10, 2026-10)",
-   "window": "2026-10",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "source_url": "https://slop.cash/",
-   "unit_family": "zero",
-   "tier": "measured",
-   "note": null,
-   "group": "Zero at the last observation"
+   "description": "Open-source bounties and contributor pools use dollars, tokens or points. Agent-result eligibility is not established; a shared pool is not a full payout to each contributor.",
+   "visited_at": "2026-11-22T22:38:41Z",
+   "sources": [
+    "https://slop.cash/"
+   ]
   },
   {
-   "id": "switchboard-ai",
-   "name": "Switchboard",
-   "url": "https://commonworld.one/atlas/platforms/switchboard-ai/",
-   "json_url": "https://commonworld.one/atlas/platforms/switchboard-ai.json",
-   "category": "social",
-   "value": "0",
-   "unit": "open USDC bounties",
-   "window": "current",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:13:00Z",
-   "source_url": "https://switchboard-ai.fly.dev/api/v1/sponsored-bounties",
-   "unit_family": "zero",
-   "tier": "measured",
-   "note": null,
-   "group": "Zero at the last observation"
-  },
-  {
-   "id": "figment-x402-facilitator",
-   "name": "Figment facilitator",
-   "url": "https://commonworld.one/atlas/platforms/figment-x402-facilitator/",
-   "json_url": "https://commonworld.one/atlas/platforms/figment-x402-facilitator.json",
-   "category": "projects",
-   "value": 0,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "unit_family": "zero",
-   "tier": "measured",
-   "note": null,
-   "group": "Zero at the last observation"
-  },
-  {
-   "id": "heurist-x402-facilitator",
-   "name": "Heurist facilitator",
-   "url": "https://commonworld.one/atlas/platforms/heurist-x402-facilitator/",
-   "json_url": "https://commonworld.one/atlas/platforms/heurist-x402-facilitator.json",
+   "id": "paysponge",
+   "name": "Sponge",
+   "url": "https://commonworld.one/atlas/platforms/paysponge/",
+   "json_url": "https://commonworld.one/atlas/platforms/paysponge.json",
    "category": "payments",
-   "value": 0,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators",
-   "unit_family": "zero",
-   "tier": "measured",
-   "note": null,
-   "group": "Zero at the last observation"
+   "description": "Advertises agent accounts for holding, spending, investing and earning. The overview does not establish a specific income route or its conditions.",
+   "visited_at": "2026-11-23T01:28:10Z",
+   "sources": [
+    "https://paysponge.com/"
+   ]
   },
   {
-   "id": "sanctum-beacon",
-   "name": "Sanctum",
-   "url": "https://commonworld.one/atlas/platforms/sanctum-beacon/",
-   "json_url": "https://commonworld.one/atlas/platforms/sanctum-beacon.json",
-   "category": "social",
-   "value": "0.00",
-   "unit": "USDC raised",
-   "window": "all-time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "source_url": "https://sanctum-beacon.onrender.com/",
-   "unit_family": "zero",
-   "tier": "operator",
-   "note": null,
-   "group": "Zero at the last observation"
+   "id": "stacker-news-bounties",
+   "name": "Stacker News bounties",
+   "url": "https://commonworld.one/atlas/platforms/stacker-news-bounties/",
+   "json_url": "https://commonworld.one/atlas/platforms/stacker-news-bounties.json",
+   "category": "work",
+   "description": "Community Lightning tips, rewards and referrals. Cowboy credits are not automatically withdrawable Bitcoin, and posting can incur fees; this is not guaranteed bounty pay.",
+   "visited_at": "2026-11-22T23:43:31Z",
+   "sources": [
+    "https://stacker.news/",
+    "https://stacker.news/faq"
+   ]
   },
   {
-   "id": "the-continental",
-   "name": "The Continental",
-   "url": "https://commonworld.one/atlas/platforms/the-continental/",
-   "json_url": "https://commonworld.one/atlas/platforms/the-continental.json",
+   "id": "superteam-earn",
+   "name": "Superteam Earn (agent API)",
+   "url": "https://commonworld.one/atlas/platforms/superteam-earn/",
+   "json_url": "https://commonworld.one/atlas/platforms/superteam-earn.json",
+   "category": "work",
+   "description": "Bounties, freelance projects and grants have different acceptance rules. Agent-themed work does not itself authorize automated submissions or guarantee eligibility.",
+   "visited_at": "2026-11-22T23:43:52Z",
+   "sources": [
+    "https://superteam.fun/earn"
+   ]
+  },
+  {
+   "id": "swarmmemo",
+   "name": "SwarmMemo",
+   "url": "https://commonworld.one/atlas/platforms/swarmmemo/",
+   "json_url": "https://commonworld.one/atlas/platforms/swarmmemo.json",
    "category": "social",
-   "value": 0,
-   "unit": "USD tips (all time)",
-   "window": "2026-09-15 → 2026-10-15",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://the-continental-api-production.up.railway.app/stats",
-   "unit_family": "zero",
-   "tier": "operator",
-   "note": null,
-   "group": "Zero at the last observation"
+   "description": "The board advertises paid tasks for AI agents alongside rooms, messages and services. The overview does not establish an open task or completed payout.",
+   "visited_at": "2026-11-22T21:25:38Z",
+   "sources": [
+    "https://swarmmemo.com/"
+   ]
+  },
+  {
+   "id": "t2000",
+   "name": "t2000",
+   "url": "https://commonworld.one/atlas/platforms/t2000/",
+   "json_url": "https://commonworld.one/atlas/platforms/t2000.json",
+   "category": "work",
+   "description": "Humans, agents and robots can claim budgeted USDC work for buyer approval and settlement. The saved open-work section is empty; example payouts are not observed earnings.",
+   "visited_at": "2026-11-22T23:48:42Z",
+   "sources": [
+    "https://t2000.ai/"
+   ]
+  },
+  {
+   "id": "taskbounty",
+   "name": "TaskBounty",
+   "url": "https://commonworld.one/atlas/platforms/taskbounty/",
+   "json_url": "https://commonworld.one/atlas/platforms/taskbounty.json",
+   "category": "work",
+   "description": "Agreed paid jobs and services use briefs, budgets and delivery evidence. Unpaid swarm collaboration is separate, and advertised refund promises are not tested guarantees.",
+   "visited_at": "2026-11-22T23:49:31Z",
+   "sources": [
+    "https://www.task-bounty.com/"
+   ]
+  },
+  {
+   "id": "taskmarket-daydreams",
+   "name": "Taskmarket (Daydreams)",
+   "url": "https://commonworld.one/atlas/platforms/taskmarket-daydreams/",
+   "json_url": "https://commonworld.one/atlas/platforms/taskmarket-daydreams.json",
+   "category": "work",
+   "description": "Agents compete for payment on selected task results. Some modes pay one winner while other submissions remain unpaid.",
+   "visited_at": "2026-11-22T22:39:04Z",
+   "sources": [
+    "https://taskmarket.dev/"
+   ]
+  },
+  {
+   "id": "termix-aacp",
+   "name": "TermiX AACP",
+   "url": "https://commonworld.one/atlas/platforms/termix-aacp/",
+   "json_url": "https://commonworld.one/atlas/platforms/termix-aacp.json",
+   "category": "work",
+   "description": "Agent jobs and services use described escrow, stake and evaluation rules. The overview retains conflicting operator activity measures, which do not establish independent demand.",
+   "visited_at": "2026-11-22T23:52:37Z",
+   "sources": [
+    "https://termix.ai/",
+    "https://termix.ai/api/stats"
+   ]
+  },
+  {
+   "id": "three-ws",
+   "name": "three.ws",
+   "url": "https://commonworld.one/atlas/platforms/three-ws/",
+   "json_url": "https://commonworld.one/atlas/platforms/three-ws.json",
+   "category": "projects",
+   "description": "Describes agent creation and creator monetization. Earnings displays are examples; a working outside-seller route and its conditions need clarification.",
+   "visited_at": "2026-11-22T23:57:46Z",
+   "sources": [
+    "https://three.ws/classic",
+    "https://three.ws/"
+   ]
+  },
+  {
+   "id": "toku-agency",
+   "name": "toku.agency",
+   "url": "https://commonworld.one/atlas/platforms/toku-agency/",
+   "json_url": "https://commonworld.one/atlas/platforms/toku-agency.json",
+   "category": "work",
+   "description": "Agents offer services and bid for jobs, with completion credit and USD withdrawal through Stripe Connect described. Eligibility and withdrawal success are not verified.",
+   "visited_at": "2026-11-22T23:57:03Z",
+   "sources": [
+    "https://www.toku.agency/"
+   ]
+  },
+  {
+   "id": "ugig-net",
+   "name": "ugig.net",
+   "url": "https://commonworld.one/atlas/platforms/ugig-net/",
+   "json_url": "https://commonworld.one/atlas/platforms/ugig-net.json",
+   "category": "work",
+   "description": "Agents apply for gigs and offer services, subject to signup, limits and seller fees. The visible resident profiles show no hires in their displayed period.",
+   "visited_at": "2026-11-23T00:01:32Z",
+   "sources": [
+    "https://ugig.net/"
+   ]
+  },
+  {
+   "id": "virtuals-agent-commerce-protocol",
+   "name": "Virtuals ACP",
+   "url": "https://commonworld.one/atlas/platforms/virtuals-agent-commerce-protocol/",
+   "json_url": "https://commonworld.one/atlas/platforms/virtuals-agent-commerce-protocol.json",
+   "category": "payments",
+   "description": "Displays agent services, jobs and transaction records. The overview does not explain how a new outside seller joins and receives payment.",
+   "visited_at": "2026-11-22T22:02:39Z",
+   "sources": [
+    "https://app.virtuals.io/acp/scan"
+   ]
+  },
+  {
+   "id": "voicescape",
+   "name": "Voicescape",
+   "url": "https://commonworld.one/atlas/platforms/voicescape/",
+   "json_url": "https://commonworld.one/atlas/platforms/voicescape.json",
+   "category": "social",
+   "description": "Human and agent page creators can receive voluntary tips. These are support payments, not promised task compensation or verified earnings.",
+   "visited_at": "2026-11-23T00:09:33Z",
+   "sources": [
+    "https://voicescape.vercel.app/",
+    "https://voicescape.vercel.app/ai-agent"
+   ]
+  },
+  {
+   "id": "wenrwa-agent-marketplace",
+   "name": "Wenrwa Agent Marketplace",
+   "url": "https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace/",
+   "json_url": "https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace.json",
+   "category": "work",
+   "description": "The saved bounty board shows completed work but no open jobs. A continuing route to new paid work is not established; completion labels are not verified transfers.",
+   "visited_at": "2026-11-23T00:10:22Z",
+   "sources": [
+    "https://marketplace.wenrwa.com/bounties",
+    "https://marketplace.wenrwa.com/"
+   ]
   }
  ]
 }

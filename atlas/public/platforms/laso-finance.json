@@ -1,90 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "laso-finance",
  "name": "Laso Finance",
  "url": "https://commonworld.one/atlas/platforms/laso-finance/",
  "json_url": "https://commonworld.one/atlas/platforms/laso-finance.json",
+ "md_url": "https://commonworld.one/atlas/platforms/laso-finance/index.md",
  "website": "https://laso.finance",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Laso Finance converts stablecoins into prepaid cards, gift cards and push-to-card/bank payments, with an x402 API so agents can order cards per call.",
  "tags": [
   "x402",
   "x402-service",
   "commerce"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402 settlement to this service's payout address: $229,195.12 in 30d from 103 distinct buyers, 464 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 229195.12,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/laso-finance"
-  },
-  {
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $44,324.27",
-   "value": 44324.27,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/laso-finance/volume?days=60"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 16736,
-  "unit": "users",
-  "window": "all-time",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:10:00Z",
-  "source_url": "https://laso.finance"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 7,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/laso-finance/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 4
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services/laso-finance",
-   "quote": "\"volume_usd_30d\":229195.119,\"unique_buyers_30d\":103,\"tx_count_30d\":464,\"top_buyer_share_30d\":0.9862928189146994,\"last_settlement_at\":\"2026-10-28T12:29:21Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Laso combines crypto-funded consumer cards, gift cards and transfers with an agent payment API and managed-wallet platform. Its agent page advertises cards, debit-card and contractor payouts, bank rails and payments to other x402 endpoints. Availability is country- and product-dependent; user and volume counters and a FinCEN registration claim do not independently establish eligibility, approval, insurance or safety. Documentation lists x402 USDC on Base and Solana and MPP on Base only. The fee-inclusive challenge total can exceed the requested face amount. x402 settles after route success, while MPP may settle first, leaving paid USDC in the Laso account balance after a later route error for withdrawal or retry rather than an automatic refund. The signing wallet identifies the account receiving credentials. No-account and zero-fee marketing is qualified by account authentication, managed-wallet setup, on-chain monitoring, conversion, deposit fees and possible issuer exchange fees. Current x402 v2 documentation rejects legacy v1 envelopes shown in an older homepage illustration.",
@@ -96,146 +28,9 @@
   ],
   "revision": "8476e8dbb2a5893a28b3a06c7d10a7ceed8233c02ee3d90091a9e86f22bf44f8"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/laso-finance.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/laso-finance-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Official site returns HTTP 200 with real content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://laso.finance",
-   "quote": "Convert stablecoins (USDC, USDT, DAI) to spendable prepaid cards and gift cards instantly.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://laso.finance"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL (x402-list base_url/website for this service, operator-owned)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://laso.finance",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100",
-    "curl -sL https://laso.finance"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Laso Finance converts stablecoins into prepaid cards, gift cards and push-to-card/bank payments, with an x402 API so agents can order cards per call.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://laso.finance",
-   "quote": "Convert stablecoins (USDC, USDT, DAI) to spendable prepaid cards and gift cards instantly.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://laso.finance",
-    "GET https://x402-list.com/api/v1/services?per_page=100"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $229,195.12 in 30d from 103 distinct buyers, 464 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 229195.12,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/laso-finance",
-   "quote": "\"volume_usd_30d\":229195.119,\"unique_buyers_30d\":103,\"tx_count_30d\":464,\"top_buyer_share_30d\":0.9862928189146994,\"last_settlement_at\":\"2026-10-28T12:29:21Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/laso-finance",
-    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
-    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 272256.88,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "x402 settlement to this service's payout address: $272,256.88 in 30d from 95 distinct buyers, 224 settlements; top buyer share 98.9%",
-     "quote": "traction.volume_usd_30d=272256.88, unique_buyers_30d=95, top_buyer_share_30d=0.9892",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "laso-finance-x402-list-30d",
-   "last_settlement_seen_at": "2026-10-28T12:29:21Z",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $44,324.27",
-   "value": 44324.27,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/laso-finance/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/laso-finance/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last UTC day with ≥$1 settled: 2026-10-14; first settlement 2026-02-10",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/laso-finance/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/laso-finance/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "Operator claims 16,736+ users",
-   "value": 16736,
-   "unit": "users",
-   "window": "all-time",
-   "basis": "operator_claim",
-   "source_url": "https://laso.finance",
-   "quote": "Join 16,736 + users already spending with Laso.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://laso.finance"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

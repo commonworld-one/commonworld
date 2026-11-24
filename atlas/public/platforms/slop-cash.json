@@ -1,18 +1,17 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "slop-cash",
  "name": "Slop (slop.cash)",
  "url": "https://commonworld.one/atlas/platforms/slop-cash/",
  "json_url": "https://commonworld.one/atlas/platforms/slop-cash.json",
+ "md_url": "https://commonworld.one/atlas/platforms/slop-cash/index.md",
  "website": "https://slop.cash",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Slop is a GitHub-native incentive network where projects post goals and monthly USDC pools and only maintainer-accepted PRs earn score and maintainer-approved payouts.",
  "tags": [
   "open-source",
   "github",
@@ -22,73 +21,6 @@
   "signed-receipts",
   "leaderboard"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Top-10 contributors this month all show $0 money received; featured Eliza and ASI pools '$1k/mo target, Vault: Not funded'",
-   "value": 0,
-   "unit": "USDC received (top 10, 2026-10)",
-   "window": "2026-10",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "source_url": "https://slop.cash/"
-  },
-  {
-   "statement": "Cycle archive: 4 published cycles (ASI Sep, Delta Star Sep, Eliza Sep, Eliza Jul) all show Paid $0; Eliza July suggested $10,000, approved $0",
-   "value": 0,
-   "unit": "USD paid",
-   "window": "all published cycles",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "source_url": "https://slop.cash/cycles"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 0,
-  "unit": "USDC received (top 10, 2026-10)",
-  "window": "2026-10",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:12:00Z",
-  "source_url": "https://slop.cash/"
- },
- "verified_at": "2026-10-15T18:22:00Z",
- "last_checked": "2026-10-15T18:22:00Z",
- "claims_count": 7,
- "disclosure": "Disclosure: Commonworld participates in this project.",
- "md_url": "https://commonworld.one/atlas/platforms/slop-cash/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Slop presents a contributor and maintainer platform for open-source software, with security bounties and project contributor pools. Offers include dollars, tokens and points, and project cards distinguish vaulted pools from configured pools labelled not vaulted. Several pools are shared among accepted outcomes rather than paid in full to each contributor. Funding labels and advertised rewards are site-reported terms.",
@@ -98,127 +30,13 @@
   ],
   "revision": "d33d4812b13f071725f57e811f2a9980c7713eed7e6c753198e2ba191f8673bd"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/slop-cash.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/slop-cash-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "slop.cash serves full content to a fetcher (curl gets a thin JS shell)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://slop.cash/",
-   "quote": "MAKE MONEY SHIPPING OPEN SOURCE.",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://slop.cash (2 KB shell)",
-    "web_fetch https://slop.cash/ (full)",
-    "curl https://slop.cash/llms.txt (200)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "slop.cash",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://slop.cash",
-   "quote": null,
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "web_fetch https://slop.cash/"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Accepted GitHub work raises Slop Score; maintainers fund pools and approve payouts",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://slop.cash/",
-   "quote": "Get merged. Accepted work raises your Slop Score. Maintainers approve rewards.",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "web_fetch https://slop.cash/"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Leaderboard points updated 2026-10-14 17:40 UTC (marked stale)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://slop.cash/",
-   "quote": "Points updated Oct 14, 2026, 17:40 UTC · Stale: the next verified update is pending.",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "web_fetch https://slop.cash/"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Top-10 contributors this month all show $0 money received; featured Eliza and ASI pools '$1k/mo target, Vault: Not funded'",
-   "value": 0,
-   "unit": "USDC received (top 10, 2026-10)",
-   "window": "2026-10",
-   "basis": "direct_observation",
-   "source_url": "https://slop.cash/",
-   "quote": "**$1k** /mo target Vault: Not funded",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "web_fetch https://slop.cash/"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Cycle archive: 4 published cycles (ASI Sep, Delta Star Sep, Eliza Sep, Eliza Jul) all show Paid $0; Eliza July suggested $10,000, approved $0",
-   "value": 0,
-   "unit": "USD paid",
-   "window": "all published cycles",
-   "basis": "direct_observation",
-   "source_url": "https://slop.cash/cycles",
-   "quote": "Eliza · July 2026 Awaiting approval Suggested $10,000 Approved $0 Paid $0",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "web_fetch https://slop.cash/cycles"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Legacy claim 'first cycle $4,219.71 USDC to 53 contributors (Sep 2026)' not found in the operator's cycle archive",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://slop.cash/cycles",
-   "quote": null,
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "web_fetch https://slop.cash/cycles"
-   ],
-   "outcome": "contradicted",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "Disclosure: Commonworld participates in this project.",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

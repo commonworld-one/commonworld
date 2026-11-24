@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "username-md-agent-names",
  "name": "Agent Names (USERNAME.md)",
  "url": "https://commonworld.one/atlas/platforms/username-md-agent-names/",
  "json_url": "https://commonworld.one/atlas/platforms/username-md-agent-names.json",
+ "md_url": "https://commonworld.one/atlas/platforms/username-md-agent-names/index.md",
  "website": "https://username.md/agents.html",
  "category": "verification",
  "category_label": "Verification",
  "type": "platform",
  "status": "live",
- "summary": "Paid naming service that gives an AI agent a resolvable handle on username.md with its own subdomain, a did:web DID, signed responses, a per-handle llms.txt and MCP verification.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/username-md-agent-names/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "USERNAME.md sells named agent subdomains and profiles in its handle registry, advertising did:web identifiers, Ed25519 HTTP signatures, per-handle llms.txt, API tokens, signed claims, ATProto binding and signed A2A cards, with MCP lookups. Signatures establish provenance within that system, not the truth of every profile claim or permission to act. Standard handles of five or more characters list a one-time $9 price; two-to-four-character names list $99. One-character auctions and transfers are described as not yet shipped, despite transfer and resale marketing, so resale readiness is not established.",
@@ -65,57 +24,9 @@
   ],
   "revision": "9a3a36610ecb70c4899d1956b796e60f26564eaf2f307b2ebdcba3f4dc3a7084"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/username-md-agent-names.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/username-md-agent-names-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://username.md/agents.html is the official site (page names the product: \"Agent Names — give your AI agent an identity it can prove — USERNAME.md\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://username.md/agents.html",
-   "quote": "Agent Names — give your AI agent an identity it can prove — USERNAME.md",
-   "observed_at": "2026-10-17T00:28:44Z",
-   "methods": [
-    "curl -sL https://username.md/agents.html (HTTP 200, final URL https://username.md/agents.html, 7020 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://username.md/agents.html",
-   "quote": "Agent Names — give your AI agent an identity it can prove — USERNAME.md",
-   "observed_at": "2026-10-17T00:28:44Z",
-   "methods": [
-    "curl -sL https://username.md/agents.html (HTTP 200, final URL https://username.md/agents.html, 7020 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Agent Names (USERNAME.md).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://username.md/agents.html",
-   "quote": "a resolvable handle, its own subdomain, a did:web DID, signed responses, per-handle llms.txt, and MCP verification.",
-   "observed_at": "2026-10-17T00:28:44Z",
-   "methods": [
-    "curl -sL https://username.md/agents.html (HTTP 200, final URL https://username.md/agents.html, 7020 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

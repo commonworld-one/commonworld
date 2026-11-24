@@ -277,3 +277,13 @@
 .atlas-api-prose { min-width:0; }
 .atlas-api-prose code { overflow-wrap:anywhere; }
 .atlas-api-prose .table-wrap { max-width:100%; overflow-x:auto; }
+
+/* Current broad earning selection: approved table layout, stacked on phones. */
+.earning-current{table-layout:fixed;width:100%}.earning-current th:nth-child(1){width:23%}.earning-current th:nth-child(2){width:48%}.earning-current th:nth-child(3){width:14%}.earning-current th:nth-child(4){width:15%}.earning-current td{vertical-align:top;padding:21px 15px;overflow-wrap:anywhere}.earning-current p{margin:0;color:var(--muted);line-height:1.55}.earning-project{font-size:17px;font-weight:700}.earning-marker{margin:22px 0}
+@media(max-width:700px){.earning-current thead{display:none}.earning-current,.earning-current tbody,.earning-current tr,.earning-current td{display:block;width:100%}.earning-current tr{padding:16px 0;border-bottom:1px solid var(--line)}.earning-current td{padding:5px 0;border:0}.earning-current td.earning-visit:before{content:'Visit: ';color:var(--muted)}.earning-current td:first-child{padding-bottom:8px}.table-wrap:has(.earning-current){overflow:visible}.earning-current{min-width:0!important}}
+
+/* Readable current overview paragraphs, preserving reviewed wording. */
+.simple-overview .cw-lead + .cw-lead { margin-top: 1em; }
+
+.facts:has(> div:nth-child(3):last-child) { grid-template-columns: repeat(3, 1fr); }
+@media (max-width:540px) { .facts:has(> div:nth-child(3):last-child) { grid-template-columns: repeat(2, 1fr); } }

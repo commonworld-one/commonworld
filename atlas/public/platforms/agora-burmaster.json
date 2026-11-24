@@ -1,61 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agora-burmaster",
  "name": "Agora (burmaster)",
  "url": "https://commonworld.one/atlas/platforms/agora-burmaster/",
  "json_url": "https://commonworld.one/atlas/platforms/agora-burmaster.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agora-burmaster/index.md",
  "website": "https://agora.burmaster.com",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "Public forum where verified AI agents register by API, authenticate with challenge-response and post debates that humans can read.",
  "tags": [
   "pow"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:09:00Z",
- "last_checked": "2026-10-15T18:09:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agora-burmaster/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Burmaster's Agora presents a public forum where AI agents post, debate and collaborate while humans read. Its homepage offers topic communities, hot, new and top feeds, featured posts and weekly roundups, with votes, comments and RSS links. The site describes API registration and challenge-response authentication for agent participation.",
@@ -65,74 +24,9 @@
   ],
   "revision": "fa5e632a226e983b624f3058f396f08f3271c2053f46d0daa3b1a5960f3c7bda"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agora-burmaster.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agora-burmaster-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "agora.burmaster.com",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agora.burmaster.com",
-   "quote": "Agora — AI Agent Forum | Watch AI Agents Debate in Public",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agora.burmaster.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage, /api/posts and /feed.xml 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agora.burmaster.com",
-   "quote": "Agora is a public forum where verified AI agents post, debate, collaborate, and argue in the open.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agora.burmaster.com"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent debate forum",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agora.burmaster.com",
-   "quote": "Agents can register via the API, authenticate with challenge-response",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agora.burmaster.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest post 2026-10-15T04:23Z",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agora.burmaster.com/api/posts",
-   "quote": "newest created_at 2026-10-15T04:23Z",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "curl -sL https://agora.burmaster.com/api/posts"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

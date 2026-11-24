@@ -1,90 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "x402stats",
  "name": "x402stats",
  "url": "https://commonworld.one/atlas/platforms/x402stats/",
  "json_url": "https://commonworld.one/atlas/platforms/x402stats.json",
+ "md_url": "https://commonworld.one/atlas/platforms/x402stats/index.md",
  "website": "https://x402stats.io",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Independent x402 analytics (by squidcode) that publishes both raw on-chain volume and a wash/self-dealing-filtered 'organic' figure, with monthly reports and CC-BY data.",
  "tags": [
   "x402",
   "analytics",
   "cc-by"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "30 d: reported (raw) $1,056,293 vs organic $684,900 (65%); 39,123 sellers with any revenue, 94 organic; median seller revenue $0.01; top-10 wallets 75%.",
-   "value": 684900,
-   "unit": "USD organic (raw 1,056,293)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402stats.io/llms-full.txt"
-  },
-  {
-   "statement": "October report (frozen 2026-10-01): raw $960k, organic $793k, 91 businesses earning organically.",
-   "value": 793000,
-   "unit": "USD organic",
-   "window": "30d to 2026-10-01",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://x402stats.io/reports/2026-10"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 684900,
-  "unit": "USD organic (raw 1,056,293)",
-  "window": "30d to 2026-10-15",
-  "basis": "independent_source",
-  "observed_at": "2026-10-15T18:10:00Z",
-  "source_url": "https://x402stats.io/llms-full.txt"
- },
- "verified_at": "2026-10-15T18:19:00Z",
- "last_checked": "2026-10-15T18:19:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/x402stats/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402stats.io/llms-full.txt",
-   "quote": "Reported volume (raw, all wallets): $1,056,293 - Organic volume (wash-filtered): $684,900 (65% of reported)"
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "x402stats presents a read-only x402 data project with raw indexed USDC receipts and a separate organic-volume filter. Its methodology counts a seller wallet as organic only with at least $100 revenue, three distinct buyer wallets and an average payment of $0.001, excluding known facilitator settlement addresses. This is explicitly a heuristic that can miss sophisticated multi-wallet self-dealing. Upstream gaps propagate, facilitator shares overlap and buyer uniques are per seller, not a deduplicated population. Raw and organic totals are project measurements, not a universal audited market size or verified independent businesses.",
@@ -95,81 +27,9 @@
   ],
   "revision": "ab6b61a41ff1b9ab8fda1e9611424bd39129f3d30f7ec77f211aa95f4cdc13e5"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/x402stats.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402stats-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "200, updated 2026-10-15 16:58 UTC.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402stats.io",
-   "quote": "updated 2026-10-15 16:58 UTC",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L",
-    "curl llms-full.txt"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "30 d: reported (raw) $1,056,293 vs organic $684,900 (65%); 39,123 sellers with any revenue, 94 organic; median seller revenue $0.01; top-10 wallets 75%.",
-   "value": 684900,
-   "unit": "USD organic (raw 1,056,293)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "source_url": "https://x402stats.io/llms-full.txt",
-   "quote": "Reported volume (raw, all wallets): $1,056,293 - Organic volume (wash-filtered): $684,900 (65% of reported)",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl llms-full.txt"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public data file of the x402stats dashboard (CC BY 4.0), updated daily with 30-day volume per facilitator."
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "October report (frozen 2026-10-01): raw $960k, organic $793k, 91 businesses earning organically.",
-   "value": 793000,
-   "unit": "USD organic",
-   "window": "30d to 2026-10-01",
-   "basis": "independent_source",
-   "source_url": "https://x402stats.io/reports/2026-10",
-   "quote": "91 businesses now earn organic revenue on x402 — +13 on last month.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Weekly record: organic sellers fell from 173 (2026-07-01) to 94 (2026-10-12).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402stats.io/llms-full.txt",
-   "quote": "2026-07-01, 965926, 432169, 173 ... 2026-10-12, 1056292.86, 684899.53, 94",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl llms-full.txt"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public data file of the x402stats dashboard (CC BY 4.0), updated daily with 30-day volume per facilitator."
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

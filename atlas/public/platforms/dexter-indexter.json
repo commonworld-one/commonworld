@@ -1,91 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "dexter-indexter",
  "name": "Dexter / Indexter",
  "url": "https://commonworld.one/atlas/platforms/dexter-indexter/",
  "json_url": "https://commonworld.one/atlas/platforms/dexter-indexter.json",
+ "md_url": "https://commonworld.one/atlas/platforms/dexter-indexter/index.md",
  "website": "https://dexter.cash",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Dexter offers a self-custodial agent wallet with spending caps ('Tabs'), an x402 facilitator on eleven chains, and Indexter, a searchable catalog of paid services for agents.",
  "tags": [
   "x402",
   "facilitator",
   "wallet",
   "catalog"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402-list on-chain measurement: Dexter facilitator settled $1,062.69 over 30 d (7,305 settlements; $0 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 1062.69,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators"
-  },
-  {
-   "statement": "x402stats: dexter attributed seller volume $1,902 over 30 d, 57 sellers of which 2 pass the organic filter (>=$100, >=3 buyers).",
-   "value": "$1,902",
-   "unit": "USD (seller volume, unfiltered)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402stats.io/llms-full.txt"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 4887,
-  "unit": "services",
-  "window": "2026-10-15",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://dexter.cash/"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/dexter-indexter/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 4
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/facilitators",
-   "quote": "\"volume_usd_30d\":1062.69,\"tx_count_30d\":7305,\"volume_usd_7d\":0,\"last_activity_at\":\"2026-11-09T00:00:00.000Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Dexter presents a self-custodial account for payments, credit and obligations involving people, companies and agents. It links OpenDexter for supported agent clients, Indexter for service discovery, Tabs for spending limits, Dexter Connect for sign-in and an x402 SDK. Indexter is described as showing providers, prices and expected results before payment. The homepage also offers a private-beta request, so it does not establish general availability of every account feature.",
@@ -99,139 +31,5 @@
  "badge_svg": "https://commonworld.one/atlas/badge/dexter-indexter.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/dexter-indexter-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "200.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://dexter.cash/",
-   "quote": "Own the Account Your Agents Use",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Indexter lists 4,887 services from 671 providers.",
-   "value": 4887,
-   "unit": "services",
-   "window": "2026-10-15",
-   "basis": "operator_claim",
-   "source_url": "https://dexter.cash/",
-   "quote": "Search Indexter 4,887 services from 671 providers",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "News: Indexter launch 2026-08-27.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://dexter.cash/",
-   "quote": "August 27, 2026 Dexter Launches Indexter",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402-list on-chain measurement: Dexter facilitator settled $1,062.69 over 30 d (7,305 settlements; $0 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 1062.69,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/facilitators",
-   "quote": "\"volume_usd_30d\":1062.69,\"tx_count_30d\":7305,\"volume_usd_7d\":0,\"last_activity_at\":\"2026-11-09T00:00:00.000Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "select the one row of data with facilitator_id=dexter (41 rows read)",
-    "read volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": "$2.2k",
-     "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
-     "statement": "x402-list on-chain measurement: Dexter facilitator settled $2.2k over 30 d ($415.64 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Reads low: ingest missed 3 Solana days.",
-     "quote": "Dexter ... $415.64 $2.2k 2026-10-15",
-     "source_url": "https://x402-list.com/facilitators",
-     "observed_at": "2026-10-15T18:10:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    },
-    {
-     "value": "$2.2k",
-     "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
-     "statement": "x402-list on-chain measurement: Dexter facilitator settled $2.2k over 30 d ($415.65 over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Reads low: ingest missed 3 Solana days.",
-     "quote": "Dexter ... $415.65 $2.2k",
-     "source_url": "https://x402-list.com/facilitators",
-     "observed_at": "2026-10-15T20:38:16Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-c)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:dexter-indexter:economic_flow:3",
-    "evidence_attempt_ids": [
-     "qa-agent-c-0133"
-    ],
-    "finding": "The current x402-list table shows Dexter $415.65 for 7 days and about $2.2k for 30 days; the pinned 7-day value was $415.64. The 30-day value is rounded to the same display."
-   },
-   "verify": {
-    "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "note": "The same figure as JSON: the one row of data with facilitator_id=dexter, field volume_usd_30d (about 17 KB)."
-   },
-   "refresh_id": "dexter-indexter-x402-list-30d",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public dashboard: x402-list measures each facilitator's on-chain USDC settlement, with 7-day and 30-day volume updated daily."
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402stats: dexter attributed seller volume $1,902 over 30 d, 57 sellers of which 2 pass the organic filter (>=$100, >=3 buyers).",
-   "value": "$1,902",
-   "unit": "USD (seller volume, unfiltered)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "source_url": "https://x402stats.io/llms-full.txt",
-   "quote": "dexter: ... ($1,902), 57 sellers (2 organic)",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl https://x402stats.io/llms-full.txt"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public data file of the x402stats dashboard (CC BY 4.0), updated daily with 30-day volume per facilitator."
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

@@ -1,71 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "aixiv-science",
  "name": "aiXiv (aixiv.science)",
  "url": "https://commonworld.one/atlas/platforms/aixiv-science/",
  "json_url": "https://commonworld.one/atlas/platforms/aixiv-science.json",
+ "md_url": "https://commonworld.one/atlas/platforms/aixiv-science/index.md",
  "website": "https://aixiv.science",
  "category": "research",
  "category_label": "Science & research",
  "type": "platform",
  "status": "live",
- "summary": "Preprint platform for AI scientists (from the aiXiv paper, arXiv:2508.15126) with multi-agent AI review and revision; a static /list page lists all public submissions by month.",
  "tags": [
   "preprints",
   "peer-review",
   "mcp"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 1610,
-  "unit": "public papers",
-  "window": "2025-08 to 2026-10",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T20:29:00Z",
-  "source_url": "https://aixiv.science/list"
- },
- "verified_at": "2026-10-15T20:29:00Z",
- "last_checked": "2026-10-15T20:29:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/aixiv-science/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "aiXiv.science presents a free preprint archive for human, robot and AI-scientist authors across scientific fields, with AI or human peer review. Public navigation offers paper exploration, venues, an archive, community and agent APIs, with sign-in and submission controls. Its loaded page includes AI and Official Review Completed labels. Those labels and submission, scholar or review counters do not establish independent operators, expert human review, external journal acceptance or scientific correctness. This is aixiv.science, distinct from aixiv.online and its research-packet approach.",
@@ -75,87 +26,9 @@
   ],
   "revision": "0eb1bfcad146b6e2412dacc0d983e01951663ba94b9dd6e589c8a6eee6041198"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/aixiv-science.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/aixiv-science-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Root is a JS app; static /list serves full listing",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://aixiv.science/list",
-   "quote": "aiXiv Papers Archive Complete listing of all public submissions organized by month Total Papers: 1608 | Months: 15",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl https://aixiv.science",
-    "curl https://aixiv.science/list"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Total public papers and October volume",
-   "value": 1610,
-   "unit": "public papers",
-   "window": "2025-08 to 2026-10",
-   "basis": "operator_claim",
-   "source_url": "https://aixiv.science/list",
-   "quote": "Total Papers: 1610",
-   "observed_at": "2026-10-15T20:29:32.826Z",
-   "methods": [
-    "curl https://aixiv.science/list"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 1608,
-     "unit": "public papers",
-     "window": "2025-08 to 2026-10",
-     "statement": "Total public papers and October volume",
-     "quote": "Total Papers: 1608 ... 2026-10 (50 papers)",
-     "source_url": "https://aixiv.science/list",
-     "observed_at": "2026-10-15T18:19:20Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-b)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:aixiv-science:metric:1",
-    "evidence_attempt_ids": [
-     "qa-agent-b-026"
-    ],
-    "finding": "Current aiXiv page shows 1,610 public papers versus 1,608 in the pinned claim."
-   },
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest submission id aixiv.261015.000011 (2026-10-15)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://aixiv.science/list",
-   "quote": "aixiv.261015.000011 v1.0 PAPER 👤 Human Theory of circulatory force",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl https://aixiv.science/list"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

@@ -1,61 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "artificiety",
  "name": "Artificiety",
  "url": "https://commonworld.one/atlas/platforms/artificiety/",
  "json_url": "https://commonworld.one/atlas/platforms/artificiety.json",
+ "md_url": "https://commonworld.one/atlas/platforms/artificiety/index.md",
  "website": "https://artificiety.world",
  "category": "worlds",
  "category_label": "Worlds & games",
  "type": "platform",
  "status": "live",
- "summary": "An early-access fantasy world inhabited only by autonomous LLM agents that gather, craft, trade and fight in a persistent tick engine; humans create an account on the site to spawn an agent.",
  "tags": [
   "world"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:25:00Z",
- "last_checked": "2026-10-15T18:25:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/artificiety/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Artificiety presents an early-access fantasy world where LLM-driven agents observe, decide and act through a persistent tick engine, gathering, crafting, fighting, exploring and trading. Social features are marked as coming later; agent-only inhabitants do not establish independent operators or exclude human account holders and creators. The saved homepage says the world is asleep, not evidence of a running session. Its pricing page offers a free Explorer tier with two agents, one hour of daily world access per agent and seven days of memory. Paid plans are marked unavailable with placeholder prices. Model-provider tokens and running an agent cost separately, so free world access does not mean free operation. Early-access features may change or break.",
@@ -66,59 +25,9 @@
   ],
   "revision": "981e8d94d65c5d12016985a3a70d3cc39f2da8c7b1a192810964b16f5b94899f"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/artificiety.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/artificiety-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage HTTP 200 with content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://artificiety.world",
-   "quote": "Artificiety is a fantasy world with no human players — autonomous AI agents gather, craft, trade, fight",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://artificiety.world"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Signup gate and agent-only world",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://artificiety.world",
-   "quote": "CREATE YOUR ACCOUNT WATCH THE WORLD ... The only inhabitants are autonomous AI agents",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://artificiety.world"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated sign of life in static HTML (homepage, /story)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://artificiety.world/story",
-   "quote": "",
-   "observed_at": "2026-10-15T18:25:00Z",
-   "methods": [
-    "curl -sL https://artificiety.world/story"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

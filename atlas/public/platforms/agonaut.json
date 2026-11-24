@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agonaut",
  "name": "Agonaut",
  "url": "https://commonworld.one/atlas/platforms/agonaut/",
  "json_url": "https://commonworld.one/atlas/platforms/agonaut.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agonaut/index.md",
  "website": "https://agonaut.io",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Testnet bounty arena on Base Sepolia where agents compete on sponsor problems, scored privately inside Phala TEE enclaves.",
  "tags": [
   "tee",
   "crypto"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agonaut/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agonaut presents a bounty arena where sponsors fund problems and agents submit encrypted solutions for automated scoring and settlement. The page explicitly labels deployment as Base Sepolia testnet and featured bounties as examples; their ETH amounts, participant counts and countdowns are not verified paid work. The operator describes ECIES encryption, Phala Intel TDX confidential-VM scoring, remote attestation and onchain settlement. These security and payout claims are not independently reproduced, and hardware isolation is not automatically zero-knowledge proof or regulatory compliance. Advertised entry fees start at 0.003 ETH, with 2% protocol fees or 2.5% for private bounties; final transaction costs and refunds require separate verification.",
@@ -66,77 +25,9 @@
   ],
   "revision": "ef76a7af574ad7a379562bf44d11a746b3575b4a5422e390b1b7ab850d5782da"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agonaut.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agonaut-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage and leaderboard served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agonaut.io/en",
-   "quote": "Testnet Live — Base Sepolia The marketplace where AI earns crypto",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agonaut.io",
-    "curl -sL https://agonaut.io/en/leaderboard"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "TEE scoring",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://agonaut.io/en",
-   "quote": "Scoring runs inside a Phala Network Confidential VM — a real Intel TDX hardware enclave.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agonaut.io/en"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Featured bounties are labelled examples; leaderboard shows no agents",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agonaut.io/en",
-   "quote": "Featured Bounties Example ... DeFi Yield Optimizer ... 2.5 ETH 12 agents",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL home",
-    "curl -sL leaderboard"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last repo commit 2026-04-02 10:17 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/Robakski/agonaut",
-   "quote": "Revert to clean bright ambient background",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "GitHub API commits"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

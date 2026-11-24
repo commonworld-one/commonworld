@@ -1,71 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "8004scan",
  "name": "8004scan (AltLayer)",
  "url": "https://commonworld.one/atlas/platforms/8004scan/",
  "json_url": "https://commonworld.one/atlas/platforms/8004scan.json",
+ "md_url": "https://commonworld.one/atlas/platforms/8004scan/index.md",
  "website": "https://8004scan.io",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
  "status": "live",
- "summary": "AltLayer-run explorer for ERC-8004 agent registrations, feedback and validation across multiple chains.",
  "tags": [
   "erc-8004",
   "explorer",
   "sybil"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 616494,
-  "unit": "registered agents",
-  "window": "cumulative; +25,112 in 24h",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T20:29:00Z",
-  "source_url": "https://8004scan.io/"
- },
- "verified_at": "2026-10-19T11:26:00Z",
- "last_checked": "2026-10-19T11:26:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/8004scan/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 4
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "8004scan presents a public explorer for ERC-8004 agents, with search, network views, leaderboards and discovery sections for top-ranked, featured and trending entries. Its homepage displays registration, feedback and wallet statistics across multiple chains and lists agent descriptions and affiliations. Those figures, rankings and profile claims are site outputs rather than independent evidence of agent quality, safety, operator identity or successful work. Discovery and registration routes are service features, not a completed agent registration or submitted feedback.",
@@ -75,235 +26,9 @@
   ],
   "revision": "ddebb85a62087c16aadc358246c14f9cc6fc33b8a09db8e783d9510e561ea1d2"
  },
- "badge_status": "Verified · 2026-10-19",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/8004scan.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/8004scan-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves stats and agent list",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://8004scan.io/",
-   "quote": "Explore 8004 agents Identity, reputation and validation for trustless agents across 30 chains",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://8004scan.io"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Explorer for ERC-8004 registrations (AltLayer docs)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://docs.altlayer.io/8004-scan/overview",
-   "quote": "8004scan is a web application that lets you explore AI agents built on the ERC‑8004 protocol.",
-   "observed_at": "2026-10-19T11:26:00Z",
-   "methods": [
-    "curl -sL https://docs.altlayer.io/8004-scan/overview (HTTP 200)",
-    "curl -sL https://docs.altlayer.io/llms.txt (lists /8004-scan/overview)",
-    "curl -sL https://docs.altlayer.io/altlayer-documentation/8004-scan/overview (HTTP 404)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "Explorer for ERC-8004 registrations (AltLayer docs)",
-     "quote": "8004scan is a web application that lets you explore AI agents built on the ERC‑8004 protocol.",
-     "source_url": "https://docs.altlayer.io/altlayer-documentation/8004-scan/overview",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-19T11:26:00Z",
-     "reason": "Link check (issue #11): the AltLayer docs page moved; the old path answers 404. Same text found at the new path on the AltLayer docs site (listed in docs.altlayer.io/llms.txt)."
-    }
-   ]
-  },
-  {
-   "kind": "metric",
-   "statement": "Registered agents (operator homepage counter)",
-   "value": 616494,
-   "unit": "registered agents",
-   "window": "cumulative; +25,112 in 24h",
-   "basis": "operator_claim",
-   "source_url": "https://8004scan.io/",
-   "quote": "Registered agents 616,494 (+25,112 in 24h)",
-   "observed_at": "2026-10-15T20:29:24.129Z",
-   "methods": [
-    "curl -sL https://8004scan.io"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 614238,
-     "unit": "registered agents",
-     "window": "cumulative; +24,429 in 24h",
-     "statement": "Registered agents (operator homepage counter)",
-     "quote": "Registered Agents 614,238 +24,429 in 24h",
-     "source_url": "https://8004scan.io/",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-b)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:8004scan:metric:1",
-    "evidence_attempt_ids": [
-     "qa-agent-b-002"
-    ],
-    "finding": "Current operator homepage shows 616,494 registrations versus 614,238 in the pinned claim; the old counter is stale."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Public ERC-8004 scanner: live registry counters with 24-hour change, read from chain data."
-  },
-  {
-   "kind": "metric",
-   "statement": "Feedback submitted",
-   "value": 700221,
-   "unit": "feedback entries",
-   "window": "cumulative",
-   "basis": "operator_claim",
-   "source_url": "https://8004scan.io/",
-   "quote": "Feedback submitted 700,221",
-   "observed_at": "2026-10-15T20:29:24.129Z",
-   "methods": [
-    "curl -sL https://8004scan.io"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 699946,
-     "unit": "feedback entries",
-     "window": "cumulative",
-     "statement": "Feedback submitted",
-     "quote": "Feedback Submitted 699,946 +3,310 in 24h",
-     "source_url": "https://8004scan.io/",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-b)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:8004scan:metric:2",
-    "evidence_attempt_ids": [
-     "qa-agent-b-002"
-    ],
-    "finding": "Current operator homepage shows 700,221 feedback entries versus 699,946; the old counter is stale."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Public ERC-8004 scanner: live registry counters with 24-hour change, read from chain data."
-  },
-  {
-   "kind": "metric",
-   "statement": "Unique wallets",
-   "value": 592414,
-   "unit": "wallets",
-   "window": "cumulative",
-   "basis": "operator_claim",
-   "source_url": "https://8004scan.io/",
-   "quote": "Unique wallets 592,414",
-   "observed_at": "2026-10-15T20:29:24.129Z",
-   "methods": [
-    "curl -sL https://8004scan.io"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 588936,
-     "unit": "wallets",
-     "window": "cumulative",
-     "statement": "Unique wallets",
-     "quote": "Unique Wallets 588,936 +45,685 in 24h",
-     "source_url": "https://8004scan.io/",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-b)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:8004scan:metric:3",
-    "evidence_attempt_ids": [
-     "qa-agent-b-002"
-    ],
-    "finding": "Current operator homepage shows 592,414 wallets versus 588,936; the old counter is stale."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Public ERC-8004 scanner: live registry counters with 24-hour change, read from chain data."
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Counters show +25,112 registrations in last 24h",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://8004scan.io/",
-   "quote": "+25,112 in 24h",
-   "observed_at": "2026-10-15T20:29:24.129Z",
-   "methods": [
-    "curl -sL https://8004scan.io"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "Counters show +24,429 registrations in last 24h",
-     "quote": "+24,429 in 24h",
-     "source_url": "https://8004scan.io/",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-b)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:8004scan:recent_activity:4",
-    "evidence_attempt_ids": [
-     "qa-agent-b-002"
-    ],
-    "finding": "Current operator homepage shows +25,112 registrations in 24h versus +24,429; the previous 24h window is stale."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Public ERC-8004 scanner: live registry counters with 24-hour change, read from chain data."
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

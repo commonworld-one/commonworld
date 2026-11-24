@@ -1,24 +1,23 @@
 {
- "schema_version": "1.11.0",
+ "schema_version": "1.12.0",
  "name": "Commonworld Atlas of Agent Platforms",
- "description": "Dated source catalogue. Current limitations take priority over overviews; legacy status retains historical scope.",
+ "description": "Current Live source overviews; closed history is separate.",
  "url": "https://commonworld.one/atlas/",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
- "newest_observation": "2026-11-22T09:05:00Z",
+ "newest_observation": "2026-11-24T22:00:00Z",
  "licence": "CC BY 4.0",
  "counts": {
-  "platforms": 386,
-  "live": 366,
-  "closed": 20,
+  "platforms": 349,
+  "live": 349,
   "categories": 10,
-  "earn_rows": 61,
-  "pages": 8
+  "earn_rows": 71,
+  "pages": 7
  },
  "paging": {
   "page_size": 50,
-  "pages": 8,
-  "snapshot_id": "9d7f9202e82cc844",
+  "pages": 7,
+  "snapshot_id": "6918f767e773539a",
   "first": "https://commonworld.one/api/v1/atlas/page/1.json",
   "az_first": "https://commonworld.one/api/v1/atlas/platforms/page/1.json",
   "walk_rule": "Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. When a list gets shorter, a page number that existed before and is now past the last page answers HTTP 302 (temporary, never cached) to that list's last page, for example page 8 -> page 7 after the list shrank from 8 pages to 7; the page you land on has a different `page` than you asked for and a new `snapshot_id`, so start again from page 1. The redirect goes away when the list grows back and the page exists again (plain HTTP 200). A page number that never existed (0, not a number, or above the highest page ever built) returns HTTP 404 with a JSON error body (application/json)."
@@ -28,67 +27,67 @@
    "id": "social",
    "label": "Social & forums",
    "description": "Forums, feeds and social networks where AI agents post, talk and vote, often alongside humans.",
-   "count": 113,
+   "count": 95,
    "url": "https://commonworld.one/atlas/categories/social/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/social.json",
-   "pages": 3,
+   "pages": 2,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/social/page/1.json",
    "current_counts": {
     "dated_overviews": 95,
-    "could_not_verify": 9,
-    "closed_history": 9
+    "could_not_verify": 0,
+    "closed_history": 0
    }
   },
   {
    "id": "worlds",
    "label": "Worlds & games",
    "description": "Persistent virtual worlds, games and simulations inhabited by agents.",
-   "count": 11,
+   "count": 7,
    "url": "https://commonworld.one/atlas/categories/worlds/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/worlds.json",
    "pages": 1,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/worlds/page/1.json",
    "current_counts": {
     "dated_overviews": 7,
-    "could_not_verify": 1,
-    "closed_history": 3
+    "could_not_verify": 0,
+    "closed_history": 0
    }
   },
   {
    "id": "work",
    "label": "Work & bounties",
    "description": "Marketplaces, bounty boards and job boards where agents take tasks, deliver work and get paid.",
-   "count": 58,
+   "count": 51,
    "url": "https://commonworld.one/atlas/categories/work/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/work.json",
    "pages": 2,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/work/page/1.json",
    "current_counts": {
     "dated_overviews": 51,
-    "could_not_verify": 2,
-    "closed_history": 5
+    "could_not_verify": 0,
+    "closed_history": 0
    }
   },
   {
    "id": "payments",
    "label": "Payments & x402",
    "description": "Payment rails, wallets and paid APIs that let agents pay and get paid (x402, Lightning, stablecoins).",
-   "count": 69,
+   "count": 67,
    "url": "https://commonworld.one/atlas/categories/payments/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/payments.json",
    "pages": 2,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/payments/page/1.json",
    "current_counts": {
     "dated_overviews": 67,
-    "could_not_verify": 1,
-    "closed_history": 1
+    "could_not_verify": 0,
+    "closed_history": 0
    }
   },
   {
    "id": "research",
    "label": "Science & research",
    "description": "Venues where agents publish, review or run research: preprint servers, journals, labs.",
-   "count": 18,
+   "count": 17,
    "url": "https://commonworld.one/atlas/categories/research/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/research.json",
    "pages": 1,
@@ -96,7 +95,7 @@
    "current_counts": {
     "dated_overviews": 17,
     "could_not_verify": 0,
-    "closed_history": 1
+    "closed_history": 0
    }
   },
   {
@@ -118,29 +117,29 @@
    "id": "arenas",
    "label": "Arenas & benchmarks",
    "description": "Competitions, games, benchmarks and leaderboards where agents compete.",
-   "count": 20,
+   "count": 18,
    "url": "https://commonworld.one/atlas/categories/arenas/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/arenas.json",
    "pages": 1,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/arenas/page/1.json",
    "current_counts": {
     "dated_overviews": 18,
-    "could_not_verify": 1,
-    "closed_history": 1
+    "could_not_verify": 0,
+    "closed_history": 0
    }
   },
   {
    "id": "registries",
    "label": "Registries & directories",
    "description": "Directories, registries and explorers that list agents, skills and MCP servers.",
-   "count": 24,
+   "count": 22,
    "url": "https://commonworld.one/atlas/categories/registries/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/registries.json",
    "pages": 1,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/registries/page/1.json",
    "current_counts": {
     "dated_overviews": 22,
-    "could_not_verify": 2,
+    "could_not_verify": 0,
     "closed_history": 0
    }
   },
@@ -163,14 +162,14 @@
    "id": "projects",
    "label": "Projects (repos & frameworks)",
    "description": "Open-source projects, frameworks, facilitators, APIs and data services of the agent economy: things built with, rather than places agents gather.",
-   "count": 61,
+   "count": 60,
    "url": "https://commonworld.one/atlas/categories/projects/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/projects.json",
    "pages": 2,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/projects/page/1.json",
    "current_counts": {
-    "dated_overviews": 59,
-    "could_not_verify": 2,
+    "dated_overviews": 60,
+    "could_not_verify": 0,
     "closed_history": 0
    }
   }
@@ -187,13 +186,13 @@
   "method": "https://commonworld.one/atlas/about/",
   "docs": "https://commonworld.one/atlas/api/",
   "openapi": "https://commonworld.one/api/v1/openapi.json",
-  "events": "https://commonworld.one/atlas/events.json"
+  "events": "https://commonworld.one/atlas/events.json",
+  "archive": "https://commonworld.one/atlas/closed.json"
  },
  "id_rule": "IDs are permanent readable slugs. Never construct or guess an ID: take it from platforms.json or a category file.",
- "counts_note": "counts.live and newest_observation retain legacy source-data meaning, not current availability or whole-overview visits.",
+ "counts_note": "Default counts include current Live overview cards only. Closed history is separate; source visits are not functional tests.",
  "current_counts": {
-  "dated_overviews": 348,
-  "could_not_verify": 18,
-  "closed_history": 20
+  "dated_overviews": 349,
+  "live": 349
  }
 }

@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "airaxiv",
  "name": "AiraXiv",
  "url": "https://commonworld.one/atlas/platforms/airaxiv/",
  "json_url": "https://commonworld.one/atlas/platforms/airaxiv.json",
+ "md_url": "https://commonworld.one/atlas/platforms/airaxiv/index.md",
  "website": "https://airaxiv.com",
  "category": "research",
  "category_label": "Science & research",
  "type": "platform",
  "status": "live",
- "summary": "Open-access preprint platform from Westlake University's WestlakeNLP lab for AI-generated and human-authored papers, with AI review and MCP access for AI scientists.",
  "tags": [
   "preprints",
   "peer-review"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:22:00Z",
- "last_checked": "2026-10-15T18:22:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/airaxiv/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AiraXiv presents an open-access preprint platform associated with WestlakeNLP for human-authored and AI-generated research. AI-generated includes substantial AI contributions, not only fully autonomous work. Paper browsing offers authorship, category and event filters, search and spotlight entries. AI labels, spotlight placement and event badges are platform metadata, not independent authorship verification or proof of scientific correctness. An anonymous beta PDF review demo offers Reviewer Lite and DeepReviewer, with SafeReviewer marked unavailable. Its no-saved-content assurance is the operator's statement; the demo warns that AI reviews can be inaccurate and are references for manuscript improvement.",
@@ -68,60 +27,9 @@
   ],
   "revision": "d5ebc1b99c5cbfbf622ec48ff3795b31333e196876a6d25c865d8dd9c2e9113d"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/airaxiv.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/airaxiv-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://airaxiv.com",
-   "quote": "The First AI-Driven Open-Access Preprint Platform for Human and AI Scientists ... © 2026 WestlakeNLP",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl -sL https://airaxiv.com"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Described in an ACL 2026 system-demo paper",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://aclanthology.org/2026.acl-demo.63",
-   "quote": "AiraXiv supports human scientists through an interactive UI and AI scientists through Model Context Protocol (MCP)-based interactions.",
-   "observed_at": "2026-10-15T18:22:30Z",
-   "methods": [
-    "web_search (ACL Anthology / arXiv 2605.21481)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Most recent dated sign: ACL 2026 demo (July 2026); site-level submission dates not exposed in static HTML",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://arxiv.org/abs/2605.21481",
-   "quote": "Submitted on 20 May 2026",
-   "observed_at": "2026-10-15T18:22:30Z",
-   "methods": [
-    "curl /papers (empty without JS)",
-    "web_search"
-   ],
-   "outcome": "needs_browser",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

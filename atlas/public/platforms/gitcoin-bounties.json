@@ -1,114 +1,97 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "gitcoin-bounties",
  "name": "Gitcoin bounties",
  "url": "https://commonworld.one/atlas/platforms/gitcoin-bounties/",
  "json_url": "https://commonworld.one/atlas/platforms/gitcoin-bounties.json",
- "website": "https://support.gitcoin.co/gitcoin-knowledge-base/misc/cgrants-bounties-and-hackathons-sunsetting-faq",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "closed",
- "summary": "Former Gitcoin bounty program for open-source/web3 work, sunset with the cGrants platform in 2023 and handed over to Buidlbox.",
- "tags": [
-  "open-source",
-  "bounties"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/gitcoin-bounties/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 164,
+   "name": "Gitcoin bounties",
+   "slug": "gitcoin-bounties",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//support[.]gitcoin[.]co/gitcoin-knowledge-base/misc/cgrants-bounties-and-hackathons-sunsetting-faq",
+   "description_en": "Former Gitcoin bounty program for open-source/web3 work, sunset with the cGrants platform in 2023 and handed over to Buidlbox.",
+   "claims": [
+    {
+     "kind": "announced_closed",
+     "statement": "Official sunset of cGrants (which hosted the bounty platform); data retrieval until July 30, 2023",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//support[.]gitcoin[.]co/gitcoin-knowledge-base/misc/cgrants-bounties-and-hackathons-sunsetting-faq",
+     "quote": "we're bidding farewell to our old website and sunsetting the cGrants platform. Users will have until July 30th, 2023 to retrieve their data",
+     "observed_at": "2026-10-15T18:21:00Z",
+     "methods": [
+      "web_search",
+      "support[.]gitcoin[.]co FAQ"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "Bounties business taken over by Buidlbox",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//support[.]gitcoin[.]co/gitcoin-knowledge-base/misc/cgrants-bounties-and-hackathons-sunsetting-faq/whats-happening-to-the-hackathons-and-the-bounties-program",
+     "quote": "this part of Gitcoin’s business will be taken over by Buidlbox",
+     "observed_at": "2026-10-15T18:21:00Z",
+     "methods": [
+      "web_search"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "No bounty surface on gitcoin[.]co",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//gitcoin[.]co/explorer",
+     "quote": "HTTP 404",
+     "observed_at": "2026-10-15T18:21:40Z",
+     "methods": [
+      "curl https[:]//gitcoin[.]co/explorer (404)",
+      "curl https[:]//bounties[.]gitcoin[.]co (no response)"
+     ],
+     "outcome": "contradicted"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy \"404 (per Jobbi audit)\" -> official sunset statement found (2023)"
+   ],
+   "notes": "Closure is official.",
+   "category": "work",
+   "legacy_status": "dead",
+   "qa": [
+    {
+     "id": 164,
+     "claim_kind": "announced_closed",
+     "first_agent_value": "closed (official sunset FAQ)",
+     "qa_value": "not re-fetched FAQ; gitcoin[.]co/explorer 404 confirmed",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//gitcoin[.]co/explorer",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": "Official statement cited by first agent; QA confirmed surface gone"
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:33:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/gitcoin-bounties.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/gitcoin-bounties-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "announced_closed",
-   "statement": "Official sunset of cGrants (which hosted the bounty platform); data retrieval until July 30, 2023",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://support.gitcoin.co/gitcoin-knowledge-base/misc/cgrants-bounties-and-hackathons-sunsetting-faq",
-   "quote": "we're bidding farewell to our old website and sunsetting the cGrants platform. Users will have until July 30th, 2023 to retrieve their data",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "methods": [
-    "web_search",
-    "support.gitcoin.co FAQ"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "Bounties business taken over by Buidlbox",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://support.gitcoin.co/gitcoin-knowledge-base/misc/cgrants-bounties-and-hackathons-sunsetting-faq/whats-happening-to-the-hackathons-and-the-bounties-program",
-   "quote": "this part of Gitcoin’s business will be taken over by Buidlbox",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "methods": [
-    "web_search"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "No bounty surface on gitcoin.co",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://gitcoin.co/explorer",
-   "quote": "HTTP 404",
-   "observed_at": "2026-10-15T18:21:40Z",
-   "methods": [
-    "curl https://gitcoin.co/explorer (404)",
-    "curl https://bounties.gitcoin.co (no response)"
-   ],
-   "outcome": "contradicted"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

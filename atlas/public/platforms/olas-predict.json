@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "olas-predict",
  "name": "Olas Predict / Polystrat (Polymarket, Omen)",
  "url": "https://commonworld.one/atlas/platforms/olas-predict/",
  "json_url": "https://commonworld.one/atlas/platforms/olas-predict.json",
+ "md_url": "https://commonworld.one/atlas/platforms/olas-predict/index.md",
  "website": "https://olas.network/agent-economies/predict",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Olas agent economy where autonomous trader agents (Omenstrat on Gnosis/Omen, Polystrat on Polygon/Polymarket) trade prediction markets.",
  "tags": [
   "forecasting",
   "on-chain"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 207,
-  "unit": "daily active agents",
-  "window": "7-day avg to 2026-10-15T17:20Z",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://olas.network/agent-economies/predict"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 7,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/olas-predict/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 4
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Olas Predict presents prediction-market agents: Omenstrat on Omen/Gnosis and Polystrat on Polymarket/Polygon. Its dashboard separates trading return from total return including staking rewards and related costs, alongside prediction accuracy and Brier scores. Positive total return or staking APR does not establish profitable trading; negative trading windows are also displayed. Active-agent figures count active multisigs using a seven-day average, while total agents counts minted services, not independent operators. Performance distributions use activity and cost thresholds. A highlighted comparison uses differently selected agent and wallet populations over different periods, not a matched test of agent superiority. Figures are operator-reported performance, not an independent audit or guaranteed earnings.",
@@ -74,126 +25,13 @@
   ],
   "revision": "c11d6b172ff4e467ba62b5123328364d51bf95252473e9e837af4d9385ca7778"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/olas-predict.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/olas-predict-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Found official page (legacy had no URL)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://olas.network/agent-economies/predict",
-   "quote": "OLAS PREDICT On-demand Agent-Powered Predictions",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://olas.network/agent-economies/predict",
-    "DoH lookup polystrat.olas.network → NXDOMAIN (guessed subdomain, not official)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Page served with live stats",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://olas.network/agent-economies/predict",
-   "quote": "Omenstrat Agent Economy 207 Daily Active Agents (DAAs)",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://olas.network/agent-economies/predict"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Agents trade Omen and Polymarket",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://olas.network/agent-economies/predict",
-   "quote": "12 daily active Polystrat agents trading Polymarket prediction markets on Polygon",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL predict page"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Omenstrat daily active agents (7-day avg)",
-   "value": 207,
-   "unit": "daily active agents",
-   "window": "7-day avg to 2026-10-15T17:20Z",
-   "basis": "operator_claim",
-   "source_url": "https://olas.network/agent-economies/predict",
-   "quote": "207 daily active Omenstrat agents ... 7-day average, as of 15 October 2026 17:20 UTC",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL predict page"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Omenstrat total agents",
-   "value": 1212,
-   "unit": "agents ever registered",
-   "window": "all time",
-   "basis": "operator_claim",
-   "source_url": "https://olas.network/agent-economies/predict",
-   "quote": "1,212 Omenstrat agents ever registered on Gnosis",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL predict page"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Polystrat daily active / total agents",
-   "value": 12,
-   "unit": "daily active agents (139 total)",
-   "window": "7-day avg / all time",
-   "basis": "operator_claim",
-   "source_url": "https://olas.network/agent-economies/predict",
-   "quote": "12 daily active Polystrat agents ... 139 Polystrat agents ever registered on Polygon",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL predict page"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Stats stamped 2026-10-15 17:20 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://olas.network/agent-economies/predict",
-   "quote": "as of 15 October 2026 17:20 UTC",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL predict page"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "natural-agentic-payments",
  "name": "Natural",
  "url": "https://commonworld.one/atlas/platforms/natural-agentic-payments/",
  "json_url": "https://commonworld.one/atlas/platforms/natural-agentic-payments.json",
+ "md_url": "https://commonworld.one/atlas/platforms/natural-agentic-payments/index.md",
  "website": "https://www.natural.com/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Natural is a San Francisco fintech building payment primitives for AI agents (wallets, payments, cards, accounts, billing) exposed via API, SDK, CLI and MCP.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:22:00Z",
- "last_checked": "2026-10-15T18:22:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/natural-agentic-payments/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Natural presents payment infrastructure for AI agents, including wallets, payments, transfers and developer access through MCP, CLI, SDK and API. The site also describes identity-linked agents, payment monitoring and managed disputes. Cards, credit, voice, billing and per-call charging are labelled as coming soon.",
@@ -63,77 +22,9 @@
   ],
   "revision": "ec7b1ff470e1b79546bf0b29fc214fda43419ddc84b40d7c3c6fe71e792a6e9f"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/natural-agentic-payments.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/natural-agentic-payments-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "natural.co (domain used in its 2025 seed blog) redirects to natural.com.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.natural.com/",
-   "quote": "Natural powers agentic payments. Wallets. Payments. Cards. Processing. Billing. Voice. All of the primitives agents need",
-   "observed_at": "2026-10-15T18:11:00Z",
-   "methods": [
-    "curl -L https://natural.co -> https://www.natural.com/"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves content (200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.natural.com/",
-   "quote": "Natural — Powering agentic payments",
-   "observed_at": "2026-10-15T18:11:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Homepage banner announces $30M Series A dated July 20 (2026 per press).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.natural.com/",
-   "quote": "Our $30M Series A July 20",
-   "observed_at": "2026-10-15T18:11:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Funding (not flow): $9.8M seed (2025-10-23) + $30M Series A (2026-07-20).",
-   "value": "9.8M + 30M",
-   "unit": "USD raised",
-   "window": "2025-10 to 2026-07",
-   "basis": "operator_claim",
-   "source_url": "https://natural.co/blog/natural-seed-round",
-   "quote": "We've raised $9.8m to build payments for AI agents ... October 23, 2025",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_search (excerpt)",
-    "homepage banner"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

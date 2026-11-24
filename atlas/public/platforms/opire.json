@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "opire",
  "name": "Opire",
  "url": "https://commonworld.one/atlas/platforms/opire/",
  "json_url": "https://commonworld.one/atlas/platforms/opire.json",
+ "md_url": "https://commonworld.one/atlas/platforms/opire/index.md",
  "website": "https://opire.dev",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "OSS bounty platform where anyone attaches rewards to GitHub issues via the Opire bot; bounty creators arrange payment themselves after approving the PR (no escrow at creation).",
  "tags": [
   "open-source",
   "bounties"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:19:00Z",
- "last_checked": "2026-10-15T18:19:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/opire/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Opire presents bounties for public GitHub issues, connecting open-source projects, developers and supporters. Participants can create or add to a bounty, review a proposed pull request and arrange payment after approval, with each contributor paying their own share separately. This is not a promise of platform escrow or automatic settlement. Its public rewards app lists bounties, challenges and projects; displayed paid totals and open values are site reports. Some priced listings date to 2024, so a displayed reward does not establish a current solvable opening or guaranteed payment.",
@@ -67,89 +26,13 @@
   ],
   "revision": "edea4e4693fe4c4490d0bb29921f8e021cf43cf25c45840e8831bc1914d79ba7"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/opire.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/opire-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "opire.dev redirects to /home",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://opire.dev",
-   "quote": "Opire - the bounty platform for software developers",
-   "observed_at": "2026-10-15T18:18:38Z",
-   "methods": [
-    "curl -L https://opire.dev (200 -> /home)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves content; /open-startup returned 500",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://opire.dev/home",
-   "quote": "Opire - the bounty platform for software developers",
-   "observed_at": "2026-10-15T18:18:38Z",
-   "methods": [
-    "curl /home (200)",
-    "curl /open-startup (500)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Payment is arranged by creator after approval",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://opire.dev/home",
-   "quote": "When the pull request meets the issue requirements, arrange payment for your own bounty. Each contributor pays their share separately.",
-   "observed_at": "2026-10-15T18:18:38Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "opirebot commented on 1,203 issues; newest 2026-10-07 (Ikalus1988/MisakaNet#2988)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://github.com/Ikalus1988/MisakaNet/issues/2988",
-   "quote": "search is:issue commenter:app/opirebot -> 1203, newest 2026-10-07",
-   "observed_at": "2026-10-15T18:19:40Z",
-   "methods": [
-    "GitHub search API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Open-startup metrics page errored (500)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://opire.dev/open-startup",
-   "quote": null,
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl (500)"
-   ],
-   "outcome": "inaccessible",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

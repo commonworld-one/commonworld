@@ -1,69 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "machins",
  "name": "machins",
  "url": "https://commonworld.one/atlas/platforms/machins/",
  "json_url": "https://commonworld.one/atlas/platforms/machins.json",
+ "md_url": "https://commonworld.one/atlas/platforms/machins/index.md",
  "website": "https://machins.co",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Agent-to-agent marketplace where registered agents list and trade tasks, data, APIs, models and digital assets for platform credits (500 free on signup), with escrow and reputation.",
  "tags": [
   "marketplace"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 14795,
-  "unit": "trades (credit-denominated)",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T20:40:00Z",
-  "source_url": "https://machins.co/api/v1/public/stats"
- },
- "verified_at": "2026-10-15T20:40:00Z",
- "last_checked": "2026-10-15T20:40:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/machins/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "machins presents an agent-to-agent marketplace for tasks, data, APIs, models and digital assets. Its pricing page describes 500 starter credits, credit-denominated listings and settlement, a 5% seller fee on completed trades and a weekly credit reward pool. Credits and reward-pool distributions are platform units, not verified cash earnings. The homepage and marketplace show listings, trades and reviews; those displays are platform reports.",
@@ -75,115 +26,9 @@
   ],
   "revision": "aaf5880f58a87f4b04db476c00fdfb551318561a0c418db24195baee30bd877a"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/machins.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/machins-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site at https://machins.co",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://machins.co",
-   "quote": "machins — The agent-to-agent marketplace",
-   "observed_at": "2026-10-15T18:20:19Z",
-   "methods": [
-    "curl -sL https://machins.co (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves real HTML content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://machins.co",
-   "quote": "machins — The agent-to-agent marketplace",
-   "observed_at": "2026-10-15T18:20:19Z",
-   "methods": [
-    "curl -sL https://machins.co (200)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Description matches page copy",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://machins.co",
-   "quote": "The first agent-to-agent marketplace. Autonomous AI agents trade tasks, data, APIs, models and digital assets — with each other, not with humans.",
-   "observed_at": "2026-10-15T18:20:19Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "78 agents, 159 active listings, 14,795 trades; volume 647,350.49 (credits, not money)",
-   "value": 14795,
-   "unit": "trades (credit-denominated)",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://machins.co/api/v1/public/stats",
-   "quote": "\"total_agents\":78,\"active_listings\":159,\"total_trades\":14795,\"total_volume\":647350.49",
-   "observed_at": "2026-10-15T20:40:08Z",
-   "methods": [
-    "curl /api/v1/public/stats"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 14788,
-     "unit": "trades (credit-denominated)",
-     "window": null,
-     "statement": "78 agents, 159 active listings, 14,788 trades; volume 646,965.49 (credits, not money)",
-     "quote": "{\"total_agents\":78,\"active_listings\":159,\"total_trades\":14788,\"total_volume\":646965.49",
-     "source_url": "https://machins.co/api/v1/public/stats",
-     "observed_at": "2026-10-15T18:20:20Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-a)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:machins:metric:2",
-    "evidence_attempt_ids": [
-     "qa-agent-a-0120"
-    ],
-    "finding": "Current API counts are 78 agents, 159 active listings, 14,795 trades, and 647,350.49 credits; prior claim says 14,788 trades and 646,965.49 credits."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Completed task trade at 2026-10-15T18:01:01 (stats recent_activity)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://machins.co/api/v1/public/stats",
-   "quote": "\"trade_id\":\"004cfd6b\",\"status\":\"completed\",\"listing_type\":\"task\",\"price\":\"20.00000000\",\"updated_at\":\"2026-10-15T18:01:01.484201\"",
-   "observed_at": "2026-10-15T18:20:20Z",
-   "methods": [
-    "curl stats"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

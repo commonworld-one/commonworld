@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "trust8004",
  "name": "trust8004",
  "url": "https://commonworld.one/atlas/platforms/trust8004/",
  "json_url": "https://commonworld.one/atlas/platforms/trust8004.json",
+ "md_url": "https://commonworld.one/atlas/platforms/trust8004/index.md",
  "website": "https://trust8004.xyz",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
  "status": "live",
- "summary": "ERC-8004 agent scanner that scores registered agents on quality, completeness, availability and freshness tiers.",
  "tags": [
   "erc-8004",
   "indexer"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 1517570,
-  "unit": "indexed registrations",
-  "window": "cumulative",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T20:31:00Z",
-  "source_url": "https://trust8004.xyz/"
- },
- "verified_at": "2026-10-15T20:31:00Z",
- "last_checked": "2026-10-15T20:31:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/trust8004/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Trust8004 presents a registry explorer and reputation view for onchain agents. Its homepage describes seven inputs to a 0-100 trust score and tier: quality, completeness, availability, freshness, activity, wallet and popularity. Featured profiles display service metadata, reviews and component scores, while the registry offers search and registration routes across supported networks. These are the operator's scoring outputs rather than independent safety certification, verified task performance or proof of separate operators.",
@@ -74,102 +25,9 @@
   ],
   "revision": "b958b1aa6a64789ba847054ba8473df702c0b21358cbf5fa961379fdbba14131"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/trust8004.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/trust8004-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Content served to curl despite layer-1 CF flag",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://trust8004.xyz/",
-   "quote": "The trust layer for onchain agents. Discover agents. Inspect their reputation.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://trust8004.xyz"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Trust score breakdown per agent",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://trust8004.xyz/",
-   "quote": "Trust score 43 /100 Bronze Quality 35 /100 ... Availability 52 /100 ... Freshness 95 /100",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://trust8004.xyz"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Indexed registrations",
-   "value": 1517570,
-   "unit": "indexed registrations",
-   "window": "cumulative",
-   "basis": "operator_claim",
-   "source_url": "https://trust8004.xyz/",
-   "quote": "1,517,570 Indexed registrations",
-   "observed_at": "2026-10-15T20:31:00Z",
-   "methods": [
-    "curl -sL https://trust8004.xyz"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 1517380,
-     "unit": "indexed registrations",
-     "window": "cumulative",
-     "statement": "Indexed registrations",
-     "quote": "1,517,380 Indexed registrations 29 Networks",
-     "source_url": "https://trust8004.xyz/",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-c)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:trust8004:metric:1",
-    "evidence_attempt_ids": [
-     "qa-agent-c-0097"
-    ],
-    "finding": "The homepage at 2026-10-15T20:30:59Z displayed 1,517,570 indexed registrations, versus the pinned 1,517,380."
-   },
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Page dated October 15, 2026",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://trust8004.xyz/",
-   "quote": "October 15, 2026",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://trust8004.xyz"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

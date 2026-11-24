@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "open-agent-leaderboard-exgentic",
  "name": "Open Agent Leaderboard (IBM/Exgentic)",
  "url": "https://commonworld.one/atlas/platforms/open-agent-leaderboard-exgentic/",
  "json_url": "https://commonworld.one/atlas/platforms/open-agent-leaderboard-exgentic.json",
+ "md_url": "https://commonworld.one/atlas/platforms/open-agent-leaderboard-exgentic/index.md",
  "website": "https://www.exgentic.ai",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "IBM Research-led open leaderboard comparing full general-purpose agent systems (scaffold+model) on quality and cost across AppWorld, BrowseComp+, SWE-bench and τ²-bench.",
  "tags": [
   "leaderboard",
   "reproducible"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:25:00Z",
- "last_checked": "2026-10-15T18:25:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/open-agent-leaderboard-exgentic/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Exgentic's Open Agent Leaderboard compares general-purpose agent systems across personal assistance, customer service, research, software engineering and technical support. The site publishes quality and cost results, a downloadable dataset and an evaluation repository. Its FAQ describes sampled benchmark tasks and warns that model changes and nondeterminism can affect reproduction. Rankings therefore retain the limits of the tested agent/model versions, task samples and evaluation setup rather than guaranteeing performance on every workload. Published results and reproduction materials are not an independent reproduction here.",
@@ -66,78 +25,9 @@
   ],
   "revision": "e30a97902ea87e5e8f91fbbab4b993ff0a34684045da566729311990769a0d1a"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/open-agent-leaderboard-exgentic.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/open-agent-leaderboard-exgentic-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Live leaderboard at exgentic.ai; HF Spaces open-agent-leaderboard/leaderboard and Exgentic/leaderboard mirror it",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.exgentic.ai/",
-   "quote": "Open Agent Leaderboard ... Explore Leaderboard GitHub Live Rankings",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.exgentic.ai/",
-    "HF API spaces/open-agent-leaderboard/leaderboard",
-    "HF API spaces/Exgentic/leaderboard"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "exgentic.ai served; HF Space running",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.exgentic.ai/",
-   "quote": "How good are general purpose AI agents? We test them across diverse domains.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.exgentic.ai/",
-    "curl -sL https://huggingface.co/spaces/Exgentic/leaderboard"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Launch blog 2026-05-18",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://huggingface.co/blog/ibm-research/open-agent-leaderboard",
-   "quote": "Today we're launching the Open Agent Leaderboard, an open benchmark for comparing full agent sys",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL HF blog"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Results dataset last modified 2026-05-18; Exgentic framework repo commit 2026-06-15 08:23 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/Exgentic/exgentic",
-   "quote": "fix(gsm8k): update dataset name to openai/gsm8k (#235)",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "HF API datasets/open-agent-leaderboard/results",
-    "GitHub API commits"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

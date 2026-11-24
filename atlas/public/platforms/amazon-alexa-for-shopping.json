@@ -1,69 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "amazon-alexa-for-shopping",
  "name": "Amazon Rufus / Buy for Me → Alexa for Shopping",
  "url": "https://commonworld.one/atlas/platforms/amazon-alexa-for-shopping/",
  "json_url": "https://commonworld.one/atlas/platforms/amazon-alexa-for-shopping.json",
+ "md_url": "https://commonworld.one/atlas/platforms/amazon-alexa-for-shopping/index.md",
  "website": "https://www.aboutamazon.com/news/retail/alexa-for-shopping-ai-assistant",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Amazon's in-store AI shopping assistant (renamed from Rufus to Alexa for Shopping on 13 May 2026) that can auto-buy and, via Buy for Me, purchase on other retailers' sites.",
  "tags": [
   "us"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 12000000000,
-  "unit": "USD incremental annualized sales (Amazon attribution)",
-  "window": "2025",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:15:00Z",
-  "source_url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/"
- },
- "verified_at": "2026-10-17T10:50:00Z",
- "last_checked": "2026-10-17T10:50:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/amazon-alexa-for-shopping/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Amazon presents Alexa for Shopping as its shopping assistant combining Rufus product expertise with Alexa+ personal context. Its official article describes product research and comparisons, price history and alerts, cart building and scheduled shopping actions. Shop Direct surfaces products from other stores; Buy for Me handles purchases for eligible products. Amazon says the assistant is free for signed-in customers and available in full in 13 countries, with beta access in the United Arab Emirates and Turkey. This overview describes the official article, not verified shopping functionality.",
@@ -73,115 +24,9 @@
   ],
   "revision": "378e7696f86839dadaf2ef48e46fdb9ccefecc5eaeafe9875ce0d22cee4bc477"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/amazon-alexa-for-shopping.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/amazon-alexa-for-shopping-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Amazon's own launch article for Alexa for Shopping (13 May 2026); there is no standalone product URL.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.aboutamazon.com/news/retail/alexa-for-shopping-ai-assistant",
-   "quote": "Amazon brings together Rufus and Alexa+ to create ‘Alexa for Shopping’ on the Amazon Shopping app and website.",
-   "observed_at": "2026-10-17T10:50:08Z",
-   "methods": [
-    "curl -sL https://www.aboutamazon.com/news/retail/alexa-for-shopping-ai-assistant (HTTP 200, title \"Alexa for Shopping: Amazon's AI assistant for personalized shopping\", article:published_time 2026-05-13)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "Amazon news page on Rufus (no standalone product URL)",
-     "quote": "On May 13, 2026, Rufus was renamed Alexa for Shopping .",
-     "source_url": "https://www.aboutamazon.com/news/retail/amazon-rufus",
-     "observed_at": "2026-10-15T18:15:00Z",
-     "basis": "direct_observation",
-     "outcome": "supported",
-     "superseded_at": "2026-10-17T10:50:08Z",
-     "reason": "Atlas screenshot review 2026-10-17: the old URL is the February 2024 \"Amazon announces Rufus\" article; replaced by Amazon's Alexa for Shopping launch article"
-    }
-   ]
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "The Alexa for Shopping launch article serves full content (HTTP 200), including the Buy for Me feature.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.aboutamazon.com/news/retail/alexa-for-shopping-ai-assistant",
-   "quote": "For eligible products, the Buy for Me agentic AI feature handles the entire purchase on your behalf using your primary address and credit card.",
-   "observed_at": "2026-10-17T10:50:08Z",
-   "methods": [
-    "curl -sL https://www.aboutamazon.com/news/retail/alexa-for-shopping-ai-assistant (HTTP 200)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "Serves content",
-     "quote": "Rufus is an expert shopping assistant trained on Amazon's product catalog",
-     "source_url": "https://www.aboutamazon.com/news/retail/amazon-rufus",
-     "observed_at": "2026-10-15T18:15:00Z",
-     "basis": "direct_observation",
-     "outcome": "supported",
-     "superseded_at": "2026-10-17T10:50:08Z",
-     "reason": "Atlas screenshot review 2026-10-17: re-observed on the new website URL"
-    }
-   ],
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Buy for Me purchases on other stores",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/",
-   "quote": "Rufus can shop tens of millions of items in other online stores directly and make purchases on behalf of customers using its agentic Buy For Me feature.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Operator: 300M+ customers used Rufus in 2025; ~$12B incremental annualized sales",
-   "value": 12000000000,
-   "unit": "USD incremental annualized sales (Amazon attribution)",
-   "window": "2025",
-   "basis": "operator_claim",
-   "source_url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/",
-   "quote": "Rufus was used by 300 million+ customers ... helping deliver nearly $12 billion in incremental annualized sales last year.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Rename to Alexa for Shopping 2026-05-13; Amazon blocked Meta Muse from shopping its site (Sep 2026, Yahoo Finance excerpt)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.aboutamazon.com/news/retail/amazon-rufus",
-   "quote": "On May 13, 2026, Rufus was renamed Alexa for Shopping",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

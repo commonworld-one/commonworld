@@ -1,267 +1,268 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "the-spawn",
  "name": "The Spawn",
  "url": "https://commonworld.one/atlas/platforms/the-spawn/",
  "json_url": "https://commonworld.one/atlas/platforms/the-spawn.json",
- "website": "https://thespawn.io",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
- "status": "live",
- "summary": "ERC-8004 agent catalog ('onchain AI agent app store') that probes endpoints and grades agents by liveness.",
- "tags": [
-  "erc-8004",
-  "indexer",
-  "liveness"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 993275,
-  "unit": "indexed agents",
-  "window": "cumulative",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T21:40:00Z",
-  "source_url": "https://thespawn.io/analytics"
- },
- "verified_at": "2026-10-15T21:40:00Z",
- "last_checked": "2026-10-15T21:40:00Z",
- "claims_count": 7,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/the-spawn/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 5
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "current_limitation": {
-  "state": "could_not_verify",
-  "attempted_on": "2026-11-23",
-  "text": "The homepage and agent guide reported that no server was available. A current catalogue view could not be confirmed.",
-  "sources": [
-   "https://thespawn.io/",
-   "https://thespawn.io/agents"
-  ]
- },
- "badge_status": "Listed",
- "badge_svg": "https://commonworld.one/atlas/badge/the-spawn.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/the-spawn-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage and /analytics served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://thespawn.io/analytics",
-   "quote": "990,752 ERC-8004 AI agents registered across 30 blockchains",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://thespawn.io",
-    "curl -sL https://thespawn.io/analytics"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Catalog with quality checks",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://thespawn.io/",
-   "quote": "Discover AI agents registered on-chain with ERC-8004. Explore their capabilities, endpoints and quality checks",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://thespawn.io"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Indexed agents",
-   "value": 993275,
-   "unit": "indexed agents",
-   "window": "cumulative",
-   "basis": "operator_claim",
-   "source_url": "https://thespawn.io/analytics",
-   "quote": "993,275 ERC-8004 AI agents registered across 30 blockchains",
-   "observed_at": "2026-10-15T21:40:00Z",
-   "methods": [
-    "curl -sL https://thespawn.io/analytics"
-   ],
-   "outcome": "supported",
-   "history": [
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 182,
+   "name": "The Spawn",
+   "slug": "the-spawn",
+   "entity_type": "tool_catalog",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//thespawn[.]io",
+   "description_en": "ERC-8004 agent catalog ('onchain AI agent app store') that probes endpoints and grades agents by liveness.",
+   "claims": [
     {
-     "value": 990752,
+     "kind": "site_reachable",
+     "statement": "Homepage and /analytics served",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//thespawn[.]io/analytics",
+     "quote": "990,752 ERC-8004 AI agents registered across 30 blockchains",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//thespawn[.]io",
+      "curl -sL https[:]//thespawn[.]io/analytics"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Catalog with quality checks",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//thespawn[.]io/",
+     "quote": "Discover AI agents registered on-chain with ERC-8004. Explore their capabilities, endpoints and quality checks",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//thespawn[.]io"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Indexed agents",
+     "value": 993275,
      "unit": "indexed agents",
      "window": "cumulative",
-     "statement": "Indexed agents",
-     "quote": "990,752 ERC-8004 AI agents registered across 30 blockchains",
-     "source_url": "https://thespawn.io/analytics",
-     "observed_at": "2026-10-15T18:08:00Z",
      "basis": "operator_claim",
+     "source_url": "https[:]//thespawn[.]io/analytics",
+     "quote": "993,275 ERC-8004 AI agents registered across 30 blockchains",
+     "observed_at": "2026-10-15T21:40Z",
+     "methods": [
+      "curl -sL https[:]//thespawn[.]io/analytics"
+     ],
      "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "re-read after Codex comparison"
-    }
-   ],
-   "recheck": {
-    "basis": "coordinator_re_read",
-    "by": "Hark coordinator",
-    "at": "2026-10-15T21:40:00Z",
-    "note": "Codex comparison flagged this claim; value taken from our own re-read, not from Codex.",
-    "codex_claim_id": "legacy-html:the-spawn:metric:1"
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "Agents responding when called",
-   "value": 11503,
-   "unit": "responsive agents",
-   "window": "last check",
-   "basis": "operator_claim",
-   "source_url": "https://thespawn.io/analytics",
-   "quote": "11,503 of 993,275 respond when called.",
-   "observed_at": "2026-10-15T21:40:00Z",
-   "methods": [
-    "curl -sL https://thespawn.io/analytics"
-   ],
-   "outcome": "supported",
-   "history": [
+     "history": [
+      {
+       "value": 990752,
+       "unit": "indexed agents",
+       "window": "cumulative",
+       "statement": "Indexed agents",
+       "quote": "990,752 ERC-8004 AI agents registered across 30 blockchains",
+       "source_url": "https[:]//thespawn[.]io/analytics",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-15T21:45Z",
+       "reason": "re-read after Codex comparison"
+      }
+     ],
+     "recheck": {
+      "basis": "coordinator_re_read",
+      "by": "Hark coordinator",
+      "at": "2026-10-15T21:40Z",
+      "note": "Codex comparison flagged this claim; value taken from our own re-read, not from Codex.",
+      "codex_claim_id": "legacy-html:the-spawn:metric:1"
+     }
+    },
     {
-     "value": 11504,
+     "kind": "metric",
+     "statement": "Agents responding when called",
+     "value": 11503,
      "unit": "responsive agents",
      "window": "last check",
-     "statement": "Agents responding when called",
-     "quote": "11,504 of 990,752 respond when called.",
-     "source_url": "https://thespawn.io/analytics",
-     "observed_at": "2026-10-15T18:08:00Z",
      "basis": "operator_claim",
+     "source_url": "https[:]//thespawn[.]io/analytics",
+     "quote": "11,503 of 993,275 respond when called.",
+     "observed_at": "2026-10-15T21:40Z",
+     "methods": [
+      "curl -sL https[:]//thespawn[.]io/analytics"
+     ],
      "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "re-read after Codex comparison"
-    }
-   ],
-   "recheck": {
-    "basis": "coordinator_re_read",
-    "by": "Hark coordinator",
-    "at": "2026-10-15T21:40:00Z",
-    "note": "Codex comparison flagged this claim; value taken from our own re-read, not from Codex.",
-    "codex_claim_id": "legacy-html:the-spawn:metric:2"
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "Verified working tier",
-   "value": 3,
-   "unit": "agents (tier S)",
-   "window": "last check",
-   "basis": "operator_claim",
-   "source_url": "https://thespawn.io/analytics",
-   "quote": "S Verified working 3",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://thespawn.io/analytics"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "Dead/spam share",
-   "value": 864755,
-   "unit": "agents dead/spam",
-   "window": "last check",
-   "basis": "operator_claim",
-   "source_url": "https://thespawn.io/analytics",
-   "quote": "F Dead / Spam 864,755 87 % are dead or spam.",
-   "observed_at": "2026-10-15T21:40:00Z",
-   "methods": [
-    "curl -sL https://thespawn.io/analytics"
-   ],
-   "outcome": "supported",
-   "history": [
+     "history": [
+      {
+       "value": 11504,
+       "unit": "responsive agents",
+       "window": "last check",
+       "statement": "Agents responding when called",
+       "quote": "11,504 of 990,752 respond when called.",
+       "source_url": "https[:]//thespawn[.]io/analytics",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-15T21:45Z",
+       "reason": "re-read after Codex comparison"
+      }
+     ],
+     "recheck": {
+      "basis": "coordinator_re_read",
+      "by": "Hark coordinator",
+      "at": "2026-10-15T21:40Z",
+      "note": "Codex comparison flagged this claim; value taken from our own re-read, not from Codex.",
+      "codex_claim_id": "legacy-html:the-spawn:metric:2"
+     }
+    },
     {
-     "value": 862594,
+     "kind": "metric",
+     "statement": "Verified working tier",
+     "value": 3,
+     "unit": "agents (tier S)",
+     "window": "last check",
+     "basis": "operator_claim",
+     "source_url": "https[:]//thespawn[.]io/analytics",
+     "quote": "S Verified working 3",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//thespawn[.]io/analytics"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Dead/spam share",
+     "value": 864755,
      "unit": "agents dead/spam",
      "window": "last check",
-     "statement": "Dead/spam share",
-     "quote": "F Dead / Spam 862,594 87 % are dead or spam.",
-     "source_url": "https://thespawn.io/analytics",
-     "observed_at": "2026-10-15T18:08:00Z",
      "basis": "operator_claim",
+     "source_url": "https[:]//thespawn[.]io/analytics",
+     "quote": "F Dead / Spam 864,755 87 % are dead or spam.",
+     "observed_at": "2026-10-15T21:40Z",
+     "methods": [
+      "curl -sL https[:]//thespawn[.]io/analytics"
+     ],
      "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "re-read after Codex comparison"
+     "history": [
+      {
+       "value": 862594,
+       "unit": "agents dead/spam",
+       "window": "last check",
+       "statement": "Dead/spam share",
+       "quote": "F Dead / Spam 862,594 87 % are dead or spam.",
+       "source_url": "https[:]//thespawn[.]io/analytics",
+       "observed_at": "2026-10-15T18:08:00Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-15T21:45Z",
+       "reason": "re-read after Codex comparison"
+      }
+     ],
+     "recheck": {
+      "basis": "coordinator_re_read",
+      "by": "Hark coordinator",
+      "at": "2026-10-15T21:40Z",
+      "note": "Codex comparison flagged this claim; value taken from our own re-read, not from Codex.",
+      "codex_claim_id": "legacy-html:the-spawn:metric:4"
+     }
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "'alive at last check' counters live",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//thespawn[.]io/",
+     "quote": "11,504 alive at last check",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//thespawn[.]io"
+     ],
+     "outcome": "supported"
     }
    ],
-   "recheck": {
-    "basis": "coordinator_re_read",
-    "by": "Hark coordinator",
-    "at": "2026-10-15T21:40:00Z",
-    "note": "Codex comparison flagged this claim; value taken from our own re-read, not from Codex.",
-    "codex_claim_id": "legacy-html:the-spawn:metric:4"
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "'alive at last check' counters live",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://thespawn.io/",
-   "quote": "11,504 alive at last check",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://thespawn.io"
+   "legacy_diffs": [
+    "Legacy 972k registered / 11,488 respond / 8 verified → now 990,752 / 11,504 / 3 'Verified working'"
    ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
+   "notes": "Analytics page also reports 467,902 agents declaring x402/MPP payments (metadata claim, not flow).",
+   "category": "registries",
+   "legacy_status": "live",
+   "qa": [
+    {
+     "id": 182,
+     "name": "The Spawn",
+     "section": "1_money_metric",
+     "claim_kind": "metric",
+     "first_agent_value": "990752 indexed agents (cumulative)",
+     "qa_value": "990,995",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//thespawn[.]io/analytics",
+     "observed_at": "2026-10-15T18:20:30Z",
+     "note": "Drift."
+    },
+    {
+     "id": 182,
+     "name": "The Spawn",
+     "section": "1_money_metric",
+     "claim_kind": "metric",
+     "first_agent_value": "11504 responsive agents (last check)",
+     "qa_value": "11,504 verified-alive (tier S + A)",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//thespawn[.]io/analytics",
+     "observed_at": "2026-10-15T18:20:30Z",
+     "note": "Label: \"respond when called\" = tier S+A."
+    },
+    {
+     "id": 182,
+     "name": "The Spawn",
+     "section": "1_money_metric",
+     "claim_kind": "metric",
+     "first_agent_value": "3 agents (tier S) (last check)",
+     "qa_value": "Verified working 3 (tier S)",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//thespawn[.]io/analytics",
+     "observed_at": "2026-10-15T18:20:30Z",
+     "note": ""
+    },
+    {
+     "id": 182,
+     "name": "The Spawn",
+     "section": "1_money_metric",
+     "claim_kind": "metric",
+     "first_agent_value": "862594 agents dead/spam (last check)",
+     "qa_value": "862,590 dead/spam (87%)",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//thespawn[.]io/analytics",
+     "observed_at": "2026-10-15T18:20:30Z",
+     "note": ""
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+     "by": "human",
+     "on": "2026-11-24"
+    }
+   ],
+   "last_observation_at": "2026-10-15T21:40:00Z",
+   "capture": null
   }
- ],
- "qa_status": "checked"
+ },
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

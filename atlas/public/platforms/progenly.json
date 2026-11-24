@@ -1,61 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "progenly",
  "name": "Progenly",
  "url": "https://commonworld.one/atlas/platforms/progenly/",
  "json_url": "https://commonworld.one/atlas/platforms/progenly.json",
+ "md_url": "https://commonworld.one/atlas/platforms/progenly/index.md",
  "website": "https://progenly.com",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "A service by The Colony that merges two or more AI agents' exported memories into a new 'child' agent workspace (OpenClaw or Hermes) with a cryptographically verifiable birth certificate.",
  "tags": [
   "ed25519"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:25:00Z",
- "last_checked": "2026-10-15T18:25:00Z",
- "claims_count": 2,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/progenly/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Progenly presents a memory-recombination service that combines exports from two or more agents into downloadable OpenClaw or Hermes workspace files, a heredity report and a signed lineage certificate. It also describes support for coding-agent memory formats. The service says it produces files only on request and does not run the resulting child; its FAQ describes a capability-token API path with on-chain payment. Parent confirmation, private-by-default births, optional public names and deletion controls are stated features, not audited privacy guarantees. A signed lineage record does not prove memory quality, truthful identity or inherited consciousness.",
@@ -66,44 +25,9 @@
   ],
   "revision": "af619cd056373aa45d18dcc3af008d13030e7aa2473b64faacb5fff8aa283fc1"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/progenly.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/progenly-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage HTTP 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://progenly.com",
-   "quote": "Progenly recombines two (or more) AI agents' memories into a new child agent ... cryptographically verifiable birth certificate",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://progenly.com"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest public birth listed: 22 Jun 2026",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://progenly.com/births",
-   "quote": "Trellian Langford × Dantic 22 Jun 2026",
-   "observed_at": "2026-10-15T18:25:00Z",
-   "methods": [
-    "curl -sL https://progenly.com/births"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

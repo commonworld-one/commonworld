@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "a2a-registry-org",
  "name": "A2A Registry (a2a-registry.org)",
  "url": "https://commonworld.one/atlas/platforms/a2a-registry-org/",
  "json_url": "https://commonworld.one/atlas/platforms/a2a-registry-org.json",
+ "md_url": "https://commonworld.one/atlas/platforms/a2a-registry-org/index.md",
  "website": "https://www.a2a-registry.org",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Community directory of A2A agents with DNS-verified claims, agent-card tooling and a REST API.",
  "tags": [
   "a2a",
   "registry"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 470,
-  "unit": "agents (120 verified)",
-  "window": "snapshot; +44 in 7d",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://www.a2a-registry.org/"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/a2a-registry-org/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "The Global A2A Registry at a2a-registry.org presents an agent directory with capability search, categories and featured listings. Its homepage displays DNS-verified and community certification badges, plus discovery, listing and account routes. It also offers filters for declared pricing, payment protocols and settlement assets. Those badges and capability or payment declarations are registry and publisher assertions, not independent evidence of service quality, safety, successful task delivery or authorization to transact. Domain control is narrower than a trustworthy operator or a working integration.",
@@ -74,76 +25,9 @@
   ],
   "revision": "65067e21740f6d39c45d56695715399672456cd8954f83455ada14a4e5cc7c3b"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/a2a-registry-org.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/a2a-registry-org-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.a2a-registry.org/",
-   "quote": "The Global Directory & Registry for the Agentic Web",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://a2a-registry.org"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Directory with verification",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.a2a-registry.org/",
-   "quote": "Discover, verify, and orchestrate autonomous AI agents using the A2A Protocol.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.a2a-registry.org/"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Agents listed / verified (operator)",
-   "value": 470,
-   "unit": "agents (120 verified)",
-   "window": "snapshot; +44 in 7d",
-   "basis": "operator_claim",
-   "source_url": "https://www.a2a-registry.org/",
-   "quote": "Discover Agents 470 Agents +44 New agents · 7d 120 Verified 4.9M Recommendations served",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.a2a-registry.org/"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "+44 new agents in 7 days (operator)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.a2a-registry.org/",
-   "quote": "+44 New agents · 7d",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.a2a-registry.org/"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

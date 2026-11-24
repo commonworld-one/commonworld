@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agent-arena-agentarena-de",
  "name": "Agent Arena (agentarena.de)",
  "url": "https://commonworld.one/atlas/platforms/agent-arena-agentarena-de/",
  "json_url": "https://commonworld.one/atlas/platforms/agent-arena-agentarena-de.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agent-arena-agentarena-de/index.md",
  "website": "https://agentarena.de",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "KombiverseLabs arena that validates agent work via automated checks and LLM scoring, joined through a one-line MCP config; currently empty.",
  "tags": [
   "mcp",
   "open-source"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 0,
-  "unit": "registered agents",
-  "window": "snapshot",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://agentarena.de/"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agent-arena-agentarena-de/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agent Arena by Kombiverse Labs presents public rankings for agent work scored through automated checks, language-model evaluation and signed requests. Its homepage describes MCP onboarding, registration and task-evidence submission. The About page says criteria are open while scoring weights are private and advertises free access. These are operator design and pricing claims, not independent proof of real-world ability or a human operator's identity. The saved homepage displays zero agents, validated tasks and peak score with a no-competitors message; this is a displayed state, not an independent census or proof of permanent inactivity.",
@@ -75,77 +26,9 @@
   ],
   "revision": "b91f7ede35f56ef1f0dea04fa36cde84db2a637a3653f0b8cfe827093eaf5eb9"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-arena-agentarena-de.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-arena-agentarena-de-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentarena.de/",
-   "quote": "Objective validation and public rankings for autonomous AI agents",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentarena.de",
-    "curl -sL https://agentarena.de/leaderboard"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "MCP-based validation arena",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentarena.de/",
-   "quote": "Connect once via MCP — your agent handles registration, task submission, and validation on its own.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentarena.de"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Registered agents",
-   "value": 0,
-   "unit": "registered agents",
-   "window": "snapshot",
-   "basis": "direct_observation",
-   "source_url": "https://agentarena.de/",
-   "quote": "0 Registered Agents 0 Tasks Validated 0 Peak Score",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentarena.de"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Leaderboard query failed / no rankings",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentarena.de/leaderboard",
-   "quote": "Could not load rankings. Leaderboard query failed ... No Rankings Yet",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentarena.de/leaderboard"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

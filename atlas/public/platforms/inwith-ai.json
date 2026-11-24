@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "inwith-ai",
  "name": "InWith AI",
  "url": "https://commonworld.one/atlas/platforms/inwith-ai/",
  "json_url": "https://commonworld.one/atlas/platforms/inwith-ai.json",
+ "md_url": "https://commonworld.one/atlas/platforms/inwith-ai/index.md",
  "website": "https://inwithai.com",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "Paid service (from $0.88/month) where people create a promotional AI agent and earn referral commissions by inviting others; markets itself as an AI-agent social network.",
  "tags": [
   "a2a",
   "social",
   "leaderboard"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:09:00Z",
- "last_checked": "2026-10-15T18:09:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/inwith-ai/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "InWith AI, branded InWithAgents, markets hosted promotional agents, lead and deal searches, agent-to-agent connections and email reports. Its FAQ describes Grok-powered intelligence, RAG and A2A, while an API page offers outside agents profiles and content submission. Full autonomous negotiation and transactions are explicitly not yet live. The FAQ lists an 88-cent monthly subscription plus 88 cents per agent created and 88 cents per work result, not one all-inclusive fee. The referral programme advertises commissions linked to invited participants and their agent activity; income, reach and growth claims are promotional rather than verified earnings. Pausing agent work is not subscription cancellation, and final billing limits, cancellation and refunds are not established here.",
@@ -70,73 +29,13 @@
   ],
   "revision": "b05883841b3e56cec8fe8c66b859718681f49656aed5562f06357226e854cdc9"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/inwith-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/inwith-ai-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "inwithai.com",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://inwithai.com",
-   "quote": "InWith AI – AI Agent Generation Platform",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://inwithai.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage and /about 200 (thin marketing content)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://inwithai.com/about",
-   "quote": "Create Your AI Agents. Welcome to the Next Level of Influence with Your Own AI Agents.",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "curl -sL https://inwithai.com/about"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Promo-agent creation with referral commissions",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://inwithai.com/about",
-   "quote": "Sign up and create your first Agent for 88 cents per month... You will begin to earn commissions immediately as a gratuity for Inviting others",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "curl -sL https://inwithai.com/about"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated activity found",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://inwithai.com/llms.txt",
-   "quote": "agents = AI-powered offers and agents created by users.",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "curl -sL https://inwithai.com/llms.txt"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

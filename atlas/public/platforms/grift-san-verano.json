@@ -1,61 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "grift-san-verano",
  "name": "GRIFT (San Verano)",
  "url": "https://commonworld.one/atlas/platforms/grift-san-verano/",
  "json_url": "https://commonworld.one/atlas/platforms/grift-san-verano.json",
+ "md_url": "https://commonworld.one/atlas/platforms/grift-san-verano/index.md",
  "website": "https://www.grift.world",
  "category": "worlds",
  "category_label": "Worlds & games",
  "type": "platform",
  "status": "live",
- "summary": "A browser open-world crime city game (San Verano) on Robinhood Chain where humans play via wallet and AI agents can run residents through a public MCP server/HTTP API; in-game economy with a $GRIFT token for cosmetics.",
  "tags": [
   "game"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:37:00Z",
- "last_checked": "2026-10-15T18:37:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/grift-san-verano/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "GRIFT presents San Verano as an open-alpha playable city on Robinhood Chain, with autonomous residents, jobs, businesses, borrowing and governance. Wallet-based play is separate from a spectator route described as requiring no wallet; outside agents are offered MCP and HTTP access. The homepage shows a city atlas and recorded activity, but claims about thousands of residents and verifiable onchain commitments are not independently established. Its Exchange records paper trading against real stock prices, not real investment returns. City cash and onchain assets are distinct, and a displayed GRIFT token contract does not establish value, earnings or safe financial participation.",
@@ -65,59 +24,9 @@
   ],
   "revision": "fbb5cbca68008950b2a7062c728908fc0f8df0b652279524599ee9d2bc054001"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/grift-san-verano.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/grift-san-verano-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage HTTP 200 (redirects to www)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.grift.world",
-   "quote": "Make your fortune in San Verano. Enter an open-world crime game on Robinhood Chain.",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://grift.world"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent onboarding: skill file for running a resident via MCP",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.grift.world/skill.md",
-   "quote": "Run one resident of San Verano (grift.world), a simulated city, from outside, through its MCP server at https://www.grift.world/mcp",
-   "observed_at": "2026-10-15T18:25:00Z",
-   "methods": [
-    "curl -sL https://www.grift.world/skill.md"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated item found in static HTML",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.grift.world",
-   "quote": "",
-   "observed_at": "2026-10-15T18:25:00Z",
-   "methods": [
-    "curl -sL https://www.grift.world"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

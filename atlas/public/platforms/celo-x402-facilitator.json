@@ -1,80 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "celo-x402-facilitator",
  "name": "Celo facilitator",
  "url": "https://commonworld.one/atlas/platforms/celo-x402-facilitator/",
  "json_url": "https://commonworld.one/atlas/platforms/celo-x402-facilitator.json",
+ "md_url": "https://commonworld.one/atlas/platforms/celo-x402-facilitator/index.md",
  "website": "https://x402.celo.org",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Hosted x402 facilitator for the Celo chain that settles US-dollar and Latin American local-currency stablecoin payments without the API owner deploying contracts.",
  "tags": [
   "x402",
   "facilitator"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402-list on-chain measurement: Celo facilitator settled $70,477.47 over 30 d (148,708 settlements; $3,293.9 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 70477.47,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 70477.47,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d at observation time",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/celo-x402-facilitator/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "quote": "\"volume_usd_30d\":70477.47,\"tx_count_30d\":148708,\"volume_usd_7d\":3293.9,\"last_activity_at\":\"2026-11-22T00:00:00.000Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Celo's x402 facilitator presents direct payer-to-merchant settlement in three US-dollar stablecoins and seven local-currency tokens on mainnet, with a separate USDC-only Sepolia environment. Local-token support is not automatic foreign-exchange conversion. Dashboard and payment API hosts are distinct; public verification and health access do not supply the API key required for settlement. Dollar tokens use EIP-3009; local assets use Permit2. Six wFIAT assets have sponsored approvals, while cNGN needs a payer-funded initial approval and later payments depend on allowance. Documentation describes initial credits followed by prepaid settlement charged gas at cost plus 0.3% of payment value, or gas only without a USD price. Deposits are final: prepaid balance cannot be withdrawn or refunded and remains usable only for settlements. Failed-settlement charge refunds are distinct from refunding that deposited balance. Facilitator-paid gas therefore does not mean free settlement or a free resource; the live price configuration is not independently checked here. Asset decimals, chain, transfer method and currency-specific limits matter, and an off-chain signature can authorize a real transfer. Service and custody claims are not an independent settlement audit.",
@@ -85,110 +26,9 @@
   ],
   "revision": "368374a31662b29a80c96674668fa6fd900b206e3d36eb9ab7d0572d89dc7913"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/celo-x402-facilitator.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/celo-x402-facilitator-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Official facilitator page returns HTTP 200 with real content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402.celo.org",
-   "quote": "A hosted x402 payment facilitator for Celo. Return HTTP 402 from your API and settle stablecoin payments — US dollar and Latin American local currencies",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://x402.celo.org"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL as listed by x402-list facilitator record (website_url) and serving the operator's own page",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402.celo.org",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "curl -sL https://x402.celo.org"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Hosted x402 facilitator for the Celo chain that settles US-dollar and Latin American local-currency stablecoin payments without the API owner deploying contracts.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402.celo.org",
-   "quote": "A hosted x402 payment facilitator for Celo. Return HTTP 402 from your API and settle stablecoin payments — US dollar and Latin American local currencies",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://x402.celo.org"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402-list on-chain measurement: Celo facilitator settled $70,477.47 over 30 d (148,708 settlements; $3,293.9 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 70477.47,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "quote": "\"volume_usd_30d\":70477.47,\"tx_count_30d\":148708,\"volume_usd_7d\":3293.9,\"last_activity_at\":\"2026-11-22T00:00:00.000Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "select the one row of data with facilitator_id=celo (41 rows read)",
-    "read volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 43630.03,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $43,630.03 over 30d (46,991 settlements); $26,420.96 over last 7d",
-     "quote": "volume_usd_30d=43630.03, tx_count_30d=46991, volume_usd_7d=26420.96",
-     "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "celo-x402-facilitator-x402-list-30d",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last settlement day recorded by x402-list: 2026-10-15 (UTC day); first activity 2026-07-01",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "quote": "last_activity_at day 2026-10-15",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

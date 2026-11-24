@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "trust-authority-ai",
  "name": "Trust Authority AI",
  "url": "https://commonworld.one/atlas/platforms/trust-authority-ai/",
  "json_url": "https://commonworld.one/atlas/platforms/trust-authority-ai.json",
+ "md_url": "https://commonworld.one/atlas/platforms/trust-authority-ai/index.md",
  "website": "https://trustauthority.ai",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "A commercial 'Know Your Agent' service issuing and verifying portable trust evidence for agents: W3C verifiable credentials, runtime attestation, disclosure receipts and signed evidence packages via API/MCP.",
  "tags": [
   "kya",
   "commercial"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:17:00Z",
- "last_checked": "2026-10-15T18:17:00Z",
- "claims_count": 2,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/trust-authority-ai/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Trust Authority AI presents a commercial Know Your Agent evidence service with verifiable credentials, runtime attestations, disclosure receipts, trust scores and signed evidence packages through API and MCP. It explicitly calls evidence different from a verdict and does not absorb downstream liability. Its KYA levels range from DID resolution to private-authority compliance review; these are service categories, not an independently accepted safety standard. Homepage scores and sample-looking records are not authenticated customer outcomes. Competitor comparisons, quantum-safe language and legal-compliance notices are vendor claims, not independent tests or legal advice.",
@@ -66,44 +25,9 @@
   ],
   "revision": "c5ea0488f0b81c4e401ffda49b4da3363fd6849e6ee4d312892cf67a3479d913"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/trust-authority-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/trust-authority-ai-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage HTTP 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://trustauthority.ai",
-   "quote": "Know Your Agent. Issue, verify, and export portable trust evidence for autonomous agents: W3C verifiable credentials, runtime attestation",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://trustauthority.ai"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated item found; homepage shows an EU AI Act Art. 50 countdown 'T-13d'",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://trustauthority.ai",
-   "quote": "EU AI Act Article 50: T-13d",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://trustauthority.ai"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

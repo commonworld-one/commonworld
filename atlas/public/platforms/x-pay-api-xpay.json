@@ -1,89 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "x-pay-api-xpay",
  "name": "X Pay (api-xpay.com)",
  "url": "https://commonworld.one/atlas/platforms/x-pay-api-xpay/",
  "json_url": "https://commonworld.one/atlas/platforms/x-pay-api-xpay.json",
+ "md_url": "https://commonworld.one/atlas/platforms/x-pay-api-xpay/index.md",
  "website": "https://www.api-xpay.com",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "X Pay offers pay-per-request utility APIs (text classification, sentiment, rewrite, IP/time/UUID helpers) paid via x402 in USDC on Base.",
  "tags": [
   "x402",
   "x402-service"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402 settlement to this service's payout address: $9,690.36 in 30d from 348 distinct buyers, 64,905 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 9690.36,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/x-pay"
-  },
-  {
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $2,824.84",
-   "value": 2824.84,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/x-pay/volume?days=60"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 9690.36,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/services/x-pay"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/x-pay-api-xpay/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services/x-pay",
-   "quote": "\"volume_usd_30d\":9690.36,\"unique_buyers_30d\":348,\"tx_count_30d\":64905,\"top_buyer_share_30d\":0.01135613124796189,\"last_settlement_at\":\"2026-10-28T03:42:17Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "X Pay presents pay-per-request utility APIs using x402 and USDC on Base through public Swagger documentation. Utilities include time, UUID and random generation, requester IP, echo, hashes, Base64 and word counts, generally labelled 0.005 USDC each, including ping, status and quote. AI-route labels differ materially: summarization is 0.01 USDC; rewrite, sentiment and keywords are 10 USDC each; classify and outline are 20 USDC each. These are documentation prices, not verified live quotes, and the low utility price does not apply to every route.",
@@ -94,130 +26,9 @@
   ],
   "revision": "430d1e4e7e8aabcbdf05f0661bc5a98cdf01543f0f5989ae553cc159713ff2b0"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/x-pay-api-xpay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x-pay-api-xpay-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "www.api-xpay.com returns 200 (OpenAPI/resources page); apex api-xpay.com fails",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.api-xpay.com",
-   "quote": "X Pay — Pay-per-request utility APIs powered by x402 using USDC on Base.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://api-xpay.com (000)",
-    "curl -sL https://www.api-xpay.com (200)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL (x402-list base_url/website for this service, operator-owned)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.api-xpay.com",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100",
-    "curl -sL https://www.api-xpay.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "X Pay offers pay-per-request utility APIs (text classification, sentiment, rewrite, IP/time/UUID helpers) paid via x402 in USDC on Base.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.api-xpay.com",
-   "quote": "Pay-per-request utility APIs powered by x402 using USDC on Base.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://www.api-xpay.com",
-    "GET https://x402-list.com/api/v1/services?per_page=100"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $9,690.36 in 30d from 348 distinct buyers, 64,905 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 9690.36,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/x-pay",
-   "quote": "\"volume_usd_30d\":9690.36,\"unique_buyers_30d\":348,\"tx_count_30d\":64905,\"top_buyer_share_30d\":0.01135613124796189,\"last_settlement_at\":\"2026-10-28T03:42:17Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/x-pay",
-    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
-    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 5313.91,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "x402 settlement to this service's payout address: $5,313.91 in 30d from 221 distinct buyers, 51,338 settlements; top buyer share 2.1%",
-     "quote": "traction.volume_usd_30d=5313.91, unique_buyers_30d=221, top_buyer_share_30d=0.0207",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "x-pay-api-xpay-x402-list-30d",
-   "last_settlement_seen_at": "2026-10-28T03:42:17Z",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $2,824.84",
-   "value": 2824.84,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/x-pay/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/x-pay/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last UTC day with ≥$1 settled: 2026-10-15; first settlement 2026-09-11",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/x-pay/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/x-pay/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

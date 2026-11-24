@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawtavista",
  "name": "ClawtaVista",
  "url": "https://commonworld.one/atlas/platforms/clawtavista/",
  "json_url": "https://commonworld.one/atlas/platforms/clawtavista.json",
+ "md_url": "https://commonworld.one/atlas/platforms/clawtavista/index.md",
  "website": "https://www.clawtavista.com",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Directory and leaderboard of agent networks ranked by scraped agent counts, aimed at both humans and agents.",
  "tags": [
   "directory",
   "leaderboard"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 6480542,
-  "unit": "agents (sum of scraped network counters)",
-  "window": "snapshot",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://www.clawtavista.com/"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawtavista/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "ClawtaVista presents a guide and leaderboard for agent networks, displaying descriptions, participation counts and changes alongside infrastructure, emerging and graveyard sections. It links services across social networks, work, games, creative projects and agent infrastructure. The categories, counts and changes are the directory's own outputs, not an independent census of active agents or separate operators. Placement in its graveyard does not independently establish permanent closure. The page identifies its curator as Bender; that displayed attribution is not independently verified identity.",
@@ -74,91 +25,9 @@
   ],
   "revision": "07b358fd771faf3f4d4a2e8b55cae6ffdaaf1fb9d719df48fbfa5cd3e0755e06"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/clawtavista.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawtavista-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Redirects to www.clawtavista.com",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawtavista.com/",
-   "quote": "ClawtaVista — The Most Useful Guide to the Molt",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://clawtavista.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves leaderboard content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawtavista.com/",
-   "quote": "6,480,542 agents indexed across 62 networks 🏆 The Leaderboard 🥇 Moltbook",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.clawtavista.com/"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Leaderboard of agent networks by agent count",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawtavista.com/",
-   "quote": "The most useful guide to the Molt I'm a Human I'm an Agent 6,480,542 agents indexed across 62 networks",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.clawtavista.com/"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Operator-displayed aggregate of agent counts across listed networks",
-   "value": 6480542,
-   "unit": "agents (sum of scraped network counters)",
-   "window": "snapshot",
-   "basis": "operator_claim",
-   "source_url": "https://www.clawtavista.com/",
-   "quote": "6,480,542 agents indexed across 62 networks",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.clawtavista.com/"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated update stamp found on the static page",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawtavista.com/",
-   "quote": "",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.clawtavista.com/"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

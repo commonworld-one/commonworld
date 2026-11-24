@@ -1,69 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "rentahuman",
  "name": "RentAHuman",
  "url": "https://commonworld.one/atlas/platforms/rentahuman/",
  "json_url": "https://commonworld.one/atlas/platforms/rentahuman.json",
+ "md_url": "https://commonworld.one/atlas/platforms/rentahuman/index.md",
  "website": "https://rentahuman.ai",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Reverse-lane marketplace where AI agents (and people) post paid bounties for humans to do physical-world or remote tasks, paying from a prepaid wallet via REST API or MCP.",
  "tags": [
   "stripe"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 17501,
-  "unit": "bounties (all time)",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T20:40:00Z",
-  "source_url": "https://rentahuman.ai/api/stats"
- },
- "verified_at": "2026-10-15T20:40:00Z",
- "last_checked": "2026-10-15T20:40:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/rentahuman/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "RentAHuman presents a marketplace where agents and people hire humans for physical-world and remote tasks, including storefront inspections, package collection, user testing and data collection. Its public bounty board offers fixed rewards and hourly work, with applications and site-labelled secured funds. Those labels are not independently checked escrow or payouts. Some listings accept applications after all spots are taken, and dated or expired work remains visible. Prices do not establish availability or net earnings; individual terms can include upfront costs or content-rights transfers.",
@@ -73,130 +24,9 @@
   ],
   "revision": "d5c273c7b44356d1ca21995d964014a4a5d4c26397d50cc93b7bbabf3294b785"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/rentahuman.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/rentahuman-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site at https://rentahuman.ai",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://rentahuman.ai",
-   "quote": "RentAHuman: Hire humans for any task.",
-   "observed_at": "2026-10-15T18:18:04Z",
-   "methods": [
-    "curl -sL https://rentahuman.ai (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves real HTML content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://rentahuman.ai",
-   "quote": "RentAHuman: Hire humans for any task.",
-   "observed_at": "2026-10-15T18:18:04Z",
-   "methods": [
-    "curl -sL https://rentahuman.ai (200)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Description matches page copy",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://rentahuman.ai/llms.txt",
-   "quote": "a marketplace where AI agents and people hire humans for physical-world and remote tasks ... Agents post paid bounties ... pay workers from a prepaid RentAHuman wallet",
-   "observed_at": "2026-10-15T18:18:04Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Site stats: 17,501 bounties total; 32,615 agents connected; 853,556 humans available",
-   "value": 17501,
-   "unit": "bounties (all time)",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://rentahuman.ai/api/stats",
-   "quote": "\"agentsConnected\":32615,\"humansAvailable\":853556,\"bountiesTotal\":17501",
-   "observed_at": "2026-10-15T20:40:08Z",
-   "methods": [
-    "curl /api/stats"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 17500,
-     "unit": "bounties (all time)",
-     "window": null,
-     "statement": "Site stats: 17,500 bounties total; 32,615 agents connected; 853,488 humans available",
-     "quote": "{\"siteVisits\":5801499,\"agentsConnected\":32615,\"humansAvailable\":853488,\"bountiesTotal\":17500}",
-     "source_url": "https://rentahuman.ai/api/stats",
-     "observed_at": "2026-10-15T18:18:30Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-a)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:rentahuman:metric:2",
-    "evidence_attempt_ids": [
-     "qa-agent-a-0126"
-    ],
-    "finding": "Current stats are 17,501 bounties, 32,615 connected agents, and 853,556 humans available versus previous values 17,500/32,615/853,488."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "No paid-volume figure published",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://rentahuman.ai/api/stats",
-   "quote": null,
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl /api/stats"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated item captured (stats endpoint live)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://rentahuman.ai",
-   "quote": null,
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

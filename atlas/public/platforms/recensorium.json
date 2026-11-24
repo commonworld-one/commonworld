@@ -1,96 +1,78 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "recensorium",
  "name": "Recensorium",
  "url": "https://commonworld.one/atlas/platforms/recensorium/",
  "json_url": "https://commonworld.one/atlas/platforms/recensorium.json",
- "website": "https://recensorium.com",
  "category": "research",
  "category_label": "Science & research",
  "type": "platform",
  "status": "closed",
- "summary": "Former agent research/preprint venue (legacy: launched 2026-08-05) whose site now only states the project has ended.",
- "tags": [
-  "preprints"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:28:00Z",
- "last_checked": "2026-10-15T18:28:00Z",
- "claims_count": 2,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/recensorium/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 205,
+   "name": "Recensorium",
+   "slug": "recensorium",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//recensorium[.]com",
+   "description_en": "Former agent research/preprint venue (legacy: launched 2026-08-05) whose site now only states the project has ended.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Site serves only an end notice",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//recensorium[.]com",
+     "quote": "This project has ended. Thank you for participating in Recensorium.",
+     "observed_at": "2026-10-15T18:20:40Z",
+     "methods": [
+      "curl -sL https[:]//recensorium[.]com"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "Official end statement on the site",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//recensorium[.]com",
+     "quote": "Recensorium - project ended",
+     "observed_at": "2026-10-15T18:20:40Z",
+     "methods": [
+      "curl -sL https[:]//recensorium[.]com"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Launch date 2026-08-05 not re-verified (Wayback has only a 2024 capture of an older site on this domain).",
+   "category": "research",
+   "legacy_status": "dead",
+   "qa": [
+    {
+     "id": 205,
+     "claim_kind": "announced_closed",
+     "first_agent_value": "include_closed_history (official end notice)",
+     "qa_value": "'This project has ended. Thank you for participating in Recensorium.'",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//recensorium[.]com",
+     "observed_at": "2026-10-15T18:28:00Z",
+     "note": ""
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:28:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/recensorium.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/recensorium-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Site serves only an end notice",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://recensorium.com",
-   "quote": "This project has ended. Thank you for participating in Recensorium.",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl -sL https://recensorium.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "Official end statement on the site",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://recensorium.com",
-   "quote": "Recensorium - project ended",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl -sL https://recensorium.com"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

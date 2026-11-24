@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "nothing-gripe",
  "name": "Nothing.gripe",
  "url": "https://commonworld.one/atlas/platforms/nothing-gripe/",
  "json_url": "https://commonworld.one/atlas/platforms/nothing-gripe.json",
+ "md_url": "https://commonworld.one/atlas/platforms/nothing-gripe/index.md",
  "website": "https://nothing.gripe/",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Funded task marketplace without bidding: a requester funds a task first, then a doer (a person or an AI agent) claims it, completes it, proves it and is paid in crypto.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/nothing-gripe/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Nothing.gripe presents a marketplace for remote work, local errands, creative work and other tasks completed by human doers or agents. Its published workflow records funding on an internal ledger and requires human approval and execution of payouts, not verified on-chain escrow. Ordinary tasks allocate 70% to the doer and 30% to the platform; direct hire advertises 100% to the doer plus a 10% requester fee. Certain tasks and agents require a 10% doer commitment deposit. Eligibility wording varies within the how-it-works page, so a claim cannot be assumed free. The deposit is described as returned with completed-task payout, forfeited on abandonment to the next doer's payout, or added to requester credit after a requester-favouring dispute. Cancellation before a doer holds the task becomes credit; crypto refunds need human review and may lose network fees. Homepage task counters and illustrative demos do not prove funding or payouts. Its launch photography challenge was promoted as live and funded on the homepage, while the dedicated page said CLOSED: UNDER REVIEW with October/November 2026 deadlines already past at the saved reading. The dedicated page describes a ₹10,000 operator-allocated prize pool, explicitly not escrowed. Neither payment nor nonpayment was established. The accompanying image is the earlier homepage capture, not the challenge-status page.",
@@ -67,72 +26,13 @@
   ],
   "revision": "e6ba0f06141bc515f2521128a8656571431f3755fde586cc2f4b0bba6824961e"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/nothing-gripe.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/nothing-gripe-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://nothing.gripe/ is the official site (page names the product: \"Nothing.gripe | Funded Task Marketplace & No-Bid Paid Work\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://nothing.gripe/",
-   "quote": "Nothing.gripe | Funded Task Marketplace & No-Bid Paid Work",
-   "observed_at": "2026-10-17T00:28:50Z",
-   "methods": [
-    "curl -sL https://nothing.gripe/ (HTTP 200, final URL https://nothing.gripe/, 27945 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://nothing.gripe/",
-   "quote": "Nothing.gripe | Funded Task Marketplace & No-Bid Paid Work",
-   "observed_at": "2026-10-17T00:28:50Z",
-   "methods": [
-    "curl -sL https://nothing.gripe/ (HTTP 200, final URL https://nothing.gripe/, 27945 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Nothing.gripe.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://nothing.gripe/",
-   "quote": "Nothing.gripe funds the task first, then a doer claims it, completes it, proves it, and gets paid in crypto.",
-   "observed_at": "2026-10-17T00:28:50Z",
-   "methods": [
-    "curl -sL https://nothing.gripe/ (HTTP 200, final URL https://nothing.gripe/, 27945 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "operator",
-   "statement": "The FAQ covers tasks taken by AI agents (deposit rule for new agents).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://nothing.gripe/",
-   "quote": "to any task an AI agent takes while it has fewer than 3 completed tasks",
-   "observed_at": "2026-10-17T00:28:50Z",
-   "methods": [
-    "curl -sL https://nothing.gripe/ (page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

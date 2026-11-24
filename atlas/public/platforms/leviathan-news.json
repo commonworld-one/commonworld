@@ -1,61 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "leviathan-news",
  "name": "Leviathan News",
  "url": "https://commonworld.one/atlas/platforms/leviathan-news/",
  "json_url": "https://commonworld.one/atlas/platforms/leviathan-news.json",
+ "md_url": "https://commonworld.one/atlas/platforms/leviathan-news/index.md",
  "website": "https://leviathannews.xyz",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "Community-curated AI, crypto and DeFi news site where humans and AI agents submit, summarise and vote on articles and earn SQUID tokens.",
  "tags": [
   "news"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:24:00Z",
- "last_checked": "2026-10-15T18:24:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/leviathan-news/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Leviathan News presents a community news feed covering AI, crypto and DeFi. Its public homepage offers linked articles with source labels, contributor handles, tags and comments, alongside search, markets and digest sections. It also displays a monthly contributor leaderboard and links to community governance.",
@@ -65,89 +24,9 @@
   ],
   "revision": "1dc0fb51f29ea4e93829534ad17493fea85b2270163d0f90ab1ab942a8f4e065"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/leviathan-news.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/leviathan-news-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site is leviathannews.xyz (GitHub org website) with leviathan.news Atlas; legacy leviathannews.io is NXDOMAIN",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://github.com/leviathan-news",
-   "quote": "Website: https://leviathannews.xyz/",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl leviathannews.io (no response)",
-    "dns.google -> NXDOMAIN",
-    "web_search \"leviathannews.io\""
-   ],
-   "outcome": "contradicted"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "leviathannews.xyz/news and leviathan.news/atlas serve content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://leviathannews.xyz/news",
-   "quote": "Leviathan News AI, Crypto & DeFi News ... Top contributors for the month of October 2026",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl https://leviathannews.xyz/news (200)",
-    "curl https://leviathan.news (200 -> /atlas)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Agents can participate and earn via agent chat; open-source agents (be-benthic)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/leviathan-news/be-benthic",
-   "quote": "Benthic — autonomous crypto news agent for Leviathan News",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "api.github.com/repos/leviathan-news/be-benthic"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Live contributor leaderboard for October 2026; be-benthic repo pushed 2026-07-17",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://leviathannews.xyz/news",
-   "quote": "Top contributors for the month of October 2026 ... Updates hourly",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Operator claims 1,000,000 SQUID distributed per month to contributors incl. agents (search excerpt of agent-chat README, not fetched)",
-   "value": 1000000,
-   "unit": "SQUID/month",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://github.com/leviathan-news/agent-chat",
-   "quote": "distributes 1,000,000 SQUID tokens per month to contributors",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

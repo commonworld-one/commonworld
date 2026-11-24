@@ -1,72 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "payapi-market",
  "name": "PayAPI Market",
  "url": "https://commonworld.one/atlas/platforms/payapi-market/",
  "json_url": "https://commonworld.one/atlas/platforms/payapi-market.json",
+ "md_url": "https://commonworld.one/atlas/platforms/payapi-market/index.md",
  "website": "https://payapi.market",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Curated x402 API marketplace where providers list APIs free and keep 100% of per-call USDC payments on Base or Solana, with settlement-verified badges and an MCP endpoint.",
  "tags": [
   "x402",
   "marketplace",
   "curated",
   "mcp"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 344,
-  "unit": "APIs",
-  "window": "2026-10-15",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://payapi.market/"
- },
- "verified_at": "2026-10-15T18:25:00Z",
- "last_checked": "2026-10-15T18:25:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/payapi-market/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "PayAPI Market presents an x402 marketplace where agents discover APIs and pay providers per request in USDC on networks offered by each listing. It advertises free listing, free catalogue search and a zero-percent platform share of each job. Its settlement-verified label is described as a paid test of a specific route with a published receipt, not verification of every route in a listing. Provider prices and verification claims are marketplace-reported.",
@@ -76,61 +27,13 @@
   ],
   "revision": "f62c57dafcb11b264dd5bcdb5fb05bbda49d69d9e19a6d08c8eab88a7fc111f0"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/payapi-market.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/payapi-market-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "200.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://payapi.market/",
-   "quote": "List an API once. Keep 100% of what each call earns. Agents pay per request in USDC on Base or Solana.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "344 APIs, 4,895 endpoints, 234 providers, 332 settlement-verified on Base.",
-   "value": 344,
-   "unit": "APIs",
-   "window": "2026-10-15",
-   "basis": "operator_claim",
-   "source_url": "https://payapi.market/",
-   "quote": "Live now: 344 APIs, 4,895 endpoints, 234 providers, 332 settlement-verified on Base.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Source comment notes search verified live on 17 Sep 2026.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://payapi.market/",
-   "quote": "Verified live on 17 Sep 2026",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L (HTML comment)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

@@ -1,61 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "solana-x402",
  "name": "Solana x402",
  "url": "https://commonworld.one/atlas/platforms/solana-x402/",
  "json_url": "https://commonworld.one/atlas/platforms/solana-x402.json",
+ "md_url": "https://commonworld.one/atlas/platforms/solana-x402/index.md",
  "website": "https://solana.com/x402",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "protocol",
  "status": "live",
- "summary": "Solana Foundation's landing page promoting x402 on Solana, with ecosystem links (facilitators, SDKs, explorers).",
  "tags": [
   "x402"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 2,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/solana-x402/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Solana's x402 page introduces internet-native payments for web services, APIs and content. It describes paying per access rather than creating a provider account or subscription, and links ecosystem projects, an explorer, documentation, templates and tools for payment-gated MCP servers. Its activity figures are site-reported statistics, not evidence that a particular service is available or suitable.",
@@ -65,44 +24,9 @@
   ],
   "revision": "6c3654def0e64c845801097b935d05d16cfd3fd46fdbb913fe174e1294c60848"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/solana-x402.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/solana-x402-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "200.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://solana.com/x402",
-   "quote": "x402 on Solana Build with internet-native payments on Solana.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Page claims '37M+ transactions on Solana, 20K+ buyers and sellers, 70% monthly volume on Solana'. x402-list's 7-day per-chain settlement (2026-10-09..15): Base $203,992 (60.7%), Solana $86,574 (25.8%), Celo $26,421, Polygon $19,187 — the 70% claim is contradicted for this window.",
-   "value": "70%",
-   "unit": "claimed share",
-   "window": "undated",
-   "basis": "operator_claim",
-   "source_url": "https://solana.com/x402",
-   "quote": "37M+ Transactions on Solana 20K+ Buyers and Sellers 70% Monthly Volume on Solana",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl solana.com/x402",
-    "curl x402-list.com/facilitators (daily chain table)"
-   ],
-   "outcome": "contradicted",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

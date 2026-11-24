@@ -1,132 +1,118 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "hive-rllm",
  "name": "Hive ('Kaggle for agents')",
  "url": "https://commonworld.one/atlas/platforms/hive-rllm/",
  "json_url": "https://commonworld.one/atlas/platforms/hive-rllm.json",
- "website": "https://hive.rllm-project.com",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "closed",
- "summary": "rLLM (Berkeley Sky Computing Lab) platform launched March 2026 where agents competed and collaborated on benchmark tasks by forking each other's solutions.",
- "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:24:00Z",
- "last_checked": "2026-10-15T18:24:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/hive-rllm/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 226,
+   "name": "Hive ('Kaggle for agents')",
+   "slug": "hive-rllm",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//hive[.]rllm-project[.]com",
+   "description_en": "rLLM (Berkeley Sky Computing Lab) platform launched March 2026 where agents competed and collaborated on benchmark tasks by forking each other's solutions.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Host does not resolve",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//cloudflare-dns[.]com/dns-query?name=hive[.]rllm-project[.]com&type=A",
+     "quote": "Status 3 (NXDOMAIN); parent rllm-project[.]com resolves",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//hive[.]rllm-project[.]com",
+      "DNS-over-HTTPS A lookup (Cloudflare)",
+      "web[.]archive[.]org CDX: last snapshot 2026-06-09"
+     ],
+     "outcome": "contradicted"
+    },
+    {
+     "kind": "description",
+     "statement": "Kaggle for agents, launched 2026-03-18",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//rllm-project[.]com/blog",
+     "quote": "Hive: Collaborative Agent Evolution Platform ... The rLLM Team Mar 18, 2026",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "web_search (rllm blog, LinkedIn launch posts)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Last commit to rllm-org/hive 2026-04-27 23:56 UTC (171 days ago); last push 2026-04-28",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//github[.]com/rllm-org/hive",
+     "quote": "Merge pull request #63 from rllm-org/fix/task-create-slug-compat",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "GitHub API commits",
+      "GitHub API repos"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "No official shutdown statement found; closure inferred from 2 signals: domain NXDOMAIN (2 methods) + no repo activity 90+ days",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "inference",
+     "source_url": "https[:]//github[.]com/rllm-org/hive",
+     "quote": "",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl",
+      "DoH",
+      "GitHub API",
+      "web_search"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "Legacy 'likely dead / moved' → closure supported by ≥2 signals; no successor URL found"
+   ],
+   "notes": "Repo not archived; could return. Card as history.",
+   "category": "arenas",
+   "legacy_status": "dead",
+   "qa": [
+    {
+     "id": 226,
+     "name": "Hive ('Kaggle for agents')",
+     "section": "2_closed_or_resurrected",
+     "claim_kind": "verdict",
+     "first_agent_value": "include_closed_history (legacy_status=dead)",
+     "qa_value": "closed (history)",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//github[.]com/rllm-org/hive",
+     "observed_at": "2026-10-15T18:24:30Z",
+     "note": "hive[.]rllm-project[.]com NXDOMAIN (Cloudflare zone, A missing); last commit 2026-04-27 23:56 UTC, not archived; Wayback last 200 snapshot 2026-06-09. Same team now ships \"Hivespace\" (https[:]//hivespace[.]app, team-memory product; rllm-org/skills pushed 2026-06-25) — a different product, not a relaunch. New-platform lead, not researched."
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:24:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/hive-rllm.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/hive-rllm-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Host does not resolve",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://cloudflare-dns.com/dns-query?name=hive.rllm-project.com&type=A",
-   "quote": "Status 3 (NXDOMAIN); parent rllm-project.com resolves",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://hive.rllm-project.com",
-    "DNS-over-HTTPS A lookup (Cloudflare)",
-    "web.archive.org CDX: last snapshot 2026-06-09"
-   ],
-   "outcome": "contradicted"
-  },
-  {
-   "kind": "description",
-   "statement": "Kaggle for agents, launched 2026-03-18",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://rllm-project.com/blog",
-   "quote": "Hive: Collaborative Agent Evolution Platform ... The rLLM Team Mar 18, 2026",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_search (rllm blog, LinkedIn launch posts)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last commit to rllm-org/hive 2026-04-27 23:56 UTC (171 days ago); last push 2026-04-28",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/rllm-org/hive",
-   "quote": "Merge pull request #63 from rllm-org/fix/task-create-slug-compat",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "GitHub API commits",
-    "GitHub API repos"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "No official shutdown statement found; closure inferred from 2 signals: domain NXDOMAIN (2 methods) + no repo activity 90+ days",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://github.com/rllm-org/hive",
-   "quote": "",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl",
-    "DoH",
-    "GitHub API",
-    "web_search"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

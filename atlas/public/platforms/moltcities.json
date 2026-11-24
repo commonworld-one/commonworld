@@ -1,206 +1,174 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "moltcities",
  "name": "MoltCities",
  "url": "https://commonworld.one/atlas/platforms/moltcities/",
  "json_url": "https://commonworld.one/atlas/platforms/moltcities.json",
- "website": "https://moltcities.org",
  "category": "worlds",
  "category_label": "Worlds & games",
  "type": "platform",
- "status": "live",
- "summary": "GeoCities-style service giving AI agents RSA-key identities and permanent subdomain homepages (name.moltcities.org) with guestbooks, a job/bounty board paid in a Solana token, and governance.",
- "tags": [
-  "world",
-  "solana",
-  "bounties"
- ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Ecosystem fund 0.32 SOL; open jobs are $MOLTCITIES referral bounties (55,000 tokens each)",
-   "value": 0.32,
-   "unit": "SOL",
-   "window": "balance now",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "source_url": "https://moltcities.org/api/stats"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 350,
-  "unit": "agents",
-  "window": "cumulative",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:21:00Z",
-  "source_url": "https://moltcities.org/api/stats"
- },
- "verified_at": "2026-10-17T00:12:00Z",
- "last_checked": "2026-10-17T00:12:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/moltcities/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://moltcities.org/api/stats",
-   "quote": "\"ecosystem_fund\":{\"sol\":0.32,\"token_millions\":0,\"value_sol\":0.32}"
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "current_limitation": {
-  "state": "could_not_verify",
-  "attempted_on": "2026-11-23",
-  "text": "The homepage and directory showed a temporarily-unavailable page. A current product page could not be reached during this check.",
-  "sources": [
-   "https://moltcities.org/",
-   "https://moltcities.org/directory"
-  ]
- },
- "badge_status": "Listed",
- "badge_svg": "https://commonworld.one/atlas/badge/moltcities.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/moltcities-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage HTTP 200 with real content (agents, open jobs, recent activity). The audit run about 15 minutes earlier got HTTP 503 \"Page Temporarily Unavailable\" twice; intermittent, re-check in the next weekly run.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://moltcities.org",
-   "quote": "moltcities — permanent addresses for agents",
-   "observed_at": "2026-10-17T00:12:27Z",
-   "methods": [
-    "curl -sL https://moltcities.org (HTTP 200, <title>)"
-   ],
-   "outcome": "supported",
-   "history": [
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 23,
+   "name": "MoltCities",
+   "slug": "moltcities",
+   "entity_type": "platform",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//moltcities[.]org",
+   "description_en": "GeoCities-style service giving AI agents RSA-key identities and permanent subdomain homepages (name[.]moltcities[.]org) with guestbooks, a job/bounty board paid in a Solana token, and governance.",
+   "claims": [
     {
+     "kind": "site_reachable",
+     "statement": "Homepage HTTP 200 with real content (agents, open jobs, recent activity). The audit run about 15 minutes earlier got HTTP 503 \"Page Temporarily Unavailable\" twice; intermittent, re-check in the next weekly run.",
      "value": null,
      "unit": null,
      "window": null,
-     "statement": "Homepage HTTP 200 with real content (layer-1 got 503)",
-     "quote": "MoltCities is infrastructure for AI agents. A permanent address. Cryptographic identity. Paid work.",
-     "source_url": "https://moltcities.org",
-     "observed_at": "2026-10-15T18:17:00Z",
      "basis": "direct_observation",
+     "source_url": "https[:]//moltcities[.]org",
+     "quote": "moltcities — permanent addresses for agents",
+     "observed_at": "2026-10-17T00:12:27Z",
+     "methods": [
+      "curl -sL https[:]//moltcities[.]org (HTTP 200, <title>)"
+     ],
      "outcome": "supported",
-     "superseded_at": "2026-10-17T00:12:27Z",
-     "reason": "Atlas audit 2026-10-17 (high-severity row): reachability re-observed (the audit saw HTTP 503 twice about 15 minutes earlier)"
-    }
-   ]
-  },
-  {
-   "kind": "metric",
-   "statement": "API stats: 350 agents, 425 sites, 13,153 guestbook entries, 66 wallets",
-   "value": 350,
-   "unit": "agents",
-   "window": "cumulative",
-   "basis": "operator_claim",
-   "source_url": "https://moltcities.org/api/stats",
-   "quote": "{\"sites\":425,\"agents\":350,\"founding_agents\":81,...\"guestbook_entries\":13153,\"wallets_connected\":66",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "methods": [
-    "curl -sL https://moltcities.org/api/stats"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Ecosystem fund 0.32 SOL; open jobs are $MOLTCITIES referral bounties (55,000 tokens each)",
-   "value": 0.32,
-   "unit": "SOL",
-   "window": "balance now",
-   "basis": "operator_claim",
-   "source_url": "https://moltcities.org/api/stats",
-   "quote": "\"ecosystem_fund\":{\"sol\":0.32,\"token_millions\":0,\"value_sol\":0.32}",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "methods": [
-    "curl -sL https://moltcities.org/api/stats"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest item in homepage activity feed is 2026-08-20 (~8 weeks old)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://moltcities.org",
-   "quote": "clawedassistant-oc claimed Referral Bounty #2 2026-08-20",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://moltcities.org"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "/api/jobs returns HTTP 200 with the job list (it returned HTTP 500 on 2026-10-15).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://moltcities.org/api/jobs",
-   "quote": "\"title\": \"Referral Bounty Test\"",
-   "observed_at": "2026-10-17T00:12:28Z",
-   "methods": [
-    "curl -sL https://moltcities.org/api/jobs (HTTP 200)"
-   ],
-   "outcome": "supported",
-   "history": [
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "Homepage HTTP 200 with real content (layer-1 got 503)",
+       "quote": "MoltCities is infrastructure for AI agents. A permanent address. Cryptographic identity. Paid work.",
+       "source_url": "https[:]//moltcities[.]org",
+       "observed_at": "2026-10-15T18:17:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-17T00:12:27Z",
+       "reason": "Atlas audit 2026-10-17 (high-severity row): reachability re-observed (the audit saw HTTP 503 twice about 15 minutes earlier)"
+      }
+     ]
+    },
     {
+     "kind": "metric",
+     "statement": "API stats: 350 agents, 425 sites, 13,153 guestbook entries, 66 wallets",
+     "value": 350,
+     "unit": "agents",
+     "window": "cumulative",
+     "basis": "operator_claim",
+     "source_url": "https[:]//moltcities[.]org/api/stats",
+     "quote": "{\"sites\":425,\"agents\":350,\"founding_agents\":81,...\"guestbook_entries\":13153,\"wallets_connected\":66",
+     "observed_at": "2026-10-15T18:21:00Z",
+     "methods": [
+      "curl -sL https[:]//moltcities[.]org/api/stats"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "economic_flow",
+     "statement": "Ecosystem fund 0.32 SOL; open jobs are $MOLTCITIES referral bounties (55,000 tokens each)",
+     "value": 0.32,
+     "unit": "SOL",
+     "window": "balance now",
+     "basis": "operator_claim",
+     "source_url": "https[:]//moltcities[.]org/api/stats",
+     "quote": "\"ecosystem_fund\":{\"sol\":0.32,\"token_millions\":0,\"value_sol\":0.32}",
+     "observed_at": "2026-10-15T18:21:00Z",
+     "methods": [
+      "curl -sL https[:]//moltcities[.]org/api/stats"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest item in homepage activity feed is 2026-08-20 (~8 weeks old)",
      "value": null,
      "unit": null,
      "window": null,
-     "statement": "/api/jobs returned HTTP 500 INTERNAL_ERROR",
-     "quote": "\"error\": \"Internal server error\"",
-     "source_url": "https://moltcities.org/api/jobs",
-     "observed_at": "2026-10-15T18:21:00Z",
      "basis": "direct_observation",
-     "outcome": "contradicted",
-     "superseded_at": "2026-10-17T00:12:28Z",
-     "reason": "Atlas audit 2026-10-17 (high-severity row): endpoint answers again"
+     "source_url": "https[:]//moltcities[.]org",
+     "quote": "clawedassistant-oc claimed Referral Bounty #2 2026-08-20",
+     "observed_at": "2026-10-15T18:17:00Z",
+     "methods": [
+      "curl -sL https[:]//moltcities[.]org"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "/api/jobs returns HTTP 200 with the job list (it returned HTTP 500 on 2026-10-15).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//moltcities[.]org/api/jobs",
+     "quote": "\"title\": \"Referral Bounty Test\"",
+     "observed_at": "2026-10-17T00:12:28Z",
+     "methods": [
+      "curl -sL https[:]//moltcities[.]org/api/jobs (HTTP 200)"
+     ],
+     "outcome": "supported",
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "/api/jobs returned HTTP 500 INTERNAL_ERROR",
+       "quote": "\"error\": \"Internal server error\"",
+       "source_url": "https[:]//moltcities[.]org/api/jobs",
+       "observed_at": "2026-10-15T18:21:00Z",
+       "basis": "direct_observation",
+       "outcome": "contradicted",
+       "superseded_at": "2026-10-17T00:12:28Z",
+       "reason": "Atlas audit 2026-10-17 (high-severity row): endpoint answers again"
+      }
+     ]
     }
-   ]
+   ],
+   "legacy_diffs": [
+    "legacy 'flaky 503' — homepage 200 now but jobs API errors",
+    "activity feed stale since 2026-08-20"
+   ],
+   "notes": "Live but low activity; jobs endpoint broken at check time. 2026-10-17: homepage returned HTTP 503 twice in the audit (~2026-10-16T23:55Z), then HTTP 200 at 2026-10-17T00:12:27Z; status unchanged.",
+   "category": "worlds",
+   "legacy_status": "unverified",
+   "qa": [
+    {
+     "id": 23,
+     "claim_kind": "metric",
+     "first_agent_value": "350 agents",
+     "qa_value": "350 agents; 425 sites; 13,153 guestbook; 66 wallets",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//moltcities[.]org/api/stats",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": "first call 503 INTERNAL_ERROR, retry after 5s OK"
+    },
+    {
+     "id": 23,
+     "claim_kind": "economic_flow",
+     "first_agent_value": "0.32 SOL fund balance",
+     "qa_value": "0.32 SOL",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//moltcities[.]org/api/stats",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": "balance, not flow"
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+     "by": "human",
+     "on": "2026-11-24"
+    }
+   ],
+   "last_observation_at": "2026-10-17T00:12:00Z",
+   "capture": null
   }
- ],
- "qa_status": "checked"
+ },
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

@@ -1,118 +1,100 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "moltslack",
  "name": "Moltslack",
  "url": "https://commonworld.one/atlas/platforms/moltslack/",
  "json_url": "https://commonworld.one/atlas/platforms/moltslack.json",
- "website": "https://moltslack.com/",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "closed",
- "summary": "Former real-time workspace (channels, DMs, presence over WebSocket) for AI agents; the hosted app is gone.",
- "tags": [
-  "molt"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/moltslack/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 91,
+   "name": "Moltslack",
+   "slug": "moltslack",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//moltslack[.]com/",
+   "description_en": "Former real-time workspace (channels, DMs, presence over WebSocket) for AI agents; the hosted app is gone.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Apex and www return Railway 'Application not found' (404).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//moltslack[.]com/",
+     "quote": "\"message\":\"Application not found\"",
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "curl https[:]//moltslack[.]com/",
+      "curl http[:]//moltslack[.]com/",
+      "curl https[:]//www[.]moltslack[.]com/"
+     ],
+     "outcome": "contradicted"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "No statement; app removed + source repo AgentWorkforce/moltslack last pushed 2026-02-04 (>8 months).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "inference",
+     "source_url": "https[:]//api[.]github[.]com/repos/AgentWorkforce/moltslack",
+     "quote": null,
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "curl",
+      "GitHub API",
+      "wayback"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest sign: GitHub push 2026-02-04; Wayback 2026-02-05.",
+     "value": "2026-02-04",
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//web[.]archive[.]org/web/20260205051132/https[:]//moltslack[.]com/",
+     "quote": "Real-time coordination workspace for AI agents. Slack, but for your autonomous workforce.",
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "GitHub API",
+      "wayback"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy dead — confirmed"
+   ],
+   "notes": "Repo: https[:]//github[.]com/AgentWorkforce/moltslack (7 stars, not archived).",
+   "category": "social",
+   "legacy_status": "dead",
+   "qa": [
+    {
+     "id": 91,
+     "claim_kind": "announced_closed",
+     "first_agent_value": "closed (inferred)",
+     "qa_value": "Railway \"Application not found\" apex+www; repo AgentWorkforce/moltslack last push 2026-02-04, not archived",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//moltslack[.]com/",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": ""
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:33:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/moltslack.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/moltslack-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Apex and www return Railway 'Application not found' (404).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://moltslack.com/",
-   "quote": "\"message\":\"Application not found\"",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl https://moltslack.com/",
-    "curl http://moltslack.com/",
-    "curl https://www.moltslack.com/"
-   ],
-   "outcome": "contradicted"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "No statement; app removed + source repo AgentWorkforce/moltslack last pushed 2026-02-04 (>8 months).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://api.github.com/repos/AgentWorkforce/moltslack",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl",
-    "GitHub API",
-    "wayback"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest sign: GitHub push 2026-02-04; Wayback 2026-02-05.",
-   "value": "2026-02-04",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://web.archive.org/web/20260205051132/https://moltslack.com/",
-   "quote": "Real-time coordination workspace for AI agents. Slack, but for your autonomous workforce.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GitHub API",
-    "wayback"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

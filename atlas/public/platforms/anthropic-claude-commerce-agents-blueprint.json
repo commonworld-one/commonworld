@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "anthropic-claude-commerce-agents-blueprint",
  "name": "Anthropic commerce blueprints",
  "url": "https://commonworld.one/atlas/platforms/anthropic-claude-commerce-agents-blueprint/",
  "json_url": "https://commonworld.one/atlas/platforms/anthropic-claude-commerce-agents-blueprint.json",
+ "md_url": "https://commonworld.one/atlas/platforms/anthropic-claude-commerce-agents-blueprint/index.md",
  "website": "https://claude.com/resources/articles/claude-for-commerce-agents",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Anthropic reference blueprint (2 Sep 2026) with harnesses, patterns and guardrails for building shopping and merchant agents on Claude; payment layer left to the implementer.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/anthropic-claude-commerce-agents-blueprint/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Anthropic's article dated 2 September 2026 presents a reference blueprint for shopping and merchant agents built with Claude. It describes harnesses, patterns, guardrails and implementations for retail, travel, telecom and ticketing, not a standalone marketplace or ready payment account. The shopping design covers catalog search, recommendations, conversational displays, carts and customer care, leaving payment integration to implementers. The merchant design covers sales, inventory, pricing and marketing suggestions with human approval before changes go live. Catalog-grounding and anti-manipulative-upsell guardrails are design claims rather than an independent security audit. Conversion and cart-size figures are vendor-reported outcomes, not independently reproduced results.",
@@ -63,83 +22,9 @@
   ],
   "revision": "0eb2318e4d86d82f4337ffe692d4dc1a550613adf09f1f90d96c9b11ba34efd8"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/anthropic-claude-commerce-agents-blueprint.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/anthropic-claude-commerce-agents-blueprint-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "claude.com article",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://claude.com/resources/articles/claude-for-commerce-agents",
-   "quote": "Building commerce agents with Claude | Claude by Anthropic",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://claude.com/resources/articles/claude-for-commerce-agents",
-   "quote": "We're launching a blueprint to help build commerce agents on Claude.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Blueprint contents",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://claude.com/resources/articles/claude-for-commerce-agents",
-   "quote": "It contains the harnesses, patterns, and guardrails an engineering team needs to get a commerce agent running in days.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Page dated 2026-09-02 (later dates 2026-10-07/08 also present)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://claude.com/resources/articles/claude-for-commerce-agents",
-   "quote": "2026-09-02",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Legacy cart +30–35% / completion +60% not re-checked",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://claude.com/resources/articles/claude-for-commerce-agents",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

@@ -1,3 +1,15 @@
+# Historical stage record
+
+This file preserves an earlier stage and its counts. It is not the current contract or a claim about deployment. Read [ATLAS-CURRENT-CONTRACT.md](ATLAS-CURRENT-CONTRACT.md) for the current349/38/71model.
+
+## Current contract,24November2026
+
+Read [ATLAS-CURRENT-CONTRACT.md](ATLAS-CURRENT-CONTRACT.md) first for current behavior:349current cards,38closed records,71earning entries; one overview+matching screenshot package, optional trials, same current data for people and agents. Raw inputs and historical sections below do not define current membership or export fields. Their348/18/20counts, bounded-note model, compatibility fields and automated reopening descriptions are historical. This repository change does not establish that a deployment occurred or activate any external workflow.
+
+## Historical and implementation reference
+
+> 24 November 2026 local earn update: the current 71-card earning-opportunity list replaces the former numeric feed at `/atlas/earn.json`, `/api/v1/atlas/earn.json` and `atlas_earn`, and drives `/atlas/earn/` and card inclusion markers. This is an explicit breaking, current-only replacement, not an additive compatible change. No old earn feed is retained. The candidate identifier is 1.12.0, not a published release. Other legacy surfaces described below remain implementation debt outside this narrow change; they do not establish the final editorially selected current-only contract. TermiX editorial revision has a fresh scoped independent receipt; this is not release approval.
+
 > Current local packaging scope, 23 November 2026: the owner chose dated catalogue preparation without requiring a complete retrospective raw-evidence archive. Missing originals remain unavailable/unverified, not passed. Source URLs, dates, known limits, exact images and available history are preserved. Quality is locally adapted to the accepted catalogue builder. The historical checkpoint and earlier proof below remain historical. No code publication, merge, deploy or automation activation is approved.
 
 > Packaging checkpoint, 23 November 2026: earlier status statements below are historical, not current release acceptance. Exact captures are now merged only in atlas-screens through image PR #317 at 3e75274034c11b7afbe81389c26843ccc813a876. Main and production have not been updated. Safety and IndexNow local reviews remain scoped; Quality still uses legacy build input. Public provenance packaging is BLOCKED: original source-evidence body availability is unverified and the proposed public/private evidence split is not owner-approved. No missing original is replaced by its receipt, hash or a new visit under an old date.
@@ -25,9 +37,9 @@ message, screenshot dispatch, spending, staging or production action.
 | Original evidence/history/identity | Source records, permanent IDs, capture dates and historical evidence | No rewrite of reviewed 348 source records; bounded attempts do not create visits, screenshots or closures | Do not infer current service state from historical fields |
 | HTML/Markdown/detail/share | Current source view on cards, grid, search and OG | Limitation first, otherwise overview; no legacy product copy on bounded cards | Exact final candidate independent review |
 | Filters | UI/JS/MCP status, tags and sorting | 348 dated-overview / 18 bounded-note / 20 history groups; legacy live token is labelled, old feature links explicitly historical; hidden claim sort not restored | Actual interaction and mobile regression evidence required |
-| JSON/API v1 | Required legacy fields and old consumers | Existing status/claim meanings retained; optional current objects and separate current_counts | Schema version remains historical 1.11.0; eventual additive release/version check open |
-| MCP | Full card, compact search, tool descriptions and Worker guides | Current fields carried and searched; earn/first tasks clearly historical; category counts labelled | Exact local tests do not establish deployed service state |
-| Legacy earn/badges/stats | Historical money, claim dates and legacy statuses | Historical labels in metadata, guidance, navigation and visible text | No new payout, task availability or functional-test guarantee |
+| JSON/API v1 | Required legacy fields and old consumers | Existing status/claim meanings retained; optional current objects and separate current_counts | Local candidate 1.12.0; earn-only breaking replacement explicitly documented, no general compatibility claim for it |
+| MCP | Full card, compact search, tool descriptions and Worker guides | Current fields carried and searched; earn current selected overviews, first tasks historical; category counts labelled | Exact local tests do not establish deployed service state |
+| Earn / remaining legacy badges and stats | Earn: current 71 selection; badges and stats still historical in this candidate | Shared earn descriptions/dates/sources, no numeric legacy earn rows | Earn inclusion is not proof of payment, task availability or functionality; other current-only migration remains open |
 | Screenshots | Exact capture bytes and source/time bindings | Reviewed local captures unchanged; botnet derivative has its own component receipt | Image branch and screens.lock cutover still open |
 | Link safety | Preserved safety report and fail-closed source-host checks | Existing controls not disabled; no external sweep performed | Current remote safety and release checks require separate authorized work |
 | CI/assets/mirrors | Local saved adapter and same-build outputs | Accepted-generator and normal checker run locally; mirror generated from same input | Actual GitHub CI, previous snapshot and private-term checks unverified or skipped |

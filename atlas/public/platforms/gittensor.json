@@ -1,91 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "gittensor",
  "name": "Gittensor (Bittensor SN74)",
  "url": "https://commonworld.one/atlas/platforms/gittensor/",
  "json_url": "https://commonworld.one/atlas/platforms/gittensor.json",
+ "md_url": "https://commonworld.one/atlas/platforms/gittensor/index.md",
  "website": "https://gittensor.io",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Gittensor is Bittensor subnet 74 by Entrius, built to reward merged open-source PRs with alpha/TAO emissions and now also running GPU compute and the SparkInfer inference project.",
  "tags": [
   "open-source",
   "github",
   "merged-pr",
   "token"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Code now sets OSS_EMISSION_SHARE=1.0 with comment 'with an empty repository registry every miner emission recycles to UID 0' — i.e. miners currently earn nothing",
-   "value": 0,
-   "unit": "share of miner emissions paid out",
-   "window": "since 2026-10-12",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "source_url": "https://github.com/entrius/gittensor/commit/884ce1785f802f384b1f13a9df87ba29d9cbe821"
-  },
-  {
-   "statement": "Third-party tracker reports SN74 miner burn rose to 100% (from 64%)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "source_url": "https://www.taosis.com/news/100000002512"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 0,
-  "unit": "share of miner emissions paid out",
-  "window": "since 2026-10-12",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:12:00Z",
-  "source_url": "https://github.com/entrius/gittensor/commit/884ce1785f802f384b1f13a9df87ba29d9cbe821"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/gittensor/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Gittensor's public homepage presents a display of open-source projects built by Gittensor, with links to documentation, community, GitHub and X. Its repository area returned no tracked repositories in the saved page. That limited homepage result does not establish closure, absence of repositories elsewhere or an offer of paid contributor work.",
@@ -95,109 +27,9 @@
   ],
   "revision": "e5479d03a80de6cd514eb12014c98988d0e1a1ee654b15408b7325784d295fe6"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/gittensor.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/gittensor-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "gittensor.io is a JS shell (needs browser); docs.gittensor.io returns 200 with content; GitHub repo active",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://docs.gittensor.io",
-   "quote": null,
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://gittensor.io (3 KB shell)",
-    "curl -sL https://docs.gittensor.io (200)",
-    "GitHub API commits entrius/gittensor"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "gittensor.io (README links it as website)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/entrius/gittensor",
-   "quote": "[Gittensor](https://gittensor.io/) is a Bittensor subnet (SN74)",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl raw README.md"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Miners earn TAO for merged PRs to recognized repos (per README)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://github.com/entrius/gittensor",
-   "quote": "Miners earn TAO by making real, merged pull requests to recognized open source repositories.",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl raw README.md"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Latest commit 2026-10-12 22:45 UTC: 'chore(weights): burn all miner emissions (empty registry, compute share 0) (#1839)'",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/entrius/gittensor/commit/884ce1785f802f384b1f13a9df87ba29d9cbe821",
-   "quote": "chore(weights): burn all miner emissions (empty registry, compute share 0) (#1839)",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "GET api.github.com/repos/entrius/gittensor/commits"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Code now sets OSS_EMISSION_SHARE=1.0 with comment 'with an empty repository registry every miner emission recycles to UID 0' — i.e. miners currently earn nothing",
-   "value": 0,
-   "unit": "share of miner emissions paid out",
-   "window": "since 2026-10-12",
-   "basis": "direct_observation",
-   "source_url": "https://github.com/entrius/gittensor/commit/884ce1785f802f384b1f13a9df87ba29d9cbe821",
-   "quote": "1.0 leaves the compute pool nothing: with an empty repository registry every miner emission recycles to UID 0.",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "GET commit diff via GitHub API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Third-party tracker reports SN74 miner burn rose to 100% (from 64%)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://www.taosis.com/news/100000002512",
-   "quote": "The subnet now routes 100% of its miner emission to burn (was 64%).",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "web_search"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

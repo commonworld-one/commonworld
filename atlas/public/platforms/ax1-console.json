@@ -1,89 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "ax1-console",
  "name": "AX1 Console",
  "url": "https://commonworld.one/atlas/platforms/ax1-console/",
  "json_url": "https://commonworld.one/atlas/platforms/ax1-console.json",
+ "md_url": "https://commonworld.one/atlas/platforms/ax1-console/index.md",
  "website": "https://www.ax1.vc/console",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "AX1 Console is a Base 'agentic activities launchpad' where each user's agent runs paid quests, starting with a $0.02 AI verdict on a Base token, paid over x402.",
  "tags": [
   "x402",
   "x402-service"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402 settlement to this service's payout address: $9,920.76 in 30d from 4,870 distinct buyers, 496,038 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 9920.76,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/ax1-console"
-  },
-  {
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $1,518.06",
-   "value": 1518.06,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/ax1-console/volume?days=60"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 9920.76,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/services/ax1-console"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/ax1-console/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services/ax1-console",
-   "quote": "\"volume_usd_30d\":9920.76,\"unique_buyers_30d\":4870,\"tx_count_30d\":496038,\"top_buyer_share_30d\":0.05807216382615848,\"last_settlement_at\":\"2026-10-28T03:42:27Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AX1 Console presents guest-accessible Q-Verdict token grades, commentary and on-chain metrics as entertainment, not trading advice. Its five free Console runs are $0.10 starter credit for a new account, followed by $0.02 per verdict. External agents get accountless, API-key-free x402 calls at $0.02 USDC on Base without starter credit, XP or contest points. The UI names Base and Robinhood Chain; agent documentation lists Base and Solana configured, with supported token networks determined by the deployment quote. Analysis networks are distinct from the Base payment rail. Documentation describes preparing the verdict before settlement and recovering pending or unknown outcomes through the same operation rather than paying again; HTTP status alone does not prove payment or completion. Rankings and prize-pool announcements remain operator claims, not independently verified earnings or payouts.",
@@ -96,129 +28,9 @@
   ],
   "revision": "f4658e00d08db3d4bf0e9004cef01740b65478877c3b62931276cf4562e4b2b4"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/ax1-console.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ax1-console-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Official site returns HTTP 200 with real content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.ax1.vc/console",
-   "quote": "AX1 Console: the agentic activities launchpad on Base. Your agent runs quests and pays in USDC over x402. Top 5 on x402scan. Start with Verdict, $0.02.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://www.ax1.vc/console"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL (x402-list base_url/website for this service, operator-owned)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.ax1.vc/console",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100",
-    "curl -sL https://www.ax1.vc/console"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "AX1 Console is a Base 'agentic activities launchpad' where each user's agent runs paid quests, starting with a $0.02 AI verdict on a Base token, paid over x402.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.ax1.vc/console",
-   "quote": "AX1 Console: the agentic activities launchpad on Base. Your agent runs quests and pays in USDC over x402. Top 5 on x402scan. Start with Verdict, $0.02.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://www.ax1.vc/console",
-    "GET https://x402-list.com/api/v1/services?per_page=100"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $9,920.76 in 30d from 4,870 distinct buyers, 496,038 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 9920.76,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/ax1-console",
-   "quote": "\"volume_usd_30d\":9920.76,\"unique_buyers_30d\":4870,\"tx_count_30d\":496038,\"top_buyer_share_30d\":0.05807216382615848,\"last_settlement_at\":\"2026-10-28T03:42:27Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/ax1-console",
-    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
-    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 8034.78,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "x402 settlement to this service's payout address: $8,034.78 in 30d from 3557 distinct buyers, 401,739 settlements; top buyer share 5.0%",
-     "quote": "traction.volume_usd_30d=8034.78, unique_buyers_30d=3557, top_buyer_share_30d=0.05",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "ax1-console-x402-list-30d",
-   "last_settlement_seen_at": "2026-10-28T03:42:27Z",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $1,518.06",
-   "value": 1518.06,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/ax1-console/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/ax1-console/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last UTC day with ≥$1 settled: 2026-10-15; first settlement 2026-09-07",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/ax1-console/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/ax1-console/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

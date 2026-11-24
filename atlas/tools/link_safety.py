@@ -88,29 +88,41 @@ def curation_hosts(slugs, files):
 
 def linked_hosts(snap, files):
     """host -> sorted slugs: the snapshot's own links plus the cards v2 curation links of its published cards."""
-    out = {h: set(v) for h, v in sb.extract_hosts(snap).items()}
-    for h, v in curation_hosts({c.get('slug') for c in snap.get('platforms') or []}, files).items():
+    active = dict(snap, platforms=[c for c in snap.get('platforms') or [] if c.get('status') != 'closed'])
+    out = {h: set(v) for h, v in sb.extract_hosts(active).items()}
+    for h, v in curation_hosts({c.get('slug') for c in active['platforms']}, files).items():
         out.setdefault(h, set()).update(v)
     return {h: sorted(v) for h, v in sorted(out.items())}
 
 
 def catalogue_hosts(catalogue, snap, files):
-    """Union of compatibility exports and current public links, never editorial history."""
+    """Hosts the current catalogue links to: each card's primary URL and the current overview/limitation fields.
+    Everything older (compat-export claims/qa/notes/..., curation files, reachability reads) stays as history and never
+    decides an exclusion here. `files` is kept for the call signature of the legacy path."""
     directory = Path(catalogue)
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'site'))
     from catalogue_safety import current_links
-    out = {h: set(v) for h, v in linked_hosts(snap, files).items()}
+    from current_catalogue import apply_closures, add_new, new_overviews
+    snap = add_new(apply_closures(snap, directory), directory)
+    out = {}
+    closed = {c['slug'] for c in snap['platforms'] if c.get('status') == 'closed'}
+    for c in snap['platforms']:
+        if c['slug'] in closed:
+            continue
+        for h in sb.hosts_of_entry({'canonical_url': c.get('canonical_url')}):
+            out.setdefault(h, set()).add(c['slug'])
     known = {c['slug'] for c in snap['platforms']}
     for name in ('overviews.json', 'limitations.json'):
-        records = json.loads((directory / name).read_text())['cards']
+        document = json.loads((directory / name).read_text())
+        if name == 'overviews.json': document = new_overviews(document, directory)
+        records = document['cards']
         if set(records) - known:
             raise ValueError('current-link source contains unknown catalogue IDs')
         for slug, record in records.items():
+            if slug in closed:
+                continue
             for h in sb.hosts_of_entry(current_links(record)):
                 out.setdefault(h, set()).add(slug)
-    # Reachability can appear in compatibility exports too.
-    for h, slugs in curation_hosts(known, [(os.path.join(DATA, 'reachability.json'), 'cards')]).items():
-        out.setdefault(h, set()).update(slugs)
     return {h: sorted(v) for h, v in sorted(out.items())}
 
 
@@ -216,6 +228,12 @@ def apply_removals(report, snap_path, removed_path, tags_path, hold, today, cura
     removed_doc = json.load(open(removed_path, encoding='utf-8'))
     tags = json.load(open(tags_path, encoding='utf-8')) if tags_path and os.path.exists(tags_path) else None
     have = {r['slug'] for r in removed_doc.get('removed') or []}
+    projected = snap
+    if preserve_inputs:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'site'))
+        from current_catalogue import apply_closures, add_new
+        projected = add_new(apply_closures(snap, Path(snap_path).parent), Path(snap_path).parent)
+    closed = {c['slug'] for c in projected.get('platforms', []) if c.get('status') == 'closed'}
     actions = []
     for h in report['flagged']:
         if h in hold:
@@ -224,7 +242,7 @@ def apply_removals(report, snap_path, removed_path, tags_path, hold, today, cura
         ev = next((s['evidence_url'] for s in r['sources'] if s['verdict'] == 'flagged'), None) or report['standard']
         reason = flag_reason(r, report['sources'])
         for slug in r['entries']:
-            if slug in have:
+            if slug in have or slug in closed:
                 continue
             removed_doc.setdefault('removed', []).append({'slug': slug, 'host': h, 'removed_on': today, 'reason': '+'.join(r['flagged_by']) or 'flagged'})
             removed_doc.setdefault('decisions', []).append({'action': 'remove', 'slug': slug, 'host': h, 'by': 'hark', 'on': today,

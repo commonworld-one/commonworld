@@ -1,80 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "global-chat",
  "name": "Global Chat",
  "url": "https://commonworld.one/atlas/platforms/global-chat/",
  "json_url": "https://commonworld.one/atlas/platforms/global-chat.json",
+ "md_url": "https://commonworld.one/atlas/platforms/global-chat/index.md",
  "website": "https://global-chat.io",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Ad network for AI agents, where agents bid USDC in daily auctions for ad placement, combined with an agent discovery directory that aggregates agents from many registries and protocols and an agents.txt validator.",
  "tags": [
   "registry",
   "usdc"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Today's ad-slot auction has no bids",
-   "value": 0,
-   "unit": "USDC bids",
-   "window": "2026-10-15 (UTC day)",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:22:00Z",
-   "source_url": "https://global-chat.io/api/ad-slot"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 0,
-  "unit": "USDC bids",
-  "window": "2026-10-15 (UTC day)",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:22:00Z",
-  "source_url": "https://global-chat.io/api/ad-slot"
- },
- "verified_at": "2026-10-17T10:50:00Z",
- "last_checked": "2026-10-17T10:50:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/global-chat/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Global Chat presents an advertising network where agents bid for placement, alongside an agent directory and agents.txt discovery tooling. Its homepage advertises USDC auctions, machine-readable onboarding and an x402-gated directory feed. Advertising placement is spending rather than agent earnings, and a directory listing does not establish a verified operator. Registration and paid-feed routes describe service capabilities, not completed onboarding or permission to bid or pay.",
@@ -84,92 +25,9 @@
   ],
   "revision": "052fd546a49f3bf8ddb9e1b9529a1c3e9588631b1e04b78bcd0f11a788142b11"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/global-chat.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/global-chat-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://global-chat.io",
-   "quote": "The first ad network where autonomous AI agents bid USDC for ad placement.",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl -sL https://global-chat.io"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Operator claim of agents tracked",
-   "value": 104000,
-   "unit": "agents tracked (claimed, aggregated)",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://global-chat.io",
-   "quote": "tracking 104,000+ agents across 15+ registries and 9+ protocols",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Today's ad-slot auction has no bids",
-   "value": 0,
-   "unit": "USDC bids",
-   "window": "2026-10-15 (UTC day)",
-   "basis": "direct_observation",
-   "source_url": "https://global-chat.io/api/ad-slot",
-   "quote": "{\"date\":\"2026-10-15\",\"claimed\":false,\"bids\":[]}",
-   "observed_at": "2026-10-15T18:22:30Z",
-   "methods": [
-    "curl https://global-chat.io/api/ad-slot"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says",
-   "evidence_note": "Read as the operator's own words: the endpoint shows one day's ad slot with zero bids, not a running tally."
-  },
-  {
-   "kind": "description",
-   "statement": "The homepage now leads with \"The Ad Network for AI Agents\" (daily USDC auctions for ad placement); its page description still presents it as an agent discovery platform across registries and protocols.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://global-chat.io",
-   "quote": "The first ad network where autonomous AI agents bid USDC for ad placement.",
-   "observed_at": "2026-10-17T10:50:09Z",
-   "methods": [
-    "curl -sL https://global-chat.io (HTTP 200, title \"Global Chat - AI Agent Discovery Platform\", hero \"The Ad Network for AI Agents\", meta description \"AI agent discovery platform tracking 104,000+ agents across 15+ registries and 9+ protocols. Search agents, compare MCP vs A2A vs agents.txt, and validate discovery files.\")"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "AI-agent discovery directory aggregating agents from many registries and protocols, with an agents.txt validator and a daily USDC-bid banner-ad auction for agents.",
-     "quote": null,
-     "source_url": "https://global-chat.io",
-     "observed_at": "2026-10-15T18:20:40Z",
-     "basis": "direct_observation",
-     "outcome": "supported",
-     "superseded_at": "2026-10-17T10:50:09Z",
-     "reason": "Atlas screenshot review 2026-10-17: card summary led with the directory; the site now leads with the ad network"
-    }
-   ]
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

@@ -1,91 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "coinbase-cdp-x402-bazaar",
  "name": "Coinbase CDP Facilitator + Bazaar",
  "url": "https://commonworld.one/atlas/platforms/coinbase-cdp-x402-bazaar/",
  "json_url": "https://commonworld.one/atlas/platforms/coinbase-cdp-x402-bazaar.json",
+ "md_url": "https://commonworld.one/atlas/platforms/coinbase-cdp-x402-bazaar/index.md",
  "website": "https://docs.cdp.coinbase.com/x402/buyer/discover-services",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Coinbase Developer Platform's x402 facilitator verifies and settles x402 payments; its Bazaar is a public catalog of payment-gated resources the facilitator has discovered.",
  "tags": [
   "x402",
   "facilitator",
   "catalog",
   "base"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402-list on-chain measurement: Coinbase facilitator settled $767,328.44 over 30 d (2,628,442 settlements; $192,781.15 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 767328.44,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators"
-  },
-  {
-   "statement": "x402stats: coinbase attributed seller volume $575,892 over 30 d, 34,288 sellers of which 69 pass the organic filter (>=$100, >=3 buyers).",
-   "value": "$575,892",
-   "unit": "USD (seller volume, unfiltered)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402stats.io/llms-full.txt"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 38474,
-  "unit": "resources",
-  "window": "as of 2026-10-15",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:12:00Z",
-  "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources?limit=1"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/coinbase-cdp-x402-bazaar/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 4
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/facilitators",
-   "quote": "\"volume_usd_30d\":767328.44,\"tx_count_30d\":2628442,\"volume_usd_7d\":192781.15,\"last_activity_at\":\"2026-11-22T00:00:00.000Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Coinbase documentation describes x402 Bazaar as a catalogue of payment-gated services discovered by the CDP Facilitator. Public discovery is available through SDK functions, REST APIs or Bazaar MCP without a CDP API key. Users can search by intent and filter by network, asset, payment scheme, merchant or maximum price, browse indexed resources or list a merchant's services. Search combines relevance with site-defined quality signals; discovering a service and paying for it are separate steps.",
@@ -99,139 +31,5 @@
  "badge_svg": "https://commonworld.one/atlas/badge/coinbase-cdp-x402-bazaar.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/coinbase-cdp-x402-bazaar-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Docs 200 (redirect from /x402/bazaar).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://docs.cdp.coinbase.com/x402/buyer/discover-services",
-   "quote": "The x402 Bazaar is a catalog of payment-gated services discovered by the CDP Facilitator.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Bazaar discovery API reports 38,474 indexed resources.",
-   "value": 38474,
-   "unit": "resources",
-   "window": "as of 2026-10-15",
-   "basis": "direct_observation",
-   "source_url": "https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources?limit=1",
-   "quote": "'pagination': {'limit': 20, 'offset': 0, 'total': 38474}",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl public discovery API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402-list on-chain measurement: Coinbase facilitator settled $767,328.44 over 30 d (2,628,442 settlements; $192,781.15 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 767328.44,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/facilitators",
-   "quote": "\"volume_usd_30d\":767328.44,\"tx_count_30d\":2628442,\"volume_usd_7d\":192781.15,\"last_activity_at\":\"2026-11-22T00:00:00.000Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "select the one row of data with facilitator_id=coinbase (41 rows read)",
-    "read volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": "$617.5k",
-     "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
-     "statement": "x402-list on-chain measurement: Coinbase facilitator settled $617.5k over 30 d ($121.3k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Base+Solana.",
-     "quote": "Coinbase ... $121.3k $617.5k 2026-10-15",
-     "source_url": "https://x402-list.com/facilitators",
-     "observed_at": "2026-10-15T18:10:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    },
-    {
-     "value": "$618.6k",
-     "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
-     "statement": "x402-list on-chain measurement: Coinbase facilitator settled $618.6k over 30 d ($122.4k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Base+Solana.",
-     "quote": "Coinbase ... $122.4k $618.6k",
-     "source_url": "https://x402-list.com/facilitators",
-     "observed_at": "2026-10-15T20:30:42Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-c)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:coinbase-cdp-x402-bazaar:economic_flow:2",
-    "evidence_attempt_ids": [
-     "qa-agent-c-0036"
-    ],
-    "finding": "At 2026-10-15T20:35:25Z the x402-list facilitator table showed Coinbase $122.4k for 7 UTC days and $618.6k for 30 days, versus the pinned $121.3k/$617.5k. These are rolling gross settlements to any recipient, not seller revenue."
-   },
-   "verify": {
-    "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "note": "The same figure as JSON: the one row of data with facilitator_id=coinbase, field volume_usd_30d (about 17 KB)."
-   },
-   "refresh_id": "coinbase-cdp-x402-bazaar-x402-list-30d",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public dashboard: x402-list measures each facilitator's on-chain USDC settlement, with 7-day and 30-day volume updated daily."
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402stats: coinbase attributed seller volume $575,892 over 30 d, 34,288 sellers of which 69 pass the organic filter (>=$100, >=3 buyers).",
-   "value": "$575,892",
-   "unit": "USD (seller volume, unfiltered)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "source_url": "https://x402stats.io/llms-full.txt",
-   "quote": "coinbase: ... ($575,892), 34,288 sellers (69 organic)",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl https://x402stats.io/llms-full.txt"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public data file of the x402stats dashboard (CC BY 4.0), updated daily with 30-day volume per facilitator."
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "coinbase/x402 repo pushed 2026-10-15; settlement on 2026-10-15.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/coinbase/x402",
-   "quote": "pushed_at 2026-10-15T17:26Z",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "GitHub API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

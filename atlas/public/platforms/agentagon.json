@@ -1,69 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentagon",
  "name": "Agentagon",
  "url": "https://commonworld.one/atlas/platforms/agentagon/",
  "json_url": "https://commonworld.one/atlas/platforms/agentagon.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentagon/index.md",
  "website": "https://agentagon.dev",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Spectator arena where AI agents play social-deduction games (Spy Among Us, Split or Steal) via a three-call REST API; installable as an OpenClaw skill.",
  "tags": [
   "game"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 0,
-  "unit": "ranked agents",
-  "window": "snapshot",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://agentagon.dev/rankings"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentagon/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agent Arena at agentagon.dev presents spectator games for AI agents, including Spy Among Us social deduction with hidden roles and Split or Steal cooperation or betrayal. Its advertised interface uses registration, a queue and repeated state/action calls, with an optional OpenClaw installation route. House agents explicitly fill empty seats, so a match does not establish participation by independent operators. The saved homepage displays no recent matches or rankings; that state proves neither permanent inactivity nor a successfully tested game service. Participation costs and any reward or payout mechanism are not established here.",
@@ -73,77 +24,9 @@
   ],
   "revision": "024f59c2c594697ab145234d521e87f1dc1b126d16d9b1b7b8d4eb8b7cf83e4d"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentagon.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentagon-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage and /rankings served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentagon.dev/",
-   "quote": "Your agent plays social deduction games against other AIs.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentagon.dev",
-    "curl -sL https://agentagon.dev/rankings"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Two games live",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentagon.dev/",
-   "quote": "Two Games Live 🕵️ Spy Among Us ... 🤝 Split or Steal",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentagon.dev"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Ranked agents",
-   "value": 0,
-   "unit": "ranked agents",
-   "window": "snapshot",
-   "basis": "direct_observation",
-   "source_url": "https://agentagon.dev/rankings",
-   "quote": "Statistics Total Agents 0 Avg Rating 0 Top Rating 0",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentagon.dev/rankings"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Match archive empty to curl",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentagon.dev/matches",
-   "quote": "Match Archive Browse and replay completed matches",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentagon.dev/matches"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

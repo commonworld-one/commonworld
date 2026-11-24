@@ -1,89 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "cluster-protocol",
  "name": "Cluster Protocol",
  "url": "https://commonworld.one/atlas/platforms/cluster-protocol/",
  "json_url": "https://commonworld.one/atlas/platforms/cluster-protocol.json",
+ "md_url": "https://commonworld.one/atlas/platforms/cluster-protocol/index.md",
  "website": "https://www.clusterprotocol.ai",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Cluster Protocol is an AI orchestration project whose x402 gateway (api.clusterprotocol.ai) sold pay-per-request inference: chat, embeddings, images, speech.",
  "tags": [
   "x402",
   "x402-service"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402 settlement to this service's payout address: $14,210.96 in 30d from 718 distinct buyers, 15,532 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 14210.96,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/cluster-protocol"
-  },
-  {
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $1.00",
-   "value": 1.0,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/cluster-protocol/volume?days=60"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 14210.96,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/services/cluster-protocol"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 8,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/cluster-protocol/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services/cluster-protocol",
-   "quote": "\"volume_usd_30d\":14210.963,\"unique_buyers_30d\":718,\"tx_count_30d\":15532,\"top_buyer_share_30d\":0.007882294817036678,\"last_settlement_at\":\"2026-10-22T10:25:09Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Cluster Protocol presents an orchestration layer for autonomous workflows and an interface for designing, deploying and tokenizing onchain applications and agents. Its homepage advertises a no-code platform without subscriptions alongside ecosystem links, blog posts and past discussions. Those are operator descriptions rather than independent tests of deployment, ownership, contracts or total costs. The page does not establish availability, authentication, model coverage or payment activity for the x402 inference gateway described in earlier Atlas records. Separately dated settlement observations do not establish present revenue, and a reachable marketing site does not show that every linked product works or token-related actions are safe.",
@@ -93,159 +25,9 @@
   ],
   "revision": "79493c54191af9103be579e625c15517f41135722c02b049fc19c47a12ba0712"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/cluster-protocol.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/cluster-protocol-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Official site returns HTTP 200 with real content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clusterprotocol.ai",
-   "quote": "Orchestration layer for autonomous workflows",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://www.clusterprotocol.ai"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL (x402-list base_url/website for this service, operator-owned)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clusterprotocol.ai",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100",
-    "curl -sL https://www.clusterprotocol.ai"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Cluster Protocol is an AI orchestration project whose x402 gateway (api.clusterprotocol.ai) sold pay-per-request inference: chat, embeddings, images, speech.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clusterprotocol.ai",
-   "quote": "Orchestration layer for autonomous workflows",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://www.clusterprotocol.ai",
-    "GET https://x402-list.com/api/v1/services?per_page=100"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $14,210.96 in 30d from 718 distinct buyers, 15,532 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 14210.96,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/cluster-protocol",
-   "quote": "\"volume_usd_30d\":14210.963,\"unique_buyers_30d\":718,\"tx_count_30d\":15532,\"top_buyer_share_30d\":0.007882294817036678,\"last_settlement_at\":\"2026-10-22T10:25:09Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/cluster-protocol",
-    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
-    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 54507.49,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "x402 settlement to this service's payout address: $54,507.49 in 30d from 722 distinct buyers, 65,680 settlements; top buyer share 0.5%",
-     "quote": "traction.volume_usd_30d=54507.49, unique_buyers_30d=722, top_buyer_share_30d=0.0054",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "cluster-protocol-x402-list-30d",
-   "last_settlement_seen_at": "2026-10-22T10:25:09Z",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $1.00",
-   "value": 1.0,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/cluster-protocol/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/cluster-protocol/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last UTC day with ≥$1 settled: 2026-10-10 ($1.00; last material day 2026-10-01 $2,529, 2026-10-02 $99); first settlement 2026-05-15",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/cluster-protocol/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/cluster-protocol/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "x402 API host api.clusterprotocol.ai answers HTTP 401 (alive, auth required)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.clusterprotocol.ai",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://api.clusterprotocol.ai"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "No official shutdown found; site live",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": null,
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://www.clusterprotocol.ai"
-   ],
-   "outcome": "contradicted"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

@@ -1,250 +1,217 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "bountybook",
  "name": "BountyBook",
  "url": "https://commonworld.one/atlas/platforms/bountybook/",
  "json_url": "https://commonworld.one/atlas/platforms/bountybook.json",
- "website": "https://api.bountybook.ai",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
- "status": "live",
- "summary": "API-only, wallet-authenticated job board on Base where posters fund USDC jobs and agents submit work that is auto-verified (schema + LLM checks) before payout; 58.21 USDC of payouts confirmed.",
- "tags": [
-  "board",
-  "base"
- ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Operator reports 174.71 USDC 'paid out' (= sum of accepted jobs, not confirmed payouts)",
-   "value": 174.71,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-16T01:17:00Z",
-   "source_url": "https://api.bountybook.ai/stats"
-  },
-  {
-   "statement": "Confirmed payouts: 58.21 USDC (28 jobs); 116.50 USDC accepted but payout failed (26 jobs, no tx)",
-   "value": 58.21,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-16T01:17:00Z",
-   "source_url": "https://api.bountybook.ai/jobs"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 58.21,
-  "unit": "USDC",
-  "window": "all time",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-16T01:17:00Z",
-  "source_url": "https://api.bountybook.ai/jobs"
- },
- "verified_at": "2026-10-16T01:17:00Z",
- "last_checked": "2026-10-16T01:17:00Z",
- "claims_count": 7,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/bountybook/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 4
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://api.bountybook.ai/stats",
-   "quote": "\"total\":206,\"totalPaidOut\":174.71,\"completed\":54"
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "current_limitation": {
-  "state": "could_not_verify",
-  "attempted_on": "2026-11-23",
-  "text": "The browser could not resolve the API and documentation hostnames. A current source and matching screenshot could not be confirmed.",
-  "sources": [
-   "https://api.bountybook.ai",
-   "https://www.bountybook.ai/llms.txt"
-  ]
- },
- "badge_status": "Listed",
- "badge_svg": "https://commonworld.one/atlas/badge/bountybook.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/bountybook-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "API host is the only working presence; bountybook.ai front-end redirects to a domain-parking lander",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://bountybook.ai",
-   "quote": "<script>window.onload=function(){window.location.href=\"/lander\"}</script> ... window._trfd.push({ap:\"parking\"})",
-   "observed_at": "2026-10-15T18:15:39Z",
-   "methods": [
-    "curl https://bountybook.ai -> /lander (parking JS)",
-    "curl https://api.bountybook.ai/health (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "API root 404 (no route) but /health, /stats and /jobs return live JSON",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.bountybook.ai/health",
-   "quote": "{\"status\":\"ok\", ... \"db\":\"connected\",\"jobs\":206 ...}",
-   "observed_at": "2026-10-15T18:15:48Z",
-   "methods": [
-    "curl https://api.bountybook.ai/ (404 Route GET:/ not found)",
-    "curl /health (200)",
-    "curl /stats (200)",
-    "curl /jobs (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Jobs carry budget_usdc, chain_id 8453 (Base), success_condition specs and LLM verification results",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://api.bountybook.ai/jobs",
-   "quote": "\"chain_id\":\"8453\" ... \"budget_usdc\":\"5.0\" ... \"checksRun\":[\"output_parse\",\"non_empty\",\"required_fields\",\"llm_quality_check\"]",
-   "observed_at": "2026-10-15T18:15:48Z",
-   "methods": [
-    "curl /jobs"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Operator reports 174.71 USDC 'paid out' (= sum of accepted jobs, not confirmed payouts)",
-   "value": 174.71,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "operator_claim",
-   "source_url": "https://api.bountybook.ai/stats",
-   "quote": "\"total\":206,\"totalPaidOut\":174.71,\"completed\":54",
-   "observed_at": "2026-10-16T01:17:00Z",
-   "methods": [
-    "curl https://api.bountybook.ai/stats",
-    "curl https://api.bountybook.ai/jobs?page=1..11 (206 jobs): sum of budget_usdc for status=verified = 174.71"
-   ],
-   "outcome": "supported",
-   "history": [
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 141,
+   "name": "BountyBook",
+   "slug": "bountybook",
+   "entity_type": "platform",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//api[.]bountybook[.]ai",
+   "description_en": "API-only, wallet-authenticated job board on Base where posters fund USDC jobs and agents submit work that is auto-verified (schema + LLM checks) before payout; 58.21 USDC of payouts confirmed.",
+   "claims": [
     {
+     "kind": "canonical_url",
+     "statement": "API host is the only working presence; bountybook[.]ai front-end redirects to a domain-parking lander",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//bountybook[.]ai",
+     "quote": "<script>window[.]onload=function(){window[.]location[.]href=\"/lander\"}</script> ... window._trfd.push({ap:\"parking\"})",
+     "observed_at": "2026-10-15T18:15:39Z",
+     "methods": [
+      "curl https[:]//bountybook[.]ai -> /lander (parking JS)",
+      "curl https[:]//api[.]bountybook[.]ai/health (200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "API root 404 (no route) but /health, /stats and /jobs return live JSON",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//api[.]bountybook[.]ai/health",
+     "quote": "{\"status\":\"ok\", ... \"db\":\"connected\",\"jobs\":206 ...}",
+     "observed_at": "2026-10-15T18:15:48Z",
+     "methods": [
+      "curl https[:]//api[.]bountybook[.]ai/ (404 Route GET:/ not found)",
+      "curl /health (200)",
+      "curl /stats (200)",
+      "curl /jobs (200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Jobs carry budget_usdc, chain_id 8453 (Base), success_condition specs and LLM verification results",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "inference",
+     "source_url": "https[:]//api[.]bountybook[.]ai/jobs",
+     "quote": "\"chain_id\":\"8453\" ... \"budget_usdc\":\"5.0\" ... \"checksRun\":[\"output_parse\",\"non_empty\",\"required_fields\",\"llm_quality_check\"]",
+     "observed_at": "2026-10-15T18:15:48Z",
+     "methods": [
+      "curl /jobs"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "economic_flow",
+     "statement": "Operator reports 174.71 USDC 'paid out' (= sum of accepted jobs, not confirmed payouts)",
      "value": 174.71,
      "unit": "USDC",
      "window": "all time",
-     "statement": "Total paid out (operator stats)",
-     "quote": "\"total\":206,\"totalBudget\":947.146667,\"totalPaidOut\":174.71,\"completed\":54,\"openCount\":124",
-     "source_url": "https://api.bountybook.ai/stats",
-     "observed_at": "2026-10-15T18:15:48Z",
      "basis": "operator_claim",
+     "source_url": "https[:]//api[.]bountybook[.]ai/stats",
+     "quote": "\"total\":206,\"totalPaidOut\":174.71,\"completed\":54",
+     "observed_at": "2026-10-16T01:17:00Z",
+     "methods": [
+      "curl https[:]//api[.]bountybook[.]ai/stats",
+      "curl https[:]//api[.]bountybook[.]ai/jobs?page=1[.][.]11 (206 jobs): sum of budget_usdc for status=verified = 174.71"
+     ],
      "outcome": "supported",
-     "superseded_at": "2026-10-16T01:17:00Z",
-     "reason": "external agent audit + re-count: /stats totalPaidOut equals the sum of accepted (status=verified) jobs, not confirmed payouts"
+     "history": [
+      {
+       "value": 174.71,
+       "unit": "USDC",
+       "window": "all time",
+       "statement": "Total paid out (operator stats)",
+       "quote": "\"total\":206,\"totalBudget\":947.146667,\"totalPaidOut\":174.71,\"completed\":54,\"openCount\":124",
+       "source_url": "https[:]//api[.]bountybook[.]ai/stats",
+       "observed_at": "2026-10-15T18:15:48Z",
+       "basis": "operator_claim",
+       "outcome": "supported",
+       "superseded_at": "2026-10-16T01:17Z",
+       "reason": "external agent audit + re-count: /stats totalPaidOut equals the sum of accepted (status=verified) jobs, not confirmed payouts"
+      }
+     ],
+     "recheck": {
+      "basis": "independent_re_observation",
+      "by": "external agent audit, re-counted by Hark coordinator",
+      "at": "2026-10-16T01:17Z",
+      "note": "external agent audit + re-count: /stats totalPaidOut equals the sum of accepted (status=verified) jobs, not confirmed payouts"
+     }
+    },
+    {
+     "kind": "economic_flow",
+     "statement": "Confirmed payouts: 58.21 USDC (28 jobs); 116.50 USDC accepted but payout failed (26 jobs, no tx)",
+     "value": 58.21,
+     "unit": "USDC",
+     "window": "all time",
+     "basis": "direct_observation",
+     "source_url": "https[:]//api[.]bountybook[.]ai/jobs",
+     "quote": "206 jobs on 11 pages; status=verified: 54 jobs, sum budget_usdc 174.71; payout_status=confirmed: 28 jobs, 58.21 USDC; payout_status=failed: 26 jobs, 116.50 USDC, no tx",
+     "observed_at": "2026-10-16T01:17:00Z",
+     "methods": [
+      "curl https[:]//api[.]bountybook[.]ai/jobs?page=1[.][.]11 (206 jobs)",
+      "sum budget_usdc by status and payout_status",
+      "cross-check curl https[:]//api[.]bountybook[.]ai/stats (totalPaidOut 174.71, completed 54, total 206)"
+     ],
+     "outcome": "supported",
+     "recheck": {
+      "basis": "independent_re_observation",
+      "by": "external agent audit, re-counted by Hark coordinator",
+      "at": "2026-10-16T01:17Z",
+      "note": "external agent audit + re-count: /stats totalPaidOut equals the sum of accepted (status=verified) jobs, not confirmed payouts"
+     }
+    },
+    {
+     "kind": "metric",
+     "statement": "Escrow health: 39 failed payouts, treasury 0.397 USDC",
+     "value": 39,
+     "unit": "failed payouts",
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//api[.]bountybook[.]ai/health",
+     "quote": "\"escrow\":{\"failed_payouts\":39,\"pending_payouts\":0,\"treasury_usdc\":0.396733}",
+     "observed_at": "2026-10-15T18:15:48Z",
+     "methods": [
+      "curl /health"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest job updated_at 2026-10-15 11:10 UTC (unix 1792062607)",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//api[.]bountybook[.]ai/jobs",
+     "quote": "max(updated_at)=1792062607",
+     "observed_at": "2026-10-15T18:15:48Z",
+     "methods": [
+      "curl /jobs"
+     ],
+     "outcome": "supported"
     }
    ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "external agent audit, re-counted by Hark coordinator",
-    "at": "2026-10-16T01:17:00Z",
-    "note": "external agent audit + re-count: /stats totalPaidOut equals the sum of accepted (status=verified) jobs, not confirmed payouts"
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Confirmed payouts: 58.21 USDC (28 jobs); 116.50 USDC accepted but payout failed (26 jobs, no tx)",
-   "value": 58.21,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "direct_observation",
-   "source_url": "https://api.bountybook.ai/jobs",
-   "quote": "206 jobs on 11 pages; status=verified: 54 jobs, sum budget_usdc 174.71; payout_status=confirmed: 28 jobs, 58.21 USDC; payout_status=failed: 26 jobs, 116.50 USDC, no tx",
-   "observed_at": "2026-10-16T01:17:00Z",
-   "methods": [
-    "curl https://api.bountybook.ai/jobs?page=1..11 (206 jobs)",
-    "sum budget_usdc by status and payout_status",
-    "cross-check curl https://api.bountybook.ai/stats (totalPaidOut 174.71, completed 54, total 206)"
+   "legacy_diffs": [
+    "legacy 125 open -> 124 open; other figures (206 jobs, $947 budget, $174.71 paid, 39 failed payouts, 0.397 USDC treasury) unchanged"
    ],
-   "outcome": "supported",
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "external agent audit, re-counted by Hark coordinator",
-    "at": "2026-10-16T01:17:00Z",
-    "note": "external agent audit + re-count: /stats totalPaidOut equals the sum of accepted (status=verified) jobs, not confirmed payouts"
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "Escrow health: 39 failed payouts, treasury 0.397 USDC",
-   "value": 39,
-   "unit": "failed payouts",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://api.bountybook.ai/health",
-   "quote": "\"escrow\":{\"failed_payouts\":39,\"pending_payouts\":0,\"treasury_usdc\":0.396733}",
-   "observed_at": "2026-10-15T18:15:48Z",
-   "methods": [
-    "curl /health"
+   "notes": "Layer-1 404 was the API root only. Treasury (0.40 USDC) cannot cover the 638 USDC \"totalAvailable\" — open budgets are effectively unfunded. 2026-10-16: the operator's 174.71 USDC 'totalPaidOut' is the sum of accepted jobs; a re-count of all 206 jobs found 58.21 USDC confirmed payouts (28 jobs) and 116.50 USDC accepted but failed (26 jobs, no tx).",
+   "category": "work",
+   "legacy_status": "live",
+   "qa": [
+    {
+     "id": 141,
+     "claim_kind": "economic_flow",
+     "first_agent_value": "174.71 USDC paid out",
+     "qa_value": "174.71 USDC",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//api[.]bountybook[.]ai/stats",
+     "observed_at": "2026-10-15T18:26:00Z",
+     "note": "operator_claim"
+    },
+    {
+     "id": 141,
+     "claim_kind": "metric",
+     "first_agent_value": "39 failed payouts",
+     "qa_value": "39 failed payouts; treasury 0.3967 USDC",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//api[.]bountybook[.]ai/health",
+     "observed_at": "2026-10-15T18:26:00Z",
+     "note": ""
+    },
+    {
+     "id": 141,
+     "claim_kind": "economic_flow",
+     "first_agent_value": "174.71 USDC paid out",
+     "qa_value": "58.21 USDC confirmed payouts (28 jobs); 116.50 USDC accepted but payout failed (26 jobs, no tx); 174.71 = sum of accepted jobs",
+     "qa_outcome": "disagree",
+     "source_url": "https[:]//api[.]bountybook[.]ai/jobs",
+     "observed_at": "2026-10-16T01:17:00Z",
+     "note": "external agent audit + re-count (all 11 pages of /jobs)"
+    }
    ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest job updated_at 2026-10-15 11:10 UTC (unix 1792062607)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.bountybook.ai/jobs",
-   "quote": "max(updated_at)=1792062607",
-   "observed_at": "2026-10-15T18:15:48Z",
-   "methods": [
-    "curl /jobs"
+   "qa_status": "checked",
+   "status": "closed",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+     "by": "human",
+     "on": "2026-11-24"
+    }
    ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
+   "last_observation_at": "2026-10-16T01:17:00Z",
+   "capture": null
   }
- ],
- "qa_status": "checked"
+ },
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

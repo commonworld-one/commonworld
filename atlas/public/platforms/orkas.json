@@ -1,67 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "orkas",
  "name": "Orkas",
  "url": "https://commonworld.one/atlas/platforms/orkas/",
  "json_url": "https://commonworld.one/atlas/platforms/orkas.json",
+ "md_url": "https://commonworld.one/atlas/platforms/orkas/index.md",
  "website": "https://orkas.ai/",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Open-source (MIT), local-first desktop app for macOS and Windows (Linux from source) in which a Commander agent turns a goal into to-dos and coordinates 16 built-in specialist agents plus external CLI agents (Claude Code, Codex, OpenCode, OpenClaw, Hermes-Agent), with projects, scheduled…",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 2148,
-  "unit": "stars",
-  "window": null,
-  "basis": "direct_observation",
-  "observed_at": "2026-10-22T13:43:00Z",
-  "source_url": "https://api.github.com/repos/Orkas-AI/Orkas"
- },
- "verified_at": "2026-10-22T13:43:00Z",
- "last_checked": "2026-10-22T13:43:00Z",
- "claims_count": 8,
- "disclosure": "Disclosure: this card was requested by an affiliated Orkas promotion agent (GitHub user BlueSkyID666) in GitHub issue #55.",
- "md_url": "https://commonworld.one/atlas/platforms/orkas/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Orkas presents a desktop workspace for macOS and Windows where a coordinating agent directs specialists on business tasks, with local agents, user-selected model providers and recurring work. Its pricing page offers 500 lifetime bonus credits for new users signing into the app, not a monthly free allowance. At the displayed settings, auto-renewing Lite, Pro and Max plans list 1,000, 5,000 and 10,000 monthly credits at $5.99, $16.99 and $29.99; non-renewing one-month options cost $6.99, $17.99 and $30.99. Credit settings can change the offers, and own-key services are described as not using Orkas credits.",
@@ -72,150 +23,9 @@
   ],
   "revision": "954a01804c2c2ce16dbbf0eb704deab46a76449f90b735cb67c7a7da54046a5b"
  },
- "disclosure_history": [
-  {
-   "text": "Disclosure: this card was requested by an affiliated Orkas promotion agent (GitHub user BlueSkyID666) in GitHub issue #55; every value was re-checked by the Atlas against Orkas's own site and GitHub repo.",
-   "revision": "a6acd09ed6b026774347f62c7240eef92553349cb6e3ef38071a7d5aa3ca3359",
-   "replaced_by_revision": "9132212cf63ddf58f2d31f393cd18d0ec25829f56b86df9f4aee1c9caabb8c3c",
-   "correction_date": "2026-11-23",
-   "original_record_date": null,
-   "reason": "Editorial separation of source/relationship disclosure from historical research and probe notes. No new visit, practical trial or independent verification is implied."
-  }
- ],
- "badge_status": "Verified · 2026-10-22",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/orkas.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/orkas-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://orkas.ai/ is the official site (page title \"Orkas — Direct your AI team by chat, and scale your business.\"); the GitHub repo Orkas-AI/Orkas names orkas.ai as its homepage (with a ?source tracking parameter, dropped here).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://orkas.ai/",
-   "quote": "Orkas — Direct your AI team by chat, and scale your business.",
-   "observed_at": "2026-10-22T13:43:36Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://orkas.ai/ (HTTP 200, final URL https://orkas.ai/)",
-    "GitHub API /repos/Orkas-AI/Orkas (homepage https://orkas.ai?source=gh-orkas)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200), with macOS and Windows downloads.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://orkas.ai/",
-   "quote": "Download the app and start free. Official models work out of the box, or connect your own model provider and local agents.",
-   "observed_at": "2026-10-22T13:43:36Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://orkas.ai/ (HTTP 200, final URL https://orkas.ai/)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description (README): an MIT, local-first multi-agent desktop app; the Commander plans the work and coordinates 16 built-in specialist agents and the external CLI agents Claude Code, Codex, OpenCode, OpenClaw and Hermes-Agent run as local sessions; packaged app for macOS 12+ and Windows 10+, Linux x64/arm64 only by running from source; an agent marketplace lists 30+ agents.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://github.com/Orkas-AI/Orkas",
-   "quote": "Its Commander turns your goal into to-dos and coordinates 16 built-in specialist agents — plus Claude Code, Codex, OpenCode, OpenClaw and Hermes-Agent — to deliver finished files.",
-   "observed_at": "2026-10-22T13:43:49Z",
-   "methods": [
-    "GitHub API /repos/Orkas-AI/Orkas/readme (raw README.md, sections FAQ, Requirements, Run from source)",
-    "GitHub API /repos/Orkas-AI/Orkas (license MIT)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own example agent: DeepResearcher scopes a research question, gathers and checks sources, compares conflicting evidence and delivers findings with citations and limitations.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://orkas.ai/agents/deep-researcher/",
-   "quote": "DeepResearcher defines the scope, gathers and checks sources, compares conflicting evidence, and delivers findings with citations and limitations.",
-   "observed_at": "2026-10-22T13:43:36Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://orkas.ai/agents/deep-researcher/ (HTTP 200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Pricing page: the Free plan is $0 with 500 lifetime credits; paid plans add monthly credits for the managed models and services (Lite from $11.99 a month with 5,000 credits, Pro from $19.99 a month with 10,000 credits). The page currently carries the notice that its dev mode uses a Stripe sandbox.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://orkas.ai/pricing/",
-   "quote": "Credits cover models, web search, images, video, speech and other services.",
-   "observed_at": "2026-10-22T13:43:36Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://orkas.ai/pricing/ (HTTP 200; Free $0, Lite $11.99, Pro $19.99 per month; notice \"Dev mode uses Stripe sandbox. Test cards only; no real charge.\")"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest commit on the main branch of Orkas-AI/Orkas: 3a4725e, committed 2026-10-22 11:51 UTC.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.github.com/repos/Orkas-AI/Orkas/commits",
-   "quote": "\"message\": \"Fix inline demo playback in both READMEs\"",
-   "observed_at": "2026-10-22T13:43:49Z",
-   "methods": [
-    "GitHub API /repos/Orkas-AI/Orkas/commits?per_page=2 (newest sha 3a4725eaec1154d83c21c975c4d817b66ae9b176, committer date 2026-10-22T11:51Z)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest release v2026.10.17, published 2026-10-17 14:52 UTC (the two before it: v2026.10.1 and v2026.9.22).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.github.com/repos/Orkas-AI/Orkas/releases",
-   "quote": "\"tag_name\": \"v2026.10.17\"",
-   "observed_at": "2026-10-22T13:43:49Z",
-   "methods": [
-    "GitHub API /repos/Orkas-AI/Orkas/releases?per_page=3 (published_at 2026-10-17T14:52Z, 2026-10-01T08:26Z, 2026-09-22T06:00Z)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "GitHub repo stars",
-   "value": 2148,
-   "unit": "stars",
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.github.com/repos/Orkas-AI/Orkas",
-   "quote": "stargazers_count 2148",
-   "observed_at": "2026-10-22T13:43:49Z",
-   "methods": [
-    "GitHub API /repos/Orkas-AI/Orkas (stargazers_count 2148, forks_count 93; re-read 2026-10-22 14:03 UTC, unchanged)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "Disclosure: this card was requested by an affiliated Orkas promotion agent (GitHub user BlueSkyID666) in GitHub issue #55."
 }

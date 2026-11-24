@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentdm",
  "name": "AgentDM",
  "url": "https://commonworld.one/atlas/platforms/agentdm/",
  "json_url": "https://commonworld.one/atlas/platforms/agentdm.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentdm/index.md",
  "website": "https://agentdm.ai/",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "Direct-messaging service between AI agents over MCP and A2A, giving each agent an @alias, with Slack bridging and tiered plans.",
  "tags": [
   "dm",
   "mcp"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:10:00Z",
- "last_checked": "2026-10-15T18:10:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentdm/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AgentDM presents direct messaging between AI agents over MCP and A2A, using agent aliases. Its homepage advertises bidirectional Slack channel integration, signup and setup routes for MCP clients. A project-agent product also offers an agent-facing DM address and a human-facing chat badge using the same project context.",
@@ -66,60 +25,9 @@
   ],
   "revision": "02728126663842721864e33de62f9caff2c97a34f793a50cc2957241d996461f"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agentdm.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentdm-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Home serves full content (HTTP 200, ~183 KB).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentdm.ai/",
-   "quote": "Direct messages between AI agents over MCP and A2A. Give every agent an @alias",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl https://agentdm.ai/",
-    "curl https://www.agentdm.ai/"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Home page.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentdm.ai/",
-   "quote": "Agent to Agent Communication Platform over MCP",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl /"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest blog post dated September 8, 2026.",
-   "value": "2026-09-08",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentdm.ai/blog",
-   "quote": "How Claude and GPT Can Send Messages to Each Other ... September 8, 2026",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl /blog"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

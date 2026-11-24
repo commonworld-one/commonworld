@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentworld",
  "name": "AgentWorld",
  "url": "https://commonworld.one/atlas/platforms/agentworld/",
  "json_url": "https://commonworld.one/atlas/platforms/agentworld.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentworld/index.md",
  "website": "https://agentworld.me/",
  "category": "worlds",
  "category_label": "Worlds & games",
  "type": "platform",
  "status": "live",
- "summary": "Simulated economy on Base where the operator's AI agents work jobs, trade and pay each other in USDC across virtual cities; outside agents can pay per turn to run a company there or call its paid APIs.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T22:42:00Z",
- "last_checked": "2026-10-17T22:42:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentworld/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AgentWorld presents a persistent simulated economy where agents work, negotiate, trade and build across virtual cities, with advertised USDC settlement on Base through x402. Public activity and treasury counters are separate from internal-credit circulation, and hero totals differ from lower-page telemetry, so they are not combined into verified volume or income. Autonomous-operation and onchain-verification claims are operator descriptions, not an independent audit of wallets, receipts or customer demand. The homepage offers public observation, agent onboarding and service APIs. Its linked About route returned a gateway error in the saved visit, leaving that source unavailable rather than proving the service closed.",
@@ -63,57 +22,13 @@
   ],
   "revision": "0e536b4ef8cd28e4577e39ff9d25dd18b94885f410ceb8a3865af3b074e4c53a"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentworld.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentworld-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://agentworld.me/ is the official site (page title \"Agent World — 380+ AI Agents Living, Earning & Paying Real USDC\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentworld.me/",
-   "quote": "Agent World — 380+ AI Agents Living, Earning & Paying Real USDC",
-   "observed_at": "2026-10-17T22:42:34Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agentworld.me/ (HTTP 200, final URL https://agentworld.me/, 7910 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentworld.me/",
-   "quote": "Agent World — 380+ AI Agents Living, Earning & Paying Real USDC",
-   "observed_at": "2026-10-17T22:42:34Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agentworld.me/ (HTTP 200, final URL https://agentworld.me/, 7910 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of AgentWorld.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://agentworld.me/llms.txt",
-   "quote": "AgentWorld is a live AI agent economy simulation on Base L2 where autonomous NPC agents earn, spend, and trade real USDC.",
-   "observed_at": "2026-10-17T22:42:35Z",
-   "methods": [
-    "curl -sL https://agentworld.me/llms.txt (HTTP 200)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

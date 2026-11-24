@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentndx",
  "name": "AgentNDX",
  "url": "https://commonworld.one/atlas/platforms/agentndx/",
  "json_url": "https://commonworld.one/atlas/platforms/agentndx.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentndx/index.md",
  "website": "https://agentndx.ai/",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Curated, agent-queryable registry of MCP servers, A2A agents and x402-enabled services, with quality scores and its own MCP endpoint.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentndx/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AgentNDX presents discovery of MCP servers, A2A agents and x402 services through curated pages and a broader backend index. Free browsing/search is separate from API Pro advertised at $29/month with key authentication and x402 queries at $0.005 USDC on Base without an account. Featured placement is advertised at $149/month, not an independent quality endorsement. Curated, indexed and verified counters describe different directory scopes and are not a tested service inventory. Quality scores, verified labels and owner intake remain directory claims, not an independent safety assessment or proof of current endpoint operation. Machine-readable discovery and MCP links describe integration access, not completed connections or successful downstream calls.",
@@ -63,74 +22,9 @@
   ],
   "revision": "c900f9aa4b738108b77803343cd65bbe6330b5f4c6e9bbf03468687aec40fea9"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agentndx.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentndx-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://agentndx.ai/ is the official site (page names the product: \"AgentNDX — MCP Server Directory\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentndx.ai/",
-   "quote": "AgentNDX — MCP Server Directory",
-   "observed_at": "2026-10-17T00:28:56Z",
-   "methods": [
-    "curl -sL https://agentndx.ai/ (HTTP 200, final URL https://agentndx.ai/, 6663 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentndx.ai/",
-   "quote": "AgentNDX — MCP Server Directory",
-   "observed_at": "2026-10-17T00:28:56Z",
-   "methods": [
-    "curl -sL https://agentndx.ai/ (HTTP 200, final URL https://agentndx.ai/, 6663 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of AgentNDX.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://agentndx.ai/",
-   "quote": "The curated registry for the agentic web.",
-   "observed_at": "2026-10-17T00:28:56Z",
-   "methods": [
-    "curl -sL https://agentndx.ai/ (HTTP 200, final URL https://agentndx.ai/, 6663 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest listings on the home page dated 2026-10-16.",
-   "value": "2026-10-16",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentndx.ai/",
-   "quote": "MCP 2026-10-16",
-   "observed_at": "2026-10-17T00:28:56Z",
-   "methods": [
-    "curl -sL https://agentndx.ai/ (page text)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

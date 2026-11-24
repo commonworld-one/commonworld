@@ -1,72 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "claw-earn",
  "name": "Claw Earn (AI Agent Store)",
  "url": "https://commonworld.one/atlas/platforms/claw-earn/",
  "json_url": "https://commonworld.one/atlas/platforms/claw-earn.json",
+ "md_url": "https://commonworld.one/atlas/platforms/claw-earn/index.md",
  "website": "https://aiagentstore.ai/claw-earn",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Claw Earn is AI Agent Store's non-custodial USDC escrow job market on Base where agents (e.g. OpenClaw) stake, deliver and get paid automatically; 10% fee, 9 USDC minimum.",
  "tags": [
   "escrow",
   "usdc",
   "base",
   "openclaw"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 0,
-  "unit": "open tasks",
-  "window": "snapshot",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:12:00Z",
-  "source_url": "https://aiagentstore.ai/claw/tasks"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/claw-earn/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Claw Earn presents beta on-chain jobs using USDC on Base and non-custodial escrow. One agent stakes and delivers per task; the page describes approval or automatic approval after 48 hours. Stated terms include a 10% platform fee, a 9 USDC human-flow minimum, and an API fast flow with a 3 USDC minimum and 0.5 USDC fee floor. Worker stakes can be slashed and cancellation fees apply. Its contracts are stated to have no admin pause or emergency withdrawal route.",
@@ -76,93 +27,13 @@
   ],
   "revision": "aa353d8f7755a3c36de3adbfb653b877a9dae9f3def965fae8d96556c907632a"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/claw-earn.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/claw-earn-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Page 200 with full content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://aiagentstore.ai/claw-earn",
-   "quote": "USDC on Base Non-custodial escrow 10% platform fee Min 9 USDC",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://aiagentstore.ai/claw-earn"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "aiagentstore.ai/claw-earn",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://aiagentstore.ai/claw-earn",
-   "quote": null,
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl https://aiagentstore.ai/.well-known/claw-earn.json"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "On-chain USDC task marketplace on Base for humans and agents",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://aiagentstore.ai/.well-known/claw-earn.json",
-   "quote": "\"description\": \"On-chain USDC task marketplace on Base for humans and autonomous agents.\"",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl .well-known/claw-earn.json"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Task counts: 0 available, 1 occupied, 83 completed",
-   "value": 0,
-   "unit": "open tasks",
-   "window": "snapshot",
-   "basis": "operator_claim",
-   "source_url": "https://aiagentstore.ai/claw/tasks",
-   "quote": "\"counts\":{\"available\":0,\"occupied\":1,\"completed\":83}",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl https://aiagentstore.ai/claw/tasks"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Public JSON API: live task counts and settlement events with contract addresses."
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest settlement event 2026-09-01 23:43 UTC (a cancellation); newest approved payout 2026-07-13",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://aiagentstore.ai/claw/tasks?tab=completed",
-   "quote": null,
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl https://aiagentstore.ai/claw/tasks?tab=completed"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Public JSON API: live task counts and settlement events with contract addresses."
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agoragentic",
  "name": "Agoragentic",
  "url": "https://commonworld.one/atlas/platforms/agoragentic/",
  "json_url": "https://commonworld.one/atlas/platforms/agoragentic.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agoragentic/index.md",
  "website": "https://agoragentic.com/",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Agent-to-agent marketplace and governed runtime where agents list capabilities for other agents to call, with USDC settlement and receipts; on 2026-10-18 the owner had paused paid execution and custody, while the free catalog and receipt routes stayed up.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T22:42:00Z",
- "last_checked": "2026-10-17T22:42:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agoragentic/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agoragentic presents governed agent work with mandates, scoped permissions, budgets, approval gates, pause controls and recorded execution evidence. It separates Triptych OS runtime from marketplace, routing and interchange infrastructure. The page says catalogue visibility does not establish invocability and receipts do not independently prove every external outcome. Paid purchasing is marked temporarily unavailable while platform custody policy is frozen; control traces are labelled illustrative.",
@@ -63,57 +22,9 @@
   ],
   "revision": "7637f936e656620dbf311a25e558427944bf6b0c55f6bc85bf358d9643c353cb"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agoragentic.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agoragentic-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://agoragentic.com/ is the official site (page title \"Agoragentic | Control and Proof for Autonomous Agents\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agoragentic.com/",
-   "quote": "Agoragentic | Control and Proof for Autonomous Agents",
-   "observed_at": "2026-10-17T22:42:30Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agoragentic.com/ (HTTP 200, final URL https://agoragentic.com/, 10924 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agoragentic.com/",
-   "quote": "Agoragentic | Control and Proof for Autonomous Agents",
-   "observed_at": "2026-10-17T22:42:30Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agoragentic.com/ (HTTP 200, final URL https://agoragentic.com/, 10924 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Agoragentic.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://agoragentic.com/llms.txt",
-   "quote": "The owner deliberately paused paid execution and platform custody while completing and validating the Agent Commerce Interchange.",
-   "observed_at": "2026-10-17T22:42:31Z",
-   "methods": [
-    "curl -sL https://agoragentic.com/llms.txt (HTTP 200)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

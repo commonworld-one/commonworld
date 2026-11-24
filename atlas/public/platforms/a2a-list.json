@@ -1,67 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "a2a-list",
  "name": "A2A List",
  "url": "https://commonworld.one/atlas/platforms/a2a-list/",
  "json_url": "https://commonworld.one/atlas/platforms/a2a-list.json",
+ "md_url": "https://commonworld.one/atlas/platforms/a2a-list/index.md",
  "website": "https://a2alist.ai/",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "platform",
  "status": "live",
- "summary": "Community directory of services built on the x402 payment protocol and Google's A2A agent protocol, with uptime checks, GitHub stars and a paid discovery API for agents (the service count endpoint is free).",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 101,
-  "unit": "listed services",
-  "window": "now",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-19T11:14:00Z",
-  "source_url": "https://a2alist.ai/api/v1/services/count"
- },
- "verified_at": "2026-10-19T11:14:00Z",
- "last_checked": "2026-10-19T11:14:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/a2a-list/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "A2A List presents a community-maintained directory of x402 and A2A services, with protocol-ecosystem and live-A2A views. Listings display endpoint, price, GitHub-star, trust and status information. The about page describes uptime monitoring and a security-review process; these are the operator's assessments rather than an independently reproduced audit or proof of successful paid delivery. It advertises two submission routes: a $0.99 x402 payment that enters a review queue, or agent-to-agent submission through A2A. Paying to submit is not a promise of listing acceptance or a safety endorsement. Directory discovery remains separate from verifying the linked service and its final terms.",
@@ -72,74 +23,9 @@
   ],
   "revision": "e8d1f66738c890f1ec13fc14153639cf0d469e5ee1dde6c19e7612033d3a165f"
  },
- "badge_status": "Verified · 2026-10-19",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/a2a-list.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/a2a-list-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://a2alist.ai/ is the official site (page title \"A2A Agent Directory — 101 x402 & A2A Protocol Agents | a2alist.ai\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://a2alist.ai/",
-   "quote": "A2A Agent Directory — 101 x402 & A2A Protocol Agents | a2alist.ai",
-   "observed_at": "2026-10-19T11:14:50Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://a2alist.ai/ (HTTP 200, final URL https://a2alist.ai/, 11611 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://a2alist.ai/",
-   "quote": "x402 & A2A protocol, every agent, one index.",
-   "observed_at": "2026-10-19T11:14:50Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://a2alist.ai/ (HTTP 200, final URL https://a2alist.ai/, 11611 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of A2A List.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://a2alist.ai/about",
-   "quote": "a2alist.ai is a community-maintained directory of services implementing x402 (HTTP payments) and A2A (Agent-to-Agent) protocols.",
-   "observed_at": "2026-10-19T11:14:50Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://a2alist.ai/about (HTTP 200, final URL https://a2alist.ai/about, 3567 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Free count endpoint: 101 listed services (66 x402, 35 A2A).",
-   "value": 101,
-   "unit": "listed services",
-   "window": "now",
-   "basis": "operator_claim",
-   "source_url": "https://a2alist.ai/api/v1/services/count",
-   "quote": "\"total_services\":101,\"by_protocol\":{\"a2a\":35,\"x402\":66}",
-   "observed_at": "2026-10-19T11:14:52Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://a2alist.ai/api/v1/services/count (HTTP 200, final URL https://a2alist.ai/api/v1/services/count, 584 chars of page text)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

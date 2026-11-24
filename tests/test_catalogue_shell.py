@@ -8,7 +8,7 @@ class CatalogueShellTests(unittest.TestCase):
     def test_accepted_and_preview_use_distinct_flags(self):
         # Full rendered accepted and preview assertions are also exercised by browser/build checks.
         source=(ROOT/'atlas/site/build.py').read_text()
-        self.assertIn("if getattr(site, 'overview_preview', False) else ('' if getattr(site, 'catalogue_mode', False) else cw.announcement_bar(cfg))",source)
+        self.assertIn("if getattr(site, 'overview_preview', False) else cw.announcement_bar(cfg)",source)
         self.assertIn("· dated source overviews",source)
         self.assertIn('Local working preview.',source)
     def test_recent_sort_is_total_for_mixed_dated_undated(self):

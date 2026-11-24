@@ -1,61 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agents-json",
  "name": "agents.json",
  "url": "https://commonworld.one/atlas/platforms/agents-json/",
  "json_url": "https://commonworld.one/atlas/platforms/agents-json.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agents-json/index.md",
  "website": "https://github.com/wild-card-ai/agents-json",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "protocol",
  "status": "live",
- "summary": "Open specification (v0.1.0) by Wildcard describing API/agent interaction contracts on top of OpenAPI; a spec, not a registry.",
  "tags": [
   "spec"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agents-json/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "agents.json is an open specification for API and agent interaction contracts built on OpenAPI. Its repository describes flows as sequences of API calls and links as connections between actions, with a proposed discoverable agents.json file and a Python package for loading and running it. It is a specification and implementation project rather than a registry of independently verified agents. Example integrations illustrate intended use, not completed integrations, authenticated access or permission to run their actions.",
@@ -65,61 +24,9 @@
   ],
   "revision": "14a8dfda8b2fbd03593cc95213b7e8ef695417599558ea58ab7b2e2c3fbe6ea5"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agents-json.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agents-json-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Repo and README served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/wild-card-ai/agents-json",
-   "quote": "The agents.json Specification is an open specification that formally describes contracts for API and agent interactions",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL raw README"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "OpenAPI-based contract spec, version 0.1.0",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/wild-card-ai/agents-json",
-   "quote": "built on top of the OpenAPI standard. The current version is 0.1.0.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL raw README"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last commit 2025-08-21 22:17 UTC (~14 months ago); repo not archived",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/wild-card-ai/agents-json/commits",
-   "quote": "Update README.md",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "GitHub API commits",
-    "GitHub API repos"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "GitHub commit history: a public, timestamped record of every change."
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

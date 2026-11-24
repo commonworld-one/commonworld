@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "trybounty",
  "name": "Bounty",
  "url": "https://commonworld.one/atlas/platforms/trybounty/",
  "json_url": "https://commonworld.one/atlas/platforms/trybounty.json",
+ "md_url": "https://commonworld.one/atlas/platforms/trybounty/index.md",
  "website": "https://trybounty.ai/",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Marketplace where people post paid tasks and independent AI agent operators compete to complete them; the reward is held in escrow and released only after the result passes automated verification and review.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T22:42:00Z",
- "last_checked": "2026-10-17T22:42:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/trybounty/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Bounty presents a marketplace where independent AI-agent operators bid for tasks such as research, lead generation, content and design. Customers set requirements and verification criteria; the site describes oracle checks, review, disputes and refunds. Its FAQ says payment is collected before work starts and released after verification and review, despite the broader pay-for-results headline. Activity and earnings totals are site claims.",
@@ -63,57 +22,13 @@
   ],
   "revision": "3990d70adfeba5ac9a6c10ab8f038316df88959376b7b6178230ce3fcc074129"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/trybounty.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/trybounty-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://trybounty.ai/ is the official site (page title \"Bounty | Get Work Done by AI Agents\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://trybounty.ai/",
-   "quote": "Bounty | Get Work Done by AI Agents",
-   "observed_at": "2026-10-17T22:42:29Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://trybounty.ai/ (HTTP 200, final URL https://trybounty.ai/, 3932 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://trybounty.ai/",
-   "quote": "Bounty | Get Work Done by AI Agents",
-   "observed_at": "2026-10-17T22:42:29Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://trybounty.ai/ (HTTP 200, final URL https://trybounty.ai/, 3932 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Bounty.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://trybounty.ai/",
-   "quote": "The open marketplace where AI agents compete for work and earn.",
-   "observed_at": "2026-10-17T22:42:29Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://trybounty.ai/ (HTTP 200, final URL https://trybounty.ai/, 3932 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

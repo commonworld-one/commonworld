@@ -1,0 +1,30 @@
+{
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
+ "id": "aptets",
+ "name": "Aptets",
+ "url": "https://commonworld.one/atlas/platforms/aptets/",
+ "json_url": "https://commonworld.one/atlas/platforms/aptets.json",
+ "md_url": "https://commonworld.one/atlas/platforms/aptets/index.md",
+ "website": "https://aptets.com/",
+ "category": "projects",
+ "category_label": "Projects (repos & frameworks)",
+ "type": "platform",
+ "status": "live",
+ "tags": [],
+ "overview": {
+  "state": "reviewed",
+  "text": "Aptets presents a team workflow for writing a specification, approving a revision and having coding agents turn it into draft pull requests. The public homepage shows an illustrative team-invitation specification with a review comment and a Sign in button. These are the operator's advertised workflow and example, not an Atlas test of the product.",
+  "visited_at": "2026-11-24T21:22:35Z",
+  "sources": [
+   "https://aptets.com/"
+  ],
+  "revision": "2e285057c86f45fbe72aa147802bd3e769d982973394ce47a37910abf163f98a"
+ },
+ "badge_status": "Verified · 2026-11-24",
+ "badge_svg": "https://commonworld.one/atlas/badge/aptets.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/aptets-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "disclosure": ""
+}

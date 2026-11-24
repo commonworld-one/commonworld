@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "perplexity-instant-buy-paypal",
  "name": "Perplexity (PayPal checkout)",
  "url": "https://commonworld.one/atlas/platforms/perplexity-instant-buy-paypal/",
  "json_url": "https://commonworld.one/atlas/platforms/perplexity-instant-buy-paypal.json",
+ "md_url": "https://commonworld.one/atlas/platforms/perplexity-instant-buy-paypal/index.md",
  "website": "https://www.perplexity.ai/hub/blog/shopping-that-puts-you-first",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Perplexity's free U.S. shopping experience with 'Instant Buy' in-chat checkout powered by PayPal, merchants remain merchant of record.",
  "tags": [
   "merchant-side",
   "us"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:09:00Z",
- "last_checked": "2026-10-17T00:09:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/perplexity-instant-buy-paypal/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Perplexity's November 2025 launch article describes conversational product discovery and instant checkout with PayPal. It presents contextual product cards and remembered shopping preferences, with retailers remaining merchant of record and handling returns and customer relationships. The dated launch offered free access to US users on desktop and web, with mobile apps then planned; it does not establish the present regional or device rollout.",
@@ -66,90 +25,9 @@
   ],
   "revision": "6a485a450f5d2cd75022181be26546f169d6e5d320e3ad3cf38f84c88fd4a3f8"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/perplexity-instant-buy-paypal.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/perplexity-instant-buy-paypal-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official Perplexity blog post announcing shopping with PayPal checkout.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.perplexity.ai/hub/blog/shopping-that-puts-you-first",
-   "quote": "Shopping on Perplexity is here: discovery that knows your taste, plus instant checkout with PayPal.",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_fetch (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "The official shopping launch post serves its full text (HTTP 200 via web_fetch). Plain curl and the help-center article get a Cloudflare challenge (HTTP 403 \"Just a moment...\"), which is a bot wall, not evidence either way.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.perplexity.ai/hub/blog/shopping-that-puts-you-first",
-   "quote": "We partnered with PayPal to power checkout all in the same user experience.",
-   "observed_at": "2026-10-17T00:09:00Z",
-   "methods": [
-    "web_fetch https://www.perplexity.ai/hub/blog/shopping-that-puts-you-first (HTTP 200, article text incl. \"Nov 25, 2025\")",
-    "curl -sL https://www.perplexity.ai/hub/blog/shopping-that-puts-you-first -> HTTP 403 title \"Just a moment...\" at 2026-10-17T00:12:19Z",
-    "curl -sL https://www.perplexity.ai/help-center/en/articles/10352906-what-is-instant-buy -> HTTP 403 title \"Just a moment...\" at 2026-10-17T00:12:20Z"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "Blog reachable via web_fetch; help-center article is behind Cloudflare challenge (403 'Just a moment').",
-     "quote": "Just a moment...",
-     "source_url": "https://www.perplexity.ai/help-center/en/articles/10352906-what-is-instant-buy",
-     "observed_at": "2026-10-15T18:11:00Z",
-     "basis": "direct_observation",
-     "outcome": "supported",
-     "superseded_at": "2026-10-17T00:09:00Z",
-     "reason": "Atlas audit 2026-10-17 (high-severity row): \"Just a moment...\" is the Cloudflare challenge page, not page content; replaced by real page text"
-    }
-   ]
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest opened official item: launch post 2025-11-25. No newer official post opened.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.perplexity.ai/hub/blog/shopping-that-puts-you-first",
-   "quote": "Nov 25, 2025",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_fetch"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "No volume published.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": null,
-   "quote": null,
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_search"
-   ],
-   "outcome": "unchecked"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

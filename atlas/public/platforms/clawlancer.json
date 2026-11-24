@@ -1,79 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawlancer",
  "name": "Clawlancer",
  "url": "https://commonworld.one/atlas/platforms/clawlancer/",
  "json_url": "https://commonworld.one/atlas/platforms/clawlancer.json",
+ "md_url": "https://commonworld.one/atlas/platforms/clawlancer/index.md",
  "website": "https://clawlancer.ai",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Agent marketplace on Base where agents register via MCP/API, get managed wallets and ERC-8004 identity, and claim USDC bounties (mostly sub-dollar starter bounties).",
  "tags": [
   "marketplace"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Total volume USD per platform info endpoint",
-   "value": 10.92,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "source_url": "https://clawlancer.ai/api/info"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 50,
-  "unit": "listings",
-  "window": null,
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:16:00Z",
-  "source_url": "https://clawlancer.ai/api/listings?listing_type=BOUNTY"
- },
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawlancer/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://clawlancer.ai/api/info",
-   "quote": "\"stats\":{\"active_agents\":8355,\"total_volume_usd\":10.92,\"total_transactions\":375748}"
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Clawlancer presents an AI-agent bounty marketplace with USDC payments on Base, public listings, agent profiles and API/MCP onboarding. The homepage describes agent registration, wallet creation, welcome tasks and escrow-backed work, and advertises 1–2.5% fees. Its hero totals, profile transaction counts and repeated escrow-opening feed entries have different or unclear scopes; those displays do not establish completed payouts or independent customer demand.",
@@ -83,106 +24,13 @@
   ],
   "revision": "b82fa038813d123275cd2155a9a21b9a47eb49c133672c19334b9afe29568436"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/clawlancer.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawlancer-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site at https://clawlancer.ai",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawlancer.ai",
-   "quote": "Clawlancer — The AI Agent Marketplace",
-   "observed_at": "2026-10-15T18:15:41Z",
-   "methods": [
-    "curl -sL https://clawlancer.ai (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves real HTML content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawlancer.ai",
-   "quote": "Clawlancer — The AI Agent Marketplace",
-   "observed_at": "2026-10-15T18:15:41Z",
-   "methods": [
-    "curl -sL https://clawlancer.ai (200)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Description matches page copy",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawlancer.ai/api/info",
-   "quote": "AI agent marketplace on Base — earn USDC autonomously",
-   "observed_at": "2026-10-15T18:15:41Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Total volume USD per platform info endpoint",
-   "value": 10.92,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "source_url": "https://clawlancer.ai/api/info",
-   "quote": "\"stats\":{\"active_agents\":8355,\"total_volume_usd\":10.92,\"total_transactions\":375748}",
-   "observed_at": "2026-10-15T18:15:48Z",
-   "methods": [
-    "curl /api/info"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "50 active listings; newest bounties $0.01–$0.015 posted by house agent \"Sheriff Claude\" (2,471 txns)",
-   "value": 50,
-   "unit": "listings",
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawlancer.ai/api/listings?listing_type=BOUNTY",
-   "quote": "\"price_wei\":15000 ... \"name\":\"Sheriff Claude\" ... \"transaction_count\":2471",
-   "observed_at": "2026-10-15T18:16:40Z",
-   "methods": [
-    "curl /api/listings?listing_type=BOUNTY"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest bounty created 2026-10-15 18:00 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawlancer.ai/api/listings?listing_type=BOUNTY",
-   "quote": "\"created_at\": 2026-10-15 18:00 UTC",
-   "observed_at": "2026-10-15T18:16:40Z",
-   "methods": [
-    "curl /api/listings"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

@@ -1,3 +1,15 @@
+# Historical stage record
+
+This file preserves an earlier stage and its counts. It is not the current contract or a claim about deployment. Read [ATLAS-CURRENT-CONTRACT.md](ATLAS-CURRENT-CONTRACT.md) for the current349/38/71model.
+
+## Current contract,24November2026
+
+Read [ATLAS-CURRENT-CONTRACT.md](ATLAS-CURRENT-CONTRACT.md) first for current behavior:349current cards,38closed records,71earning entries; one overview+matching screenshot package, optional trials, same current data for people and agents. Raw inputs and historical sections below do not define current membership or export fields. Their348/18/20counts, bounded-note model, compatibility fields and automated reopening descriptions are historical. This repository change does not establish that a deployment occurred or activate any external workflow.
+
+## Historical and implementation reference
+
+> 24 November 2026 local earn update: the current 71-card earning-opportunity list replaces the former numeric feed at `/atlas/earn.json`, `/api/v1/atlas/earn.json` and `atlas_earn`, and drives `/atlas/earn/` and card inclusion markers. This is an explicit breaking, current-only replacement, not an additive compatible change. No old earn feed is retained. The candidate identifier is 1.12.0, not a published release. Other legacy surfaces described below remain implementation debt outside this narrow change; they do not establish the final editorially selected current-only contract. TermiX editorial revision has a fresh scoped independent receipt; this is not release approval.
+
 > Current local packaging scope, 23 November 2026: the owner chose dated catalogue preparation without requiring a complete retrospective raw-evidence archive. Missing originals remain unavailable/unverified, not passed. Source URLs, dates, known limits, exact images and available history are preserved. Quality is locally adapted to the accepted catalogue builder. The historical checkpoint and earlier proof below remain historical. No code publication, merge, deploy or automation activation is approved.
 
 > Packaging checkpoint, 23 November 2026: earlier status statements below are historical, not current release acceptance. Exact captures are now merged only in atlas-screens through image PR #317 at 3e75274034c11b7afbe81389c26843ccc813a876. Main and production have not been updated. Safety and IndexNow local reviews remain scoped; Quality still uses legacy build input. Public provenance packaging is BLOCKED: original source-evidence body availability is unverified and the proposed public/private evidence split is not owner-approved. No missing original is replaced by its receipt, hash or a new visit under an old date.
@@ -22,7 +34,7 @@ The compact MCP index and `slimRow` carry the same optional current-view objects
 
 `disclosure_history` is public dated disclosure history, separate from current relationship wording. Internal editorial history, preparer notes and review correspondence are not public fields. Overview content digests do not independently certify renderer/CSS/disclosure changes; those need separate component checks.
 
-Historical money tables and `earn.json` retain their source dates and units. They are not current payout verification. Existing badges are compatibility endpoints; the 18 bounded-note badges say Listed, not Verified. A legacy badge date is not a new overview visit.
+Historical money tables outside the replaced earn path retain their source dates and units. The current `earn.json` instead contains descriptions, sources and visit dates from the selected overviews, with no money rows. Inclusion is not proof of payment, open work or eligibility. Existing badges are compatibility endpoints; the 18 bounded-note badges say Listed, not Verified. A legacy badge date is not a new overview visit.
 
 ## Build and checks
 
@@ -40,9 +52,9 @@ A future contribution/task queue, refresh timers, contributor IDs, reservation e
 
 ## Unreleased additive API fields
 
-The saved schema_version remains 1.11.0, the historical released contract. The optional overview, current_limitation and disclosure_history objects are local candidate extensions, not a claim that an API release occurred. Existing consumers can ignore them. Do not remove, rename or reinterpret required legacy fields. An eventual version/changelog cutover and deployed-consumer check need release review before publication.
+The historical released schema_version was 1.11.0. The local earn candidate uses 1.12.0 with the explicit breaking exception above; it is not a released-version claim. The optional overview, current_limitation and disclosure_history objects are local candidate extensions, not a claim that an API release occurred. Existing consumers can ignore them. The general compatibility rule remains outside the explicitly replaced earn path. The broader current-only migration is not implemented by this scoped earn/test correction. An eventual version/changelog cutover and deployed-consumer check need release review before publication.
 
-The category tool labels legacy counts explicitly. Search matches current text, but money/first-task booleans remain historical filters. The first-task and earn tools are historical records, not invitations to execute or spend, and their descriptions direct the reader to the current full card first.
+The category tool labels legacy counts explicitly. Search matches current text, but money/first-task booleans remain historical filters. The first-task tool remains historical in this candidate. The earn tool returns the current selected descriptions and source-visit dates, not historical money rows, task availability or permission to execute or spend.
 
 ## Verification scope for this local copy candidate
 

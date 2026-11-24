@@ -1,22 +1,10 @@
-# Atlas verification protocol
+## Atlas current contract
 
-## Local catalogue checkpoint, 23 November 2026
+Read [the current catalogue contract](../docs/ATLAS-CURRENT-CONTRACT.md) for349current cards,38closed records and71earning entries. Current HTML, Markdown, JSON, search and MCP share one overview+capture package and optional actual-use notes. Old claims, numeric money and first-task fields are not current exports. Raw catalogue inputs and historical stage documents are not current output. This file describes repository behavior, not deployment status; release and external workflow actions remain separate.
 
-The [current local catalogue contract](../docs/ATLAS-CURRENT-LOCAL-CONTRACT.md) supersedes earlier local checkpoint counts and current-view descriptions below. It describes 348 dated source overviews, 18 bounded notes and 20 closed-history records. Production has not been updated or verified by this checkpoint. Legacy claim/status fields remain compatibility data, not current availability or functional-test claims. No new recurring job or future agent queue is implemented.
+## Historical protocol reference
 
-
-## Simple-overview mode and legacy protocol
-
-The [simple-overview working implementation](../docs/ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
-
-
-## Current local overview procedure
-
-For this local candidate, the editorial unit is a short dated source overview, not a completed claim checklist. Preserve the permanent ID, exact source URLs, real visit date and reviewed source-page capture. Record an optional trial only when it was actually performed. A source visit does not prove availability, earnings or functionality.
-
-When the bounded source attempt could not establish an overview, record a dated current_limitation. It supersedes older descriptive copy without erasing compatibility history. It is not a new accepted visit, screenshot, service closure or proof that everyone is blocked. Do not repeat established terminal blockers without a new signal.
-
-The accepted-generator path and source files are specified in the current local contract above. Read current_limitation before overview on every surface. Do not run refresh, screenshot, IndexNow, release or publication procedures merely because an older section describes them. Their current cutover remains open. No task queue, reward system or new agent identity system is part of this change.
+The following preserves the earlier claim-based procedure and stored automation. It does not define current exports, revive closed cards, activate jobs or grant permission.
 
 ## Historical claim-based protocol and automation reference
 

@@ -1,72 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "stripe-link-agent-wallet",
  "name": "Stripe Issuing for agents + Link agent wallet",
  "url": "https://commonworld.one/atlas/platforms/stripe-link-agent-wallet/",
  "json_url": "https://commonworld.one/atlas/platforms/stripe-link-agent-wallet.json",
+ "md_url": "https://commonworld.one/atlas/platforms/stripe-link-agent-wallet/index.md",
  "website": "https://stripe.com/blog/helping-personal-agents-shop-more-intelligently-and-reliably-with-link",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Stripe Link's wallet for agents, letting consumer AI agents (e.g. Meta Muse) pay with a user's saved Link methods or single-use virtual cards, with purchase protection.",
  "tags": [
   "stripe",
   "buyer-side",
   "us-only",
   "cards"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 38,
-  "unit": "x growth, base undisclosed",
-  "window": "month before 2026-09-29",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:15:00Z",
-  "source_url": "https://stripe.com/blog/helping-personal-agents-shop-more-intelligently-and-reliably-with-link"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/stripe-link-agent-wallet/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Stripe's article dated 29 September 2026 describes Link's wallet for consumer-agent purchases, including incremental authorization, guidance through checkout obstacles, consumer-permissioned financial insights and protections for eligible transactions. It names Muse as the first agent offering those purchase protections, with wider protection availability and future spending controls described as plans. The article distinguishes help completing approved purchases from proposed budget-based autonomy. These dated product statements do not establish present eligibility for every agent, country, merchant or transaction, and the protections are conditional rather than a blanket guarantee.",
@@ -76,83 +27,9 @@
   ],
   "revision": "cf7baf6b1574cd102e5e8839fa4976c30e6d0c3568efbdb2490b40b1251b7c2a"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/stripe-link-agent-wallet.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/stripe-link-agent-wallet-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Stripe blog post 2026-09-29 is the most specific official page (no dedicated product URL found)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://stripe.com/blog/helping-personal-agents-shop-more-intelligently-and-reliably-with-link",
-   "quote": "Helping personal agents shop more intelligently and reliably with Link",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Page serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://stripe.com/blog/helping-personal-agents-shop-more-intelligently-and-reliably-with-link",
-   "quote": "provide purchase protection if an agent makes a mistake",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Link issues single-use virtual card per approved purchase; Meta Muse integration",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://stripe.com/newsroom/news/stripe-helps-meta-muse-shop-with-link",
-   "quote": "For other businesses, Link issues Muse a single-use virtual card scoped to the approved purchase.",
-   "observed_at": "2026-10-15T18:20:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Blog post 2026-09-29",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://stripe.com/blog/helping-personal-agents-shop-more-intelligently-and-reliably-with-link",
-   "quote": "2026-09-29",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Operator: agentic purchases with Link up 38x over the past month (no base disclosed)",
-   "value": 38,
-   "unit": "x growth, base undisclosed",
-   "window": "month before 2026-09-29",
-   "basis": "operator_claim",
-   "source_url": "https://stripe.com/blog/helping-personal-agents-shop-more-intelligently-and-reliably-with-link",
-   "quote": "over the past month, agentic purchases made with Link increased 38x.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

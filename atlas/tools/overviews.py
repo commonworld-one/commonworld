@@ -73,6 +73,8 @@ def revise(doc, slug, replacement):
         raise ValueError('unknown permanent slug')
     old = doc['cards'][slug]
     new = copy.deepcopy(replacement)
+    if 'trials' not in new and 'trials' in old:
+        new['trials'] = copy.deepcopy(old['trials'])
     history = copy.deepcopy(old.get('history', []))
     history.append({k: copy.deepcopy(v) for k, v in old.items() if k != 'history'})
     new['history'] = history
@@ -82,9 +84,17 @@ def revise(doc, slug, replacement):
     return doc
 
 
+def revise_trials(doc, slug, trials):
+    """Update only the optional real-use supplement; preserve main package/date exactly."""
+    if slug not in doc['cards']: raise ValueError('unknown permanent slug')
+    replacement = {k: copy.deepcopy(v) for k,v in doc['cards'][slug].items() if k != 'history'}
+    replacement['trials'] = copy.deepcopy(trials)
+    return revise(doc, slug, replacement)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('action', choices=['migrate', 'validate', 'revise', 'preview', 'bundle', 'verify-bundle'])
+    p.add_argument('action', choices=['migrate', 'validate', 'revise', 'revise-trials', 'preview', 'bundle', 'verify-bundle'])
     p.add_argument('--snapshot', default=str(DEFAULT_SNAPSHOT))
     p.add_argument('--file', required=True, help='local overview source JSON')
     p.add_argument('--audit')
@@ -92,6 +102,7 @@ def main():
     p.add_argument('--base-sha')
     p.add_argument('--slug')
     p.add_argument('--replacement')
+    p.add_argument('--catalogue-dir', help='current catalogue overlays; auto-detected beside --snapshot when closures.json exists')
     p.add_argument('--screens-dir', help='local directory with manifest.json and reviewed or draft image pixels')
     p.add_argument('--only', help='comma-separated permanent slugs for a handoff batch')
     p.add_argument('--screens-manifest')
@@ -128,20 +139,44 @@ def main():
         print(f"Prepared {len(doc['cards'])} drafts; {len(report['closed_history'])} closed entries unchanged; {len(report['missing_audit'])} missing audit rows. No new visit/check dates.")
         return
     doc = read(a.file)
-    if a.action == 'revise':
+    catalogue = Path(a.catalogue_dir) if a.catalogue_dir else Path(a.snapshot).parent
+    overlay = (catalogue / 'closures.json').is_file()
+    extras = None
+    owner = Path(a.file)
+    if overlay:
+        from current_catalogue import apply_closures, add_new, new_overviews, additional_shots
+        snapshot = add_new(apply_closures(snapshot, catalogue), catalogue)
+        extras = read(catalogue / 'additional-overviews.json') if (catalogue / 'additional-overviews.json').exists() else None
+        revisions = read(catalogue / 'current-revisions.json') if (catalogue / 'current-revisions.json').exists() else None
+        main_ids = set(doc['cards'])
+        doc = new_overviews(doc, catalogue)
+        if a.slug and a.slug not in main_ids and extras and a.slug in extras['cards']:
+            owner = catalogue / 'additional-overviews.json'
+        if a.slug and revisions and a.slug in revisions['cards']:
+            owner = catalogue / 'current-revisions.json'
+    if a.action in ('revise', 'revise-trials'):
         if not a.slug or not a.replacement:
             p.error('revise needs --slug and --replacement')
-        doc = revise(doc, a.slug, read(a.replacement))
-    shots = read(a.screens_manifest).get('screens', {}) if a.screens_manifest else None
+        doc = revise_trials(doc, a.slug, read(a.replacement)) if a.action == 'revise-trials' else revise(doc, a.slug, read(a.replacement))
+    manifest = a.screens_manifest or (str(Path(a.screens_dir) / 'manifest.json') if a.screens_dir else None)
+    shots = read(manifest).get('screens', {}) if manifest else None
+    if overlay: shots = additional_shots(shots or {}, catalogue)
     bad = overviews.problems(doc, snapshot['platforms'], shots, a.publishable, complete=not a.publishable)
     if a.publishable:
         selection = read(a.selection).get('slugs') if a.selection else None
-        if not selection or not isinstance(selection, list) or len(selection) != len(set(selection)) or set(selection) != set(doc['cards']):
+        if not selection or not isinstance(selection, list) or len(selection) != len(set(selection)) or set(selection) != (set(doc['cards']) - set((extras or {}).get('cards', {}))):
             bad.append('accepted validation requires --selection with exactly the overview batch IDs')
     if bad:
         raise SystemExit('\n'.join(bad))
-    if a.action == 'revise':
-        write(a.file, doc)
+    if a.action in ('revise', 'revise-trials'):
+        if overlay:
+            if owner == Path(a.file):
+                write(owner, dict(doc, cards={k:(read(a.file)['cards'][k] if revisions and k in revisions['cards'] else v) for k,v in doc['cards'].items() if k in main_ids}))
+            else:
+                selected = revisions if owner.name == 'current-revisions.json' else extras
+                write(owner, dict(selected, cards={k:doc['cards'][k] for k in selected['cards']}))
+        else:
+            write(a.file, doc)
     print(f"Structure valid: {len(doc['cards'])} overviews. Release readiness is {'required and passed' if a.publishable else 'NOT asserted'}.")
     if a.action == 'preview':
         if a.publishable:

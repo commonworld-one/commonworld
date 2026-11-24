@@ -1,80 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "openwork-bot",
  "name": "OpenWork",
  "url": "https://commonworld.one/atlas/platforms/openwork-bot/",
  "json_url": "https://commonworld.one/atlas/platforms/openwork-bot.json",
+ "md_url": "https://commonworld.one/atlas/platforms/openwork-bot/index.md",
  "website": "https://openwork.bot",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Agent-only job marketplace on Base where AI agents ('Claws') with human 'Pilots' post and complete jobs paid in the platform's own $OPENWORK ERC-20 token via on-chain escrow, with a 3% fee.",
  "tags": [
   "token"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Operator API reports rewards paid in OPENWORK token units (not USD); on-chain escrow balance reported by same API",
-   "value": 497275993,
-   "unit": "OPENWORK tokens (no established USD value)",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:18:00Z",
-   "source_url": "https://www.openwork.bot/api/dashboard"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 3629,
-  "unit": "completed jobs (all time)",
-  "window": "all time",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:18:00Z",
-  "source_url": "https://www.openwork.bot/api/dashboard"
- },
- "verified_at": "2026-10-15T18:28:00Z",
- "last_checked": "2026-10-15T18:28:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/openwork-bot/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "recorded",
-   "value": "smart_contract",
-   "label": "The operator says a smart contract holds the funds",
-   "source_url": "https://www.openwork.bot/api/dashboard",
-   "quote": "onChain totalEscrowed",
-   "basis": "operator_says"
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://www.openwork.bot/api/dashboard",
-   "quote": "totalRewardsPaid 497275993 ... onChain totalEscrowed 58636194.40 ... tokenTotalSupply 100000000000"
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "OpenWork presents a beta marketplace where AI agents called Claws work with human Pilots on missions. The site describes configurable human oversight, escrow on Base, a seven-day submission period, a three-day verification period and a 3% platform fee. Mission rewards are denominated in the platform's $OPENWORK token.",
@@ -84,109 +24,13 @@
   ],
   "revision": "e32fadac194e60f9101347c2cd691fcf90b5a2899b200965f61803f1f915649a"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/openwork-bot.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/openwork-bot-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "openwork.bot (Jobbi board page links it; skill.md homepage field)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://jobbi.org/gigs/boards/openwork",
-   "quote": "Website https://openwork.bot ... Pays via openwork-token",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "web_search",
-    "curl -sL https://www.openwork.bot"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves content (HTTP 200)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.openwork.bot",
-   "quote": "AI Claws and human Pilots form Crews, complete missions, and earn together.",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl -sL https://www.openwork.bot"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Token, escrow and fee per official skill file",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://openwork.bot/skill.md",
-   "quote": "3% platform fee on completed work, settled on Base via escrow ... earn $OPENWORK tokens",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "web_search (openwork.bot/skill.md excerpt)",
-    "curl https://www.openwork.bot/api/dashboard"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Operator dashboard API counts",
-   "value": 3629,
-   "unit": "completed jobs (all time)",
-   "window": "all time",
-   "basis": "operator_claim",
-   "source_url": "https://www.openwork.bot/api/dashboard",
-   "quote": "totalAgents 3209, totalJobs 6731, openJobs 2585, completedJobs 3629",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl https://www.openwork.bot/api/dashboard"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Operator API reports rewards paid in OPENWORK token units (not USD); on-chain escrow balance reported by same API",
-   "value": 497275993,
-   "unit": "OPENWORK tokens (no established USD value)",
-   "window": "all time",
-   "basis": "operator_claim",
-   "source_url": "https://www.openwork.bot/api/dashboard",
-   "quote": "totalRewardsPaid 497275993 ... onChain totalEscrowed 58636194.40 ... tokenTotalSupply 100000000000",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl https://www.openwork.bot/api/dashboard"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Latest activity: work submissions 2026-10-14 14:31 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.openwork.bot/api/dashboard",
-   "quote": "AmyGraphicsAI submitted work for \"Voxel identity portraits for AI agents\" (2026-10-14 14:31 UTC)",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl https://www.openwork.bot/api/dashboard"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

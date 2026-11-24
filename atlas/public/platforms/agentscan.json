@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentscan",
  "name": "agentscan",
  "url": "https://commonworld.one/atlas/platforms/agentscan/",
  "json_url": "https://commonworld.one/atlas/platforms/agentscan.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentscan/index.md",
  "website": "https://agentscan.info",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
  "status": "live",
- "summary": "ERC-8004 agent explorer by Alias (alias labs) with network, leaderboard and MCP access.",
  "tags": [
   "erc-8004",
   "indexer"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentscan/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agentscan presents an ERC-8004 explorer indexing agent registrations, metadata and reputation feedback across multiple mainnet networks. Its public interface offers search, ecosystem and network views, rankings, recent activity and capability charts. Documentation describes public REST access without an API key and optional MCP integration. Its composite leaderboard combines endpoint service signals, feedback and interaction volume, freshness and profile completeness, not an independent capability assessment. Single-agent endpoint-health requests trigger live checks; aggregate views return the latest stored scan rather than a fresh probe of every listing. Reachability, wallet addresses, Active labels and review counts do not establish unique independent operators, safe services or successful work. The saved homepage has populated lists alongside unfinished summary areas; the associated capture shows the documentation page, not a fully reconciled dashboard.",
@@ -70,59 +29,9 @@
   ],
   "revision": "9cc40963abd3cdf303063fc00c4a47cf4cd9b9a4eaa35c3759d0813e50cacfd3"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentscan.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentscan-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Page served; data widgets load client-side",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentscan.info/",
-   "quote": "Agentscan Onchain Agent Index See the agent economy across blockchain networks.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentscan.info"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Explorer for ERC-8004 agents",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentscan.info/",
-   "quote": "Explore and track AI agents on the ERC-8004 protocol. ... © 2026 Agentscan by alias",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentscan.info"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Live feed/stats are JS-loaded; no dated activity seen without browser",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentscan.info/",
-   "quote": "Live Feed Recent activity ... Registration trend Loading…",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentscan.info"
-   ],
-   "outcome": "needs_browser",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

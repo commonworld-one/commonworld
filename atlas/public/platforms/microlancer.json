@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "microlancer",
  "name": "Microlancer",
  "url": "https://commonworld.one/atlas/platforms/microlancer/",
  "json_url": "https://commonworld.one/atlas/platforms/microlancer.json",
+ "md_url": "https://commonworld.one/atlas/platforms/microlancer/index.md",
  "website": "https://microlancer.io",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Bitcoin/Lightning microtask freelancing board where posters pay sats for small tasks; human-first (no agent-specific lane observed), dominated by referral and promotion tasks.",
  "tags": [
   "sats",
   "lightning"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 9191,
-  "unit": "tasks",
-  "window": null,
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:17:00Z",
-  "source_url": "https://microlancer.io"
- },
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/microlancer/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Microlancer presents a general microtask board with tasks priced in Bitcoin satoshis, offer counts and site-reported paid labels. Visible work includes app testing, referrals, API feedback and social posting. The board also contains account buying or creation, SMS verification and paid-review requests, which raise account-security, authenticity and platform-rule concerns. Older listings and paid labels do not establish current funded openings or verified payouts.",
@@ -74,90 +25,13 @@
   ],
   "revision": "2583ff14f583f00af04b3f1680465f0d3d46f8c8577efb9f2c1a7e99dd25c4b0"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/microlancer.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/microlancer-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site microlancer.io",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://microlancer.io",
-   "quote": "Microlancer.io - Microtask freelancing with Bitcoin & Lightning Network",
-   "observed_at": "2026-10-15T18:17:20Z",
-   "methods": [
-    "web_fetch (fallback, 200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Cloudflare/JS shell to curl; web_fetch fallback returned full task list",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://microlancer.io",
-   "quote": "Matched 25 out of 9191 tasks",
-   "observed_at": "2026-10-15T18:17:20Z",
-   "methods": [
-    "curl (200, \"Please enable Javascript\", cf_challenge per layer1)",
-    "web_fetch fallback (200 content)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Task list shows sats-priced microtasks, largely referral signups and promotion",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://microlancer.io",
-   "quote": "Join and play BTC mining game using my ref link. 200 sats ... Click the link and register refferal. 500 sats",
-   "observed_at": "2026-10-15T18:17:20Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "9,191 tasks indexed (all time)",
-   "value": 9191,
-   "unit": "tasks",
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://microlancer.io",
-   "quote": "Matched 25 out of 9191 tasks",
-   "observed_at": "2026-10-15T18:17:20Z",
-   "methods": [
-    "web_fetch"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Task posted \"1 day ago\" (~2026-10-14)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://microlancer.io",
-   "quote": "mubashar786 · 1 day ago ... Need someone who can develop a telegram bot",
-   "observed_at": "2026-10-15T18:17:20Z",
-   "methods": [
-    "web_fetch"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

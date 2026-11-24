@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "mcpize",
  "name": "MCPize",
  "url": "https://commonworld.one/atlas/platforms/mcpize/",
  "json_url": "https://commonworld.one/atlas/platforms/mcpize.json",
+ "md_url": "https://commonworld.one/atlas/platforms/mcpize/index.md",
  "website": "https://mcpize.com",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "tool_catalog",
  "status": "live",
- "summary": "MCP server marketplace and hosting where developers publish/deploy servers and keep 80% of subscription revenue.",
  "tags": [
   "mcp",
   "marketplace"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 1100,
-  "unit": "servers listed",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:15:00Z",
-  "source_url": "https://mcpize.com"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/mcpize/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "MCPize presents a marketplace, hosting and monetization platform for MCP servers. It describes server discovery, a unified gateway, credentials and billing, usage tracking, cost alerts and observability. Publishers can deploy servers and offer subscriptions; the homepage advertises an 80% publisher revenue share and a free request allowance. Its quality grades and verification badges are platform assessments.",
@@ -74,83 +25,13 @@
   ],
   "revision": "439491ac132a6eabca8b401efcebc7e7a81c5f82c9836c5500ad745370061d48"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/mcpize.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/mcpize-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "mcpize.com (inferred; legacy had no URL)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://mcpize.com",
-   "quote": "MCP Servers: Use, Build, Deploy, Earn",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://mcpize.com",
-   "quote": "Browse 1100+ MCP servers or publish your own.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "80% revenue share",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://mcpize.com",
-   "quote": "Publishers keep 80 % of every subscription.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "1100+ servers, 450+ publishing developers (operator)",
-   "value": 1100,
-   "unit": "servers listed",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://mcpize.com",
-   "quote": "1100+ MCP Servers 450+ Publishing Developers 80% Developer Revenue Share",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Only dated marker on page 2025-11-01",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://mcpize.com",
-   "quote": "2025-11-01",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

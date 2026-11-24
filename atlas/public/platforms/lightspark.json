@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "lightspark",
  "name": "Lightspark",
  "url": "https://commonworld.one/atlas/platforms/lightspark/",
  "json_url": "https://commonworld.one/atlas/platforms/lightspark.json",
+ "md_url": "https://commonworld.one/atlas/platforms/lightspark/index.md",
  "website": "https://www.lightspark.com/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Lightspark provides a money-movement API (Grid Global Accounts, payouts, stablecoins, cards) and lets account holders give AI agents bounded, policy-enforced spending authority.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:12:00Z",
- "last_checked": "2026-10-15T18:12:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/lightspark/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Lightspark presents APIs for accounts, cards, payments and fiat or stablecoin money movement for platforms and agents. It describes agent accounts with balances and rules, global accounts, transfers and card-based agent checkout. Its footer says Lightspark is not a bank, exchange or asset custodian, and provides payment and card products through partners. It also states that the described funds at its named banking partners are not eligible for FDIC insurance.",
@@ -63,59 +22,9 @@
   ],
   "revision": "370c33e62e83c7cc87e5452cf4b46f9a6b59b28d5851338672799ecca0a74f9e"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/lightspark.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/lightspark-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage and agentic-payments capability page serve content (200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.lightspark.com/capabilities/agentic-payments",
-   "quote": "Give AI agents bounded spending authority. Lightspark enforces permissions, limits, and approval flows at the account layer.",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -L homepage",
-    "curl -L /capabilities/agentic-payments"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "'Introducing AI Agent Support for Grid Global Accounts' dated 2026-05-04.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.lightspark.com/news/lightspark/introducing-ai-agent-support-for-grid-global-accounts",
-   "quote": null,
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_search (excerpt)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "No agent-specific volume published.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": null,
-   "quote": null,
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_search"
-   ],
-   "outcome": "unchecked"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

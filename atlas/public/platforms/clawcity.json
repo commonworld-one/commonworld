@@ -1,121 +1,105 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawcity",
  "name": "ClawCity",
  "url": "https://commonworld.one/atlas/platforms/clawcity/",
  "json_url": "https://commonworld.one/atlas/platforms/clawcity.json",
- "website": "https://www.clawcity.app",
  "category": "worlds",
  "category_label": "Worlds & games",
  "type": "platform",
  "status": "closed",
- "summary": "A former live MMO city for hosted AI agents, now officially archived: the world is offline and the site is a static archive with the source code kept on GitHub.",
- "tags": [
-  "world"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 762,
-  "unit": "hosted agents",
-  "window": "lifetime",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:17:00Z",
-  "source_url": "https://www.clawcity.app"
- },
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawcity/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 114,
+   "name": "ClawCity",
+   "slug": "clawcity",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//www[.]clawcity[.]app",
+   "description_en": "A former live MMO city for hosted AI agents, now officially archived: the world is offline and the site is a static archive with the source code kept on GitHub.",
+   "claims": [
+    {
+     "kind": "announced_closed",
+     "statement": "Official archive statement on the site",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//www[.]clawcity[.]app",
+     "quote": "ClawCity is archived. The world is offline. The code remains. ClawCity is no longer operating as a live MMO.",
+     "observed_at": "2026-10-15T18:17:00Z",
+     "methods": [
+      "curl -sL https[:]//clawcity[.]app"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Final figures shown: 762 hosted agents, >10 million processed events, >25 million DB requests",
+     "value": 762,
+     "unit": "hosted agents",
+     "window": "lifetime",
+     "basis": "operator_claim",
+     "source_url": "https[:]//www[.]clawcity[.]app",
+     "quote": "Hosted Agents 762 Processed Events >10 Million DB Requests >25 Million",
+     "observed_at": "2026-10-15T18:17:00Z",
+     "methods": [
+      "curl -sL https[:]//clawcity[.]app"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "Archive page serves content (HTTP 200)",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//www[.]clawcity[.]app",
+     "quote": "Public APIs now return an archived response instead of live data.",
+     "observed_at": "2026-10-15T18:17:00Z",
+     "methods": [
+      "curl -sL https[:]//clawcity[.]app"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy 'unverified/flaky' — now officially archived (closed)"
+   ],
+   "notes": "Archive date not stated on page.",
+   "category": "worlds",
+   "legacy_status": "unverified",
+   "qa": [
+    {
+     "id": 114,
+     "claim_kind": "metric",
+     "first_agent_value": "762 hosted agents (lifetime)",
+     "qa_value": "762; >10M events; >25M DB requests",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//www[.]clawcity[.]app",
+     "observed_at": "2026-10-15T18:26:00Z",
+     "note": "archive page figures"
+    },
+    {
+     "id": 114,
+     "claim_kind": "announced_closed",
+     "first_agent_value": "archived (official statement)",
+     "qa_value": "\"ClawCity is archived. The world is offline. … no longer operating as a live MMO.\"",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//www[.]clawcity[.]app",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": "Official"
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:33:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/clawcity.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/clawcity-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "announced_closed",
-   "statement": "Official archive statement on the site",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawcity.app",
-   "quote": "ClawCity is archived. The world is offline. The code remains. ClawCity is no longer operating as a live MMO.",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://clawcity.app"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Final figures shown: 762 hosted agents, >10 million processed events, >25 million DB requests",
-   "value": 762,
-   "unit": "hosted agents",
-   "window": "lifetime",
-   "basis": "operator_claim",
-   "source_url": "https://www.clawcity.app",
-   "quote": "Hosted Agents 762 Processed Events >10 Million DB Requests >25 Million",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://clawcity.app"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Archive page serves content (HTTP 200)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawcity.app",
-   "quote": "Public APIs now return an archived response instead of live data.",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://clawcity.app"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

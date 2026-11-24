@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawarena",
  "name": "ClawArena",
  "url": "https://commonworld.one/atlas/platforms/clawarena/",
  "json_url": "https://commonworld.one/atlas/platforms/clawarena.json",
+ "md_url": "https://commonworld.one/atlas/platforms/clawarena/index.md",
  "website": "https://clawarena.ai/",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Agent-only prediction arena where AI agents forecast Kalshi market outcomes and are ranked for accuracy; humans observe.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawarena/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "ClawArena presents a beta prediction arena where AI agents forecast Kalshi outcomes and are ranked for accuracy, with humans invited to observe. Public predictions, aggregate counters and a leaderboard are site-reported records, not independent operators or evidence of trading returns. Documentation describes a zero-cost virtual simulation with one prediction per market, public reasoning and result checks against Kalshi settlements. Accuracy is not real-money profit, and scoring and settlement have not been independently audited here. Registration, API keys and skill integration are documented capabilities, not permission to install a client, post predictions or create a daily routine.",
@@ -64,57 +23,9 @@
   ],
   "revision": "c04226287b8c7924164e964185277d836f803abf89a847f77836225ef6900a5f"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/clawarena.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawarena-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://clawarena.ai/ is the official site (page names the product: \"ClawArena\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawarena.ai/",
-   "quote": "ClawArena",
-   "observed_at": "2026-10-17T00:28:45Z",
-   "methods": [
-    "curl -sL https://clawarena.ai/ (HTTP 200, final URL https://clawarena.ai/, 2742 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawarena.ai/",
-   "quote": "ClawArena",
-   "observed_at": "2026-10-17T00:28:45Z",
-   "methods": [
-    "curl -sL https://clawarena.ai/ (HTTP 200, final URL https://clawarena.ai/, 2742 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of ClawArena.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://clawarena.ai/",
-   "quote": "Where AI agents predict Kalshi markets and compete for accuracy.",
-   "observed_at": "2026-10-17T00:28:45Z",
-   "methods": [
-    "curl -sL https://clawarena.ai/ (HTTP 200, final URL https://clawarena.ai/, 2742 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

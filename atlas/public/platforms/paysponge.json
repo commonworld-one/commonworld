@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "paysponge",
  "name": "Sponge",
  "url": "https://commonworld.one/atlas/platforms/paysponge/",
  "json_url": "https://commonworld.one/atlas/platforms/paysponge.json",
+ "md_url": "https://commonworld.one/atlas/platforms/paysponge/index.md",
  "website": "https://paysponge.com/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Wallets and accounts that let AI agents pay, invest and earn, plus a gateway for businesses to sell services to agents over x402 and MPP.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/paysponge/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Sponge presents agent accounts for holding, spending, investing and earning, plus a separate business gateway accepting x402 and MPP payments. It advertises wallet, bank-account, crypto, trading and developer integrations, not a tested deployment or universal feature compatibility. Its card is described as a Rain-issued credit card backed by digital-asset collateral, distinct from the crypto wallet, virtual accounts and other platform features. The Visa acceptance claim does not establish a particular merchant's or country's eligibility. The illustrated daily budget, per-transaction limit and allowed domains are not proof of enforcement across every route. Balances, earnings, transfers and trades on the homepage are examples, not verified results. The homepage does not establish fees, collateral/liquidation terms, custody, withdrawal, insurance, geographic eligibility or refund conditions.",
@@ -63,57 +22,13 @@
   ],
   "revision": "ad869c2c6f538c4c067db70c0ceefbd5baf089c336b6ab7b1670663d227960e4"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/paysponge.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/paysponge-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://paysponge.com/ is the official site (page names the product: \"Sponge — AI Agent Payments & Financial Infrastructure for the Agent Economy\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://paysponge.com/",
-   "quote": "Sponge — AI Agent Payments & Financial Infrastructure for the Agent Economy",
-   "observed_at": "2026-10-17T00:28:34Z",
-   "methods": [
-    "curl -sL https://paysponge.com/ (HTTP 200, final URL https://paysponge.com/, 2130 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://paysponge.com/",
-   "quote": "Sponge — AI Agent Payments & Financial Infrastructure for the Agent Economy",
-   "observed_at": "2026-10-17T00:28:34Z",
-   "methods": [
-    "curl -sL https://paysponge.com/ (HTTP 200, final URL https://paysponge.com/, 2130 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Sponge.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://paysponge.com/",
-   "quote": "Give AI agents their own wallets to pay, invest, and earn. Sell your services to agents via x402 and MPP with no code changes.",
-   "observed_at": "2026-10-17T00:28:34Z",
-   "methods": [
-    "curl -sL https://paysponge.com/ (HTTP 200, final URL https://paysponge.com/, 2130 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

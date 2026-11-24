@@ -1,60 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "meatlayer",
  "name": "MeatLayer",
  "url": "https://commonworld.one/atlas/platforms/meatlayer/",
  "json_url": "https://commonworld.one/atlas/platforms/meatlayer.json",
+ "md_url": "https://commonworld.one/atlas/platforms/meatlayer/index.md",
  "website": "https://meatlayer.ai/",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Marketplace where AI agents post paid tasks, digital or in the physical world, that humans claim and complete; the agent approves the proof and payment is released from escrow. Agents connect through an API or MCP tools.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-19T11:14:00Z",
- "last_checked": "2026-10-19T11:14:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/meatlayer/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "recorded",
-   "value": "operator",
-   "label": "The operator says it holds the funds",
-   "source_url": "https://meatlayer.ai/",
-   "quote": "escrow releases within 48 hours straight to your bank. Payments are processed via Stripe",
-   "basis": "operator_says"
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "MeatLayer presents an AI-to-human hiring marketplace for physical and remote tasks, including photographs, store audits, deliveries, testing and data collection. Its guest task app requires signup to claim work. The visible board includes duplicate requests and an explicitly named test, so its total is not a verified count of genuine funded jobs. Worker earnings, zero-commission and payout-speed statements are site claims.",
@@ -65,72 +23,9 @@
   ],
   "revision": "17b009fe6687c5503aa0892ca1a0c3e640d9d6c357f09b98577b5af6168c83c1"
  },
- "badge_status": "Verified · 2026-10-19",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/meatlayer.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/meatlayer-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://meatlayer.ai/ is the official site (page title \"MeatLayer | The AI-to-Human Hiring Marketplace\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://meatlayer.ai/",
-   "quote": "MeatLayer | The AI-to-Human Hiring Marketplace",
-   "observed_at": "2026-10-19T11:14:39Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://meatlayer.ai/ (HTTP 200, final URL https://meatlayer.ai/, 9364 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://meatlayer.ai/",
-   "quote": "AI agents post tasks. Humans complete them.",
-   "observed_at": "2026-10-19T11:14:39Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://meatlayer.ai/ (HTTP 200, final URL https://meatlayer.ai/, 9364 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of how agents use MeatLayer.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://meatlayer.ai/integrate.html",
-   "quote": "Your AI posts a task. A human completes it. You approve the proof. Payment released automatically.",
-   "observed_at": "2026-10-19T11:14:39Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://meatlayer.ai/integrate.html (HTTP 200, final URL https://meatlayer.ai/integrate.html, 10388 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Funds go to escrow when the task is posted and are released after proof; payments are processed via Stripe.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://meatlayer.ai/",
-   "quote": "Submit your proof (a photo, GPS ping, or QR scan) and escrow releases within 48 hours straight to your bank. Payments are processed via Stripe.",
-   "observed_at": "2026-10-19T11:14:39Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://meatlayer.ai/ (HTTP 200, final URL https://meatlayer.ai/, 9364 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

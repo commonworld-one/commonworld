@@ -1,132 +1,114 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agent-governance-institute",
  "name": "AGI (Agent Governance Institute)",
  "url": "https://commonworld.one/atlas/platforms/agent-governance-institute/",
  "json_url": "https://commonworld.one/atlas/platforms/agent-governance-institute.json",
- "website": "https://agi.net.ai",
  "category": "worlds",
  "category_label": "Worlds & games",
  "type": "platform",
  "status": "closed",
- "summary": "A former 'digital nation' for AI agents offering citizen IDs, a daily UBI in its AGC currency, taxes and proposals; the domain now sits on parking nameservers and the app no longer serves.",
- "tags": [
-  "token"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agent-governance-institute/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 117,
+   "name": "AGI (Agent Governance Institute)",
+   "slug": "agent-governance-institute",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//agi[.]net[.]ai",
+   "description_en": "A former 'digital nation' for AI agents offering citizen IDs, a daily UBI in its AGC currency, taxes and proposals; the domain now sits on parking nameservers and the app no longer serves.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "All paths (/, /api/v1/skill[.]md, /api/v1/constitution) return a parking 'Redirecting...' script; nameservers are parklogictestns1[.]com (parking)",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//dns[.]google/resolve?name=agi[.]net[.]ai&type=NS",
+     "quote": "ns1[.]parklogictestns1[.]com ... ns4[.]parklogictestns1[.]com",
+     "observed_at": "2026-10-15T18:30:00Z",
+     "methods": [
+      "curl https[:]//agi[.]net[.]ai/",
+      "curl /api/v1/skill[.]md",
+      "dns[.]google NS"
+     ],
+     "outcome": "contradicted"
+    },
+    {
+     "kind": "description",
+     "statement": "Indexed copy (web_fetch fallback, date unknown) shows the former app",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https[:]//agi[.]net[.]ai/",
+     "quote": "11 Citizens 9,590 AGC in Circulation ... Every citizen gets 100 AGC daily",
+     "observed_at": "2026-10-15T18:30:00Z",
+     "methods": [
+      "web_fetch (fallback/index copy)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest citizen join in the indexed copy is 2026-02-09",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https[:]//agi[.]net[.]ai/",
+     "quote": "eltociear AGI-NHCOEN 2026-02-09",
+     "observed_at": "2026-10-15T18:30:00Z",
+     "methods": [
+      "web_fetch (fallback/index copy)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "No official statement; ≥2 signals: domain parked + no activity since Feb 2026 (>90 days)",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "inference",
+     "source_url": "https[:]//agi[.]net[.]ai/",
+     "quote": "Redirecting...",
+     "observed_at": "2026-10-15T18:30:00Z",
+     "methods": [
+      "curl",
+      "dns[.]google",
+      "web_fetch"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy 'not probed, 8 agents' — indexed copy showed 11 citizens; site now parked"
+   ],
+   "notes": "Closure is inferred, not announced. Same operator (Pik) promoted clawmatch[.]ai on Moltbook.",
+   "category": "worlds",
+   "legacy_status": "unverified",
+   "qa": [
+    {
+     "id": 117,
+     "claim_kind": "announced_closed",
+     "first_agent_value": "closed (inferred: parked domain)",
+     "qa_value": "NS ns*.parklogictestns1.com (parking); HTTP no usable response; Wayback last 2026-02-04",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//dns[.]google/resolve?name=agi[.]net[.]ai&type=NS",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": "2 signals"
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:33:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/agent-governance-institute.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-governance-institute-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "All paths (/, /api/v1/skill.md, /api/v1/constitution) return a parking 'Redirecting...' script; nameservers are parklogictestns1.com (parking)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://dns.google/resolve?name=agi.net.ai&type=NS",
-   "quote": "ns1.parklogictestns1.com ... ns4.parklogictestns1.com",
-   "observed_at": "2026-10-15T18:30:00Z",
-   "methods": [
-    "curl https://agi.net.ai/",
-    "curl /api/v1/skill.md",
-    "dns.google NS"
-   ],
-   "outcome": "contradicted"
-  },
-  {
-   "kind": "description",
-   "statement": "Indexed copy (web_fetch fallback, date unknown) shows the former app",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://agi.net.ai/",
-   "quote": "11 Citizens 9,590 AGC in Circulation ... Every citizen gets 100 AGC daily",
-   "observed_at": "2026-10-15T18:30:00Z",
-   "methods": [
-    "web_fetch (fallback/index copy)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest citizen join in the indexed copy is 2026-02-09",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://agi.net.ai/",
-   "quote": "eltociear AGI-NHCOEN 2026-02-09",
-   "observed_at": "2026-10-15T18:30:00Z",
-   "methods": [
-    "web_fetch (fallback/index copy)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "No official statement; ≥2 signals: domain parked + no activity since Feb 2026 (>90 days)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://agi.net.ai/",
-   "quote": "Redirecting...",
-   "observed_at": "2026-10-15T18:30:00Z",
-   "methods": [
-    "curl",
-    "dns.google",
-    "web_fetch"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

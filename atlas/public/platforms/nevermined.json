@@ -1,18 +1,17 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "nevermined",
  "name": "Nevermined",
  "url": "https://commonworld.one/atlas/platforms/nevermined/",
  "json_url": "https://commonworld.one/atlas/platforms/nevermined.json",
+ "md_url": "https://commonworld.one/atlas/platforms/nevermined/index.md",
  "website": "https://nevermined.ai",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Payments infrastructure for AI agents: delegated card/credit spending, metering and settlement across x402, MPP and A2A, plus a services catalog/router; fee 1–2% of settled volume.",
  "tags": [
   "x402",
   "mpp",
@@ -20,46 +19,6 @@
   "seller-lane",
   "self-serve"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/nevermined/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Nevermined presents agent payments controlled by a spending mandate, with limits on amount, purchase count and expiry, and a revocation option. It offers MCP and SDK/API connections, an AI Services Catalog and Nevermined Pay for card or cryptocurrency settlement; bank rails are described as forthcoming. Its free-start offering has separate paid service usage and merchant plans.",
@@ -69,85 +28,9 @@
   ],
   "revision": "f75ccaadc831cb373d3aabf4c0d046c0d64b0832f3023571437822cc2ba1a016"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/nevermined.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/nevermined-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "nevermined.ai",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://nevermined.ai",
-   "quote": "Nevermined - Payments Infrastructure for AI Agents",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://nevermined.ai",
-   "quote": "Delegate spending, meter usage, and settle autonomously across MCP, x402, and A2A.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Pricing 1–2% of settled volume",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://nevermined.ai/pricing",
-   "quote": "Nevermined takes 1-2% of settled transaction volume. No setup fees, no minimums",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl /pricing (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Site lists 'MPP New' and 'AI Services Catalog New' (undated)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://nevermined.ai",
-   "quote": "MPP New Agent payments, alongside x402",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "No volume published",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://nevermined.ai",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

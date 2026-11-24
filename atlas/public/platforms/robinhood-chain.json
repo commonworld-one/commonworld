@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "robinhood-chain",
  "name": "Robinhood Chain",
  "url": "https://commonworld.one/atlas/platforms/robinhood-chain/",
  "json_url": "https://commonworld.one/atlas/platforms/robinhood-chain.json",
+ "md_url": "https://commonworld.one/atlas/platforms/robinhood-chain/index.md",
  "website": "https://robinhood.com/us/en/chain/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "protocol",
  "status": "live",
- "summary": "Robinhood Chain is a permissionless Arbitrum-based Layer 2 for tokenized real-world assets that markets itself as purpose-built for AI agents; x402 facilitators (Dexter, Meridian) settle on it.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/robinhood-chain/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Robinhood Chain is presented as a permissionless Layer 2 for financial services and tokenized real-world assets, developed on Arbitrum infrastructure. Its listed agent use cases include trading, swapping, lending and payments. The page distinguishes Stock Tokens from shares: they provide economic exposure without legal or beneficial rights in the underlying securities. Stock Tokens are unavailable in the US and restricted elsewhere, and carry investment-loss risk.",
@@ -63,59 +22,9 @@
   ],
   "revision": "06f8e194cf602f0d5036b8fe59abf451f98b9073306f788c004dc9e4a121ceec"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/robinhood-chain.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/robinhood-chain-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Page serves content (200; geo-redirected to a regional version of the page from our egress).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://robinhood.com/eu/en/crypto/chain/",
-   "quote": "Robinhood Chain is a permissionless, AI-native Layer 2 blockchain built for financial services and real-world assets.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent positioning.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://robinhood.com/eu/en/crypto/chain/",
-   "quote": "Purpose-built for AI agents AI agents can trade, swap, lend, and transact with tokenized real-world assets onchain.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Dexter facilitator began settling on Robinhood Chain (news 2026-07-19); x402-list counts 21 services on Robinhood Chain.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/stats",
-   "quote": "\"abbreviation\":\"Robinhood Chain\",\"is_mainnet\":true,\"service_count\":21",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl x402-list stats API",
-    "curl dexter.cash"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

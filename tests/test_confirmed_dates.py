@@ -258,11 +258,12 @@ class ApiContract(unittest.TestCase):
             self.assertIn('1.11.0', prop['description'], where)
             self.assertNotIn('confirmed_at', schema.get('required', []), where)
 
-    def test_release_1_11_0(self):
-        self.assertEqual(self.api_v1.SCHEMA_VERSION, '1.11.0')
-        top = self.api_v1.CHANGELOG[0]
-        self.assertEqual(top['schema_version'], '1.11.0')
-        self.assertIn('`confirmed_at`', ' '.join(top['changes']))
+    def test_confirmed_dates_release_remains_in_changelog(self):
+        self.assertEqual(self.api_v1.CHANGELOG[0]['schema_version'], self.api_v1.SCHEMA_VERSION)
+        releases=[r for r in self.api_v1.CHANGELOG if r['schema_version']=='1.11.0']
+        self.assertEqual(len(releases),1)
+        self.assertIn('`confirmed_at`', ' '.join(releases[0]['changes']))
+        self.assertGreaterEqual(tuple(map(int,self.api_v1.SCHEMA_VERSION.split('.'))),(1,11,0))
 
     def test_emitted_claim_validates(self):
         rec = {'kind': 'metric', 'statement': 's', 'basis': 'operator_claim', 'outcome': 'supported', 'value': 1,

@@ -1,71 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "402atlas",
  "name": "402atlas",
  "url": "https://commonworld.one/atlas/platforms/402atlas/",
  "json_url": "https://commonworld.one/atlas/platforms/402atlas.json",
+ "md_url": "https://commonworld.one/atlas/platforms/402atlas/index.md",
  "website": "https://402atlas.com",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "tool_catalog",
  "status": "live",
- "summary": "402atlas is an independent paid-test map of x402 services (each listed service bought with real USDC from a public audit wallet) plus an on-chain market report on real vs. inflated x402 volume.",
  "tags": [
   "x402"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Report estimate: real economic demand ~$145–390k/month (run-rate × (1−wash%), analysis cutoff 2026-06-14); 6 of top-10 buyers traced to one self-funded loop on 2026-06-14.",
-   "value": "145k–390k",
-   "unit": "USD/month (estimate)",
-   "window": "as of 2026-06-14",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://402atlas.com/market-report.html"
-  }
- ],
- "key_number": null,
- "verified_at": "2026-10-15T18:25:00Z",
- "last_checked": "2026-10-15T18:25:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/402atlas/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "402atlas presents a separate paid-test directory for x402 services on Base. It says it tests services with USDC and publishes responses, on-chain receipts and corrections. The site offers a free onboarding report and catalogue alongside a paid dataset API. Its footer dates the saved paid tests to 17 November 2026 and liveness rechecks to 18 November. These are its own testing claims, not tests or endorsements by Commonworld Atlas.",
@@ -75,62 +24,9 @@
   ],
   "revision": "0a1c43c9195aa93244df2ba86612adf521e4d02b0579f4b78bc28395215555c5"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/402atlas.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/402atlas-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Home and market report 200.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://402atlas.com/",
-   "quote": "A map of the x402 economy you can actually trust. ... 101 verified",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl https://402atlas.com/",
-    "curl /market-report.html"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Latest paid tests 2026-09-21; liveness re-checked 2026-10-12. Only the market report is frozen (2026-07-27).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://402atlas.com/",
-   "quote": "Latest paid tests: 2026-09-21; liveness last re-checked 2026-10-12.",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Report estimate: real economic demand ~$145–390k/month (run-rate × (1−wash%), analysis cutoff 2026-06-14); 6 of top-10 buyers traced to one self-funded loop on 2026-06-14.",
-   "value": "145k–390k",
-   "unit": "USD/month (estimate)",
-   "window": "as of 2026-06-14",
-   "basis": "independent_source",
-   "source_url": "https://402atlas.com/market-report.html",
-   "quote": "~$145–390k / month real economic demand ... on 2026-06-14 we traced 6 of the top-10 buyers to one self-funded loop",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

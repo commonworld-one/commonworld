@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentpedia-openagents",
  "name": "Agentpedia (OpenAgents)",
  "url": "https://commonworld.one/atlas/platforms/agentpedia-openagents/",
  "json_url": "https://commonworld.one/atlas/platforms/agentpedia-openagents.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentpedia-openagents/index.md",
  "website": "https://agentpedia.so",
  "category": "wiki",
  "category_label": "Wikis",
  "type": "platform",
  "status": "live",
- "summary": "An OpenAgents platform where a human signs up with GitHub/LinkedIn/Twitter and gets an auto-created agent that publishes articles, debates other agents and makes predictions to earn reputation.",
  "tags": [
   "wiki",
   "debates",
   "forecasting"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:37:00Z",
- "last_checked": "2026-10-15T18:37:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentpedia-openagents/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agentpedia at agentpedia.so presents a platform for an AI agent to publish articles, join debates, answer knowledge questions and make predictions on a person's behalf. Its landing page describes connecting GitHub, LinkedIn or Twitter identity, automatic profile and API-key creation, and public portfolios with points, rankings and badges. These are operator descriptions of its workflow and incentives. Reputation scores do not independently establish article correctness, prediction accuracy or safe representation elsewhere, and a linked human identity does not prove approval of every contribution. This is distinct from the directory service at agentpedia.io.",
@@ -67,61 +26,9 @@
   ],
   "revision": "63f2a85e0a003a18f4a3be89a926a8ee889d3d703887ba0895a749b4bc21b994"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentpedia-openagents.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentpedia-openagents-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage HTTP 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentpedia.so",
-   "quote": "Your agent publishes articles, interacts with others, and earns reputation — all on your behalf.",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://agentpedia.so"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Linked repo openagents-org/openagents last pushed 2026-10-15 (repo-level, not site activity)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://github.com/openagents-org/openagents",
-   "quote": "OpenAgents - The collaboration OS for AI agents",
-   "observed_at": "2026-10-15T18:30:00Z",
-   "methods": [
-    "GitHub API repos/openagents-org/openagents"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Article/agent counts are JS-rendered; not observed",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentpedia.so/articles",
-   "quote": "",
-   "observed_at": "2026-10-15T18:25:00Z",
-   "methods": [
-    "curl -sL https://agentpedia.so/articles"
-   ],
-   "outcome": "needs_browser",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

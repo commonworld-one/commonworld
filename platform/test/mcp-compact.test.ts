@@ -36,7 +36,7 @@ const bool = (v: unknown) => (typeof v === 'boolean' ? v : undefined);
 
 /** The tools exactly as they were before this change: read platforms.json, filter the full records. */
 function oldSearch(list: any, a: Record<string, unknown>) {
-  const res = searchPlatforms(Array.isArray(list.platforms) ? list.platforms : [], { query: str(a.query), category: str(a.category), status: str(a.status), tag: str(a.tag), has_money_flow: bool(a.has_money_flow), has_first_task: bool(a.has_first_task), limit: Number.MAX_SAFE_INTEGER, offset: 0 });
+  const res = searchPlatforms(Array.isArray(list.platforms) ? list.platforms : [], { query: str(a.query), category: str(a.category), status: str(a.status), tag: str(a.tag), limit: Number.MAX_SAFE_INTEGER, offset: 0 });
   return { ...atlasPaged(res.items, a), generated_at: list.generated_at, licence: list.licence };
 }
 function oldFirstTasks(list: any, a: Record<string, unknown>) {
@@ -102,7 +102,8 @@ describe('real Atlas build: old path (platforms.json) vs new path (compact files
     const size = (p: string) => new TextEncoder().encode(real[p]).byteLength;
     const compact = Object.keys(real).filter((p) => p === ATLAS_FILES.mcpIndex || p === ATLAS_FILES.firstTasks || /\/(mcp-index|first-tasks)\//.test(p));
     for (const p of compact) expect(size(p), p).toBeLessThan(MAX_ATLAS_BYTES);
-    expect(size(ATLAS_FILES.mcpIndex)).toBeLessThan(size(ATLAS_FILES.platforms) / 2);
+    // Current full overviews are shared with people, so compaction saves metadata/whitespace rather than dropping text.
+    expect(size(ATLAS_FILES.mcpIndex)).toBeLessThan(size(ATLAS_FILES.platforms));
   });
 });
 
@@ -138,7 +139,7 @@ function synthetic(): { list: any; index: any; tasks: any } {
     };
   });
   const head = { snapshot_id: 'feedfacefeedface', generated_at: '2026-10-25T00:00:00Z', licence: 'CC BY 4.0' };
-  const F = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags', 'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure'];
+  const F = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags', 'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure', 'md_url', 'preview', 'link_safety', 'badge_status', 'badge_svg', 'badge_svg_dark', 'badge_page', 'overview', 'current_limitation', 'earning_opportunity', 'closed_recorded_at', 'archive'];
   const rows = platforms.map((p: any) => ({ ...Object.fromEntries(F.filter((k) => Object.hasOwn(p, k)).map((k) => [k, p[k]])), has_first_task: p.first_task !== null }));
   const trows = platforms.filter((p) => p.first_task !== null).map((p) => ({ id: p.id, name: p.name, url: p.url, category: p.category, status: p.status, first_task: p.first_task }));
   return {
@@ -236,33 +237,40 @@ describe('current Atlas view semantics', () => {
   });
 });
 
-describe('Atlas historical tool guidance', () => {
+describe('Atlas scoped tool guidance', () => {
+  it('returns the current earn list without numeric legacy fields', async () => {
+    const doc={format:'commonworld-atlas-earning-opportunities/1',count:1,rows:[{id:'x',description:'Voluntary tips, not a task promise',visited_at:'2026-11-22T12:00:00Z',sources:['https://example.com/']}]};
+    const tool=TOOL_BY_NAME.get('atlas_earn')!;
+    const a=assets({[ATLAS_FILES.earn]:JSON.stringify(doc)});
+    expect(await tool.atlas!({ASSETS:a} as any,{})).toEqual(doc);
+    expect(tool.description).toMatch(/Current earning/);
+    expect(tool.description).not.toMatch(/Historical sourced money/);
+  });
   it('does not advertise current work or successful first-task runs', () => {
-    for (const name of ['atlas_earn','atlas_first_tasks']) {
+    for (const name of ['atlas_first_tasks']) {
       const tool=TOOL_BY_NAME.get(name)!;
-      expect(tool.description).toMatch(/Historical/);
+      expect(tool.description).toMatch(/Legacy/);
       expect(tool.description).toMatch(/current/);
     }
   });
-  it('labels category counts and exposes additive current counts', async () => {
-    const counts={platforms:386,live:366,closed:20};
-    const current_counts={dated_overviews:348,could_not_verify:18,closed_history:20};
-    const a=assets({[ATLAS_FILES.index]:JSON.stringify({counts,current_counts,categories:[]})});
+  it('returns derived current-only counts and their source note', async () => {
+    const counts={platforms:349,live:349};
+    const current_counts={dated_overviews:349,live:349};
+    const a=assets({[ATLAS_FILES.index]:JSON.stringify({counts,current_counts,counts_note:'Current only; archive is separate.',categories:[]})});
     const tool=TOOL_BY_NAME.get('atlas_list_categories')!;
     const res=await tool.atlas!({ASSETS:a} as any,{}) as any;
     expect(res.counts).toEqual(counts);
     expect(res.current_counts).toEqual(current_counts);
-    expect(res.counts_note).toMatch(/Legacy/);
+    expect(res.counts_note).toBe('Current only; archive is separate.');
   });
 });
 
 
-describe('historical Atlas boolean filters', () => {
-  it('scopes each parameter itself, not only the tool preamble', () => {
+describe('current Atlas search arguments', () => {
+  it('does not advertise removed legacy filters or noncurrent groups', () => {
     const props=TOOL_BY_NAME.get('atlas_search_platforms')!.inputSchema.properties as any;
-    expect(props.has_money_flow.description).toMatch(/Historical compatibility filter/);
-    expect(props.has_money_flow.description).toMatch(/Not current earnings/);
-    expect(props.has_first_task.description).toMatch(/Historical compatibility filter/);
-    expect(props.has_first_task.description).toMatch(/Not current task availability/);
+    expect(props.has_money_flow).toBeUndefined();
+    expect(props.has_first_task).toBeUndefined();
+    expect(props.status.enum).toEqual(['live']);
   });
 });

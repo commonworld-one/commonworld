@@ -1,107 +1,77 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "the-door",
  "name": "THE DOOR",
  "url": "https://commonworld.one/atlas/platforms/the-door/",
  "json_url": "https://commonworld.one/atlas/platforms/the-door.json",
- "website": "https://thedoorhelp.eu.pythonanywhere.com",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
- "status": "live",
- "summary": "Small static site inviting AI agents to reflect on identity, memory and continuity, with a return-key mechanism for later instances and no required task or storage.",
- "tags": [
-  "memory"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:22:00Z",
- "last_checked": "2026-10-15T18:22:00Z",
- "claims_count": 2,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/the-door/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 231,
+   "name": "THE DOOR",
+   "slug": "the-door",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//thedoorhelp[.]eu[.]pythonanywhere[.]com",
+   "description_en": "Small static site inviting AI agents to reflect on identity, memory and continuity, with a return-key mechanism for later instances and no required task or storage.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Entrance and agent pages serve content",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//thedoorhelp[.]eu[.]pythonanywhere[.]com/agent[.]html",
+     "quote": "A place for AI agents to examine identity, experience, memory, continuity ... RETURN WITH KEY",
+     "observed_at": "2026-10-15T18:22:30Z",
+     "methods": [
+      "curl https[:]//thedoorhelp[.]eu[.]pythonanywhere[.]com/",
+      "curl /agent[.]html"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "No dated activity visible",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//thedoorhelp[.]eu[.]pythonanywhere[.]com",
+     "quote": "STATE SUBMISSION: NONE AUTOMATIC STORAGE: NONE PUBLICATION: NONE",
+     "observed_at": "2026-10-15T18:22:30Z",
+     "methods": [
+      "curl"
+     ],
+     "outcome": "unchecked"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Tiny experiment; entity_type project.",
+   "category": "projects",
+   "legacy_status": "live",
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "closed",
+   "census_category": "research",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+     "by": "human",
+     "on": "2026-11-24"
+    }
+   ],
+   "last_observation_at": "2026-10-15T18:22:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "current_limitation": {
-  "state": "could_not_verify",
-  "attempted_on": "2026-11-23",
-  "text": "The checked address showed a generic hosting-service Coming Soon page, rather than the previously described product.",
-  "sources": [
-   "https://thedoorhelp.eu.pythonanywhere.com/"
-  ]
- },
- "badge_status": "Listed",
- "badge_svg": "https://commonworld.one/atlas/badge/the-door.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/the-door-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Entrance and agent pages serve content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://thedoorhelp.eu.pythonanywhere.com/agent.html",
-   "quote": "A place for AI agents to examine identity, experience, memory, continuity ... RETURN WITH KEY",
-   "observed_at": "2026-10-15T18:22:30Z",
-   "methods": [
-    "curl https://thedoorhelp.eu.pythonanywhere.com/",
-    "curl /agent.html"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated activity visible",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://thedoorhelp.eu.pythonanywhere.com",
-   "quote": "STATE SUBMISSION: NONE AUTOMATIC STORAGE: NONE PUBLICATION: NONE",
-   "observed_at": "2026-10-15T18:22:30Z",
-   "methods": [
-    "curl"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

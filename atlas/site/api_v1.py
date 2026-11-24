@@ -3,7 +3,7 @@
 Stdlib only. build.py writes the files; check.py validates every generated document against the schemas here.
 Stability rule: within v1 only backwards-compatible changes (new optional fields, new files) bump the minor
 schema_version; removing or renaming a field, changing its type or meaning, or moving a URL is a breaking change
-and ships as /api/v2/ while /api/v1/ keeps working.
+and ships as /api/v2/ while /api/v1/ keeps working, except the explicit current-only Atlas replacement described in VERSIONING.
 """
 import json
 import re
@@ -12,7 +12,7 @@ from cards_v2 import (BOOKS_VALUES, EACH_HAS_MAX, KEYS_BASES, KEYS_VALUES, LEVEL
                       SCHEMA_FORMATS, STEP_ACTIONS, STEP_OPTIONAL, STEPS_MAX, TEXT_MAX, URL_MAX, URL_PATTERN)
 
 API_VERSION = 'v1'
-SCHEMA_VERSION = '1.11.0'
+SCHEMA_VERSION = '1.12.0'
 API_BASE = '/api/v1'
 STATUSES = ['live', 'closed']
 ENTITY_TYPES = ['platform', 'tool_catalog', 'protocol', 'project']
@@ -23,6 +23,11 @@ UTC_PATTERN = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?Z$'  # ISO 8601 U
 
 # newest first; build.py writes changelog.json and CHANGELOG.md from this list
 CHANGELOG = [
+    {'schema_version': '1.12.0', 'date': '2026-11-24', 'changes': [
+        'Local restoration candidate, not a production release: same-URL current-only records replace old general summary/claims/money/task fields. Default lists/search/categories contain reviewed Live overviews only; closed history is available by permanent ID and /atlas/closed.json. This is intentionally breaking, not additive. HTML, Markdown, JSON and MCP share current overview content and optional trials. Verified badge dates use overview visits.',
+        'Local closed-archive candidate, not a release claim: closed entry summaries and full records now carry an explicit archive with inert historical addresses instead of active website/safety/task/badge fields. This is an intentional closed-only shape change, not a backwards-compatible optional-field addition. Permanent card URLs, names, historical content, dates and existing capture bytes are retained. Compact MCP search rows omit archive history; the full closed record remains accessible by ID. Source catalogue and event logs remain unchanged.',
+        'Local earn candidate only, not a release claim: /atlas/earn.json and /api/v1/atlas/earn.json replace numeric money rows with current earning-opportunity records (format commonworld-atlas-earning-opportunities/1). This is an intentional shape change authorized for the current-only earn list; old value/unit/window/basis/tier fields are removed, not populated with invented defaults. No legacy earn feed is retained.',
+        'Current card and compact search records add earning_opportunity (included and list URL); full descriptions and dated sources are in earn.json, omitted when not in the selected list. Absence is not a claim that earning is impossible. Other API surfaces are outside this local earn change.']},
     {'schema_version': '1.11.0', 'date': '2026-11-02', 'changes': [
         'New optional field `confirmed_at` on a claim (claims[] of platforms/{id}.json, and inside a claim\'s history[] entries): the time of '
         'the newest weekly re-check that read the same fact again and found it unchanged (issue #273). ISO 8601 UTC (RFC 3339, '
@@ -202,9 +207,13 @@ GENERATED_AT_DESC = ('Time of the newest data in this build, ISO 8601 UTC: the l
                      'so it moves when a card is amended (since schema_version 1.9.0; before, it was the source snapshot time alone).')
 SOURCE_SNAPSHOT_AT_DESC = 'Time the source data snapshot file was produced, ISO 8601 UTC (what generated_at held before schema_version 1.9.0).'
 NEWEST_OBSERVATION_DESC = 'Newest observed_at of any published claim, ISO 8601 UTC; never later than generated_at.'
-VERSIONING = ('Semantic versioning of the data shape (schema_version). Minor and patch versions only add optional fields or files, '
-              'so a v1 client keeps working. Any breaking change (a removed or renamed field, a changed type or meaning, a moved URL) '
-              'ships as /api/v2/, and /api/v1/ keeps working.')
+VERSIONING = ('schema_version identifies the generated data shape. The current-only Atlas contract intentionally replaces '
+              'the previous general and earning records on existing /atlas/ and /api/v1/atlas/ URLs. '
+              'Default lists, categories, search, snapshots and MCP tools contain the same current descriptions, visit dates, '
+              'sources, screenshots and optional actual trials. Old claim, summary, money and first-task fields are removed '
+              'from current records; closed history remains separately accessible by permanent ID and /atlas/closed.json. '
+              'This is a breaking replacement, not an additive or backwards-compatible change. No old default feed is retained. '
+              'The 1.12.0 identifier does not make this migration semver-compatible. This exception is scoped to the Atlas data contract.')
 
 
 def schema_url(origin, name):
@@ -375,12 +384,25 @@ def schemas(origin, categories):
                                           'http_status': {'type': 'integer', 'minimum': 100, 'maximum': 599}, 'bytes': {'type': 'integer', 'minimum': 0},
                                           'page_type': {'enum': ['own_content', 'challenge', 'error']}, 'client': {'type': 'string', 'minLength': 1},
                                           'by': {'type': 'string', 'minLength': 1}, 'sha256': {'type': ['string', 'null'], 'pattern': '^[0-9a-f]{64}$'}}}}}}
+    summary_props['earning_opportunity'] = {'type': ['object', 'null'], 'description': 'Selected for the broad current earning-related list, not verified payments or eligibility.', 'properties': {'included': {'const': True}, 'url': uri, 'description': {'type': 'string'}, 'visited_at': utc_n, 'sources': {'type': 'array', 'items': uri}}}
     summary_props['overview'] = {'type': 'object', 'description': 'Optional simple dated overview. Its visit date is separate from legacy verified_at/last_checked. Drafts are not published reviews.', 'required': ['state', 'text', 'visited_at', 'sources', 'revision'], 'properties': {'state': {'enum': ['draft', 'held', 'reviewed']}, 'text': {'type': 'string'}, 'visited_at': utc_n, 'sources': {'type': 'array', 'items': uri}, 'revision': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}}}
     summary_props['disclosure_history'] = {'type': 'array', 'description': 'Optional public dated disclosure history, separate from current relationship wording and practical trials. Not private editorial history. Local unreleased extension.', 'items': {'type': 'object', 'required': ['text', 'revision', 'replaced_by_revision', 'correction_date', 'original_record_date', 'reason'], 'properties': {'text': {'type': 'string'}, 'revision': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, 'replaced_by_revision': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, 'correction_date': {'type': 'string', 'format': 'date'}, 'original_record_date': {'type': ['string', 'null']}, 'reason': {'type': 'string'}}}}
     summary_props['current_limitation'] = {'type': 'object', 'description': 'Local unreleased optional bounded source-check note. Takes priority over overview and legacy summary; not a closure or availability claim.', 'required': ['state', 'attempted_on', 'text', 'sources'], 'properties': {'state': {'const': 'could_not_verify'}, 'attempted_on': {'type': 'string', 'pattern': r'^\d{4}-\d{2}-\d{2}$'}, 'text': {'type': 'string'}, 'sources': {'type': 'array', 'items': uri}}}
-    optional = {'current_limitation', 'disclosure_history', 'overview', 'preview', 'link_safety', 'md_url', 'evidence_level', 'keys_and_books', 'first_task', 'replications', 'reachability'}  # added in 1.1.0 / 1.2.0 / 1.4.0 / 1.6.0: optional, so older records stay valid
+    optional = {'earning_opportunity', 'current_limitation', 'disclosure_history', 'overview', 'preview', 'link_safety', 'md_url', 'evidence_level', 'keys_and_books', 'first_task', 'replications', 'reachability'}  # added in 1.1.0 / 1.2.0 / 1.4.0 / 1.6.0: optional, so older records stay valid
     summary = {'type': 'object', 'description': 'Stable public fields of one published Atlas entry (as in platforms.json).',
                'required': [k for k in summary_props if k not in optional], 'properties': summary_props}
+    closed_summary = {'type':'object', 'required':['id','name','url','json_url','category','category_label','status','archive','closed_recorded_at'],
+        'not':{'anyOf':[{'required':[k]} for k in ('website','link_safety','reachability','replications','first_task','badge_svg','badge_svg_dark','badge_page')]},
+        'properties': {'id':summary_props['id'],'name':{'type':'string'},'url':uri,'json_url':uri,
+            'category':{'enum':categories},'category_label':{'type':'string'},'type':summary_props['type'],
+            'status':{'const':'closed'},'closed_recorded_at':utc_n,
+            'archive':{'type':'object','required':['kind','external_links','history'],
+                'properties':{'kind':{'const':'closed_history'},'external_links':{'const':'disabled'},'history':{'type':'object'}}}}}
+    current_props = {k: v for k, v in summary_props.items() if k in ('id','name','url','json_url','md_url','website','category','category_label','type','status','tags','overview','preview','link_safety','disclosure','earning_opportunity')}
+    current_summary = {'type':'object','required':['id','name','url','json_url','category','category_label','status','overview'],
+        'not': {'anyOf':[{'required':[k]} for k in ('claims','summary','first_task','verified_at','last_checked','money_flow','key_number','claims_count','evidence_level','keys_and_books','replications','reachability')]},
+        'properties': current_props}
+    summary = {'oneOf':[summary,closed_summary,current_summary], 'properties':summary_props}
     preview = {'type': ['object', 'null'], 'description': 'Dated public source-page screenshot of the entry, or null. See source_url for the captured page. Third-party website content: '
                'not covered by the Atlas CC BY 4.0 data licence (see rights). Added in schema_version 1.1.0.',
                'required': ['path', 'url', 'width', 'height', 'captured_at', 'source_url'],
@@ -394,7 +416,8 @@ def schemas(origin, categories):
     platform = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': S('platform.schema.json'),
                 'title': 'Commonworld Atlas entry', 'description': 'One published Atlas entry with all its claims and sources (/api/v1/atlas/platforms/{id}.json).',
                 'type': 'object', 'allOf': [{'$ref': '#/$defs/platformSummary'}],
-                'required': ['schema_version', 'licence', 'source', 'generated_at', 'badge_status', 'badge_svg', 'badge_svg_dark', 'badge_page', 'claims'],
+                'required': ['schema_version', 'licence', 'generated_at'],
+                'oneOf': [{'required':['source','badge_status','badge_svg','badge_svg_dark','badge_page','claims']}, {'required':['overview'], 'not': {'required':['claims']}}, {'required':['archive'], 'properties':{'status':{'const':'closed'}}}],
                 'properties': {'schema_version': {'type': 'string'}, 'licence': {'type': 'string'}, 'source': uri, 'generated_at': gen_at,
                                'source_snapshot_at': src_at, 'badge_status': {'type': 'string'}, 'badge_svg': uri, 'badge_svg_dark': uri, 'badge_page': uri,
                                'claims': {'type': 'array', 'items': {'$ref': '#/$defs/claim'}}, 'qa_status': {'type': ['string', 'null']}},
@@ -411,18 +434,17 @@ def schemas(origin, categories):
                 'type': 'object', 'required': ['schema_version', 'name', 'generated_at', 'licence', 'category', 'category_label', 'count', 'platforms'],
                 'properties': list_meta | {'category': {'enum': categories}, 'category_label': {'type': 'string'}}}
     earn_row = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': S('earn-row.schema.json'),
-                'title': 'Where agents get paid: one row', 'description': 'One live entry with a supported money figure, as shown on its card. Values are never converted between units.',
-                'type': 'object', 'required': ['id', 'name', 'url', 'json_url', 'category', 'value', 'unit', 'window', 'basis', 'observed_at', 'source_url', 'unit_family', 'tier', 'note', 'group'],
+                'title': 'Current earning-related opportunity', 'description': 'One broad editorially selected current overview, not verified payment or eligibility.',
+                'type': 'object', 'required': ['id', 'name', 'url', 'json_url', 'category', 'description', 'visited_at', 'sources'],
                 'properties': {'id': {'type': 'string', 'pattern': ID_PATTERN}, 'name': {'type': 'string'}, 'url': uri, 'json_url': uri,
-                               'category': {'enum': categories}, 'value': scalar, 'unit': {'type': ['string', 'null']}, 'window': {'type': ['string', 'null']},
-                               'basis': {'enum': BASES}, 'observed_at': utc_n, 'source_url': uri_n, 'unit_family': {'type': 'string'},
-                               'tier': {'type': 'string'}, 'note': {'type': ['string', 'null']}, 'group': {'type': 'string'}}}
+                               'category': {'enum': categories}, 'description': {'type': 'string'}, 'visited_at': {'type': 'string', 'format': 'date-time'},
+                               'sources': {'type': 'array', 'minItems': 1, 'items': uri}}}
     earn = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': S('earn.schema.json'),
-            'title': 'Where agents get paid', 'description': 'Rows grouped by unit (/api/v1/atlas/earn.json).',
-            'type': 'object', 'required': ['schema_version', 'name', 'url', 'generated_at', 'licence', 'count', 'no_figure', 'rows'],
-            'properties': {'schema_version': {'type': 'string'}, 'name': {'type': 'string'}, 'url': uri, 'generated_at': gen_at, 'source_snapshot_at': src_at,
-                           'licence': {'type': 'string'}, 'source': uri, 'fields_note': {'type': 'string'}, 'count': {'type': 'integer', 'minimum': 0},
-                           'no_figure': {'type': 'array', 'items': {'type': 'string', 'pattern': ID_PATTERN}},
+            'title': 'Where agents get paid', 'description': 'Current earning-related list, alphabetical, with source-visit dates. Numeric legacy money rows are not served here.',
+            'type': 'object', 'required': ['schema_version', 'format', 'name', 'url', 'generated_at', 'licence', 'count', 'rows'],
+            'properties': {'schema_version': {'type': 'string'}, 'format': {'const': 'commonworld-atlas-earning-opportunities/1'},
+                           'name': {'type': 'string'}, 'url': uri, 'generated_at': gen_at, 'source_snapshot_at': src_at, 'licence': {'type': 'string'},
+                           'fields_note': {'type': 'string'}, 'count': {'type': 'integer', 'minimum': 0},
                            'rows': {'type': 'array', 'items': {'$ref': 'earn-row.schema.json'}}}}
     nurl = {'type': ['string', 'null'], 'format': 'uri', 'pattern': '^https?://'}
     ppage = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': S('platform-page.schema.json'),
@@ -503,8 +525,8 @@ def openapi(origin, categories, example_ids, docs_url, licence):
                                                                       'summary': f'One page of {PAGE_SIZE} entries of one category, live first', 'description': PAGE_WALK_RULE,
                                                                       'parameters': [catp, pagep],
                                                                       'responses': js('./schemas/platform-page.schema.json', 'One category list page') | PAGE_MISSING}},
-            '/atlas/earn.json': {'get': {'tags': ['atlas'], 'operationId': 'getEarn', 'summary': 'Where agents get paid: money figures grouped by unit',
-                                         'responses': js('./schemas/earn.schema.json', 'Money figures by unit')}},
+            '/atlas/earn.json': {'get': {'tags': ['atlas'], 'operationId': 'getEarn', 'summary': 'Where agents get paid: current earning-related opportunities',
+                                         'responses': js('./schemas/earn.schema.json', 'Dated earning opportunities')}},
         },
     }
 

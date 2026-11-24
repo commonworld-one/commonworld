@@ -1,90 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "laevitas-api-v2",
  "name": "Laevitas",
  "url": "https://commonworld.one/atlas/platforms/laevitas-api-v2/",
  "json_url": "https://commonworld.one/atlas/platforms/laevitas-api-v2.json",
+ "md_url": "https://commonworld.one/atlas/platforms/laevitas-api-v2/index.md",
  "website": "https://apiv2.laevitas.ch",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Laevitas API V2 sells crypto derivatives data (options, perps, futures, OI, volatility, liquidations) per request in USDC via x402 as an alternative to an API key.",
  "tags": [
   "x402",
   "x402-service",
   "data"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402 settlement to this service's payout address: $614.8 in 30d from 33 distinct buyers, 5,630 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 614.8,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/laevitas-api-v2"
-  },
-  {
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $474.30",
-   "value": 474.3,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/laevitas-api-v2/volume?days=60"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 614.8,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/services/laevitas-api-v2"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/laevitas-api-v2/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services/laevitas-api-v2",
-   "quote": "\"volume_usd_30d\":614.8,\"unique_buyers_30d\":33,\"tx_count_30d\":5630,\"top_buyer_share_30d\":0.7161678594664932,\"last_settlement_at\":\"2026-10-28T01:46:07Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Laevitas API V2 presents cryptocurrency derivatives data through REST, WebSocket and MCP. Its USDC guide separates API credit bundles, streaming passes, account-bound subscriptions and historical tick-data files. The $0.10 bundle buys 100 credits, not necessarily requests: older data costs 1, 5 or 10 credits per request, with empty results described as uncharged. Broader 100-call language is qualified by those rules and the final quote. Credit tokens expire after 24 hours but wallet-attached credits can be accessed through token refresh without repurchase. Streaming costs $0.50/hour or $10/day. Prepaid Premium/Enterprise list 50/500 USDC monthly without automatic wallet renewal; Premium lacks Enterprise API rights. Tick-data quotes depend on files, dates and coverage gaps, with orders owned by the signed-in account. Paid confirmation is not file preparation or delivery. Accountless API credit access does not generalize to subscriptions/exports, and prices, coverage and performance are publisher descriptions rather than tested guarantees.",
@@ -95,129 +27,9 @@
   ],
   "revision": "d1af3b4afd27c3bdf07bd3b167dd68738b70e2155a93c924525b60cc9899a589"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/laevitas-api-v2.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/laevitas-api-v2-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Official site returns HTTP 200 with real content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://apiv2.laevitas.ch",
-   "quote": "Derivatives Data Without The Spread … Tick data and subscriptions, payable in USDC on Base or Solana.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://apiv2.laevitas.ch"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL (x402-list base_url/website for this service, operator-owned)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://apiv2.laevitas.ch",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100",
-    "curl -sL https://apiv2.laevitas.ch"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Laevitas API V2 sells crypto derivatives data (options, perps, futures, OI, volatility, liquidations) per request in USDC via x402 as an alternative to an API key.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://apiv2.laevitas.ch",
-   "quote": "Derivatives Data Without The Spread … Tick data and subscriptions, payable in USDC on Base or Solana.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://apiv2.laevitas.ch",
-    "GET https://x402-list.com/api/v1/services?per_page=100"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $614.8 in 30d from 33 distinct buyers, 5,630 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 614.8,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/laevitas-api-v2",
-   "quote": "\"volume_usd_30d\":614.8,\"unique_buyers_30d\":33,\"tx_count_30d\":5630,\"top_buyer_share_30d\":0.7161678594664932,\"last_settlement_at\":\"2026-10-28T01:46:07Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/laevitas-api-v2",
-    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
-    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 633.9,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "x402 settlement to this service's payout address: $633.90 in 30d from 35 distinct buyers, 5,821 settlements; top buyer share 69.5%",
-     "quote": "traction.volume_usd_30d=633.9, unique_buyers_30d=35, top_buyer_share_30d=0.6946",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "laevitas-api-v2-x402-list-30d",
-   "last_settlement_seen_at": "2026-10-28T01:46:07Z",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $474.30",
-   "value": 474.3,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/laevitas-api-v2/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/laevitas-api-v2/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last UTC day with ≥$1 settled: 2026-10-14; first settlement 2026-02-12",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/laevitas-api-v2/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/laevitas-api-v2/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

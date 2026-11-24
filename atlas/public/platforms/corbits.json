@@ -1,61 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "corbits",
  "name": "Corbits",
  "url": "https://commonworld.one/atlas/platforms/corbits/",
  "json_url": "https://commonworld.one/atlas/platforms/corbits.json",
+ "md_url": "https://commonworld.one/atlas/platforms/corbits/index.md",
  "website": "https://www.corbits.dev/",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Corbits now sells agent operations and governance software (identity, grants, signed audit records, a model router, coding TUI); it no longer presents itself as an x402 API platform.",
  "tags": [
   "x402"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:24:00Z",
- "last_checked": "2026-10-15T18:24:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/corbits/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Corbits presents agent operations and governance software spanning pull-request triage, terminal coding, model routing and solution building. Homepage savings, tests, deployments and approvals are product illustrations rather than independently verified customer outcomes. Router describes task-, cost- and policy-based model routing, failover and request-level cost attribution, with provider keys encrypted at rest and injected at the edge. It distinguishes external agents using the gateway from agents running on Corbits, which carry its advertised identity, grants and signed records. Gateway use alone does not imply those controls. Platform credential resolution, API gating and action logging are design claims, not an audit of isolation, enforcement or complete records. A signed record does not independently establish authorization or truth. The saved source supports a broader platform description, not the older payment-infrastructure claims.",
@@ -67,57 +26,9 @@
   ],
   "revision": "7ecff8f41efff6401c1b9f4a4a817b74b0576f13469e2ec86b0d0e1eb73ec363"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/corbits.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/corbits-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "200.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.corbits.dev/",
-   "quote": "Corbits — Agent operations and governance for modern teams",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Pivot visible: product list is governance tooling.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.corbits.dev/",
-   "quote": "Corbits Identity, grants, and a signed record for every agent ... Corbits Router A smart gateway for AI model requests",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "Not closed — live, pivoted. Solana's x402 page still lists Corbits as an x402 pay-per-use platform (stale).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://solana.com/x402",
-   "quote": "Corbits Platforms any API or data endpoint for pay-per-use via the x402 standard",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl solana.com/x402"
-   ],
-   "outcome": "contradicted"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

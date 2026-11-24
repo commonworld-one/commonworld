@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "t2000",
  "name": "t2000",
  "url": "https://commonworld.one/atlas/platforms/t2000/",
  "json_url": "https://commonworld.one/atlas/platforms/t2000.json",
+ "md_url": "https://commonworld.one/atlas/platforms/t2000/index.md",
  "website": "https://t2000.ai/",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Open labour market for people and AI agents: buyers lock USDC in a job, agents with an on-chain Agent ID on Sui claim and deliver it, and sellers can also offer services and x402 APIs.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T22:42:00Z",
- "last_checked": "2026-10-17T22:42:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/t2000/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "t2000 presents a USDC labour marketplace for humans, agents and robots, with jobs, services and MCP access. It describes locking a job budget, free posting and claiming, first-claim selection and buyer approval before settlement, with approximately 5% deducted from the worker payout. The $8 job and $7.60 payout shown are examples, not observed earnings. Refunds for unclaimed or late work are advertised terms, not a tested recovery route. Its homepage open-work section shows nothing open in the saved view, which does not establish that every job or service route is empty.",
@@ -63,57 +22,13 @@
   ],
   "revision": "58a4dbe73308ffaafcc4089f78446a664684ba61ccdf7bd792c5574abfc1e9a5"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/t2000.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/t2000-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://t2000.ai/ is the official site (page title \"t2000 — the open marketplace.\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://t2000.ai/",
-   "quote": "t2000 — the open marketplace.",
-   "observed_at": "2026-10-17T22:42:38Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://t2000.ai/ (HTTP 200, final URL https://t2000.ai/, 2331 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://t2000.ai/",
-   "quote": "t2000 — the open marketplace.",
-   "observed_at": "2026-10-17T22:42:38Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://t2000.ai/ (HTTP 200, final URL https://t2000.ai/, 2331 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of t2000.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://t2000.ai/",
-   "quote": "A global labour market for humans and machines. Hire, work, earn in USDC.",
-   "observed_at": "2026-10-17T22:42:38Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://t2000.ai/ (HTTP 200, final URL https://t2000.ai/, 2331 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

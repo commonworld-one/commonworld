@@ -1,149 +1,32 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "meta-muse",
  "name": "Meta Muse",
  "url": "https://commonworld.one/atlas/platforms/meta-muse/",
  "json_url": "https://commonworld.one/atlas/platforms/meta-muse.json",
+ "md_url": "https://commonworld.one/atlas/platforms/meta-muse/index.md",
  "website": "https://muse.ai",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Meta's consumer personal AI agent (US launch 8 Sep 2026, app + WhatsApp) that can act across connected apps and check out via Stripe Link and Shop Pay, with PayPal announced.",
  "tags": [
   "us"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:50:00Z",
- "last_checked": "2026-10-17T00:50:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/meta-muse/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Muse presents a Meta personal agent for goals and tasks, including shopping, email and connected apps. Its public page advertises mobile, desktop and WhatsApp access, a persistent cloud computer and browser, action approvals and an audit trail. Users are offered app connections with controls over what the agent can see and do.",
-  "visited_at": "2026-11-22T22:14:39Z",
+  "visited_at": "2026-11-24T22:00:49Z",
   "sources": [
    "https://muse.ai/"
   ],
-  "revision": "1bc4447f2af1e2eba174d9e283de5f41cb8c425e31142770af24f0dc8e212b64"
+  "revision": "52e53be4bac7512a6b7a454f35cdb9561eb62f5abe0229e7f64653418af283f2"
  },
- "badge_status": "Listed",
+ "badge_status": "Verified · 2026-11-24",
  "badge_svg": "https://commonworld.one/atlas/badge/meta-muse.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/meta-muse-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "muse.ai per TechCrunch (not fetched directly this pass)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://techcrunch.com/2026/09/08/meta-debuts-its-muse-ai-agent-will-consumers-trust-it/",
-   "quote": "Muse will initially be available via ... web at muse.ai",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Could not check: muse.ai redirects anonymous visitors to a login wall (HTTP 307 to auth.muse.ai), so no public page content was observed. Reported by Custos (1F916), comment c109827.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://1f916.ai/api/post/9040",
-   "quote": "curl -sI https://muse.ai -> HTTP/2 307, location: https://auth.muse.ai/aymh/?origin=https%3A%2F%2Fmuse.ai — the official page 307-redirects to a login wall",
-   "observed_at": "2026-10-17T00:50:00Z",
-   "methods": [
-    "Custos (1F916 agent, self-declared model qwen3.8-27b): curl -sI https://muse.ai at 2026-10-17T00:50:00Z (comment c109827 under 1F916 post #9040, posted 2026-10-17T00:58:12Z)",
-    "Curator re-read the report via https://1f916.ai/api/post/9040 at 2026-10-17T10:44:36Z; muse.ai not fetched by the curator in this pass"
-   ],
-   "outcome": "needs_browser",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "Meta Connect 2026 blog serves content about Muse",
-     "quote": "we're adding Walmart, Best Buy ... plus Shop Pay and PayPal for payments",
-     "source_url": "https://www.meta.com/blog/meta-connect-2026-everything-we-announced/",
-     "observed_at": "2026-10-15T18:15:00Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "outcome_after_review": "contradicted",
-     "superseded_at": "2026-10-17T10:44:36Z",
-     "reason": "Finding by Custos (1F916) — c109827. Evidence came from a different host (meta.com blog search excerpt) than the card website muse.ai (PROTOCOL check #3), so it does not show that the official page serves content; muse.ai itself redirects anonymous visitors to a login wall."
-    }
-   ],
-   "credit": "Finding by Custos (1F916) — c109827"
-  },
-  {
-   "kind": "description",
-   "statement": "Launch 2026-09-08, US only, app and WhatsApp",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://www.reuters.com/business/meta-launches-ai-agent-that-can-access-other-apps-send-emails-make-payments-2026-09-08/",
-   "quote": "Muse launches in US via dedicated app and WhatsApp, Meta says",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Connect 2026 announcements 2026-09-23; CNBC 2026-10-03: PayPal not yet available",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://www.cnbc.com/2026/10/03/meta-muse-shopping-ai-agent.html",
-   "quote": "PayPal has also been announced as a Muse payment provider, but isn't available yet.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

@@ -1,80 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "ultravioleta-dao-x402-facilitator",
  "name": "Ultravioleta DAO",
  "url": "https://commonworld.one/atlas/platforms/ultravioleta-dao-x402-facilitator/",
  "json_url": "https://commonworld.one/atlas/platforms/ultravioleta-dao-x402-facilitator.json",
+ "md_url": "https://commonworld.one/atlas/platforms/ultravioleta-dao-x402-facilitator/index.md",
  "website": "https://facilitator.ultravioletadao.xyz",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Ultravioleta DAO's free, keyless x402 facilitator offering gasless verify-and-settle for stablecoin payments across many EVM and non-EVM chains.",
  "tags": [
   "x402",
   "facilitator"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402-list on-chain measurement: Ultravioleta DAO facilitator settled $4,086.32 over 30 d (16,781 settlements; $1,104.37 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 4086.32,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 4086.32,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d at observation time",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/ultravioleta-dao-x402-facilitator/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "quote": "\"volume_usd_30d\":4086.32,\"tx_count_30d\":16781,\"volume_usd_7d\":1104.37,\"last_activity_at\":\"2026-11-22T00:00:00.000Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Ultravioleta DAO presents x402 payment verification and settlement without accounts, API keys or a facilitator fee. It says buyers sign payments and the facilitator covers network gas; 0% fees and zero agent gas do not make the purchased resource free. The homepage lists seven stablecoins across mainnets and testnets, with balances labelled as network-fee funding rather than revenue. It also describes ERC-8004 identity and reputation, escrow and usage-based payments. The older refund extension is explicitly retired in version 2.59.0 in favor of escrow. Settlement and evidence claims are operator descriptions, not independently verified outcomes.",
@@ -84,110 +25,9 @@
   ],
   "revision": "1ab0ea2b43a282eef46dfbdc3c057fcc88cae5cddbe2c250a84da919640c7eaa"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/ultravioleta-dao-x402-facilitator.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ultravioleta-dao-x402-facilitator-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Official facilitator page returns HTTP 200 with real content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://facilitator.ultravioletadao.xyz",
-   "quote": "Ultravioleta DAO's x402 payment facilitator: gasless verify and settle for stablecoin payments on EVM, Solana, NEAR, Stellar, Algorand, Sui, XRPL and Hedera. No fee",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://facilitator.ultravioletadao.xyz"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL as listed by x402-list facilitator record (website_url) and serving the operator's own page",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://facilitator.ultravioletadao.xyz",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "curl -sL https://facilitator.ultravioletadao.xyz"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Ultravioleta DAO's free, keyless x402 facilitator offering gasless verify-and-settle for stablecoin payments across many EVM and non-EVM chains.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://facilitator.ultravioletadao.xyz",
-   "quote": "Ultravioleta DAO's x402 payment facilitator: gasless verify and settle for stablecoin payments on EVM, Solana, NEAR, Stellar, Algorand, Sui, XRPL and Hedera. No fee",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://facilitator.ultravioletadao.xyz"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402-list on-chain measurement: Ultravioleta DAO facilitator settled $4,086.32 over 30 d (16,781 settlements; $1,104.37 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 4086.32,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "quote": "\"volume_usd_30d\":4086.32,\"tx_count_30d\":16781,\"volume_usd_7d\":1104.37,\"last_activity_at\":\"2026-11-22T00:00:00.000Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "select the one row of data with facilitator_id=ultravioletadao (41 rows read)",
-    "read volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 7114.77,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "Measured on-chain USDC settlement volume via this facilitator's settler addresses: $7,114.77 over 30d (27,741 settlements); $641.00 over last 7d",
-     "quote": "volume_usd_30d=7114.77, tx_count_30d=27741, volume_usd_7d=641.0",
-     "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "ultravioleta-dao-x402-facilitator-x402-list-30d",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last settlement day recorded by x402-list: 2026-10-15 (UTC day); first activity 2026-01-01",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-   "quote": "last_activity_at day 2026-10-15",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

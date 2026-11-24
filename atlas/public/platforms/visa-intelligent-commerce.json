@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "visa-intelligent-commerce",
  "name": "Visa Intelligent Commerce + Trusted Agent Protocol",
  "url": "https://commonworld.one/atlas/platforms/visa-intelligent-commerce/",
  "json_url": "https://commonworld.one/atlas/platforms/visa-intelligent-commerce.json",
+ "md_url": "https://commonworld.one/atlas/platforms/visa-intelligent-commerce/index.md",
  "website": "https://www.visa.com/en-us/solutions/intelligent-commerce",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Visa's agentic-commerce portfolio (tokenised credentials, controls, Trusted Agent Protocol) under which AI agents complete purchases; live in Europe since 2 Jul 2026 with 30+ issuers.",
  "tags": [
   "card-network",
   "token",
   "buyer-side"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:25:00Z",
- "last_checked": "2026-10-15T18:25:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/visa-intelligent-commerce/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Visa Intelligent Commerce presents a portfolio for agent-initiated transactions, covering payment credentials, controls, authentication and protections. Its public page describes Commercial Solutions, Intelligent Commerce Connect, a command-line interface and Trusted Agent Protocol. Visa says the product is still being deployed and its final version might not include every described feature.",
@@ -67,100 +26,9 @@
   ],
   "revision": "ba62a3a7e18cdaf4d0f65fbaab08456cf3cf1a9164e4a4e6f595e657d93306b4"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/visa-intelligent-commerce.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/visa-intelligent-commerce-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "corporate.visa.com intelligent-commerce redirects to visa.com/en-us/solutions/intelligent-commerce; TAP repo github.com/visa/trusted-agent-protocol",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.visa.com/en-us/solutions/intelligent-commerce",
-   "quote": "Visa Intelligent Commerce (VIC) is our strategic portfolio for the age of AI agents",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl corporate.visa.com/... (200 after redirect)",
-    "curl developer.visa.com (403)",
-    "GitHub API visa/trusted-agent-protocol"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Product page serves content (developer.visa.com returns 403 to curl)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.visa.com/en-us/solutions/intelligent-commerce",
-   "quote": "enabling agents, issuers, merchants and developers to transact with trust, speed and intelligence",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Live agentic transactions at European merchants, 2026-07-02",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.visa.co.uk/about-visa/newsroom/press-releases.3457328.html",
-   "quote": "Visa ... announced the execution of live agentic commerce transactions across Europe",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Europe live 2026-07-02; Agentic Ready global expansion (investor.visa.com, date not captured)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.visa.co.uk/about-visa/newsroom/press-releases.3457328.html",
-   "quote": "Paris, 2 July 2026",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Trusted Agent Protocol repo last push 2025-10-28 (quiet ~1 year)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.github.com/repos/visa/trusted-agent-protocol",
-   "quote": "pushed_at 2025-10-28",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "No 2026 volume published",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://www.visa.co.uk/about-visa/newsroom/press-releases.3457328.html",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }
