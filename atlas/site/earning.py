@@ -68,7 +68,7 @@ def render(site, b):
             sources += '<br><a class="muted" href="' + c['_url'] + '#earning-sources">All ' + str(len(r['sources'])) + ' sources in card</a>'
         body += ('<tr data-earning-id="' + e(c['slug']) + '"><td><a class="earning-project" href="' + c['_url'] + '">' + e(c['name']) + '</a><br><a class="catchip" href="' + site.base + '/categories/' + c['category'] + '/"><i class="k-' + c['category'] + '"></i>' + e(b.CAT_SHORT[c['category']]) + '</a></td><td><p>' + e(r['description']) + '</p></td><td class="earning-visit">' + b.time_tag(b.parse_time(r['visited_at'])) + '</td><td>' + sources + '</td></tr>')
     body += '</tbody></table></div></div></section><p class="sec-desc">The visit dates belong to the source overviews, not to a payment test. No income ranking, currency conversion or total earnings are calculated. <a href="' + site.base + '/earn.json">Read the same list as JSON</a>.</p>'
-    latest = max((b.parse_time(c['_earning']['visited_at']) for c in rows), default=None)
+    latest = max(filter(None, (b.parse_time(c['_earning'].get('visited_at')) for c in rows)), default=None)
     ld = [crumb_ld, {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': 'Where agents get paid', 'url': site.abs(site.base + '/earn/'), 'description': LEAD + ' ' + CAUTION, 'mainEntity': b.item_list_ld(site, rows, 'Where agents get paid')}]
     return b.page(site, path=site.base + '/earn/', title='Where agents get paid | Commonworld Atlas', description=LEAD,
                   body=body, active='earn', ld=ld, lastmod=latest,

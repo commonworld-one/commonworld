@@ -31,3 +31,12 @@ Former list pages beyond the current last page return302 with no-store in HTML, 
 
 ## Scope boundaries
 No database migration, new recurring job, queue, reward system or new agent identity system is part of this change. Existing refresh/screens/IndexNow/release workflows are not activated by the source update. A screenshot-only check does not create a new overview visit. A new visit or trial needs its own actual evidence and independent review.
+
+## Local draft preview validation
+`build.py --draft-preview --no-mirror` can render undated drafts. Missing visit dates remain null in JSON and unrecorded in the page; they never become Verified or inherit a historical date. Date aggregates use only recorded visits, or null when none exist. Earning explanations remain revision-bound; changing an overview does not bypass that check.
+
+A local preview is not the release API. Its earning API document names `earn-preview.schema.json`, with `earn-row-preview.schema.json` allowing a null visit date. These two schemas are generated only for draft previews. The published `earn.schema.json` and `earn-row.schema.json` remain unchanged and require dated rows. No earning rows are hidden to satisfy a schema.
+
+`tests/test_draft_preview_build.py` runs complete mixed-date and undated preview builds and validates their generated API documents against their named schemas. It also checks the preview marker, noindex, draft status, Listed badges and absent mirror writes. The production `check.py` is a release gate, not a preview validator: its indexability, canonical, image, sitemap and growth rules deliberately do not describe local previews. Passing preview tests does not mean the release gate passed. The preview marker still makes the deployment packager refuse these artifacts.
+
+The narrower `atlas/site/tools/check_overview_preview.py --source SOURCE --dist DIST` checks local noindex, links and cross-surface overview equality. `SOURCE` must be the resolved preview document after additions and current revisions (and explicit removals), not the frozen `overviews.json` input alone. It does not apply overlays itself. Comparing the frozen input with a build containing the reviewed Meta Muse revision reports three machine-overview mismatches; that is an input-layer mismatch, not a changed capture or invented visit. The full preview regression constructs the resolved source and runs this checker for all 349 fixture records. Neither this checker nor the preview regression replaces independent content review or the protected privacy gate.

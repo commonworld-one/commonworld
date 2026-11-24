@@ -3506,6 +3506,8 @@ def build_api(site, write):
     lic = site.cfg.get('data_licence') or 'not yet specified'
     gen, src = iso(site.generated), iso(site.source_generated)
     for path, doc, sch, indent in site.api_docs:
+        if getattr(site, 'overview_preview', False) and sch == 'earn.schema.json':
+            sch = 'earn-preview.schema.json'
         write(V + path, api_json({'schema_version': api_v1.SCHEMA_VERSION, 'schema': api_v1.schema_url(site.origin, sch)} | doc, indent))
     # paged lists (D3): {V}/atlas/page/N.json and {V}/atlas/categories/<k>/page/N.json, the same records as platforms.json,
     # PAGE_SIZE per page, in the order of the HTML pages; every page of one build carries the same snapshot_id
@@ -3534,7 +3536,7 @@ def build_api(site, write):
     head = {'snapshot_id': site.snapshot_id, 'generated_at': gen, 'licence': lic}
     for p, doc in mcp_files(site.agent_recs, [az_letter(c['name']) for c in site.cards], head).items():
         write(p, json.dumps(doc, ensure_ascii=False, separators=(',', ':')) + '\n')
-    for name, sch in api_v1.schemas(site.origin, site.cats).items():
+    for name, sch in api_v1.schemas(site.origin, site.cats, draft_preview=getattr(site, 'overview_preview', False)).items():
         write(f'{V}/schemas/{name}', api_json(sch))
     ids = [c['slug'] for c in site.cards]
     exs = [s for s in ('dealwork-ai', 'bountybook', 'aibtc-bounty-board') if s in ids] or ids[:3]
@@ -3944,7 +3946,7 @@ def main():
         site.by_cat = defaultdict(list)
         for c in site.cards: site.by_cat[c['category']].append(c)
     if getattr(site, 'catalogue_mode', False):
-        site.latest = max((parse_time(c['_overview']['visited_at']) for c in site.cards), default=None)
+        site.latest = max(filter(None, (parse_time(c['_overview'].get('visited_at')) for c in site.cards)), default=None)
         site.generated = data_generated(site.source_generated, site.latest)
     site.limitations = getattr(site, 'limitations', {})
     earning.attach(site, os.path.join(HERE, '..', 'catalogue', 'earning.json'))

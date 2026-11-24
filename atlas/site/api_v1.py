@@ -225,7 +225,7 @@ def _nullable(t):
     return {'type': [t, 'null']} if isinstance(t, str) else t
 
 
-def schemas(origin, categories):
+def schemas(origin, categories, draft_preview=False):
     """{file name: JSON Schema 2020-12}. categories: list of category keys (enum)."""
     S = lambda n: schema_url(origin, n)
     utc = {'type': 'string', 'pattern': UTC_PATTERN, 'format': 'date-time'}
@@ -467,9 +467,19 @@ def schemas(origin, categories):
                  'first': uri, 'full_list': uri | {'description': 'The complete list in one file (platforms.json or the category file).'},
                  'walk_rule': {'type': 'string'},
                  'category': {'enum': categories}, 'category_label': {'type': 'string'}}}
-    return {'platform.schema.json': platform, 'platform-list.schema.json': plist, 'category.schema.json': category,
+    out = {'platform.schema.json': platform, 'platform-list.schema.json': plist, 'category.schema.json': category,
             'platform-page.schema.json': ppage,
             'earn-row.schema.json': earn_row, 'earn.schema.json': earn}
+    if draft_preview:
+        import copy
+        row = copy.deepcopy(earn_row)
+        row.update({'$id': S('earn-row-preview.schema.json'), 'title': 'Local draft earning preview, not publishable'})
+        row['properties']['visited_at'] = utc_n
+        doc = copy.deepcopy(earn)
+        doc.update({'$id': S('earn-preview.schema.json'), 'title': 'Local draft earning preview, not publishable'})
+        doc['properties']['rows']['items']['$ref'] = 'earn-row-preview.schema.json'
+        out.update({'earn-row-preview.schema.json': row, 'earn-preview.schema.json': doc})
+    return out
 
 
 # ---------------------------------------------------------------- OpenAPI 3.1
