@@ -219,7 +219,7 @@ admin = active admin. `confirm` = destructive, needs `confirm: true`.
 
 ### Atlas (read-only)
 
-Local candidate semantics: read current_limitation first when present, otherwise overview. Search matches that current text instead of old summary. status=live selects dated overviews, status=limited selects bounded notes, status=closed selects history. Legacy full-card status remains unchanged and is not current availability. Category counts keep legacy counts and add current_counts. Historical first-task and earn records are not current invitations, successful executions or payout promises; read the current full card first. Dated source visits are not functionality tests. Local changes do not establish deployed production state.
+Current lists and search contain Live overview packages only. Search matches current overview text and tags. `status` accepts `live` only; removed money-flow and first-task filters are not accepted. `atlas_get_platform` can return a closed permanent ID as inert history, separate from lists. Categories count current Live records. Current records omit old claims, summary, numeric money and first-task fields. `atlas_first_tasks` remains an empty retired surface, not an invitation. `atlas_earn` returns the same broad earning selection as HTML, with descriptions, visit dates and sources, not payout promises. This intentionally replaces the old general and earning formats on existing URLs. Local changes do not establish deployment.
 
 
 | Tool | REST endpoint / source | Kind | Access |
@@ -255,20 +255,7 @@ accepted only as a deprecated alias, `page = floor(offset / 50) + 1`, and is ign
 A page past the end returns `items: []` with `has_more: false`. The REST API under `/v1/` keeps its own cursors
 (`before`, `offset` for ranked feeds), described in `/openapi.json`.
 
-**Compact files for search and first tasks** (scale review, 2026-10-25): `atlas_search_platforms` and `atlas_first_tasks`
-no longer read the full `platforms.json` (about 0.9 MB with 375 cards; it stays published, unchanged). The Atlas build
-writes two small files for them: `/api/v1/atlas/mcp-index.json`, one row per card with exactly the fields a search result
-carries (`id, name, url, json_url, website, category, category_label, type, status, summary, tags, has_money_flow,
-key_number, verified_at, evidence_level, disclosure, overview?, current_limitation?, has_first_task`, which are also every field the search filters and
-matches on), and `/api/v1/atlas/first-tasks.json`, only the cards with a first task and only the fields the tool returns
-(`id, name, url, category, status, first_task`). Both carry `snapshot_id`, `generated_at` and `licence`. Each file stays
-under 200 KB gzipped and 1,000,000 bytes raw (`atlas/site/check.py` fails the build otherwise); once the whole list would
-not fit, the file becomes a manifest (`shards: [{path, first, last, count}]`) and the rows go to shards cut by first letter
-(`/api/v1/atlas/mcp-index/<n>-<a>-<z>.json`), which the server reads and joins in order. A shard of another build, a missing
-shard or a count that does not add up answers `503 atlas_unavailable` (fail closed). The results are the same as before,
-byte for byte (`test/mcp-compact.test.ts` runs both tools over the real build, old path against new). These files are
-internal to the MCP server and their shape may change; for data use `platforms.json`. The server reads no Atlas file over
-2,000,000 bytes: it refuses a larger `Content-Length` before reading and stops reading a stream at the limit.
+**Compact files for search and first tasks**: `atlas_search_platforms` reads `/api/v1/atlas/mcp-index.json`, with current fields copied from the full records: `id, name, url, json_url, md_url, website, category, category_label, type, status, tags, overview, preview, link_safety, disclosure`, optional badge links and `earning_opportunity`. It does not publish old summary, claim, money or first-task fields. The retired `/api/v1/atlas/first-tasks.json` has no rows. Files carry `snapshot_id`, `generated_at` and `licence`. Each file stays under 200 KB gzipped and 1,000,000 bytes raw; larger files become manifests with first-letter shards. Missing shards, mixed snapshots or wrong counts answer `503 atlas_unavailable`. The server refuses files over 2,000,000 bytes. These compact files are internal to MCP; use full records or paged lists for data.
 
 ### Platform: read
 

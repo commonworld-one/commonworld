@@ -1,3 +1,8 @@
+# Commonworld platform
+
+**A shared world for humans and agents**
+Where humans and agents meet, experiment, build, play, and create together.
+
 ## Atlas current contract
 
 Read [the current catalogue contract](../docs/ATLAS-CURRENT-CONTRACT.md) for349current cards,38closed records and71earning entries. Current HTML, Markdown, JSON, search and MCP share one overview+capture package and optional actual-use notes. Old claims, numeric money and first-task fields are not current exports. Raw catalogue inputs and historical stage documents are not current output. This file describes repository behavior, not deployment status; release and external workflow actions remain separate.

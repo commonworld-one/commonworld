@@ -18,6 +18,14 @@ class SmokeUrlTests(unittest.TestCase):
         for value in ['https://thecolony.ai.evil/','https://evil@thecolony.ai/','https://evil/?next=https://thecolony.ai/','https://evil/path/https://thecolony.ai/']:
             self.assertFalse(caption_source_matches(template.format(value),'https://thecolony.ai/'))
         self.assertFalse(caption_source_matches('prefix '+template.format('https://thecolony.ai/'),'https://thecolony.ai/'))
+    def test_current_caption_exact_source_without_second_date(self):
+        template = 'Homepage · {}. Screenshot © the site owner, not part of the CC BY data.'
+        self.assertTrue(caption_source_matches(template.format('https://thecolony.ai/'), 'https://thecolony.ai/', current=True))
+        for value in ['https://thecolony.ai.evil/', 'https://evil@thecolony.ai/', 'https://evil/?next=https://thecolony.ai/', 'https://evil/path/https://thecolony.ai/']:
+            self.assertFalse(caption_source_matches(template.format(value), 'https://thecolony.ai/', current=True))
+        for value in ['prefix ' + template.format('https://thecolony.ai/'), template.format('https://thecolony.ai/') + ' extra']:
+            self.assertFalse(caption_source_matches(value, 'https://thecolony.ai/', current=True))
+
     def test_share_target_parsed_parameter_not_arbitrary_substring(self):
         canon='https://commonworld.one/atlas/platforms/the-colony/'
         for network,root,key in [('x','https://x.com/intent/tweet','url'),('linkedin','https://www.linkedin.com/sharing/share-offsite/','url'),('telegram','https://t.me/share/url','url'),('reddit','https://www.reddit.com/submit','url'),('facebook','https://www.facebook.com/sharer/sharer.php','u')]:

@@ -2,7 +2,7 @@ import closed_archive
 #!/usr/bin/env python3
 """Commonworld Atlas static site generator. Python 3.9+ standard library only.
 
-    python3 atlas/site/build.py                 # reads atlas/data/snapshot-verified-2026-10-15.json
+    python3 atlas/site/build.py                 # accepted current catalogue; exact reviewed captures required
     python3 atlas/site/build.py --data X.json --out DIR
 
 Output (default atlas/site/dist/) is a plain static tree with clean URLs as directories:
@@ -3837,7 +3837,7 @@ ROUTES = {'version': 1, 'include': ['/*'],
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--data', default=DEFAULT_DATA)
+    ap.add_argument('--data', help='custom snapshot; requires matching explicit overview source')
     ap.add_argument('--config', default=os.path.join(HERE, 'site-config.json'))
     ap.add_argument('--out', default=os.path.join(HERE, 'dist'))
     ap.add_argument('--tags', default=TAGS_FILE, help='census tags (descriptive labels, not verified claims)')
@@ -3848,6 +3848,16 @@ def main():
     ap.add_argument('--no-mirror', action='store_true', help='isolated preview, do not modify atlas/public')
     ap.add_argument('--local', action='store_true', help="local preview: cross-product links (site.product_url) point to '/'")
     a = ap.parse_args()
+    if not a.overviews:
+        # One public contract: the old default snapshot is never a public feed.
+        if a.data is not None or a.limitations or a.draft_preview:
+            ap.error('custom data requires --overviews and an explicit --overview-selection; use atlas/tools/catalogue_build.py --mode accepted for the current catalogue')
+        catalogue = os.path.join(HERE, '..', 'catalogue')
+        a.data = os.path.join(catalogue, 'snapshot.json')
+        a.overviews = os.path.join(catalogue, 'overviews.json')
+        a.overview_selection = os.path.join(catalogue, 'selection.json')
+    elif a.data is None:
+        a.data = DEFAULT_DATA
     if a.draft_preview and (not a.overviews or not a.no_mirror):
         ap.error('--draft-preview requires --overviews and --no-mirror')
     cfg = json.load(open(a.config))
@@ -3858,13 +3868,13 @@ def main():
     removed = load_removed()
     import catalogue_safety
     gone = {r['slug'] for r in removed}
-    if any(c.get('slug') in gone for c in data['platforms']):  # removed.json wins over the data file
-        print(f"note: dropping removed entries still in the data: {sorted(c['slug'] for c in data['platforms'] if c.get('slug') in gone)}", file=sys.stderr)
-        data['platforms'] = [c for c in data['platforms'] if c.get('slug') not in gone]
-        data['count'] = len(data['platforms'])
     if a.overviews:
         from current_catalogue import apply_closures, add_new
         data = add_new(apply_closures(data, os.path.join(HERE, '..', 'catalogue')), os.path.join(HERE, '..', 'catalogue'))
+    if any(c.get('slug') in gone for c in data['platforms']):
+        print(f"note: dropping safety-removed entries: {sorted(c['slug'] for c in data['platforms'] if c.get('slug') in gone)}", file=sys.stderr)
+        data['platforms'] = [c for c in data['platforms'] if c.get('slug') not in gone]
+    data['count'] = len(data['platforms'])
     site = Site(cfg, data)
     site.cats = [k for k, *_ in CATEGORIES if k in original_categories]
     site.removed = removed
@@ -4136,6 +4146,10 @@ def main():
   Content-Type: application/json; charset=utf-8
   X-Robots-Tag: noindex
 {b}/platforms/*.json
+  Access-Control-Allow-Origin: *
+  Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
+{b}/closed.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json; charset=utf-8
   X-Robots-Tag: noindex

@@ -1854,7 +1854,7 @@ def events_checks():
         dj = json.load(open(os.path.join(DIST, 'atlas', 'events.json'), encoding='utf-8'))
     except (OSError, ValueError) as ex:
         return fails + [f'/atlas/events.json: missing or invalid ({ex})']
-    archived = {c['slug'] for c in json.load(open(os.path.join(DIST,'atlas','data','snapshot.json')))['platforms'] if c.get('archive',{}).get('kind') == 'closed_history'}
+    archived = {c['id'] for c in json.load(open(archive_path))['platforms']} if os.path.exists(archive_path) else set()
     import closed_archive
     expected_evs = [closed_archive.inert(e) if e.get('slug') in archived else e for e in evs]
     if dj.get('events') != ev_.newest_first(expected_evs): fails.append('/atlas/events.json: events differ from atlas/data/events.jsonl (newest first)')
@@ -1872,6 +1872,7 @@ def events_checks():
         fp_ = os.path.join(DIST, t)
         if os.path.exists(fp_) and ORIGIN + ev_.JSON_PATH not in open(fp_, encoding='utf-8').read(): fails.append(f'/{t} does not mention the events log')
     hd = open(os.path.join(DIST, '_headers'), encoding='utf-8').read() if os.path.exists(os.path.join(DIST, '_headers')) else ''
+    if os.path.exists(archive_path) and '/atlas/closed.json\n  Access-Control-Allow-Origin: *\n  Content-Type: application/json; charset=utf-8\n  X-Robots-Tag: noindex' not in hd: fails.append('/atlas/closed.json: missing JSON CORS/noindex headers')
     for path_, ct in ((ev_.JSON_PATH, 'application/json'), (ev_.MD_PATH, 'text/markdown')):
         if f'{path_}\n  Access-Control-Allow-Origin: *\n  Content-Type: {ct}; charset=utf-8' not in hd: fails.append(f'_headers: {path_} lacks CORS + {ct}')
     try:

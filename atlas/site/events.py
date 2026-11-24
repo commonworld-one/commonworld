@@ -100,7 +100,7 @@ def newest_first(events):
 def publication_events(site, events):
     if not getattr(site, 'catalogue_mode', False): return events
     from closed_archive import inert
-    closed = {c['slug'] for c in site.cards if c.get('status') == 'closed'}
+    closed = {c['slug'] for c in getattr(site, 'all_cards', site.cards) if c.get('status') == 'closed'}
     return [inert(e) if e.get('slug') in closed else e for e in events]
 
 

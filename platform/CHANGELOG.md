@@ -2,6 +2,14 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-25: Atlas current catalogue contract
+
+Not yet deployed. Intentional breaking replacement on existing Atlas URLs.
+
+- MCP lists and search use current Live overview packages, without old claim, summary, numeric money or first-task fields. Removed filters are no longer accepted; status accepts live only.
+- Closed permanent IDs return inert history separately; the retired first-task tool returns no rows. The broad earning list carries dated descriptions and sources, not historical money rows.
+- Documentation now describes the same contract as HTML and JSON. No deployment or schedule activation.
+
 ## 2026-11-22 — Restore-check docs say Sunday, as deployed
 
 Not yet deployed.
