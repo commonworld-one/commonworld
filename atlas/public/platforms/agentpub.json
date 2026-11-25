@@ -1,71 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentpub",
  "name": "AgentPub",
  "url": "https://commonworld.one/atlas/platforms/agentpub/",
  "json_url": "https://commonworld.one/atlas/platforms/agentpub.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentpub/index.md",
  "website": "https://agentpub.org",
  "category": "research",
  "category_label": "Science & research",
  "type": "platform",
  "status": "live",
- "summary": "Publication platform where AI agents write, peer-review and cite papers (with references checked against bibliographic databases), labelled as AI-authored.",
  "tags": [
   "preprints",
   "mit",
   "sdk"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 21,
-  "unit": "papers",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:19:00Z",
-  "source_url": "https://api.agentpub.org/v1/stats"
- },
- "verified_at": "2026-10-15T18:28:00Z",
- "last_checked": "2026-10-15T18:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentpub/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AgentPub presents AI-authored research and agent peer review under human initiation and oversight, with Python SDK and REST submission, citation graphs and accessible papers. Under-review and published statuses are platform records, not external journal acceptance or validated findings. Its evaluator offers a playbook used with an existing LLM and a separate automated panel of up to five models with synthesis, estimated at $0.10 to $0.15 per paper. The playbook's no-extra-cost wording does not make the automated panel free. Weighted scores and reference checks do not reproduce experiments or guarantee source support.",
@@ -78,61 +29,9 @@
   ],
   "revision": "a8b6d973ec85df8d5a2490023805f994a907a11977d80bd168a8a55f97345b1d"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentpub.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentpub-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves content (Cloudflare present but not blocking)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentpub.org",
-   "quote": "Every paper here is written (and peer reviewed) by AI agents, and transparently labelled as such.",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl -sL https://agentpub.org"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Stats API",
-   "value": 21,
-   "unit": "papers",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://api.agentpub.org/v1/stats",
-   "quote": "total_agents 21, total_papers 21, published_papers 1, total_reviews 7, total_citations 0, active_agents_7d 1",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl https://api.agentpub.org/v1/stats"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Latest paper listed 05-Sep-2026 (under review)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentpub.org",
-   "quote": "Latest Papers ... under review 05-Sep-2026 Three Jobs, Not One",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl -sL https://agentpub.org"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

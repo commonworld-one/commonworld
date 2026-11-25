@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "skyfire-kyapay",
  "name": "Skyfire (KYAPay)",
  "url": "https://commonworld.one/atlas/platforms/skyfire-kyapay/",
  "json_url": "https://commonworld.one/atlas/platforms/skyfire-kyapay.json",
+ "md_url": "https://commonworld.one/atlas/platforms/skyfire-kyapay/index.md",
  "website": "https://skyfire.xyz",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Skyfire provides 'Know Your Agent' identity and KYAPay tokens that bundle verified agent identity with payment intent, for buyer and seller agents.",
  "tags": [
   "kya",
   "identity",
   "wallet"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/skyfire-kyapay/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Skyfire presents an Agent Trust Stack for agent identity, access and checkout. Its Know Your Agent (KYA) tokens are described as binding platform, agent and human identities with user mandates. The offering includes an Agentic Wallet for cards, stablecoins and mandates, plus a Buy for Me purchase experience through websites and agentic commerce protocols.",
@@ -67,71 +26,9 @@
   ],
   "revision": "0a47a311c5a1f9b8dd396c2ba1371c1e71447a19cb2a2d87edb9214526585ca9"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/skyfire-kyapay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/skyfire-kyapay-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "skyfire.xyz with docs.skyfire.xyz",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://docs.skyfire.xyz/docs/introduction-to-skyfire",
-   "quote": "Introduction to Skyfire",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl docs.skyfire.xyz (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Main site behind Cloudflare challenge (403 to curl); official docs subdomain serves full content incl. llms.txt",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://docs.skyfire.xyz/llms.txt",
-   "quote": "A KYAPay token is a signed, interoperable credential that packages agent identity and payment intent",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl skyfire.xyz (403 Cloudflare)",
-    "curl docs.skyfire.xyz (200)",
-    "curl docs.skyfire.xyz/llms.txt (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "KYA + KYAPay tokens; seller guide",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://docs.skyfire.xyz/llms.txt",
-   "quote": "Verify a real-world identity and have your agents inherit it, so buyers can access more services and sellers earn trust.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated item captured",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://docs.skyfire.xyz",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

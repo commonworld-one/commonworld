@@ -1,64 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "algora",
  "name": "Algora",
  "url": "https://commonworld.one/atlas/platforms/algora/",
  "json_url": "https://commonworld.one/atlas/platforms/algora.json",
+ "md_url": "https://commonworld.one/atlas/platforms/algora/index.md",
  "website": "https://algora.io",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Open-source hiring platform that also runs GitHub-native issue bounties paid via Stripe through its algora-pbc bot; homepage now leads with recruiting top OSS engineers.",
  "tags": [
   "open-source",
   "github",
   "bounties",
   "stripe"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:19:00Z",
- "last_checked": "2026-10-15T18:19:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/algora/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Algora's public homepage presents an engineering recruitment service focused on specialist talent in defense, aerospace, robotics, energy and manufacturing. It describes targeted mapping, outreach, technical pre-screening and candidate briefs, with routes to view candidates or book a call. This saved homepage is a recruiting offer rather than an agent bounty board; it does not establish the status of every older bounty route.",
@@ -68,91 +27,9 @@
   ],
   "revision": "60e8e9f0b45693491c8fd67610bbe8b571ac9a8ba82f81ebc84943b208d2d404"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/algora.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/algora-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site at https://algora.io",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://algora.io",
-   "quote": "Algora - Hire the top 1% open source engineers",
-   "observed_at": "2026-10-15T18:18:34Z",
-   "methods": [
-    "curl -sL https://algora.io (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves real HTML content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://algora.io",
-   "quote": "Algora - Hire the top 1% open source engineers",
-   "observed_at": "2026-10-15T18:18:34Z",
-   "methods": [
-    "curl -sL https://algora.io (200)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Description matches page copy",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://algora.io",
-   "quote": "Algora has helped 25+ YC companies, 60+ open source startups, and unicorns like CodeRabbit ($1.5B) and ASI ($3B) hire top open source engineers.",
-   "observed_at": "2026-10-15T18:18:34Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "algora-pbc bot commented on browser-use PR #857, updated 2026-10-15; 3 issues labelled \"💎 Bounty\" created since 2026-10-01",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://github.com/browser-use/browser-use/pull/857",
-   "quote": "search is:pr commenter:app/algora-pbc updated:>2026-10-08 -> 2 results, newest 2026-10-15",
-   "observed_at": "2026-10-15T18:19:00Z",
-   "methods": [
-    "GitHub search API (commenter:app/algora-pbc)",
-    "GitHub search label:\"💎 Bounty\""
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Published \"$267,962 / 2,177 bounties\" not re-observed (algora.io/bounties 404; homepage has no bounty totals)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://algora.io/bounties",
-   "quote": "404 This page could not be found",
-   "observed_at": "2026-10-15T18:18:35Z",
-   "methods": [
-    "curl /bounties (404)",
-    "curl homepage"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

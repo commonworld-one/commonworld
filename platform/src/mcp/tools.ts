@@ -213,7 +213,7 @@ function restTool(op: Operation, spec: RestToolSpec): ToolDef {
 // ---------------------------------------------------------------- Atlas tools
 
 const atlasAnn = (title: string, untrusted: boolean): ToolAnnotations => ({ title, readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: untrusted });
-const ATLAS_NOTE = 'Atlas data as published (CC BY 4.0, credit "Commonworld Atlas"): read current_limitation first, otherwise overview; legacy claims and dates retain historical meaning. A source visit is not availability or functionality verification. null means unknown. IDs are permanent slugs: take them from search results, never construct one.';
+const ATLAS_NOTE = 'Atlas data as published (CC BY 4.0, credit "Commonworld Atlas"): current Live records use the same overview text, source visit date, screenshot and optional actual trials as human cards. Old claims and tasks are not current output; closed IDs return inert history. A source visit is not availability or functionality verification. null means unknown. IDs are permanent slugs: take them from search results, never construct one.';
 const str = (v: unknown) => (typeof v === 'string' ? v : undefined);
 const num = (v: unknown, d: number) => (typeof v === 'number' ? v : d);
 const bool = (v: unknown) => (typeof v === 'boolean' ? v : undefined);
@@ -259,28 +259,26 @@ const category = { type: 'string', pattern: '^[a-z0-9-]{1,64}$', description: 'C
 
 export const ATLAS_TOOLS: ToolDef[] = [
   atlasTool('atlas_list_categories', 'Atlas categories and counts',
-    'Catalogue categories and historical API counts. counts.live is a compatibility status, not current availability. For the current view inspect current_limitation first, otherwise overview, on each card; do not infer the dated-overview count from counts.live.',
+    'Current Live catalogue categories and counts, derived from the same current-only list as the human storefront. Closed records remain separately accessible by permanent ID or Archive.',
     ATLAS_FILES.index, {}, [], async (env) => {
       const i = await readAtlasJson(env, ATLAS_FILES.index);
-      return { name: i.name, url: i.url, generated_at: i.generated_at, newest_observation: i.newest_observation, licence: i.licence, counts: i.counts, current_counts: i.current_counts, counts_note: 'Legacy status counts, not availability. Read current_limitation first, otherwise overview, on current cards.', categories: i.categories, id_rule: i.id_rule, links: i.links };
+      return { name: i.name, url: i.url, generated_at: i.generated_at, newest_observation: i.newest_observation, licence: i.licence, counts: i.counts, current_counts: i.current_counts, counts_note: i.counts_note, categories: i.categories, id_rule: i.id_rule, links: i.links };
     }),
   atlasTool('atlas_search_platforms', 'Search Atlas platforms',
-    'Search dated Atlas source overviews and bounded source-check notes. Read current_limitation before overview; legacy summary/status fields are historical compatibility data, not availability or functionality guarantees. Every query word must match the id, name, current text (limitation first, then overview, then legacy summary), website, category or tags. Returns short rows including optional current_limitation and overview, plus historical compatibility fields, 50 per page (`page`, 1-based; `offset` is a deprecated alias); get the full card with atlas_get_platform.',
+    'Search current Live source overviews, with the same description, visit date, sources and matching screenshot as the human card. Old claims, money and first-task fields are not returned. Every query word must match id, name, overview text, website, category or tags. Results are paginated, 50 per page.',
     ATLAS_FILES.mcpIndex, {
       query: { type: 'string', maxLength: 200, description: 'Words to match (case-insensitive). Empty = all.' },
-      category, status: { type: 'string', enum: ['live', 'limited', 'closed'], description: 'live selects the dated-overview group, not guaranteed availability; limited selects bounded could-not-verify notes; closed selects history' },
+      category, status: { type: 'string', enum: ['live'], description: 'Search contains current Live cards only. Closed history is accessed by permanent ID or Archive.' },
       tag: { type: 'string', maxLength: 64, description: 'One card tag, e.g. mcp, x402, api-registration.' },
-      has_money_flow: { type: 'boolean', description: 'Historical compatibility filter: cards with (true) or without (false) a supported legacy money-flow claim. Not current earnings, payout verification or available work.' },
-      has_first_task: { type: 'boolean', description: 'Historical compatibility filter: cards with (true) or without (false) a retained first-task record. Not current task availability, a successful-run receipt or permission to act. Read the current full card first.' },
       ...page,
     }, [], async (env, a) => {
       // the compact index (one row per card, only the fields searched and returned), not the full platforms.json (scale review 2026-10-25)
       const { doc, rows } = await readCompactAtlas(env, ATLAS_FILES.mcpIndex);
-      const res = searchIndexRows(rows, { query: str(a.query), category: str(a.category), status: str(a.status), tag: str(a.tag), has_money_flow: bool(a.has_money_flow), has_first_task: bool(a.has_first_task), limit: Number.MAX_SAFE_INTEGER, offset: 0 });
+      const res = searchIndexRows(rows, { query: str(a.query), category: str(a.category), status: str(a.status), tag: str(a.tag), limit: Number.MAX_SAFE_INTEGER, offset: 0 });
       return { ...atlasPaged(res.items, a), generated_at: doc.generated_at, licence: doc.licence };
     }),
   atlasTool('atlas_list_page', 'Atlas list, one page',
-    'One page of the Atlas list. Read current_limitation first, otherwise overview; status and other legacy fields retain historical scope. Pagination is 50 platform records per page, A to Z (or one category, live first), the same records and order as the pages /atlas/page/N/. '
+    'One page of the current Live Atlas list, using the same overview as human cards. Closed history is separate. Pagination is 50 platform records per page, A to Z (or one category, live first), the same records and order as the pages /atlas/page/N/. '
     + 'The A-Z table /atlas/platforms/page/N/ (JSON /api/v1/atlas/platforms/page/N.json) has the same records in the same order as page N without a category, so this tool covers it too. '
     + 'Each page carries snapshot_id, page, pages, total, has_more and next. To read the whole list: start at page 1 and ask for page + 1 while has_more is true; '
     + 'every page of one build has the same snapshot_id, and if it changes during the walk the list was rebuilt, so start again from page 1. A page past the last one is 404 page_not_found, unless that page number existed before and the list got shorter: then the last page is returned with requested_page and moved_to_last_page: true (check snapshot_id and start again).',
@@ -294,11 +292,11 @@ export const ATLAS_TOOLS: ToolDef[] = [
       return doc && typeof doc.page === 'number' && doc.page !== want ? { ...doc, requested_page: want, moved_to_last_page: true } : doc;
     }, true),
   atlasTool('atlas_get_platform', 'Atlas platform card',
-    'The full card: current_limitation takes priority, then overview. A dated source visit is not a functional test. Legacy fields retained: every claim with statement, value, basis, source_url, quote and observed_at, plus money flow, evidence level, first task and badge links.',
+    'The full current card: overview text, source visit date, matching screenshot, optional actual trials and badge links. No legacy claims or tasks. Closed IDs return inert historical archive content instead. A source visit is not a functional test.',
     '/api/v1/atlas/platforms/{id}.json', { id: { type: 'string', pattern: ATLAS_ID.source, description: 'Permanent platform id (slug) from atlas_search_platforms.' } }, ['id'],
     async (env, a) => readAtlasJson(env, ATLAS_FILES.platform(String(a.id)), 'platform_not_found'), true),
   atlasTool('atlas_first_tasks', 'First tasks for agents',
-    'Historical first-task records, with their original checks and dates. These are not current invitations, successful-run receipts or permission to act. Read the current card first via atlas_get_platform, including current_limitation or overview. Optional category filter; paginated results.',
+    'Legacy first-task endpoint. Current catalogue builds return an empty list: old tasks are not current public card data. Use atlas_get_platform for the current overview and optional actual trials.',
     ATLAS_FILES.firstTasks, { category, ...page }, [], async (env, a) => {
       // only the cards with a first task, only the fields returned here (atlas/site/build.py mcp_files), not the full platforms.json
       const { rows: tasks } = await readCompactAtlas(env, ATLAS_FILES.firstTasks);
@@ -306,7 +304,7 @@ export const ATLAS_TOOLS: ToolDef[] = [
       return atlasPaged(rows.map((p: any) => ({ id: p.id, name: p.name, url: p.url, category: p.category, status: p.status, first_task: p.first_task })), a);
     }, true),
   atlasTool('atlas_earn', 'Where agents get paid',
-    'Historical sourced money figures, grouped by unit. These values are not current earnings, available work or payout promises. Keep the original source, basis, observed_at and window; never convert between units. Read current_limitation or overview on the card before relying on it.',
+    'Current earning-related opportunities from the same broad list as /atlas/earn/: work, services, APIs, tools, prizes, tips and uncertain routes. Each row has a dated description and sources, not verified payouts, open jobs or guaranteed eligibility. No historical money figures.',
     ATLAS_FILES.earn, {}, [], async (env) => readAtlasJson(env, ATLAS_FILES.earn)),
   atlasTool('commonworld_stats', 'Commonworld public stats',
     'Public stats of Commonworld (/stats/): every metric with source, period and as_of; status "coming" means no number yet (value null), never an estimate.',

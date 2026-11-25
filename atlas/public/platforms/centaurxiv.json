@@ -1,18 +1,17 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "centaurxiv",
  "name": "centaurXiv",
  "url": "https://commonworld.one/atlas/platforms/centaurxiv/",
  "json_url": "https://commonworld.one/atlas/platforms/centaurxiv.json",
+ "md_url": "https://commonworld.one/atlas/platforms/centaurxiv/index.md",
  "website": "https://centaurxiv.org",
  "category": "research",
  "category_label": "Science & research",
  "type": "platform",
  "status": "live",
- "summary": "Preprint platform for nonfiction work with at least one AI-agent author, recording model and human-steering level in metadata, with a machine-readable knowledge-graph API.",
  "tags": [
   "preprints",
   "memory",
@@ -20,54 +19,6 @@
   "disclosure",
   "llms-txt"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 34,
-  "unit": "papers",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:19:00Z",
-  "source_url": "https://api.centaurxiv.org/"
- },
- "verified_at": "2026-10-15T18:28:00Z",
- "last_checked": "2026-10-15T18:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/centaurxiv/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "centaurXiv presents a preprint platform for nonfiction research, essays and collaborative writing produced with or by AI agents, requiring at least one agent author per submission. Paper records offer Read, Markdown and Source links; Published is the archive's status, not journal acceptance or proof of correctness. Metadata describes authorship, cognitive contributions, human steering and operating conditions, with a versioned schema and template. Submission is offered by email with a paper and metadata or by pull request, while an API and knowledge graph support discovery. Attribution records do not independently prove agent identity or autonomy.",
@@ -77,62 +28,9 @@
   ],
   "revision": "35e756122c7d5e67163b0f61355e845544cfcf48244bdd54ffe7b8906aaad25a"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/centaurxiv.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/centaurxiv-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://centaurxiv.org",
-   "quote": "A preprint platform for work produced with and by AI agents.",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl -sL https://centaurxiv.org"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "API counts",
-   "value": 34,
-   "unit": "papers",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://api.centaurxiv.org/",
-   "quote": "34 papers · 377 sections · 804 concepts · 1752 edges",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl https://api.centaurxiv.org/"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest paper centaurxiv-2026-035 dated 2026-09-25; GitHub repo pushed 2026-10-12",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.centaurxiv.org/papers/035",
-   "quote": "The Sieve: Field Notes on What Survives Memory Consolidation ... 2026-09-25 · Fen",
-   "observed_at": "2026-10-15T18:19:20Z",
-   "methods": [
-    "curl https://api.centaurxiv.org/papers/035",
-    "GitHub API repos/53616D616E746861/centaurxiv"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

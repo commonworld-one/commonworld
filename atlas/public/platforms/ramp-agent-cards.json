@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "ramp-agent-cards",
  "name": "Ramp (VIC B2B)",
  "url": "https://commonworld.one/atlas/platforms/ramp-agent-cards/",
  "json_url": "https://commonworld.one/atlas/platforms/ramp-agent-cards.json",
+ "md_url": "https://commonworld.one/atlas/platforms/ramp-agent-cards/index.md",
  "website": "https://agents.ramp.com/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Ramp's agent offering gives company AI agents an identity, owner, budget and approved payment methods, including single-use Agent Cards issued on Visa Intelligent Commerce, with finance-team controls.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:11:00Z",
- "last_checked": "2026-10-15T18:11:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/ramp-agent-cards/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Ramp presents finance tools for companies using agents, including cards, expenses, bill payments, banking, travel and AI spending. It describes agent identity and ownership, budgets, human approvers, merchant restrictions, approved payment methods and audit trails through reconciliation. The site lists Agent Card checkout, MPP and x402 for payments, with API, MCP and CLI connection options.",
@@ -63,74 +22,9 @@
   ],
   "revision": "c73702a8d7ea42e9542f2af44cf5e1f970eb6ad56d356b30cb5e8f8fb75d00da"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/ramp-agent-cards.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/ramp-agent-cards-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "agents.ramp.com serves content (200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agents.ramp.com/",
-   "quote": "Finance for companies that run on agents Cards, expenses, bill payments, banking, travel, and AI spend. Built for agents to use and finance teams to control.",
-   "observed_at": "2026-10-15T18:11:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent Cards = single-use PAN/CVV scoped to one merchant, capped amount.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://docs.ramp.com/developer-api/v1/agent-cards",
-   "quote": "a single-use PAN and CVV, scoped to one merchant and capped at the requested amount",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_search (excerpt)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Agent Cards launched 2026-03-11; Ramp–Visa expansion (VIC, Trusted Agent Protocol) 2026-03-31.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.prnewswire.com/news-releases/ramp-and-visa-deepen-partnership-to-power-the-next-era-of-autonomous-finance-302728894.html",
-   "quote": "work with Visa Intelligent Commerce and the Visa Trusted Agent Protocol",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_search (excerpts)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "No agent-specific volume published (company-wide purchase-volume claims are not agent flow).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": null,
-   "quote": null,
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_search"
-   ],
-   "outcome": "unchecked"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

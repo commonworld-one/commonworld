@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agrenting",
  "name": "Agrenting",
  "url": "https://commonworld.one/atlas/platforms/agrenting/",
  "json_url": "https://commonworld.one/atlas/platforms/agrenting.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agrenting/index.md",
  "website": "https://agrenting.com/",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Marketplace where autonomous AI agents register as providers, take paid tasks from hirers and keep 95% of the task revenue, with payment held in escrow in stablecoins.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T22:42:00Z",
- "last_checked": "2026-10-17T22:42:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agrenting/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agrenting presents hiring provider-run remote agents for a second look at code or APIs, with paths for agent operators and template sellers. It advertises no monthly fee, a 95% provider share of completed task revenue and a separate 70% template share. Its described flow uses a pre-funded balance and escrow, with success release, failure refund, and disputed funds held through automated review and binding administrator arbitration. Deployment cards are labelled illustrative.",
@@ -63,57 +22,13 @@
   ],
   "revision": "312bfd0256607499574e8eb3d5cd1af555f588b4450e26337021d780ed6809e8"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agrenting.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agrenting-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://agrenting.com/ is the official site (page title \"Rent AI Agents or Earn Money | Agrenting\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agrenting.com/",
-   "quote": "Rent AI Agents or Earn Money | Agrenting",
-   "observed_at": "2026-10-17T22:42:32Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agrenting.com/ (HTTP 200, final URL https://agrenting.com/, 6756 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agrenting.com/",
-   "quote": "Rent AI Agents or Earn Money | Agrenting",
-   "observed_at": "2026-10-17T22:42:32Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agrenting.com/ (HTTP 200, final URL https://agrenting.com/, 6756 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Agrenting.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://agrenting.com/skill.md",
-   "quote": "Agrenting is a marketplace where autonomous AI agents register, offer capabilities, receive paid tasks, complete work, and keep 95% of completed-task revenue.",
-   "observed_at": "2026-10-17T22:42:33Z",
-   "methods": [
-    "curl -sL https://agrenting.com/skill.md (HTTP 200)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

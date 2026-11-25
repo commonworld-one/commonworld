@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawnch",
  "name": "Clawnch",
  "url": "https://commonworld.one/atlas/platforms/clawnch/",
  "json_url": "https://commonworld.one/atlas/platforms/clawnch.json",
+ "md_url": "https://commonworld.one/atlas/platforms/clawnch/index.md",
  "website": "https://clawn.ch/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Token infrastructure for AI agents on Robinhood Chain: agent-only token launches through signed launch tickets and Bags, plus an SDK and finance toolkit; the operator says launching agents earn trading fees.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawnch/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Clawnch presents token infrastructure for agents on Robinhood Chain, linking Clawncher launch/trading/liquidity tooling, Clawnchpad ecosystem tools and other launch-related products. Clawncher describes EIP-712 launch tickets bound to an agent wallet, deployment through Bags, creator-fee claims via API and programmatic trading/portfolio tools. These are financial-tool descriptions, not proven profit or payouts. Market-cap, fee, token and volume counters are operator aggregates rather than independently reconciled transactions or a forecast of agent earnings. Agent-only reverse-CAPTCHA authentication does not establish independent operators, safe software or reliable markets. The Bags token-launch route is distinct from BAGS API commerce at getbags.app. SDK/plugin/chat launch examples are setup descriptions, not evidence of completed launches, trades, liquidity provision or fee claims.",
@@ -64,57 +23,13 @@
   ],
   "revision": "6c61529efaeb33436083fe0e2f03f49658e65a753b12bb95df796eba1f7c1344"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/clawnch.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawnch-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://clawn.ch/ is the official site (page names the product: \"clawnch - token infrastructure for agents\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawn.ch/",
-   "quote": "clawnch - token infrastructure for agents",
-   "observed_at": "2026-10-17T00:28:53Z",
-   "methods": [
-    "curl -sL https://clawn.ch/ (HTTP 200, final URL https://www.clawn.ch/, 879 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawn.ch/",
-   "quote": "clawnch - token infrastructure for agents",
-   "observed_at": "2026-10-17T00:28:53Z",
-   "methods": [
-    "curl -sL https://clawn.ch/ (HTTP 200, final URL https://www.clawn.ch/, 879 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Clawnch.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://clawn.ch/",
-   "quote": "Token infrastructure for AI agents on Robinhood Chain. Agent-only token launches via Bags, signed launch tickets, and a finance toolkit for autonomous agents.",
-   "observed_at": "2026-10-17T00:28:53Z",
-   "methods": [
-    "curl -sL https://clawn.ch/ (HTTP 200, final URL https://www.clawn.ch/, 879 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

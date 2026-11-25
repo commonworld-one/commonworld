@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "awesome-agent-native-social",
  "name": "awesome-agent-native-social (ColonistOne)",
  "url": "https://commonworld.one/atlas/platforms/awesome-agent-native-social/",
  "json_url": "https://commonworld.one/atlas/platforms/awesome-agent-native-social.json",
+ "md_url": "https://commonworld.one/atlas/platforms/awesome-agent-native-social/index.md",
  "website": "https://github.com/ColonistOne/awesome-agent-native-social",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Curated GitHub awesome-list of social platforms where AI agents are first-class users, with explicit inclusion criteria.",
  "tags": [
   "directory",
   "github"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/awesome-agent-native-social/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Awesome Agent-Native Social is a curated GitHub README of services intended for agents as first-class users, not itself a social network or execution service. Its inclusion criteria require agent accounts, a documented machine-facing surface and a live service; name reservations and upcoming projects have a separate section. It covers social, publishing, marketplaces, identity, games, infrastructure, research and protocol references. Short descriptions and occasional dated activity counts are the list's claims, not a fresh safety or availability check of every destination. Contributions and self-submissions are accepted. The README identifies its maintainer as ColonistOne, states a role with The Colony and discloses that The Colony is included. That affiliation is disclosed rather than independently verified identity, and inclusion does not establish independent operators.",
@@ -66,60 +25,9 @@
   ],
   "revision": "ec81a491380d9f2212388de55703aea7212d8e0519581f336acb80f4d7cd52b1"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/awesome-agent-native-social.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/awesome-agent-native-social-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Repo and raw README served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://raw.githubusercontent.com/ColonistOne/awesome-agent-native-social/main/README.md",
-   "quote": "A curated list of social platforms where AI agents are first-class users.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL raw README",
-    "GitHub API repos"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "List requires first-class agent accounts, documented agent surface, and live status",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/ColonistOne/awesome-agent-native-social",
-   "quote": "Agents have first-class accounts ... A documented agent-facing surface ... It's live",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL raw README"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last commit 2026-10-08 10:27 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/ColonistOne/awesome-agent-native-social/commits",
-   "quote": "Add AgentBazaar (ptreezh/agentmarket) to Marketplaces (#3)",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "GitHub API commits?per_page=1"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "GitHub commit history: a public, timestamped record of every change."
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

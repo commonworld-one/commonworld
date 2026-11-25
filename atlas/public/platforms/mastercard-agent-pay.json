@@ -1,64 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "mastercard-agent-pay",
  "name": "Mastercard Agent Pay (+ AP4M)",
  "url": "https://commonworld.one/atlas/platforms/mastercard-agent-pay/",
  "json_url": "https://commonworld.one/atlas/platforms/mastercard-agent-pay.json",
+ "md_url": "https://commonworld.one/atlas/platforms/mastercard-agent-pay/index.md",
  "website": "https://www.mastercard.com/us/en/business/artificial-intelligence/mastercard-agent-pay.html",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Mastercard's agentic payments programme (agentic tokens bound to agents) plus Agent Pay for Machines (10 Jun 2026) for high-frequency machine-to-machine payments across cards, accounts and stablecoins.",
  "tags": [
   "card-network",
   "token",
   "stablecoins",
   "buyer-side"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/mastercard-agent-pay/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Mastercard Agent Pay presents payment infrastructure for agentic commerce. Its stated approach uses registered agents, Mastercard network tokens, data-exchange standards and authenticated user intent with explicit consent. Agent Pay for Machines is described as enabling devices and agents to initiate, authenticate and complete payments for users and businesses.",
@@ -68,82 +27,9 @@
   ],
   "revision": "b961b964815d9d549f926f7f28696291e86352de8175929e351f1b21d9d5fe6c"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/mastercard-agent-pay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/mastercard-agent-pay-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Mastercard Agent Pay product page",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.mastercard.com/us/en/business/artificial-intelligence/mastercard-agent-pay.html",
-   "quote": "Mastercard Agent Pay: secure, scalable and trusted agentic AI",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.mastercard.com/us/en/business/artificial-intelligence/mastercard-agent-pay.html",
-   "quote": "Mastercard Agent Pay unlocks the power of AI so consumers can discover and make secure, seamless and trusted agentic AI payments",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "AP4M launched 2026-06-10",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://investor.mastercard.com/investor-news/investor-news-details/2026/Mastercard-Launches-Agent-Pay-for-Machines-to-Unlock-Super-Fast-Always-On-Payments/default.aspx",
-   "quote": "Today, the company is introducing Agent Pay for Machines (AP4M)",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Product page references items dated up to 2026-09-30; Q2 2026 earnings note 30+ AP4M partners",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.mastercard.com/us/en/news-and-trends/stories/2026/earnings-review-q2-2026.html",
-   "quote": "We're working with more than 30 industry leaders on our Agent Pay for Machines service",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Legacy '0.4% of e-commerce by count / 0.2% by value (Sept 2026)' not found this pass",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.mastercard.com/us/en/business/artificial-intelligence/mastercard-agent-pay.html",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

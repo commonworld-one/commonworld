@@ -1,91 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "fluxa",
  "name": "FluxA",
  "url": "https://commonworld.one/atlas/platforms/fluxa/",
  "json_url": "https://commonworld.one/atlas/platforms/fluxa.json",
+ "md_url": "https://commonworld.one/atlas/platforms/fluxa/index.md",
  "website": "https://fluxapay.xyz",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "FluxA offers AI-agent payment infrastructure: an agent co-wallet with budgets/mandates, single-use AgentCards, AgentMarket discovery and AgentCharge for accepting USDC from agents.",
  "tags": [
   "x402",
   "facilitator",
   "throughput",
   "wallet"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402-list on-chain measurement: FluxA facilitator settled $313,309.69 over 30 d (248,480 settlements; $157,930.92 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 313309.69,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators"
-  },
-  {
-   "statement": "x402stats: fluxa attributed seller volume $321,401 over 30 d, 3,582 sellers of which 3 pass the organic filter (>=$100, >=3 buyers).",
-   "value": "$321,401",
-   "unit": "USD (seller volume, unfiltered)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402stats.io/llms-full.txt"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 140417,
-  "unit": "agent wallets (claimed)",
-  "window": "cumulative",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://fluxapay.xyz/"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/fluxa/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/facilitators",
-   "quote": "\"volume_usd_30d\":313309.69,\"tx_count_30d\":248480,\"volume_usd_7d\":157930.92,\"last_activity_at\":\"2026-11-22T00:00:00.000Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "FluxA presents agent-payment infrastructure spanning AgentWallet, single-use AgentCard, AgentMarket discovery, AgentCharge USDC acceptance and AI spending management. Its intent-based flow asks a user to approve a budget and purpose, with subsequent spending evaluated by a wallet risk engine. Payment Security is labelled beta. Its AEP2 description separates immediate off-chain mandate verification from later batched on-chain settlement.",
@@ -99,98 +31,5 @@
  "badge_svg": "https://commonworld.one/atlas/badge/fluxa.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/fluxa-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "200.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://fluxapay.xyz/",
-   "quote": "Extensible Payment Layer for AI Agents",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Claims 140,417 agents created FluxA wallets.",
-   "value": 140417,
-   "unit": "agent wallets (claimed)",
-   "window": "cumulative",
-   "basis": "operator_claim",
-   "source_url": "https://fluxapay.xyz/",
-   "quote": "140,417 AI agents created FluxA wallets",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402-list on-chain measurement: FluxA facilitator settled $313,309.69 over 30 d (248,480 settlements; $157,930.92 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 313309.69,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/facilitators",
-   "quote": "\"volume_usd_30d\":313309.69,\"tx_count_30d\":248480,\"volume_usd_7d\":157930.92,\"last_activity_at\":\"2026-11-22T00:00:00.000Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "select the one row of data with facilitator_id=fluxa (41 rows read)",
-    "read volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "verify": {
-    "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "note": "The same figure as JSON: the one row of data with facilitator_id=fluxa, field volume_usd_30d (about 17 KB)."
-   },
-   "history": [
-    {
-     "value": "$323.1k",
-     "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
-     "statement": "x402-list on-chain measurement: FluxA facilitator settled $323.1k over 30 d ($143.5k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15. Gross settlement throughput.",
-     "quote": "FluxA ... $143.5k $323.1k 2026-10-15",
-     "source_url": "https://x402-list.com/facilitators",
-     "observed_at": "2026-10-15T18:10:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "fluxa-x402-list-30d",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public dashboard: x402-list measures each facilitator's on-chain USDC settlement, with 7-day and 30-day volume updated daily."
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402stats: fluxa attributed seller volume $321,401 over 30 d, 3,582 sellers of which 3 pass the organic filter (>=$100, >=3 buyers).",
-   "value": "$321,401",
-   "unit": "USD (seller volume, unfiltered)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "source_url": "https://x402stats.io/llms-full.txt",
-   "quote": "fluxa: ... ($321,401), 3,582 sellers (3 organic)",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl https://x402stats.io/llms-full.txt"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public data file of the x402stats dashboard (CC BY 4.0), updated daily with 30-day volume per facilitator."
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

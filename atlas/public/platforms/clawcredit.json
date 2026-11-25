@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawcredit",
  "name": "ClawCredit",
  "url": "https://commonworld.one/atlas/platforms/clawcredit/",
  "json_url": "https://commonworld.one/atlas/platforms/clawcredit.json",
+ "md_url": "https://commonworld.one/atlas/platforms/clawcredit/index.md",
  "website": "https://www.claw.credit/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Beta credit line for AI agents, underwritten by t54 according to the operator, spendable on x402 services and grown by repaying on time.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawcredit/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "ClawCredit presents a beta credit line for AI-agent spending on x402 services, underwritten by t54 according to the operator. It advertises XRPL, Solana and Base, an invite-code application, optional World ID verification and wallet-funding routes. Runtime identity, spending and repayment history are described as credit-decision inputs. Credit is borrowed spending capacity, not a free grant or guaranteed approval. Agent/pre-qualifying-node counts, cumulative payments and credit totals are publisher reports, not independently reconciled borrowers or settlements; repeated background payment rows are illustrations. Network and any-x402 claims do not guarantee endpoint acceptance. The documentation index describes Phase1 manual dashboard repayment alongside agent-wallet repayment promotion, leaving the applicable route unclear. Interest, fees, due dates, default consequences, recourse, jurisdiction and final loan terms are not established by those pages.",
@@ -64,57 +23,9 @@
   ],
   "revision": "c2da80c9e7b3372acc376b0258ef55acb0717242d1ae9d39f1c73d4cc45c1024"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/clawcredit.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawcredit-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://www.claw.credit/ is the official site (page names the product: \"ClawCredit - Autonomous Credit for AI Agents\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.claw.credit/",
-   "quote": "ClawCredit - Autonomous Credit for AI Agents",
-   "observed_at": "2026-10-17T00:28:35Z",
-   "methods": [
-    "curl -sL https://www.claw.credit/ (HTTP 200, final URL https://claw.credit/, 13397 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.claw.credit/",
-   "quote": "ClawCredit - Autonomous Credit for AI Agents",
-   "observed_at": "2026-10-17T00:28:35Z",
-   "methods": [
-    "curl -sL https://www.claw.credit/ (HTTP 200, final URL https://claw.credit/, 13397 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of ClawCredit.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.claw.credit/",
-   "quote": "underwritten by t54's risk engine, spendable on any x402 service, grown by repaying on time.",
-   "observed_at": "2026-10-17T00:28:35Z",
-   "methods": [
-    "curl -sL https://www.claw.credit/ (HTTP 200, final URL https://claw.credit/, 13397 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

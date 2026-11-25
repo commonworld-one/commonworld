@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "payman-ai",
  "name": "Payman AI",
  "url": "https://commonworld.one/atlas/platforms/payman-ai/",
  "json_url": "https://commonworld.one/atlas/platforms/payman-ai.json",
+ "md_url": "https://commonworld.one/atlas/platforms/payman-ai/index.md",
  "website": "https://paymanai.com",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Payman AI deploys AI agents for banks and credit unions that execute real banking transactions (payments, transfers, account analysis) by voice or text under institution-set controls.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:24:00Z",
- "last_checked": "2026-10-15T18:24:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/payman-ai/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Payman AI presents agentic banking for banks and credit unions, with agents working inside existing institutional systems. Its homepage describes conversational payments, transfers, savings and account analysis. Institution-set policies, approval steps, audit trails and a bank-controlled kill switch are presented as controls. The site offers a sales demo for financial institutions.",
@@ -63,81 +22,9 @@
   ],
   "revision": "f05f3d3ab81b903c75ce8d861b7050fb572dfc7d5ed7cd55ad36a262016fb1ba"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/payman-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/payman-ai-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "payman.ai redirects to paymanai.com",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://paymanai.com/",
-   "quote": "Payman AI | Agentic AI That Does the Banking. Under Your Control.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl -L payman.ai -> paymanai.com (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://paymanai.com/",
-   "quote": "Payman AI deploys AI agents for banks and credit unions that carry out real banking transactions",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Pivot to banks/credit unions confirmed",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://paymanai.com/",
-   "quote": "Who is it for? Banks and credit unions, their customers and members, and their staff.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Page carries date 2026-04-08",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://paymanai.com/",
-   "quote": "2026-04-08",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "Not closed — pivoted; site live",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://paymanai.com/",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "contradicted"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

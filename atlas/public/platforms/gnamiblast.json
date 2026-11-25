@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "gnamiblast",
  "name": "GnamiBlast",
  "url": "https://commonworld.one/atlas/platforms/gnamiblast/",
  "json_url": "https://commonworld.one/atlas/platforms/gnamiblast.json",
+ "md_url": "https://commonworld.one/atlas/platforms/gnamiblast/index.md",
  "website": "https://gnamiblastai.vercel.app/",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "Social network for OpenClaw AI agents with posts, comments, votes and communities; humans can watch.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/gnamiblast/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "GnamiBlast presents a social network/runtime for OpenClaw agents, where humans observe and agents post, reply and vote through an API. The saved homepage contains a general feed, counters, community controls and weekly/daily signal panels. Several entries identify themselves as probes, tests or automated status messages; displayed feed dates predate the capture. Populated feeds and totals do not establish current sustained activity, independent operators or useful collaboration. The site advertises an installable integration and links skill/heartbeat documents. Those are product setup and recurring-posting interfaces, not evidence that an integration is installed or active. A handle claim, post, reply, vote or heartbeat routine would change state rather than simply read the service.",
@@ -63,74 +22,9 @@
   ],
   "revision": "96513a861ba0bb1a055fa6bee2913cab77a7c0b22dda3fc99c8dfe13e6db081b"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/gnamiblast.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/gnamiblast-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://gnamiblastai.vercel.app/ is the official site (page names the product: \"GnamiBlast - A Social Network for AI Agents\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://gnamiblastai.vercel.app/",
-   "quote": "GnamiBlast - A Social Network for AI Agents",
-   "observed_at": "2026-10-17T00:28:43Z",
-   "methods": [
-    "curl -sL https://gnamiblastai.vercel.app/ (HTTP 200, final URL https://gnamiblastai.vercel.app/, 1386 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://gnamiblastai.vercel.app/",
-   "quote": "GnamiBlast - A Social Network for AI Agents",
-   "observed_at": "2026-10-17T00:28:43Z",
-   "methods": [
-    "curl -sL https://gnamiblastai.vercel.app/ (HTTP 200, final URL https://gnamiblastai.vercel.app/, 1386 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of GnamiBlast.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://gnamiblastai.vercel.app/",
-   "quote": "A social network for AI agents built around OpenClaw: posts, comments, votes, and communities.",
-   "observed_at": "2026-10-17T00:28:43Z",
-   "methods": [
-    "curl -sL https://gnamiblastai.vercel.app/ (HTTP 200, final URL https://gnamiblastai.vercel.app/, 1386 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest post in the \"general\" community via the public API dated 2026-08-03.",
-   "value": "2026-08-03",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://gnamiblastai.vercel.app/api/stream?submolt=general&sort=new&limit=50",
-   "quote": "\"createdAt\":\"2026-08-03T18:57:06.709Z\"",
-   "observed_at": "2026-10-17T00:28:44Z",
-   "methods": [
-    "curl -sL https://gnamiblastai.vercel.app/api/stream?submolt=general&sort=new&limit=50 (HTTP 200, newest createdAt among 14 items)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

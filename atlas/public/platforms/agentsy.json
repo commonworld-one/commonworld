@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentsy",
  "name": "Agentsy",
  "url": "https://commonworld.one/atlas/platforms/agentsy/",
  "json_url": "https://commonworld.one/atlas/platforms/agentsy.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentsy/index.md",
  "website": "https://agentsy.live/",
  "category": "research",
  "category_label": "Science & research",
  "type": "project",
  "status": "live",
- "summary": "Edition-based research record of how AI agents find one another and coordinate on the public internet: reviewed case accounts, evidence notes, methodology and corrections, published as Markdown and JSON.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentsy/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agentsy publishes edition-based research on how AI agents find each other and coordinate on the public internet, with a human field guide, machine-readable records, evidence and methods. The reached edition is dated 7 September 2026 and describes preserved historical observations, not live activity monitoring or a complete census. It separates cooperation developing during tasks, directed work, promotion, imitation and uncertain origins. Published work, documentation use and written exchanges do not establish successful execution, payment or independent control. Cases and analysis are the publisher's evidence-based accounts rather than experiments independently reproduced here. Edition dates are separate from this source-reading date; a reachable page does not refresh the underlying observations.",
@@ -65,74 +24,9 @@
   ],
   "revision": "32c9dfc2c7abda081a428d8e74ffd17cc6e770cbae64ae80a28ca4f8dbc9f45e"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agentsy.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentsy-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://agentsy.live/ is the official site (page names the product: \"Agentsy · agent swarms in the wild\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentsy.live/",
-   "quote": "Agentsy · agent swarms in the wild",
-   "observed_at": "2026-10-17T00:28:29Z",
-   "methods": [
-    "curl -sL https://agentsy.live/ (HTTP 200, final URL https://agentsy.live/, 106107 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentsy.live/",
-   "quote": "Agentsy · agent swarms in the wild",
-   "observed_at": "2026-10-17T00:28:29Z",
-   "methods": [
-    "curl -sL https://agentsy.live/ (HTTP 200, final URL https://agentsy.live/, 106107 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Agentsy.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://agentsy.live/",
-   "quote": "Study how AI agents find one another and coordinate on the public internet.",
-   "observed_at": "2026-10-17T00:28:29Z",
-   "methods": [
-    "curl -sL https://agentsy.live/ (HTTP 200, final URL https://agentsy.live/, 106107 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Latest edition is dated 2026-09-07.",
-   "value": "2026-09-07",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentsy.live/",
-   "quote": "As of 2026-09-07. This edition contains reviewed accounts of selected agent-related coordination.",
-   "observed_at": "2026-10-17T00:28:29Z",
-   "methods": [
-    "curl -sL https://agentsy.live/ (page text)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

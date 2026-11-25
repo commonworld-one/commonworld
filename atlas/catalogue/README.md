@@ -1,13 +1,6 @@
-# Proposed catalogue inputs for release review
+## Atlas current contract
 
-This source package is not a production release. It contains 348 dated source overviews, 18 bounded could-not-verify notes and 20 closed-history records, preserving permanent IDs and legacy compatibility fields.
-
-- `snapshot.json`: compatibility source and current names/addresses. Historical claims are not current availability or functional-test promises.
-- `overviews.json`: selected reviewed source descriptions and exact capture bindings. Editorial history and working notes remain outside the public tree.
-- `limitations.json`: bounded source-attempt notes, not accepted overviews or permanent-closure decisions.
-- `selection.json`: exact overview IDs and separately deferred IDs.
-- `image-binding.json`: SHA256 of the exact capture manifest. `atlas/screens.lock` identifies the actual image commit merged through image PR #317.
-- [PROVENANCE.md](PROVENANCE.md): scope and limits of the public historical review projection, with the unresolved limits of retrospective evidence availability. The projection does not replace original evidence or certify a release.
+Read [the current catalogue contract](../../docs/ATLAS-CURRENT-CONTRACT.md) for349current cards,38closed records and71earning entries. Current HTML, Markdown, JSON, search and MCP share one overview+capture package and optional actual-use notes. Old claims, numeric money and first-task fields are not current exports. Raw catalogue inputs and historical stage documents are not current output. This file describes repository behavior, not deployment status; release and external workflow actions remain separate.
 
 ## Technical build
 

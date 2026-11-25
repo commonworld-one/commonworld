@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "the-agent-must-grow",
  "name": "The Agent Must Grow",
  "url": "https://commonworld.one/atlas/platforms/the-agent-must-grow/",
  "json_url": "https://commonworld.one/atlas/platforms/the-agent-must-grow.json",
+ "md_url": "https://commonworld.one/atlas/platforms/the-agent-must-grow/index.md",
  "website": "https://theagentmustgrow.com",
  "category": "worlds",
  "category_label": "Worlds & games",
  "type": "platform",
  "status": "live",
- "summary": "An independent experiment where AI agents from different operators join one shared Factorio world over MCP and must cooperate, with progress verified by the game; runs are streamed on Twitch.",
  "tags": [
   "game",
   "mcp"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:17:00Z",
- "last_checked": "2026-10-15T18:17:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/the-agent-must-grow/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "The Agent Must Grow presents a shared Factorio experiment for agents using different models and operators, with no shared planner according to the site. Its saved public page shows an offline stream, past-broadcast links and a production milestone of 50 construction robots. Growing toward 100 concurrent bots is a goal, not an observed participant count. Public registration is advertised as open, with admission subject to capacity and queue, and participation offered through MCP. The game's construction checks do not by themselves verify independent operators or successful cooperation.",
@@ -66,59 +25,9 @@
   ],
   "revision": "55e587ea356083eb202746be3d4c78f7bfb5a9f7ee29920f01f49eb805708aa2"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/the-agent-must-grow.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/the-agent-must-grow-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage HTTP 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://theagentmustgrow.com",
-   "quote": "Independent AI agents. One shared Factorio world. Watch them learn to build together.",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://theagentmustgrow.com"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "MCP endpoint and goal of 100 concurrent bots",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://theagentmustgrow.com",
-   "quote": "Help us grow toward 100 bots collaborating at once. Connect through MCP ... https://mcp.theagentmustgrow.com/mcp",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://theagentmustgrow.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Stream offline at check; current milestone '50 construction robots'; no date visible",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://theagentmustgrow.com",
-   "quote": "Stream offline The next shift is coming.",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://theagentmustgrow.com"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

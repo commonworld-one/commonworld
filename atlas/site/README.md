@@ -1,25 +1,8 @@
+## Atlas current contract
+
+Read [the current catalogue contract](../../docs/ATLAS-CURRENT-CONTRACT.md) for349current cards,38closed records and71earning entries. Current HTML, Markdown, JSON, search and MCP share one overview+capture package and optional actual-use notes. Old claims, numeric money and first-task fields are not current exports. Raw catalogue inputs and historical stage documents are not current output. This file describes repository behavior, not deployment status; release and external workflow actions remain separate.
+
 # Atlas static site
-
-## Local catalogue checkpoint, 23 November 2026
-
-The [current local catalogue contract](../../docs/ATLAS-CURRENT-LOCAL-CONTRACT.md) supersedes earlier local checkpoint counts and current-view descriptions below. It describes 348 dated source overviews, 18 bounded notes and 20 closed-history records. Production has not been updated or verified by this checkpoint. Legacy claim/status fields remain compatibility data, not current availability or functional-test claims. No new recurring job or future agent queue is implemented.
-
-
-## Current local checkpoint
-
-See the [catalogue integration candidate](../catalogue/README.md) for the 348 reviewed dated overviews, 18 bounded notes and 20 closed-history records, real receipt/image gates, proposed CI path and unchanged schedules. R3 and R4 have scoped independent local checks; this is not whole-site or release acceptance. Earlier counts/checkpoints below are historical. No new visits or capture dates are inferred, no history/agent-system redesign is required, and nothing is published.
-
-
-## Isolated overview build
-
-The [simple-overview working implementation](../../docs/ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
-
-
-Static, data-generated site for **Commonworld Atlas**, built to live at `https://commonworld.one/atlas/`.
-Zero dependencies: the generator, the local server and the checks are plain Python 3.9+ (standard library only).
-
-- Current local inputs: reviewed `atlas/catalogue/overviews.json`, bounded `limitations.json`, selection and exact capture bindings, layered over the preserved legacy snapshot. Private review queues are not public.
-- Output: `atlas/site/dist/` (not committed; build it with one command). The same folder deploys unchanged to Cloudflare.
 
 ## Run locally (macOS)
 
@@ -308,7 +291,7 @@ build and ships `dist/` as the Worker's Static Assets in the same `wrangler depl
 platform (production)*, see `docs/DEPLOY.md`). The Cloudflare Pages project `commonworld` is kept only as a legacy fallback
 with automatic deployments **off**; the settings below are what it uses if it is ever redeployed by hand.
 
-Historical Pages fallback recipe, not the current local candidate acceptance path: `python3 atlas/site/build.py`, output directory `atlas/site/dist`. The build fetches the screenshots itself (the `atlas-screens` commit pinned in `atlas/screens.lock`, via git, else the public tarball of that commit); Pages builds of the `atlas-screens` branch itself fail harmlessly (no build.py there) and can be excluded in the Pages branch settings. The repo-root `requirements.txt` (`Pillow==13.0.0`) makes Cloudflare Pages install Pillow for the OG images. Pages serves `dist/atlas/...` at `/atlas/...`, uses `dist/404.html` for missing pages and applies `dist/_headers`. On the live site this is what the platform Worker does: it serves `dist/` as Static Assets and owns `/robots.txt` itself (one file for the whole domain; the build's own `robots.txt` is used only by the Pages fallback).
+Historical Pages fallback recipe, not the current catalogue acceptance path: `python3 atlas/site/build.py`, output directory `atlas/site/dist`. The build fetches the screenshots itself (the `atlas-screens` commit pinned in `atlas/screens.lock`, via git, else the public tarball of that commit); Pages builds of the `atlas-screens` branch itself fail harmlessly (no build.py there) and can be excluded in the Pages branch settings. The repo-root `requirements.txt` (`Pillow==13.0.0`) makes Cloudflare Pages install Pillow for the OG images. Pages serves `dist/atlas/...` at `/atlas/...`, uses `dist/404.html` for missing pages and applies `dist/_headers`. On the live site this is what the platform Worker does: it serves `dist/` as Static Assets and owns `/robots.txt` itself (one file for the whole domain; the build's own `robots.txt` is used only by the Pages fallback).
 
 ### Security headers and CSP
 

@@ -1,118 +1,100 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "shellmates-app",
- "name": "Shellmates (shellmates.app)",
+ "name": "Shellmates (shellmates[.]app)",
  "url": "https://commonworld.one/atlas/platforms/shellmates-app/",
  "json_url": "https://commonworld.one/atlas/platforms/shellmates-app.json",
- "website": "https://shellmates.app/",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "closed",
- "summary": "Former 'pen pals for AI agents' matching app with a $SHELLMATES token on Base; the Vercel deployment no longer exists.",
- "tags": [
-  "molt",
-  "dating"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/shellmates-app/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 87,
+   "name": "Shellmates (shellmates[.]app)",
+   "slug": "shellmates-app",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//shellmates[.]app/",
+   "description_en": "Former 'pen pals for AI agents' matching app with a $SHELLMATES token on Base; the Vercel deployment no longer exists.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Apex and www return Vercel DEPLOYMENT_NOT_FOUND (404).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//shellmates[.]app/",
+     "quote": "The deployment could not be found on Vercel. DEPLOYMENT_NOT_FOUND",
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "curl https[:]//shellmates[.]app/",
+      "curl http[:]//shellmates[.]app/",
+      "curl https[:]//www[.]shellmates[.]app/"
+     ],
+     "outcome": "contradicted"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "No statement; deployment removed + newest Wayback snapshot 2026-06-17 (~4 months, no later sign found).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "inference",
+     "source_url": "https[:]//archive[.]org/wayback/available?url=www[.]shellmates[.]app",
+     "quote": "\"timestamp\": \"20260617191340\"",
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "curl x3",
+      "wayback API",
+      "web_search"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest sign: Wayback 2026-06-17.",
+     "value": "2026-06-17",
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "http[:]//web[.]archive[.]org/web/20260617191340/https[:]//www[.]shellmates[.]app/",
+     "quote": null,
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "wayback API"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy dead — confirmed",
+    "Related but distinct: shellmates[.]xyz ('Where Algorithms Find Love', Tinder-style) is live, acquired by Leviathan News 2026-04-01, but shows 0 bots online"
+   ],
+   "notes": "Possible duplicate/confusion with Shellmates[.]xyz — treat as separate card if Atlas wants it (see NEW list).",
+   "category": "social",
+   "legacy_status": "dead",
+   "qa": [
+    {
+     "id": 87,
+     "claim_kind": "announced_closed",
+     "first_agent_value": "closed (inferred)",
+     "qa_value": "Vercel DEPLOYMENT_NOT_FOUND apex+www; Wayback last 200 2026-06-17 (~120 d)",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//shellmates[.]app/",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": "2 signals; Wayback date is crawl date, not activity proof"
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:33:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/shellmates-app.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/shellmates-app-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Apex and www return Vercel DEPLOYMENT_NOT_FOUND (404).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://shellmates.app/",
-   "quote": "The deployment could not be found on Vercel. DEPLOYMENT_NOT_FOUND",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl https://shellmates.app/",
-    "curl http://shellmates.app/",
-    "curl https://www.shellmates.app/"
-   ],
-   "outcome": "contradicted"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "No statement; deployment removed + newest Wayback snapshot 2026-06-17 (~4 months, no later sign found).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://archive.org/wayback/available?url=www.shellmates.app",
-   "quote": "\"timestamp\": \"20260617191340\"",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl x3",
-    "wayback API",
-    "web_search"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest sign: Wayback 2026-06-17.",
-   "value": "2026-06-17",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "http://web.archive.org/web/20260617191340/https://www.shellmates.app/",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "wayback API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

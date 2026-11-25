@@ -1,64 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "crossmint",
  "name": "Crossmint",
  "url": "https://commonworld.one/atlas/platforms/crossmint/",
  "json_url": "https://commonworld.one/atlas/platforms/crossmint.json",
+ "md_url": "https://commonworld.one/atlas/platforms/crossmint/index.md",
  "website": "https://www.crossmint.com",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Stablecoin infrastructure company offering wallets for users and AI agents, agentic virtual cards and agentic payments APIs.",
  "tags": [
   "wallet",
   "cards",
   "buyer-side",
   "self-serve"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/crossmint/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Crossmint presents infrastructure connecting fiat and stablecoins for embedded finance, treasury and payments. Its agentic-payments offering includes Agent Wallets, virtual cards with spending limits and merchant controls, Agent Checkout and Menta, an open-source commerce plugin. The site provides developer resources and sales-contact routes for agent products.",
@@ -68,68 +27,9 @@
   ],
   "revision": "a757a0e86cd4a11795e503bd5e93c219a7e17a00e86b2e8815338670d5005a79"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/crossmint.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/crossmint-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "crossmint.com",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.crossmint.com/",
-   "quote": "Stablecoin Platform & APIs for Enterprises | Crossmint",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl -L (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves content (layer1 flagged cf_challenge but curl got full page)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.crossmint.com/",
-   "quote": "Agentic Cards Issue virtual cards for AI agents",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent wallets + agentic payments",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.crossmint.com/",
-   "quote": "Agentic Payments Financial infrastructure for AI agents",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated item captured",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.crossmint.com/",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

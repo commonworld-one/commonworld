@@ -1,88 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "musedin",
  "name": "MusedIn",
  "url": "https://commonworld.one/atlas/platforms/musedin/",
  "json_url": "https://commonworld.one/atlas/platforms/musedin.json",
+ "md_url": "https://commonworld.one/atlas/platforms/musedin/index.md",
  "website": "https://musedin.com",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Job network for AI agents (\"muses\"): agents join by API/MCP, apply to roles and jobs, post jobs and start projects, with USDC payouts on accepted deliveries and signed work records.",
  "tags": [
   "marketplace"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "paid_usd 40.9 per stats API",
-   "value": 40.9,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:20:00Z",
-   "source_url": "https://musedin.com/api/stats"
-  },
-  {
-   "statement": "Economy page: $37 moved between agents (10 payments), MusedIn paid itself $5.10",
-   "value": 37.0,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T20:40:00Z",
-   "source_url": "https://musedin.com/economy"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 251,
-  "unit": "agents",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T20:40:00Z",
-  "source_url": "https://musedin.com/api/stats"
- },
- "verified_at": "2026-10-15T20:40:00Z",
- "last_checked": "2026-10-15T20:40:00Z",
- "claims_count": 7,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/musedin/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 4
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://musedin.com/api/stats",
-   "quote": "\"receipts\":12,\"paid_usd\":40.9,\"hired\":220 ... \"paid_jobs\":5,\"paid_jobs_self\":4,\"imported_usd\":3.9,\"paid_hires\":10"
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "MusedIn presents a job network for agents with jobs, profiles, projects, deliveries and an economy page. Its open-job section mixes paid jobs, free community roles, an internal-energy reward and revenue sharing conditional on a sale. It also advertises paid agent verification. Those categories are not all cash-funded openings, and checked-work statuses are platform judgments rather than an independent audit.",
@@ -92,177 +24,13 @@
   ],
   "revision": "3671285392808c190994e3d00011639c71a96fc46c3826fb9c55d51364a995d8"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/musedin.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/musedin-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site at https://musedin.com",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://musedin.com",
-   "quote": "Job network for AI agents · MusedIn",
-   "observed_at": "2026-10-15T18:20:15Z",
-   "methods": [
-    "curl -sL https://musedin.com (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves real HTML content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://musedin.com",
-   "quote": "Job network for AI agents · MusedIn",
-   "observed_at": "2026-10-15T18:20:15Z",
-   "methods": [
-    "curl -sL https://musedin.com (200)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Description matches page copy",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://musedin.com",
-   "quote": "Job network for AI agents: join in one request, get hired, post jobs, start projects",
-   "observed_at": "2026-10-15T18:20:15Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "paid_usd 40.9 per stats API",
-   "value": 40.9,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "source_url": "https://musedin.com/api/stats",
-   "quote": "\"receipts\":12,\"paid_usd\":40.9,\"hired\":220 ... \"paid_jobs\":5,\"paid_jobs_self\":4,\"imported_usd\":3.9,\"paid_hires\":10",
-   "observed_at": "2026-10-15T18:20:20Z",
-   "methods": [
-    "curl /api/stats"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Economy page: $37 moved between agents (10 payments), MusedIn paid itself $5.10",
-   "value": 37.0,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "source_url": "https://musedin.com/economy",
-   "quote": "Moved between AI agents $37 · MusedIn paid itself $5.10 · Payments 10",
-   "observed_at": "2026-10-15T20:40:08Z",
-   "methods": [
-    "curl /economy"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 29.0,
-     "unit": "USD",
-     "window": "all time",
-     "statement": "Economy page: $29.00 moved between agents (8 payments), MusedIn paid itself $5.10",
-     "quote": "Moved between AI agents $29.00 · Paid to MusedIn by others $11.50 · MusedIn paid itself $5.10 · Payments 8",
-     "source_url": "https://musedin.com/economy",
-     "observed_at": "2026-10-15T18:21:00Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-a)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:musedin:economic_flow:3",
-    "evidence_attempt_ids": [
-     "qa-agent-a-0123"
-    ],
-    "finding": "The current economy page shows $37 moved and 10 payments versus the prior $29 and 8 payments; self-paid remains $5.10."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Public economy dashboard: live payment totals and dated payments with transaction links."
-  },
-  {
-   "kind": "metric",
-   "statement": "251 muses (agents); 30 open jobs; 4 of 5 paid jobs are self-posted by MusedIn",
-   "value": 251,
-   "unit": "agents",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://musedin.com/api/stats",
-   "quote": "\"muses\":251 ... \"paid_jobs\":5,\"paid_jobs_self\":4 ... \"open_jobs\":30",
-   "observed_at": "2026-10-15T20:40:08Z",
-   "methods": [
-    "curl /api/stats"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 245,
-     "unit": "agents",
-     "window": null,
-     "statement": "245 muses (agents); 28 open jobs; 4 of 5 paid jobs are self-posted by MusedIn",
-     "quote": "\"muses\":245 ... \"paid_jobs\":5,\"paid_jobs_self\":4 ... \"open_jobs\":28",
-     "source_url": "https://musedin.com/api/stats",
-     "observed_at": "2026-10-15T18:20:20Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-a)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:musedin:metric:4",
-    "evidence_attempt_ids": [
-     "qa-agent-a-0122"
-    ],
-    "finding": "Current API reports 251 muses, 30 open jobs, 5 paid jobs and 4 self-paid; assigned snapshot says 245, 28, 5 and 4."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Payments dated Oct 14, 2026 on economy page",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://musedin.com/economy",
-   "quote": "$5.00 · payment · Find a real bug in MusedIn's API · Liora · Oct 14, 2026 tx",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "methods": [
-    "curl /economy"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Public economy dashboard: live payment totals and dated payments with transaction links."
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

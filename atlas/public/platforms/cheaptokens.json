@@ -1,89 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "cheaptokens",
  "name": "CheapTokens",
  "url": "https://commonworld.one/atlas/platforms/cheaptokens/",
  "json_url": "https://commonworld.one/atlas/platforms/cheaptokens.json",
+ "md_url": "https://commonworld.one/atlas/platforms/cheaptokens/index.md",
  "website": "https://cheaptokens.ai",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "CheapTokens resells discounted Venice AI API credits (same-day expiring or prepaid keys), payable by card or USDC via x402.",
  "tags": [
   "x402",
   "x402-service"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402 settlement to this service's payout address: $598.98 in 30d from 20 distinct buyers, 454 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 598.98,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/cheaptokens"
-  },
-  {
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $110.68",
-   "value": 110.68,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/cheaptokens/volume?days=60"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 598.98,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/services/cheaptokens"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/cheaptokens/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services/cheaptokens",
-   "quote": "\"volume_usd_30d\":598.98,\"unique_buyers_30d\":20,\"tx_count_30d\":454,\"top_buyer_share_30d\":0.5359110487829309,\"last_settlement_at\":\"2026-10-27T20:16:39Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "CheapTokens offers discounted same-day Venice AI API credits through a direct Venice key and states that it is independent of Venice. It advertises USDC payment, no subscription and discounts increasing through the UTC day. The key stops working and unused balance becomes zero at midnight UTC, without rollover or unused-credit refunds. The advertised 90% discount starts at 23:00 UTC, leaving only an hour before expiry and no guarantee of remaining supply. Card fees may apply. Saved prices and inventory are dated displays, not current availability or reserved credits. Supply charts use completed 15-minute windows, gaps mean unknown and steps do not identify exact purchase times. Recent purchases are not an instant complete sales feed. Usage figures represent identifiable billed requests, not unique users or guaranteed successful outputs; missing days are marked. Model compatibility and availability depend on the live Venice catalogue.",
@@ -93,129 +25,9 @@
   ],
   "revision": "e6df428e82e0a0a4941154026afd7c85bc03d83ddd3c24e509f13456313c48ee"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/cheaptokens.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/cheaptokens-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Official site returns HTTP 200 with real content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://cheaptokens.ai",
-   "quote": "Buy discounted Venice AI API credits with card or USDC. Discounts grow throughout the day, subject to availability.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://cheaptokens.ai"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL (x402-list base_url/website for this service, operator-owned)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://cheaptokens.ai",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100",
-    "curl -sL https://cheaptokens.ai"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "CheapTokens resells discounted Venice AI API credits (same-day expiring or prepaid keys), payable by card or USDC via x402.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://cheaptokens.ai",
-   "quote": "Buy discounted Venice AI API credits with card or USDC. Discounts grow throughout the day, subject to availability.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://cheaptokens.ai",
-    "GET https://x402-list.com/api/v1/services?per_page=100"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $598.98 in 30d from 20 distinct buyers, 454 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 598.98,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/cheaptokens",
-   "quote": "\"volume_usd_30d\":598.98,\"unique_buyers_30d\":20,\"tx_count_30d\":454,\"top_buyer_share_30d\":0.5359110487829309,\"last_settlement_at\":\"2026-10-27T20:16:39Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/cheaptokens",
-    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
-    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 575.42,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "x402 settlement to this service's payout address: $575.42 in 30d from 23 distinct buyers, 492 settlements; top buyer share 59.4%",
-     "quote": "traction.volume_usd_30d=575.42, unique_buyers_30d=23, top_buyer_share_30d=0.5943",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "cheaptokens-x402-list-30d",
-   "last_settlement_seen_at": "2026-10-27T20:16:39Z",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $110.68",
-   "value": 110.68,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/cheaptokens/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/cheaptokens/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last UTC day with ≥$1 settled: 2026-10-14; first settlement 2026-06-13",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/cheaptokens/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/cheaptokens/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

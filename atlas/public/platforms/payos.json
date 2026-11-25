@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "payos",
  "name": "PayOS",
  "url": "https://commonworld.one/atlas/platforms/payos/",
  "json_url": "https://commonworld.one/atlas/platforms/payos.json",
+ "md_url": "https://commonworld.one/atlas/platforms/payos/index.md",
  "website": "https://payos.ai/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "PayOS sells payments data APIs (card, bank, KYC/KYB) and an 'Agent Data' line with agentic tokens, a PayOS wallet and agent monetization/checkout for letting AI agents pay.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T21:40:00Z",
- "last_checked": "2026-10-15T21:40:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/payos/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "PayOS presents payments data for the agentic economy, including card, bank, business, user and transaction signals. It works alongside existing payment processors rather than replacing a gateway or processor, and advertises self-serve, pay-per-use access. Its agentic product line lists agent tokens, wallets, monetization and catalogue/checkout, with examples covering account checks, merchant risk and retry decisions.",
@@ -63,81 +22,9 @@
   ],
   "revision": "a96181bba613c2421097459927b838791aea84d6acbea3ae7654527d2b608794"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/payos.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/payos-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves content (200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://payos.ai/",
-   "quote": "Actionable Payments Data for Anyone, Anywhere.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent-payment products listed.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://payos.ai/",
-   "quote": "Agent Data › Agent Data Overview · Start here › Agentic Tokens PayOS Wallet Agent Monetization Catalog & Checkout",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest dated blog item: 'Every PayOS Product, Now Self-Serve' (2026-09-30); also 2026-09-27 and 2026-09-02 posts, listed on the homepage and blog",
-   "value": "2026-09-30",
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://payos.ai/blog/every-payos-product-now-self-serve",
-   "quote": "Announcement September 30, 2026 Every PayOS Product, Now Self-Serve",
-   "observed_at": "2026-10-15T21:40:00Z",
-   "methods": [
-    "curl -sL https://payos.ai/ (homepage news list)",
-    "curl -sL https://payos.ai/blog"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "No dated item found on homepage.",
-     "quote": null,
-     "source_url": null,
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "inference",
-     "outcome": "unchecked",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "corrected after Codex comparison"
-    }
-   ],
-   "recheck": {
-    "basis": "coordinator_re_read",
-    "by": "Hark coordinator",
-    "at": "2026-10-15T21:40:00Z",
-    "note": "Fix from the Codex comparison, re-checked by us."
-   },
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

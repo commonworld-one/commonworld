@@ -1,112 +1,95 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "polar-issue-funding",
  "name": "Polar issue funding",
  "url": "https://commonworld.one/atlas/platforms/polar-issue-funding/",
  "json_url": "https://commonworld.one/atlas/platforms/polar-issue-funding.json",
- "website": "https://github.com/polarsource/polar/issues/5222",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "closed",
- "summary": "Former issue-funding (pledges/bounties on GitHub issues) feature of Polar.sh, removed in 2025 as Polar refocused on billing for developers.",
- "tags": [
-  "open-source",
-  "bounties"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/polar-issue-funding/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 165,
+   "name": "Polar issue funding",
+   "slug": "polar-issue-funding",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//github[.]com/polarsource/polar/issues/5222",
+   "description_en": "Former issue-funding (pledges/bounties on GitHub issues) feature of Polar[.]sh, removed in 2025 as Polar refocused on billing for developers.",
+   "claims": [
+    {
+     "kind": "announced_closed",
+     "statement": "Polar team issue \"Issue Funding: Remove from codebase after April 2nd\", closed as completed 2025-04-30",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//github[.]com/polarsource/polar/issues/5222",
+     "quote": "Issue Funding: Remove from codebase after April 2nd ... closed (completed)",
+     "observed_at": "2026-10-15T18:21:40Z",
+     "methods": [
+      "GitHub API repos/polarsource/polar/issues/5222"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "Issue-funding docs page gone",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//polar[.]sh/docs/issue-funding/overview",
+     "quote": "HTTP 404",
+     "observed_at": "2026-10-15T18:21:40Z",
+     "methods": [
+      "curl (404)"
+     ],
+     "outcome": "contradicted"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "Third-party confirmation (dependent project removed Polar boosts)",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https[:]//github[.]com/pawamoy/insiders-project/commit/b62d293dd62ba50c24f6e3aa399d0b606d9b627c",
+     "quote": "refactor: Remove boost feature (issue funding discontinued by Polar)",
+     "observed_at": "2026-10-15T18:21:00Z",
+     "methods": [
+      "web_search"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy \"removed Apr 2025\" confirmed"
+   ],
+   "notes": "Polar[.]sh itself remains live as a billing platform; only issue funding closed.",
+   "category": "work",
+   "legacy_status": "dead",
+   "qa": [
+    {
+     "id": 165,
+     "claim_kind": "announced_closed",
+     "first_agent_value": "closed (official issue #5222)",
+     "qa_value": "polar[.]sh/docs/issue-funding/overview 404 confirmed",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//polar[.]sh/docs/issue-funding/overview",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": "Official GitHub issue cited; Polar itself live"
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:33:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/polar-issue-funding.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/polar-issue-funding-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "announced_closed",
-   "statement": "Polar team issue \"Issue Funding: Remove from codebase after April 2nd\", closed as completed 2025-04-30",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://github.com/polarsource/polar/issues/5222",
-   "quote": "Issue Funding: Remove from codebase after April 2nd ... closed (completed)",
-   "observed_at": "2026-10-15T18:21:40Z",
-   "methods": [
-    "GitHub API repos/polarsource/polar/issues/5222"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Issue-funding docs page gone",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://polar.sh/docs/issue-funding/overview",
-   "quote": "HTTP 404",
-   "observed_at": "2026-10-15T18:21:40Z",
-   "methods": [
-    "curl (404)"
-   ],
-   "outcome": "contradicted"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "Third-party confirmation (dependent project removed Polar boosts)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://github.com/pawamoy/insiders-project/commit/b62d293dd62ba50c24f6e3aa399d0b606d9b627c",
-   "quote": "refactor: Remove boost feature (issue funding discontinued by Polar)",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "methods": [
-    "web_search"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

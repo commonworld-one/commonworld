@@ -1,89 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "keyring-agent",
  "name": "keyring-agent",
  "url": "https://commonworld.one/atlas/platforms/keyring-agent/",
  "json_url": "https://commonworld.one/atlas/platforms/keyring-agent.json",
+ "md_url": "https://commonworld.one/atlas/platforms/keyring-agent/index.md",
  "website": "https://keyring-agent.blockchhub.link",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "KEYRING AGENT is a DeFi-assistant x402 service from the KEYRING PRO wallet team, charging execution fees for token/NFT transfers, swaps and Uniswap V3 liquidity actions.",
  "tags": [
   "x402",
   "x402-service"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402 settlement to this service's payout address: $1,468.15 in 30d from 64 distinct buyers, 29,363 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 1468.15,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/keyring-agent"
-  },
-  {
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $310.35",
-   "value": 310.35,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/keyring-agent/volume?days=60"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 1468.15,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/services/keyring-agent"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/keyring-agent/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services/keyring-agent",
-   "quote": "\"volume_usd_30d\":1468.15,\"unique_buyers_30d\":64,\"tx_count_30d\":29363,\"top_buyer_share_30d\":0.02067227463133876,\"last_settlement_at\":\"2026-10-28T03:09:11Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "The earlier KEYRING AGENT address leads to KEYRING PRO's wallet homepage at keyring.app. Its agent section advertises market research, token transfers and liquidity-pool actions through an AI interface. The surrounding product is presented as a Bacoor-developed non-custodial Ethereum/EVM wallet with swaps, NFC backup and related tools. Account, Uniswap and chat panels are illustrations rather than a connected wallet or completed transactions. The page does not establish continued availability of the former standalone x402 execution service, fees or API. Security and open-source statements are publisher claims, not an independent code or custody audit. Transfers, swaps and liquidity actions involve assets, possible fees and market risk.",
@@ -94,163 +26,9 @@
   ],
   "revision": "e922cbf170dbadcb22c84e2c394a5942b8d3af315874080c25561b1618429632"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/keyring-agent.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/keyring-agent-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "The x402 service answers on its own host: GET /api/add-pool returns HTTP 402 with x402 v2 payment requirements (3 USDC on Base). The host root is only a \"KEYRING AGENT\" stub that redirects browsers to keyring.app, the KEYRING PRO wallet homepage, so a browser visit shows the wallet, not the service.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://keyring-agent.blockchhub.link/api/add-pool",
-   "quote": "Pay the add-pool execution fee (add liquidity to a Uniswap V3 pool)",
-   "observed_at": "2026-10-17T10:50:05Z",
-   "methods": [
-    "curl -sD- https://keyring-agent.blockchhub.link/api/add-pool -> HTTP 402, PAYMENT-REQUIRED header (base64 JSON, x402Version 2)",
-    "curl -sL https://keyring-agent.blockchhub.link -> HTTP 200, title \"KEYRING AGENT\", meta refresh \"0; url=https://keyring.app\" at 2026-10-17T10:50:04Z",
-    "x402-list.com/api/v1/services/keyring-agent: 6 endpoints on this base_url"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "keyring-agent.blockchhub.link returns a redirect stub to keyring.app; keyring.app returns 200 with full content",
-     "quote": "KEYRING PRO is a non-custodial crypto wallet for Ethereum and EVM networks.",
-     "source_url": "https://keyring.app",
-     "observed_at": "2026-10-15T18:15:00Z",
-     "basis": "direct_observation",
-     "outcome": "supported",
-     "superseded_at": "2026-10-17T10:50:05Z",
-     "reason": "Atlas screenshot review 2026-10-17: the evidence was keyring.app (the wallet homepage, a different host); replaced by observations on the card's own host"
-    }
-   ]
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "keyring-agent.blockchhub.link is the KEYRING PRO team's x402 server: the official KEYRINGPRO repository (github.com/bacoor-hb/KEYRINGPRO, homepage keyring.app, linked from keyring.app) sets X402_SERVER_API to this host; the same repo also loads assets from ipfs.blockchhub.link.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://github.com/bacoor-hb/KEYRINGPRO/blob/main/.env.example",
-   "quote": "X402_SERVER_API=https://keyring-agent.blockchhub.link",
-   "observed_at": "2026-10-17T00:12:20Z",
-   "methods": [
-    "curl https://raw.githubusercontent.com/bacoor-hb/KEYRINGPRO/main/.env.example (line 34)",
-    "GitHub API repos/bacoor-hb/KEYRINGPRO: homepage https://keyring.app/",
-    "curl -sL https://keyring.app: footer links https://github.com/bacoor-hb/KEYRINGPRO",
-    "curl -sL https://keyring-agent.blockchhub.link -> HTTP 200, title \"KEYRING AGENT\", \"Redirecting to keyring.app\"",
-    "x402-list.com/api/v1/services/keyring-agent: base_url https://keyring-agent.blockchhub.link (website_url null, verified false)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "Official URL (x402-list base_url/website for this service, operator-owned)",
-     "quote": null,
-     "source_url": "https://keyring-agent.blockchhub.link",
-     "observed_at": "2026-10-15T18:10:00Z",
-     "basis": "direct_observation",
-     "outcome": "supported",
-     "superseded_at": "2026-10-17T00:12:20Z",
-     "reason": "Atlas audit 2026-10-17 (high-severity row): ownership of the third-party-looking host checked against the operator's own repository"
-    }
-   ]
-  },
-  {
-   "kind": "description",
-   "statement": "KEYRING AGENT is a DeFi-assistant x402 service from the KEYRING PRO wallet team, charging execution fees for token/NFT transfers, swaps and Uniswap V3 liquidity actions.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://keyring-agent.blockchhub.link",
-   "quote": "KEYRING AGENT — Your DeFi Assistant … Redirecting to keyring.app",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://keyring-agent.blockchhub.link",
-    "GET https://x402-list.com/api/v1/services?per_page=100"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $1,468.15 in 30d from 64 distinct buyers, 29,363 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 1468.15,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/keyring-agent",
-   "quote": "\"volume_usd_30d\":1468.15,\"unique_buyers_30d\":64,\"tx_count_30d\":29363,\"top_buyer_share_30d\":0.02067227463133876,\"last_settlement_at\":\"2026-10-28T03:09:11Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/keyring-agent",
-    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
-    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 1405.05,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "x402 settlement to this service's payout address: $1,405.05 in 30d from 60 distinct buyers, 28,102 settlements; top buyer share 2.1%",
-     "quote": "traction.volume_usd_30d=1405.05, unique_buyers_30d=60, top_buyer_share_30d=0.0214",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "keyring-agent-x402-list-30d",
-   "last_settlement_seen_at": "2026-10-28T03:09:11Z",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $310.35",
-   "value": 310.35,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/keyring-agent/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/keyring-agent/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last UTC day with ≥$1 settled: 2026-10-15; first settlement 2026-07-27",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/keyring-agent/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/keyring-agent/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

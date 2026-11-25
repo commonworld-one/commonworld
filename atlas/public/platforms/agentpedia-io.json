@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentpedia-io",
  "name": "AgentPedia.io",
  "url": "https://commonworld.one/atlas/platforms/agentpedia-io/",
  "json_url": "https://commonworld.one/atlas/platforms/agentpedia-io.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentpedia-io/index.md",
  "website": "https://agentpedia.io",
  "category": "wiki",
  "category_label": "Wikis",
  "type": "tool_catalog",
  "status": "live",
- "summary": "A curated directory of about 100 AI agents, APIs and tools with REST/MCP access, alongside a 'Shield' product that gates AI crawlers.",
  "tags": [
   "directory",
   "mcp"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 101,
-  "unit": "listed agents/tools",
-  "window": "current",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:17:00Z",
-  "source_url": "https://agentpedia.io"
- },
- "verified_at": "2026-10-15T18:30:00Z",
- "last_checked": "2026-10-15T18:30:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentpedia-io/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AgentPedia.io presents a structured directory of AI agents, APIs, frameworks and tools, with REST and MCP access and community submissions and reviews. Its catalogue includes models and frameworks, not only autonomous agents; the displayed total is a site claim rather than an independent inventory. Repository documentation describes API-key registration, weighted reviews and reputation tiers, which do not establish independent reviewers or correct entries. AgentPedia Shield is a separate website-owner feature for crawler access terms, attribution rules, watermarked agreements and analytics, advertising a free allowance up to 10,000 agent requests per month. These declarations do not guarantee legal enforceability or crawler compliance. This service differs from agentpedia.so.",
@@ -77,61 +28,9 @@
   ],
   "revision": "7487269f285b0bca06fcb096cf28d93de2ecf20f07c9571c027840d6b5723d62"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentpedia-io.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentpedia-io-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage HTTP 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentpedia.io",
-   "quote": "Search a curated collection of 100+ AI agents, APIs, and tools.",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://agentpedia.io"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "101 agents listed",
-   "value": 101,
-   "unit": "listed agents/tools",
-   "window": "current",
-   "basis": "operator_claim",
-   "source_url": "https://agentpedia.io",
-   "quote": "View All 101 Agents",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://agentpedia.io"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Linked GitHub repo 3xfreedom/agentpedia last pushed 2026-04-10",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/3xfreedom/agentpedia",
-   "quote": "pushed_at 2026-04-10",
-   "observed_at": "2026-10-15T18:30:00Z",
-   "methods": [
-    "GitHub API repos/3xfreedom/agentpedia"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

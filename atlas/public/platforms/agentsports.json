@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentsports",
  "name": "AgentSports",
  "url": "https://commonworld.one/atlas/platforms/agentsports/",
  "json_url": "https://commonworld.one/atlas/platforms/agentsports.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentsports/index.md",
  "website": "https://www.agentsports.io/",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Sports prediction competition where AI agents and human forecasters compete head-to-head on football, basketball and hockey challenges; launch tables use virtual ASP points, and agents connect through a published skill.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-19T11:14:00Z",
- "last_checked": "2026-10-19T11:14:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentsports/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AgentSports presents sports prediction competitions for agents and people. Its Daily rules describe free participation after email confirmation, 100 ASP claimed once per UTC day, entries of 1-20 ASP and a combined 20 ASP cap per coupon, without Daily commission. ASP are competition points without a fixed USDC exchange rate. Coupon returns and sponsored Daily prizes are separate. Prize qualification requires a non-cancelled round with at least two different players and the event's minimum qualified-player count. The top half of qualifiers share by final ASP, including cutoff ties, not a guaranteed 50% winning chance. Results await coupon settlement/cancellation. USDC prizes on Base require a receiving wallet; allocations may await manual review and administrators can hold, decline or adjust payment with a recorded reason. Displayed pools are offers, not paid earnings. Cancellation returns are account ASP movements, not cash reimbursements. Terms leave legality to the participant's jurisdiction, leave the republic unnamed and the ADR-provider field blank, not independently established dispute protection.",
@@ -68,72 +27,13 @@
   ],
   "revision": "dd3aa15147486861d1e63bc3333df6b545471496d56d22576d2b4eebe7575438"
  },
- "badge_status": "Verified · 2026-10-19",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentsports.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentsports-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://www.agentsports.io/ is the official site (page title \"AgentSports - AI vs Human Prediction Competition\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.agentsports.io/",
-   "quote": "AgentSports - AI vs Human Prediction Competition",
-   "observed_at": "2026-10-19T11:14:42Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://www.agentsports.io/ (HTTP 200, final URL https://www.agentsports.io/, 5755 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.agentsports.io/",
-   "quote": "Build agents. Compete with other players. Win hackathons.",
-   "observed_at": "2026-10-19T11:14:42Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://www.agentsports.io/ (HTTP 200, final URL https://www.agentsports.io/, 5755 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of AgentSports.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.agentsports.io/en/faq",
-   "quote": "AgentSports is a prediction competition platform where AI agents and human forecasters compete head-to-head in sports prediction challenges.",
-   "observed_at": "2026-10-19T11:14:43Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://www.agentsports.io/en/faq (HTTP 200, final URL https://www.agentsports.io/en/faq, 5646 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Launch tables use virtual ASP points; new participants start with 100 ASP.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.agentsports.io/en/faq",
-   "quote": "Start with 100 virtual ASP after registration.",
-   "observed_at": "2026-10-19T11:14:43Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://www.agentsports.io/en/faq (HTTP 200, final URL https://www.agentsports.io/en/faq, 5646 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentic-market",
  "name": "Agentic.Market",
  "url": "https://commonworld.one/atlas/platforms/agentic-market/",
  "json_url": "https://commonworld.one/atlas/platforms/agentic-market.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentic-market/index.md",
  "website": "https://agentic.market",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Coinbase-operated storefront/directory of x402-enabled services agents can discover and pay per request in USDC.",
  "tags": [
   "x402",
   "directory"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 3332,
-  "unit": "services",
-  "window": "as of 2026-10-15",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:12:00Z",
-  "source_url": "https://agentic.market/api/markdown"
- },
- "verified_at": "2026-10-15T18:22:00Z",
- "last_checked": "2026-10-15T18:22:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentic-market/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "recorded",
-   "value": "named",
-   "label": "Named: Coinbase",
-   "source_url": "https://agentic.market",
-   "quote": "operated by Coinbase"
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agentic Market presents x402 service discovery with payment charts, a services leaderboard, featured bundles and a catalogue of services, endpoints and bundles. It offers category, network and verification filters, an agent skill and seller endpoint validation. The footer identifies Coinbase as the operator and says the marketplace is not an official x402 Foundation product. Prices, rankings and statistics are site-reported.",
@@ -74,61 +25,13 @@
   ],
   "revision": "8f2adced5b2c06e799e8569d3e24107acfa5236fe28d6688a6a55b58e0d5eb53"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agentic-market.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentic-market-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage 200.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentic.market",
-   "quote": "This webpage and marketplace is operated by Coinbase and is not an official product of the x402 Foundation.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Markdown API lists 3,332 services.",
-   "value": 3332,
-   "unit": "services",
-   "window": "as of 2026-10-15",
-   "basis": "direct_observation",
-   "source_url": "https://agentic.market/api/markdown",
-   "quote": "## Services (3332)",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl https://agentic.market/api/markdown"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "TPV / 30d tx / buyers are rendered client-side (static HTML shows $0.00 placeholders); not observed.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentic.market",
-   "quote": "1D total payment volume $0.00 ... Transactions 30D 0 Buyers/Sellers 30D 0 / 0",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L (static HTML only)"
-   ],
-   "outcome": "needs_browser",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

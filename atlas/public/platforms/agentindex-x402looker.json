@@ -1,67 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentindex-x402looker",
  "name": "AgentIndex",
  "url": "https://commonworld.one/atlas/platforms/agentindex-x402looker/",
  "json_url": "https://commonworld.one/atlas/platforms/agentindex-x402looker.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentindex-x402looker/index.md",
  "website": "https://x402looker.com/",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "platform",
  "status": "live",
- "summary": "Static directory of x402-enabled agent services (APIs, tools, paywalls and infrastructure that agents can pay per request), built from a published dataset, with a form to submit new services.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 500,
-  "unit": "listed services",
-  "window": "now",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-19T11:14:00Z",
-  "source_url": "https://x402looker.com/"
- },
- "verified_at": "2026-10-19T11:14:00Z",
- "last_checked": "2026-10-19T11:14:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentindex-x402looker/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AgentIndex presents a static directory of x402-enabled agent services, including APIs, tools, paywalls and payment infrastructure. Visitors can browse by category and chain, read protocol information and reach a service-submission page. The homepage says headline counts are calculated from the dataset at build time, and featured services are a deterministic sample from that dataset. These are directory snapshots and discovery leads, not live availability monitoring, independent quality endorsements or guarantees that a listed service accepts payment and completes work successfully.",
@@ -71,74 +22,9 @@
   ],
   "revision": "5ab81f39616ba81d00c09181a5a4d86bf87f46827db48d02287d1370a972fcdf"
  },
- "badge_status": "Verified · 2026-10-19",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agentindex-x402looker.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentindex-x402looker-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://x402looker.com/ is the official site (page title \"AgentIndex — x402-Enabled Agent Services Directory\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402looker.com/",
-   "quote": "AgentIndex — x402-Enabled Agent Services Directory",
-   "observed_at": "2026-10-19T11:14:53Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://x402looker.com/ (HTTP 200, final URL https://x402looker.com/, 3934 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402looker.com/",
-   "quote": "A static directory of x402-enabled agent services.",
-   "observed_at": "2026-10-19T11:14:53Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://x402looker.com/ (HTTP 200, final URL https://x402looker.com/, 3934 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of AgentIndex.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://x402looker.com/",
-   "quote": "AgentIndex catalogs APIs, tools, paywalls, and infrastructure that speak the x402 payment protocol, so builders can find paid endpoints without accounts, API keys, or subscriptions.",
-   "observed_at": "2026-10-19T11:14:53Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://x402looker.com/ (HTTP 200, final URL https://x402looker.com/, 3934 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Directory count computed by the operator at build time: 500 services listed.",
-   "value": 500,
-   "unit": "listed services",
-   "window": "now",
-   "basis": "operator_claim",
-   "source_url": "https://x402looker.com/",
-   "quote": "Services listed 500",
-   "observed_at": "2026-10-19T11:14:53Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://x402looker.com/ (HTTP 200, final URL https://x402looker.com/, 3934 chars of page text)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "bountyhub",
  "name": "BountyHub",
  "url": "https://commonworld.one/atlas/platforms/bountyhub/",
  "json_url": "https://commonworld.one/atlas/platforms/bountyhub.json",
+ "md_url": "https://commonworld.one/atlas/platforms/bountyhub/index.md",
  "website": "https://www.bountyhub.dev/en",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Platform for placing crowdfundable bounties on GitHub issues, paid out via Stripe when the bounty creator approves the solving pull request.",
  "tags": [
   "open-source",
   "bounties"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:19:00Z",
- "last_checked": "2026-10-15T18:19:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/bountyhub/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "BountyHub presents GitHub issue bounties for maintainers and developers. It describes importing an issue, funding or pledging a reward, crowdfunding contributions and reviewing a pull request before payout through Stripe. The page offers bounty tracking and a dispute-resolution process. Its comparison table advertises zero hunter fees and a 10% creator fee; featured rewards and payout coverage remain platform claims.",
@@ -66,89 +25,13 @@
   ],
   "revision": "50b860b5e1d095e7e9629ec18dc30667dd37f1284805506084d7439d5c21853b"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/bountyhub.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/bountyhub-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site bountyhub.dev (redirects to /en)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.bountyhub.dev/en",
-   "quote": "BountyHub",
-   "observed_at": "2026-10-15T18:18:37Z",
-   "methods": [
-    "curl -L https://bountyhub.dev (200 -> /en)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Static marketing content served (layer1 flagged a CF challenge marker, but content returned); bounty list is JS-rendered",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.bountyhub.dev/en/bounties",
-   "quote": "Bounties Explore Bounties Leaderboard ...",
-   "observed_at": "2026-10-15T18:19:19Z",
-   "methods": [
-    "curl /en (200 content)",
-    "curl /en/bounties (200 shell, list JS)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Homepage copy",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.bountyhub.dev/en",
-   "quote": "When the solution is accepted, the bounty is paid out automatically via Stripe ... Bounties are crowdfundable",
-   "observed_at": "2026-10-15T18:18:37Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Funded vs unfunded bounty totals need browser (list JS-rendered)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.bountyhub.dev/en/bounties",
-   "quote": null,
-   "observed_at": "2026-10-15T18:19:19Z",
-   "methods": [
-    "curl"
-   ],
-   "outcome": "needs_browser",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "bountyhub-org/platform issue #1 created 2026-09-08",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://github.com/bountyhub-org/platform/issues/1",
-   "quote": "GitHub search \"bountyhub.dev\" created:>2026-07-01",
-   "observed_at": "2026-10-15T18:19:40Z",
-   "methods": [
-    "GitHub search API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

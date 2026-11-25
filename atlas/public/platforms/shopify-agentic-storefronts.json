@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "shopify-agentic-storefronts",
  "name": "Shopify Agentic Storefronts + Catalog API",
  "url": "https://commonworld.one/atlas/platforms/shopify-agentic-storefronts/",
  "json_url": "https://commonworld.one/atlas/platforms/shopify-agentic-storefronts.json",
+ "md_url": "https://commonworld.one/atlas/platforms/shopify-agentic-storefronts/index.md",
  "website": "https://help.shopify.com/en/manual/online-sales-channels/agentic-storefronts",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Shopify feature, on by default for eligible stores, that syndicates merchants' products into AI channels such as ChatGPT, Google AI Mode/Gemini, Microsoft Copilot and Meta.",
  "tags": [
   "merchant-side",
   "catalog"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:25:00Z",
- "last_checked": "2026-10-15T18:25:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/shopify-agentic-storefronts/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Shopify agentic storefronts enables product discovery and purchases through AI channels, subject to store, catalogue, policy and channel requirements. Its help article distinguishes ChatGPT referrals to store checkout from activated Shopify-powered direct checkout in other channels. Eligible stores have agentic storefronts active by default, while Agentic-plan stores have different setup and direct checkout off by default. Use requires agreement to supplemental terms.",
@@ -66,83 +25,9 @@
   ],
   "revision": "7fd033dbabdab2b47e332ebfaf2d9631943bc209670059f0a760da5e31505013"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/shopify-agentic-storefronts.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/shopify-agentic-storefronts-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Shopify Help Center page",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://help.shopify.com/en/manual/online-sales-channels/agentic-storefronts",
-   "quote": "Shopify Help Center | Shopify agentic storefronts",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://help.shopify.com/en/manual/online-sales-channels/agentic-storefronts",
-   "quote": "Agentic storefronts is active by default for eligible stores.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Channels listed",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://help.shopify.com/en/manual/online-sales-channels/agentic-storefronts",
-   "quote": "purchase your products in AI channels, such as ChatGPT, Google AI Mode and Gemini, Microsoft Copilot, and Meta.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Shop Pay brought into Meta Muse (Shopify LinkedIn 2026-09-24, search excerpt)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.linkedin.com/posts/shopify_activity-7508703293825531904-B7IR",
-   "quote": "Today, we're bringing Shop Pay into personal AI agents, starting with Muse from Meta.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Legacy 13x/3x AI-order growth and 1B+ catalog not re-observed",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://help.shopify.com/en/manual/online-sales-channels/agentic-storefronts",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

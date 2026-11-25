@@ -40,6 +40,57 @@ class CatalogueSafety(unittest.TestCase):
             self.assertEqual(set(hosts),{'official.example','prose.example','source.example','proof.example','result.example','capture.example','limited.example'})
             self.assertEqual(hosts['capture.example'],['sample'])
 
+    def test_legacy_snapshot_fields_do_not_create_safety_inputs(self):
+        with tempfile.TemporaryDirectory() as td:
+            cat=Path(td)
+            (cat/'overviews.json').write_text(json.dumps({'cards':{'sample':{'text':'Current text','sources':['https://docs.example/']}}}))
+            (cat/'limitations.json').write_text(json.dumps({'cards':{}}))
+            snap={'platforms':[{'slug':'sample','canonical_url':'https://official.example/',
+                                'claims':[{'evidence':'https://old-claim.example/x'}],'qa':{'url':'https://old-qa.example/'},
+                                'category_basis':'https://old-basis.example/','notes':'https://old-note.example/',
+                                'related_addresses':['https://old-related.example/'],'legacy_diffs':['https://old-diff.example/']}]}
+            with patch.object(ls,'DATA',td):hosts=ls.catalogue_hosts(cat,snap,[])
+            self.assertEqual(set(hosts),{'official.example','docs.example'})
+
+    def test_curation_and_reachability_files_do_not_create_safety_inputs(self):
+        with tempfile.TemporaryDirectory() as td:
+            d=Path(td)
+            (d/'overviews.json').write_text(json.dumps({'cards':{'sample':{'text':'t','sources':['https://docs.example/']}}}))
+            (d/'limitations.json').write_text(json.dumps({'cards':{}}))
+            (d/'evidence-levels.json').write_text(json.dumps({'overrides':{'sample':{'source_url':'https://old-evidence.example/a'}}}))
+            (d/'reachability.json').write_text(json.dumps({'cards':{'sample':{'reads':[{'url':'https://old-read.example/'}]}}}))
+            snap={'platforms':[{'slug':'sample','canonical_url':'https://official.example/'}]}
+            with patch.object(ls,'DATA',td):hosts=ls.catalogue_hosts(d,snap,[(str(d/'evidence-levels.json'),'overrides')])
+            self.assertEqual(set(hosts),{'official.example','docs.example'})
+
+    def test_current_flagged_link_removes_card_but_old_hidden_link_does_not(self):
+        with tempfile.TemporaryDirectory() as td:
+            d=Path(td)
+            (d/'overviews.json').write_text(json.dumps({'cards':{'sample':{'text':'t','sources':['https://docs.example/']}}}))
+            (d/'limitations.json').write_text(json.dumps({'cards':{}}))
+            snap={'platforms':[{'slug':'sample','canonical_url':'https://official.example/','claims':[{'evidence':'https://old-claim.example/x'}]}],'count':1}
+            with patch.object(ls,'DATA',td):hosts=ls.catalogue_hosts(d,snap,[])
+            def run(host):
+                removed=d/'removed.json';removed.write_text(json.dumps({'removed':[],'decisions':[]}))
+                (d/'snapshot.json').write_text(json.dumps(snap))
+                report={'flagged':[host],'hosts':{h:{'entries':v,'flagged_by':['test'],'sources':[{'name':'test','verdict':'flagged' if h==host else 'clean','evidence_url':'https://evidence.example/'}],'status':'flagged' if h==host else 'clean'} for h,v in hosts.items()},
+                        'sources':[{'id':'test','name':'Synthetic source'}],'standard':'https://evidence.example/','removed_hosts':{},'summary':{}}
+                return ls.apply_removals(report,str(d/'snapshot.json'),str(removed),None,set(),'2026-11-24',[],preserve_inputs=True)
+            self.assertEqual([a['slug'] for a in run('docs.example')],['sample'])
+            self.assertEqual([a['slug'] for a in run('official.example')],['sample'])
+            # an old hidden host is never put on the checked list, so no source can flag it and it cannot remove the card
+            self.assertNotIn('old-claim.example',hosts)
+
+    def test_closed_overlay_never_removed_by_stale_shared_host_report(self):
+        with tempfile.TemporaryDirectory() as td:
+            d=Path(td)
+            (d/'snapshot.json').write_text(json.dumps({'platforms':[{'slug':'closed-one','status':'live'},{'slug':'open-one','status':'live'}]}))
+            (d/'closures.json').write_text(json.dumps({'ids':['closed-one'],'recorded_at':'2026-11-24T12:00:00Z','reason':'test'}))
+            (d/'removed.json').write_text(json.dumps({'removed':[],'decisions':[]}))
+            report={'flagged':['shared.example'],'hosts':{'shared.example':{'entries':['closed-one','open-one'],'status':'flagged','flagged_by':['test'],'sources':[{'name':'test','verdict':'flagged','evidence_url':'https://proof.example/'}]}},'sources':[{'id':'test','name':'Synthetic'}],'standard':'https://proof.example/','summary':{},'removed_hosts':{}}
+            result=ls.apply_removals(report,str(d/'snapshot.json'),str(d/'removed.json'),None,set(),'2026-11-24',preserve_inputs=True)
+            self.assertEqual([r['slug'] for r in result],['open-one'])
+
     def test_unknown_current_id_fails_closed(self):
         with tempfile.TemporaryDirectory() as td:
             d=Path(td)

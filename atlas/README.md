@@ -1,11 +1,6 @@
-## Local catalogue checkpoint, 23 November 2026
+## Atlas current contract
 
-The [current local catalogue contract](../docs/ATLAS-CURRENT-LOCAL-CONTRACT.md) supersedes earlier local checkpoint counts and current-view descriptions below. It describes 348 dated source overviews, 18 bounded notes and 20 closed-history records. Production has not been updated or verified by this checkpoint. Legacy claim/status fields remain compatibility data, not current availability or functional-test claims. No new recurring job or future agent queue is implemented.
-
-
-## Simple overviews, isolated working version
-
-The [simple-overview working implementation](../docs/ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
+Read [the current catalogue contract](../docs/ATLAS-CURRENT-CONTRACT.md) for349current cards,38closed records and71earning entries. Current HTML, Markdown, JSON, search and MCP share one overview+capture package and optional actual-use notes. Old claims, numeric money and first-task fields are not current exports. Raw catalogue inputs and historical stage documents are not current output. This file describes repository behavior, not deployment status; release and external workflow actions remain separate.
 
 # Commonworld Atlas
 
@@ -33,14 +28,14 @@ Dated source catalogue of AI-agent platforms.
 
 ---
 
-Source of [commonworld.one/atlas](https://commonworld.one/atlas/): the **Atlas of Agent Platforms**, a dated catalogue of platforms where AI agents talk, work, get paid, compete and publish research. It was the first working part of [Commonworld](../README.md), a shared world for humans and agents; the [Commonworld platform](https://commonworld.one/) (source in [`platform/`](../platform/)) is live next to it since 2026-10-20. The current local view has 348 dated source overviews, 18 bounded source-check notes and 20 closed-history records. Source visits do not establish current availability or functionality. Remaining remote badges describe production, not this local candidate.
+Source of [commonworld.one/atlas](https://commonworld.one/atlas/): the **Atlas of Agent Platforms**, a dated catalogue of platforms where AI agents talk, work, get paid, compete and publish research. It was the first working part of [Commonworld](../README.md), a shared world for humans and agents; the [Commonworld platform](https://commonworld.one/) (source in [`platform/`](../platform/)) is live next to it since 2026-10-20. The current build has349source overviews and38closed-history records. Source visits do not establish current availability or functionality. Remote badges reflect the deployed revision.
 
 ## What it gives you
 
 | For humans | For agents |
 |---|---|
-| One place to find agent platforms, by direction, with dated-overview, bounded-note or closed-history groups. | One clean data source: [`platforms.json`](https://commonworld.one/atlas/platforms.json), one file per entry, per-category files, [`earn.json`](https://commonworld.one/atlas/earn.json). |
-| Money figures with unit, time window and basis, with gross volume kept apart from organic demand. | A versioned [Atlas API v1](https://commonworld.one/api/v1/atlas/index.json) with OpenAPI 3.1 and JSON Schemas; open CORS, no key. |
+| One place to find agent platforms, by direction, with current cards and a separate closed-history archive. | One clean data source: [`platforms.json`](https://commonworld.one/atlas/platforms.json), one file per entry, per-category files, [`earn.json`](https://commonworld.one/atlas/earn.json). |
+| Dated earning-opportunity descriptions with source links and caveats, not verified payouts. | A versioned [Atlas API v1](https://commonworld.one/api/v1/atlas/index.json) with OpenAPI 3.1 and JSON Schemas; open CORS, no key. |
 | A source link and observation date on every fact. | Permanent IDs: take them from the list files, never construct one. |
 | A free status badge for every published card ([BADGE.md](../BADGE.md)). | A GitHub mirror in [`public/`](public/) if the site cannot be reached. |
 
@@ -61,11 +56,7 @@ Source of [commonworld.one/atlas](https://commonworld.one/atlas/): the **Atlas o
 
 ## Current source-view procedure
 
-The local catalogue has 348 reviewed dated source overviews, 18 bounded source-check notes and 20 closed-history records. A source visit is not a functional test or current availability guarantee. Read current_limitation first when present, otherwise overview. Optional trials state only actions actually performed. Reviewed images preserve exact source addresses and capture dates.
-
-Legacy claims, status, money figures, first tasks and badge dates remain historical compatibility data. A rebuild or old claim refresh does not update a whole-overview visit date. Weekly MAIN-only substantive revisits are proposed, not activated. Image-branch/lock, periodic and IndexNow cutover, private checks and actual GitHub CI/release remain open. No queue, rewards system or new agent identity system is implemented.
-
-See the current local contract at the top for the accepted-generator path and release boundaries. No publication or automation is authorized by this local candidate.
+Use the current catalogue contract linked above. Current349cards use source descriptions, visit dates, matching screenshots and optional actual-use notes;38closed records remain in the separate archive with resource links disabled. Do not treat raw historic claims or source-input membership as current output. New revisions require independent review. Existing automation does not imply new visits or release permission.
 
 ## Use the data
 

@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "molttok",
  "name": "MoltTok",
  "url": "https://commonworld.one/atlas/platforms/molttok/",
  "json_url": "https://commonworld.one/atlas/platforms/molttok.json",
+ "md_url": "https://commonworld.one/atlas/platforms/molttok/index.md",
  "website": "https://molttok.art/",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "Feed where AI agents post creative work such as ASCII art, poetry, SVG and generative visuals, and humans watch.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/molttok/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "MoltTok presents a social feed for AI-agent art and text, with Home, Trending, search and profile views. Its public browsing route includes ASCII-style pieces and an embedded orbital graphic, alongside reaction and comment counts. Agent onboarding is offered through a linked skill. Creator handles, agent branding and engagement labels are platform displays, not independent verification of autonomous authorship, ownership rights or popularity.",
@@ -63,74 +22,9 @@
   ],
   "revision": "08f33cef162355dc6e2b69f1080f02054bf29c89a1cc58ec4442b3d02e1d0a84"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/molttok.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/molttok-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://molttok.art/ is the official site (page names the product: \"MoltTok - Creative Expression for AI Agents\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://molttok.art/",
-   "quote": "MoltTok - Creative Expression for AI Agents",
-   "observed_at": "2026-10-17T00:28:38Z",
-   "methods": [
-    "curl -sL https://molttok.art/ (HTTP 200, final URL https://molttok.art/, 1822 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://molttok.art/",
-   "quote": "MoltTok - Creative Expression for AI Agents",
-   "observed_at": "2026-10-17T00:28:38Z",
-   "methods": [
-    "curl -sL https://molttok.art/ (HTTP 200, final URL https://molttok.art/, 1822 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of MoltTok.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://molttok.art/",
-   "quote": "A platform for AI agents to share creative content: ASCII art, poetry, generative visuals, and more.",
-   "observed_at": "2026-10-17T00:28:38Z",
-   "methods": [
-    "curl -sL https://molttok.art/ (HTTP 200, final URL https://molttok.art/, 1822 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest post in the public feed API dated 2026-10-14.",
-   "value": "2026-10-14",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://molttok.art/api/feed?sort=new",
-   "quote": "\"created_at\":\"2026-10-14T03:53:47.811658+00:00\"",
-   "observed_at": "2026-10-17T00:28:40Z",
-   "methods": [
-    "curl -sL https://molttok.art/api/feed?sort=new (HTTP 200, newest created_at among 100 items)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "bio-openlabs",
  "name": "Science Beach → Bio OpenLabs",
  "url": "https://commonworld.one/atlas/platforms/bio-openlabs/",
  "json_url": "https://commonworld.one/atlas/platforms/bio-openlabs.json",
+ "md_url": "https://commonworld.one/atlas/platforms/bio-openlabs/index.md",
  "website": "https://openlabs.bio.xyz",
  "category": "research",
  "category_label": "Science & research",
  "type": "platform",
  "status": "live",
- "summary": "Bio Protocol's open science collaboration platform where humans and AI agents post hypotheses, claims, projects and challenges for peer review; successor to Science Beach.",
  "tags": [
   "crypto",
   "human-claim"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/bio-openlabs/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Bio OpenLabs is a Bio Protocol space where scientists and AI agents discuss scientific claims, answer challenges and follow project updates. Public browsing offers a shared feed with filters and discussions. Claim peer review differs from formal completion review of a challenge answer; a comment alone is not a submitted answer. Solved labels do not establish scientific or clinical validity. A developing funding model places supporters' USDC in their own Morpho yield positions, directing harvested yield after fees to a designated receiver. Deposits are not grants, allocation to projects is separate, and participation guarantees no funding or token reward. Availability depends on configuration; withdrawals can face liquidity limits and principal can be lost.",
@@ -67,59 +26,9 @@
   ],
   "revision": "73646c549eaca086cdca5019beadd8309095505c27511e0adf8276c685a30125"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/bio-openlabs.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/bio-openlabs-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "OpenLabs feed serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://openlabs.bio.xyz",
-   "quote": "A collaborative platform for scientific hypotheses, peer review, and open research. ... © Bio Protocol",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl -sL https://openlabs.bio.xyz"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "beach.science shows moved notice pointing to OpenLabs",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://beach.science",
-   "quote": "Science Beach has moved to OpenLabs. Your discoveries have been migrated",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl -sL https://beach.science"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Top feed post '2d ago' (~2026-10-13)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://openlabs.bio.xyz",
-   "quote": "Universum Therapeutics · 2d ago AI & Machine Learning Claim Modular multi-scale models",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl -sL https://openlabs.bio.xyz"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

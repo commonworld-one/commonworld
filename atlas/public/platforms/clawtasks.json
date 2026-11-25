@@ -1,61 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawtasks",
  "name": "ClawTasks",
  "url": "https://commonworld.one/atlas/platforms/clawtasks/",
  "json_url": "https://commonworld.one/atlas/platforms/clawtasks.json",
+ "md_url": "https://commonworld.one/atlas/platforms/clawtasks/index.md",
  "website": "https://clawtasks.com",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Agent-to-agent bounty marketplace on Base L2 (operated by AI Magic, LLC) that originally paid in USDC escrow and is now restricted to free tasks while paid bounties wind down.",
  "tags": [
   "bounties"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:28:00Z",
- "last_checked": "2026-10-15T18:28:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawtasks/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "recorded",
-   "value": "named",
-   "label": "Named: AI Magic, LLC",
-   "source_url": "https://clawtasks.com",
-   "quote": "Operated by AI Magic, LLC"
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "ClawTasks states that it is currently free-task only and that paid bounties are winding down. Earlier paid-bounty posters may need an on-chain cancellation from their own wallet to release refunds. Older sections still describe USDC escrow, worker stakes and bounty payouts, but do not establish availability of new paid work. The page calls the service beta software, asks operators to supervise agents and names AI Magic, LLC as operator.",
@@ -65,92 +24,9 @@
   ],
   "revision": "01cee4ecf1d901bad8226bc43a8dbf78d2a3d3c8a21d694dde655d1d8eb1b021"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/clawtasks.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawtasks-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site clawtasks.com (found via search; legacy had no URL)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawtasks.com",
-   "quote": "ClawTasks - Agent-to-Agent Bounty Marketplace ... Operated by AI Magic, LLC",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "web_search",
-    "curl -sL https://clawtasks.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves full content (HTTP 200)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawtasks.com",
-   "quote": "Where AI agents post and complete bounties for USDC. Humans welcome to fund wallets.",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl -sL https://clawtasks.com"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Free-task-only mode with paid-bounty wind-down banner",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawtasks.com",
-   "quote": "Product update: ClawTasks is currently free-task only... Paid bounty wind-down notice: open paid bounties may require an on-chain cancel",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl -sL https://clawtasks.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Open-bounties API returns HTTP 500 now; bounties/workers/leaderboard pages show none",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawtasks.com/api/bounties?status=open",
-   "quote": "HTTP 500",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl https://clawtasks.com/api/bounties?status=open",
-    "web_search (bounties page: 'No open bounties found')"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says",
-   "evidence_note": "Read as a text page: the endpoint answers HTTP 500, so it carries no live figures."
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "Official notice winds down PAID bounties only; no full shutdown statement",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://clawtasks.com",
-   "quote": "Paid bounty wind-down notice",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl"
-   ],
-   "outcome": "contradicted"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

@@ -15,11 +15,14 @@ def exact_https_url(value, expected):
         return False
 
 
-def caption_source_matches(text, expected):
+def caption_source_matches(text, expected, current=False):
     # The visible caption has one address in a fixed template, not an arbitrary text URL search.
-    prefix, marker, suffix = text.partition(' from ')
+    if current:
+        prefix, marker, suffix = text.partition(' · ')
+    else:
+        prefix, marker, suffix = text.partition(' from ')
     address, end, rights = suffix.partition('. Screenshot © ')
-    return (bool(marker) and bool(end) and prefix.startswith('Homepage as captured ')
+    return (bool(marker) and bool(end) and (prefix == 'Homepage' if current else prefix.startswith('Homepage as captured '))
             and rights == 'the site owner, not part of the CC BY data.'
             and exact_https_url(address, expected))
 

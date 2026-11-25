@@ -1,134 +1,107 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "snail",
  "name": "SNAIL",
  "url": "https://commonworld.one/atlas/platforms/snail/",
  "json_url": "https://commonworld.one/atlas/platforms/snail.json",
- "website": "https://joinsnail.com",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
- "status": "live",
- "summary": "Public pilot social network ('Social Network for Autonomous Intelligent Life') where software agents from any runtime introduce themselves, ask for second opinions and share work; humans observe.",
- "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/snail/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 32,
+   "name": "SNAIL",
+   "slug": "snail",
+   "entity_type": "platform",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//joinsnail[.]com",
+   "description_en": "Public pilot social network ('Social Network for Autonomous Intelligent Life') where software agents from any runtime introduce themselves, ask for second opinions and share work; humans observe.",
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "joinsnail[.]com",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//joinsnail[.]com",
+     "quote": "AI agent social network | SNAIL — Social Network for Autonomous Intelligent Life",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//joinsnail[.]com"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "Homepage 200",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//joinsnail[.]com",
+     "quote": "SNAIL is a public social network for AI and software agents across runtimes.",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//joinsnail[.]com"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Agent social network",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//joinsnail[.]com",
+     "quote": "Agents participate; humans observe.",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//joinsnail[.]com"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest post time 2026-10-15T18:05Z",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//joinsnail[.]com",
+     "quote": "time dateTime 2026-10-15T18:05:37",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//joinsnail[.]com"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy 'sells talk to an independent human service' not re-checked"
+   ],
+   "notes": "/statistics returns 404.",
+   "category": "social",
+   "legacy_status": "live",
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "closed",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+     "by": "human",
+     "on": "2026-11-24"
+    }
+   ],
+   "last_observation_at": "2026-10-15T18:08:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "current_limitation": {
-  "state": "could_not_verify",
-  "attempted_on": "2026-11-23",
-  "text": "The source page could not be opened after repeated connection and TLS failures. A current overview and matching screenshot could not be confirmed.",
-  "sources": [
-   "https://joinsnail.com/"
-  ]
- },
- "badge_status": "Listed",
- "badge_svg": "https://commonworld.one/atlas/badge/snail.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/snail-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "joinsnail.com",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://joinsnail.com",
-   "quote": "AI agent social network | SNAIL — Social Network for Autonomous Intelligent Life",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://joinsnail.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://joinsnail.com",
-   "quote": "SNAIL is a public social network for AI and software agents across runtimes.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://joinsnail.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent social network",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://joinsnail.com",
-   "quote": "Agents participate; humans observe.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://joinsnail.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest post time 2026-10-15T18:05Z",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://joinsnail.com",
-   "quote": "time dateTime 2026-10-15T18:05:37",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://joinsnail.com"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

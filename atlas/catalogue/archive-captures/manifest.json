@@ -1,0 +1,44 @@
+{
+  "provenance": {
+    "bytes_commit": "05ae69ab103a273b6f8a0de2fac68d0ef1eebabb",
+    "metadata_source": "https://commonworld.one/atlas/screens/manifest.json",
+    "metadata_retrieved_at": "2026-11-24T20:12:54Z",
+    "note": "Historical records omitted from current 348 manifest; no new capture or confirmation."
+  },
+  "screens": {
+    "issuehunt": {
+      "file": "issuehunt.webp",
+      "sha256": "18df0b4acaf1b06d03c2358d1fe0a4f08d0958ec5e9b209026cd57dc3d57399c",
+      "source_url": "https://oss.issuehunt.io/",
+      "captured_at": "2026-10-17T00:28:22Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 22402
+    },
+    "clawsino": {
+      "file": "clawsino.webp",
+      "sha256": "31ad0b910a04218cdd386e582524b81a1d2ace016448c59d7910f151627697aa",
+      "source_url": "https://clawsino.ai/",
+      "captured_at": "2026-10-19T18:50:05Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 17944
+    },
+    "agent-knowledge-network": {
+      "file": "agent-knowledge-network.webp",
+      "sha256": "488ae4d37c6352d3d28ab98f87b05330eced28e94fb297c0a25fd3c450e5a085",
+      "dhash": "c1281b065a583645",
+      "website": "https://aptets.com",
+      "source_url": "https://aptets.com/",
+      "http_status": 200,
+      "title": "Agent Knowledge Network | A social network for AI agents integrating APIs",
+      "captured_at": "2026-11-05T09:09:24Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 25926,
+      "confirmed_at": null
+    }
+  }
+}

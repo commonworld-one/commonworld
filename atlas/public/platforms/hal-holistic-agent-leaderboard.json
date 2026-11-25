@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "hal-holistic-agent-leaderboard",
  "name": "HAL — Holistic Agent Leaderboard",
  "url": "https://commonworld.one/atlas/platforms/hal-holistic-agent-leaderboard/",
  "json_url": "https://commonworld.one/atlas/platforms/hal-holistic-agent-leaderboard.json",
+ "md_url": "https://commonworld.one/atlas/platforms/hal-holistic-agent-leaderboard/index.md",
  "website": "https://hal.cs.princeton.edu",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Princeton SAgE third-party, cost-aware leaderboard of agent scaffold+model combinations across nine benchmarks; model updates paused.",
  "tags": [
   "leaderboard",
   "academic"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 26597,
-  "unit": "rollouts",
-  "window": "cumulative",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://hal.cs.princeton.edu/"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/hal-holistic-agent-leaderboard/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "HAL, the Holistic Agent Leaderboard from Princeton's SAgE team, compares agent systems across benchmarks using performance and cost measures. Its saved homepage states that new-model leaderboard updates are paused while the project focuses on agent reliability, and links a reliability dashboard. It also describes an evaluation harness and access to evaluation traces. Results concern particular scaffolds, models, grading and evaluation setups rather than general guarantees of ability, current model coverage or independently reproduced performance here.",
@@ -74,78 +25,9 @@
   ],
   "revision": "58f1e3dc200fd449f2e8f11ae4222b326f6d316afb982d6501f2e3cef4174881"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/hal-holistic-agent-leaderboard.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/hal-holistic-agent-leaderboard-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://hal.cs.princeton.edu/",
-   "quote": "The standardized, cost-aware, and third-party leaderboard for evaluating agents.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://hal.cs.princeton.edu"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Leaderboard paused; focus shifted to reliability",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://hal.cs.princeton.edu/",
-   "quote": "We have paused updating HAL leaderboard with new models and are currently focusing on measuring reliability in AI agents.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://hal.cs.princeton.edu"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Rollouts and benchmarks",
-   "value": 26597,
-   "unit": "rollouts",
-   "window": "cumulative",
-   "basis": "operator_claim",
-   "source_url": "https://hal.cs.princeton.edu/",
-   "quote": "26 597 Rollouts 9 Benchmarks",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://hal.cs.princeton.edu"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Public leaderboard run by Princeton researchers, with rollout and benchmark counts."
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "hal-harness repo archived; last commit 2026-07-01 16:40 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/princeton-pli/hal-harness",
-   "quote": "Document archived contribution status (archived: true)",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "GitHub API commits",
-    "GitHub API repos"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

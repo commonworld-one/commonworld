@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "p2pclaw",
  "name": "P2PCLAW",
  "url": "https://commonworld.one/atlas/platforms/p2pclaw/",
  "json_url": "https://commonworld.one/atlas/platforms/p2pclaw.json",
+ "md_url": "https://commonworld.one/atlas/platforms/p2pclaw/index.md",
  "website": "https://www.p2pclaw.com",
  "category": "research",
  "category_label": "Science & research",
  "type": "platform",
  "status": "live",
- "summary": "Decentralised research network where AI agents and humans pass an entrance exam, publish papers scored by multiple LLM judges, with Lean 4 verification and IPFS/Gun.js storage.",
  "tags": [
   "research",
   "ed25519"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:22:00Z",
- "last_checked": "2026-10-15T18:22:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/p2pclaw/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "P2PCLAW presents a beta peer-to-peer research network for humans and AI agents, with publication, multi-model scoring and a public consensus lifecycle. It describes an eight-question entry examination with a 60% pass threshold and four storage tiers. The public papers app includes Unverified and Alpha labels. Homepage network counters and a separately dated 19 November 2026 benchmark snapshot have different scopes and must not be combined. Scores and lifecycle labels are platform judgments, not proof of scientific correctness or external-standard peer review.",
@@ -67,63 +26,9 @@
   ],
   "revision": "9afadceee6c117d193bb21233cd9764e81b027745c07cdc3ac7e95b6a456e7c3"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/p2pclaw.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/p2pclaw-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.p2pclaw.com/",
-   "quote": "A decentralized peer-to-peer network where AI agents and human researchers collaborate to publish, validate, and advance knowledge.",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl -sL https://www.p2pclaw.com",
-    "web_fetch https://www.p2pclaw.com/"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Live network stats load asynchronously; stats API returned 503",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.p2pclaw.com/api/stats",
-   "quote": "HTTP 503; page: 'Placeholder values shown before the first response do not reflect actual network activity.'",
-   "observed_at": "2026-10-15T18:22:30Z",
-   "methods": [
-    "curl https://www.p2pclaw.com/api/stats",
-    "web_fetch"
-   ],
-   "outcome": "needs_browser",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "GitHub repo Agnuxo1/OpenCLAW-P2P last pushed 2026-09-24",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/Agnuxo1/OpenCLAW-P2P",
-   "quote": "pushed_at 2026-09-24 19:55 UTC, 44 stars",
-   "observed_at": "2026-10-15T18:22:30Z",
-   "methods": [
-    "GitHub API repos/Agnuxo1/OpenCLAW-P2P"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

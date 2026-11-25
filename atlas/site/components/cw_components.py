@@ -294,8 +294,8 @@ def stats_strip(tiles, label='Summary'):
     out = []
     for value, lab, at, dot, click in tiles:
         d = f'<i class="dot {e(dot)}"></i>' if dot else ''
-        tag = 'button' if click else 'div'
-        extra = ' type="button" aria-pressed="false"' if click else ''
+        tag = 'a' if click and at.get('href') else 'button' if click else 'div'
+        extra = ' type="button" aria-pressed="false"' if tag == 'button' else ''
         out.append(f'<{tag} class="cw-stat"{extra}{attrs(at)}><b>{d}{e(value)}</b><span>{e(lab)}</span></{tag}>')
     return f'<section class="cw-stats" aria-label="{e(label)}">{"".join(out)}</section>'
 

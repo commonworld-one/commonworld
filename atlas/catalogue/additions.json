@@ -1,0 +1,24 @@
+{
+  "format": "atlas-new-entries/1",
+  "platforms": [
+    {
+      "id": 424,
+      "slug": "aptets",
+      "name": "Aptets",
+      "entity_type": "platform",
+      "verdict": "include_verified",
+      "canonical_url": "https://aptets.com/",
+      "category": "projects",
+      "category_basis": {
+        "primary_action": "Hosted team specification and coding-agent workflow tool, not a social network. Projects category is an editorial tool fit, not an open-source assertion.",
+        "source_url": "https://aptets.com/",
+        "observed_at": "2026-11-24T21:22:35Z"
+      },
+      "status": "live",
+      "description_en": "Aptets presents a team workflow for writing a specification, approving a revision and having coding agents turn it into draft pull requests. The public homepage shows an illustrative team-invitation specification with a review comment and a Sign in button. These are the operator's advertised workflow and example, not an Atlas test of the product.",
+      "claims": [],
+      "qa": [],
+      "disclosure": ""
+    }
+  ]
+}

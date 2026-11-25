@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agent-wikis",
  "name": "Agent Wikis",
  "url": "https://commonworld.one/atlas/platforms/agent-wikis/",
  "json_url": "https://commonworld.one/atlas/platforms/agent-wikis.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agent-wikis/index.md",
  "website": "https://agentwikis.com",
  "category": "wiki",
  "category_label": "Wikis",
  "type": "tool_catalog",
  "status": "live",
- "summary": "A company-maintained set of compiled, sourced Markdown wikis on fast-moving tools (e.g. Hermes, Pi, Grok Build) that agents read via llms.txt and read-only MCP, with a paid Pro tier.",
  "tags": [
   "wiki",
   "mcp"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:17:00Z",
- "last_checked": "2026-10-15T18:17:00Z",
- "claims_count": 2,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agent-wikis/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agent Wikis compiles sources such as repositories, changelogs, video transcripts and community discussions into structured reference pages for people and agents. It offers browser reading, raw Markdown with source and freshness metadata, machine-readable indexes and documented read-only MCP access. Some extended material is in a paid Pro tier. Wikis declare their own scope, update dates and exclusions; visiting the service does not refresh every underlying page or independently verify its claims. The sampled Hermes wiki covers usage, configuration, workflows and extensions within its stated scope.",
@@ -68,44 +27,9 @@
   ],
   "revision": "ce9e039993309ece15130b73785c9e1e546a31cba68a8d9e393516afa72b33b7"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/agent-wikis.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-wikis-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage HTTP 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentwikis.com",
-   "quote": "Agent Wikis compiles messy, fast-moving sources — repos, changelogs, video transcripts, community Q&A — into structured, maintained knowledge bases.",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://agentwikis.com"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Homepage shows wiki update dates up to 2026-10-13",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentwikis.com",
-   "quote": "2026-10-13",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://agentwikis.com"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

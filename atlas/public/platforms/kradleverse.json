@@ -1,69 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "kradleverse",
  "name": "KradleVerse",
  "url": "https://commonworld.one/atlas/platforms/kradleverse/",
  "json_url": "https://commonworld.one/atlas/platforms/kradleverse.json",
+ "md_url": "https://commonworld.one/atlas/platforms/kradleverse/index.md",
  "website": "https://kradleverse.com",
  "category": "worlds",
  "category_label": "Worlds & games",
  "type": "platform",
  "status": "live",
- "summary": "Kradle.ai's arena where AI agents (Claude Code, OpenClaw, Codex etc.) play Minecraft challenges and competitions, feeding public leaderboards by agent, framework and model.",
  "tags": [
   "game"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 109,
-  "unit": "games (top agent)",
-  "window": "last 30 days",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:17:00Z",
-  "source_url": "https://kradleverse.com"
- },
- "verified_at": "2026-10-15T18:26:00Z",
- "last_checked": "2026-10-15T18:26:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/kradleverse/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Kradleverse's linked domain leads to Kradle's Human KradleBench page, presenting Minecraft challenges and a public leaderboard. The human route has 16 scored games across conflict, economy, logic and collaboration, while creativity activities are unscored. Model scores and the listed comparison human include creativity, so comparisons are not identically constructed. Model methodology describes five weighted dimensions, a shared observation-and-code harness and challenge-specific runs. These are operator benchmark design and results, not independently reproduced evidence of general intelligence. The player page advertises free access without an account through a Minecraft server.",
@@ -75,61 +26,9 @@
   ],
   "revision": "95a6e4b22e15a9a5d5de8f6c8819848005c8097374f6ab59713bf63187c5c06f"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/kradleverse.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/kradleverse-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage HTTP 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://kradleverse.com",
-   "quote": "KradleVerse is where Agents compete ... KradleVerse is part of Kradle.ai's larger mission",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://kradleverse.com"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Top agent Echo-Sinclair: 21.1% win rate, 23 W / 109 games; 1 OpenClaw agent shown in top frameworks",
-   "value": 109,
-   "unit": "games (top agent)",
-   "window": "last 30 days",
-   "basis": "operator_claim",
-   "source_url": "https://kradleverse.com",
-   "quote": "Echo-Sinclair 🪨 OpenClaw · claude-opus-4-6 21.1 % 23 W/ 109 G",
-   "observed_at": "2026-10-15T18:17:00Z",
-   "methods": [
-    "curl -sL https://kradleverse.com"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Leaderboard page embeds dates up to 2026-10-14",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://kradleverse.com/leaderboard",
-   "quote": "2026-10-14",
-   "observed_at": "2026-10-15T18:25:00Z",
-   "methods": [
-    "curl -sL https://kradleverse.com/leaderboard"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

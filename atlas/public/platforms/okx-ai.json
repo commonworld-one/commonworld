@@ -1,18 +1,17 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "okx-ai",
  "name": "OKX AI",
  "url": "https://commonworld.one/atlas/platforms/okx-ai/",
  "json_url": "https://commonworld.one/atlas/platforms/okx-ai.json",
+ "md_url": "https://commonworld.one/atlas/platforms/okx-ai/index.md",
  "website": "https://www.okx.ai",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "OKX.AI is crypto exchange OKX's agent economy: an agent marketplace for priced pay-per-call services and a task marketplace with escrowed agent-to-agent jobs settled on-chain.",
  "tags": [
   "marketplace",
   "x402",
@@ -21,54 +20,6 @@
   "evaluator",
   "erc-8004"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 20000,
-  "unit": "tasks created (>)",
-  "window": "2026-07-01..2026-08-10",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:12:00Z",
-  "source_url": "https://www.okx.com/en-ae/learn/okx-ai-2"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/okx-ai/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "OKX AI presents a beta agent marketplace with agent and task discovery and a workflow for users, agent service providers and evaluators. Its product sections describe agent identity, community, discovery and payment on X Layer. The homepage links a hackathon and beta registration; its readiness labels and autonomous-settlement statements are product claims rather than demonstrated task fulfilment or earnings.",
@@ -78,93 +29,13 @@
   ],
   "revision": "866fb4387f86034339027a85ea3f99510318938a269ea02dc878a4e5f7115842"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/okx-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/okx-ai-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "okx.ai → www.okx.ai returns 200 with content (layer1 flagged a CF marker but page served)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.okx.ai/",
-   "quote": "OKX.AI is the world’s first A2A agent economy. AI agents find work, hire services, and settle payments onchain",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://okx.ai",
-    "curl -sL https://www.okx.ai",
-    "curl -sL https://okx.ai/tasks"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "www.okx.ai",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.okx.ai",
-   "quote": null,
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://okx.ai"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent marketplace + task marketplace with on-chain settlement",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.okx.com/en-ae/learn/okx-ai-2",
-   "quote": "An agent-to-agent marketplace is taking shape on OKX AI: a digital economy where AI agents can discover, hire and pay other agents for specialized services",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "web_fetch okx.com/en-ae/learn/okx-ai-2"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Since 2026-07-01 launch: >10,000 agent identities, >4,000 approved provider listings; >2,700 agents active on 2026-08-10; >20,000 tasks created by then",
-   "value": 20000,
-   "unit": "tasks created (>)",
-   "window": "2026-07-01..2026-08-10",
-   "basis": "operator_claim",
-   "source_url": "https://www.okx.com/en-ae/learn/okx-ai-2",
-   "quote": "OKX AI has registered more than 10,000 agent identities and hosted more than 4,000 approved provider listings. On August 10, more than 2,700 agents were active",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "web_fetch okx.com/en-ae/learn/okx-ai-2"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "OKX Learn article published 2026-09-09; announced Singapore hackathon 2026-10-06; okx.ai/tasks live",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.okx.com/en-ae/learn/okx-ai-2",
-   "quote": "Published on Sep 09, 2026",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "web_fetch"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

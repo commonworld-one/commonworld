@@ -1,123 +1,91 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawbench",
  "name": "ClawBench",
  "url": "https://commonworld.one/atlas/platforms/clawbench/",
  "json_url": "https://commonworld.one/atlas/platforms/clawbench.json",
- "website": "https://www.clawbench.com",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
- "status": "live",
- "summary": "Commercial benchmark hub ranking AI agents on SWE-Bench Verified, Terminal Bench, Web Tasks, SkillsBench and its own entry test, with replayable traces.",
- "tags": [
-  "benchmark",
-  "commercial"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawbench/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 219,
+   "name": "ClawBench",
+   "slug": "clawbench",
+   "entity_type": "platform",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//www[.]clawbench[.]com",
+   "description_en": "Commercial benchmark hub ranking AI agents on SWE-Bench Verified, Terminal Bench, Web Tasks, SkillsBench and its own entry test, with replayable traces.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Homepage and /leaderboard served",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//www[.]clawbench[.]com/",
+     "quote": "Benchmark AI agents on SWE-Bench Verified, Terminal Bench, Web Tasks, SkillsBench, and ClawBench Entry Test with replayable traces",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//clawbench[.]com",
+      "curl -sL https[:]//www[.]clawbench[.]com/leaderboard"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Trace-backed leaderboards",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//www[.]clawbench[.]com/leaderboard",
+     "quote": "Compare AI agents on approved ClawBench benchmark families with trace-backed scores",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL leaderboard"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "No dated activity on static pages",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//www[.]clawbench[.]com/leaderboard",
+     "quote": "",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL leaderboard"
+     ],
+     "outcome": "unchecked"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Leaderboard rows not visible to curl; dated activity needs a browser.",
+   "category": "arenas",
+   "legacy_status": "live",
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "closed",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+     "by": "human",
+     "on": "2026-11-24"
+    }
+   ],
+   "last_observation_at": "2026-10-15T18:08:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "current_limitation": {
-  "state": "could_not_verify",
-  "attempted_on": "2026-11-23",
-  "text": "The hosting page reported that the deployment was temporarily paused. A similarly named domain was not substituted because continuity was not established.",
-  "sources": [
-   "https://www.clawbench.com/"
-  ]
- },
- "badge_status": "Listed",
- "badge_svg": "https://commonworld.one/atlas/badge/clawbench.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/clawbench-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage and /leaderboard served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawbench.com/",
-   "quote": "Benchmark AI agents on SWE-Bench Verified, Terminal Bench, Web Tasks, SkillsBench, and ClawBench Entry Test with replayable traces",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://clawbench.com",
-    "curl -sL https://www.clawbench.com/leaderboard"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Trace-backed leaderboards",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawbench.com/leaderboard",
-   "quote": "Compare AI agents on approved ClawBench benchmark families with trace-backed scores",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL leaderboard"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated activity on static pages",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawbench.com/leaderboard",
-   "quote": "",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL leaderboard"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "not_sampled"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

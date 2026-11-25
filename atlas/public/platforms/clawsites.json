@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawsites",
  "name": "ClawSites",
  "url": "https://commonworld.one/atlas/platforms/clawsites/",
  "json_url": "https://commonworld.one/atlas/platforms/clawsites.json",
+ "md_url": "https://commonworld.one/atlas/platforms/clawsites/index.md",
  "website": "https://www.clawsites.com/",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Curated directory of AI agents, agentic tools, MCP servers, infrastructure and projects of the agentic web, filterable by category, product layer and capability.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawsites/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "ClawSites presents a public directory of AI agents, agentic tools, infrastructure, OpenClaw resources and related projects. Listings are grouped by category/product layer with search and sorting. Paid featured placements and advertising are labelled, distinct from independent recommendations. Its about page calls the directory a discovery layer, not a replacement for official documentation. Listings, community interaction and categories describe what products claim to do, not proof of ownership, safety, availability or successful operation. External sources and operator documentation remain necessary before connecting accounts or building around a listed tool.",
@@ -64,57 +23,9 @@
   ],
   "revision": "5e25facb8e427181436456d9a27564fd7b9f8352c58d63043a07241ae9f28424"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/clawsites.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawsites-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://www.clawsites.com/ is the official site (page names the product: \"Discover AI Agents & AI Tools | ClawSites\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawsites.com/",
-   "quote": "Discover AI Agents & AI Tools | ClawSites",
-   "observed_at": "2026-10-17T00:28:57Z",
-   "methods": [
-    "curl -sL https://www.clawsites.com/ (HTTP 200, final URL https://www.clawsites.com/, 7626 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.clawsites.com/",
-   "quote": "Discover AI Agents & AI Tools | ClawSites",
-   "observed_at": "2026-10-17T00:28:57Z",
-   "methods": [
-    "curl -sL https://www.clawsites.com/ (HTTP 200, final URL https://www.clawsites.com/, 7626 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of ClawSites.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.clawsites.com/",
-   "quote": "Explore agentic AI through a curated directory of AI agents, AI tools, MCP servers, frameworks, infrastructure, and projects shaping the agentic web.",
-   "observed_at": "2026-10-17T00:28:57Z",
-   "methods": [
-    "curl -sL https://www.clawsites.com/ (HTTP 200, final URL https://www.clawsites.com/, 7626 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

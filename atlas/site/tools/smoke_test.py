@@ -23,6 +23,7 @@ import json  # noqa: E402
 from smoke_urls import exact_https_url, caption_source_matches, share_target_matches
 _SNAP = json.load(open(os.path.join(HERE, '..', 'dist', 'atlas', 'data', 'snapshot.json')))['platforms']  # counts follow the built data
 CATALOGUE = any(c.get('overview') for c in _SNAP)
+ANNOUNCEMENT = json.load(open(os.path.join(HERE, '..', 'site-config.json'))).get('announcement', {})
 CURRENT_COUNTS = json.load(open(os.path.join(HERE, '..', 'dist', 'api', 'v1', 'atlas', 'index.json'))).get('current_counts', {})
 N_DATED = sum(bool(c.get('overview')) for c in _SNAP)
 N_LIMITED = sum(bool(c.get('current_limitation')) for c in _SNAP)
@@ -142,17 +143,20 @@ with sync_playwright() as p:
     pg.click('[data-cookie-settings]'); pg.click('[data-consent="granted"]'); pg.wait_for_timeout(300)
     check('accept loads gtag.js G-9QB65R36K6', any('gtag/js?id=G-9QB65R36K6' in u for u in ga))
     check('consent update granted in dataLayer', pg.evaluate("JSON.stringify(dataLayer).includes('\"analytics_storage\":\"granted\"')"))
+    check('accepted catalogue has no draft warning',
+          pg.locator('.overview-draft, body > .overview-legacy-note').count() == 0 and 'working version' not in pg.inner_text('.cw-foot'))
+    check('restored announcement text matches configured text',
+          pg.locator('.cw-announce').count() == 1 and ANNOUNCEMENT.get('text', '') in pg.inner_text('.cw-announce'))
+    pg.click('.cw-announce-x'); pg.reload()
+    check('announcement dismissal persists for configured ID', not pg.is_visible('.cw-announce'))
+
     if CATALOGUE:
-        check('accepted catalogue: no draft warning or stale verification announcement',
-              pg.locator('.overview-draft').count() == 0 and pg.locator('body > .overview-legacy-note').count() == 0
-              and pg.locator('.cw-announce').count() == 0 and 'working version' not in pg.inner_text('.cw-foot')
-              and 'dated source overviews' in pg.inner_text('.cw-foot'))
-        pg.reload()
-        check('accepted catalogue stays free of draft/stale announcement after reload',
-              pg.locator('.cw-announce').count() == 0 and pg.locator('body > .overview-legacy-note').count() == 0)
-    else:
-        pg.click('.cw-announce-x'); pg.reload()
-        check('announcement dismissed and remembered', not pg.is_visible('.cw-announce'))
+        earn_tile = pg.locator('.cw-stats a.cw-stat[href="/atlas/earn/"]')
+        check('Earn counter is a native internal link, not a DOM redirect',
+              earn_tile.count() == 1 and 'Earn' in earn_tile.inner_text() and pg.locator('[data-href]').count() == 0)
+        earn_tile.focus(); pg.keyboard.press('Enter'); pg.wait_for_url('**/atlas/earn/')
+        check('Earn counter keyboard navigation opens the earning list', pg.locator('.earning-current').count() == 1)
+        pg.goto(B + '/atlas/')
 
     # catalog: /atlas/ is page 1 of the list (50 cards + pager); search, filters, sort and counters run on the whole Atlas
     v, a, good = pg.evaluate(ADS_OK)
@@ -180,35 +184,28 @@ with sync_playwright() as p:
     pg.fill('#q', ''); pg.wait_for_timeout(250)
     check(f'empty search: back to page 1 ({pg.evaluate(VIS)} cards, pager, indexable)', pg.evaluate(VIS) == N_PAGE1 and (N_PAGES == 1 or pg.is_visible('#pager'))
           and pg.get_attribute('meta[name="robots"]', 'content').startswith('index,follow'))
-    pg.click('[data-f-status="closed"]')
-    n = pg.evaluate(VIS)
-    check(f'status chip closed -> {N_CLOSED} ({n})', n == N_CLOSED)
-    v, a, good = pg.evaluate(ADS_OK)
-    check(f'native ad re-inserted after filter ({v} cards, {a} ads, expect {N_CLOSED // 12})', good and a == N_CLOSED // 12)
-    check('list count updates', pg.inner_text('#list-count') == f'{N_CLOSED} of {N_ALL}')
-    pg.click('#f-reset')
     if CATALOGUE:
-        check('catalogue status groups match the current-view dataset',
-              CURRENT_COUNTS == {'dated_overviews': N_DATED, 'could_not_verify': N_LIMITED, 'closed_history': N_CLOSED})
-        for token, count in [('live', N_DATED), ('limited', N_LIMITED), ('closed', N_CLOSED)]:
-            pg.click(f'[data-filter="status:{token}"]')
-            check(f'catalogue stat {token}: exact count {count}', pg.evaluate(VIS) == count)
-            if token == 'limited':
-                check('bounded notes remain distinct from reviewed overviews', pg.evaluate(
-                    "Array.from(document.querySelectorAll('#grid .cw-card[data-slug]:not([hidden])')).every(c => c.dataset.s === 'limited')"))
-            pg.click('#f-reset')
-        pg.click('[data-filter="status:live"]')
+        check('current-only status controls exclude archive and limited',
+              pg.locator('[data-f-status="closed"],[data-f-status="limited"]').count() == 0)
+        check('current counts match current-only source', CURRENT_COUNTS == {'dated_overviews': N_DATED, 'live': N_DATED})
+        pg.click('[data-f-status="live"]')
         nm = pg.evaluate(VIS)
+        check('Live filter includes whole current catalogue', nm == N_DATED)
         pg.click('[data-f-type="platform"]')
         nmt = pg.evaluate(VIS)
-        expected = sum(bool(c.get('overview')) and c.get('entity_type') == 'platform' for c in _SNAP)
-        check(f'dated overview AND platform type: exact {expected}', nm == N_DATED and nmt == expected)
+        expected = sum(bool(c.get('overview')) and c.get('type') == 'platform' for c in _SNAP)
+        check(f'Live AND platform type: exact {expected}', nmt == expected)
     else:
+        pg.click('[data-f-status="closed"]')
+        check('legacy closed filter matches dataset', pg.evaluate(VIS) == N_CLOSED)
+        pg.click('#f-reset')
         pg.click('[data-filter="feat:money"]')
         nm = pg.evaluate(VIS)
         pg.click('[data-f-type="platform"]')
         nmt = pg.evaluate(VIS)
         check(f'stat tile "money flow" ({nm}) AND type platform ({nmt})', 0 < nmt <= nm < N_ALL)
+    v, a, good = pg.evaluate(ADS_OK)
+    check('native ads are re-inserted after type and status filtering', good and a == v // 12)
     cnt = pg.inner_text('[data-f-status="live"] span')
     check(f'chip counts follow other filters (live={cnt})', int(cnt) <= nmt)
     pg.click('#f-reset')
@@ -234,7 +231,7 @@ with sync_playwright() as p:
               pg.locator('#f-sort option').evaluate_all('(opts)=>opts.map(o=>o.value)') == ['name', 'recent'])
         pg.select_option('#f-sort', 'recent')
         check('source-view date sort is descending for the whole catalogue', pg.evaluate(
-            "(() => { const xs = Array.from(document.querySelectorAll('#grid .cw-card[data-slug]:not([hidden])')).map(c=>Number(c.dataset.ver || 0)); return xs.length === document.querySelectorAll('#grid .cw-card[data-slug]').length && xs.length > 50 && xs.some(v=>v===0) && xs.some(v=>v>0) && xs.every((v,i)=>i===0 || xs[i-1]>=v); })()"))
+            "(() => { const xs = Array.from(document.querySelectorAll('#grid .cw-card[data-slug]:not([hidden])')).map(c=>Number(c.dataset.ver || 0)); return xs.length === document.querySelectorAll('#grid .cw-card[data-slug]').length && xs.length > 50 && xs.every(v=>v>0) && xs.every((v,i)=>i===0 || xs[i-1]>=v); })()"))
         pg.select_option('#f-sort', 'name')
         pg.click('[data-f-type="platform"]')
         check('name sort orders the filtered catalogue', pg.evaluate(
@@ -247,9 +244,9 @@ with sync_playwright() as p:
         check('sort by most claims', first == mx)
     pg.select_option('#f-sort', 'name'); pg.click('#f-reset')
     check(f'reset + default sort: page 1 again ({pg.evaluate(VIS)} cards)', pg.evaluate(VIS) == N_PAGE1 and pg.inner_text('#list-count').startswith('Showing 1–'))
-    pg.goto(B + '/atlas/?status=closed&type=platform&q=x')
+    pg.goto(B + '/atlas/?status=live&type=platform&q=x')
     wait_js(pg, "document.getElementById('catalog').dataset.index === 'loaded'"); pg.wait_for_timeout(200)
-    check('state restored from URL', pg.evaluate(VIS) <= N_CLOSED and pg.input_value('#q') == 'x')
+    check('state restored from URL', pg.evaluate(VIS) <= N_ALL and pg.input_value('#q') == 'x' and pg.evaluate("Array.from(document.querySelectorAll('#grid .cw-card[data-slug]:not([hidden])')).every(c=>c.dataset.t==='platform' && c.dataset.s==='live')"))
 
     # page 2 of the list: plain static page, its own 50 cards, prev/next links, self-canonical
     if N_PAGES > 1:
@@ -266,7 +263,7 @@ with sync_playwright() as p:
     fc.route('**/www.googletagmanager.com/**', lambda route: route.fulfill(status=200, body=''))
     fc.route('**/atlas/data/search-index.json*', lambda route: route.fulfill(status=503, body='down'))
     fp = fc.new_page(); fp.goto(B + '/atlas/')
-    fp.evaluate("document.querySelector('[data-f-status=\"closed\"]').click()")  # JS click: the consent banner of a fresh context may cover the chip
+    fp.evaluate("document.querySelector('[data-f-status=\"live\"]').click()")  # JS click: the consent banner of a fresh context may cover the chip
     wait_js(fp, "document.getElementById('catalog').dataset.index === 'failed'"); fp.wait_for_timeout(200)
     check(f'index fails: page keeps its {N_PAGE1} cards, says so, no partial filter', fp.evaluate(VIS) == N_PAGE1
           and 'could not be loaded' in fp.inner_text('#active') and fp.locator('#active [role="alert"]').count() == 1)
@@ -345,16 +342,16 @@ with sync_playwright() as p:
     m.keyboard.press('Escape'); m.wait_for_timeout(300)
     check('mobile: Escape closes drawer', m.get_attribute('.cw-menu', 'aria-expanded') == 'false')
     if CATALOGUE:
-        check('current card: header, sponsored slot, screenshot, sources; no legacy facts', m.evaluate(
+        check('current card: header, sponsored slot, screenshot, metadata, sources; no legacy claims', m.evaluate(
             "(() => { const h=document.querySelector('.entry-head'), s=document.querySelector('[data-ad-slot=\"atlas-platform-top\"]'), fig=document.querySelector('figure.entry-shot'), sources=document.querySelector('.entry .cw-panel');"
-            " return !!h && !!s && !!fig && !!sources && h.nextElementSibling===s && s.nextElementSibling===fig && fig.nextElementSibling===sources"
+            " return !!h && !!s && !!fig && !!sources && h.nextElementSibling===s && s.nextElementSibling===fig && !!(fig.compareDocumentPosition(sources) & Node.DOCUMENT_POSITION_FOLLOWING)"
             " && s.classList.contains('cw-ad-banner') && s.querySelector('.cw-ad-label').textContent==='Sponsored'"
             " && /sponsored/.test(s.querySelector('a').rel) && /nofollow/.test(s.querySelector('a').rel)"
             " && sources.textContent.includes('Sources') && !!sources.querySelector('a[href=\"https://thecolony.ai/\"]')"
-            " && !document.querySelector('.entry > dl.facts') && !document.getElementById('h-claims'); })()"))
+            " && !!document.querySelector('.entry > dl.facts') && !document.getElementById('h-claims'); })()"))
         check('current card: dated overview, disclosure and exact source caption visible',
               'Visit for this overview:' in m.inner_text('.entry-head') and 'Commonworld participates in this project.' in m.inner_text('.entry-head')
-              and caption_source_matches(m.inner_text('figure.entry-shot figcaption'), 'https://thecolony.ai/'))
+              and caption_source_matches(m.inner_text('figure.entry-shot figcaption'), 'https://thecolony.ai/', current=True))
     else:
         check('platform page: sponsored banner directly under the header, then the screenshot figure, then the facts', m.evaluate(
             "(() => { const s = document.querySelector('[data-ad-slot=\"atlas-platform-top\"]'), f = document.getElementById('h-claims'), h = document.querySelector('.entry-head'), d = document.querySelector('.entry > dl.facts');"
@@ -460,16 +457,20 @@ with sync_playwright() as p:
     am = br.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True).new_page()
     am.goto(B + '/about/')
     check('about mobile: no horizontal overflow', am.evaluate("document.documentElement.scrollWidth <= innerWidth"))
-    # /atlas/earn/: Basis pills stay on one line, Window column shows no raw ISO timestamps (desktop 1280/1440, mobile 390)
-    ONE_LINE = """Array.from(document.querySelectorAll('.list.earn .earn-basis .tag')).every(t => {
-      const lh = parseFloat(getComputedStyle(t).lineHeight) || 14; return t.getClientRects().length === 1 && t.getBoundingClientRect().height < lh * 1.9; })"""
+    # Current earnings rows expose source-backed descriptions, visit dates and source links.
+    N_EARN = json.load(open(os.path.join(HERE, '..', 'dist', 'api', 'v1', 'atlas', 'earn.json')))['count'] if CATALOGUE else 0
     for w, h, mob in ((1280, 900, False), (1440, 1000, False), (390, 844, True)):
         ec = br.new_context(viewport={'width': w, 'height': h}, **({'is_mobile': True, 'has_touch': True} if mob else {}))
         ep = ec.new_page(); ep.goto(B + '/atlas/earn/')
-        n = ep.locator('.list.earn .earn-basis .tag').count()
-        check(f'earn {w}px: {n} Basis pills, each on one line', n > 0 and ep.evaluate(ONE_LINE))
-        check(f'earn {w}px: Window column has no raw ISO timestamps', not ep.evaluate(
-            "Array.from(document.querySelectorAll('.list.earn .earn-win')).some(td => /\\dT\\d{2}:\\d{2}/.test(td.textContent))"))
+        if CATALOGUE:
+            rows = ep.locator('.list.earn tbody tr[data-earning-id]')
+            check(f'earn {w}px: {N_EARN} current earning entries with description, date and sources',
+                  rows.count() == N_EARN and rows.evaluate_all("rs => rs.every(r => r.cells.length===4 && r.cells[1].innerText.trim() && r.querySelector('.earning-visit time[datetime]') && r.cells[3].querySelector('a[href]'))"))
+            check(f'earn {w}px: legacy basis and window columns absent', ep.locator('.earn-basis,.earn-win').count() == 0)
+        else:
+            pills = ep.locator('.list.earn .earn-basis .tag')
+            check(f'earn {w}px: legacy Basis pills fit on one line', pills.count() > 0 and pills.evaluate_all("ts => ts.every(t => t.getClientRects().length===1 && t.getBoundingClientRect().height < (parseFloat(getComputedStyle(t).lineHeight)||14)*1.9)"))
+            check(f'earn {w}px: legacy Window dates are formatted', not ep.evaluate("Array.from(document.querySelectorAll('.earn-win')).some(t=>/\\dT\\d{2}:\\d{2}/.test(t.textContent))"))
         check(f'earn {w}px: page itself does not scroll sideways (table scrolls in its wrapper)', ep.evaluate("document.documentElement.scrollWidth <= innerWidth"))
         if SHOTS:
             ep.locator('.list.earn').first.scroll_into_view_if_needed()

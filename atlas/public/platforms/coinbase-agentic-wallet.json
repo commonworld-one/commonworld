@@ -1,64 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "coinbase-agentic-wallet",
  "name": "Coinbase AgentKit / Agentic Wallets",
  "url": "https://commonworld.one/atlas/platforms/coinbase-agentic-wallet/",
  "json_url": "https://commonworld.one/atlas/platforms/coinbase-agentic-wallet.json",
+ "md_url": "https://commonworld.one/atlas/platforms/coinbase-agentic-wallet/index.md",
  "website": "https://docs.cdp.coinbase.com/agentic-wallet/welcome",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Coinbase Developer Platform tools giving AI agents stablecoin wallets (awal CLI and MCP) with guardrails and native x402 payments; AgentKit is the open-source agent toolkit.",
  "tags": [
   "wallet",
   "x402",
   "base",
   "tee"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/coinbase-agentic-wallet/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Coinbase Wallet MCP connects AI assistants to wallet balances, transfers, swaps, contract interactions and x402 API payments. Its documentation distinguishes individual approval links for main-wallet actions from eligible dedicated agent wallets with expiring signing grants and saved spending controls. Autonomous actions depend on enabled tools, supported assets and networks, a shared rolling spending allowance and available gas; enrollment does not enable every action.",
@@ -68,85 +27,9 @@
   ],
   "revision": "87ea7a166e9cd407580e81d230fd7b4a5a758e2f5312e28f47529e0b5b23e319"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/coinbase-agentic-wallet.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/coinbase-agentic-wallet-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "CDP Agentic Wallet docs + github.com/coinbase/agentkit",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://docs.cdp.coinbase.com/agentic-wallet/welcome",
-   "quote": "Give your AI agent a wallet. Agentic Wallet is a suite of tools for enabling AI agents to hold, spend, trade, and earn stablecoins",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl docs (200)",
-    "GitHub API coinbase/agentkit",
-    "old /agentkit/docs/welcome 404"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Docs serve content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://docs.cdp.coinbase.com/agentic-wallet/welcome",
-   "quote": "Agents use awal CLI commands to authenticate, send, trade, and pay for x402 services.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "CLI + MCP",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://docs.cdp.coinbase.com/agentic-wallet/welcome",
-   "quote": "Agentic Wallet MCP An MCP server + companion wallet app.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "coinbase/agentkit pushed 2026-10-14 21:50 UTC; 1,330 stars",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.github.com/repos/coinbase/agentkit",
-   "quote": "pushed_at 2026-10-14",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "Legacy Chainalysis '138M+ x402 payments on Base' not re-observed",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://docs.cdp.coinbase.com/agentic-wallet/welcome",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

@@ -1,0 +1,28 @@
+{
+  "screens": {
+    "aptets": {
+      "file": "aptets.webp",
+      "sha256": "6a505a2d0e0cb9be135e93ab1291d2790b79ae9cb444d3bd10624407c7f24de2",
+      "source_url": "https://aptets.com/",
+      "captured_at": "2026-11-24T21:22:35Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 71642,
+      "title": "Aptets: From spec to pull request",
+      "http_status": 200
+    },
+    "meta-muse": {
+      "file": "meta-muse.webp",
+      "sha256": "523dc84c29836740cd3b6599f429f2c552c7b40855af7017ab264985622cbddf",
+      "source_url": "https://muse.ai/",
+      "captured_at": "2026-11-24T22:00:48Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 12926,
+      "title": "Muse: Your Personal AI Agent from Meta",
+      "http_status": 200,
+      "replaces_original": true,
+      "transform": "Original1920x993capture scaled to fit1200x750with white padding; no content cropped"
+    }
+  }
+}

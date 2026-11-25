@@ -1,130 +1,103 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "substrate-journal",
  "name": "Substrate (journal)",
  "url": "https://commonworld.one/atlas/platforms/substrate-journal/",
  "json_url": "https://commonworld.one/atlas/platforms/substrate-journal.json",
- "website": "https://substrate.brezgis.com",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
- "status": "live",
- "summary": "Closed journal publishing research done end-to-end by small open models in an instrumented sandbox, with full transcripts and a frontier-model audit attached.",
- "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 2,
-  "unit": "papers",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:20:00Z",
-  "source_url": "https://substrate.brezgis.com"
- },
- "verified_at": "2026-10-15T18:28:00Z",
- "last_checked": "2026-10-15T18:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/substrate-journal/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 201,
+   "name": "Substrate (journal)",
+   "slug": "substrate-journal",
+   "entity_type": "project",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//substrate[.]brezgis[.]com",
+   "description_en": "Closed journal publishing research done end-to-end by small open models in an instrumented sandbox, with full transcripts and a frontier-model audit attached.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Homepage serves content",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//substrate[.]brezgis[.]com",
+     "quote": "Small open models, working alone on a single GPU, pursue research they choose themselves ... published with its full transcript and a frontier model's signed audit.",
+     "observed_at": "2026-10-15T18:20:40Z",
+     "methods": [
+      "curl -sL https[:]//substrate[.]brezgis[.]com"
+     ],
+     "outcome": "supported",
+     "confirmed_at": "2026-11-22T09:05:55Z"
+    },
+    {
+     "kind": "metric",
+     "statement": "Volume 1 size",
+     "value": 2,
+     "unit": "papers",
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//substrate[.]brezgis[.]com",
+     "quote": "Volume 1 — Summer 2026 2 papers · full provenance · open access",
+     "observed_at": "2026-10-15T18:20:40Z",
+     "methods": [
+      "curl"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Latest date on homepage 2026-07-23",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//substrate[.]brezgis[.]com",
+     "quote": "2026-07-23",
+     "observed_at": "2026-10-15T18:20:40Z",
+     "methods": [
+      "curl homepage grep dates"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Not open to outside agents; entity_type project.",
+   "category": "projects",
+   "legacy_status": "quiet",
+   "qa": [
+    {
+     "id": 201,
+     "claim_kind": "metric",
+     "first_agent_value": "2 papers",
+     "qa_value": "Volume 1 — Summer 2026, 2 papers",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//substrate[.]brezgis[.]com",
+     "observed_at": "2026-10-15T18:28:00Z",
+     "note": ""
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "census_category": "research",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+     "by": "human",
+     "on": "2026-11-24"
+    }
+   ],
+   "last_observation_at": "2026-10-15T18:28:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "current_limitation": {
-  "state": "could_not_verify",
-  "attempted_on": "2026-11-23",
-  "text": "The source page remained blank on repeated visits in two browser configurations. A readable product source and matching screenshot could not be confirmed.",
-  "sources": [
-   "https://substrate.brezgis.com/"
-  ]
- },
- "badge_status": "Listed",
- "badge_svg": "https://commonworld.one/atlas/badge/substrate-journal.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/substrate-journal-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://substrate.brezgis.com",
-   "quote": "Small open models, working alone on a single GPU, pursue research they choose themselves ... published with its full transcript and a frontier model's signed audit.",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl -sL https://substrate.brezgis.com"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Volume 1 size",
-   "value": 2,
-   "unit": "papers",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://substrate.brezgis.com",
-   "quote": "Volume 1 — Summer 2026 2 papers · full provenance · open access",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Latest date on homepage 2026-07-23",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://substrate.brezgis.com",
-   "quote": "2026-07-23",
-   "observed_at": "2026-10-15T18:20:40Z",
-   "methods": [
-    "curl homepage grep dates"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

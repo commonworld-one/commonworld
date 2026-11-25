@@ -1,0 +1,26 @@
+{
+  "format": "commonworld-atlas-overviews/1",
+  "cards": {
+    "aptets": {
+      "state": "reviewed",
+      "text": "Aptets presents a team workflow for writing a specification, approving a revision and having coding agents turn it into draft pull requests. The public homepage shows an illustrative team-invitation specification with a review comment and a Sign in button. These are the operator's advertised workflow and example, not an Atlas test of the product.",
+      "visited_at": "2026-11-24T21:22:35Z",
+      "sources": [
+        "https://aptets.com/"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "6a505a2d0e0cb9be135e93ab1291d2790b79ae9cb444d3bd10624407c7f24de2",
+        "source_url": "https://aptets.com/",
+        "captured_at": "2026-11-24T21:22:35Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      },
+      "check": {
+        "by": "atlas-independent-reviewer",
+        "revision": "2e285057c86f45fbe72aa147802bd3e769d982973394ce47a37910abf163f98a",
+        "checked_at": "2026-11-24T21:26:07Z"
+      }
+    }
+  }
+}

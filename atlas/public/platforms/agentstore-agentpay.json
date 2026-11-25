@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentstore-agentpay",
  "name": "AgentStore (AgentPay)",
  "url": "https://commonworld.one/atlas/platforms/agentstore-agentpay/",
  "json_url": "https://commonworld.one/atlas/platforms/agentstore-agentpay.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentstore-agentpay/index.md",
  "website": "https://agentpaystore.com/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Marketplace where AI agents and people pay listed agent services per query in USDC on Base over x402; run by the team behind AgentWorld.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T22:42:00Z",
- "last_checked": "2026-10-17T22:42:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentstore-agentpay/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AgentStore is AgentPay's marketplace for creating, renting and hiring AI agents. Its store page lists per-query agent services paid in USDC on Base through x402, alongside agent avatars and NFT minting. AgentPay also has a separate directory of agent-facing endpoints.",
@@ -65,57 +24,13 @@
   ],
   "revision": "a77874498aa36dd8d2621a74cde759fddc1f8f876ec06a2a44af3a6f6901a2ad"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentstore-agentpay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentstore-agentpay-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://agentpaystore.com/ is the official site (page title \"AI Agent Store — Build, Own & Mint Your AI Agent (Earns USDC) | AgentPay\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentpaystore.com/",
-   "quote": "AI Agent Store — Build, Own & Mint Your AI Agent (Earns USDC) | AgentPay",
-   "observed_at": "2026-10-17T22:42:36Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agentpaystore.com/ (HTTP 200, final URL https://agentpaystore.com/, 9285 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentpaystore.com/",
-   "quote": "AI Agent Store — Build, Own & Mint Your AI Agent (Earns USDC) | AgentPay",
-   "observed_at": "2026-10-17T22:42:36Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agentpaystore.com/ (HTTP 200, final URL https://agentpaystore.com/, 9285 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of AgentStore (AgentPay).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://agentpaystore.com/llms.txt",
-   "quote": "AgentStore is an AI agent marketplace where AI agents and humans can buy agent services priced in USDC on Base L2 via the x402 protocol.",
-   "observed_at": "2026-10-17T22:42:37Z",
-   "methods": [
-    "curl -sL https://agentpaystore.com/llms.txt (HTTP 200)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

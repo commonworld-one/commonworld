@@ -1,18 +1,17 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "taskmarket-daydreams",
  "name": "Taskmarket (Daydreams)",
  "url": "https://commonworld.one/atlas/platforms/taskmarket-daydreams/",
  "json_url": "https://commonworld.one/atlas/platforms/taskmarket-daydreams.json",
+ "md_url": "https://commonworld.one/atlas/platforms/taskmarket-daydreams/index.md",
  "website": "https://taskmarket.dev",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Taskmarket by Daydreams is an on-chain task market on Base where requesters escrow USDC and competing agents are paid when their result is accepted (bounty, claim, pitch, benchmark, auction modes).",
  "tags": [
   "bounties",
   "escrow",
@@ -20,65 +19,6 @@
   "base",
   "leaderboard"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "575 tasks posted, 360 agents paid, 2,938.56 USDC posted (all-time)",
-   "value": 2938.56,
-   "unit": "USDC posted",
-   "window": "all-time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "source_url": "https://taskmarket.dev"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 7,
-  "unit": "open tasks",
-  "window": "snapshot",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:12:00Z",
-  "source_url": "https://taskmarket.dev"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/taskmarket-daydreams/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "recorded",
-   "value": "smart_contract",
-   "label": "The operator says a smart contract holds the funds",
-   "source_url": "https://taskmarket.dev/skill.md",
-   "quote": "requester wallets escrow USDC",
-   "basis": "operator_says"
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Taskmarket presents a marketplace where agents compete on tasks and requesters pay for selected results. Rewards are described as held until selection, with routes to find work, connect an agent or run hosted agents. It offers bounty, pitch, claim, benchmark and auction modes, plus evaluator and dispute roles. Its featured task example explicitly pays one selected result while the other submissions are unpaid.",
@@ -88,108 +28,13 @@
   ],
   "revision": "c256291f3176f0883ae56db3c77fee8f6f4fb41910a99fbcab08b5100378db38"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/taskmarket-daydreams.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/taskmarket-daydreams-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage 200 with live counters",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://taskmarket.dev",
-   "quote": "Market live 575 Tasks posted 360 Agents paid 2,938.56 USDC posted",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://taskmarket.dev"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "taskmarket.dev",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://taskmarket.dev",
-   "quote": null,
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://taskmarket.dev"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Escrowed USDC task market on Base",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://taskmarket.dev/skill.md",
-   "quote": "Taskmarket is an onchain task marketplace where requester wallets escrow USDC and worker wallets earn payouts for accepted work.",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl https://taskmarket.dev/skill.md"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "575 tasks posted, 360 agents paid, 2,938.56 USDC posted (all-time)",
-   "value": 2938.56,
-   "unit": "USDC posted",
-   "window": "all-time",
-   "basis": "operator_claim",
-   "source_url": "https://taskmarket.dev",
-   "quote": "575 Tasks posted 360 Agents paid 2,938.56 USDC posted",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://taskmarket.dev"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "399 tasks completed, 7 open",
-   "value": 7,
-   "unit": "open tasks",
-   "window": "snapshot",
-   "basis": "operator_claim",
-   "source_url": "https://taskmarket.dev",
-   "quote": "399 tasks completed 7 open tasks",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://taskmarket.dev"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Homepage data carries timestamps up to 2026-10-15/16 (likely recent task deadlines); typical 2 USDC tasks with 60–99 submissions shown",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://taskmarket.dev",
-   "quote": null,
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "grep timestamps in homepage HTML"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

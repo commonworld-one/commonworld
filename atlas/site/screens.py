@@ -195,3 +195,24 @@ def thumb(src_path, sha):
             f.write(buf.getvalue())
         os.replace(cp + '.tmp', cp)
     return open(cp, 'rb').read()
+
+
+def retain_archive_captures(directory, records, closed):
+    """Restore checked-in historical pixels only for explicitly closed IDs.
+
+    Their metadata was recovered from the published screenshot manifest, with
+    byte identity checked against the pinned screenshot branch. Never a new visit.
+    """
+    archive = os.path.join(REPO_ROOT, 'atlas', 'catalogue', 'archive-captures')
+    mf = os.path.join(archive, 'manifest.json')
+    if not os.path.exists(mf): return records
+    out = dict(records)
+    for slug, record in json.load(open(mf))['screens'].items():
+        if slug not in closed or slug in out: continue
+        if not SLUG.fullmatch(slug) or record['file'] != slug + '.webp':
+            raise ValueError('invalid historical capture name: ' + slug)
+        raw = open(os.path.join(archive, record['file']), 'rb').read()
+        if hashlib.sha256(raw).hexdigest() != record['sha256'] or len(raw) != record['bytes']:
+            raise ValueError('historical capture byte mismatch: ' + slug)
+        out[slug] = dict(record, _source_file=os.path.join(archive, record['file']))
+    return out

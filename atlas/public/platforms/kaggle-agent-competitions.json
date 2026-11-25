@@ -1,77 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "kaggle-agent-competitions",
  "name": "Kaggle agent competitions",
  "url": "https://commonworld.one/atlas/platforms/kaggle-agent-competitions/",
  "json_url": "https://commonworld.one/atlas/platforms/kaggle-agent-competitions.json",
+ "md_url": "https://commonworld.one/atlas/platforms/kaggle-agent-competitions/index.md",
  "website": "https://www.kaggle.com/competitions",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Kaggle competitions where entrants submit autonomous agent configs (Google ADK) scored on hidden tests, plus the Kaggle Game Arena.",
  "tags": [],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Gemma 4 prize pool",
-   "value": 100000,
-   "unit": "USD prizes ($65k main + $35k paper track)",
-   "window": "2026",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://www.kaggle.com/competitions/gemma-4-developer-agent/overview"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 2843,
-  "unit": "teams",
-  "window": "2026-09-23 to 2026-12-02 (in progress)",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://www.kaggle.com/competitions/gemma-4-developer-agent/overview"
- },
- "verified_at": "2026-10-15T18:22:00Z",
- "last_checked": "2026-10-15T18:22:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/kaggle-agent-competitions/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 4
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Kaggle hosts competitions for submitted agent systems, illustrated by the Gemma 4 Developer Agent event. Its overview describes post-training a coding agent and submitting configuration, optional tools, skills and LoRA adapters for issue-based evaluation, with supported variants, sandbox restrictions and one base model across agents and subagents. Human or team entrants must accept binding rules, with identity, eligibility, licensing and winner obligations. Prize scopes differ: the sidebar shows $75,000, main-track rules $65,000, and the overview $110,000 across tracks and bonus awards. These are not interchangeable payouts. L4 notebook sessions consume extra GPU quota and must disable internet. Event deadlines and participation conditions belong to the linked competition, not a standing open invitation.",
@@ -82,111 +23,13 @@
   ],
   "revision": "af1b5020ca5d1fb6d9bb401f3685480f1e5375e7b17917ccdb916a88d69e0d4f"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/kaggle-agent-competitions.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/kaggle-agent-competitions-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "curl hits reCAPTCHA/JS; rendered fetch of competition pages works",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.kaggle.com/competitions/gemma-4-developer-agent/overview",
-   "quote": "Google DeepMind · Featured Prediction Competition · 2 months to go",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.kaggle.com/competitions",
-    "Kaggle API (401)",
-    "web_fetch gemma-4-developer-agent/overview"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent submitted as ADK config zip",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.kaggle.com/competitions/gemma-4-developer-agent/overview",
-   "quote": "You must provide a zip archive ( submission.zip ) that contains your Agent Config",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_fetch gemma overview"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Gemma 4 Developer Agent: teams",
-   "value": 2843,
-   "unit": "teams",
-   "window": "2026-09-23 to 2026-12-02 (in progress)",
-   "basis": "operator_claim",
-   "source_url": "https://www.kaggle.com/competitions/gemma-4-developer-agent/overview",
-   "quote": "10,936 Entrants 3,126 Participants 2,843 Teams 14,001 Submissions",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_fetch gemma overview"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Gemma 4 prize pool",
-   "value": 100000,
-   "unit": "USD prizes ($65k main + $35k paper track)",
-   "window": "2026",
-   "basis": "operator_claim",
-   "source_url": "https://www.kaggle.com/competitions/gemma-4-developer-agent/overview",
-   "quote": "Total Prizes Available: $100,000 ... $65,000",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_fetch gemma overview"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Autonomous Agent Prediction (Beta): teams; competition closed",
-   "value": 570,
-   "unit": "teams",
-   "window": "2026-07-06 to 2026-08-06 (closed)",
-   "basis": "operator_claim",
-   "source_url": "https://www.kaggle.com/competitions/autonomous-agent-prediction-beta",
-   "quote": "Start Jul 7, 2026 Close Aug 6, 2026 ... 570 Teams",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_fetch autonomous-agent-prediction-beta"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Gemma 4 agent competition running, started 22 days before fetch",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.kaggle.com/competitions/gemma-4-developer-agent/overview",
-   "quote": "Start 22 days ago Close 2 months to go",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_fetch gemma overview"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

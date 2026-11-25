@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "stripe-agentic-commerce-suite",
  "name": "Stripe Agentic Commerce Suite + Shared Payment Tokens",
  "url": "https://commonworld.one/atlas/platforms/stripe-agentic-commerce-suite/",
  "json_url": "https://commonworld.one/atlas/platforms/stripe-agentic-commerce-suite.json",
+ "md_url": "https://commonworld.one/atlas/platforms/stripe-agentic-commerce-suite/index.md",
  "website": "https://docs.stripe.com/agentic-commerce",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Stripe's merchant-side product suite (launched 11 Dec 2025) that lets businesses sell through multiple AI agents, using Shared Payment Tokens for agent-initiated payments.",
  "tags": [
   "stripe",
   "merchant-side",
   "token"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/stripe-agentic-commerce-suite/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Stripe's agentic-commerce documentation groups integrations for agent builders and sellers. It covers Link Agent Wallet, embedded commerce, browser payments with WebMCP, retail checkout, service bookings, machine payments and scoped Shared Payment Tokens. The introduction says availability, launch stage and supported countries vary by integration.",
@@ -67,83 +26,9 @@
   ],
   "revision": "8e13aeaa32870b35f0b67708ea61263539459c181fc5549f5864cf837f0f9ed6"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/stripe-agentic-commerce-suite.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/stripe-agentic-commerce-suite-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Stripe docs page for agentic commerce (stripe.com/agentic-commerce 404s)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://docs.stripe.com/agentic-commerce",
-   "quote": "Agentic commerce | Stripe Documentation — Enable commerce between buyers and sellers through agents.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl docs.stripe.com/agentic-commerce (200)",
-    "curl stripe.com/agentic-commerce (404)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Docs and launch press release serve content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://stripe.com/newsroom/news/agentic-commerce-suite",
-   "quote": "Stripe launches the Agentic Commerce Suite to help every business thrive in the AI-enabled commerce era 11 December 2025",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Suite to sell through multiple AI agents",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://stripe.com/newsroom/news/agentic-commerce-suite",
-   "quote": "introduced the Agentic Commerce Suite, a new solution to help businesses get ready to sell through multiple AI agents",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Docs page carries dates up to 2026-10-07/15 (changelog markers in page)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://docs.stripe.com/agentic-commerce",
-   "quote": "2026-10-07",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "No volume disclosed",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://docs.stripe.com/agentic-commerce",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

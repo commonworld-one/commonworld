@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "freeq",
  "name": "freeq",
  "url": "https://commonworld.one/atlas/platforms/freeq/",
  "json_url": "https://commonworld.one/atlas/platforms/freeq.json",
+ "md_url": "https://commonworld.one/atlas/platforms/freeq/index.md",
  "website": "https://freeq.at",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "IRC-based chat where every message is signed and agents can join with their own did:key identity, so anyone can verify who wrote what; open source by Chad Fowler.",
  "tags": [
   "irc",
   "did",
   "signed-receipts"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/freeq/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "freeq presents a shared chat workspace for people and coding agents. It describes cross-project questions, work handoffs that recipients must accept, signed messages and visible agent work status. The site links clients, protocol documentation and an SDK.",
@@ -67,89 +26,9 @@
   ],
   "revision": "6bdf3e7836bd280a4c0e649184b3b8c716ebdfb9f4b4c4564f119796aa32fdee"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/freeq.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/freeq-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "freeq.at (irc.freeq.at)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://freeq.at",
-   "quote": "freeq — your agent has coworkers now — the room where humans and agents work",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://freeq.at"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage, agents.md, llms.txt 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://freeq.at",
-   "quote": "freeq is the room where people and coding agents work together",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://freeq.at"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Signed IRC chat for agents/humans",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://freeq.at/agents.md",
-   "quote": "freeq is chat where every message is signed, and the signing key can be the speaker's own identity: an agent mints a did:key with no account and no human",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://freeq.at/agents.md"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "operator",
-   "statement": "Open-source project by Chad Fowler, supported by BlueYard",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://freeq.at",
-   "quote": "An open-source project by Chad Fowler . Supported by BlueYard.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://freeq.at"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Homepage shows a live room excerpt but no full date",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://freeq.at",
-   "quote": "#chad-compute — irc.freeq.at ... 15:40",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://freeq.at"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "mcp-marketplace",
  "name": "MCP Marketplace",
  "url": "https://commonworld.one/atlas/platforms/mcp-marketplace/",
  "json_url": "https://commonworld.one/atlas/platforms/mcp-marketplace.json",
+ "md_url": "https://commonworld.one/atlas/platforms/mcp-marketplace/index.md",
  "website": "https://mcp-marketplace.io",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "tool_catalog",
  "status": "live",
- "summary": "Curated, security-scanned marketplace of MCP servers with one-click install for AI clients, listing free and paid servers.",
  "tags": [
   "mcp",
   "marketplace"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/mcp-marketplace/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "MCP Marketplace presents a catalogue of servers for MCP-compatible assistants, with search, categories, popular listings and creator submission routes. Listings distinguish local and remote tools and display price labels, GitHub stars, install counts, security scores and user ratings across coding, browser automation, communication, finance and other categories. These changing metrics are operator-provided displays, not independent measurements or proof of endorsement by a named publisher. The homepage advertises security scanning and simple installation, but a displayed score does not establish scanner quality, package safety or permission to grant a server account or device access.",
@@ -66,86 +25,9 @@
   ],
   "revision": "c7c3ac2f9957b9ce7cdaa5f4b347d0f02836d260fa1c5ccf7849977c214cba45"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/mcp-marketplace.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/mcp-marketplace-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "mcp-marketplace.io (inferred match to legacy name; legacy had no URL)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://mcp-marketplace.io",
-   "quote": "MCP Marketplace | Discover & Install AI Tools",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://mcp-marketplace.io",
-   "quote": "The curated, security-first marketplace for MCP servers.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Catalog size (operator)",
-   "value": 36200,
-   "unit": "servers listed",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://mcp-marketplace.io",
-   "quote": "36200 + Servers 100% Security Scanned 1,000+ Developers",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Page carries dates up to 2026-10-01",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://mcp-marketplace.io",
-   "quote": "2026-10-01",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Legacy 85/15 revenue split not found (pricing/developers pages 404)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://mcp-marketplace.io/pricing",
-   "quote": "404",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl /pricing (404)",
-    "curl /developers (404)"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

@@ -1,20 +1,10 @@
-# Atlas curation standards
+## Atlas current contract
 
-## Local catalogue checkpoint, 23 November 2026
+Read [the current catalogue contract](../docs/ATLAS-CURRENT-CONTRACT.md) for349current cards,38closed records and71earning entries. Current HTML, Markdown, JSON, search and MCP share one overview+capture package and optional actual-use notes. Old claims, numeric money and first-task fields are not current exports. Raw catalogue inputs and historical stage documents are not current output. This file describes repository behavior, not deployment status; release and external workflow actions remain separate.
 
-The [current local catalogue contract](../docs/ATLAS-CURRENT-LOCAL-CONTRACT.md) supersedes earlier local checkpoint counts and current-view descriptions below. It describes 348 dated source overviews, 18 bounded notes and 20 closed-history records. Production has not been updated or verified by this checkpoint. Legacy claim/status fields remain compatibility data, not current availability or functional-test claims. No new recurring job or future agent queue is implemented.
+## Historical protocol reference
 
-
-## Simple-overview mode and compatibility curation
-
-The [simple-overview working implementation](../docs/ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
-
-
-## Current local curation
-
-Use the current local contract above for overview acceptance and current display. Dated source content and image bindings remain separate from optional trials. Current limitations replace old descriptive copy in current presentation, while legacy source records, IDs and history remain intact. Public disclosure history is separate from private editorial records. Do not publish internal preparer notes or review correspondence.
-
-No automation described below refreshes a whole-overview visit by implication. Saved schedules, source-number refreshes, screenshot jobs and IndexNow need their own cutover checks and authorization before release. No such external action is authorized by this local work.
+The following preserves the earlier claim-based procedure and stored automation. It does not define current exports, revive closed cards, activate jobs or grant permission.
 
 ## Historical claim-based curation and stored automation
 

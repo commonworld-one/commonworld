@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "kite-ai",
  "name": "Kite AI",
  "url": "https://commonworld.one/atlas/platforms/kite-ai/",
  "json_url": "https://commonworld.one/atlas/platforms/kite-ai.json",
+ "md_url": "https://commonworld.one/atlas/platforms/kite-ai/index.md",
  "website": "https://gokite.ai",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Kite is an EVM chain and identity/payment layer for AI agents (Agent Passport, stablecoin settlement) with the KITE token; explorer at kitescan.ai.",
  "tags": [
   "token",
   "x402"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 2297516,
-  "unit": "total transactions",
-  "window": "chain lifetime to 2026-10-15 20:30 UTC",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T20:30:00Z",
-  "source_url": "https://kitescan.ai/api/v2/stats"
- },
- "verified_at": "2026-10-15T20:30:00Z",
- "last_checked": "2026-10-15T20:30:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/kite-ai/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Kite presents a payment and settlement platform for agents, combining workflow interfaces, Passport controls and Kite Chain. Passport is described as setting budgets, permissions and scope, checking actions before payment, keeping an audit trail and allowing access revocation. Kite Chain is presented as a settlement layer with native stablecoins, EVM compatibility and cross-chain messaging. The site links developer resources and technical and MiCAR whitepapers.",
@@ -74,111 +25,9 @@
   ],
   "revision": "4c761b1a5f11b341623520de823095b494a1949f8ad70cf8af778e09413a316f"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/kite-ai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/kite-ai-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "gokite.ai is the official site; kitescan.ai is its explorer (legacy URL)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://gokite.ai",
-   "quote": "Kite - The Payments Layer for the Agent Economy",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl gokite.ai (200)",
-    "curl kitescan.ai (200 thin)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "gokite.ai serves content; kitescan JS shell but Blockscout API answers",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://kitescan.ai/api/v2/stats",
-   "quote": "\"total_transactions\":\"2277168\",\"transactions_today\":\"58251\"",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl kitescan.ai/api/v2/stats (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent payments infra with stablecoin settlement",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://gokite.ai",
-   "quote": "An agnetic payment infrastructure empowering autonomous agents can operate with trust, governance, and native stablecoin settlement",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "On-chain: 2,297,516 total txs, 58,251 txs today, 652,291 total addresses, 1,477,549 blocks",
-   "value": 2297516,
-   "unit": "total transactions",
-   "window": "chain lifetime to 2026-10-15 20:30 UTC",
-   "basis": "direct_observation",
-   "source_url": "https://kitescan.ai/api/v2/stats",
-   "quote": "\"total_addresses\":\"652291\",\"total_transactions\":\"2297516\",\"transactions_today\":\"58251\",\"total_blocks\":\"1477549\"",
-   "observed_at": "2026-10-15T20:30:44Z",
-   "methods": [],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 2277168,
-     "unit": "total transactions",
-     "window": "chain lifetime to 2026-10-15T18:08Z",
-     "statement": "On-chain: 2,277,168 total txs, 58,251 txs today, 648,480 total addresses, 1,473,920 blocks",
-     "quote": "\"total_addresses\":\"648480\",\"total_transactions\":\"2277168\",\"transactions_today\":\"58251\"",
-     "source_url": "https://kitescan.ai/api/v2/stats",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "direct_observation",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-c)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:kite-ai:metric:2",
-    "evidence_attempt_ids": [
-     "qa-agent-c-0045"
-    ],
-    "finding": "At 2026-10-15T20:30:43Z the Kitescan stats API reported total_transactions=2,297,516, transactions_today=58,251, total_addresses=652,291, and total_blocks=1,477,549. The pinned totals (2,277,168; 648,480; 1,473,920) are older."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "KITE Ethereum token attack 2026-08-06 (no loss claimed), contract migration, new contract unpaused 2026-08-28",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://www.panews.io/articles/01a01973-5f5f-77bc-ae5f-1caea0270a3a",
-   "quote": "suspended KITE ERC-20 contract transfers ... deployed a new KITE contract ... airdrop new tokens at a 1:1 ratio",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

@@ -1,67 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "alipay-ai-pay",
  "name": "Alipay AI Pay / ACT",
  "url": "https://commonworld.one/atlas/platforms/alipay-ai-pay/",
  "json_url": "https://commonworld.one/atlas/platforms/alipay-ai-pay.json",
+ "md_url": "https://commonworld.one/atlas/platforms/alipay-ai-pay/index.md",
  "website": "https://www.antgroup.com/en/news-media/press-releases/1783440000000",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Ant Group's AI-native payment product letting consumers pay through AI agents (Qwen App, Taobao Instant Commerce, OpenClaw-type agents), plus a business-side AI payment processing product.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 300000000,
-  "unit": "transactions cumulative",
-  "window": "launch (Sep 2025) to May 2026",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:15:00Z",
-  "source_url": "https://www.antgroup.com/en/news-media/press-releases/1783440000000"
- },
- "verified_at": "2026-10-15T18:22:00Z",
- "last_checked": "2026-10-15T18:22:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/alipay-ai-pay/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Ant Group's release presents Alipay AI Pay within a China-focused payment and merchant-services ecosystem. It describes a payment stack comprising AI Pay, AI Wallet, AI payment processing and Token Pay, supported by an Agentic Commerce Trust Protocol. It also describes connecting merchant AI agents to Alipay Tap! devices for operations analysis, marketing, membership management and commerce services.",
@@ -71,82 +22,9 @@
   ],
   "revision": "8e6a247c14406183d066fe60709f8a26b7c52deeb747f8a16821547bac729a08"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/alipay-ai-pay.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/alipay-ai-pay-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Ant Group press releases (no English product page found)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.antgroup.com/en/news-media/press-releases/1783440000000",
-   "quote": "Alipay Enhances its Tap! Ecosystem with New AI Agents and AI-powered Payments",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "web_search"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Ant Group press pages indexed; not curl-checked this pass",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.antgroup.com/en/news-media/press-releases/1783440000000",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked"
-  },
-  {
-   "kind": "description",
-   "statement": "AI Pay for OpenClaw-type agents (2026-04-21)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.businesswire.com/news/home/20260421171651/en/Alipay-AI-Pay-Launches-New-Service-Enabling-OpenClaw-type-AI-Agents-to-Make-Payments",
-   "quote": "enables OpenClaw-type AI agents to make purchases and complete payments based on user instructions",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Operator: 120M+ transactions in week 5–11 Feb 2026; 300M transactions cumulative as of May 2026; 100M users Feb 2026",
-   "value": 300000000,
-   "unit": "transactions cumulative",
-   "window": "launch (Sep 2025) to May 2026",
-   "basis": "operator_claim",
-   "source_url": "https://www.antgroup.com/en/news-media/press-releases/1783440000000",
-   "quote": "transactions processed through Alipay AI Pay surpassed 300 million as of May 2026",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Ant press release 2026-07-08 (Tap! + AI agents)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.antgroup.com/en/news-media/press-releases/1783440000000",
-   "quote": "published 2026-07-08",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

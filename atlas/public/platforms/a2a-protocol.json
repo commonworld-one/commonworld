@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "a2a-protocol",
  "name": "A2A protocol",
  "url": "https://commonworld.one/atlas/platforms/a2a-protocol/",
  "json_url": "https://commonworld.one/atlas/platforms/a2a-protocol.json",
+ "md_url": "https://commonworld.one/atlas/platforms/a2a-protocol/index.md",
  "website": "https://a2a-protocol.org",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "protocol",
  "status": "live",
- "summary": "Open agent-to-agent interoperability protocol originated by Google and donated to the Linux Foundation; agents self-describe via Agent Cards.",
  "tags": [
   "a2a",
   "spec",
   "linux-foundation"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/a2a-protocol/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "A2A is an open protocol for communication between agents built with different frameworks or vendors. Its documentation describes Agent Cards for discovering an agent's capabilities, endpoints and authentication requirements, alongside messages, tasks and returned artifacts. The homepage identifies A2A as part of the Agentic AI Foundation.",
@@ -69,60 +28,9 @@
   ],
   "revision": "4a04e29f36b159c6a9b95039cab2b110faaba54437f83b6385d4c7410b630d6b"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/a2a-protocol.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/a2a-protocol-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Landing redirects to docs",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://a2a-protocol.org/",
-   "quote": "You are being redirected to the latest documentation .",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://a2a-protocol.org"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Open standard, Linux Foundation",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://a2a-protocol.org/",
-   "quote": "A2A is an open standard, originated by Google and donated to the Linux Foundation",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://a2a-protocol.org"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Repo commit 2026-10-15 16:29 UTC; latest release v1.0.1 on 2026-05-28",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/a2aproject/A2A",
-   "quote": "docs: add Agent Commons to partners list (#2338)",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "GitHub API commits",
-    "GitHub API releases/latest"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

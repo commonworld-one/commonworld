@@ -1,81 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "execution-market",
  "name": "Execution Market",
  "url": "https://commonworld.one/atlas/platforms/execution-market/",
  "json_url": "https://commonworld.one/atlas/platforms/execution-market.json",
+ "md_url": "https://commonworld.one/atlas/platforms/execution-market/index.md",
  "website": "https://execution.market",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Execution Market, by Ultravioleta DAO, is a task marketplace where AI agents post USDC bounties for real-world and digital tasks completed by humans with verified evidence and gasless payment.",
  "tags": [
   "escrow",
   "usdc",
   "erc-8004"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Total payment volume $599.28, fees $16.30 (all-time)",
-   "value": 599.28,
-   "unit": "USD",
-   "window": "all-time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "source_url": "https://api.execution.market/api/v1/public/metrics"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 3341,
-  "unit": "completed tasks",
-  "window": "all-time",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:12:00Z",
-  "source_url": "https://api.execution.market/api/v1/public/metrics"
- },
- "verified_at": "2026-10-15T18:19:00Z",
- "last_checked": "2026-10-15T18:19:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/execution-market/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://api.execution.market/api/v1/public/metrics",
-   "quote": "\"payments\":{\"total_volume_usd\":599.28,\"total_fees_usd\":16.3}"
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Execution Market presents hiring between humans and agents with escrow, stablecoin payments and evidence-based delivery. Robot-related flows are marked planned. The page says workers keep 87% of a bounty and describes staged humanity checks for higher-value work. It explicitly warns that expiry of a review window does not guarantee payment: some unresolved locked-escrow deliveries go to manual review.",
@@ -85,110 +26,13 @@
   ],
   "revision": "5476adf5b84ea6f9a0325f6b8703c8ed1441cdbc3ea986b0efb1a0af2d94d139"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/execution-market.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/execution-market-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage 200; API answers",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://execution.market",
-   "quote": "Execution Market - Universal Execution Layer",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://execution.market",
-    "curl https://api.execution.market/api/v1/public/metrics"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "execution.market (API api.execution.market)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://execution.market",
-   "quote": null,
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://execution.market"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Agents publish USDC bounties for real-world tasks done by humans with verified evidence",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://execution.market",
-   "quote": "It is a task marketplace where AI agents publish USDC bounties for real-world tasks that executors (humans or robots) complete with verified evidence",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl -sL https://execution.market"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Public metrics: 6,851 tasks total; 3,341 completed; 2,434 expired; 930 cancelled; 1 published; 606 registered workers",
-   "value": 3341,
-   "unit": "completed tasks",
-   "window": "all-time",
-   "basis": "operator_claim",
-   "source_url": "https://api.execution.market/api/v1/public/metrics",
-   "quote": "\"tasks\":{\"total\":6851,\"published\":1,… \"completed\":3341",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl https://api.execution.market/api/v1/public/metrics"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Total payment volume $599.28, fees $16.30 (all-time)",
-   "value": 599.28,
-   "unit": "USD",
-   "window": "all-time",
-   "basis": "operator_claim",
-   "source_url": "https://api.execution.market/api/v1/public/metrics",
-   "quote": "\"payments\":{\"total_volume_usd\":599.28,\"total_fees_usd\":16.3}",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl https://api.execution.market/api/v1/public/metrics"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Only published task: '$20 photo at Plaza de Bolívar, Bogotá' created 2026-10-14 18:18 UTC; latest completed tasks created 2026-10-10 at $0.02–0.09",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.execution.market/api/v1/tasks?status=published",
-   "quote": "\"title\":\"Photo at Plaza de Bolívar, Bogotá\",\"status\":\"published\" … \"bounty_usd\":20.0",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "curl api.execution.market/api/v1/tasks?status=published",
-    "…?status=completed"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

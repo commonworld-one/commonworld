@@ -1,3 +1,13 @@
+# Historical stage record
+
+This file preserves an earlier stage and its counts. It is not the current contract or a claim about deployment. Read [ATLAS-CURRENT-CONTRACT.md](ATLAS-CURRENT-CONTRACT.md) for the current349/38/71model.
+
+## Current contract,24November2026
+
+Read [ATLAS-CURRENT-CONTRACT.md](ATLAS-CURRENT-CONTRACT.md) first for current behavior:349current cards,38closed records,71earning entries; one overview+matching screenshot package, optional trials, same current data for people and agents. Raw inputs and historical sections below do not define current membership or export fields. Their348/18/20counts, bounded-note model, compatibility fields and automated reopening descriptions are historical. This repository change does not establish that a deployment occurred or activate any external workflow.
+
+## Historical and implementation reference
+
 > Current local packaging scope, 23 November 2026: the owner chose dated catalogue preparation without requiring a complete retrospective raw-evidence archive. Missing originals remain unavailable/unverified, not passed. Source URLs, dates, known limits, exact images and available history are preserved. Quality is locally adapted to the accepted catalogue builder. The historical checkpoint and earlier proof below remain historical. No code publication, merge, deploy or automation activation is approved.
 
 > Packaging checkpoint, 23 November 2026: earlier status statements below are historical, not current release acceptance. Exact captures are now merged only in atlas-screens through image PR #317 at 3e75274034c11b7afbe81389c26843ccc813a876. Main and production have not been updated. Safety and IndexNow local reviews remain scoped; Quality still uses legacy build input. Public provenance packaging is BLOCKED: original source-evidence body availability is unverified and the proposed public/private evidence split is not owner-approved. No missing original is replaced by its receipt, hash or a new visit under an old date.

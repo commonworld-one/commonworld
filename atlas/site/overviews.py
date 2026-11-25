@@ -3,6 +3,7 @@
 This is the new editorial source. The old snapshot remains an immutable migration
 input and an API v1 compatibility archive, not an editing form for this source.
 """
+import earning
 import copy
 import hashlib
 import html
@@ -158,6 +159,12 @@ def attach(site, doc, allow_drafts=False, expected=None):
         hosts = (site.safety or {}).get('hosts', {})
         for slug, r in doc['cards'].items():
             c = next(c for c in site.cards if c['slug'] == slug)
+            # Closed records retain validated history, never a current outbound
+            # transition. Their hosts are deliberately absent from safety queries.
+            # Do not extend this exemption to live/unknown statuses or skip the
+            # structure, receipt, capture and selection checks above.
+            if c.get('status') == 'closed':
+                continue
             urls = list(r['sources']) + [c.get('canonical_url')] + [t.get('proof_url') for t in r.get('trials', [])]
             for u in filter(None, urls):
                 host = urlsplit(u).hostname.lower().removeprefix('www.').rstrip('.')
@@ -215,14 +222,25 @@ def render_html(site, c, b):
     visit = link(website, 'Visit ' + e(b.domain(website)) + ' ↗', 'cw-btn cw-btn-primary') if website else ''
     compat = site.base + '/platforms/' + c['slug'] + '.json'
     share = b.cw.share_bar(site.cfg, site.abs(c['_url']), share_text(c), cls='cw-share-head')
+    paragraphs = re.split(r'\n\s*\n', r['text'].strip())
+    if len(paragraphs) == 1 and len(r['text']) > 420:
+        sentences = re.split(r'(?<=[.!?])\s+(?=[A-Z])', r['text'])
+        paragraphs = [' '.join(sentences[i:i+2]) for i in range(0, len(sentences), 2)]
+    description_html = ''.join('<p class="cw-lead">' + e(text) + '</p>' for text in paragraphs)
+    tags = b.cw.tag_chips(c['_tags'], lambda t: b.tag_href(site, t), limit=99)
+    current_status = 'Draft · not verified' if pending else 'Live · Verified'
+    identity = '<dl class="facts"><div><dt>Permanent ID</dt><dd><code>' + e(c['slug']) + '</code> · <a href="' + compat + '">JSON</a></dd></div><div><dt>Type</dt><dd>' + e(b.TYPE_LABEL.get(c['entity_type'], c['entity_type'])) + '</dd></div><div><dt>Status</dt><dd>' + current_status + '</dd></div></dl>'
+    related = [x for x in site.by_cat[c['category']] if x['slug'] != c['slug'] and x.get('_overview')][:6]
+    related_html = ('<section class="related"><div class="sec-head"><h2>More in ' + e(b.CAT_LABEL[c['category']]) + '</h2></div><div class="cw-grid">' + ''.join(b.card_html(site, x) for x in related) + '</div></section>') if related else ''
+    correction = '<aside class="correction"><h2>Something wrong or out of date?</h2><p><a href="' + e(site.cfg['site']['corrections_url']) + '" rel="nofollow noopener">Report a correction</a> with a source showing the right information.</p></aside>'
     body = f'''{crumbs}<article class="entry simple-overview">
 <header class="entry-head"><div class="cw-meta"><a class="catchip" href="{site.base}/categories/{c['category']}/">{e(b.CAT_LABEL[c['category']])}</a></div>
 <h1>{e(c['name'])}</h1>{note}<p class="overview-date">Visit for this overview: {date}</p>
-<p class="cw-lead">{e(r['text'])}</p>{disclosure}<div class="entry-actions"><p class="actions">{visit}</p>{share}</div></header>
+{description_html}{disclosure}{tags}<div class="entry-actions"><p class="actions">{visit}</p>{share}</div>{earning.marker_html(site, c)}</header>
 {b.cw.ad_slot(site.cfg, 'atlas-platform-top', 'cw-ad-banner')}
-{b.shot_figure(site, c)}{trials}
-<section class="cw-panel"><div class="cw-panel-body"><h2>Sources</h2><ul>{source_links}</ul></div></section>
-</article>'''
+{b.shot_figure(site, c)}{identity}{trials}
+<section class="cw-panel"><div class="cw-panel-body"><h2 id="earning-sources">Sources</h2><ul>{source_links}</ul></div></section>
+{b.badge_block(site, c)}{correction}</article>{related_html}'''
     body = body.replace("</a>. '\n", '</a>.\n')
     date_obj = b.parse_time(r.get('visited_at'))
     ld = [crumb_ld, {'@context': 'https://schema.org', '@type': 'WebPage', 'name': c['name'],
@@ -233,7 +251,7 @@ def render_html(site, c, b):
         ld=ld, lastmod=date_obj, noindex=pending,
         alt_json=site.abs(compat), alt_md=c['_url'] + 'index.md',
         og=b.og_generic(site, c['slug'], c['name'], r['text'],
-            [('Dated overview', 'olive')], kicker=b.CAT_LABEL[c['category']].upper(),
+            [(current_status, 'olive')], kicker=b.CAT_LABEL[c['category']].upper(),
             alt=c['name'] + ': dated overview in Commonworld Atlas',
             foot=('Overview visit ' + b.fmt_date(date_obj)) if date_obj else 'Overview date not established'))
 
@@ -241,15 +259,16 @@ def render_html(site, c, b):
 def render_md(site, c):
     r = c['_overview']
     lines = ['# ' + c['name'], '', 'Canonical page: ' + site.abs(c['_url']), '',
-        'Draft, not ready for publication.' if r['state'] != 'reviewed' else 'Dated overview', '',
+        'Draft, not ready for publication.' if r['state'] != 'reviewed' else 'Live · Verified', '',
         'Visit for this overview: ' + (r.get('visited_at') or 'Not yet recorded for this overview'), '', r['text'], '',
         '## Sources', ''] + ['- ' + u for u in r['sources']]
+    if c.get('_earning'):
+        lines += ['', '## Where agents get paid', '', c['_earning']['description'], '', 'Included in the broad earning-related list, not a payment or eligibility guarantee.', site.abs(site.base + '/earn/'), '']
     if relationship_disclosure(c):
         lines += ['', relationship_disclosure(c)]
     shot = site.shots.get(c['slug'])
     if shot:
-        lines += ['', 'Screenshot captured: ' + shot['captured_at'],
-                  'Screenshot: ' + site.abs(site.base + '/screens/' + c['slug'] + '.webp')]
+        lines += ['', 'Screenshot: ' + site.abs(site.base + '/screens/' + c['slug'] + '.webp')]
     else:
         lines += ['', 'Screenshot missing. Publication is blocked.']
     if r.get('trials'):

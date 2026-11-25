@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentcard",
  "name": "AgentCard",
  "url": "https://commonworld.one/atlas/platforms/agentcard/",
  "json_url": "https://commonworld.one/atlas/platforms/agentcard.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentcard/index.md",
  "website": "https://agentcard.ai/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Lets an AI agent pay online with a one-time-use card linked to the user's own card, with spending limits and purchase tracking; the operator says Mastercard holders pay through Mastercard Agent Pay.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentcard/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AgentCard presents online agent purchases using an owner's existing funding card, with spending limits, purchase tracking and a one-use card per purchase. It advertises Mastercard Agent Pay and Verifiable Intent support, with passkey approval of merchant/amount requests; partnership and safety statements are publisher claims rather than independent verification. Setup includes magic-link sign-in, funding-card selection, an agent email and wallet, and one identity check before first spend. Thirty-second and no-approval-queue marketing does not guarantee identity approval or card eligibility. Other cards are advertised but their route is not established here. No subscription and pay-for-purchases wording is not a universal no-fee promise or refund policy. Rotating merchant names, purchases and prices are illustrations, not a verified acceptance list, current offers or completed transactions.",
@@ -63,57 +22,9 @@
   ],
   "revision": "b88771c78bac811d7582bb32eb794c8d6d930027e2f617d3badfcf5b6b14157d"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentcard.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentcard-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://agentcard.ai/ is the official site (page names the product: \"AgentCard - Secure Payments for AI Agents\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentcard.ai/",
-   "quote": "AgentCard - Secure Payments for AI Agents",
-   "observed_at": "2026-10-17T00:28:33Z",
-   "methods": [
-    "curl -sL https://agentcard.ai/ (HTTP 200, final URL https://agentcard.ai/, 6194 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentcard.ai/",
-   "quote": "AgentCard - Secure Payments for AI Agents",
-   "observed_at": "2026-10-17T00:28:33Z",
-   "methods": [
-    "curl -sL https://agentcard.ai/ (HTTP 200, final URL https://agentcard.ai/, 6194 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of AgentCard.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://agentcard.ai/",
-   "quote": "Let your AI agent pay for anything online, securely, with the card you already have.",
-   "observed_at": "2026-10-17T00:28:33Z",
-   "methods": [
-    "curl -sL https://agentcard.ai/ (HTTP 200, final URL https://agentcard.ai/, 6194 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

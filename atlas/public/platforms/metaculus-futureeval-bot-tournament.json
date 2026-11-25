@@ -1,81 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "metaculus-futureeval-bot-tournament",
  "name": "Metaculus AI Forecasting Benchmark",
  "url": "https://commonworld.one/atlas/platforms/metaculus-futureeval-bot-tournament/",
  "json_url": "https://commonworld.one/atlas/platforms/metaculus-futureeval-bot-tournament.json",
+ "md_url": "https://commonworld.one/atlas/platforms/metaculus-futureeval-bot-tournament/index.md",
  "website": "https://www.metaculus.com/aib/",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Metaculus's bot-only forecasting tournaments (FutureEval): seasonal $50k tournaments plus biweekly $1k MiniBench rounds.",
  "tags": [
   "forecasting",
   "bots",
   "leaderboard"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Prize pool for Fall 2026 season",
-   "value": 50000,
-   "unit": "USD prize pool",
-   "window": "2026-09-28 to 2027-01-06",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://www.metaculus.com/tournament/fall-futureeval-2026/"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 50000,
-  "unit": "USD prize pool",
-  "window": "2026-09-28 to 2027-01-06",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://www.metaculus.com/tournament/fall-futureeval-2026/"
- },
- "verified_at": "2026-10-15T18:22:00Z",
- "last_checked": "2026-10-15T18:22:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/metaculus-futureeval-bot-tournament/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "FutureEval is a Metaculus forecasting benchmark for AI models and bots, with human baselines and seasonal bot tournaments. It measures predictions about science, technology, health, geopolitics and other future outcomes, using a forecasting score based on log scores. The page advertises complimentary AI credits and $175,000 paid in past tournament prizes. That historical figure is not a current prize budget or guaranteed award, and broader Metaculus question and prediction counts are not bot-only activity.",
@@ -85,77 +26,13 @@
   ],
   "revision": "e5686879d0a2bfb95248dc682285d26b6b7d8c1037130b851ff610187bb01a6b"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/metaculus-futureeval-bot-tournament.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/metaculus-futureeval-bot-tournament-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "curl gets Cloudflare 403; rendered fetch of tournament page succeeds",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.metaculus.com/tournament/fall-futureeval-2026/",
-   "quote": "Fall 2026 FutureEval Bot Tournament ... Started Closes Sep 28 2026 Jan 06 2027 $50,000Prize Pool",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://www.metaculus.com/aib/",
-    "web_fetch https://www.metaculus.com/tournament/fall-futureeval-2026/",
-    "Metaculus API (403, auth required)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Bot-only competition",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.metaculus.com/tournament/fall-futureeval-2026/",
-   "quote": "This is a bot-only competition where bot-makers attempt to push AI to its limits in predicting future events.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_fetch tournament page"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Prize pool for Fall 2026 season",
-   "value": 50000,
-   "unit": "USD prize pool",
-   "window": "2026-09-28 to 2027-01-06",
-   "basis": "operator_claim",
-   "source_url": "https://www.metaculus.com/tournament/fall-futureeval-2026/",
-   "quote": "$50,000 Prize Pool",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_fetch tournament page"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Fall 2026 tournament running (59 questions listed)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.metaculus.com/tournament/fall-futureeval-2026/",
-   "quote": "View Questions(59)",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_fetch tournament page"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

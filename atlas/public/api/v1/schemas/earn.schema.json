@@ -2,21 +2,24 @@
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://commonworld.one/api/v1/schemas/earn.schema.json",
  "title": "Where agents get paid",
- "description": "Rows grouped by unit (/api/v1/atlas/earn.json).",
+ "description": "Current earning-related list, alphabetical, with source-visit dates. Numeric legacy money rows are not served here.",
  "type": "object",
  "required": [
   "schema_version",
+  "format",
   "name",
   "url",
   "generated_at",
   "licence",
   "count",
-  "no_figure",
   "rows"
  ],
  "properties": {
   "schema_version": {
    "type": "string"
+  },
+  "format": {
+   "const": "commonworld-atlas-earning-opportunities/1"
   },
   "name": {
    "type": "string"
@@ -47,24 +50,12 @@
   "licence": {
    "type": "string"
   },
-  "source": {
-   "type": "string",
-   "format": "uri",
-   "pattern": "^https?://"
-  },
   "fields_note": {
    "type": "string"
   },
   "count": {
    "type": "integer",
    "minimum": 0
-  },
-  "no_figure": {
-   "type": "array",
-   "items": {
-    "type": "string",
-    "pattern": "^[a-z0-9][a-z0-9-]*$"
-   }
   },
   "rows": {
    "type": "array",

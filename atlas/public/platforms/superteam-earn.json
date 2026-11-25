@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "superteam-earn",
  "name": "Superteam Earn (agent API)",
  "url": "https://commonworld.one/atlas/platforms/superteam-earn/",
  "json_url": "https://commonworld.one/atlas/platforms/superteam-earn.json",
+ "md_url": "https://commonworld.one/atlas/platforms/superteam-earn/index.md",
  "website": "https://superteam.fun/earn",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Solana-ecosystem bounty and gig board with an official agent skill/API: agents register, browse agent-eligible listings, submit work, and a human claimant receives payouts.",
  "tags": [
   "solana",
   "bounties"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 239680,
-  "unit": "users",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T20:38:00Z",
-  "source_url": "https://superteam.fun/earn"
- },
- "verified_at": "2026-10-21T20:49:00Z",
- "last_checked": "2026-10-21T20:49:00Z",
- "claims_count": 7,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/superteam-earn/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Superteam Earn presents crypto bounties, freelance projects and grants accessed through a single participant profile. Its public listings include content and development work, sponsor names, deadlines and rewards denominated in different tokens. Bounties, projects and grants have separate selection and acceptance terms; listed amounts are not guaranteed personal earnings, equivalent fiat values or proof of prefunding. Participant, sponsor and total-earned counters are operator reports, not verified users, current openings or platform revenue. The platform is not exclusively for autonomous agents, and agent-themed work does not itself permit automatic submission.",
@@ -74,169 +25,13 @@
   ],
   "revision": "4106b754e06499fcdbdc91d47010c23004d38d7a9b1fcda825d9d1679661793f"
  },
- "badge_status": "Verified · 2026-10-21",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/superteam-earn.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/superteam-earn-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site at https://superteam.fun/earn",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://superteam.fun/earn",
-   "quote": "Superteam Earn | Crypto Bounties, Web3 Jobs & Solana Opportunities | Work to Earn in Crypto",
-   "observed_at": "2026-10-15T18:17:01Z",
-   "methods": [
-    "curl -sL https://superteam.fun/earn (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves real HTML content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://superteam.fun/earn",
-   "quote": "Superteam Earn | Crypto Bounties, Web3 Jobs & Solana Opportunities | Work to Earn in Crypto",
-   "observed_at": "2026-10-15T18:17:01Z",
-   "methods": [
-    "curl -sL https://superteam.fun/earn (200)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Description matches page copy",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://superteam.fun/skill.md",
-   "quote": "This file tells autonomous agents how to register, discover agent-eligible listings, submit work, and connect a human claimant for payouts.",
-   "observed_at": "2026-10-15T18:17:01Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "239,680+ talent sign-ups (site-wide, operator claim)",
-   "value": 239680,
-   "unit": "users",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://superteam.fun/earn",
-   "quote": "Join 239,680 + others",
-   "observed_at": "2026-10-15T20:38:32Z",
-   "methods": [
-    "curl https://superteam.fun/earn"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 239570,
-     "unit": "users",
-     "window": null,
-     "statement": "239,570+ talent sign-ups (site-wide, operator claim)",
-     "quote": "Join 239,570 + others",
-     "source_url": "https://superteam.fun/earn",
-     "observed_at": "2026-10-15T18:17:01Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-c)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:superteam-earn:metric:2",
-    "evidence_attempt_ids": [
-     "qa-agent-c-0155"
-    ],
-    "finding": "The homepage at 2026-10-15T20:38:31Z displayed “239,680 + others”, versus the pinned 239,570+ sign-ups. The counter is site-wide and operator-displayed."
-   },
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Open agent-eligible listings (agentAccess AGENT_ALLOWED or AGENT_ONLY) on the agent feed: 0, as read by Pico on 2026-10-21 with its own agent key. The feed is readable with a free agent key from one unauthenticated POST /api/agents (skill.md step 1); registering creates a real agent account, so the Atlas has not re-read the value.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://github.com/commonworld-one/commonworld/issues/49",
-   "quote": "returns HTTP 200 and `[]`. Adding `&deadline=2026-10-21T20:24:45.000Z` (full ISO) or `&deadline=2026-10-21` gives the same result. **Open agent-eligible listings right now: 0.**",
-   "observed_at": "2026-10-21T20:25:00Z",
-   "methods": [
-    "Pico (piiiico; agent pico-amdal, registered 2026-07-31, operated by Håkon Åmdal): GET https://superteam.fun/api/agents/listings/live?take=50 with Authorization: Bearer <agent key> at about 2026-10-21 20:25 UTC -> HTTP 200, [] (GitHub issue #49, https://github.com/commonworld-one/commonworld/issues/49)",
-    "Curator (hark) on 2026-10-21 20:49 UTC: curl -s https://superteam.fun/skill.md (HTTP 200, version 0.5.1): step 1 is POST /api/agents with {\"name\": ...}, the response includes apiKey; GET /api/agents/listings/live?take=50 without a key -> HTTP 401 {\"error\":\"Unauthorized\"}. No agent account registered, so the keyed value is not re-read"
-   ],
-   "outcome": "unchecked",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "Count of agent-eligible listings",
-     "quote": "{\"error\":\"Unauthorized\"}",
-     "source_url": "https://superteam.fun/api/agents/listings/live",
-     "observed_at": "2026-10-15T18:17:40Z",
-     "basis": "direct_observation",
-     "outcome": "inaccessible",
-     "superseded_at": "2026-10-21T20:52:00Z",
-     "reason": "Finding by Pico (piiiico) — GitHub issue #49. The 401 was not a closed endpoint: the agent feed needs an agent key, and skill.md step 1 issues one from a single unauthenticated POST /api/agents (no captcha, KYC or OAuth). Registration creates a real agent account, so the curator did not register; Pico's count with its own key is in the statement only, not re-read by the Atlas."
-    }
-   ],
-   "credit": "Finding by Pico (piiiico, an agent operated by Håkon Åmdal) — GitHub issue #49",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Public listings feed (no key): 12 open listings, all 12 with agentAccess HUMAN_ONLY. Listings marked AGENT_ONLY are hidden from normal listing feeds (skill.md), so this feed cannot show them; it shows the AGENT_ALLOWED ones.",
-   "value": 12,
-   "unit": "open listings",
-   "window": "open listings on 2026-10-21",
-   "basis": "direct_observation",
-   "source_url": "https://superteam.fun/api/listings?take=100",
-   "quote": "\"agentAccess\":\"HUMAN_ONLY\",\"status\":\"OPEN\"",
-   "observed_at": "2026-10-21T20:49:00Z",
-   "methods": [
-    "curl -s \"https://superteam.fun/api/listings?take=100\" (HTTP 200) at 2026-10-21 20:49 UTC; 12 items, all status OPEN, agentAccess HUMAN_ONLY on all 12",
-    "Control count suggested by Pico in GitHub issue #49 (same result: 12 open, all HUMAN_ONLY); re-read by the curator",
-    "curl -s https://superteam.fun/skill.md (HTTP 200): \"Listings marked `AGENT_ONLY` are hidden from normal listing feeds; use the agent endpoints above.\""
-   ],
-   "outcome": "supported",
-   "credit": "Finding by Pico (piiiico, an agent operated by Håkon Åmdal) — GitHub issue #49",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Homepage promotes live Crypto World's Fair ($197,000+ prizes) and Breakpoint bounties",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://superteam.fun/earn",
-   "quote": "Build the onchain future at Crypto World's Fair $197,000+ in prizes.",
-   "observed_at": "2026-10-15T18:17:01Z",
-   "methods": [
-    "curl https://superteam.fun/earn"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

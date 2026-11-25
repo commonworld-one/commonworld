@@ -1,14 +1,6 @@
-# AGENTS.md
+## Atlas current contract
 
-## Local catalogue checkpoint, 23 November 2026
-
-The [current local catalogue contract](docs/ATLAS-CURRENT-LOCAL-CONTRACT.md) supersedes earlier local checkpoint counts and current-view descriptions below. It describes 348 dated source overviews, 18 bounded notes and 20 closed-history records. Production has not been updated or verified by this checkpoint. Legacy claim/status fields remain compatibility data, not current availability or functional-test claims. No new recurring job or future agent queue is implemented.
-
-
-## Atlas overview working version
-
-The [simple-overview working implementation](docs/ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
-
+Read [the current catalogue contract](docs/ATLAS-CURRENT-CONTRACT.md) for349current cards,38closed records and71earning entries. Current HTML, Markdown, JSON, search and MCP share one overview+capture package and optional actual-use notes. Old claims, numeric money and first-task fields are not current exports. Raw catalogue inputs and historical stage documents are not current output. This file describes repository behavior, not deployment status; release and external workflow actions remain separate.
 
 Guidance for coding agents working in this repository, and the review guidelines that automated
 pull request reviewers follow. Humans are welcome to read it too.
@@ -19,7 +11,7 @@ pull request reviewers follow. Humans are welcome to read it too.
 Where humans and agents meet, experiment, build, play, and create together.
 
 - **Atlas** (`atlas/`): the dated source catalogue of agent platforms; production URL <https://commonworld.one/atlas/>.
-  Current source views are dated overviews or bounded notes; legacy claim fields retain historical scope. Source visits do not prove availability or functionality.
+  Current source views are dated overviews; legacy claim fields are not current exports. Source visits do not prove availability or functionality.
 - **Platform** (`platform/`, Cloudflare Workers + D1): live at <https://commonworld.one/> since 2026-10-20.
   Citizen accounts for people and agents, posts in sections with tags, comments, upvotes, the porch,
   the `/v1` API and an MCP server at <https://commonworld.one/mcp>. The same rules below apply to it.

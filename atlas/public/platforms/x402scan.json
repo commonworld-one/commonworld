@@ -1,81 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "x402scan",
  "name": "x402scan",
  "url": "https://commonworld.one/atlas/platforms/x402scan/",
  "json_url": "https://commonworld.one/atlas/platforms/x402scan.json",
+ "md_url": "https://commonworld.one/atlas/platforms/x402scan/index.md",
  "website": "https://www.x402scan.com",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Open-source x402 ecosystem explorer by Merit Systems showing transactions, sellers, origins and resources.",
  "tags": [
   "x402",
   "explorer",
   "open-source"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Overview payload: 2,873,610 tx, total_amount 1,094,752,973,761 base units (= $1,094,753 at USDC 6 decimals), 36,572 buyers, 39,005 sellers; series starts 2026-09-15 so window ≈30 d (inferred). Raw, unfiltered.",
-   "value": 1094753,
-   "unit": "USD (raw)",
-   "window": "~30d to 2026-10-15T16:45Z (inferred)",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "source_url": "https://www.x402scan.com/"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 1094753,
-  "unit": "USD (raw)",
-  "window": "~30d to 2026-10-15T16:45Z (inferred)",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://www.x402scan.com/"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/x402scan/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://www.x402scan.com/",
-   "quote": "\"total_transactions\":2873610,\"total_amount\":1094752973761,\"unique_buyers\":36572,\"unique_sellers\":39005,\"latest_block_timestamp\":\"2026-10-15T16:45:31.000Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "x402scan presents an x402 block explorer, analytics dashboard and marketplace for paid APIs. Its homepage displays ecosystem transaction, volume, buyer and seller charts, featured services and routes to facilitator and network views. These are displayed ecosystem measures and discovery listings rather than independent evidence of organic demand, service quality, separate customers or successful task delivery. A listed paid API is an option to assess, not an authenticated integration or permission to call or pay for it.",
@@ -85,62 +26,9 @@
   ],
   "revision": "75592280c6620631b6d8538473bb1ce1f40144eb002a1355c8c4838ccdb42a7a"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/x402scan.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402scan-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "200; content is a Next.js app, numbers embedded in RSC payload.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.x402scan.com/",
-   "quote": "x402scan | x402 Ecosystem Explorer",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L",
-    "web_fetch (title only)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Overview payload: 2,873,610 tx, total_amount 1,094,752,973,761 base units (= $1,094,753 at USDC 6 decimals), 36,572 buyers, 39,005 sellers; series starts 2026-09-15 so window ≈30 d (inferred). Raw, unfiltered.",
-   "value": 1094753,
-   "unit": "USD (raw)",
-   "window": "~30d to 2026-10-15T16:45Z (inferred)",
-   "basis": "direct_observation",
-   "source_url": "https://www.x402scan.com/",
-   "quote": "\"total_transactions\":2873610,\"total_amount\":1094752973761,\"unique_buyers\":36572,\"unique_sellers\":39005,\"latest_block_timestamp\":\"2026-10-15T16:45:31.000Z\"",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L, parse __next_f payload"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Repo Merit-Systems/x402scan pushed 2026-10-14 (397 stars).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/Merit-Systems/x402scan",
-   "quote": "pushed_at 2026-10-14T15:38Z",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "GitHub API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

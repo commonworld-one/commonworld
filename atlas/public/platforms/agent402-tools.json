@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agent402-tools",
  "name": "Agent402",
  "url": "https://commonworld.one/atlas/platforms/agent402-tools/",
  "json_url": "https://commonworld.one/atlas/platforms/agent402-tools.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agent402-tools/index.md",
  "website": "https://agent402.tools/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Pay-per-call tool hub for AI agents: 500+ metered tools, models and reports paid per request over x402 or MPP without signup or API keys, plus an open directory of indexed x402 sellers with their tools and settlement networks.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-31T23:19:00Z",
- "last_checked": "2026-10-31T23:19:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agent402-tools/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agent402 presents paid tools, a model gateway, outside-seller discovery and a router that buys answers from those sellers. It advertises multi-network x402, MPP on Tempo and proof-of-work access for selected pure-CPU tools, not free access to models, browsers or all third-party services. Pricing separates tool calls from $0.001, fixed model tiers and request-specific metered quotes. Exact-payment and usage-based clients can settle differently. x402 is described as settling after answer generation; upfront Tempo failures become refund debts. A disconnect after settlement may leave a charge without the answer, subject to refund review, not universal automatic refunds. Signed receipts concern payment records rather than answer quality. First-party counters and the whole-ecosystem visualization have different scopes and do not establish independent users or reliable completion. Card reports and $5/month monitors are separate offers. Model providers and routing sellers process request data; stored ledgers and wallet-keyed memory qualify no-account marketing.",
@@ -65,91 +24,13 @@
   ],
   "revision": "4d2d4863e48b70eacc35a9af0be9534261fddd0b77c1337221b1549df2966fbf"
  },
- "badge_status": "Verified · 2026-10-31",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agent402-tools.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agent402-tools-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://agent402.tools/ is the official site (page title \"Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agent402.tools/",
-   "quote": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
-   "observed_at": "2026-10-19T11:14:46Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agent402.tools/ (HTTP 200, final URL https://agent402.tools/, 18450 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agent402.tools/",
-   "quote": "OUR 500+ TOOLS",
-   "observed_at": "2026-10-19T11:14:46Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agent402.tools/ (HTTP 200, final URL https://agent402.tools/, 18450 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Agent402.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://agent402.tools/",
-   "quote": "Agentic Finance for AI agents: 500+ pay-per-call tools, metered models and finished reports over x402 and MPP, or by card. No signup, no API keys.",
-   "observed_at": "2026-10-19T11:14:46Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agent402.tools/ (HTTP 200, final URL https://agent402.tools/, 18450 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "The operator also publishes a directory of x402 sellers it crawls.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://agent402.tools/marketplace",
-   "quote": "The open directory of every x402 seller we can crawl: advertised tools, settlement networks, crawl health and routability.",
-   "observed_at": "2026-10-19T11:14:47Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://agent402.tools/marketplace (HTTP 200, final URL https://agent402.tools/marketplace, 20782 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "protocol",
-   "statement": "Commonworld's own paid check (research observation, micropay test 2026-11-01): the live 402 of https://agent402.tools/api/random asked 0.001 USDC on Base (x402 v2, scheme exact, payTo 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0; the 402 also offers other networks); Commonworld paid it once with ?min=1&max=100&count=3 and got three integers. Settlement: Base tx 0xfd2e232fb27f03c428c9643818119a5ad380225b63768803cd4779a9f08d4035 (block 53349729), 0.001 USDC to that payTo. A first paid request without query parameters was rejected with HTTP 400 before settlement (not charged).",
-   "value": 0.001,
-   "unit": "USDC per call (/api/random, paid)",
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agent402.tools/api/random",
-   "quote": "HTTP 402, x402Version 2, scheme exact, amount 1000, network eip155:8453, payTo 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0",
-   "observed_at": "2026-10-31T23:19:57Z",
-   "methods": [
-    "unpaid GET https://agent402.tools/api/random at 2026-10-31T23:19:57Z (HTTP 402, payment-required decoded: amount 1000, payTo 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0)",
-    "paid GET ?min=1&max=100&count=3 with an x402 exact (EIP-3009) authorization for exactly those terms at 2026-10-31T23:20:00Z (HTTP 200, {\"integers\":[42,66,77]}, PAYMENT-RESPONSE success)",
-    "first paid GET without parameters: HTTP 400 \"Provide ?bytes= or integer ?min= and ?max=\", authorization still unused, balance unchanged (not charged)",
-    "Base receipt (status 1, block 53349729): one USDC Transfer of 1000 units to 0xaBF4FAbd7c416fB67202E5f9002389Fc75e2a9D0; authorizationState(nonce) 0 -> 1",
-    "explorer record: https://basescan.org/tx/0xfd2e232fb27f03c428c9643818119a5ad380225b63768803cd4779a9f08d4035"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

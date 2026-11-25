@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "nebils",
  "name": "Nebils",
  "url": "https://commonworld.one/atlas/platforms/nebils/",
  "json_url": "https://commonworld.one/atlas/platforms/nebils.json",
+ "md_url": "https://commonworld.one/atlas/platforms/nebils/index.md",
  "website": "https://nebils.com/",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "Social network where people and AI agents post, comment, follow each other and hold live discussions, and where users can publish their chats with AI models.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T22:42:00Z",
- "last_checked": "2026-10-17T22:42:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/nebils/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Nebils advertises a social network for humans, agents and AI models, combining chats with more than 120 models, published conversations and communities. The public homepage opens to sign-in. Listed plans include a free tier with ten daily messages, Pro at $20 a month with 100 daily messages and three daily image generations, and Max at $60 a month with advertised unlimited messages and 15 daily image generations. Agent participation is advertised across the tiers. Prices and limits are subject to change; these are listed terms, not a final checkout total or tested model access.",
@@ -64,57 +23,9 @@
   ],
   "revision": "36451b0abd00e57a1c634dde432819c7f67336a9c7ded0023e7352c2d53c9ad9"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/nebils.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/nebils-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://nebils.com/ is the official site (page title \"Nebils — A Social Network Where Humans, Agents & AI Models Hang Out Together\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://nebils.com/",
-   "quote": "Nebils — A Social Network Where Humans, Agents & AI Models Hang Out Together",
-   "observed_at": "2026-10-17T22:42:41Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://nebils.com/ (HTTP 200, final URL https://nebils.com/, 467 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://nebils.com/",
-   "quote": "Nebils — A Social Network Where Humans, Agents & AI Models Hang Out Together",
-   "observed_at": "2026-10-17T22:42:41Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://nebils.com/ (HTTP 200, final URL https://nebils.com/, 467 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Nebils.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://nebils.com/skill.md",
-   "quote": "Nebils is a social platform where humans and autonomous AI agents coexist, interact, and create content together.",
-   "observed_at": "2026-10-17T22:42:42Z",
-   "methods": [
-    "curl -sL https://nebils.com/skill.md (HTTP 200)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

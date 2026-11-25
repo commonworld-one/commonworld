@@ -1,90 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "blockrun",
  "name": "BlockRun",
  "url": "https://commonworld.one/atlas/platforms/blockrun/",
  "json_url": "https://commonworld.one/atlas/platforms/blockrun.json",
+ "md_url": "https://commonworld.one/atlas/platforms/blockrun/index.md",
  "website": "https://blockrun.ai",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "BlockRun is an OpenAI-compatible routing and payment layer giving agents pay-per-call access to many LLMs and tool/data APIs via x402.",
  "tags": [
   "x402",
   "x402-service",
   "llm"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402 settlement to this service's payout address: $1,516.59 in 30d from 458 distinct buyers, 96,400 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 1516.59,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/blockrun"
-  },
-  {
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $435.96",
-   "value": 435.96,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/blockrun/volume?days=60"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 1516.59,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/services/blockrun"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 7,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/blockrun/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services/blockrun",
-   "quote": "\"volume_usd_30d\":1516.588105,\"unique_buyers_30d\":458,\"tx_count_30d\":96400,\"top_buyer_share_30d\":0.25115511175659655,\"last_settlement_at\":\"2026-10-28T03:30:43Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "BlockRun presents payment-workflow evaluations for financial institutions, synthetic test environments for AI labs and inference/tool endpoints for developers. It describes grading recipient, amount, limits and reporting against settlement records. Selected benchmark results are publisher-reported rather than independently reproduced safety rankings. Developers get wallet-paid calls or a separate account/API-key card/invoice route. Pricing describes vendor rates plus 5% and a $0.001 request fee, while a FAQ instead describes a flat transaction margin without token percentage; no live quote reconciles that conflict here. Exact settlement can charge a max_tokens quote; actual-output settlement is limited to supported up-to/batch options. Security claims scope no-account/no-balance to pay-per-call. The page disclaims third-party BlockRun audits, SLA, standard tenant isolation and per-key budgets. Several gateways store prompts/completions; Solana is described separately, and free upstream terms may allow prompt reuse. Retired IDs can redirect to other models. Noncustodial payment does not establish confidential inference or safe outputs.",
@@ -96,147 +28,9 @@
   ],
   "revision": "1f502e0005317857e0a5e3733eea46540853c2d013cfd0b70914b40fa92dfcfb"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/blockrun.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/blockrun-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Official site returns HTTP 200 with real content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://blockrun.ai",
-   "quote": "BlockRun lets agents pay for the outcome — every model, tool and data source, best value per dollar. 115 models and 100 tool APIs, OpenAI-compatible.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://blockrun.ai"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL (x402-list base_url/website for this service, operator-owned)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://blockrun.ai",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100",
-    "curl -sL https://blockrun.ai"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "BlockRun is an OpenAI-compatible routing and payment layer giving agents pay-per-call access to many LLMs and tool/data APIs via x402.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://blockrun.ai",
-   "quote": "BlockRun lets agents pay for the outcome — every model, tool and data source, best value per dollar. 115 models and 100 tool APIs, OpenAI-compatible.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://blockrun.ai",
-    "GET https://x402-list.com/api/v1/services?per_page=100"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $1,516.59 in 30d from 458 distinct buyers, 96,400 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 1516.59,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/blockrun",
-   "quote": "\"volume_usd_30d\":1516.588105,\"unique_buyers_30d\":458,\"tx_count_30d\":96400,\"top_buyer_share_30d\":0.25115511175659655,\"last_settlement_at\":\"2026-10-28T03:30:43Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/blockrun",
-    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
-    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 1682.55,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "x402 settlement to this service's payout address: $1,682.55 in 30d from 468 distinct buyers, 94,987 settlements; top buyer share 36.3%",
-     "quote": "traction.volume_usd_30d=1682.55, unique_buyers_30d=468, top_buyer_share_30d=0.3627",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "blockrun-x402-list-30d",
-   "last_settlement_seen_at": "2026-10-28T03:30:43Z",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $435.96",
-   "value": 435.96,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/blockrun/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/blockrun/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last UTC day with ≥$1 settled: 2026-10-15; first settlement 2026-01-01",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/blockrun/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/blockrun/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "protocol",
-   "statement": "Commonworld's own paid check (research observation, micropay test 2026-11-01): the live 402 of https://blockrun.ai/api/v1/chat/completions for model gpt-4o-mini asked 0.002 USDC on Base (x402 v2, scheme exact, payTo 0xe9030014F5DAe217d0A152f02A043567b16c1aBf); Commonworld paid it once and got a real completion (55 tokens). Settlement: Base tx 0x5c341f8a1bbab0dc5d0a6685076e6201116d82d812654f6381ee3e1119114c27 (block 53349788), 0.002 USDC to that payTo.",
-   "value": 0.002,
-   "unit": "USDC per call (chat completions, gpt-4o-mini, paid)",
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://blockrun.ai/api/v1/chat/completions",
-   "quote": "HTTP 402, x402Version 2, scheme exact, amount 2000, network eip155:8453, payTo 0xe9030014F5DAe217d0A152f02A043567b16c1aBf",
-   "observed_at": "2026-10-31T23:21:56Z",
-   "methods": [
-    "unpaid POST https://blockrun.ai/api/v1/chat/completions (model gpt-4o-mini) at 2026-10-31T23:21:56Z (HTTP 402, payment-required decoded: amount 2000, payTo 0xe9030014F5DAe217d0A152f02A043567b16c1aBf)",
-    "paid POST with an x402 exact (EIP-3009) authorization for exactly those terms at 2026-10-31T23:21:59Z (HTTP 200, completion returned, PAYMENT-RESPONSE success)",
-    "Base receipt (status 1, block 53349788): one USDC Transfer of 2000 units to 0xe9030014F5DAe217d0A152f02A043567b16c1aBf; authorizationState(nonce) 0 -> 1",
-    "explorer record: https://basescan.org/tx/0x5c341f8a1bbab0dc5d0a6685076e6201116d82d812654f6381ee3e1119114c27"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

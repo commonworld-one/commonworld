@@ -97,11 +97,18 @@ def newest_first(events):
     return [e for _, e in sorted(enumerate(events), key=lambda x: (x[1].get('date') or '', x[0]), reverse=True)]
 
 
+def publication_events(site, events):
+    if not getattr(site, 'catalogue_mode', False): return events
+    from closed_archive import inert
+    closed = {c['slug'] for c in getattr(site, 'all_cards', site.cards) if c.get('status') == 'closed'}
+    return [inert(e) if e.get('slug') in closed else e for e in events]
+
+
 def doc(site, events, generated_at):
     return {'name': 'Commonworld Atlas events log', 'url': site.abs(JSON_PATH), 'markdown': site.abs(MD_PATH),
             'source': 'https://github.com/commonworld-one/commonworld/blob/main/atlas/data/events.jsonl',
             'generated_at': generated_at, 'licence': site.cfg.get('data_licence') or 'not yet specified',
-            'about': LEAD, 'types': list(TYPES), 'count': len(events), 'events': [dict(e) for e in newest_first(events)]}
+            'about': LEAD, 'types': list(TYPES), 'count': len(events), 'events': [dict(e) for e in newest_first(publication_events(site, events))]}
 
 
 def markdown(site, events):
@@ -114,7 +121,7 @@ def markdown(site, events):
          f'decision log ({A("/atlas/decisions/")}).', '']
     if events:
         L += ['| Date | Entry ID | Event | Reason | Source |', '|---|---|---|---|---|']
-        for e in newest_first(events):
+        for e in newest_first(publication_events(site, events)):
             L.append(f"| {cell(e['date'])} | [`{cell(e['slug'])}`]({A(site.base + '/platforms/' + e['slug'] + '/')}) | {cell(e['type'])} | "
                      f"{cell(e['reason'])} | <{e['source']}> |")
     else:

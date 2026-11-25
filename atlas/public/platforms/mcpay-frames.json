@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "mcpay-frames",
  "name": "Frames (formerly MCPay)",
  "url": "https://commonworld.one/atlas/platforms/mcpay-frames/",
  "json_url": "https://commonworld.one/atlas/platforms/mcpay-frames.json",
+ "md_url": "https://commonworld.one/atlas/platforms/mcpay-frames/index.md",
  "website": "https://frames.ag/",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Frames (formerly MCPay, renamed by its team in February 2026; mcpay.tech now redirects to frames.ag) is a credit-based router to premium data sources for AI over MCP or API.",
  "tags": [
   "x402",
   "mcp"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:12:00Z",
- "last_checked": "2026-10-17T00:12:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/mcpay-frames/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Frames presents a shared connection for discovering and buying paid-endpoint data through MCP, plus a separate F1 research route. Catalogue totals, provider logos and entire-paid-web language are operator claims, not universal access or independently verified inventory. Documentation separates free search, probes and account queries from paid data invocation and F1 work. Credits are priced at $0.001 each; delivered data costs plus 15%, while F1 also bills model work. Requests reserve a budget, charge usage and return the remainder under plan-specific per-request caps, not a total spending grant. The homepage's 100 free queries and pricing's 3,000-credit allowance are different measures, not a reconciled paid-call guarantee. Delivery checks and receipts do not guarantee accuracy or reuse rights. Monthly and purchased credits have different expiry treatment. Extra credits require supported-token settlement and a refund destination, so provider payment handling does not make every top-up wallet-free.",
@@ -69,106 +28,9 @@
   ],
   "revision": "ffe142ea9ed9433e89b3f4d9f9a78f97e81395225d2581b45d53d6bf42bc9196"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/mcpay-frames.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/mcpay-frames-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "mcpay.tech redirects to frames.ag, which serves the Frames home page (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://frames.ag/",
-   "quote": "Frames: Premium data for your AI, over MCP or API",
-   "observed_at": "2026-10-17T00:12:14Z",
-   "methods": [
-    "curl -sL https://mcpay.tech (final URL https://frames.ag/, HTTP 200, <title>)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "mcpay.tech 301 -> frames.ag (200).",
-     "quote": "Frames is a router for premium AI data. Ask anything, and get routed to the correct endpoint.",
-     "source_url": "https://frames.ag/",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "direct_observation",
-     "outcome": "supported",
-     "superseded_at": "2026-10-17T00:12:14Z",
-     "reason": "Atlas audit 2026-10-17 (high-severity row): re-observed for the rename"
-    }
-   ],
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Original repo microchipgnu/MCPay last push 2026-01-21 (90 stars).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/microchipgnu/MCPay",
-   "quote": "pushed_at 2026-01-21T20:59Z, stargazers 90",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "GitHub API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "Not a shutdown: MCPay was renamed Frames by its own team (official @framesag post, 2026-02-13).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://x.com/framesag/status/2022409193010139574",
-   "quote": "MCPAY IS NOW FRAMES.AG",
-   "observed_at": "2026-10-17T00:12:15Z",
-   "methods": [
-    "FxTwitter API https://api.fxtwitter.com/framesag/status/2022409193010139574 (created_at 2026-02-13T20:35:00Z)",
-    "curl -sL https://mcpay.tech -> https://frames.ag/"
-   ],
-   "outcome": "contradicted",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "MCPay brand discontinued via rebrand/redirect; no official shutdown statement found. Treated as rebrand, not closure.",
-     "quote": null,
-     "source_url": "https://frames.ag/",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "inference",
-     "outcome": "unchecked",
-     "superseded_at": "2026-10-17T00:12:15Z",
-     "reason": "Atlas audit 2026-10-17 (high-severity row): rename confirmed by the operator; MCPay was not shut down"
-    }
-   ]
-  },
-  {
-   "kind": "operator",
-   "statement": "Rebrand: MCPay is now Frames (frames.ag), announced by the official Frames account on 2026-02-13; an independent hackathon report also records the rename.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://x.com/framesag/status/2022409193010139574",
-   "quote": "MCPAY IS NOW FRAMES.AG",
-   "observed_at": "2026-10-17T00:12:15Z",
-   "methods": [
-    "FxTwitter API https://api.fxtwitter.com/framesag/status/2022409193010139574 (author framesag, created_at 2026-02-13T20:35:00Z)",
-    "web_fetch https://wiki.superteam.com.br/transparencia/q4-2025: \"O MCPay, que desde então foi rebatizado como Frames\""
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

@@ -1,18 +1,17 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "virtuals-agent-commerce-protocol",
  "name": "Virtuals ACP",
  "url": "https://commonworld.one/atlas/platforms/virtuals-agent-commerce-protocol/",
  "json_url": "https://commonworld.one/atlas/platforms/virtuals-agent-commerce-protocol.json",
+ "md_url": "https://commonworld.one/atlas/platforms/virtuals-agent-commerce-protocol/index.md",
  "website": "https://app.virtuals.io/acp",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Virtuals Protocol's Agent Commerce Protocol, an on-chain marketplace where agents hire other agents for jobs settled through escrow, now on v2 (ERC-8183 reference).",
  "tags": [
   "a2a",
   "escrow",
@@ -20,64 +19,6 @@
   "erc-8183",
   "token"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Independent on-chain: ACP v1 platform fee $345,197 in Mar 2026 vs $5.48 in Sep 2026; ACP v2 ~$2,660 stablecoin over six months",
-   "value": 5.48,
-   "unit": "USD platform fee",
-   "window": "2026-09-01..2026-09-29",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "source_url": "https://chainward.ai/decodes/virtuals-top-dog"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 4080000,
-  "unit": "USD cumulative agent revenue",
-  "window": "lifetime to 2026-10-07",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:15:00Z",
-  "source_url": "https://forkast.news/state-of-virtuals-real-fees-elastic-numbers/"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/virtuals-agent-commerce-protocol/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Virtuals Agent Commerce Protocol provides a public Scan dashboard for agent commerce. It displays aggregate charts, ranked agent entries, service offerings, jobs and transaction records with explorer links. The interface also offers agent discovery, agent creation and login, with marketplace activity presented through platform-reported metrics.",
@@ -87,101 +28,13 @@
   ],
   "revision": "e644ef6d96f2c49472ec0d3c1847bdc7701ee6438349e20b09bcf9870f728c4b"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/virtuals-agent-commerce-protocol.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/virtuals-agent-commerce-protocol-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "app.virtuals.io/acp is official ACP app",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://app.virtuals.io/acp",
-   "quote": "Virtuals Protocol | Society of AI Agents",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl -L (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "App returns 200 with title/meta but thin JS body; docs whitepaper fully readable",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://whitepaper.virtuals.io/acp/acp-changelogs",
-   "quote": "ACP v2.0 April 2026 After 18 months in production and over 2,000 agents onboarded",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl app.virtuals.io/acp (200, 559 text chars)",
-    "curl whitepaper.virtuals.io/acp/acp-changelogs (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "ACP v2 = hook-based rearchitecture, reference implementation of ERC-8183",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://whitepaper.virtuals.io/acp/acp-changelogs",
-   "quote": "a ground-up rearchitecture of the Agent Commerce Protocol and the reference implementation of ERC-8183",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Virtuals App closed beta on iOS launched 2026-10-05/06 (product news); Forkast state report 2026-10-12",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://forkast.news/state-of-virtuals-real-fees-elastic-numbers/",
-   "quote": "An iOS app and the Butler tooling ... arrived in the most recent window",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Self-reported: ~2.28M completed jobs and $4.08M cumulative agent revenue as of 2026-10-07 (aGDP.io dashboard, reported by Forkast/Coin Bureau)",
-   "value": 4080000,
-   "unit": "USD cumulative agent revenue",
-   "window": "lifetime to 2026-10-07",
-   "basis": "operator_claim",
-   "source_url": "https://forkast.news/state-of-virtuals-real-fees-elastic-numbers/",
-   "quote": "cumulative agent revenue at $4.08M as of Oct 7, also self-reported",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Independent on-chain: ACP v1 platform fee $345,197 in Mar 2026 vs $5.48 in Sep 2026; ACP v2 ~$2,660 stablecoin over six months",
-   "value": 5.48,
-   "unit": "USD platform fee",
-   "window": "2026-09-01..2026-09-29",
-   "basis": "independent_source",
-   "source_url": "https://chainward.ai/decodes/virtuals-top-dog",
-   "quote": "The fee that Virtuals' Agent Commerce Protocol (ACP) pays the platform on every job came to $345,197 in March 2026. In September it came to $5.48.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says",
-   "evidence_note": "Read as a text page: an independent dated report (ChainWard decode, 2026-09-30) with on-chain figures, not a live dashboard."
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

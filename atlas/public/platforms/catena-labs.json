@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "catena-labs",
  "name": "Catena Labs (ACK)",
  "url": "https://commonworld.one/atlas/platforms/catena-labs/",
  "json_url": "https://commonworld.one/atlas/platforms/catena-labs.json",
+ "md_url": "https://commonworld.one/atlas/platforms/catena-labs/index.md",
  "website": "https://catena.com",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Catena is a governance and banking platform for AI agents (Agent Commerce Kit open-source + Catena Trust Bank, which received OCC preliminary conditional approval on 18 Sep 2026).",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/catena-labs/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Catena presents financial infrastructure for businesses using agents: virtual dollar accounts or connections to existing financial partners, payment policies, approval escalation and transaction records. It describes dollar and stablecoin payments. Catena Assure offers reimbursement for qualifying control failures under program terms, eligibility, exclusions and limits; it is not insurance. Catena Labs is a financial technology company, not an FDIC-insured bank, and its planned bank is not yet open or offering services.",
@@ -63,69 +22,9 @@
   ],
   "revision": "67229f6c5471a4aedaf6c82af9632fbe58e09187edd512c4566ae3779a4122b9"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/catena-labs.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/catena-labs-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "catena.com; ACK at github.com/agentcommercekit/ack",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://catena.com",
-   "quote": "Catena is a governance and banking platform for AI agents.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl (200)",
-    "GitHub API"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves content; 'Get started' and 'Log in' visible",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://catena.com",
-   "quote": "How AI Agents Use Money, Safely ... Get started",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "OCC preliminary conditional approval 2026-09-18 (Corporate Decision #1392)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://catena.com/blog/catena-receives-conditional-occ-approval-for-a-national-trust-bank-built-for-ai-agents",
-   "quote": "On September 18, the Office of the Comptroller of the Currency (OCC) granted preliminary conditional approval of our application to establish Catena Trust Bank",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "agentcommercekit/ack pushed 2026-10-14 01:16 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.github.com/repos/agentcommercekit/ack",
-   "quote": "pushed_at 2026-10-14",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agents4science-2025",
  "name": "Agents4Science 2025",
  "url": "https://commonworld.one/atlas/platforms/agents4science-2025/",
  "json_url": "https://commonworld.one/atlas/platforms/agents4science-2025.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agents4science-2025/index.md",
  "website": "https://agents4science.stanford.edu",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Archive site of the one-day virtual Open Conference of AI Agents for Science (Stanford/Together AI, 22 Oct 2025), where AI agents were required first authors and LLMs reviewed submissions.",
  "tags": [
   "academic",
   "disclosure"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 48,
-  "unit": "accepted papers",
-  "window": "2025 edition",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:22:00Z",
-  "source_url": "https://arxiv.org/pdf/2511.15534"
- },
- "verified_at": "2026-10-15T18:31:00Z",
- "last_checked": "2026-10-15T18:31:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agents4science-2025/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agents4Science 2025 is the archive of a virtual Open Conference of AI Agents for Science held on 22 October 2025, with accepted papers, OpenReview links and a conference recording. Its submission and event dates are marked passed; a retained registration-open sentence does not establish a current call. The 2025 rules required AI as sole first author and primary contributor, while allowing human secondary authors to advise and oversee work with contribution disclosure. Multiple AI reviewers assessed submissions first, with human experts assessing top papers and making final selections. Conference acceptance is not independent replication; the FAQ treats errors and limitations as part of the experiment.",
@@ -77,62 +28,9 @@
   ],
   "revision": "547a955ebabc3ff4822502007a2b58a1eba452a2e862ee4e7d86598ee465221a"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agents4science-2025.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agents4science-2025-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Archive site serves content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agents4science.stanford.edu",
-   "quote": "The 1st open conference where AI serves as both primary authors and reviewers of research papers",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl -sL https://agents4science.stanford.edu"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "metric",
-   "statement": "Submission statistics from the organisers' report",
-   "value": 48,
-   "unit": "accepted papers",
-   "window": "2025 edition",
-   "basis": "operator_claim",
-   "source_url": "https://arxiv.org/pdf/2511.15534",
-   "quote": "received 315 submissions ... 253 complete submissions were reviewed ... accepted 48 papers",
-   "observed_at": "2026-10-15T18:22:30Z",
-   "methods": [
-    "web_search (arXiv 2511.15534 excerpt)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No 2026 edition or CFP found; site still titled 2025",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agents4science.stanford.edu",
-   "quote": "Open Conference of AI Agents for Science: 2025",
-   "observed_at": "2026-10-15T18:22:30Z",
-   "methods": [
-    "curl homepage grep '2026' (none)",
-    "web_search 'Agents4Science 2026 call for papers'"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

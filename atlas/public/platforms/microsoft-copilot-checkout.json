@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "microsoft-copilot-checkout",
  "name": "Microsoft Copilot Checkout",
  "url": "https://commonworld.one/atlas/platforms/microsoft-copilot-checkout/",
  "json_url": "https://commonworld.one/atlas/platforms/microsoft-copilot-checkout.json",
+ "md_url": "https://commonworld.one/atlas/platforms/microsoft-copilot-checkout/index.md",
  "website": "https://about.ads.microsoft.com/en/solutions/technology/agentic-commerce",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "In-chat checkout inside Microsoft Copilot (U.S.), letting shoppers buy from merchants via PayPal, Shopify and Stripe rails without leaving the conversation; merchants remain merchant of record.",
  "tags": [
   "merchant-side",
   "us"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:11:00Z",
- "last_checked": "2026-10-15T18:11:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/microsoft-copilot-checkout/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Microsoft presents Copilot Checkout as purchases inside Copilot while merchants remain merchant of record and use their existing payment, fraud, tax and fulfillment systems. Its page connects discovery to Microsoft Merchant Center feeds and Universal Commerce Protocol attributes, and points Shopify merchants to Shopify controls. Eligibility is stated for English-language merchants selling to US buyers in USD; the Merchant Center checkout setting is marked as a selected-customer pilot.",
@@ -66,75 +25,9 @@
   ],
   "revision": "c248f7b14929d2dda241e033ade6c1d0425e47732e076a1fec1143ed5613198c"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/microsoft-copilot-checkout.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/microsoft-copilot-checkout-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official Microsoft Advertising agentic-commerce page describes Copilot Checkout.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://about.ads.microsoft.com/en/solutions/technology/agentic-commerce",
-   "quote": "Copilot Checkout lets shoppers complete purchases directly inside Microsoft Copilot, enabling AI-powered shopping experiences.",
-   "observed_at": "2026-10-15T18:11:00Z",
-   "methods": [
-    "curl -L (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Page returns HTTP 200 with content.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://about.ads.microsoft.com/en/solutions/technology/agentic-commerce",
-   "quote": "Agentic Commerce | Microsoft Advertising",
-   "observed_at": "2026-10-15T18:11:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Launch announced 2026-01-08 (Microsoft Source); rollout in U.S. with PayPal, Shopify, Stripe.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://news.microsoft.com/source/2026/01/08/microsoft-propels-retail-forward-with-agentic-ai-capabilities-that-power-intelligent-automation-for-every-retail-function/",
-   "quote": "Copilot Checkout is now available in the U.S. on Copilot.com. Trusted partners enabling this experience include PayPal, Shopify and Stripe.",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_search (excerpt; page not opened)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "No GMV/order volume published.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": null,
-   "quote": null,
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "web_search",
-    "curl official page"
-   ],
-   "outcome": "unchecked"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

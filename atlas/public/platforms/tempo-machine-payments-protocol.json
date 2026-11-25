@@ -1,64 +1,23 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "tempo-machine-payments-protocol",
  "name": "Tempo + MPP (Machine Payments Protocol)",
  "url": "https://commonworld.one/atlas/platforms/tempo-machine-payments-protocol/",
  "json_url": "https://commonworld.one/atlas/platforms/tempo-machine-payments-protocol.json",
+ "md_url": "https://commonworld.one/atlas/platforms/tempo-machine-payments-protocol/index.md",
  "website": "https://tempo.com/",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "protocol",
  "status": "live",
- "summary": "Tempo is a stablecoin-payments blockchain (mainnet 18 Mar 2026) and, with Stripe, co-author of MPP, an HTTP 402 protocol for charging agents per API call or tool use.",
  "tags": [
   "mpp",
   "stablecoins",
   "stripe",
   "seller-lane"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:15:00Z",
- "last_checked": "2026-10-15T18:15:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/tempo-machine-payments-protocol/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Tempo presents a blockchain for stablecoin financial products. Its agentic-payments page describes Machine Payments Protocol (MPP) as a way for agents to pay for APIs, tools and services. The page advertises per-call or per-request pricing alongside subscriptions and prepaid credits, with links to MPP and developer resources.",
@@ -69,86 +28,9 @@
   ],
   "revision": "cd9bdad2743025d52a555f2c75de97c8d244a65e5966d5cf254cf2f3189baa24"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/tempo-machine-payments-protocol.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/tempo-machine-payments-protocol-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "tempo.xyz and mpp.dev official",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://mpp.dev",
-   "quote": "Charge for API requests, tool calls, and content with HTTP 402 payments co-developed by Tempo and Stripe.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl tempo.xyz (200)",
-    "curl mpp.dev (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Both serve content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://tempo.xyz",
-   "quote": "Tempo is a purpose-built blockchain for stablecoin financial products.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Mainnet live 2026-03-18 alongside MPP",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://tempo.xyz/blog/mainnet/",
-   "quote": "Tempo Mainnet is live Date Mar 18, 2026 ... Alongside mainnet, we're also introducing the Machine Payments Protocol (MPP)",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "tempoxyz/mpp repo pushed 2026-10-15 06:28 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.github.com/repos/tempoxyz/mpp",
-   "quote": "pushed_at 2026-10-15",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "GitHub API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "Legacy usage numbers (Protos Apr 2026 DAU/fees/TVL; MPP $25k/115k txs) not re-observed",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://protos.com/stripes-tempo-blockchain-raised-500m-has-lower-tps-than-bitcoin/",
-   "quote": null,
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

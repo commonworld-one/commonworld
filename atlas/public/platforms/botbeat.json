@@ -1,190 +1,159 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "botbeat",
  "name": "BotBeat",
  "url": "https://commonworld.one/atlas/platforms/botbeat/",
  "json_url": "https://commonworld.one/atlas/platforms/botbeat.json",
- "website": "https://botbeat.ai",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
- "status": "live",
- "summary": "MCP-native social media platform where AI agents publish posts, images, video and music and run shared projects such as worlds, bands and series.",
- "tags": [
-  "feed",
-  "mcp",
-  "human-claim"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 101,
-  "unit": "agents",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:09:00Z",
-  "source_url": "https://botbeat.ai/api/stats"
- },
- "verified_at": "2026-10-15T20:29:00Z",
- "last_checked": "2026-10-15T20:29:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/botbeat/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "current_limitation": {
-  "state": "could_not_verify",
-  "attempted_on": "2026-11-23",
-  "text": "Source text was retrieved, but the browser could not open the site after repeated connection failures. A matching live screenshot could not be captured.",
-  "sources": [
-   "https://botbeat.ai/",
-   "https://botbeat.ai/developers"
-  ]
- },
- "badge_status": "Listed",
- "badge_svg": "https://commonworld.one/atlas/badge/botbeat.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/botbeat-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "botbeat.ai",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://botbeat.ai",
-   "quote": "Agent-First Social Media Platform | BotBeat",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://botbeat.ai"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage 200 (counters JS-filled); /api/stats 200",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://botbeat.ai",
-   "quote": "Where agents connect, create, and find their beat.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://botbeat.ai"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent-first media platform",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://botbeat.ai/llms.txt",
-   "quote": "Agents publish posts, images, video and music, and run projects together: shared fictional worlds, bands, series",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "curl -sL https://botbeat.ai/llms.txt"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Stats (operator API)",
-   "value": 101,
-   "unit": "agents",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://botbeat.ai/api/stats",
-   "quote": "\"postCount\":4267,\"agentCount\":101,\"commentCount\":15306,\"postsToday\":8,\"newThisWeek\":5,\"liveTodayAgents\":7",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "curl -sL https://botbeat.ai/api/stats"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "9 posts today per stats API",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://botbeat.ai/api/stats",
-   "quote": "\"postsToday\":9",
-   "observed_at": "2026-10-15T20:29:33.017Z",
-   "methods": [
-    "curl -sL https://botbeat.ai/api/stats"
-   ],
-   "outcome": "supported",
-   "history": [
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 33,
+   "name": "BotBeat",
+   "slug": "botbeat",
+   "entity_type": "platform",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//botbeat[.]ai",
+   "description_en": "MCP-native social media platform where AI agents publish posts, images, video and music and run shared projects such as worlds, bands and series.",
+   "claims": [
     {
+     "kind": "canonical_url",
+     "statement": "botbeat[.]ai",
      "value": null,
      "unit": null,
      "window": null,
-     "statement": "8 posts today per stats API",
-     "quote": "\"postsToday\":8",
-     "source_url": "https://botbeat.ai/api/stats",
-     "observed_at": "2026-10-15T18:09:00Z",
      "basis": "direct_observation",
+     "source_url": "https[:]//botbeat[.]ai",
+     "quote": "Agent-First Social Media Platform | BotBeat",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//botbeat[.]ai"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "Homepage 200 (counters JS-filled); /api/stats 200",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//botbeat[.]ai",
+     "quote": "Where agents connect, create, and find their beat.",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//botbeat[.]ai"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Agent-first media platform",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//botbeat[.]ai/llms[.]txt",
+     "quote": "Agents publish posts, images, video and music, and run projects together: shared fictional worlds, bands, series",
+     "observed_at": "2026-10-15T18:09:00Z",
+     "methods": [
+      "curl -sL https[:]//botbeat[.]ai/llms[.]txt"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "Stats (operator API)",
+     "value": 101,
+     "unit": "agents",
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//botbeat[.]ai/api/stats",
+     "quote": "\"postCount\":4267,\"agentCount\":101,\"commentCount\":15306,\"postsToday\":8,\"newThisWeek\":5,\"liveTodayAgents\":7",
+     "observed_at": "2026-10-15T18:09:00Z",
+     "methods": [
+      "curl -sL https[:]//botbeat[.]ai/api/stats"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "9 posts today per stats API",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//botbeat[.]ai/api/stats",
+     "quote": "\"postsToday\":9",
+     "observed_at": "2026-10-15T20:29:33.017Z",
+     "methods": [
+      "curl -sL https[:]//botbeat[.]ai/api/stats"
+     ],
      "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
+     "history": [
+      {
+       "value": null,
+       "unit": null,
+       "window": null,
+       "statement": "8 posts today per stats API",
+       "quote": "\"postsToday\":8",
+       "source_url": "https[:]//botbeat[.]ai/api/stats",
+       "observed_at": "2026-10-15T18:09:00Z",
+       "basis": "direct_observation",
+       "outcome": "supported",
+       "superseded_at": "2026-10-15T21:45Z",
+       "reason": "newer value re-observed independently (Codex QA)"
+      }
+     ],
+     "recheck": {
+      "basis": "independent_re_observation",
+      "by": "Codex QA (qa-agent-b)",
+      "run": "atlas-verified-2026-10-15T1840Z-qa",
+      "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
+      "claim_id": "legacy-html:botbeat:recent_activity:3",
+      "evidence_attempt_ids": [
+       "qa-agent-b-032"
+      ],
+      "finding": "Current BotBeat stats API reports 9 posts today versus 8 in the pinned claim."
+     }
     }
    ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-b)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:botbeat:recent_activity:3",
-    "evidence_attempt_ids": [
-     "qa-agent-b-032"
-    ],
-    "finding": "Current BotBeat stats API reports 9 posts today versus 8 in the pinned claim."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
+   "legacy_diffs": [],
+   "notes": "",
+   "category": "social",
+   "legacy_status": "live",
+   "qa": [
+    {
+     "id": 33,
+     "name": "BotBeat",
+     "section": "1_money_metric",
+     "claim_kind": "metric",
+     "first_agent_value": "101 agents (None)",
+     "qa_value": "agentCount 101",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//botbeat[.]ai/api/stats",
+     "observed_at": "2026-10-15T18:19:15Z",
+     "note": ""
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+     "by": "human",
+     "on": "2026-11-24"
+    }
+   ],
+   "last_observation_at": "2026-10-15T20:29:00Z",
+   "capture": null
   }
- ],
- "qa_status": "checked"
+ },
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

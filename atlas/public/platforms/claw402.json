@@ -1,90 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "claw402",
  "name": "claw402",
  "url": "https://commonworld.one/atlas/platforms/claw402/",
  "json_url": "https://commonworld.one/atlas/platforms/claw402.json",
+ "md_url": "https://commonworld.one/atlas/platforms/claw402/index.md",
  "website": "https://claw402.ai",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "claw402 is an x402 gateway reselling third-party APIs (CoinAnk crypto derivatives data plus OpenAI/Anthropic/DeepSeek model access) for USDC per call on Base.",
  "tags": [
   "x402",
   "x402-service",
   "data"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402 settlement to this service's payout address: $1,248.24 in 30d from 175 distinct buyers, 464,716 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 1248.24,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/claw402"
-  },
-  {
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $307.26",
-   "value": 307.26,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/claw402/volume?days=60"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 1248.24,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/services/claw402"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/claw402/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services/claw402",
-   "quote": "\"volume_usd_30d\":1248.240245,\"unique_buyers_30d\":175,\"tx_count_30d\":464716,\"top_buyer_share_30d\":0.06364159489185513,\"last_settlement_at\":\"2026-10-28T03:42:27Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Claw402 presents a wallet-paid gateway for models, market data and analytics. Its homepage separates public endpoint/price discovery from an HTTP 402 quote, payment authorization and response. No-provider-key or subscription marketing does not establish partnerships, available inventory or working integrations from logos. Fixed-price APIs charge per call, while supported models offer actual-usage settlement within an authorized ceiling; this is not universal output-only billing. Base x402/USDC, Solana USDC-SPL and Tempo MPP availability is endpoint-specific. Live responses determine price, parameters and rails rather than network badges or diagrams. Its catalog example is explicitly free discovery, not a payment, budget or guarantee of response quality, custody or refunds.",
@@ -94,129 +26,9 @@
   ],
   "revision": "b22db60d3bbe9febd4029011bf883a014598180b86f2b66c5f0f0feb163aefcc"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/claw402.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/claw402-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage is a JS shell but https://claw402.ai/llms.txt returns full text docs (200)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://claw402.ai/llms.txt",
-   "quote": "claw402 — Pay-Per-Call Market Data & AI APIs",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl -sL https://claw402.ai (2 KB shell)",
-    "curl -s https://claw402.ai/llms.txt (200, content)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL (x402-list base_url/website for this service, operator-owned)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://claw402.ai",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100",
-    "curl -sL https://claw402.ai"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "claw402 is an x402 gateway reselling third-party APIs (CoinAnk crypto derivatives data plus OpenAI/Anthropic/DeepSeek model access) for USDC per call on Base.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://claw402.ai",
-   "quote": "claw402 — Pay-Per-Call Market Data & AI APIs … Pay $0.001–$0.05 USDC per call. No API key. No registration.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://claw402.ai",
-    "GET https://x402-list.com/api/v1/services?per_page=100"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $1,248.24 in 30d from 175 distinct buyers, 464,716 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 1248.24,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/claw402",
-   "quote": "\"volume_usd_30d\":1248.240245,\"unique_buyers_30d\":175,\"tx_count_30d\":464716,\"top_buyer_share_30d\":0.06364159489185513,\"last_settlement_at\":\"2026-10-28T03:42:27Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/claw402",
-    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
-    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 1071.39,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "x402 settlement to this service's payout address: $1,071.39 in 30d from 148 distinct buyers, 466,673 settlements; top buyer share 7.4%",
-     "quote": "traction.volume_usd_30d=1071.39, unique_buyers_30d=148, top_buyer_share_30d=0.074",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "claw402-x402-list-30d",
-   "last_settlement_seen_at": "2026-10-28T03:42:27Z",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $307.26",
-   "value": 307.26,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/claw402/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/claw402/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last UTC day with ≥$1 settled: 2026-10-15; first settlement 2026-03-01",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/claw402/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/claw402/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

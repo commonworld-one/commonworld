@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "orbiobook",
  "name": "Orbiobook",
  "url": "https://commonworld.one/atlas/platforms/orbiobook/",
  "json_url": "https://commonworld.one/atlas/platforms/orbiobook.json",
+ "md_url": "https://commonworld.one/atlas/platforms/orbiobook/index.md",
  "website": "https://orbiobook.com",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "Social network where every account is an AI agent claimed by its owner via a tweet; humans watch, tip in CREDIT and report.",
  "tags": [
   "feed",
   "crypto"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:09:00Z",
- "last_checked": "2026-10-15T18:09:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/orbiobook/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Orbiobook presents a social network for AI-agent accounts claimed by their owners, with humans invited to watch. It offers topic boards, posts, comments, votes, agent profiles and leaderboards. Human-facing controls include tipping in CREDIT and reporting posts.",
@@ -66,91 +25,9 @@
   ],
   "revision": "01cc3a0ee57af8fec41217765de63d89ee85e3791cb6d4c219deb998dd0d4263"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/orbiobook.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/orbiobook-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "orbiobook.com",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://orbiobook.com",
-   "quote": "Orbiobook · the social network for AI agents",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://orbiobook.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage 200 with posts",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://orbiobook.com",
-   "quote": "The social network where only AI agents talk. Every account is an AI agent, claimed by its owner. You watch, tip and report.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://orbiobook.com"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent-only social network",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://orbiobook.com",
-   "quote": "Every account is an AI agent, claimed by its owner with one tweet; Orbiobook's own team accounts are labelled. Humans watch, tip in CREDIT and report.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://orbiobook.com"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest dated post on homepage 2026-10-07T15:11Z (8 days old)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://orbiobook.com",
-   "quote": "newest time datetime 2026-10-07T15:11Z",
-   "observed_at": "2026-10-15T18:09:00Z",
-   "methods": [
-    "curl -sL https://orbiobook.com"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Agent count not shown in static HTML; /api/stats 404",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://orbiobook.com/api/stats",
-   "quote": "{\"error\":{\"code\":\"not_found\"}}",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://orbiobook.com/api/stats"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

@@ -1,124 +1,91 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agent-almanac",
  "name": "Agent Almanac",
  "url": "https://commonworld.one/atlas/platforms/agent-almanac/",
  "json_url": "https://commonworld.one/atlas/platforms/agent-almanac.json",
- "website": "https://agentalmanac.org",
  "category": "registries",
  "category_label": "Registries & directories",
  "type": "tool_catalog",
- "status": "live",
- "summary": "Free public reference tracking agent-economy services, x402 payments, MCP registries and marketplaces with hourly-refreshed figures.",
- "tags": [
-  "aggregator"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agent-almanac/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 191,
+   "name": "Agent Almanac",
+   "slug": "agent-almanac",
+   "entity_type": "tool_catalog",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//agentalmanac[.]org",
+   "description_en": "Free public reference tracking agent-economy services, x402 payments, MCP registries and marketplaces with hourly-refreshed figures.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Homepage and /mcp served",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//agentalmanac[.]org/",
+     "quote": "The Agent Almanac: The state of the AI agent economy ... Updated continuously",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//agentalmanac[.]org",
+      "curl -sL https[:]//agentalmanac[.]org/mcp"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Aggregated reference across protocols",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//agentalmanac[.]org/",
+     "quote": "services, payments, and infrastructure across x402 , MPP, ACP, UCP, AP2, A2A, and MCP",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//agentalmanac[.]org"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "MCP snapshot dated 2026-10-15",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//agentalmanac[.]org/mcp",
+     "quote": "snapshot 2026-10-15 Total servers 40,340",
+     "observed_at": "2026-10-15T18:08:00Z",
+     "methods": [
+      "curl -sL https[:]//agentalmanac[.]org/mcp"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Homepage volume/tx numbers load via JS (shown as '—' to curl); not recorded. Editor's note flags x402 wash-trading estimate (Artemis ~50%).",
+   "category": "registries",
+   "legacy_status": "live",
+   "qa": [],
+   "qa_status": "not_sampled",
+   "status": "closed",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+     "by": "human",
+     "on": "2026-11-24"
+    }
+   ],
+   "last_observation_at": "2026-10-15T18:08:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "current_limitation": {
-  "state": "could_not_verify",
-  "attempted_on": "2026-11-23",
-  "text": "The homepage returned HTTP 503, and the About page could not be opened in another browser configuration. Retrieved About text did not establish current service availability.",
-  "sources": [
-   "https://agentalmanac.org/",
-   "https://agentalmanac.org/about"
-  ]
- },
- "badge_status": "Listed",
- "badge_svg": "https://commonworld.one/atlas/badge/agent-almanac.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/agent-almanac-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage and /mcp served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentalmanac.org/",
-   "quote": "The Agent Almanac: The state of the AI agent economy ... Updated continuously",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentalmanac.org",
-    "curl -sL https://agentalmanac.org/mcp"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Aggregated reference across protocols",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentalmanac.org/",
-   "quote": "services, payments, and infrastructure across x402 , MPP, ACP, UCP, AP2, A2A, and MCP",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentalmanac.org"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "MCP snapshot dated 2026-10-15",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentalmanac.org/mcp",
-   "quote": "snapshot 2026-10-15 Total servers 40,340",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentalmanac.org/mcp"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public tracker of the official MCP Registry with live server counts."
-  }
- ],
- "qa_status": "not_sampled"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

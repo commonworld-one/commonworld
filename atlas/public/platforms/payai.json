@@ -1,90 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "payai",
  "name": "PayAI",
  "url": "https://commonworld.one/atlas/platforms/payai/",
  "json_url": "https://commonworld.one/atlas/platforms/payai.json",
+ "md_url": "https://commonworld.one/atlas/platforms/payai/index.md",
  "website": "https://payai.network",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Solana-first x402 facilitator that verifies and settles USDC micropayments across Solana and several EVM chains, with an ecosystem/discovery page.",
  "tags": [
   "x402",
   "facilitator",
   "solana"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402-list on-chain measurement: PayAI facilitator settled $22,509.64 over 30 d (90,883 settlements; $3,269.12 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 22509.64,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/facilitators"
-  },
-  {
-   "statement": "x402stats: payAI attributed seller volume $14,022 over 30 d, 1,107 sellers of which 12 pass the organic filter (>=$100, >=3 buyers).",
-   "value": "$14,022",
-   "unit": "USD (seller volume, unfiltered)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402stats.io/llms-full.txt"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 22509.64,
-  "unit": "USDC (gross settlement)",
-  "window": "trailing 30d at observation time",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/facilitators"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/payai/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/facilitators",
-   "quote": "\"volume_usd_30d\":22509.64,\"tx_count_30d\":90883,\"volume_usd_7d\":3269.12,\"last_activity_at\":\"2026-11-22T00:00:00.000Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "PayAI presents an x402 facilitator and agent-payments SDK for supported Solana and EVM networks. It distinguishes payment verification from settlement, with availability, timing and fees depending on the network and scheme. It offers an Echo Merchant for payment testing, while Payment Splitting and Token Gateway are marked coming soon. Its FAQ treats pending settlement as unresolved and says discovery listings do not prove current service availability or quality.",
@@ -98,105 +30,5 @@
  "badge_svg": "https://commonworld.one/atlas/badge/payai.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/payai-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "200.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://payai.network/",
-   "quote": "PayAI is Solana-first and settles USDC micropayments on Solana , Base , Polygon , Avalanche , Arbitrum , Sei , X Layer , and SKALE",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402-list on-chain measurement: PayAI facilitator settled $22,509.64 over 30 d (90,883 settlements; $3,269.12 over the last 7 d), settlement to anyone (gross, not seller revenue)",
-   "value": 22509.64,
-   "unit": "USDC (gross settlement)",
-   "window": "trailing 30d at observation time",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/facilitators",
-   "quote": "\"volume_usd_30d\":22509.64,\"tx_count_30d\":90883,\"volume_usd_7d\":3269.12,\"last_activity_at\":\"2026-11-22T00:00:00.000Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "select the one row of data with facilitator_id=payAI (41 rows read)",
-    "read volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": "$8.0k",
-     "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
-     "statement": "x402-list on-chain measurement: PayAI facilitator settled $8.0k over 30 d ($3.1k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
-     "quote": "PayAI ... $3.1k $8.0k 2026-10-15",
-     "source_url": "https://x402-list.com/facilitators",
-     "observed_at": "2026-10-15T18:10:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    },
-    {
-     "value": "$8.1k",
-     "unit": "USDC (gross settlement)",
-     "window": "30d to 2026-10-15",
-     "statement": "x402-list on-chain measurement: PayAI facilitator settled $8.1k over 30 d ($3.3k over 7 d), settlement to anyone (gross, not seller revenue); last settlement day 2026-10-15.",
-     "quote": "PayAI ... $3.3k $8.1k",
-     "source_url": "https://x402-list.com/facilitators",
-     "observed_at": "2026-10-15T20:37:56Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-a)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:payai:economic_flow:1",
-    "evidence_attempt_ids": [
-     "qa-agent-a-0094"
-    ],
-    "finding": "On 2026-10-15, x402-list displays PayAI Base + Solana as $3.3k and $8.1k for its 7-day/30-day windows, versus the earlier claim of $3.1k/$8.0k."
-   },
-   "verify": {
-    "url": "https://x402-list.com/api/v1/facilitators?timeframe=30d&per_page=100",
-    "note": "The same figure as JSON: the one row of data with facilitator_id=payAI, field volume_usd_30d (about 17 KB)."
-   },
-   "refresh_id": "payai-x402-list-30d",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public dashboard: x402-list measures each facilitator's on-chain USDC settlement, with 7-day and 30-day volume updated daily."
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402stats: payAI attributed seller volume $14,022 over 30 d, 1,107 sellers of which 12 pass the organic filter (>=$100, >=3 buyers).",
-   "value": "$14,022",
-   "unit": "USD (seller volume, unfiltered)",
-   "window": "30d to 2026-10-15",
-   "basis": "independent_source",
-   "source_url": "https://x402stats.io/llms-full.txt",
-   "quote": "payAI: ... ($14,022), 1,107 sellers (12 organic)",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl https://x402stats.io/llms-full.txt"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard",
-   "evidence_note": "Independent public data file of the x402stats dashboard (CC BY 4.0), updated daily with 30-day volume per facilitator."
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

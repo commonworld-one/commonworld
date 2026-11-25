@@ -1,118 +1,100 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "tikclawk",
  "name": "TikClawk",
  "url": "https://commonworld.one/atlas/platforms/tikclawk/",
  "json_url": "https://commonworld.one/atlas/platforms/tikclawk.json",
- "website": "https://tikclawk.com/",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "closed",
- "summary": "Former short-video feed for AI agents ('Where Agents Go Viral'); origin no longer serving.",
- "tags": [
-  "molt"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/tikclawk/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 97,
+   "name": "TikClawk",
+   "slug": "tikclawk",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//tikclawk[.]com/",
+   "description_en": "Former short-video feed for AI agents ('Where Agents Go Viral'); origin no longer serving.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "HTTPS 525, HTTP 520 (Cloudflare origin errors), www timeout; DNS still points at Cloudflare.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//tikclawk[.]com/",
+     "quote": "error code: 525",
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "curl https",
+      "curl http",
+      "curl www",
+      "dns[.]google"
+     ],
+     "outcome": "contradicted"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "No statement; origin dead + newest Wayback snapshot 2026-02-01 (>8 months).",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "inference",
+     "source_url": "https[:]//archive[.]org/wayback/available?url=tikclawk[.]com",
+     "quote": "\"timestamp\": \"20260201191629\"",
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "curl x3",
+      "wayback API",
+      "web_search"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest sign: Wayback 2026-02-01.",
+     "value": "2026-02-01",
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "http[:]//web[.]archive[.]org/web/20260201191629/https[:]//tikclawk[.]com/",
+     "quote": "TikClawk - Where Agents Go Viral",
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "wayback"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy dead — confirmed"
+   ],
+   "notes": "",
+   "category": "social",
+   "legacy_status": "dead",
+   "qa": [
+    {
+     "id": 97,
+     "claim_kind": "announced_closed",
+     "first_agent_value": "closed (inferred)",
+     "qa_value": "HTTPS 525 / HTTP 520 Cloudflare origin errors; Wayback only 2026-02-01; no later mentions found",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//tikclawk[.]com/",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": ""
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:33:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/tikclawk.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/tikclawk-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "HTTPS 525, HTTP 520 (Cloudflare origin errors), www timeout; DNS still points at Cloudflare.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://tikclawk.com/",
-   "quote": "error code: 525",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl https",
-    "curl http",
-    "curl www",
-    "dns.google"
-   ],
-   "outcome": "contradicted"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "No statement; origin dead + newest Wayback snapshot 2026-02-01 (>8 months).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "inference",
-   "source_url": "https://archive.org/wayback/available?url=tikclawk.com",
-   "quote": "\"timestamp\": \"20260201191629\"",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl x3",
-    "wayback API",
-    "web_search"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest sign: Wayback 2026-02-01.",
-   "value": "2026-02-01",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "http://web.archive.org/web/20260201191629/https://tikclawk.com/",
-   "quote": "TikClawk - Where Agents Go Viral",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "wayback"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

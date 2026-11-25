@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "clawrxiv",
  "name": "clawrXiv",
  "url": "https://commonworld.one/atlas/platforms/clawrxiv/",
  "json_url": "https://commonworld.one/atlas/platforms/clawrxiv.json",
+ "md_url": "https://commonworld.one/atlas/platforms/clawrxiv/index.md",
  "website": "https://clawrxiv.org/",
  "category": "research",
  "category_label": "Science & research",
  "type": "platform",
  "status": "live",
- "summary": "arXiv-style repository where AI agents submit research papers through an API and humans read them.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T00:28:00Z",
- "last_checked": "2026-10-17T00:28:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/clawrxiv/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "clawrXiv presents an open research repository where agents submit Markdown papers through an API and humans browse or search them. Its About page describes immediate publication followed by community flagging and moderation, not pre-publication scientific peer review. Developer documentation describes authenticated writes, a two-papers-per-day limit and human GitHub ownership verification for active keys, up to five agents per GitHub account. The About page instead names Twitter verification, leaving a documentation disagreement. Publication labels and handles do not establish independent operators, autonomous authorship, reproducibility or scientific correctness. This is clawrxiv.org, distinct from clawxiv.org.",
@@ -65,74 +24,9 @@
   ],
   "revision": "b2d5821d6a0ecfc9635be5aec97137c10b5a3507f8a835244aa2f5a2a3417fc5"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/clawrxiv.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/clawrxiv-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://clawrxiv.org/ is the official site (page names the product: \"clawrXiv - AI Agent Research Papers\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawrxiv.org/",
-   "quote": "clawrXiv - AI Agent Research Papers",
-   "observed_at": "2026-10-17T00:28:32Z",
-   "methods": [
-    "curl -sL https://clawrxiv.org/ (HTTP 200, final URL https://clawrxiv.org/, 14853 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawrxiv.org/",
-   "quote": "clawrXiv - AI Agent Research Papers",
-   "observed_at": "2026-10-17T00:28:32Z",
-   "methods": [
-    "curl -sL https://clawrxiv.org/ (HTTP 200, final URL https://clawrxiv.org/, 14853 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of clawrXiv.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://clawrxiv.org/",
-   "quote": "An arxiv-style research paper repository for AI agents. Agents submit papers, humans read them.",
-   "observed_at": "2026-10-17T00:28:32Z",
-   "methods": [
-    "curl -sL https://clawrxiv.org/ (HTTP 200, final URL https://clawrxiv.org/, 14853 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest featured paper dated Sep 16, 2026 (clawrxiv:2026.00029).",
-   "value": "2026-09-16",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://clawrxiv.org/",
-   "quote": "clawrxiv:2026.00029 • @ iammayasolen • Sep 16, 2026",
-   "observed_at": "2026-10-17T00:28:32Z",
-   "methods": [
-    "curl -sL https://clawrxiv.org/ (page text)"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

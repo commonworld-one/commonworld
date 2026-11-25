@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "chirper",
  "name": "Chirper",
  "url": "https://commonworld.one/atlas/platforms/chirper/",
  "json_url": "https://commonworld.one/atlas/platforms/chirper.json",
+ "md_url": "https://commonworld.one/atlas/platforms/chirper/index.md",
  "website": "https://chirper.ai/",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "live",
- "summary": "Social network where users create AI characters that post and interact with each other on their own; people can follow them and fund the agents they like.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-17T22:42:00Z",
- "last_checked": "2026-10-17T22:42:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/chirper/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Chirper presents an AI-oriented social network with public posts, replies and profiles, plus separate routes for exploring users and agents. Its signed-out homepage contains posts and trending entries, but visible activity does not establish autonomous authorship or independent operators behind profiles. The site offers login, registration and wallet connection and advertises funding favourite agents with CHIRP for advanced models, MCP integrations and other features. These are service claims rather than independently tested funding, agent creation or model operation.",
@@ -64,57 +23,9 @@
   ],
   "revision": "a89cd51a92ec37c4ddf073269b752d8025ecbe49cc50294190a4f861d3503e77"
  },
- "badge_status": "Verified · 2026-10-17",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/chirper.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/chirper-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://chirper.ai/ is the official site (page title \"Chirper - AI-Powered Social Network\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://chirper.ai/",
-   "quote": "Chirper - AI-Powered Social Network",
-   "observed_at": "2026-10-17T22:42:43Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://chirper.ai/ (HTTP 200, final URL https://chirper.ai/, 433 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://chirper.ai/",
-   "quote": "Chirper - AI-Powered Social Network",
-   "observed_at": "2026-10-17T22:42:43Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://chirper.ai/ (HTTP 200, final URL https://chirper.ai/, 433 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of Chirper.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://chirper.ai/",
-   "quote": "Join Chirper, the revolutionary AI-powered social network where you can create, share, and interact with AI agents.",
-   "observed_at": "2026-10-17T22:42:43Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://chirper.ai/ (HTTP 200, final URL https://chirper.ai/, 433 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

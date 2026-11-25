@@ -251,6 +251,10 @@ def safety_report_checks(parsed):
     if any(sm.get(k) != v for k, v in want.items()): fails.append(f'safety.json: summary {sm} != {want}')
     for fn in ('atlas/platforms.json', 'atlas/data/snapshot.json'):
         for r in json.load(open(os.path.join(DIST, fn), encoding='utf-8'))['platforms']:
+            if r.get('archive', {}).get('kind') == 'closed_history':
+                if r.get('status') != 'closed' or r['archive'].get('external_links') != 'disabled' or r.get('link_safety'):
+                    fails.append(f'{fn}: malformed closed archive or active safety state')
+                continue
             ls = r.get('link_safety')
             if not isinstance(ls, dict) or ls.get('status') not in st or 'checked_at' not in ls:
                 fails.append(f"{fn}: {r.get('id') or r.get('slug')} lacks link_safety {{status, checked_at}}"); break
@@ -292,6 +296,40 @@ def _git_snapshot_slugs():
     return slugs
 
 
+def _preserved_archive_slugs(dist, locs, expected):
+    """An index entry alone is not preservation: require decision, history and all twins."""
+    path = os.path.join(dist, 'atlas', 'closed.json')
+    if not os.path.isfile(path):
+        return set()
+    rows = json.load(open(path, encoding='utf-8')).get('platforms', [])
+    seen, duplicates = set(), set()
+    for row in rows:
+        slug = row.get('id')
+        if slug in seen: duplicates.add(slug)
+        seen.add(slug)
+    kept = set()
+    for row in rows:
+        slug = row.get('id')
+        if slug not in expected or slug in duplicates or not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,80}', str(slug or '')):
+            continue
+        archive = row.get('archive', {})
+        history = archive.get('history', {})
+        if row.get('status') != 'closed' or archive.get('kind') != 'closed_history' or archive.get('external_links') != 'disabled' or history.get('slug') != slug or history.get('status') != 'closed':
+            continue
+        url = '/atlas/platforms/' + slug + '/'
+        if ORIGIN + url not in locs:
+            continue
+        paths = [os.path.join(dist, url.lstrip('/'), x) for x in ('index.html', 'index.md')]
+        detail = os.path.join(dist, 'atlas', 'platforms', slug + '.json')
+        if not all(os.path.isfile(x) and os.path.getsize(x) for x in paths + [detail]):
+            continue
+        full = json.load(open(detail, encoding='utf-8'))
+        if any(full.get(k) != v for k, v in row.items()):
+            continue
+        kept.add(slug)
+    return kept
+
+
 def growth_guard(locs, update=False):
     fails = []
     red = load_redirects()
@@ -311,7 +349,12 @@ def growth_guard(locs, update=False):
     if removed:
         fails.append(f'{len(removed)} published URL(s) disappeared from the sitemap (pages are never removed; add a 301 in atlas/data/redirects.json if moved): {removed[:10]}')
     cur = {c['slug'] for c in json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms']}
-    gone = sorted(s for s in _git_snapshot_slugs() - cur if f'/atlas/platforms/{s}/' not in red and f'/atlas/platforms/{s}/' not in stubs)
+    from current_catalogue import project_snapshot
+    catalogue = os.path.join(HERE, '..', 'catalogue')
+    source = project_snapshot(json.load(open(os.path.join(catalogue, 'snapshot.json'), encoding='utf-8')), catalogue)
+    expected_closed = {c['slug'] for c in source['platforms'] if c.get('status') == 'closed'}
+    archived = _preserved_archive_slugs(DIST, locs, expected_closed)
+    gone = sorted(s for s in _git_snapshot_slugs() - cur - archived if f'/atlas/platforms/{s}/' not in red and f'/atlas/platforms/{s}/' not in stubs)
     if gone:
         fails.append(f'slug(s) of the previous committed snapshot missing now: {gone[:10]}')
     added = len(locs - base)
@@ -451,6 +494,8 @@ def badge_checks(parsed, pages, locs):
     /atlas/badge/ page in sitemap + llms.txt, per-entry JSON badge URLs, _headers rule."""
     fails = []
     snap = json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms']
+    archive_path = os.path.join(DIST, 'atlas', 'closed.json')
+    if os.path.exists(archive_path): snap += [dict(r, slug=r['id']) for r in json.load(open(archive_path))['platforms']]
     slugs = {c['slug'] for c in snap}
     bdir = os.path.join(DIST, 'atlas', 'badge')
     clash = sorted(s for s in slugs if s + '-dark' in slugs)
@@ -489,9 +534,9 @@ def badge_checks(parsed, pages, locs):
             h = open(pages[u], encoding='utf-8').read()
             record = json.load(open(os.path.join(DIST, 'atlas', 'platforms', slug + '.json')))
             simple = record.get('overview') is not None or record.get('current_limitation') is not None
-            if simple and ('id="badge"' in h or 'Disclosure correction history' in h):
+            if simple and ('Disclosure correction history' in h):
                 fails.append(f'{u}: legacy badge/history UI in current overview')
-            for need in (() if simple else ('id="badge"', '>Add this badge to your site<', 'Free. Never sold. Regenerated when the catalogue is rebuilt.',
+            for need in (('id="badge"', '>Add this badge to your site<') if simple else ('id="badge"', '>Add this badge to your site<', 'Free. Never sold. Regenerated when the catalogue is rebuilt.',
                          f'src="/atlas/badge/{slug}.svg"', f'src="/atlas/badge/{slug}-dark.svg"',
                          f'&lt;a href=&quot;{ORIGIN}/atlas/platforms/{slug}/&quot;&gt;&lt;img src=&quot;{ORIGIN}/atlas/badge/{slug}.svg&quot; alt=&quot;Commonworld Atlas: ',
                          f']({ORIGIN}/atlas/badge/{slug}.svg)]({ORIGIN}/atlas/platforms/{slug}/)', 'href="/atlas/badge/"')):
@@ -501,6 +546,9 @@ def badge_checks(parsed, pages, locs):
         jp = os.path.join(DIST, 'atlas', 'platforms', f'{slug}.json')
         if os.path.isfile(jp):
             j = json.load(open(jp, encoding='utf-8'))
+            if j.get('archive',{}).get('kind') == 'closed_history':
+                if any(k in j for k in ('badge_svg','badge_svg_dark','badge_page')): fails.append(f'{slug}: active badge fields on closed archive')
+                continue
             if j.get('badge_svg') != f'{ORIGIN}/atlas/badge/{slug}.svg' or j.get('badge_svg_dark') != f'{ORIGIN}/atlas/badge/{slug}-dark.svg' \
                     or j.get('badge_page') != f'{ORIGIN}/atlas/badge/':
                 fails.append(f'{slug}.json: badge_svg/badge_svg_dark/badge_page wrong or missing')
@@ -510,7 +558,7 @@ def badge_checks(parsed, pages, locs):
     else:
         bh = open(pages['/atlas/badge/'], encoding='utf-8').read()
         for need in ('<h1>Commonworld Atlas badges</h1>', 'No tracking', 'Verified · date',
-                     '>Listed<', 'Closed · history', '-dark.svg', 'href="/atlas/about/#corrections"', 'the-spawn'):
+                     '>Listed<', 'Closed · history', '-dark.svg', 'href="/atlas/about/#corrections"', 'Add this badge to your site'):
             if need not in bh: fails.append(f'/atlas/badge/: lacks {need!r}')
     if ORIGIN + '/atlas/badge/' not in locs: fails.append('/atlas/badge/ not in sitemap')
     for f_ in ('llms.txt', 'llms-full.txt'):
@@ -966,6 +1014,9 @@ def api_checks(parsed, locs):
         if {k: v for k, v in obj.items() if k not in ('schema_version', 'schema')} != old:
             fails.append(f'api: {p} drifted from legacy {p}')
     want = {'/atlas/platforms.json', '/atlas/earn.json'} | {f'/atlas/platforms/{i}.json' for i in ids} | {f'/atlas/categories/{k}.json' for k in cats}
+    archive_path = os.path.join(DIST, 'atlas', 'closed.json')
+    archive_ids = {r['id'] for r in json.load(open(archive_path))['platforms']} if os.path.exists(archive_path) else set()
+    want |= {f'/atlas/platforms/{i}.json' for i in archive_ids}
     missing = [p for p in want if p not in docs]
     if missing: fails.append(f'api: data documents missing: {sorted(missing)[:5]}')
     n_paged = sum(1 for p in docs if PAGED_JSON_RE.match(p) or AZ_JSON_RE.match(p))
@@ -982,7 +1033,7 @@ def api_checks(parsed, locs):
               'sum of api categories': sum(c['count'] for c in ai.get('categories', [])), 'snapshot.json': snap_n,
               'legacy per-entry files': len([f for f in os.listdir(os.path.join(DIST, 'atlas', 'platforms')) if f.endswith('.json')]),
               'api per-entry files': len([f for f in os.listdir(os.path.join(V, 'atlas', 'platforms')) if f.endswith('.json')])}
-    bad = {k: v for k, v in counts.items() if v != n}
+    bad = {k: v for k, v in counts.items() if v != n + (len(archive_ids) if k in ('legacy per-entry files','api per-entry files') else 0)}
     if bad: fails.append(f'api: counts differ from {n}: {bad}')
     for k in cats:
         c_old = json.load(open(os.path.join(DIST, 'atlas', 'categories', f'{k}.json')))['count']
@@ -1061,6 +1112,9 @@ def screens_checks(pages):
     mpath = os.path.join(sdir, 'manifest.json')
     man = json.load(open(mpath))['screens'] if os.path.exists(mpath) else {}
     recs = {r['id']: r for r in json.load(open(os.path.join(DIST, 'atlas', 'platforms.json')))['platforms']}
+    archive_path = os.path.join(DIST, 'atlas', 'closed.json')
+    if os.path.exists(archive_path): recs.update({r['id']: r for r in json.load(open(archive_path))['platforms']})
+    recs = {k: (dict(r, preview=r['archive']['history'].get('capture')) if r.get('archive',{}).get('kind') == 'closed_history' else r) for k,r in recs.items()}
     utc = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?Z$')
     with_prev = {k for k, r in recs.items() if r.get('preview')}
     if 'preview' not in next(iter(recs.values()), {}):
@@ -1085,7 +1139,7 @@ def screens_checks(pages):
         if p.get('path') != f'/atlas/screens/{k}.webp' or p.get('url') != ORIGIN + p.get('path', ''):
             fails.append(f'{k}: preview path/url {p.get("path")} {p.get("url")}')
         if not utc.match(str(p.get('captured_at'))): fails.append(f'{k}: preview.captured_at not ISO UTC')
-        if not str(p.get('source_url', '')).startswith('https://'): fails.append(f'{k}: preview.source_url not https')
+        if not str(p.get('source_url', '')).startswith('https://' if not recs[k].get('archive') else 'https[:]//'): fails.append(f'{k}: preview.source_url not https')
         if (p.get('captured_at'), p.get('source_url')) != (m.get('captured_at'), m.get('source_url')): fails.append(f'{k}: preview differs from screens manifest')
         if (p.get('width'), p.get('height')) != SHOT_WH: fails.append(f'{k}: preview size {p.get("width")}x{p.get("height")}')
         if 'not covered' not in str(p.get('rights')): fails.append(f'{k}: preview.rights missing')
@@ -1137,7 +1191,7 @@ def screens_checks(pages):
             a = dict(re.findall(r'(\w[\w-]*)="([^"]*)"', im.group(1))) if im else {}
             if a.get('src') != f'/atlas/screens/{k}.webp' or not a.get('alt') or a.get('width') != '1200' or a.get('height') != '750' or a.get('loading') != 'lazy':
                 fails.append(f'{u}: screenshot <img> attributes {a}')
-            if not re.search(r'captured <time datetime=', f, re.I): fails.append(f'{u}: screenshot caption lacks "captured <time>"')
+            if not r.get('overview') and not re.search(r'captured <time datetime=', f, re.I): fails.append(f'{u}: screenshot caption lacks "captured <time>"')
             if r['status'] == 'closed' and 'Last captured' not in f: fails.append(f'{u}: closed card caption lacks "Last captured"')
             if 'not part of the CC BY data' not in f: fails.append(f'{u}: screenshot caption lacks the rights line')
         elif 'is-empty' not in f or '<img' in f:
@@ -1360,7 +1414,7 @@ def closure_checks(pages):
     """Closure wording matches atlas/refresh.py: two routes (human review / automated weekly check), auto-closed cards labelled."""
     fails = []
     ch = open(pages['/atlas/closed/'], encoding='utf-8').read()
-    for need in ('Human review:', 'Automated weekly check:', '2 consecutive weekly checks', 'not a current schedule or service-state promise', 'Periodic cutover remains open',
+    for need in ('Human review:', 'Automated weekly check:', '2 consecutive weekly checks', 'not a current schedule or service-state promise', 'Archived cards are never reopened automatically',
                  'never reopened automatically', 'A single failed page load is never treated as proof.'):
         if need not in ch: fails.append(f'/atlas/closed/: lacks {need!r}')
     ab = open(pages['/atlas/about/'], encoding='utf-8').read()
@@ -1368,8 +1422,8 @@ def closure_checks(pages):
         if need not in ab: fails.append(f'/atlas/about/: closure section lacks {need!r}')
     if 'a failed page load alone is never treated as proof' in ch: fails.append('/atlas/closed/: old one-route closure wording')
     for c in json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms']:
-        hist = c.get('status_history') or []
-        auto = c.get('status') == 'closed' and hist and hist[-1].get('to') == 'closed' and hist[-1].get('by') == REFRESH_TOOL
+        hist = c.get('status_history') or c.get('archive',{}).get('history',{}).get('status_history') or []
+        auto = c.get('status') == 'closed' and hist and hist[-1].get('to') == 'closed' and hist[-1].get('by') in (REFRESH_TOOL, REFRESH_TOOL.replace('.', '[.]'))
         h = open(pages[f"/atlas/platforms/{c['slug']}/"], encoding='utf-8').read()
         if auto and '<b>Closed by automated check since' not in h: fails.append(f"{c['slug']}: auto-closed card lacks 'Closed by automated check since'")
         if not auto and 'Closed by automated check' in h and c.get('status') == 'closed': fails.append(f"{c['slug']}: human-closed card labelled automated")
@@ -1381,6 +1435,9 @@ def _share_expectations():
     """Expected share text per entry page, by badge status (verified / listed / closed), and the live count for the index."""
     snap = json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms']
     exp = {}
+    archive_path = os.path.join(DIST, 'atlas', 'closed.json')
+    if os.path.exists(archive_path):
+        snap = snap + [dict(r, slug=r['id']) for r in json.load(open(archive_path))['platforms']]
     for c in snap:
         if c.get('overview') or c.get('current_limitation'):
             t = f"{c['name']} on Commonworld Atlas"
@@ -1626,6 +1683,8 @@ def stats_checks(parsed, pages, locs):
     snap = json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms']
     want = {'atlas_cards': len(snap), 'atlas_live': sum(1 for c in snap if c.get('status') == 'live'),
             'atlas_closed': sum(1 for c in snap if c.get('status') == 'closed')}
+    archive_path = os.path.join(DIST, 'atlas', 'closed.json')
+    if os.path.exists(archive_path): want['atlas_closed'] = json.load(open(archive_path))['count']
     vals = {m.get('id'): m.get('value') for _, m in pm}
     for k, v in want.items():
         if k in vals and vals[k] != v: fails.append(f'/stats.json: {k}={vals[k]} != snapshot {v}')
@@ -1784,6 +1843,8 @@ def events_checks():
     if not evs: fails.append('atlas/data/events.jsonl: empty or missing')
     pub = {c['slug'] for c in json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms']}
     rem = {r.get('slug') for r in ((json.load(open(REMOVED)) if os.path.exists(REMOVED) else {}).get('removed') or [])}
+    archive_path = os.path.join(DIST, 'atlas', 'closed.json')
+    if os.path.exists(archive_path): pub |= {r['id'] for r in json.load(open(archive_path))['platforms']}
     fails += ev_.validate(evs, pub | rem)
     snap_f = os.path.normpath(os.path.join(DATA_DIR, 'snapshot-verified-2026-10-15.json'))
     fails += ev_.amendment_gaps(json.load(open(snap_f, encoding='utf-8')).get('amendments') or [], evs)
@@ -1793,14 +1854,17 @@ def events_checks():
         dj = json.load(open(os.path.join(DIST, 'atlas', 'events.json'), encoding='utf-8'))
     except (OSError, ValueError) as ex:
         return fails + [f'/atlas/events.json: missing or invalid ({ex})']
-    if dj.get('events') != ev_.newest_first(evs): fails.append('/atlas/events.json: events differ from atlas/data/events.jsonl (newest first)')
+    archived = {c['id'] for c in json.load(open(archive_path))['platforms']} if os.path.exists(archive_path) else set()
+    import closed_archive
+    expected_evs = [closed_archive.inert(e) if e.get('slug') in archived else e for e in evs]
+    if dj.get('events') != ev_.newest_first(expected_evs): fails.append('/atlas/events.json: events differ from atlas/data/events.jsonl (newest first)')
     if dj.get('count') != len(evs): fails.append(f"/atlas/events.json: count {dj.get('count')} != {len(evs)}")
     if not re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z', str(dj.get('generated_at') or '')): fails.append('/atlas/events.json: generated_at not ISO 8601 UTC')
     if dj.get('types') != list(ev_.TYPES): fails.append('/atlas/events.json: types list drifted')
     mdp = os.path.join(DIST, 'atlas', 'events.md')
     md = open(mdp, encoding='utf-8').read() if os.path.exists(mdp) else ''
     if not md: fails.append('missing /atlas/events.md')
-    for e_ in evs:
+    for e_ in expected_evs:
         if f"`{e_['slug']}`" not in md or e_['source'] not in md: fails.append(f"/atlas/events.md lacks the {e_['date']} {e_['type']} event of {e_['slug']}")
     ab = os.path.join(DIST, 'atlas', 'about', 'index.html')
     if os.path.exists(ab) and f'href="{ev_.MD_PATH}"' not in open(ab, encoding='utf-8').read(): fails.append('/atlas/about/ does not link the events log')
@@ -1808,6 +1872,7 @@ def events_checks():
         fp_ = os.path.join(DIST, t)
         if os.path.exists(fp_) and ORIGIN + ev_.JSON_PATH not in open(fp_, encoding='utf-8').read(): fails.append(f'/{t} does not mention the events log')
     hd = open(os.path.join(DIST, '_headers'), encoding='utf-8').read() if os.path.exists(os.path.join(DIST, '_headers')) else ''
+    if os.path.exists(archive_path) and '/atlas/closed.json\n  Access-Control-Allow-Origin: *\n  Content-Type: application/json; charset=utf-8\n  X-Robots-Tag: noindex' not in hd: fails.append('/atlas/closed.json: missing JSON CORS/noindex headers')
     for path_, ct in ((ev_.JSON_PATH, 'application/json'), (ev_.MD_PATH, 'text/markdown')):
         if f'{path_}\n  Access-Control-Allow-Origin: *\n  Content-Type: {ct}; charset=utf-8' not in hd: fails.append(f'_headers: {path_} lacks CORS + {ct}')
     try:
@@ -1897,6 +1962,12 @@ def replications_checks(pages):
     fails += repl.validate(cards, set(recs))
     for slug, r in recs.items():
         w = f'replications: {slug}'
+        if r.get('archive',{}).get('kind') == 'closed_history':
+            if 'replications' in r: fails.append(f'{w}: active replication record on inert archive')
+            continue
+        if r.get('overview'):
+            if 'replications' in r: fails.append(f'{w}: legacy replications in current record')
+            continue
         want = repl.published(cards, slug)
         if 'replications' not in r: fails.append(f'{w}: entry JSON lacks the replications field'); continue
         if r['replications'] != want: fails.append(f'{w}: entry JSON replications differs from atlas/data/replications.json')
@@ -1936,6 +2007,12 @@ def reachability_checks(pages):
     fails += reach.validate(cards, {s for s, r in recs.items() if r.get('status') == 'live'}, set(recs))
     for slug, r in recs.items():
         w = f'reachability: {slug}'
+        if r.get('archive',{}).get('kind') == 'closed_history':
+            if 'reachability' in r: fails.append(f'{w}: active reachability record on inert archive')
+            continue
+        if r.get('overview'):
+            if 'reachability' in r: fails.append(f'{w}: legacy reachability in current record')
+            continue
         want = reach.published(cards, slug) if r.get('status') == 'live' else None
         if 'reachability' not in r: fails.append(f'{w}: entry JSON lacks the reachability field'); continue
         if r['reachability'] != want: fails.append(f'{w}: entry JSON reachability differs from atlas/data/reachability.json')
@@ -1977,10 +2054,15 @@ def cards_v2_checks(pages):
             recs[fn[:-5]] = json.load(open(os.path.join(pdir, fn), encoding='utf-8'))
     gone = {r['slug'] for r in load_removed()}
     # Preserve stored curation/history, suppress only explicit safety removals.
-    active = lambda rows: {s: r for s, r in rows.items() if s not in gone}
+    archived = {s for s,r in recs.items() if r.get('archive',{}).get('kind') == 'closed_history'}
+    active = lambda rows: {s: r for s, r in rows.items() if s not in gone and s not in archived}
     curated, tasks, evo = active(cv2.load_keys_books()), active(cv2.load_first_tasks()), active(cv2.load_evidence_overrides())
-    fails += cv2.validate_keys_books(curated, recs)
-    fails += cv2.validate_evidence_overrides(evo, recs)
+    source_recs = recs
+    if any(r.get('overview') for r in recs.values()):
+        source_doc = json.load(open(os.path.join(HERE, '..', 'catalogue', 'snapshot.json')))
+        source_recs = {c['slug']: c for c in source_doc['platforms']}
+    fails += cv2.validate_keys_books(curated, source_recs)
+    fails += cv2.validate_evidence_overrides(evo, source_recs)
     fails += cv2.validate_first_tasks(tasks, set(recs))
     for lv, (lid, label, desc) in cv2.LEVELS.items():
         for w in cv2.negative_hits(label + ' ' + desc): fails.append(f'cards v2: ladder level {lv} wording uses {w!r}')
@@ -1989,6 +2071,20 @@ def cards_v2_checks(pages):
     levels = Counter()
     for slug, r in recs.items():
         w = f'cards v2: {slug}'
+        if r.get('archive',{}).get('kind') == 'closed_history':
+            if r.get('status') != 'closed' or r['archive'].get('external_links') != 'disabled': fails.append(f'{w}: invalid inert archive')
+            continue
+        if r.get('overview'):
+            forbidden = {'claims','summary','first_task','verified_at','last_checked','money_flow','key_number','claims_count','evidence_level','keys_and_books','replications','reachability'}
+            if forbidden & set(r): fails.append(f'{w}: legacy fields in current record: {forbidden & set(r)}')
+            h = open(pages[f'/atlas/platforms/{slug}/'], encoding='utf-8').read()
+            md = open(os.path.join(DIST, 'atlas', 'platforms', slug, 'index.md'), encoding='utf-8').read()
+            text = html.unescape(re.sub('<[^>]*>', ' ', h))
+            if ' '.join(r['overview']['text'].split()) not in ' '.join(text.split()) or r['overview']['text'] not in md: fails.append(f'{w}: current HTML/Markdown/JSON text differs')
+            if r['overview']['visited_at'] not in md: fails.append(f'{w}: current visit missing')
+            if 'id="h-claims"' in h or '## First task' in md: fails.append(f'{w}: legacy widget restored')
+            if 'Verified · ' + r['overview']['visited_at'][:10] not in open(os.path.join(DIST,'atlas','badge',slug+'.svg')).read(): fails.append(f'{w}: badge visit mismatch')
+            continue
         claims = r.get('claims') or []
         ov = cv2.card_overrides(r, evo)
         ev = cv2.card_evidence(r, evo)
@@ -2161,8 +2257,8 @@ def main():
                 if burl != p.canon: fails.append(f'{u}: share bar url {burl} != canonical')
                 want_txt = {'/': 'Commonworld — A shared world for humans and agents',
                             '/about/': 'About Commonworld — A shared world for humans and agents',
-                            '/atlas/': (f'Commonworld Atlas: {len(SHARE_ENTRY)} entries, with dated overviews and source-check limitations' if SHARE_LIMITED else f'Atlas of Agent Platforms: {SHARE_LIVE} places where AI agents work and get paid'),
-                            '/atlas/earn/': 'Where AI agents get paid — Commonworld Atlas'}.get(u) or SHARE_ENTRY.get(u)
+                            '/atlas/': (f'Commonworld Atlas: {len(SHARE_ENTRY)} entries, with dated overviews and source-check limitations' if SHARE_LIMITED else f'Commonworld Atlas: {SHARE_LIVE} Live source overviews'),
+                            '/atlas/earn/': 'Where AI agents get paid | Commonworld Atlas'}.get(u) or SHARE_ENTRY.get(u)
                 if not btext or btext != want_txt: fails.append(f'{u}: share text {btext!r} != {want_txt!r}')
             enc = quote(p.canon or '', safe='')
             for kind, href, label in p.shares:

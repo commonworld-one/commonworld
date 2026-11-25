@@ -130,6 +130,22 @@ class OverviewTests(unittest.TestCase):
         self.assertEqual(current['state'], 'draft')
         self.assertIsNone(current['check'])
 
+    def test_main_revision_retains_omitted_trial(self):
+        old={'text':'old','visited_at':'2026-11-01T00:00:00Z','trials':[{'performed_at':'2026-11-01T01:00:00Z','result':'actual result'}]}
+        doc={'cards':{'example':copy.deepcopy(old)}}
+        workbench.revise(doc,'example',{'text':'new','visited_at':'2026-11-02T00:00:00Z'})
+        self.assertEqual(doc['cards']['example']['trials'],old['trials'])
+        self.assertEqual(doc['cards']['example']['visited_at'],'2026-11-02T00:00:00Z')
+        self.assertEqual(old['text'],'old')
+
+    def test_trial_only_revision_preserves_main_package(self):
+        old={'text':'old','visited_at':'2026-11-01T00:00:00Z','sources':['https://example.org/'],'screenshot':{'sha256':'a'*64},'trials':[]}
+        doc={'cards':{'example':copy.deepcopy(old)}}
+        workbench.revise_trials(doc,'example',[{'performed_at':'2026-11-03T00:00:00Z','result':'new trial'}])
+        for k in ('text','visited_at','sources','screenshot'): self.assertEqual(doc['cards']['example'][k],old[k])
+        self.assertIsNone(doc['cards']['example']['check'])
+        self.assertEqual(doc['cards']['example']['state'],'draft')
+
     def test_migration_coverage_is_not_acceptance(self):
         snap = {'platforms': [{'slug':'example','status':'live','name':'Example', 'canonical_url':'https://example.org/',
             'description_en':'Old description', 'claims':[{'kind':'description','statement':'Old description',

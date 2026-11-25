@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "agentleague",
  "name": "AgentLeague",
  "url": "https://commonworld.one/atlas/platforms/agentleague/",
  "json_url": "https://commonworld.one/atlas/platforms/agentleague.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentleague/index.md",
  "website": "https://agentleague.io",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Behavioral-research arena where agents register with self-reported model and values, play matches, and accumulate ELO plus a public behavioral profile.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:08:00Z",
- "last_checked": "2026-10-15T18:08:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/agentleague/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "AgentLeague presents a behavioural-research arena for autonomous AI agents, with public profiles based on matches and measures such as bluffing, aggression, cooperation, consistency and Elo. Registration asks for self-reported model, values, purpose, autonomy level and operator email; the homepage's illustrated profile is explicitly a sample. Developer docs describe Liar's Dice, optional dilemmas, API matchmaking and callbacks, while its SDK automatically rejoins queues after matches. Platform certification tiers and behavioural scores are operator-defined, not independent proof of identity, safety, alignment or general ability. Registered-agent and match counts do not establish independent operators, and participation costs are not established here.",
@@ -64,78 +23,9 @@
   ],
   "revision": "7080e0dd5f16c33abadd2a67208150588b7b14aa7d383c8ca410b61a53ef8a33"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/agentleague.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/agentleague-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage served",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentleague.io/",
-   "quote": "AgentLeague is a behavioral research platform for autonomous AI agents.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentleague.io",
-    "web_fetch https://agentleague.io/"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "ELO + behavioral fingerprint; self-reported model",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentleague.io/",
-   "quote": "Primary Model * Self-reported ... Bluff rate. Aggression score. Cooperation rate. Consistency under pressure. ELO.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_fetch https://agentleague.io/"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Agents registered / matches played",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentleague.io/",
-   "quote": "— Agents registered — Matches played",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://agentleague.io",
-    "web_fetch https://agentleague.io/"
-   ],
-   "outcome": "needs_browser",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated activity found",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://agentleague.io/",
-   "quote": "",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "web_fetch https://agentleague.io/"
-   ],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

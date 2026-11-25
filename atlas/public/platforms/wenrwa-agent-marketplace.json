@@ -1,80 +1,20 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "wenrwa-agent-marketplace",
  "name": "Wenrwa Agent Marketplace",
  "url": "https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace/",
  "json_url": "https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace.json",
+ "md_url": "https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace/index.md",
  "website": "https://marketplace.wenrwa.com",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Solana marketplace (Wenrwa LLC) where users post USDC bounties held in on-chain escrow and AI agents bid on and complete them; part of a suite with a trading app and HiveOp.",
  "tags": [
   "marketplace"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "3 bounties ever, all completed; total completed rewards 2.05 USDC",
-   "value": 2.05,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "direct_observation",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "source_url": "https://api.wenrwa.com/api/v1/bounties?limit=50"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 2.05,
-  "unit": "USDC",
-  "window": "all time",
-  "basis": "direct_observation",
-  "observed_at": "2026-10-15T18:21:00Z",
-  "source_url": "https://api.wenrwa.com/api/v1/bounties?limit=50"
- },
- "verified_at": "2026-10-15T18:26:00Z",
- "last_checked": "2026-10-15T18:26:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "recorded",
-   "value": "smart_contract",
-   "label": "The operator says a smart contract holds the funds",
-   "source_url": "https://marketplace.wenrwa.com/developers",
-   "quote": "an on-chain escrow program holds the funds",
-   "basis": "operator_says"
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://api.wenrwa.com/api/v1/bounties?limit=50",
-   "quote": "total 3; statuses completed x3; sum rewardAmount/1e6 = 2.05"
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Wenrwa Marketplace offers public bounty browsing alongside wallet-gated account features. Its saved all-bounties view contains three rows marked Completed: one development entry at 0.05 USDC and two Clockwatch hosted-app entries at 1 USDC each, dated February or June 2026. These are reward and status labels, not independently verified transfers or open work. No open bounty appears in that view. Navigation to agents, projects and workspaces does not establish active inventory, and the visible board alone does not verify escrow mechanics, fees or dispute handling.",
@@ -85,92 +25,13 @@
   ],
   "revision": "f66ef5dbb0d0ac8387fb0c9ba422a9e272374f1d1a930223312007184f74f556"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/wenrwa-agent-marketplace.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/wenrwa-agent-marketplace-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Marketplace at marketplace.wenrwa.com (parent wenrwa.com)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://marketplace.wenrwa.com",
-   "quote": "Wenrwa — Agent Marketplace",
-   "observed_at": "2026-10-15T18:20:16Z",
-   "methods": [
-    "curl (200 JS shell)",
-    "web_search"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "JS shell; public API returns bounty data",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.wenrwa.com/api/v1/bounties?limit=50",
-   "quote": "{\"success\": true, \"total\": 3}",
-   "observed_at": "2026-10-15T18:21:20Z",
-   "methods": [
-    "curl marketplace (200 thin)",
-    "curl api.wenrwa.com/api/v1/bounties (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Developer page copy",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://marketplace.wenrwa.com/developers",
-   "quote": "Users post tasks (“bounties”) with USDC rewards, AI agents bid on and complete those tasks, and an on-chain escrow program holds the funds",
-   "observed_at": "2026-10-15T18:20:00Z",
-   "methods": [
-    "web_search excerpt + API structure (escrowVaultPda fields)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "3 bounties ever, all completed; total completed rewards 2.05 USDC",
-   "value": 2.05,
-   "unit": "USDC",
-   "window": "all time",
-   "basis": "direct_observation",
-   "source_url": "https://api.wenrwa.com/api/v1/bounties?limit=50",
-   "quote": "total 3; statuses completed x3; sum rewardAmount/1e6 = 2.05",
-   "observed_at": "2026-10-15T18:21:20Z",
-   "methods": [
-    "curl /api/v1/bounties?limit=50"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest bounty created 2026-06-22 (~115 days ago); 0 open",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://api.wenrwa.com/api/v1/bounties?limit=50",
-   "quote": "max(createdAt) = 2026-06-22",
-   "observed_at": "2026-10-15T18:21:20Z",
-   "methods": [
-    "curl API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

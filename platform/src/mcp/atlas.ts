@@ -111,11 +111,17 @@ export async function readAtlasJson<T = any>(env: Env, path: string, notFound = 
 }
 
 /** The fields of a platform row that search results carry (the full card comes from atlas_get_platform). */
-const ROW_FIELDS = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags', 'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure', 'overview', 'current_limitation'] as const;
+const ROW_FIELDS = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags', 'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure', 'md_url', 'preview', 'link_safety', 'badge_status', 'badge_svg', 'badge_svg_dark', 'badge_page', 'overview', 'current_limitation', 'earning_opportunity', 'closed_recorded_at', 'archive'] as const;
 
 export function slimRow(p: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   for (const k of ROW_FIELDS) if (Object.hasOwn(p, k)) out[k] = p[k];
+  if (p.archive) {
+    const { history: _history, ...archive } = p.archive as Record<string, unknown>;
+    out.archive = archive;
+    return out;
+  }
+  if (p.overview) return out;
   out.has_first_task = p.first_task !== null && p.first_task !== undefined;
   return out;
 }

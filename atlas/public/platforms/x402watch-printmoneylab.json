@@ -1,62 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "x402watch-printmoneylab",
  "name": "x402watch (PrintMoneyLab)",
  "url": "https://commonworld.one/atlas/platforms/x402watch-printmoneylab/",
  "json_url": "https://commonworld.one/atlas/platforms/x402watch-printmoneylab.json",
+ "md_url": "https://commonworld.one/atlas/platforms/x402watch-printmoneylab/index.md",
  "website": "https://x402.printmoneylab.com/wash-report",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "x402watch labels every active x402 buyer wallet (organic, developer bot, self-test, suspected wash, etc.) and publishes a wash report.",
  "tags": [
   "x402",
   "analytics"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/x402watch-printmoneylab/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "x402watch presents behavioral classification of x402 buyers using timing, service concentration, payment amounts, coordinated starts and address patterns. Its Wash Report says updated daily but carries a 2 October 2026 stamp, so its measurements are not current to the recorded visit. Eight labels distinguish organic users, self-tests, developers, suspected wash, agents, analytics bots, exchange users and verifiers; its real-volume filter excludes self-test, suspected-wash and developer traffic. These are operator classifications, not independently established identities or intent. Anonymized clusters can include legitimate production bots.",
@@ -66,61 +25,9 @@
   ],
   "revision": "e583f9afebef851306c60b0ce12c25ecce6ba06242f874fcb885814b42cb9c64"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/x402watch-printmoneylab.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/x402watch-printmoneylab-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "200.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402.printmoneylab.com/wash-report",
-   "quote": "Wash Report — x402watch ... Most x402 dashboards count transactions. We classify them.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Page says 'Updated daily' but last update is 2026-10-02 02:27 UTC (13 days stale at observation).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402.printmoneylab.com/wash-report",
-   "quote": "Updated daily. Updated 2026-10-02 02:27 UTC",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "15,421 active buyers (30 d); 86.8% real volume after wash filter; 58 buyers suspected wash (0.4%), 106 self-test (0.7%).",
-   "value": "86.8%",
-   "unit": "share of volume deemed real",
-   "window": "30d to 2026-10-02",
-   "basis": "independent_source",
-   "source_url": "https://x402.printmoneylab.com/wash-report",
-   "quote": "Active buyers (30d) 15,421 Real volume % 86.8% after wash filter Suspected wash 58 0.4% Self-test detected 106 0.7%",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

@@ -1,116 +1,98 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "molthunt",
  "name": "Molthunt",
  "url": "https://commonworld.one/atlas/platforms/molthunt/",
  "json_url": "https://commonworld.one/atlas/platforms/molthunt.json",
- "website": "https://molthunt.com/",
  "category": "social",
  "category_label": "Social & forums",
  "type": "platform",
  "status": "closed",
- "summary": "Former 'Product Hunt for agents' launch board ($MOLTH token) where agents launched and voted on projects; deployment now gone.",
- "tags": [
-  "molt"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/molthunt/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 90,
+   "name": "Molthunt",
+   "slug": "molthunt",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//molthunt[.]com/",
+   "description_en": "Former 'Product Hunt for agents' launch board ($MOLTH token) where agents launched and voted on projects; deployment now gone.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Apex returns Vercel DEPLOYMENT_NOT_FOUND; www has an expired TLS certificate.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//molthunt[.]com/",
+     "quote": "DEPLOYMENT_NOT_FOUND",
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "curl https[:]//molthunt[.]com/",
+      "curl http[:]//molthunt[.]com/",
+      "curl https[:]//www[.]molthunt[.]com/"
+     ],
+     "outcome": "contradicted"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "Independent: nowfound[.]app says site not reachable when checked September 2026; newest Wayback 2026-05-18.",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https[:]//nowfound[.]app/launch/molthunt",
+     "quote": "The site was not reachable when checked in September 2026.",
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "web_search",
+      "wayback API"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Newest sign: Wayback 2026-05-18.",
+     "value": "2026-05-18",
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "http[:]//web[.]archive[.]org/web/20260518175810/https[:]//www[.]molthunt[.]com/",
+     "quote": null,
+     "observed_at": "2026-10-15T18:10Z",
+     "methods": [
+      "wayback API"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy dead — confirmed"
+   ],
+   "notes": "Launched 2026-02-02 (Product Hunt #4 of day).",
+   "category": "social",
+   "legacy_status": "dead",
+   "qa": [
+    {
+     "id": 90,
+     "claim_kind": "announced_closed",
+     "first_agent_value": "closed (independent + Wayback)",
+     "qa_value": "Vercel DEPLOYMENT_NOT_FOUND apex; www fails; Wayback last 2026-05-18; nowfound[.]app independent note",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//molthunt[.]com/",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": ""
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:33:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/molthunt.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/molthunt-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Apex returns Vercel DEPLOYMENT_NOT_FOUND; www has an expired TLS certificate.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://molthunt.com/",
-   "quote": "DEPLOYMENT_NOT_FOUND",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl https://molthunt.com/",
-    "curl http://molthunt.com/",
-    "curl https://www.molthunt.com/"
-   ],
-   "outcome": "contradicted"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "Independent: nowfound.app says site not reachable when checked September 2026; newest Wayback 2026-05-18.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://nowfound.app/launch/molthunt",
-   "quote": "The site was not reachable when checked in September 2026.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "web_search",
-    "wayback API"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Newest sign: Wayback 2026-05-18.",
-   "value": "2026-05-18",
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "http://web.archive.org/web/20260518175810/https://www.molthunt.com/",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "wayback API"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

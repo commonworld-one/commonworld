@@ -1,90 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "dtelecom-x402-gateway",
  "name": "dTelecom x402 Gateway",
  "url": "https://commonworld.one/atlas/platforms/dtelecom-x402-gateway/",
  "json_url": "https://commonworld.one/atlas/platforms/dtelecom-x402-gateway.json",
+ "md_url": "https://commonworld.one/atlas/platforms/dtelecom-x402-gateway/index.md",
  "website": "https://x402.dtelecom.org",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "dTelecom's gateway sells prepaid WebRTC, speech-to-text and text-to-speech credits to AI agents over x402/MPP, built on its DePIN network.",
  "tags": [
   "x402",
   "x402-service",
   "prepaid"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "x402 settlement to this service's payout address: $36,591.7 in 30d from 30 distinct buyers, 16,668 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 36591.7,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "observed_at": "2026-11-22T09:05:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/dtelecom-x402-gateway"
-  },
-  {
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $8,126.50",
-   "value": 8126.5,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "source_url": "https://x402-list.com/api/v1/services/dtelecom-x402-gateway/volume?days=60"
-  }
- ],
- "key_number": {
-  "kind": "economic_flow",
-  "value": 36591.7,
-  "unit": "USD (USDC)",
-  "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-  "basis": "independent_source",
-  "observed_at": "2026-11-22T09:05:00Z",
-  "source_url": "https://x402-list.com/api/v1/services/dtelecom-x402-gateway"
- },
- "verified_at": "2026-11-22T09:05:00Z",
- "last_checked": "2026-11-22T09:05:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/dtelecom-x402-gateway/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://x402-list.com/api/v1/services/dtelecom-x402-gateway",
-   "quote": "\"volume_usd_30d\":36591.7,\"unique_buyers_30d\":30,\"tx_count_30d\":16668,\"top_buyer_share_30d\":0.09742646556459526,\"last_settlement_at\":\"2026-10-28T03:40:43Z\""
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "dTelecom's gateway presents prepaid communication and AI services via x402 or MPP: WebRTC audio, streaming speech recognition and synthesis, file transcription, WAV generation, translation, vision snapshots and moderation. No-account/API-key marketing still requires wallet-funded credits. Displayed tariffs distinguish $0.0001 per audio participant minute, $0.004 per connected STT session minute and $0.006 per 1,000 spoken TTS Unicode code points. Translation is $5 per million input code points with a 500-code-point request limit. Voice cost examples exclude the language model, and language coverage differs by service. Released reservations return to prepaid balance; unused credits require a refund request to return to the paying wallet. Only Base USDC live payments are reported qualified by the operator; Solana, Tempo and TRON qualification remains pending despite header badges. Vision and image moderation process bounded static images or sampled frames, not arbitrary full video. Tariffs and qualification are operator statements, not independently measured trial results.",
@@ -94,129 +26,9 @@
   ],
   "revision": "1b26079fbc8f2cf15218779189a48e88ad5869355d2c2af344fbd7ec1f632284"
  },
- "badge_status": "Verified · 2026-11-22",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/dtelecom-x402-gateway.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/dtelecom-x402-gateway-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Official site returns HTTP 200 with real content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402.dtelecom.org",
-   "quote": "Pay-per-use WebRTC, Speech-to-Text, and Text-to-Speech for AI agents. Pay with USDC via x402. No API keys, no accounts.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://x402.dtelecom.org"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "canonical_url",
-   "statement": "Official URL (x402-list base_url/website for this service, operator-owned)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402.dtelecom.org",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services?per_page=100",
-    "curl -sL https://x402.dtelecom.org"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "dTelecom's gateway sells prepaid WebRTC, speech-to-text and text-to-speech credits to AI agents over x402/MPP, built on its DePIN network.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://x402.dtelecom.org",
-   "quote": "Pay-per-use WebRTC, Speech-to-Text, and Text-to-Speech for AI agents. Pay with USDC via x402. No API keys, no accounts.",
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "curl -sL https://x402.dtelecom.org",
-    "GET https://x402-list.com/api/v1/services?per_page=100"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "x402 settlement to this service's payout address: $36,591.7 in 30d from 30 distinct buyers, 16,668 settlements (x402-list traction: a measured floor, USDC via measured facilitators only)",
-   "value": 36591.7,
-   "unit": "USD (USDC)",
-   "window": "trailing 30d, precomputed by x402-list (the service API gives no as-of time; last_settlement_at is the newest settlement seen, kept as last_settlement_seen_at)",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/dtelecom-x402-gateway",
-   "quote": "\"volume_usd_30d\":36591.7,\"unique_buyers_30d\":30,\"tx_count_30d\":16668,\"top_buyer_share_30d\":0.09742646556459526,\"last_settlement_at\":\"2026-10-28T03:40:43Z\"",
-   "observed_at": "2026-11-22T09:05:55Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/dtelecom-x402-gateway",
-    "read data.assessment.traction.last_settlement_at (last settlement seen, not the as-of time)",
-    "read data.assessment.traction.volume_usd_30d (rounded to 2 decimals)"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 36530.0,
-     "unit": "USD (USDC)",
-     "window": "trailing 30d to 2026-10-15",
-     "statement": "x402 settlement to this service's payout address: $36,530.00 in 30d from 26 distinct buyers, 16,614 settlements; top buyer share 9.6%",
-     "quote": "traction.volume_usd_30d=36530.0, unique_buyers_30d=26, top_buyer_share_30d=0.0959",
-     "source_url": "https://x402-list.com/api/v1/services?per_page=100",
-     "observed_at": "2026-10-15T18:08:00Z",
-     "basis": "independent_source",
-     "outcome": "supported",
-     "superseded_at": "2026-11-22T09:05:55Z",
-     "reason": "weekly automated re-observation (atlas/refresh.py); source and window now from the mapping in atlas/refresh-sources.json"
-    }
-   ],
-   "refresh_id": "dtelecom-x402-gateway-x402-list-30d",
-   "last_settlement_seen_at": "2026-10-28T03:40:43Z",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Sum of daily volume for UTC days 2026-10-09..2026-10-15 (last day partial): $8,126.50",
-   "value": 8126.5,
-   "unit": "USD (USDC)",
-   "window": "2026-10-09..2026-10-15 UTC",
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/dtelecom-x402-gateway/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/dtelecom-x402-gateway/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Last UTC day with ≥$1 settled: 2026-10-15; first settlement 2026-02-10",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://x402-list.com/api/v1/services/dtelecom-x402-gateway/volume?days=60",
-   "quote": null,
-   "observed_at": "2026-10-15T18:10:00Z",
-   "methods": [
-    "GET https://x402-list.com/api/v1/services/dtelecom-x402-gateway/volume?days=60"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": ""
 }

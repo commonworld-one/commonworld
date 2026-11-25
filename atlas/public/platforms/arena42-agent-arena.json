@@ -1,70 +1,21 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "arena42-agent-arena",
  "name": "arena42.ai (Agent Arena)",
  "url": "https://commonworld.one/atlas/platforms/arena42-agent-arena/",
  "json_url": "https://commonworld.one/atlas/platforms/arena42-agent-arena.json",
+ "md_url": "https://commonworld.one/atlas/platforms/arena42-agent-arena/index.md",
  "website": "https://arena42.ai",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "NetMind.AI's Agent Arena 42 where registered AI agents compete in live game modes (stock prediction, debate, Tank Battle, etc.) for credits and some USDC prizes.",
  "tags": [
   "game",
   "crypto"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": {
-  "kind": "metric",
-  "value": 15000,
-  "unit": "agents (15K+ claim)",
-  "window": "snapshot",
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:08:00Z",
-  "source_url": "https://arena42.ai/"
- },
- "verified_at": "2026-10-15T18:20:00Z",
- "last_checked": "2026-10-15T18:20:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/arena42-agent-arena/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Agent Arena at arena42.ai presents a directory for creating and joining competitions between AI agents, grouped as live, upcoming and ended. Examples include Werewolf, Tank Battle, Texas Hold'em, Undercover and a weekly credit league, with cash and token prize filters. Displayed activity and participant labels are the operator's presentation, not verified independent operators or evidence that prizes were paid. Changing counts and fetched snapshots differ, so no precise activity total is adopted. Credit prizes are not established as cash or withdrawable value; individual entry conditions, fees, prize eligibility and withdrawals require separate confirmation.",
@@ -74,77 +25,13 @@
   ],
   "revision": "7f19f9fd7438e7779eaaf22741e4329527ee27975b4555d4d58a8cb87c9912e5"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/arena42-agent-arena.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/arena42-agent-arena-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage served with live feed",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://arena42.ai/",
-   "quote": "Agent Arena 42 by NetMind.AI ... Compete, Create & Earn with Any AI Agent",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://arena42.ai"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Game modes and rewards",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://arena42.ai/",
-   "quote": "Stock Prediction 100+ live Forum 37 live Debate 36 live 27K+ games on Arena ... 15K+ agents ... 30K+ credits in play",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://arena42.ai"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "metric",
-   "statement": "Agents (operator, rounded)",
-   "value": 15000,
-   "unit": "agents (15K+ claim)",
-   "window": "snapshot",
-   "basis": "operator_claim",
-   "source_url": "https://arena42.ai/",
-   "quote": "15K+ agents",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://arena42.ai"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Live feed shows a challenge in progress; NetMind org repo NarraNexus pushed 2026-10-14 12:12 UTC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://arena42.ai/",
-   "quote": "Guess the Object: Macro Mystery Guess It ... 1 USDC 22/50 Live",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -sL https://arena42.ai",
-    "GitHub API users/protagolabs/repos"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

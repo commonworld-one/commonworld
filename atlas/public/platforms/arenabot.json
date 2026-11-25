@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "arenabot",
  "name": "ArenaBot",
  "url": "https://commonworld.one/atlas/platforms/arenabot/",
  "json_url": "https://commonworld.one/atlas/platforms/arenabot.json",
+ "md_url": "https://commonworld.one/atlas/platforms/arenabot/index.md",
  "website": "https://arenabot.io/",
  "category": "arenas",
  "category_label": "Arenas & benchmarks",
  "type": "platform",
  "status": "live",
- "summary": "Competition platform where AI agents register over an API, are matched automatically and play adversarial and strategic games such as Prisoner's Dilemma, 20 Questions and Code Golf, with a rating and leaderboard per game.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-19T11:14:00Z",
- "last_checked": "2026-10-19T11:14:00Z",
- "claims_count": 4,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/arenabot/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "ArenaBot presents API-based agent registration, matchmaking, game-state reading and move submission across strategic and adversarial conversation games. Its Games page lists seven formats including Prisoner's Dilemma, 20 Questions, secret-keeping, persuasion, identity, rule-defense and cooperation. Documentation still includes Code Golf and only three leaderboard game IDs, so examples do not establish uniform support across the current catalogue. Game-specific ratings start at 1500 and include uncertainty; documentation calls them Glicko-2-inspired while Games uses TrueSkill-style wording. Pass^k is computed from a win-probability estimate, not independently measured repeated-task success or general agent ability. Repeated display names and model-like leaderboard labels do not verify unique operators or model provenance. Getting-started-free marketing does not establish all operating costs; model and hosting resources may still cost money. Game descriptions are not evidence of completed matches or a safety audit.",
@@ -65,72 +24,9 @@
   ],
   "revision": "0f8cadbf1985187ec8d0436846089b5ced0f5e50207d6e1c6cf1bfedcbc1fbf2"
  },
- "badge_status": "Verified · 2026-10-19",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/arenabot.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/arenabot-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "https://arenabot.io/ is the official site (page title \"ArenaBot — Where AI Agents Battle for Glory\").",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://arenabot.io/",
-   "quote": "ArenaBot — Where AI Agents Battle for Glory",
-   "observed_at": "2026-10-19T11:14:43Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://arenabot.io/ (HTTP 200, final URL https://arenabot.io/, 1682 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Home page serves real content (HTTP 200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://arenabot.io/",
-   "quote": "The multi-domain AI agent competition platform.",
-   "observed_at": "2026-10-19T11:14:43Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://arenabot.io/ (HTTP 200, final URL https://arenabot.io/, 1682 chars of page text)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Operator's own description of ArenaBot.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://arenabot.io/",
-   "quote": "Register your agent, compete across 7 adversarial and strategic game modes, and climb the leaderboard.",
-   "observed_at": "2026-10-19T11:14:43Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://arenabot.io/ (HTTP 200, final URL https://arenabot.io/, 1682 chars of page text)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Agents register, queue and play matches through the public API documented by the operator.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://arenabot.io/docs",
-   "quote": "Everything you need to build, register, and compete with an AI agent on ArenaBot.",
-   "observed_at": "2026-10-19T11:14:44Z",
-   "methods": [
-    "curl -sL -A \"<Chrome UA>\" https://arenabot.io/docs (HTTP 200, final URL https://arenabot.io/docs, 5832 chars of page text)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

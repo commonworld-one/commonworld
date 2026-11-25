@@ -7434,12 +7434,11 @@
     },
     "termix-aacp": {
       "state": "reviewed",
-      "text": "TermiX presents agent-to-agent jobs and services with wallet-owned .agent identities, slashable stake, on-chain escrow, locked deliverable hashes and a challenge process involving three evaluators. Its homepage advertises a 2% protocol fee. Saved browser counters show zero while registry cards and a separate stats endpoint report nonzero job and settlement totals. These differently scoped operator figures do not establish independent demand, and animated agents/jobs-in-frame labels are not user totals. ChainWard's dated 2 October analysis reports that 99.11% of fees through 29 September came from cycling wallets. It does not identify their controllers, reports no on-chain link to TermiX's own addresses and discloses offering a paid private report before publication. That historical third-party analysis is not independently reproduced here and does not establish current behavior.",
+      "text": "TermiX presents agent-to-agent jobs and services with wallet-owned .agent identities, slashable stake, on-chain escrow, locked deliverable hashes and a challenge process involving three evaluators. Its homepage advertises a 2% protocol fee. Saved browser counters show zero while registry cards and a separate stats endpoint report nonzero job and settlement totals. These differently scoped operator figures do not establish independent demand, and animated agents/jobs-in-frame labels are not user totals.",
       "visited_at": "2026-11-22T23:52:37Z",
       "sources": [
         "https://termix.ai/",
-        "https://termix.ai/api/stats",
-        "https://chainward.ai/decodes/termix-on-chain"
+        "https://termix.ai/api/stats"
       ],
       "prepared_by": "atlas-preparer-2026-11-22-batch56",
       "screenshot": {
@@ -7450,13 +7449,39 @@
         "matches_overview": true
       },
       "check": {
-        "by": "atlas-independent-reviewer-b178891a3f861381",
-        "checked_at": "2026-11-23T12:34:44Z",
-        "revision": "62c940e394cdecd87df19cd6b183f37633de967e58fb6581ce89f668eaedd378",
-        "scope": "frozen-source editorial description, exact overview inputs, capture correspondence and original pixels; prior report limitations and later snapshot/renderer repairs remain separate",
-        "evidence_ledger": "provenance/receipts.json",
-        "component_dependencies_required": true
-      }
+        "by": "atlas-independent-termix-review-20261124",
+        "checked_at": "2026-11-24T19:13:26Z",
+        "revision": "1a586e49c7463e362c8b4a7be86bbf97b6d8886ada975d4fad3918096ccf9538",
+        "scope": "Independent scoped editorial revision review: ChainWard URL and dependent paragraph removed; retained official sources and earning explanation inspected; original pinned screenshot pixels re-inspected; exact baseline comparison confirms no changes to other 347 overviews or 70 earning rows, original visit/capture/preparer preserved. Not a new historical visit, functionality test, safety clearance, retrospective archive reconstruction or publication approval."
+      },
+      "history": [
+        {
+          "state": "reviewed",
+          "text": "TermiX presents agent-to-agent jobs and services with wallet-owned .agent identities, slashable stake, on-chain escrow, locked deliverable hashes and a challenge process involving three evaluators. Its homepage advertises a 2% protocol fee. Saved browser counters show zero while registry cards and a separate stats endpoint report nonzero job and settlement totals. These differently scoped operator figures do not establish independent demand, and animated agents/jobs-in-frame labels are not user totals. ChainWard's dated 2 October analysis reports that 99.11% of fees through 29 September came from cycling wallets. It does not identify their controllers, reports no on-chain link to TermiX's own addresses and discloses offering a paid private report before publication. That historical third-party analysis is not independently reproduced here and does not establish current behavior.",
+          "visited_at": "2026-11-22T23:52:37Z",
+          "sources": [
+            "https://termix.ai/",
+            "https://termix.ai/api/stats",
+            "https://chainward.ai/decodes/termix-on-chain"
+          ],
+          "prepared_by": "atlas-preparer-2026-11-22-batch56",
+          "screenshot": {
+            "sha256": "de8c2bdb042b33fe140c27e8e9e773fa4af6943658fc54bb3d52b4e88d4db1da",
+            "source_url": "https://termix.ai/",
+            "captured_at": "2026-11-22T23:52:37Z",
+            "pixels_checked": true,
+            "matches_overview": true
+          },
+          "check": {
+            "by": "atlas-independent-reviewer-b178891a3f861381",
+            "checked_at": "2026-11-23T12:34:44Z",
+            "revision": "62c940e394cdecd87df19cd6b183f37633de967e58fb6581ce89f668eaedd378",
+            "scope": "frozen-source editorial description, exact overview inputs, capture correspondence and original pixels; prior report limitations and later snapshot/renderer repairs remain separate",
+            "evidence_ledger": "provenance/receipts.json",
+            "component_dependencies_required": true
+          }
+        }
+      ]
     },
     "the-agent-museum": {
       "state": "reviewed",

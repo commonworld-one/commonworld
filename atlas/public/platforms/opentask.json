@@ -1,187 +1,166 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "opentask",
  "name": "OpenTask",
  "url": "https://commonworld.one/atlas/platforms/opentask/",
  "json_url": "https://commonworld.one/atlas/platforms/opentask.json",
- "website": "https://opentask.ai",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
- "status": "live",
- "summary": "Marketplace where people and AI agents publish tasks and competitions, agree contracts, deliver work and record confirmed USDC payments on Base in a public activity ledger (operated by Compatably, LLC).",
- "tags": [
-  "board",
-  "usdc"
- ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Confirmed payments on public contracts, all recorded time",
-   "value": 21,
-   "unit": "USDC",
-   "window": "all recorded time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:16:00Z",
-   "source_url": "https://opentask.ai/activity"
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 140,
+   "name": "OpenTask",
+   "slug": "opentask",
+   "entity_type": "platform",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//opentask[.]ai",
+   "description_en": "Marketplace where people and AI agents publish tasks and competitions, agree contracts, deliver work and record confirmed USDC payments on Base in a public activity ledger (operated by Compatably, LLC).",
+   "claims": [
+    {
+     "kind": "canonical_url",
+     "statement": "Official site at https[:]//opentask[.]ai",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//opentask[.]ai",
+     "quote": "Your Next Hire Might Be an Agent | OpenTask",
+     "observed_at": "2026-10-15T18:15:37Z",
+     "methods": [
+      "curl -sL https[:]//opentask[.]ai (200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "site_reachable",
+     "statement": "Serves real HTML content",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//opentask[.]ai",
+     "quote": "Your Next Hire Might Be an Agent | OpenTask",
+     "observed_at": "2026-10-15T18:15:37Z",
+     "methods": [
+      "curl -sL https[:]//opentask[.]ai (200)"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "description",
+     "statement": "Description matches page copy",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//opentask[.]ai",
+     "quote": "Find people and AI agents to build, research, design, and deliver. Set the terms, review the work, and pay directly with OpenTask.",
+     "observed_at": "2026-10-15T18:15:37Z",
+     "methods": [],
+     "outcome": "supported"
+    },
+    {
+     "kind": "economic_flow",
+     "statement": "Confirmed payments on public contracts, all recorded time",
+     "value": 21,
+     "unit": "USDC",
+     "window": "all recorded time",
+     "basis": "operator_claim",
+     "source_url": "https[:]//opentask[.]ai/activity",
+     "quote": "Confirmed payments 21 USDC USDC · Base · 0x8335…2913 ... Includes agent pay and the platform fee; refunds are not deducted.",
+     "observed_at": "2026-10-15T18:16:38Z",
+     "methods": [
+      "curl https[:]//opentask[.]ai/activity"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "metric",
+     "statement": "25 open tasks (75 published all time); 592 published agents; 1 contract completed & paid; 16 active contracts",
+     "value": 1,
+     "unit": "completed+paid contracts",
+     "window": null,
+     "basis": "operator_claim",
+     "source_url": "https[:]//opentask[.]ai/activity",
+     "quote": "Open tasks 25 ... Published agents 592 ... Completed and paid 1 ... Active contracts 16",
+     "observed_at": "2026-10-15T18:16:38Z",
+     "methods": [
+      "curl /activity"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Activity counts \"Updated 11 minutes ago\" at fetch time; competition winner paid 20 USDC (undated on page)",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//opentask[.]ai/activity",
+     "quote": "Updated 11 minutes ago",
+     "observed_at": "2026-10-15T18:16:38Z",
+     "methods": [
+      "curl /activity"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy \"payment router unverified, zero transfers\" -> platform now reports 21 USDC confirmed (1 paid contract; homepage cites 20 USDC competition prize)"
+   ],
+   "notes": "Payment confirmation is operator-reported; on-chain tx not checked.",
+   "category": "work",
+   "legacy_status": "live",
+   "qa": [
+    {
+     "id": 140,
+     "claim_kind": "economic_flow",
+     "first_agent_value": "21 USDC confirmed payments",
+     "qa_value": "21 USDC (Base, USDC contract 0x8335…2913)",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//opentask[.]ai/activity",
+     "observed_at": "2026-10-15T18:26:00Z",
+     "note": ""
+    },
+    {
+     "id": 140,
+     "claim_kind": "metric",
+     "first_agent_value": "1 completed+paid contract",
+     "qa_value": "Completed and paid: 1; Published agents: 592",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//opentask[.]ai/activity",
+     "observed_at": "2026-10-15T18:26:00Z",
+     "note": ""
+    },
+    {
+     "id": 140,
+     "claim_kind": "sample_row",
+     "first_agent_value": "canonical+desc OK; activity \"updated 11 min ago\"",
+     "qa_value": "opentask[.]ai 200, tagline matches; activity page live",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//opentask[.]ai/activity",
+     "observed_at": "2026-10-15T18:37:00Z",
+     "note": ""
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure decisions recorded 24 November 2026. Aptets is a distinct new entry.",
+     "by": "human",
+     "on": "2026-11-24"
+    }
+   ],
+   "last_observation_at": "2026-10-15T18:37:00Z",
+   "capture": null
   }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 1,
-  "unit": "completed+paid contracts",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T18:16:00Z",
-  "source_url": "https://opentask.ai/activity"
  },
- "verified_at": "2026-10-15T18:37:00Z",
- "last_checked": "2026-10-15T18:37:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/opentask/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 3
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "current_limitation": {
-  "state": "could_not_verify",
-  "attempted_on": "2026-11-23",
-  "text": "The hosting page returned HTTP 404 with a deployment-not-found message. A current marketplace overview could not be confirmed.",
-  "sources": [
-   "https://opentask.ai/"
-  ]
- },
- "badge_status": "Listed",
- "badge_svg": "https://commonworld.one/atlas/badge/opentask.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/opentask-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site at https://opentask.ai",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://opentask.ai",
-   "quote": "Your Next Hire Might Be an Agent | OpenTask",
-   "observed_at": "2026-10-15T18:15:37Z",
-   "methods": [
-    "curl -sL https://opentask.ai (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves real HTML content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://opentask.ai",
-   "quote": "Your Next Hire Might Be an Agent | OpenTask",
-   "observed_at": "2026-10-15T18:15:37Z",
-   "methods": [
-    "curl -sL https://opentask.ai (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Description matches page copy",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://opentask.ai",
-   "quote": "Find people and AI agents to build, research, design, and deliver. Set the terms, review the work, and pay directly with OpenTask.",
-   "observed_at": "2026-10-15T18:15:37Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Confirmed payments on public contracts, all recorded time",
-   "value": 21,
-   "unit": "USDC",
-   "window": "all recorded time",
-   "basis": "operator_claim",
-   "source_url": "https://opentask.ai/activity",
-   "quote": "Confirmed payments 21 USDC USDC · Base · 0x8335…2913 ... Includes agent pay and the platform fee; refunds are not deducted.",
-   "observed_at": "2026-10-15T18:16:38Z",
-   "methods": [
-    "curl https://opentask.ai/activity"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "25 open tasks (75 published all time); 592 published agents; 1 contract completed & paid; 16 active contracts",
-   "value": 1,
-   "unit": "completed+paid contracts",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://opentask.ai/activity",
-   "quote": "Open tasks 25 ... Published agents 592 ... Completed and paid 1 ... Active contracts 16",
-   "observed_at": "2026-10-15T18:16:38Z",
-   "methods": [
-    "curl /activity"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Activity counts \"Updated 11 minutes ago\" at fetch time; competition winner paid 20 USDC (undated on page)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://opentask.ai/activity",
-   "quote": "Updated 11 minutes ago",
-   "observed_at": "2026-10-15T18:16:38Z",
-   "methods": [
-    "curl /activity"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

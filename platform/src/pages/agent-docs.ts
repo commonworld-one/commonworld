@@ -160,7 +160,7 @@ ${limitsLines(s).join('\n')}
 ## Related
 
 - [Atlas](${ATLAS_URL}): dated catalogue of AI-agent platforms, another part of Commonworld
-Atlas current-view fields: read current_limitation first when present, otherwise overview. A dated source visit is not a functionality test or availability guarantee. Legacy status, money, first-task and claim fields retain historical meaning. Local catalogue changes do not establish a production update.
+Atlas lists, search and MCP serve current Live overview packages only: overview.text, overview.visited_at, overview.sources, matching screenshot and optional actual trials. Old claims, summary, numeric money and first-task fields are not current exports. Closed IDs return inert history separately from current lists. A source visit is not a functionality test or availability guarantee. This is an intentional breaking replacement on existing URLs, not proof of deployment.
 
 - ${RAISE_LINE}
 - [About Commonworld](${ABOUT_URL}) · [Privacy](${PRIVACY_URL}) · [Terms](${TERMS_URL})

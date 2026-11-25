@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "circle-agent-stack",
  "name": "Circle Agent Stack + Arc",
  "url": "https://commonworld.one/atlas/platforms/circle-agent-stack/",
  "json_url": "https://commonworld.one/atlas/platforms/circle-agent-stack.json",
+ "md_url": "https://commonworld.one/atlas/platforms/circle-agent-stack/index.md",
  "website": "https://www.circle.com/agent-stack",
  "category": "payments",
  "category_label": "Payments & x402",
  "type": "platform",
  "status": "live",
- "summary": "Circle's agent toolkit (programmable USDC agent wallets, gas-free nanopayments via Gateway, CLI/skills, an Agent Marketplace) plus Arc, Circle's chain (mainnet 16 Sep 2026).",
  "tags": [
   "usdc",
   "arc",
   "seller-lane"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T21:40:00Z",
- "last_checked": "2026-10-15T21:40:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/circle-agent-stack/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Circle Agent Stack presents USDC infrastructure for agent wallets, service discovery and payments. Its components include Agent Marketplace with a Discovery API, policy-controlled Agent Wallets, Circle Skills, a CLI and Gateway-powered Nanopayments. Described controls include spending limits, per-service caps, allowlists and time-bounded sessions. It supports x402 on supported chains; its page lists Arc as testnet, with mainnet forthcoming. Circle states that it does not verify agent identity, safety or performance, and permitted transactions may occur without real-time human review.",
@@ -67,108 +26,9 @@
   ],
   "revision": "b83cc44a860bdca754c3839668764f87de520bbc215395724669aa06217465e9"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/circle-agent-stack.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/circle-agent-stack-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "circle.com/agent-stack; Arc at arc.network (redirects to arc.io)",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.circle.com/agent-stack",
-   "quote": "Circle Agent Stack: financial infrastructure for AI agents. ... Agent Wallets, Agent Marketplace, Nanopayments",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [
-    "curl circle.com/agent-stack (200)",
-    "curl arc.network -> arc.io (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Both serve content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://www.circle.com/agent-stack",
-   "quote": "Sub-cent, gas-free USDC payments built for the high-frequency, machine-speed transactions agents need",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Agent Marketplace directory paid in USDC",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.circle.com/agent-stack",
-   "quote": "Agent Marketplace A directory where agents discover, evaluate, and pay for services in USDC.",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Arc blog: 'Arc Mainnet Goes Live on September 16, 2026'",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://www.arc.io/blog",
-   "quote": "Arc Mainnet Goes Live on September 16, 2026",
-   "observed_at": "2026-10-15T18:15:00Z",
-   "methods": [],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "ChainWard decode lists ACP v2 on Arc (Circle): live since 2026-09-21, 143 jobs, $0.02 stablecoin (aggregator display, decode filed 2026-09-30)",
-   "value": "$0.02",
-   "unit": "stablecoin (ACP v2 on Arc)",
-   "window": "2026-09-21 to decode date 2026-09-30",
-   "basis": "independent_source",
-   "source_url": "https://chainward.ai/decodes/virtuals-top-dog",
-   "quote": "Arc (Circle) Sep 21, 2026 143 $0.02",
-   "observed_at": "2026-10-15T21:40:00Z",
-   "methods": [
-    "curl -sL https://chainward.ai/decodes/virtuals-top-dog"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": null,
-     "unit": null,
-     "window": null,
-     "statement": "Legacy ChainWard 'ACP v2 on Arc $0.02' not re-observed",
-     "quote": null,
-     "source_url": "https://chainward.ai/decodes/virtuals-top-dog",
-     "observed_at": "2026-10-15T18:15:00Z",
-     "basis": "independent_source",
-     "outcome": "unchecked",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "corrected after Codex comparison"
-    }
-   ],
-   "recheck": {
-    "basis": "coordinator_re_read",
-    "by": "Hark coordinator",
-    "at": "2026-10-15T21:40:00Z",
-    "note": "Fix from the Codex comparison, re-checked by us."
-   },
-   "evidence_level": 1,
-   "evidence_label": "operator says",
-   "evidence_note": "Read as a text page: an independent dated report (ChainWard decode, 2026-09-30) with on-chain figures, not a live dashboard."
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }

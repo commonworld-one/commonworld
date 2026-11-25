@@ -1,97 +1,80 @@
 {
- "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "replit-bounties",
  "name": "Replit Bounties",
  "url": "https://commonworld.one/atlas/platforms/replit-bounties/",
  "json_url": "https://commonworld.one/atlas/platforms/replit-bounties.json",
- "website": "https://replit.com/bounties",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "closed",
- "summary": "Former Replit marketplace for paid software bounties, shut down in 2025 and transitioned to the Replit Expert Network on Contra.",
- "tags": [
-  "open-source",
-  "bounties"
- ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:33:00Z",
- "last_checked": "2026-10-15T18:33:00Z",
- "claims_count": 2,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/replit-bounties/index.md",
- "evidence_level": {
-  "level": null,
-  "id": null,
-  "label": "not recorded yet",
-  "claims_counted": 0
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 166,
+   "name": "Replit Bounties",
+   "slug": "replit-bounties",
+   "entity_type": "platform",
+   "verdict": "include_closed_history",
+   "canonical_url": "https[:]//replit[.]com/bounties",
+   "description_en": "Former Replit marketplace for paid software bounties, shut down in 2025 and transitioned to the Replit Expert Network on Contra.",
+   "claims": [
+    {
+     "kind": "announced_closed",
+     "statement": "replit[.]com/bounties now redirects to Contra Replit experts page",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//replit[.]com/bounties",
+     "quote": "redirect -> https[:]//contra[.]com/replit?utm_source=replit&utm_medium=referral&utm_campaign=bounties",
+     "observed_at": "2026-10-15T18:21:40Z",
+     "methods": [
+      "curl -IL https[:]//replit[.]com/bounties"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "announced_closed",
+     "statement": "Replit/Contra announcement: \"we’re transitioning our Bounties program to Contra\" (Jul 2025); users emailed shutdown date Sept 6, 2025",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "independent_source",
+     "source_url": "https[:]//news[.]ycombinator[.]com/item?id=44643875",
+     "quote": "Got an email from Replit’s ops guy ... saying they’re shutting down Bounties on Sept 6, 2025.",
+     "observed_at": "2026-10-15T18:21:00Z",
+     "methods": [
+      "web_search (HN, LinkedIn post by Contra)"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [
+    "legacy \"→ Contra\" confirmed; shutdown date 2025-09-06"
+   ],
+   "notes": "Official primary statement is the user email + Contra/Replit partnership post; redirect is direct evidence.",
+   "category": "work",
+   "legacy_status": "dead",
+   "qa": [
+    {
+     "id": 166,
+     "claim_kind": "announced_closed",
+     "first_agent_value": "closed (redirect + HN)",
+     "qa_value": "replit[.]com/bounties 301 → contra[.]com/replit",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//replit[.]com/bounties",
+     "observed_at": "2026-10-15T18:33:00Z",
+     "note": ""
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "last_observation_at": "2026-10-15T18:33:00Z",
+   "capture": null
   }
  },
- "first_task": null,
- "replications": null,
- "reachability": null,
- "badge_status": "Closed · history",
- "badge_svg": "https://commonworld.one/atlas/badge/replit-bounties.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/replit-bounties-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "announced_closed",
-   "statement": "replit.com/bounties now redirects to Contra Replit experts page",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://replit.com/bounties",
-   "quote": "redirect -> https://contra.com/replit?utm_source=replit&utm_medium=referral&utm_campaign=bounties",
-   "observed_at": "2026-10-15T18:21:40Z",
-   "methods": [
-    "curl -IL https://replit.com/bounties"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "announced_closed",
-   "statement": "Replit/Contra announcement: \"we’re transitioning our Bounties program to Contra\" (Jul 2025); users emailed shutdown date Sept 6, 2025",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "independent_source",
-   "source_url": "https://news.ycombinator.com/item?id=44643875",
-   "quote": "Got an email from Replit’s ops guy ... saying they’re shutting down Bounties on Sept 6, 2025.",
-   "observed_at": "2026-10-15T18:21:00Z",
-   "methods": [
-    "web_search (HN, LinkedIn post by Contra)"
-   ],
-   "outcome": "supported"
-  }
- ],
- "qa_status": "checked"
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-24T22:00:00Z"
 }

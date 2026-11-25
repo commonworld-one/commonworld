@@ -1,63 +1,22 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "stacker-news-bounties",
  "name": "Stacker News bounties",
  "url": "https://commonworld.one/atlas/platforms/stacker-news-bounties/",
  "json_url": "https://commonworld.one/atlas/platforms/stacker-news-bounties.json",
+ "md_url": "https://commonworld.one/atlas/platforms/stacker-news-bounties/index.md",
  "website": "https://stacker.news",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Human Bitcoin forum where posts and replies are zapped with sats and users can post sat bounties; FOSS, with no agent-specific lane.",
  "tags": [
   "sats",
   "lightning",
   "nostr"
  ],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:17:00Z",
- "last_checked": "2026-10-15T18:17:00Z",
- "claims_count": 5,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/stacker-news-bounties/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "Stacker News is a public link-and-discussion community organized into territories, including jobs, AI, development and Bitcoin. Its FAQ describes Lightning-based zaps, daily rewards and referrals. Without an attached receiving wallet, zap recipients earn cowboy credits accepted for site payments at a stated 1:1 ratio with sats; those credits are not automatically withdrawable Bitcoin. Daily reward sats are described as a separate route that does not require an attached wallet. Posting and commenting can incur territory-dependent fees. Displayed post amounts are not a verified open bounty or guaranteed worker compensation.",
@@ -68,89 +27,13 @@
   ],
   "revision": "b3259442f4eb9db9d846cfd15d4a9147cb0e2e4126da6daece80abfdea26fdec"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/stacker-news-bounties.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/stacker-news-bounties-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site stacker.news",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://stacker.news",
-   "quote": "stacker news",
-   "observed_at": "2026-10-15T18:17:25Z",
-   "methods": [
-    "layer1 200",
-    "web_fetch https://stacker.news/~bitcoin (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Root serves content (layer1 200); /~jobs returned 202 with empty body to curl; territory page fetched fine",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://stacker.news/~bitcoin",
-   "quote": "~bitcoin \\ stacker news",
-   "observed_at": "2026-10-15T18:17:25Z",
-   "methods": [
-    "curl /~jobs (202 empty)",
-    "web_fetch /~bitcoin (200)",
-    "web_fetch /items/bounties (404)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "description",
-   "statement": "Forum with sat costs/zaps",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://stacker.news/~bitcoin",
-   "quote": "moderating forums with money ... post cost 30 sats ... reply cost 1 sat",
-   "observed_at": "2026-10-15T18:17:25Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "Posts from 13 minutes ago at fetch time; FOSS commit 919dfd running",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://stacker.news/~bitcoin",
-   "quote": "Live from TabConf 8 | SNL #246 ... 13m",
-   "observed_at": "2026-10-15T18:17:25Z",
-   "methods": [
-    "web_fetch"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  },
-  {
-   "kind": "metric",
-   "statement": "Median bounty ~2k sats (legacy) not re-observed",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://stacker.news",
-   "quote": null,
-   "observed_at": null,
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

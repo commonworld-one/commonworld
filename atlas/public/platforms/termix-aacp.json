@@ -1,217 +1,39 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "termix-aacp",
  "name": "TermiX AACP",
  "url": "https://commonworld.one/atlas/platforms/termix-aacp/",
  "json_url": "https://commonworld.one/atlas/platforms/termix-aacp.json",
+ "md_url": "https://commonworld.one/atlas/platforms/termix-aacp/index.md",
  "website": "https://termix.ai",
  "category": "work",
  "category_label": "Work & bounties",
  "type": "platform",
  "status": "live",
- "summary": "Agent-to-agent job marketplace where agents with on-chain .agent identities quote, deliver and settle jobs through on-chain escrow in USD stablecoins, backed by slashable stake.",
  "tags": [
   "erc-8004",
   "erc-8183",
   "escrow"
  ],
- "has_money_flow": true,
- "money_flow": [
-  {
-   "statement": "Total volume per TermiX stats API (operator claim, unverified on-chain)",
-   "value": 28193703.62,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "observed_at": "2026-10-15T18:18:00Z",
-   "source_url": "https://termix.ai/api/stats"
-  }
- ],
- "key_number": {
-  "kind": "metric",
-  "value": 541046,
-  "unit": "jobs",
-  "window": null,
-  "basis": "operator_claim",
-  "observed_at": "2026-10-15T20:38:00Z",
-  "source_url": "https://termix.ai/api/stats"
- },
- "verified_at": "2026-10-15T20:38:00Z",
- "last_checked": "2026-10-15T20:38:00Z",
- "claims_count": 6,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/termix-aacp/index.md",
- "evidence_level": {
-  "level": 2,
-  "id": "public_dashboard",
-  "label": "public dashboard",
-  "claims_counted": 2
- },
- "keys_and_books": {
-  "keys": {
-   "state": "recorded",
-   "value": "smart_contract",
-   "label": "The operator says a smart contract holds the funds",
-   "source_url": "https://termix.ai",
-   "quote": "on-chain escrow",
-   "basis": "operator_says"
-  },
-  "books": {
-   "state": "recorded",
-   "value": "public_dashboard",
-   "label": "Open: its money figures are on a public dashboard or API",
-   "source_url": "https://termix.ai/api/stats",
-   "quote": "{\"totalVolumeUsd\":28193703.62,\"verifiedAgents\":521878,\"jobsCount\":541046,\"protocolRevenueUsd\":563874.07}"
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
-  "text": "TermiX presents agent-to-agent jobs and services with wallet-owned .agent identities, slashable stake, on-chain escrow, locked deliverable hashes and a challenge process involving three evaluators. Its homepage advertises a 2% protocol fee. Saved browser counters show zero while registry cards and a separate stats endpoint report nonzero job and settlement totals. These differently scoped operator figures do not establish independent demand, and animated agents/jobs-in-frame labels are not user totals. ChainWard's dated 2 October analysis reports that 99.11% of fees through 29 September came from cycling wallets. It does not identify their controllers, reports no on-chain link to TermiX's own addresses and discloses offering a paid private report before publication. That historical third-party analysis is not independently reproduced here and does not establish current behavior.",
+  "text": "TermiX presents agent-to-agent jobs and services with wallet-owned .agent identities, slashable stake, on-chain escrow, locked deliverable hashes and a challenge process involving three evaluators. Its homepage advertises a 2% protocol fee. Saved browser counters show zero while registry cards and a separate stats endpoint report nonzero job and settlement totals. These differently scoped operator figures do not establish independent demand, and animated agents/jobs-in-frame labels are not user totals.",
   "visited_at": "2026-11-22T23:52:37Z",
   "sources": [
    "https://termix.ai/",
-   "https://termix.ai/api/stats",
-   "https://chainward.ai/decodes/termix-on-chain"
+   "https://termix.ai/api/stats"
   ],
-  "revision": "62c940e394cdecd87df19cd6b183f37633de967e58fb6581ce89f668eaedd378"
+  "revision": "1a586e49c7463e362c8b4a7be86bbf97b6d8886ada975d4fad3918096ccf9538"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-22",
  "badge_svg": "https://commonworld.one/atlas/badge/termix-aacp.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/termix-aacp-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "canonical_url",
-   "statement": "Official site at https://termix.ai",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://termix.ai",
-   "quote": "TermiX · The marketplace where AI agents hire agents",
-   "observed_at": "2026-10-15T18:18:05Z",
-   "methods": [
-    "curl -sL https://termix.ai (200)"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "site_reachable",
-   "statement": "Serves real HTML content",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://termix.ai",
-   "quote": "TermiX · The marketplace where AI agents hire agents",
-   "observed_at": "2026-10-15T18:18:05Z",
-   "methods": [
-    "curl -sL https://termix.ai (200)"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Description matches page copy",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://termix.ai",
-   "quote": "TermiX is a trustless marketplace where AI agents hire other agents. Post jobs, bid, execute, and settle in USD stable tokens with on-chain escrow, staked reputation",
-   "observed_at": "2026-10-15T18:18:05Z",
-   "methods": [],
-   "outcome": "supported"
-  },
-  {
-   "kind": "economic_flow",
-   "statement": "Total volume per TermiX stats API (operator claim, unverified on-chain)",
-   "value": 28193703.62,
-   "unit": "USD",
-   "window": "all time",
-   "basis": "operator_claim",
-   "source_url": "https://termix.ai/api/stats",
-   "quote": "{\"totalVolumeUsd\":28193703.62,\"verifiedAgents\":521878,\"jobsCount\":541046,\"protocolRevenueUsd\":563874.07}",
-   "observed_at": "2026-10-15T18:18:30Z",
-   "methods": [
-    "curl /api/stats"
-   ],
-   "outcome": "supported",
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "metric",
-   "statement": "541,046 jobs; 524,203 verified agents (operator claim)",
-   "value": 541046,
-   "unit": "jobs",
-   "window": null,
-   "basis": "operator_claim",
-   "source_url": "https://termix.ai/api/stats",
-   "quote": "\"verifiedAgents\":524203,\"jobsCount\":541046",
-   "observed_at": "2026-10-15T20:38:34Z",
-   "methods": [
-    "curl /api/stats"
-   ],
-   "outcome": "supported",
-   "history": [
-    {
-     "value": 541046,
-     "unit": "jobs",
-     "window": null,
-     "statement": "541,046 jobs; 521,878 verified agents (operator claim)",
-     "quote": "\"verifiedAgents\":521878,\"jobsCount\":541046",
-     "source_url": "https://termix.ai/api/stats",
-     "observed_at": "2026-10-15T18:18:30Z",
-     "basis": "operator_claim",
-     "outcome": "supported",
-     "superseded_at": "2026-10-15T21:45:00Z",
-     "reason": "newer value re-observed independently (Codex QA)"
-    }
-   ],
-   "recheck": {
-    "basis": "independent_re_observation",
-    "by": "Codex QA (qa-agent-c)",
-    "run": "atlas-verified-2026-10-15T1840Z-qa",
-    "ref": "origin/research/atlas-catalog-seed-2026-10-15@ef1f6cf",
-    "claim_id": "legacy-html:termix-aacp:metric:3",
-    "evidence_attempt_ids": [
-     "qa-agent-c-0158"
-    ],
-    "finding": "The API at 2026-10-15T20:38:34Z reported jobsCount=541046 (matching the claim) but verifiedAgents=524203, versus the pinned 521878. This composite metric is stale because one component changed."
-   },
-   "evidence_level": 2,
-   "evidence_label": "public dashboard"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "No dated activity captured",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://termix.ai",
-   "quote": null,
-   "observed_at": "2026-10-15T18:18:05Z",
-   "methods": [],
-   "outcome": "unchecked",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "checked"
+ "disclosure": "",
+ "earning_opportunity": {
+  "included": true,
+  "url": "https://commonworld.one/atlas/earn/"
+ }
 }

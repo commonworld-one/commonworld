@@ -1,59 +1,18 @@
 {
  "licence": "CC BY 4.0",
- "source": "https://github.com/commonworld-one/commonworld",
- "generated_at": "2026-11-22T09:05:00Z",
+ "generated_at": "2026-11-24T22:00:00Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "nekuda",
  "name": "Nekuda",
  "url": "https://commonworld.one/atlas/platforms/nekuda/",
  "json_url": "https://commonworld.one/atlas/platforms/nekuda.json",
+ "md_url": "https://commonworld.one/atlas/platforms/nekuda/index.md",
  "website": "https://nekuda.ai/",
  "category": "projects",
  "category_label": "Projects (repos & frameworks)",
  "type": "project",
  "status": "live",
- "summary": "Nekuda now builds WebMCP tooling (AgentLane, WebMCP Kit plugin, SDK, Chrome extension, webmcp.com directory) to make websites actionable for agents; its homepage no longer presents an agent-payments product.",
  "tags": [],
- "has_money_flow": false,
- "money_flow": [],
- "key_number": null,
- "verified_at": "2026-10-15T18:12:00Z",
- "last_checked": "2026-10-15T18:12:00Z",
- "claims_count": 3,
- "disclosure": null,
- "md_url": "https://commonworld.one/atlas/platforms/nekuda/index.md",
- "evidence_level": {
-  "level": 1,
-  "id": "operator_says",
-  "label": "operator says",
-  "claims_counted": 1
- },
- "keys_and_books": {
-  "keys": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "books": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  },
-  "people": {
-   "state": "not_recorded",
-   "value": null,
-   "label": "not recorded yet",
-   "source_url": null,
-   "quote": null
-  }
- },
- "first_task": null,
- "replications": null,
- "reachability": null,
  "overview": {
   "state": "reviewed",
   "text": "nekuda presents a platform for website owners to manage WebMCP tools, inspect agent sessions, evaluate journeys and build missing capabilities. Dashboard, MCP, CLI and automated reporting are advertised features; its purchase-complete animation is a product demonstration rather than an independently measured customer outcome. The associated WebMCP.com directory exposes registered tool schemas through public read-only JSON and separates answer tools, page-changing actions and sensitive money or commitment actions. Directory counts do not guarantee complete journeys, and WebMCP is described as a proposed standard rather than universal browser support. The discovery-bot policy says it checks permitted public resources and runtime registrations without invoking tools, signing in, submitting forms or buying, subject to robots directives and request budgets. These are published operating claims, not an independent crawler audit; signed bot identity is not site authorization.",
@@ -65,59 +24,9 @@
   ],
   "revision": "3234492be385bfdd57c986502f72e4f03d503c6c945e01db2de1f9fc5be6b935"
  },
- "badge_status": "Verified · 2026-10-15",
+ "badge_status": "Verified · 2026-11-23",
  "badge_svg": "https://commonworld.one/atlas/badge/nekuda.svg",
  "badge_svg_dark": "https://commonworld.one/atlas/badge/nekuda-dark.svg",
  "badge_page": "https://commonworld.one/atlas/badge/",
- "claims": [
-  {
-   "kind": "site_reachable",
-   "statement": "Homepage serves content (200).",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://nekuda.ai/",
-   "quote": "nekuda | Make Your Website Actionable For Agents",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported",
-   "confirmed_at": "2026-11-22T09:05:55Z"
-  },
-  {
-   "kind": "description",
-   "statement": "Current product is WebMCP tooling, not payments.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://nekuda.ai/",
-   "quote": "Add WebMCP tools to your website — actions for agents, visibility for you.",
-   "observed_at": "2026-10-15T18:08:00Z",
-   "methods": [
-    "curl -L"
-   ],
-   "outcome": "supported"
-  },
-  {
-   "kind": "recent_activity",
-   "statement": "GitHub nekuda-ai/webmcp-kit last push 2026-09-29.",
-   "value": null,
-   "unit": null,
-   "window": null,
-   "basis": "direct_observation",
-   "source_url": "https://github.com/nekuda-ai/webmcp-kit",
-   "quote": "pushed_at 2026-09-29T19:39Z, 45 stars",
-   "observed_at": "2026-10-15T18:12:00Z",
-   "methods": [
-    "GitHub API /repos/nekuda-ai/webmcp-kit"
-   ],
-   "outcome": "supported",
-   "evidence_level": 1,
-   "evidence_label": "operator says"
-  }
- ],
- "qa_status": "not_sampled"
+ "disclosure": ""
 }
