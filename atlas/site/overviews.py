@@ -159,6 +159,12 @@ def attach(site, doc, allow_drafts=False, expected=None):
         hosts = (site.safety or {}).get('hosts', {})
         for slug, r in doc['cards'].items():
             c = next(c for c in site.cards if c['slug'] == slug)
+            # Closed records retain validated history, never a current outbound
+            # transition. Their hosts are deliberately absent from safety queries.
+            # Do not extend this exemption to live/unknown statuses or skip the
+            # structure, receipt, capture and selection checks above.
+            if c.get('status') == 'closed':
+                continue
             urls = list(r['sources']) + [c.get('canonical_url')] + [t.get('proof_url') for t in r.get('trials', [])]
             for u in filter(None, urls):
                 host = urlsplit(u).hostname.lower().removeprefix('www.').rstrip('.')

@@ -17,6 +17,7 @@ class CatalogueLifecycle(unittest.TestCase):
     def copy(self,root):
         for n in ['site','data','catalogue']:
             shutil.copytree(ROOT/'atlas'/n,root/'atlas'/n,ignore=shutil.ignore_patterns('dist','.og-cache','.screens-cache','__pycache__'))
+        shutil.copytree(ROOT/'atlas/tools',root/'atlas/tools',ignore=shutil.ignore_patterns('__pycache__'))
         with (root/'atlas/data/events.jsonl').open('a') as fh:
             fh.write('\n'+json.dumps({'date':'2026-11-24','slug':'kradleverse','type':'closed','reason':'Lifecycle fixture','source':'https://kradleverse.com/fixture'})+'\n')
     def run_build(self,root,args):
@@ -45,6 +46,13 @@ class CatalogueLifecycle(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             root=Path(td);self.copy(root);cat=root/'atlas/catalogue'
             d=json.loads((cat/'closures.json').read_text());d['ids']+=['kradleverse','aptets'];(cat/'closures.json').write_text(json.dumps(d))
+            # Rebuild the safety report through the real CLI from recorded engine
+            # answers. This is offline replay, not a new live safety claim.
+            safety=root/'atlas/data/link-safety.json';previous=json.loads(safety.read_text())
+            engine=root/'engine-replay.json';engine.write_text(json.dumps({'results':{h:{'sources':r['sources']} for h,r in (previous['hosts']|previous.get('removed_hosts',{})).items()},'sources':previous['sources'],'run_at':previous['run_at']}))
+            regenerated=subprocess.run([sys.executable,str(root/'atlas/tools/link_safety.py'),'--catalogue-dir',str(cat),'--curation-dir',str(root/'atlas/data'),'--removed',str(root/'atlas/data/removed.json'),'--hold',str(root/'atlas/data/trust-hold.json'),'--out',str(safety),'--report-in',str(engine)],capture_output=True,text=True,timeout=30)
+            self.assertEqual(regenerated.returncode,0,regenerated.stdout+regenerated.stderr)
+            self.assertNotIn('kradle.ai',json.loads(safety.read_text())['hosts'])
             out=root/'out';env=dict(os.environ,CW_SCREENS_DIR=str(captures));env.pop('CW_SCREENS',None)
             r=subprocess.run([sys.executable,str(root/'atlas/site/build.py'),'--no-mirror','--out',str(out)],env=env,capture_output=True,text=True,timeout=90)
             self.assertEqual(r.returncode,0,r.stderr[-2000:]);self.assert_closed_projections(out,['kradleverse','aptets'])
