@@ -144,8 +144,8 @@ def main():
     extras = None
     owner = Path(a.file)
     if overlay:
-        from current_catalogue import apply_closures, add_new, new_overviews, additional_shots
-        snapshot = add_new(apply_closures(snapshot, catalogue), catalogue)
+        from current_catalogue import project_snapshot, new_overviews, additional_shots
+        snapshot = project_snapshot(snapshot, catalogue)
         extras = read(catalogue / 'additional-overviews.json') if (catalogue / 'additional-overviews.json').exists() else None
         revisions = read(catalogue / 'current-revisions.json') if (catalogue / 'current-revisions.json').exists() else None
         main_ids = set(doc['cards'])

@@ -102,8 +102,8 @@ def catalogue_hosts(catalogue, snap, files):
     directory = Path(catalogue)
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'site'))
     from catalogue_safety import current_links
-    from current_catalogue import apply_closures, add_new, new_overviews
-    snap = add_new(apply_closures(snap, directory), directory)
+    from current_catalogue import project_snapshot, new_overviews
+    snap = project_snapshot(snap, directory)
     out = {}
     closed = {c['slug'] for c in snap['platforms'] if c.get('status') == 'closed'}
     for c in snap['platforms']:
@@ -231,8 +231,8 @@ def apply_removals(report, snap_path, removed_path, tags_path, hold, today, cura
     projected = snap
     if preserve_inputs:
         sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'site'))
-        from current_catalogue import apply_closures, add_new
-        projected = add_new(apply_closures(snap, Path(snap_path).parent), Path(snap_path).parent)
+        from current_catalogue import project_snapshot
+        projected = project_snapshot(snap, Path(snap_path).parent)
     closed = {c['slug'] for c in projected.get('platforms', []) if c.get('status') == 'closed'}
     actions = []
     for h in report['flagged']:

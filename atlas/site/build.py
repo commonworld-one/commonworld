@@ -3883,10 +3883,8 @@ def main():
     import catalogue_safety
     gone = {r['slug'] for r in removed}
     if a.overviews:
-        from current_catalogue import apply_closures, add_new
-        if catalogue_inputs:
-            data = add_new(data, catalogue_dir)
-        data = apply_closures(data, catalogue_dir)
+        from current_catalogue import project_snapshot
+        data = project_snapshot(data, catalogue_dir, include_additions=catalogue_inputs)
     if any(c.get('slug') in gone for c in data['platforms']):
         print(f"note: dropping safety-removed entries: {sorted(c['slug'] for c in data['platforms'] if c.get('slug') in gone)}", file=sys.stderr)
         data['platforms'] = [c for c in data['platforms'] if c.get('slug') not in gone]

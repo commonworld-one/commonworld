@@ -349,9 +349,9 @@ def growth_guard(locs, update=False):
     if removed:
         fails.append(f'{len(removed)} published URL(s) disappeared from the sitemap (pages are never removed; add a 301 in atlas/data/redirects.json if moved): {removed[:10]}')
     cur = {c['slug'] for c in json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms']}
-    from current_catalogue import apply_closures
+    from current_catalogue import project_snapshot
     catalogue = os.path.join(HERE, '..', 'catalogue')
-    source = apply_closures(json.load(open(os.path.join(catalogue, 'snapshot.json'), encoding='utf-8')), catalogue)
+    source = project_snapshot(json.load(open(os.path.join(catalogue, 'snapshot.json'), encoding='utf-8')), catalogue)
     expected_closed = {c['slug'] for c in source['platforms'] if c.get('status') == 'closed'}
     archived = _preserved_archive_slugs(DIST, locs, expected_closed)
     gone = sorted(s for s in _git_snapshot_slugs() - cur - archived if f'/atlas/platforms/{s}/' not in red and f'/atlas/platforms/{s}/' not in stubs)

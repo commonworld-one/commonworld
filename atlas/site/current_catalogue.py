@@ -28,6 +28,18 @@ def add_new(data, directory):
     data['platforms'].extend(rows)
     return data
 
+def project_snapshot(data, directory, *, include_additions=True):
+    """Resolve membership before status, without changing retained inputs.
+
+    A closure can name a card introduced by additions. Every full-catalogue
+    consumer must use this order; isolated batches can exclude additions while
+    still honoring closure decisions for their supplied IDs.
+    """
+    if include_additions:
+        data = add_new(data, directory)
+    return apply_closures(data, directory)
+
+
 def new_overviews(doc, directory):
     path=Path(directory)/'additional-overviews.json'
     if not path.exists(): return doc
