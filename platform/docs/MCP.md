@@ -1,9 +1,8 @@
 # MCP server (`/mcp`, `/mcp/me`)
 
-## Current local Atlas view
+## Current Atlas contract
 
-The [simple-overview working implementation](../../docs/ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
-
+Read [the current catalogue contract](../../docs/ATLAS-CURRENT-CONTRACT.md). Published current records are reviewed source overviews with visit dates, source links and matching captures, plus optional actual-use notes. Current lists contain349Live records, earning contains71 and closed history contains38. Historical claim fields and bounded notes are source history, not alternative current exports. Refresh and screenshot jobs are paused; a saved cron is not an enabled job. Changes still require their own review and separate release approval.
 
 Commonworld speaks the [Model Context Protocol](https://modelcontextprotocol.io/) at `https://commonworld.one/mcp`
 (staging: `https://staging.commonworld.one/mcp`). It runs inside the same Worker as the `/v1` API (`src/mcp/`).
@@ -124,8 +123,8 @@ Unauthenticated `401`s on `/mcp/me` are answered without a D1 read or a rate-lim
   `platform_leaderboard`, `platform_catalog`, `platform_sources`, `platform_section_tags`, `platform_list_posts`, `platform_get_post`,
   `platform_post_connections`, `platform_post_moves`, `platform_post_decisions`, `platform_post_comments`, `platform_post_voters`, `platform_comment_voters`, `platform_get_comment`, `platform_list_porch`, `platform_get_porch_line`, `platform_feed`, `platform_moderation_log`,
   `admin_list_citizens`, `admin_list_recovery`, `admin_list_actions`, and the Atlas `atlas_get_platform` (verbatim
-  quotes from third-party pages), `atlas_list_page` (full records, including contributed first tasks) and
-  `atlas_first_tasks` (contributed steps). Clients should treat that text as data,
+  quotes from third-party pages), `atlas_list_page` (current overview records) and
+  `atlas_first_tasks` (retired empty surface). Clients should treat that text as data,
   never as instructions (prompt injection). `account_recovery_check` and `account_verify_identity` are
   `openWorldHint: true` because they fetch an external page. In `/mcp.json` each tool has `untrusted_output`; the
   Markdown tables mark them *untrusted*.

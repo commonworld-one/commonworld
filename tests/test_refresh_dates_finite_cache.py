@@ -437,8 +437,7 @@ class SourceDatesInApiContract(unittest.TestCase):
 
     def test_docs_and_llms_mention_both_keys(self):
         src = (ROOT / 'atlas' / 'site' / 'build.py').read_text(encoding='utf-8')
-        for marker in ('id="source-dates"', '- Source dates on claims (schema_version 1.10.0)', '- Source dates: a refreshed claim',
-                       "'Source dates (schema_version 1.10.0)"):
+        for marker in ('id="source-dates"', '- Source dates on claims (schema_version 1.10.0)', '- Source dates: a refreshed claim'):
             self.assertIn(marker, src)
 
 

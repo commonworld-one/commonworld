@@ -21,8 +21,8 @@ body:
     id: change
     attributes:
       label: What is wrong, and what is right
-      description: The field or claim, its current value on the card, and the correct value.
-      placeholder: "metric citizens: 3,213 -> about 3,440"
+      description: The current overview or historical field, what is wrong and the supported correction. A changed overview needs a matching capture and new independent review; trial-only updates keep the main visit date.
+      placeholder: "Overview description: what changed in the resource and the source you visited"
     validations: {required: true}
   - type: input
     id: source

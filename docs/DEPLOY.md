@@ -182,12 +182,14 @@ The sha alone decides everything that goes live:
 |---|---|
 | Platform code (Worker, migrations) | the release sha |
 | Atlas data | the same sha |
-| Homepage screenshots | the `atlas-screens` commit written in `atlas/screens.lock` at the release sha |
+| Source-page captures | pinned base `atlas-screens` commit plus reviewed addition/archive/current-revision capture layers at the release sha |
 
 The **release manifest** records the three shas, the staging check result (the staging run, or the emergency reason),
 the sha256 of the built Atlas assets (`platform/.atlas-dist` packed
 as a byte-reproducible `tar.gz`: sorted names, mtime 0, owner 0, `gzip -n`) and the wrangler version. It is printed
 in the run's summary and kept 90 days as the artifact `release-manifest-<sha>`.
+
+Refresh/screens jobs are currently paused by repository settings. Their saved workflow is not an active cadence. Current builds also apply reviewed capture layers from main; do not substitute those with a fresh capture.
 
 `atlas/screens.lock` is one line: the full sha of an `atlas-screens` commit. The weekly screenshots PR
 (`screens.yml`) goes into the `atlas-screens` branch; after it is reviewed and merged, a separate PR on `main` bumps

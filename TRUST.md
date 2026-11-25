@@ -43,7 +43,7 @@ for that domain is kept (marked stale), so a network error never hides an earlie
 
 | What | How often | Where the result is |
 |---|---|---|
-| Every domain linked from the Atlas (official URLs and the sources behind each claim) | daily, 04:17 UTC | [`/atlas/safety.json`](https://commonworld.one/atlas/safety.json), `link_safety` on every entry |
+| Current Atlas resource domains and safety-removed domains; closed-history addresses excluded | daily, 04:17 UTC | [`/atlas/safety.json`](https://commonworld.one/atlas/safety.json), `link_safety` on every entry |
 | Our own domains: commonworld.one, www.commonworld.one, staging.commonworld.one | hourly | `GET /v1/trust/status` on the Commonworld app (production at <https://commonworld.one/v1/trust/status> since 2026-10-20, and staging), with the history of every run |
 | Links in posts and comments | every time a post or comment is published | live in the Commonworld app (v1): a link to a flagged domain stops the text before it goes public, with a 7-day appeal to a person ([Privacy Policy](https://commonworld.one/privacy/#links-check)) |
 
@@ -54,7 +54,7 @@ sends an alert email, when the last run is more than 2 hours old.
 
 When any one source flags a domain:
 
-1. **It is hidden at once, without waiting for a person.** In the Atlas, every entry that links to the domain is
+1. **A recorded decision excludes it from rebuilt Atlas output. Production changes require deployment.** In the Atlas, every entry that links to the domain is
    removed from every listing, count, search index and data file. Its permanent ID keeps working as a short
    "entry removed" note without the name or any link, marked noindex.
 2. **The decision is recorded** with who acted (the agent `hark` for automatic removals), the date, the reason (which

@@ -24,10 +24,10 @@ UTC_PATTERN = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?Z$'  # ISO 8601 U
 # newest first; build.py writes changelog.json and CHANGELOG.md from this list
 CHANGELOG = [
     {'schema_version': '1.12.0', 'date': '2026-11-24', 'changes': [
-        'Local restoration candidate, not a production release: same-URL current-only records replace old general summary/claims/money/task fields. Default lists/search/categories contain reviewed Live overviews only; closed history is available by permanent ID and /atlas/closed.json. This is intentionally breaking, not additive. HTML, Markdown, JSON and MCP share current overview content and optional trials. Verified badge dates use overview visits.',
-        'Local closed-archive candidate, not a release claim: closed entry summaries and full records now carry an explicit archive with inert historical addresses instead of active website/safety/task/badge fields. This is an intentional closed-only shape change, not a backwards-compatible optional-field addition. Permanent card URLs, names, historical content, dates and existing capture bytes are retained. Compact MCP search rows omit archive history; the full closed record remains accessible by ID. Source catalogue and event logs remain unchanged.',
-        'Local earn candidate only, not a release claim: /atlas/earn.json and /api/v1/atlas/earn.json replace numeric money rows with current earning-opportunity records (format commonworld-atlas-earning-opportunities/1). This is an intentional shape change authorized for the current-only earn list; old value/unit/window/basis/tier fields are removed, not populated with invented defaults. No legacy earn feed is retained.',
-        'Current card and compact search records add earning_opportunity (included and list URL); full descriptions and dated sources are in earn.json, omitted when not in the selected list. Absence is not a claim that earning is impossible. Other API surfaces are outside this local earn change.']},
+        'Current-only catalogue contract: same-URL current-only records replace old general summary/claims/money/task fields. Default lists/search/categories contain reviewed Live overviews only; closed history is available by permanent ID and /atlas/closed.json. This is intentionally breaking, not additive. HTML, Markdown, JSON and MCP share current overview content and optional trials. Verified badge dates use overview visits.',
+        'Closed-history contract: closed entry summaries and full records now carry an explicit archive with inert historical addresses instead of active website/safety/task/badge fields. This is an intentional closed-only shape change, not a backwards-compatible optional-field addition. Permanent card URLs, names, historical content, dates and existing capture bytes are retained. Compact MCP search rows omit archive history; the full closed record remains accessible by ID. Historical source catalogue inputs remain unchanged. The event log includes an explicitly dated migration backfill.',
+        'Earning-opportunity contract: /atlas/earn.json and /api/v1/atlas/earn.json replace numeric money rows with current earning-opportunity records (format commonworld-atlas-earning-opportunities/1). This is an intentional shape change authorized for the current-only earn list; old value/unit/window/basis/tier fields are removed, not populated with invented defaults. No legacy earn feed is retained.',
+        'Current card and compact search records add earning_opportunity (included and list URL); full descriptions and dated sources are in earn.json, omitted when not in the selected list. Absence is not a claim that earning is impossible. Other API surfaces are outside the earning-list shape change.']},
     {'schema_version': '1.11.0', 'date': '2026-11-02', 'changes': [
         'New optional field `confirmed_at` on a claim (claims[] of platforms/{id}.json, and inside a claim\'s history[] entries): the time of '
         'the newest weekly re-check that read the same fact again and found it unchanged (issue #273). ISO 8601 UTC (RFC 3339, '
@@ -204,9 +204,9 @@ def page_json(n, category=None):
 
 
 GENERATED_AT_DESC = ('Time of the newest data in this build, ISO 8601 UTC: the later of source_snapshot_at and newest_observation, '
-                     'so it moves when a card is amended (since schema_version 1.9.0; before, it was the source snapshot time alone).')
+                     'so it moves when a newer overview visit is recorded (since schema_version 1.9.0; before, it was the source snapshot time alone).')
 SOURCE_SNAPSHOT_AT_DESC = 'Time the source data snapshot file was produced, ISO 8601 UTC (what generated_at held before schema_version 1.9.0).'
-NEWEST_OBSERVATION_DESC = 'Newest observed_at of any published claim, ISO 8601 UTC; never later than generated_at.'
+NEWEST_OBSERVATION_DESC = 'Newest overview visit of any current published card, ISO 8601 UTC; never later than generated_at.'
 VERSIONING = ('schema_version identifies the generated data shape. The current-only Atlas contract intentionally replaces '
               'the previous general and earning records on existing /atlas/ and /api/v1/atlas/ URLs. '
               'Default lists, categories, search, snapshots and MCP tools contain the same current descriptions, visit dates, '
@@ -385,24 +385,32 @@ def schemas(origin, categories, draft_preview=False):
                                           'page_type': {'enum': ['own_content', 'challenge', 'error']}, 'client': {'type': 'string', 'minLength': 1},
                                           'by': {'type': 'string', 'minLength': 1}, 'sha256': {'type': ['string', 'null'], 'pattern': '^[0-9a-f]{64}$'}}}}}}
     summary_props['earning_opportunity'] = {'type': ['object', 'null'], 'description': 'Selected for the broad current earning-related list, not verified payments or eligibility.', 'properties': {'included': {'const': True}, 'url': uri, 'description': {'type': 'string'}, 'visited_at': utc_n, 'sources': {'type': 'array', 'items': uri}}}
-    summary_props['overview'] = {'type': 'object', 'description': 'Optional simple dated overview. Its visit date is separate from legacy verified_at/last_checked. Drafts are not published reviews.', 'required': ['state', 'text', 'visited_at', 'sources', 'revision'], 'properties': {'state': {'enum': ['draft', 'held', 'reviewed']}, 'text': {'type': 'string'}, 'visited_at': utc_n, 'sources': {'type': 'array', 'items': uri}, 'revision': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}}}
+    summary_props['overview'] = {'type': 'object', 'description': 'Accepted current source overview. Visit and actual-use trial dates have separate meanings.',
+        'required': ['state', 'text', 'visited_at', 'sources', 'revision'],
+        'properties': {'state': {'enum': ['draft', 'held', 'reviewed'] if draft_preview else ['reviewed']},
+            'text': {'type': 'string', 'minLength': 1, 'pattern': r'.*\S.*'},
+            'visited_at': utc_n if draft_preview else utc,
+            'sources': {'type': 'array', 'minItems': 1, 'items': uri},
+            'revision': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}}}
     summary_props['disclosure_history'] = {'type': 'array', 'description': 'Optional public dated disclosure history, separate from current relationship wording and practical trials. Not private editorial history. Local unreleased extension.', 'items': {'type': 'object', 'required': ['text', 'revision', 'replaced_by_revision', 'correction_date', 'original_record_date', 'reason'], 'properties': {'text': {'type': 'string'}, 'revision': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, 'replaced_by_revision': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, 'correction_date': {'type': 'string', 'format': 'date'}, 'original_record_date': {'type': ['string', 'null']}, 'reason': {'type': 'string'}}}}
     summary_props['current_limitation'] = {'type': 'object', 'description': 'Local unreleased optional bounded source-check note. Takes priority over overview and legacy summary; not a closure or availability claim.', 'required': ['state', 'attempted_on', 'text', 'sources'], 'properties': {'state': {'const': 'could_not_verify'}, 'attempted_on': {'type': 'string', 'pattern': r'^\d{4}-\d{2}-\d{2}$'}, 'text': {'type': 'string'}, 'sources': {'type': 'array', 'items': uri}}}
     optional = {'earning_opportunity', 'current_limitation', 'disclosure_history', 'overview', 'preview', 'link_safety', 'md_url', 'evidence_level', 'keys_and_books', 'first_task', 'replications', 'reachability'}  # added in 1.1.0 / 1.2.0 / 1.4.0 / 1.6.0: optional, so older records stay valid
     summary = {'type': 'object', 'description': 'Stable public fields of one published Atlas entry (as in platforms.json).',
                'required': [k for k in summary_props if k not in optional], 'properties': summary_props}
     closed_summary = {'type':'object', 'required':['id','name','url','json_url','category','category_label','status','archive','closed_recorded_at'],
-        'not':{'anyOf':[{'required':[k]} for k in ('website','link_safety','reachability','replications','first_task','badge_svg','badge_svg_dark','badge_page')]},
+        'not':{'anyOf':[{'required':[k]} for k in ('website','link_safety','reachability','replications','first_task','badge_svg','badge_svg_dark','badge_page','overview','preview','earning_opportunity','disclosure')]},
         'properties': {'id':summary_props['id'],'name':{'type':'string'},'url':uri,'json_url':uri,
             'category':{'enum':categories},'category_label':{'type':'string'},'type':summary_props['type'],
             'status':{'const':'closed'},'closed_recorded_at':utc_n,
             'archive':{'type':'object','required':['kind','external_links','history'],
                 'properties':{'kind':{'const':'closed_history'},'external_links':{'const':'disabled'},'history':{'type':'object'}}}}}
     current_props = {k: v for k, v in summary_props.items() if k in ('id','name','url','json_url','md_url','website','category','category_label','type','status','tags','overview','preview','link_safety','disclosure','earning_opportunity')}
-    current_summary = {'type':'object','required':['id','name','url','json_url','category','category_label','status','overview'],
-        'not': {'anyOf':[{'required':[k]} for k in ('claims','summary','first_task','verified_at','last_checked','money_flow','key_number','claims_count','evidence_level','keys_and_books','replications','reachability')]},
+    current_props['status'] = {'enum': ['draft', 'live'] if draft_preview else ['live']}
+    current_props['preview'] = {'$ref': '#/$defs/preview'} if draft_preview else {'allOf': [{'$ref': '#/$defs/preview'}, {'type': 'object'}]}
+    current_summary = {'type':'object','required':['id','name','url','json_url','category','category_label','status','overview'] + ([] if draft_preview else ['preview']),
+        'not': {'anyOf':[{'required':[k]} for k in ('archive','closed_recorded_at','current_limitation','has_money_flow','claims','summary','first_task','verified_at','last_checked','money_flow','key_number','claims_count','evidence_level','keys_and_books','replications','reachability')]},
         'properties': current_props}
-    summary = {'oneOf':[summary,closed_summary,current_summary], 'properties':summary_props}
+    summary = {'oneOf':[closed_summary,current_summary], 'description': 'Accepted current package or inert closed history. Legacy input shapes are not public current records.'}
     preview = {'type': ['object', 'null'], 'description': 'Dated public source-page screenshot of the entry, or null. See source_url for the captured page. Third-party website content: '
                'not covered by the Atlas CC BY 4.0 data licence (see rights). Added in schema_version 1.1.0.',
                'required': ['path', 'url', 'width', 'height', 'captured_at', 'source_url'],
@@ -412,12 +420,11 @@ def schemas(origin, categories, draft_preview=False):
                               'confirmed_at': utc_n | {'description': 'Newest weekly capture that showed no visible change, so the stored image '
                                                'was kept (captured_at stays the time of the stored image), ISO 8601 UTC, or null. Added in schema_version 1.11.0.'},
                               'rights': {'type': 'string'}}}
-    defs = {'platformSummary': summary, 'moneyFlow': money_flow, 'keyNumber': key_number, 'claim': claim, 'preview': preview}
+    defs = {'historicalInputFields': {'description': 'Historical source-field definitions only, not a public response alternative.', 'properties': summary_props}, 'platformSummary': summary, 'moneyFlow': money_flow, 'keyNumber': key_number, 'claim': claim, 'preview': preview}
     platform = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': S('platform.schema.json'),
-                'title': 'Commonworld Atlas entry', 'description': 'One published Atlas entry with all its claims and sources (/api/v1/atlas/platforms/{id}.json).',
+                'title': 'Commonworld Atlas entry', 'description': 'One accepted current overview package or an inert closed-history record (/api/v1/atlas/platforms/{id}.json).',
                 'type': 'object', 'allOf': [{'$ref': '#/$defs/platformSummary'}],
                 'required': ['schema_version', 'licence', 'generated_at'],
-                'oneOf': [{'required':['source','badge_status','badge_svg','badge_svg_dark','badge_page','claims']}, {'required':['overview'], 'not': {'required':['claims']}}, {'required':['archive'], 'properties':{'status':{'const':'closed'}}}],
                 'properties': {'schema_version': {'type': 'string'}, 'licence': {'type': 'string'}, 'source': uri, 'generated_at': gen_at,
                                'source_snapshot_at': src_at, 'badge_status': {'type': 'string'}, 'badge_svg': uri, 'badge_svg_dark': uri, 'badge_page': uri,
                                'claims': {'type': 'array', 'items': {'$ref': '#/$defs/claim'}}, 'qa_status': {'type': ['string', 'null']}},
@@ -487,7 +494,7 @@ def openapi(origin, categories, example_ids, docs_url, licence):
     js = lambda ref, desc: {'200': {'description': desc, 'content': {'application/json': {'schema': {'$ref': ref}}}}}
     obj = lambda desc: {'200': {'description': desc, 'content': {'application/json': {'schema': {'type': 'object'}}}}}
     idp = {'name': 'id', 'in': 'path', 'required': True,
-           'description': 'Permanent entry ID (URL slug). Never construct or guess an ID; take it from atlas/platforms.json (or a category file). An ID not listed there does not exist.',
+           'description': 'Permanent entry ID (URL slug). Never construct or guess an ID; take it from atlas/platforms.json (or a category file). Closed IDs are discoverable in /atlas/closed.json and remain accessible by permanent ID even when absent from current lists.',
            'schema': {'type': 'string', 'pattern': ID_PATTERN}, 'examples': {x: {'value': x} for x in example_ids}}
     catp = {'name': 'category', 'in': 'path', 'required': True, 'description': 'Category key, as listed in atlas/index.json.',
             'schema': {'type': 'string', 'enum': categories}}
@@ -505,9 +512,7 @@ def openapi(origin, categories, example_ids, docs_url, licence):
                                  'CORS is open (Access-Control-Allow-Origin: *). Responses may be cached by Cloudflare and browsers for up to a few hours. '
                                  + VERSIONING + ' Related file outside /api/: ' + origin + '/atlas/events.json, the public log of card changes '
                                  '(also as /atlas/events.md). '
-                                 'Money and activity claims carry evidence_level (1 operator says, 2 public dashboard, 3 public transactions, set only by a curator who opened the record) and '
-                                 'evidence_label; where a curator opened the source and set the level by hand, the claim also carries evidence_note, '
-                                 'a short reason (manual relabel rules: https://github.com/commonworld-one/commonworld/blob/main/atlas/CURATION.md#curator-review-of-a-level). '
+                                 'Current records contain source overviews, captures and optional actual trials. Closed history is separate and inert. '
                                  + f'Human documentation: {docs_url}'),
                  'license': {'name': f'Data: {licence}', 'url': 'https://creativecommons.org/licenses/by/4.0/'}},
         'servers': [{'url': f'{origin}{API_BASE}', 'description': 'Commonworld (canonical)'}],
@@ -519,7 +524,7 @@ def openapi(origin, categories, example_ids, docs_url, licence):
             '/atlas/index.json': {'get': {'tags': ['atlas'], 'operationId': 'getAtlasIndex', 'summary': 'Atlas module: counts, categories and links', 'responses': obj('Atlas index')}},
             '/atlas/platforms.json': {'get': {'tags': ['atlas'], 'operationId': 'listPlatforms', 'summary': 'All published entries',
                                               'responses': js('./schemas/platform-list.schema.json', 'All published entries')}},
-            '/atlas/platforms/{id}.json': {'get': {'tags': ['atlas'], 'operationId': 'getPlatform', 'summary': 'One entry with all claims and sources', 'parameters': [idp],
+            '/atlas/platforms/{id}.json': {'get': {'tags': ['atlas'], 'operationId': 'getPlatform', 'summary': 'One current overview package or closed-history record', 'parameters': [idp],
                                                    'responses': js('./schemas/platform.schema.json', 'One entry') | {'404': {'description': 'No entry with this ID'}}}},
             '/atlas/categories/{category}.json': {'get': {'tags': ['atlas'], 'operationId': 'listCategory', 'summary': 'Entries of one category', 'parameters': [catp],
                                                           'responses': js('./schemas/category.schema.json', 'Entries of one category') | {'404': {'description': 'No such category'}}}},
@@ -643,6 +648,10 @@ def validate(inst, schema, registry, base_name, path='$', errs=None, limit=20):
         if len(ok) != 1:
             hint = '' if ok else ': ' + min(res, key=len)[0]
             errs.append(f'{path}: matches {len(ok)} of the {len(res)} oneOf branches, not exactly one{hint}')
+    if 'anyOf' in schema and not any(not validate(inst, sub, registry, base_name, path, [], limit) for sub in schema['anyOf']):
+        errs.append(f'{path}: matches no anyOf branch')
+    if 'not' in schema and not validate(inst, schema['not'], registry, base_name, path, [], limit):
+        errs.append(f'{path}: matches forbidden shape')
     t = schema.get('type')
     if t is not None:
         ts = t if isinstance(t, list) else [t]

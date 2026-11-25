@@ -14,6 +14,8 @@ SNAP = json.load(open(ROOT / 'atlas' / 'data' / 'snapshot-verified-2026-10-15.js
 SLUGS = {p['slug'] for p in SNAP['platforms']} | {r['slug'] for r in json.load(open(ROOT / 'atlas' / 'data' / 'removed.json'))['removed']}
 
 
+SLUGS |= {p['slug'] for p in json.load(open(ROOT / 'atlas/catalogue/additions.json'))['platforms']}
+
 class FakeSite:
     base = '/atlas'
     cfg = {'data_licence': 'CC BY 4.0'}

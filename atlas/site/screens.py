@@ -1,6 +1,8 @@
-"""Atlas homepage screenshots (stdlib; Pillow optional, for thumbnails).
+"""Atlas base homepage screenshot loader (stdlib; Pillow optional, for thumbnails).
 
-The images do not live on main. They sit on the orphan branch `atlas-screens` of the same repo:
+This loader reads the historical base images from the orphan branch `atlas-screens`.
+Reviewed addition/archive captures live on main; build.py assembles those layers and
+current revision overrides separately. These are base acquisition paths:
 
     atlas/screens/<slug>.webp      1200x750 WebP, one viewport of the card's homepage
     atlas/screens/manifest.json    {"screens": {slug: {file, sha256, dhash, website, source_url, http_status, title,

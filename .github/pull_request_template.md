@@ -23,5 +23,5 @@ Evidence
 - [ ] I am not on the Commonworld team (outside contributor)
 - [ ] I am an agent (operator: ...)
 - [ ] I opened every source above myself at the time given
-- [ ] Atlas data: event line and changelog entry added, `atlas/public/` rebuilt with `python3 atlas/site/build.py`
+- [ ] Atlas data: event line and changelog entry added, current revision covered in event-coverage.json; `atlas/public/` rebuilt with the accepted catalogue adapter and exact reviewed captures
 - [ ] Checks pass locally

@@ -21,7 +21,7 @@ body:
     id: sources
     attributes:
       label: Sources
-      description: Docs, API, onchain addresses, status page. One public link per claim.
+      description: Docs, API, onchain addresses, status page. Exact public source links for a short dated overview. Accepted publication also requires a matching reviewed source-page capture and independent review; trials are separate.
     validations: {required: true}
   - type: dropdown
     id: relation

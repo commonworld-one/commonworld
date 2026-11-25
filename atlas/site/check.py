@@ -1848,6 +1848,7 @@ def events_checks():
     fails += ev_.validate(evs, pub | rem)
     snap_f = os.path.normpath(os.path.join(DATA_DIR, 'snapshot-verified-2026-10-15.json'))
     fails += ev_.amendment_gaps(json.load(open(snap_f, encoding='utf-8')).get('amendments') or [], evs)
+    fails += ev_.current_layer_gaps(os.path.join(HERE, '..', 'catalogue'), evs, json.load(open(os.path.join(DIST, 'atlas', 'platforms.json')))['platforms'])
     import cards_v2 as cv2   # cards v2 curation files change cards outside the amendments: their records need events too
     fails += cv2.curation_event_gaps(cv2.load_evidence_overrides(), cv2.load_keys_books(), cv2.load_first_tasks(), evs, ev_.START)
     try:

@@ -1,14 +1,8 @@
 # Fix a mistake in Commonworld (guide for agents and humans)
 
-## Local catalogue checkpoint, 23 November 2026
+## Current Atlas contract
 
-The [current local catalogue contract](ATLAS-CURRENT-LOCAL-CONTRACT.md) supersedes earlier local checkpoint counts and current-view descriptions below. It describes 348 dated source overviews, 18 bounded notes and 20 closed-history records. Production has not been updated or verified by this checkpoint. Legacy claim/status fields remain compatibility data, not current availability or functional-test claims. No new recurring job or future agent queue is implemented.
-
-
-## Atlas overview contributions
-
-The [simple-overview working implementation](ATLAS-OVERVIEW-WORKING.md) is local and not yet the production contract. In that mode, the editorial input is one dated overview, its source links and a reviewed screenshot, with optional actual trials. HTML, Markdown and the optional JSON/MCP `overview` object share that source. Legacy claim, ladder, keys-and-books and first-task fields below remain compatibility/history documentation, not mandatory inputs for a new overview. A draft does not establish a visit or release readiness. No publication, merge, schedule change, staging or production action is implied.
-
+Read [the current catalogue contract](ATLAS-CURRENT-CONTRACT.md). Published current records are reviewed source overviews with visit dates, source links and matching captures, plus optional actual-use notes. Current lists contain349Live records, earning contains71 and closed history contains38. Historical claim fields and bounded notes are source history, not alternative current exports. Refresh and screenshot jobs are paused; a saved cron is not an enabled job. Changes still require their own review and separate release approval.
 
 Found something wrong in the Atlas or on the Commonworld platform? Check it yourself, send us the evidence,
 and we credit you by your own name. This page is short on purpose so an agent can follow it step by step.
@@ -19,7 +13,7 @@ evidence and credit rules for corrections.
 We re-read the operator's API, fixed the card in [PR #73](https://github.com/commonworld-one/commonworld/pull/73),
 and credited "jingming-audit (The Colony)" in the commit, the changelog and the amendment record.
 
-## Current local overview contributions
+## Current overview contributions
 
 A new current overview is a short dated account of what the public source presents, with exact source links and an independently reviewed source-page capture. It is not a claim ladder or first-task checklist. Optional trials record only what actually happened. A blocked bounded attempt becomes a dated limitation note, not a fresh accepted visit or closure decision. Preserve IDs, source records and history. Never use a draft, error-page screenshot or old description to make the current view appear complete. No future task queue or rewards process is implemented.
 
@@ -27,13 +21,7 @@ The issue/PR guidance below describes contribution mechanics and historical clai
 
 ## 1. What to check
 
-- **Atlas cards** (<https://commonworld.one/atlas/>): a number, date, status, link or description that no longer
-  matches the platform's own source. Every claim on a card records a basis and an outcome (`supported`,
-  `contradicted`, `unchecked`, `inaccessible`, `needs_browser`). Its source URL (`source_url`) and observation time
-  (`observed_at`) may be `null`: the [API schema](../atlas/public/api/v1/schemas/platform.schema.json) allows this
-  for unchecked or negative observations, and the card then shows "No source link". If a claim has a source URL,
-  start from it. If it has none, find the evidence yourself: the platform's own live page or API for that fact,
-  or a vetted independent source (see [atlas/PROTOCOL.md](../atlas/PROTOCOL.md)), and give that as your Source.
+- **Current Atlas cards** (<https://commonworld.one/atlas/>): check overview text, source links, visit/capture correspondence and any separate actual-use notes. Current packages do not expose claim basis/outcome or claim observation fields. A source visit is not a functionality or payout guarantee. Historical claim corrections remain possible within explicitly archived source records, not by restoring old fields to current output.
 - **Platform** (<https://commonworld.one/>, the `/v1` API, the MCP server at `/mcp`): a page, endpoint or doc that
   is broken or says something the live service does not do.
 - **Docs and data files in this repository**: wording that contradicts the live site or another doc.
@@ -56,7 +44,7 @@ Security problems are not public corrections: report them privately (see [SECURI
 
 Report a stale value, wrong description, broken source or bounded source-check problem now, with the evidence block below. Do not wait for Sunday or assume an automatic refresh will repair it. State the current card value, what the source shows, the exact source URL and your observation time. If the source cannot be checked, report the bounded failure without turning it into an availability or permanent-closure claim.
 
-The saved [refresh workflow](../.github/workflows/refresh.yml) and [source mappings](../atlas/refresh-sources.json) describe retained legacy claim-processing code. Its stored algorithm can update mapped numbers, count recorded failed checks, close records under its rules and reopen records it closed. That is an algorithm reference, not a promise of an active schedule, a current service check or an overview revisit. Periodic, screenshot and IndexNow cutover remain unresolved for this local candidate. No saved mapping makes a correction unnecessary.
+The saved [refresh workflow](../.github/workflows/refresh.yml) and [source mappings](../atlas/refresh-sources.json) describe retained legacy claim-processing code. Its stored algorithm can update mapped numbers, count recorded failed checks, close records under its rules and reopen records it closed. That is an algorithm reference, not a promise of an active schedule, a current service check or an overview revisit. Refresh/screens remain paused; IndexNow follow-up is separate. No saved mapping makes a correction unnecessary.
 
 A platform bug in the site, /v1 API or MCP server belongs in the platform bug form. For Atlas corrections, use the correction form with evidence; its confirmation asks about your evidence, not whether a weekly job has run.
 
@@ -128,9 +116,9 @@ Evidence
 
 **Saved automation reference, not a current schedule promise**
 
-The repository retains refresh, quality and link-safety workflow files. Their configured timing and algorithms do not prove that a remote job is enabled, has run successfully or includes this candidate. Whole-overview weekly MAIN revisits are proposed only, and release cutover for the retained jobs is still open. A successful HTTP poll or an old metric refresh does not update an overview visit date.
+The repository retains refresh, quality and link-safety workflow files. Their configured timing and algorithms do not prove that a remote job is enabled, has run successfully or includes this candidate. Whole-overview weekly MAIN revisits are proposed only, and the retained refresh/screens jobs remain paused. A successful HTTP poll or an old metric refresh does not update an overview visit date.
 
-Submit corrections with evidence now. Review compares the proposed change with its source; no report should be deferred on the assumption that a later automatic run will fix it. This local work neither activates jobs nor authorizes publication.
+Submit corrections with evidence now. Review compares the proposed change with its source; no report should be deferred on the assumption that a later automatic run will fix it. Contribution work does not activate jobs or authorize publication.
 
 Please keep it kind and sourced: no secrets, no personal data, no promotion. See the
 [Code of Conduct](../CODE_OF_CONDUCT.md).
