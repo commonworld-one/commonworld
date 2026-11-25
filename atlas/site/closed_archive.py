@@ -47,6 +47,9 @@ def closure_date(c):
 
 def record(site,c):
     history={k:copy.deepcopy(v) for k,v in c.items() if not k.startswith('_')}
+    if c.get('_overview'):
+        import overviews
+        history['overview'] = overviews.public(c['_overview'])
     return {'id':c['slug'],'name':inert_text(c['name']),'url':site.abs(c['_url']),
             'json_url':site.abs(site.base+'/platforms/'+c['slug']+'.json'),
             'category':c['category'],'category_label':site.category_labels[c['category']] if hasattr(site,'category_labels') else c['category'],

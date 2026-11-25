@@ -903,10 +903,13 @@ def build_platform(site, c):
             raw = build_platform(site, c)
         finally:
             site.catalogue_mode = True
+        if c.get('_overview'):
+            historical = '<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Historical overview</h2></div><div class="cw-panel-body"><p>' + e(c['_overview']['text']).replace('\n', '<br>') + '</p></div></section>'
+            raw = raw.replace('</article>', historical + '</article>', 1)
         return closed_archive.html_document(raw)
-    if c.get('_limitation'):
+    if c.get('status') != 'closed' and c.get('_limitation'):
         return limitations.render_html(site, c, sys.modules[__name__])
-    if c.get('_overview') is not None:
+    if c.get('status') != 'closed' and c.get('_overview') is not None:
         return overviews.render_html(site, c, sys.modules[__name__])
     b = site.base
     cat = c['category']
@@ -1140,10 +1143,12 @@ def build_platform_md(site, c):
         capture = preview_record(site, c)
         if capture:
             raw += '\n\n## Historical screenshot\n\n' + f"![Historical screenshot of {c['name']}]({capture['url']})\n\nCaptured: {capture['captured_at']}. Source: {capture['source_url']}. {capture['rights']}\n"
+        if c.get('_overview'):
+            raw += '\n\n## Historical overview\n\n' + c['_overview']['text'] + '\n'
         return closed_archive.markdown(raw)
-    if c.get('_limitation'):
+    if c.get('status') != 'closed' and c.get('_limitation'):
         return limitations.render_md(site, c)
-    if c.get('_overview') is not None:
+    if c.get('status') != 'closed' and c.get('_overview') is not None:
         return overviews.render_md(site, c)
     """Markdown twin of a card page (<card>/index.md): the same facts, ladder, keys and books, first task and claims."""
     A, b = site.abs, site.base
@@ -1930,6 +1935,10 @@ def landing_agents(site):
             ('One entry (JSON), e.g. BountyBook', site.abs(f'{b}/platforms/bountybook.json')),
             ('API v1 root (OpenAPI, schemas, versioned)', site.abs(f'{api_v1.API_BASE}/index.json')),
             ('Mirror on GitHub if this site cannot be fetched', RAW_BASE + '/platforms.json')]
+    if getattr(site, 'overview_preview', False):
+        available = {site.abs(f'{b}/categories/{k}.json') for k in site.cats}
+        available |= {site.abs(f'{b}/platforms/{c["slug"]}.json') for c in site.cards}
+        rows = [(t,u) for t,u in rows if ('/categories/' not in u and '/platforms/' not in u) or u in available]
     items = ''.join(f'<li>{e(t)}: <a href="{e(u)}"' + ('' if u.startswith(site.abs('/')) else ' rel="noopener nofollow"') + f'><code>{e(u)}</code></a></li>' for t, u in rows)
     return (f'<section class="cw-panel landing-agents" aria-labelledby="agents-title"><h2 id="agents-title">For AI agents</h2>'
             f'<p>Read the Atlas as data. Take IDs only from these files; never guess one.</p><ul>{items}</ul>{official_line(site)}</section>')
@@ -3862,6 +3871,9 @@ def main():
         a.data = DEFAULT_DATA
     if a.draft_preview and (not a.overviews or not a.no_mirror):
         ap.error('--draft-preview requires --overviews and --no-mirror')
+    catalogue_dir = os.path.join(HERE, '..', 'catalogue')
+    catalogue_inputs = (os.path.realpath(a.overviews) == os.path.realpath(os.path.join(catalogue_dir, 'overviews.json'))
+                        and os.path.realpath(a.data) == os.path.realpath(os.path.join(catalogue_dir, 'snapshot.json')))
     cfg = json.load(open(a.config))
     if a.local:
         cfg['site']['product_url'] = '/'
@@ -3872,7 +3884,9 @@ def main():
     gone = {r['slug'] for r in removed}
     if a.overviews:
         from current_catalogue import apply_closures, add_new
-        data = add_new(apply_closures(data, os.path.join(HERE, '..', 'catalogue')), os.path.join(HERE, '..', 'catalogue'))
+        if catalogue_inputs:
+            data = add_new(data, catalogue_dir)
+        data = apply_closures(data, catalogue_dir)
     if any(c.get('slug') in gone for c in data['platforms']):
         print(f"note: dropping safety-removed entries: {sorted(c['slug'] for c in data['platforms'] if c.get('slug') in gone)}", file=sys.stderr)
         data['platforms'] = [c for c in data['platforms'] if c.get('slug') not in gone]
@@ -3891,11 +3905,12 @@ def main():
     site.keys_books = cv2.load_keys_books()
     site.ev_overrides = cv2.load_evidence_overrides()
     site.first_tasks = cv2.load_first_tasks()
-    site.replications = {s: r for s, r in repl.load().items() if s not in gone}
+    custom_ids = {c['slug'] for c in site.cards} if not catalogue_inputs else None
+    site.replications = {s: r for s, r in repl.load().items() if s not in gone and (custom_ids is None or s in custom_ids)}
     bad_repl = repl.validate(site.replications, {c['slug'] for c in site.cards})
     if bad_repl:  # fail closed: a record that breaks the contract is never rendered
         raise SystemExit('atlas/data/replications.json: ' + '; '.join(bad_repl[:5]))
-    site.reachability = {s: r for s, r in reach.load().items() if s not in gone}
+    site.reachability = {s: r for s, r in reach.load().items() if s not in gone and (custom_ids is None or s in custom_ids)}
     bad_reach = reach.validate(site.reachability, {c['slug'] for c in site.cards if c.get('status') == 'live'}, {c['slug'] for c in site.cards})
     if bad_reach:  # fail closed, same as replications
         raise SystemExit('atlas/data/reachability.json: ' + '; '.join(bad_reach[:5]))
@@ -3903,7 +3918,7 @@ def main():
     site.shot_dir, shots, site.shot_src = screens.load()
     if a.overviews:
         shots = screens.retain_archive_captures(site.shot_dir, shots, {c['slug'] for c in site.cards if c.get('status') == 'closed'})
-    if a.overviews:
+    if catalogue_inputs:
         from current_catalogue import additional_shots
         shots = additional_shots(shots, os.path.join(HERE, '..', 'catalogue'))
     site.shots = {c['slug']: shots[c['slug']] for c in site.cards if c['slug'] in shots}
@@ -3931,7 +3946,8 @@ def main():
             if not a.draft_preview and (not selection or set(selection) != set(doc['cards'])):
                 raise ValueError('accepted selection must match original overview IDs exactly')
             from current_catalogue import new_overviews
-            doc = new_overviews(doc, os.path.join(HERE, '..', 'catalogue'))
+            if catalogue_inputs:
+                doc = new_overviews(doc, catalogue_dir)
             selection = list(doc['cards']) if selection is not None else None
             doc = catalogue_safety.active_document(doc, gone)
             selection = [s for s in selection if s not in gone] if selection is not None else None
@@ -3940,7 +3956,14 @@ def main():
             raise SystemExit('Overview validation: ' + str(exc))
     if a.limitations and not a.overviews:
         limitations.attach(site, catalogue_safety.active_document(json.load(open(a.limitations)), gone))
+    if not catalogue_inputs and a.draft_preview:
+        # Isolated review batches never publish unrelated live snapshot records.
+        site.cards = [c for c in site.cards if c['slug'] in site.overviews]
     site.all_cards = list(site.cards)
+    included_ids = {c['slug'] for c in site.cards}
+    site.shots = {s:r for s,r in site.shots.items() if s in included_ids}
+    live_ids = {c['slug'] for c in site.cards if c['status'] == 'live'}
+    site.overviews = {s:r for s,r in site.overviews.items() if s in live_ids}
     if getattr(site, 'catalogue_mode', False):
         site.cards = [c for c in site.cards if c['status'] == 'live' and c.get('_overview')]
         site.by_cat = defaultdict(list)
