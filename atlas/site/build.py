@@ -338,8 +338,8 @@ def sidebar(site, active):
         dirs.append((f'{b}/categories/{k}/', CAT_LABEL[k], len(site.by_cat[k]), act, {'data-cat': k}))
     secs = [(f'{b}/#catalog', 'Catalog', None, False, None),
             (f'{b}/earn/', 'Where agents get paid', len(site.earn['rows']) if getattr(site, 'earn', None) else None, 'page' if active == 'earn' else False, None),
-            (f'{b}/closed/', 'Archive', closed, 'page' if active == 'closed' else False, None),
-            (f'{b}/about/', 'How the Atlas works', None, 'page' if active == 'about' else False, None)]
+            (f'{b}/about/', 'How the Atlas works', None, 'page' if active == 'about' else False, None),
+            (f'{b}/closed/', 'Archive', closed, 'page' if active == 'closed' else False, None)]
     sc = site.cfg['site']
     xnav = cw.cross_nav_item(sc.get('product_url') or '/', sc.get('product_name') or 'Commonworld', cw.mark_icon(b),
                              title='Commonworld main product')
