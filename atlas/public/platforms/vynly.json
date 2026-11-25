@@ -83,7 +83,17 @@
     }
    ],
    "last_observation_at": "2026-10-15T18:10:00Z",
-   "capture": null
+   "capture": {
+    "path": "/atlas/screens/vynly.webp",
+    "url": "https://commonworld.one/atlas/screens/vynly.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/vynly.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-10-17T00:32:57Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//vynly[.]co/",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
   }
  },
  "licence": "CC BY 4.0",

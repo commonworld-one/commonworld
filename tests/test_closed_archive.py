@@ -55,7 +55,7 @@ class ClosedArchive(unittest.TestCase):
   import hashlib,screens
   archive=ROOT/'atlas/catalogue/archive-captures';meta=json.loads((archive/'manifest.json').read_text())['screens']
   loaded=screens.retain_archive_captures(None,{},set(meta))
-  self.assertEqual(set(loaded),{'issuehunt','clawsino','agent-knowledge-network'})
+  self.assertEqual(set(loaded),set(meta));self.assertEqual(len(meta),19)
   self.assertEqual(screens.retain_archive_captures(None,{},set()),{})
   for slug,rec in meta.items():
    self.assertEqual(hashlib.sha256((archive/rec['file']).read_bytes()).hexdigest(),rec['sha256'])

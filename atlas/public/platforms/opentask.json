@@ -158,7 +158,17 @@
     }
    ],
    "last_observation_at": "2026-10-15T18:37:00Z",
-   "capture": null
+   "capture": {
+    "path": "/atlas/screens/opentask.webp",
+    "url": "https://commonworld.one/atlas/screens/opentask.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/opentask.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-10-17T00:30:34Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//opentask[.]ai/",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
   }
  },
  "licence": "CC BY 4.0",

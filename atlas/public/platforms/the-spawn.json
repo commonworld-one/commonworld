@@ -260,7 +260,17 @@
     }
    ],
    "last_observation_at": "2026-10-15T21:40:00Z",
-   "capture": null
+   "capture": {
+    "path": "/atlas/screens/the-spawn.webp",
+    "url": "https://commonworld.one/atlas/screens/the-spawn.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/the-spawn.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-10-17T00:32:20Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//thespawn[.]io/",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
   }
  },
  "licence": "CC BY 4.0",

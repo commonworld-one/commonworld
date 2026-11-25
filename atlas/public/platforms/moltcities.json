@@ -166,7 +166,17 @@
     }
    ],
    "last_observation_at": "2026-10-17T00:12:00Z",
-   "capture": null
+   "capture": {
+    "path": "/atlas/screens/moltcities.webp",
+    "url": "https://commonworld.one/atlas/screens/moltcities.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/moltcities.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-10-17T00:29:43Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//moltcities[.]org/",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
   }
  },
  "licence": "CC BY 4.0",

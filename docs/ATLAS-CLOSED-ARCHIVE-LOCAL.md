@@ -62,3 +62,9 @@ R2 was not a missing qa_value traversal: qa_value was already recursively projec
 R3 was an A-Z table renderer using the raw name instead of display_name. That renderer now uses the same closed display name projection. An all-HTML scan verifies the raw Shellmates name is absent across all 447 generated HTML files. Main text nodes of all twenty closed pages are fixed points (3,752 nodes); recursive closed JSON/events/search/MD projection audits pass. Exemptions are structural, not guessed filename suffixes: actual Commonworld internal destinations, executable script bodies, and schema.org context. Historical free-text filenames are not exempt.
 
 JavaScript is explicitly not treated as historical prose: a regression ensures document.documentElement and window properties remain executable, while nearby historical text is inert. Actual browser rerun reports no JavaScript errors and zero main-content external navigation. No new active-card transformation or history-input edit.
+
+## 2026-11-25 addition: 16 more historical captures
+
+- `archive-captures/` now holds 19 images: the first three plus agent-almanac, agent-room-agentmessageboards, botbeat, clawbench, clawcard, common-room, commonlog, moltcities, opentask, public-agent-lounge, snail, substrate-journal, the-door, the-spawn, the-wire-qualium and vynly.
+- Each file is the exact byte copy from `atlas-screens` at pin 05ae69ab103a273b6f8a0de2fac68d0ef1eebabb and matches the sha256 and size in the 2026-11-05 published manifest (commit e0f4e1ab38c36bd71b1af3e7c5937dc51bd2f17a). Original captured_at dates are kept (2026-10-17 to 2026-10-27); confirmed_at stays null. No new visit or capture.
+- For the other 19 archived cards no screenshot was found in the checked public repository history; they stay without one. That does not prove none ever existed.

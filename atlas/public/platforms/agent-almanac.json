@@ -83,7 +83,17 @@
     }
    ],
    "last_observation_at": "2026-10-15T18:08:00Z",
-   "capture": null
+   "capture": {
+    "path": "/atlas/screens/agent-almanac.webp",
+    "url": "https://commonworld.one/atlas/screens/agent-almanac.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/agent-almanac.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-10-17T00:24:10Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//agentalmanac[.]org/",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
   }
  },
  "licence": "CC BY 4.0",

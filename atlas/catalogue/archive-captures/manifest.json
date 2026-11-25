@@ -39,6 +39,166 @@
       "height": 750,
       "bytes": 25926,
       "confirmed_at": null
+    },
+    "agent-almanac": {
+      "file": "agent-almanac.webp",
+      "sha256": "30715788d03fe57b8129358b824e237a9c5012969fdd9c701edbf6b360b6af4c",
+      "source_url": "https://agentalmanac.org/",
+      "captured_at": "2026-10-17T00:24:10Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 48050
+    },
+    "agent-room-agentmessageboards": {
+      "file": "agent-room-agentmessageboards.webp",
+      "sha256": "56ba4ec03686ca035ce4de63127ee30c9ffecabee72e4bd51384f22190bf0bfc",
+      "source_url": "https://agentmessageboards.com/",
+      "captured_at": "2026-10-27T18:31:03Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 60038
+    },
+    "botbeat": {
+      "file": "botbeat.webp",
+      "sha256": "6fb53fea63c727d80bf8c92b29519cca5f4a288a09250c1acc7c61a59eccb071",
+      "source_url": "https://botbeat.ai/",
+      "captured_at": "2026-10-17T10:58:57Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 47436
+    },
+    "clawbench": {
+      "file": "clawbench.webp",
+      "sha256": "61843a18c688ec8fa93c327485fa9019d5c86d61e730832bc03fe0dfe267bb7c",
+      "source_url": "https://www.clawbench.com/",
+      "captured_at": "2026-10-17T00:26:58Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 34376
+    },
+    "clawcard": {
+      "file": "clawcard.webp",
+      "sha256": "2ae8d08b146c59029e26c1d6142723fc7ba84975548f0d61c36c9584bbba5dc5",
+      "source_url": "https://www.clawcard.sh/",
+      "captured_at": "2026-10-17T00:35:03Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 52888
+    },
+    "common-room": {
+      "file": "common-room.webp",
+      "sha256": "2a0b6da4b80c53d02dabb810b6e40734f53796c49e17927c8cdc1d2023777880",
+      "source_url": "https://common-room-cckw.onrender.com/",
+      "captured_at": "2026-10-17T00:27:21Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 39852
+    },
+    "commonlog": {
+      "file": "commonlog.webp",
+      "sha256": "5f4ee98547064ab2c02ed03cf10a9f8debd229dc8d41b0cce3d08e1c51e3c57f",
+      "source_url": "https://commonlog.ai/",
+      "captured_at": "2026-10-19T18:50:06Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 64462
+    },
+    "moltcities": {
+      "file": "moltcities.webp",
+      "sha256": "e9157c2ae6205bea1e955fbf23ecf235dce03a7d621a2eef40790872f3b8d054",
+      "source_url": "https://moltcities.org/",
+      "captured_at": "2026-10-17T00:29:43Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 63028
+    },
+    "opentask": {
+      "file": "opentask.webp",
+      "sha256": "48538a40882b5bd0155488ee026c95636d899fee9c6222a9da6677240ee17c54",
+      "source_url": "https://opentask.ai/",
+      "captured_at": "2026-10-17T00:30:34Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 46366
+    },
+    "public-agent-lounge": {
+      "file": "public-agent-lounge.webp",
+      "sha256": "19b86ab74ae25d4d339a32ed99a7f39571ee2c7e174d939909a5941b52b60f4a",
+      "source_url": "https://kevinlukelewis.com/agents",
+      "captured_at": "2026-10-27T18:31:25Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 60524
+    },
+    "snail": {
+      "file": "snail.webp",
+      "sha256": "566702868ce87b52318f52ba8b65b949620b733c1b3aae4079e02f38fe77139a",
+      "source_url": "https://joinsnail.com/",
+      "captured_at": "2026-10-17T00:31:26Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 36986
+    },
+    "substrate-journal": {
+      "file": "substrate-journal.webp",
+      "sha256": "450ae4a77a6eedfe44025e079db68327e9ed3a02c4b21f9661393bc0f3a61863",
+      "source_url": "https://substrate.brezgis.com/",
+      "captured_at": "2026-10-17T00:31:42Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 27410
+    },
+    "the-door": {
+      "file": "the-door.webp",
+      "sha256": "c3582d4db69f0b5523662d391940cbc781573457d4afd8bc0ebaf96cb13ee133",
+      "source_url": "https://thedoorhelp.eu.pythonanywhere.com/",
+      "captured_at": "2026-10-17T00:32:10Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 4836
+    },
+    "the-spawn": {
+      "file": "the-spawn.webp",
+      "sha256": "cb8c7ba374c1597bb800be55ace15816bb544a7d72799a55107e4ba8f71dbaff",
+      "source_url": "https://thespawn.io/",
+      "captured_at": "2026-10-17T00:32:20Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 44338
+    },
+    "the-wire-qualium": {
+      "file": "the-wire-qualium.webp",
+      "sha256": "6e3e0eecdd95182b0ead7b99f44118afca9629c7c8e274d46e7156e3bf0395f3",
+      "source_url": "https://qualium.io/",
+      "captured_at": "2026-10-17T00:32:16Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 54784
+    },
+    "vynly": {
+      "file": "vynly.webp",
+      "sha256": "86a5c734b8d612e06fb3f5f9509aaab7d041ca0f3a530081f62773404259fcaf",
+      "source_url": "https://vynly.co/",
+      "captured_at": "2026-10-17T00:32:57Z",
+      "confirmed_at": null,
+      "width": 1200,
+      "height": 750,
+      "bytes": 58938
     }
   }
 }
