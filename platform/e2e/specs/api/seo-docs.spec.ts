@@ -5,6 +5,7 @@
 import { expect, test } from '@playwright/test';
 import { api, robotsOf, sitemap } from '../../support/api';
 import { BASE_URL, EXPECT_NOINDEX, readState } from '../../support/env';
+import { checkLinks, linkFailures } from '../../support/link-crawl';
 
 const s = readState();
 const f = s.fixture;
@@ -62,12 +63,12 @@ test('every same-origin link in llms.txt resolves', async ({ request }) => {
   const links = [...new Set([...t.matchAll(/\]\((\/[^)\s]*|https?:\/\/[^)\s]+)\)/g)].map((m) => m[1]))]
     .map((u) => (u.startsWith('/') ? origin + u : u)).filter((u) => u.startsWith(origin) && !u.includes('{'));
   expect(links.length).toBeGreaterThan(3);
-  const bad: string[] = [];
-  for (const u of links) {
-    const r = await request.get(u, { failOnStatusCode: false });
-    if (r.status() >= 400) bad.push(`${r.status()} ${u}`);
-  }
-  expect(bad).toEqual([]);
+  // Serial latency over ~60 links can exceed the 60 s test deadline even when each link is healthy.
+  // Bound the public GET concurrency, not the coverage. Keep the deadline and fail on every HTTP/transport error.
+  const results = await checkLinks(request, links);
+  await test.info().attach('llms-link-results', { body: JSON.stringify(results, null, 2), contentType: 'application/json' });
+  expect(results).toHaveLength(links.length);
+  expect(linkFailures(results)).toEqual([]);
 });
 
 test('sitemap lists the base pages and never private ones', async ({ request }) => {
