@@ -17,7 +17,7 @@ A plain SVG image served from `commonworld.one`: left *Commonworld Atlas*, right
 - Light backgrounds: `https://commonworld.one/atlas/badge/<id>.svg`
 - Dark backgrounds: `https://commonworld.one/atlas/badge/<id>-dark.svg`
 
-`<id>` is the card's permanent ID (its URL slug), taken from the card page or [platforms.json](https://commonworld.one/atlas/platforms.json). Never guess an ID. Each entry's JSON (`/atlas/platforms/<id>.json`) lists `badge_svg`, `badge_svg_dark` and `badge_page`.
+`<id>` is the card's permanent ID (its URL slug), taken from the card page or [platforms.json](https://commonworld.one/atlas/platforms.json). Never guess an ID. Each current entry's JSON (`/atlas/platforms/<id>.json`) lists `badge_svg`, `badge_svg_dark` and `badge_page`. Closed JSON omits these fields; stable closed badge URLs remain available by permanent ID.
 
 ## Statuses
 

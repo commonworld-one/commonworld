@@ -252,7 +252,7 @@ class ApiContract(unittest.TestCase):
     def test_confirmed_at_declared_optional_nullable_utc(self):
         defs = self.reg['platform.schema.json']['$defs']
         for where, schema in (('claim', defs['claim']), ('preview', defs['preview']),
-                              ('replications', defs['platformSummary']['properties']['replications'])):
+                              ('replications', defs['historicalInputFields']['properties']['replications'])):
             prop = schema['properties']['confirmed_at']
             self.assertEqual(prop['type'], ['string', 'null'], where)
             self.assertIn('1.11.0', prop['description'], where)
@@ -275,8 +275,7 @@ class ApiContract(unittest.TestCase):
 
     def test_docs_and_llms_mention_confirmed_dates(self):
         src = (ROOT / 'atlas' / 'site' / 'build.py').read_text(encoding='utf-8')
-        for marker in ('id="confirmed-dates"', '- Confirmed dates (schema_version 1.11.0)', '- Confirmed dates: a claim may carry confirmed_at',
-                       "'Confirmed dates (schema_version 1.11.0)"):
+        for marker in ('id="confirmed-dates"', '- Confirmed dates (schema_version 1.11.0)', '- Confirmed dates: a claim may carry confirmed_at'):
             self.assertIn(marker, src)
 
 

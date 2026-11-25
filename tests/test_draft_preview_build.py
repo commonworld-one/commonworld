@@ -39,8 +39,6 @@ class DraftPreviewBuild(unittest.TestCase):
             self.assertEqual(len(rows),349)
             newest=json.loads((out/'atlas/platforms.json').read_text())['newest_observation']
             expected=max((r['visited_at'] for r in active.values() if r.get('visited_at')),default=None)
-            # Public iso() follows parse_time's existing minute precision.
-            expected=expected[:16]+':00Z' if expected else None
             self.assertEqual(newest,expected)
             page=(out/'atlas/platforms/1f916/index.html').read_text()
             self.assertIn('Draft · not verified',page)

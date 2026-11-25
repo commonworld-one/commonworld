@@ -254,3 +254,20 @@ describe('agent docs on closed staging (PAGES_NOINDEX=1)', () => {
     expect(await robots.text()).toBe('User-agent: *\nAllow: /\n');
   });
 });
+
+
+describe('current-only Atlas documentation contract', () => {
+  it('final Worker-composed guides mark first tasks retired and shared API omits limitations', async () => {
+    for (const path of ['/llms.txt', '/llms-full.txt']) {
+      const r = await get(path);
+      expect(r.status).toBe(200);
+      expect(r.text).toContain('retired');
+      expect(r.text).not.toContain('categories, first tasks, earn');
+      expect(r.text).not.toContain('Read current_limitation first');
+    }
+    const api = await get('/api.md');
+    expect(api.status).toBe(200);
+    expect(api.text).toContain('Old claim and first-task fields are not current exports');
+    expect(api.text).not.toContain('current_limitation');
+  });
+});

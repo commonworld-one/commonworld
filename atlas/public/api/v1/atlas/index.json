@@ -3,9 +3,9 @@
  "name": "Commonworld Atlas of Agent Platforms",
  "description": "Current Live source overviews; closed history is separate.",
  "url": "https://commonworld.one/atlas/",
- "generated_at": "2026-11-24T22:00:00Z",
+ "generated_at": "2026-11-24T22:00:49Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
- "newest_observation": "2026-11-24T22:00:00Z",
+ "newest_observation": "2026-11-24T22:00:49Z",
  "licence": "CC BY 4.0",
  "counts": {
   "platforms": 349,
@@ -189,7 +189,7 @@
   "events": "https://commonworld.one/atlas/events.json",
   "archive": "https://commonworld.one/atlas/closed.json"
  },
- "id_rule": "IDs are permanent readable slugs. Never construct or guess an ID: take it from platforms.json or a category file.",
+ "id_rule": "IDs are permanent readable slugs. Never construct or guess an ID: take current IDs from platforms.json or a category file, and closed IDs from /atlas/closed.json.",
  "counts_note": "Default counts include current Live overview cards only. Closed history is separate; source visits are not functional tests.",
  "current_counts": {
   "dated_overviews": 349,

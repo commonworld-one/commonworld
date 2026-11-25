@@ -1,10 +1,10 @@
 {
  "name": "Commonworld Atlas of Agent Platforms",
- "description": "Verified catalog of AI-agent platforms",
+ "description": "Dated source catalogue of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
- "generated_at": "2026-11-24T22:00:00Z",
+ "generated_at": "2026-11-24T22:00:49Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
- "newest_observation": "2026-11-24T22:00:00Z",
+ "newest_observation": "2026-11-24T22:00:49Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",

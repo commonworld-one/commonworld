@@ -731,11 +731,11 @@ class FirstTaskRandomized(unittest.TestCase):
 
 
 class SchemaParity(unittest.TestCase):
-    """The published JSON Schema of first_task (api_v1.py) and the runtime check (validate_first_tasks) agree on the whole regression
+    """The retained historical-input JSON Schema of first_task (api_v1.py) and the runtime check (validate_first_tasks) agree on the whole regression
     corpus: every known bypass is rejected by both, the real Touchstone task passes both. Schema validation runs with the built-in
     validator (api_v1.validate) and, when it is installed (CI), the jsonschema library through tools/validate_jsonschema.py."""
     ORIGIN = 'https://commonworld.one'
-    FT = 'platform.schema.json#/$defs/platformSummary/properties/first_task'
+    FT = 'platform.schema.json#/$defs/historicalInputFields/properties/first_task'
     STEP = FT + '/properties/steps/items'
 
     @classmethod

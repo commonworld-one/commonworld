@@ -20,7 +20,7 @@ The accepted build applies these layers before current membership, safety querie
 ## Build and checks
 ```sh
 python atlas/tools/catalogue_build.py --mode accepted --screens-dir /path/to/pinned-captures
-python atlas/site/check.py
+CW_SCREENS_DIR=/path/to/pinned-captures CW_SCREENS_REQUIRED=1 python atlas/site/check.py
 CW_SCREENS_DIR=/path/to/pinned-captures python -m unittest discover -s tests
 cd platform && npm run typecheck && npm test
 ```
@@ -47,3 +47,11 @@ A card closed after a reviewed overview keeps its public overview as inert histo
 The repository's own snapshot and overview paths select the complete current catalogue layers. Explicit custom snapshot/overview inputs, including generated review bundles, do not inherit unrelated additions, current revisions or replacement captures. Closure and safety decisions still apply to matching IDs. An isolated draft preview publishes only its selected overview IDs and matching captures, even when its packaged snapshot contains more records. Replication/reachability validation considers the supplied snapshot, not absent global cards. Preview landing links never advertise absent example cards or categories.
 
 `tests/test_catalogue_lifecycle.py` runs full accepted and draft closure transitions and executes the preview command emitted by a real generated and verified one-card bundle. The accepted lifecycle test requires `CW_SCREENS_DIR` pointing at the exact reviewed captures; without it that test skips, rather than manufacturing receipts or pixels.
+
+## Current editorial event coverage
+
+The append-only events.jsonl keeps its original148lines. The25November migration backfill records18editorial closures, Aptets addition and Meta Muse revision on their24November source-record dates, then349per-card25November migration events. Migration entries describe packaging, never a new source visit, screenshot or trial. Original dated history is retained; generated_at is a build timestamp, not event coverage.
+
+`atlas/catalogue/event-coverage.json` binds each current overview revision and the addition/revision/closure layers to a dated event. When those inputs change, add a supported event and renew that specific binding. Never renew a binding just to silence a failure, invent an event date, or claim retrospective completeness without evidence. The checker rejects a stale binding or missing event. Safety decisions and automated numeric-history changes retain their existing separate records and exclusions.
+
+The published release schemas admit only reviewed, dated, nonempty current overview packages with sources and captures, or explicit inert closed-history records. Historical source-field definitions remain under a named historical schema definition, not a public-response alternative. Preview schemas remain local-only and cannot authorize release. Schema structure checks do not prove source/image correspondence or independent review, which remain acceptance checks.

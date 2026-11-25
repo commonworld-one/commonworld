@@ -28,7 +28,7 @@ Start with [README.md](README.md), [CONTRIBUTING.md](CONTRIBUTING.md), [docs/AGE
 | `atlas/site/` | Static site generator (`build.py`), checks (`check.py`), API v1 (`api_v1.py`), components, static assets, tools |
 | `atlas/public/` | **Generated** GitHub mirror of the published data. Never edit by hand |
 | `atlas/tools/` | Link safety, IndexNow, screenshots capture, trust check, GitHub stats |
-| `atlas/refresh.py` | Weekly re-check of every card (opens a PR, never merges itself) |
+| `atlas/refresh.py` | Retained legacy claim-refresh algorithm; remote workflow paused |
 | `atlas/CHANGELOG.md` | Atlas changelog |
 | `trust/` | Commonworld trust engine (TypeScript, Node 22): domain safety sources, unit tests |
 | `platform/` | Commonworld platform: Cloudflare Worker + D1 (API, pages, MCP server; also serves the Atlas), see `platform/README.md` |
@@ -50,7 +50,7 @@ git status --porcelain -- atlas/public                 # must print nothing: the
 CW_SCREENS_DIR=/path/to/exact-reviewed-captures CW_SCREENS_REQUIRED=1 python3 atlas/site/check.py
 ```
 
-- Use the exact reviewed local capture directory for both build and checker. Do not substitute a new homepage capture or a fetched branch image. The saved image branch/lock path remains a release dependency, not proof that it contains this candidate's captures. The lower-level bare `atlas/site/build.py` is legacy-compatible only and does not establish current catalogue acceptance.
+- Use the exact reviewed local capture directory for both build and checker. Do not substitute a new homepage capture or a fetched branch image. The saved image branch/lock path remains a release dependency, not proof that it contains this candidate's captures. Bare build.py defaults to the canonical catalogue too; use the adapter to make acceptance and capture inputs explicit. A successful build is not release approval.
 - CI also validates API v1 against its JSON Schemas
   (`python3 atlas/site/tools/validate_jsonschema.py atlas/site/dist/api/v1`, needs `requirements-ci.txt`)
   and runs a browser smoke test (`atlas/site/tools/smoke_test.py`, needs Playwright + Chromium).

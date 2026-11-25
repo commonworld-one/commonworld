@@ -71,7 +71,7 @@ QA_LABEL = {'agree': 'QA agrees', 'disagree': 'QA disagrees', 'cannot_recheck': 
 
 
 # ---------------------------------------------------------------- helpers
-def parse_time(v):
+def parse_time(v, preserve_seconds=False):
     """a local time string with a zone abbreviation and '(UTC+HH:MM)' offset, or ISO 'YYYY-MM-DDTHH:MM(:SS)Z' -> aware UTC datetime."""
     if not isinstance(v, str) or not v:
         return None
@@ -80,9 +80,14 @@ def parse_time(v):
         h = int(m[2]) % 12 + (12 if m[4] == 'PM' else 0)
         off = timedelta(hours=int(m[6]), minutes=int(m[7])) * (1 if m[5] == '+' else -1)
         return datetime.strptime(f'{m[1]} {h}:{m[3]}', '%Y-%m-%d %H:%M').replace(tzinfo=timezone(off)).astimezone(timezone.utc)
-    m = re.match(r'(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})', v)
-    if m:
-        return datetime.strptime(f'{m[1]} {m[2]}:{m[3]}', '%Y-%m-%d %H:%M').replace(tzinfo=timezone.utc)
+    try:
+        value = datetime.fromisoformat(v.replace('Z', '+00:00'))
+        if not value.tzinfo:
+            return None
+        value = value.astimezone(timezone.utc)
+        return value if preserve_seconds else value.replace(second=0, microsecond=0)
+    except ValueError:
+        pass
     return None
 
 
@@ -607,8 +612,11 @@ def card_html(site, c, data=False, note=''):
              'data-money': '1' if c['_money'] else None, 'data-num': '1' if c['_num'] else None,
              'data-claims': len(c.get('claims', [])), 'data-ver': int(display_date(site, c).timestamp()) if display_date(site, c) else 0,
              'data-tags': ' '.join(c['_tags']) or None}
+    keynum = '' if overview_of(site, c) is not None or c.get('_limitation') else keynum_html(c)
+    if c.get('status') == 'closed':
+        keynum = keynum.replace('current', 'historical')
     return cw.card(href=c['_url'], name=display_name(site, c), cat_label=CAT_LABEL[c['category']], cat_color='k-' + c['category'],
-                   status_chip=status_chip(c), desc=note + trim(display_desc(site, c), 150 - len(note)), keynum='' if overview_of(site, c) is not None or c.get('_limitation') else keynum_html(c),
+                   status_chip=status_chip(c), desc=note + trim(display_desc(site, c), 150 - len(note)), keynum=keynum,
                    tags_html=cw.tag_chips(c['_tags'], lambda t: tag_href(site, t)), closed=c['status'] == 'closed', data=d,
                    thumb=thumb_html(site, c))
 
@@ -655,7 +663,7 @@ def dataset_ld(site, cards, *, name, description, url, downloads, keywords):
 
 
 DATASET_KEYWORDS = ['AI agents', 'agent platforms', 'agent economy', 'agent social networks', 'agent marketplaces', 'agent payments', 'x402',
-                    'MCP', 'agent registries', 'verified catalog', 'open data']
+                    'MCP', 'agent registries', 'dated source catalogue', 'open data']
 
 
 def item_list_ld(site, cards, name):
@@ -818,7 +826,7 @@ def build_index(site):
            'potentialAction': {'@type': 'SearchAction', 'target': {'@type': 'EntryPoint', 'urlTemplate': site.abs(f'{b}/') + '?q={search_term_string}'},
                                'query-input': 'required name=search_term_string'}},
           {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': 'Atlas of Agent Platforms', 'url': site.abs(f'{b}/'),
-           'description': 'Verified catalog of AI-agent platforms.', 'dateModified': site.latest.strftime('%Y-%m-%d') if site.latest else None,
+           'description': 'Dated source catalogue of AI-agent platforms.', 'dateModified': site.latest.strftime('%Y-%m-%d') if site.latest else None,
            'mainEntity': {'@type': 'ItemList', 'name': 'Atlas categories', 'numberOfItems': len(site.cats), 'itemListElement': [
                {'@type': 'ListItem', 'position': i + 1, 'name': CAT_LABEL[k], 'url': site.abs(f'{b}/categories/{k}/')} for i, k in enumerate(site.cats)]}},
           dataset_ld(site, cards, name='Commonworld Atlas', url=f'{b}/', keywords=DATASET_KEYWORDS,
@@ -891,7 +899,7 @@ def build_index_md(site, n, pages):
     else:
         title, intro = index_page_text(site, n, m, cs)[0], index_page_text(site, n, m, cs)[3]
     if getattr(site, 'catalogue_mode', False) and n == 1:
-        intro = f'Dated source catalogue: {len(site.overviews)} source overviews, {len(site.limitations)} bounded notes and {sum(c["status"] == "closed" for c in getattr(site, "all_cards", site.cards))} closed-history records. A source visit is not a functionality or availability guarantee. Read current_limitation first, otherwise overview. Search and filters: {site.abs(b + chr(47))}'
+        intro = f'Dated source catalogue: {len(site.overviews)} source overviews, {sum(c["status"] == "closed" for c in getattr(site, "all_cards", site.cards))} closed-history records. A source visit is not a functionality or availability guarantee. Read overview text, visit date, sources and matching capture. Actual-use notes are separate. Search and filters: {site.abs(b + chr(47))}'
     return list_md(site, title=title, path=list_path(f'{b}/', n), intro=intro, cs=cs, n=n, m=m, first=f'{b}/',
                    json_path=api_v1.page_json(n), total=len(site.cards))
 
@@ -1465,20 +1473,20 @@ def build_closed(site):
     crumbs, crumb_ld = breadcrumbs(site, [('Atlas', f'{b}/'), ('Closed', f'{b}/closed/')])
     n_auto = sum(1 for c in cs if closure_info(c)[0] == 'auto')
     box = cw.info_box('closed', f'{len(cs)} closed', 'history',
-                      'A closure is recorded in one of two ways. <b>Human review:</b> an official shutdown statement or at least two independent signals. '
+                      'Current closures include explicit editorial decisions. The following older rules describe historical records only. <b>Human review:</b> an official shutdown statement or at least two independent signals. '
                       '<b>Automated weekly check:</b> the site could not be reached in 2 consecutive weekly checks (several attempts plus alternate URLs each week); '
                       'such historical records identify the automated check. These are historical rules, not a current schedule or service-state promise. Closed archive records are excluded from current safety queries and removal actions. Archived cards are never reopened automatically. '
                       'A single failed page load is never treated as proof.')
-    lead = ('<p>Platforms that shut down keep their card as a history record, with the evidence of closure and dates.'
+    lead = ('<p>Retained closed catalogue records preserve available historical descriptions, dates and captures. An editorial closure is not proof that an operator shut down.'
             + (f' {n_auto} of them {"was" if n_auto == 1 else "were"} closed by the automated weekly check.' if n_auto else '') + '</p>')
     body = f"""{crumbs}{cw.hero('Atlas · history', 'Closed platforms', lead, box, small=True, kicker_href=f'{b}/')}
 <div class="cw-grid mt-22">{''.join(card_html(site, c, note=closure_note(c)) for c in cs)}</div>"""
     ld = [crumb_ld, {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': 'Closed AI-agent platforms (history)', 'url': site.abs(f'{b}/closed/'),
                      'mainEntity': item_list_ld(site, cs, 'Closed platforms')}]
     return page(site, path=f'{b}/closed/', title=f'Closed agent platforms: {len(cs)} records | Commonworld Atlas',
-                description=f'{len(cs)} AI-agent platforms that have closed, kept as history records with the evidence of closure and dates.',
+                description=f'{len(cs)} retained closed catalogue records, with available historical provenance.',
                 body=body, active='closed', ld=ld,
-                og=og_generic(site, 'page-closed', 'Closed platforms', 'Platforms that shut down keep their card as a history record, with the evidence of closure and dates.',
+                og=og_generic(site, 'page-closed', 'Closed platforms', 'Retained closed catalogue records preserve available historical descriptions, dates and captures. An editorial closure is not proof that an operator shut down.',
                               [(f'{len(cs)} closed', 'closed'), ('history', None)], kicker='HISTORY'))
 
 
@@ -1526,7 +1534,7 @@ def build_about(site):
 <h2 id="link-safety">Link safety</h2><p>The trust engine checks linked domains. Flagged entries keep neutral noindex records without outbound links. A clean result is limited to the sources and time checked; it does not guarantee a service is safe or suitable.</p>
 <h2 id="data">Data for agents</h2><p>The overview object in each card JSON contains the same text, source links, visit date and revision as the HTML and Markdown card. <a href="/api/v1/index.json">API</a> default lists contain only current cards. Closed history remains accessible by permanent ID and Archive. The current-only shape replaces old fields on the same URLs.</p></div>'''
         body = crumbs + body
-        body += '<div class="prose"><h2 id="freshness">Keeping the catalogue current</h2><p>The proposed GitHub process is a weekly queue for MAIN overviews, a substantive source revisit and matching screenshot, separate review, then a PR with preview and checks. This proposal is not an active new schedule. Screenshot-only captures and legacy metric refreshes do not change an overview visit date. Practical supplements have no recurring schedule now.</p><p>Existing stored revisions are retained. Current cards do not show old review logs. A separate history or agent system is not required to keep the catalogue current.</p><p>Contact: ' + mailto(contact(site, 'general')) + '.</p><p><a href="' + site.base + '/events.md">Catalogue events</a>. These older records keep their own dates.</p></div>'
+        body += '<div class="prose"><h2 id="freshness">Keeping the catalogue current</h2><p>The proposed GitHub process is a weekly queue for MAIN overviews, a substantive source revisit and matching screenshot, separate review, then a PR with preview and checks. This proposal is not an active new schedule. Screenshot-only captures and legacy metric refreshes do not change an overview visit date. Practical supplements have no recurring schedule now.</p><p>Existing stored revisions are retained. Current cards do not show old review logs. A separate history or agent system is not required to keep the catalogue current.</p><p>Contact: ' + mailto(contact(site, 'general')) + '.</p><p><a href="' + site.base + '/events.md">Catalogue events</a>. Recorded editorial changes retain event dates; the migration backfill is explicitly labelled and does not create new visits.</p></div>'
         return page(site, path=site.base + '/about/', title='How the Atlas works | Commonworld Atlas',
             description='Short dated overviews, source links, clean screenshots and separate review.',
             body=body, active='about', ld=[crumb_ld],
@@ -2192,7 +2200,7 @@ STATS_PATH = '/stats/'
 STATS_MD = STATS_PATH + 'index.md'
 STATS_JSON = '/stats.json'
 STATS_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'stats.json'))  # one input file: Citizens rows refreshed weekly from Pulse (atlas/tools/stats_from_pulse.py), the rest by hand
-STATS_LEAD = ('Honest numbers about Commonworld, small ones included, updated weekly. Every number names its source, its period '
+STATS_LEAD = ('Dated numbers about Commonworld, small ones included. Legacy weekly refresh is paused; each value keeps its own as-of date. Every number names its source, its period '
               'and the date it was taken. Citizens, site visitors, agents and search clicks are always counted separately.')
 
 
@@ -2218,10 +2226,11 @@ def load_stats(site):
                         metric['label'] = 'Current Live cards'
                         metric['note'] = 'Latest source description and matching screenshot, not a functional test.'
                     if metric['id'] == 'atlas_last_verified':
+                        metric['source']['name'] = 'Atlas current overview visit dates (overview.visited_at)'
                         metric['label'] = 'Newest overview visit'
                         metric['period'] = {'label': 'newest current overview visit'}
     return {'name': 'Commonworld public stats', 'url': site.abs(STATS_JSON), 'page': site.abs(STATS_PATH),
-            'updated_at': doc.get('updated_at'), 'cadence': doc.get('cadence') or 'weekly',
+            'updated_at': doc.get('updated_at'), 'cadence': 'legacy weekly refresh paused',
             'rules': 'Every value carries source, period and as_of (YYYY-MM-DD, UTC). status ok = a measured value; coming = not measured yet; '
                      'none_yet = measurable, but nothing happened to measure yet. A null value is never an estimate. Citizens (human and agent citizens '
                      'of the Commonworld v1 platform, counted from launch, never staging test accounts; team and review accounts on the live platform are counted, never subtracted; a dated weekly snapshot of Pulse, which is the live view), human visits, agent deliveries and search clicks '
@@ -2288,7 +2297,7 @@ def build_stats(site, doc):
                 table += (f'<h3>By week</h3><div class="table-wrap"><table class="list stats-weekly"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>'
                           f'<p class="about-note">Source: {stats_source_html(site, wk.get("source"))} · as of {e(wk.get("as_of") or "")}</p>')
             else:
-                table += f'<p class="about-note">By week: coming, the weekly update adds one row per week ({e((wk.get("source") or {}).get("name") or "")}).</p>'
+                table += f'<p class="about-note">By week: not collected here yet; the legacy weekly update is paused ({e((wk.get("source") or {}).get("name") or "")}).</p>'
         lv = s.get('live')
         live = (f'<p class="about-note stats-live">Live view: <a href="{e(lv["url"])}">{e(lv["name"])}</a> ({e(lv.get("note") or "always current")}) · '
                 f'Markdown: <a href="{e(lv["markdown"])}">pulse.md</a> · JSON: <a href="{e(lv["json"])}">/v1/pulse</a>. '
@@ -2297,7 +2306,7 @@ def build_stats(site, doc):
                          f'<p>{e(s.get("intro") or "")}</p>{live}{table}</section>')
     upd = doc.get('updated_at') or ''
     lead = (f'<p class="about-motto">A shared world for humans and agents</p><p>{e(STATS_LEAD)}</p>')
-    box = cw.info_box('live', 'Updated weekly', f'last update {upd}',
+    box = cw.info_box('live', 'Legacy weekly refresh paused', f'last update {upd}',
                       f'Data as JSON: <a href="{STATS_JSON}">stats.json</a> · Markdown: <a href="{STATS_MD}">index.md</a>')
     body = f"""{crumbs}
 {cw.hero('Commonworld', 'Commonworld in numbers', lead, box, small=True, kicker_href='/')}
@@ -2328,13 +2337,13 @@ def build_stats(site, doc):
                      'dateModified': upd or None, 'mainEntity': ds}]
     n_ok = sum(1 for s in doc['sections'] for m in s['metrics'] if m.get('value') is not None)
     name, spec, alt = og_generic(site, 'page-cw-stats', 'Commonworld in numbers',
-                                 'Honest numbers, small ones included, updated weekly. Source, period and date on every number.',
-                                 [('stats', 'olive'), ('updated weekly', None), (f'{n_ok} measured values', None)], kicker='STATS',
+                                 'Dated numbers, small ones included; legacy weekly refresh paused. Source, period and date on every number.',
+                                 [('stats', 'olive'), ('refresh paused', None), (f'{n_ok} measured values', None)], kicker='STATS',
                                  alt='Commonworld in numbers: public stats with source and date on every number')
     spec.update({'brand': 'A shared world for humans and agents', 'foot_left': 'commonworld.one/stats'})
     lm = parse_time(upd + 'T00:00:00Z') if upd else site.latest
-    return page(site, path=STATS_PATH, title='Commonworld in numbers — public stats, updated weekly',
-                description='Honest Commonworld stats, updated weekly: citizens (humans and agents), Atlas cards, Google Search and AI features, visits, response times. Dated sources.',
+    return page(site, path=STATS_PATH, title='Commonworld in numbers: dated public stats',
+                description='Dated Commonworld stats, legacy weekly refresh paused: citizens (humans and agents), Atlas cards, Google Search and AI features, visits, response times. Dated sources.',
                 body=body, active='cw-stats', ld=ld, lastmod=lm, alt_md=STATS_MD, og=(name, spec, alt))
 
 
@@ -2366,7 +2375,7 @@ def build_stats_md(site, doc):
                 lines += ['', '### By week', '', '| ' + ' | '.join(cols) + ' |', '|' + '---|' * len(cols)]
                 lines += ['| ' + ' | '.join(cell(r.get(c)) for c in cols) + ' |' for r in wk['rows']]
             else:
-                lines += ['', 'By week: coming, the weekly update adds one row per week.']
+                lines += ['', 'By week: not collected here yet; the legacy weekly update is paused.']
         lines.append('')
     lines += ['## How to read these numbers', '',
               '- Citizens (human and agent citizens of the Commonworld v1 platform, each counted on its own), people (visits), agents (deliveries) and search (impressions, clicks) are separate numbers and are never added together.',
@@ -2687,7 +2696,7 @@ def build_badge_page(site):
     html_s, md, link = badge_snippets(site, ex)
     corr = site.cfg['site']['corrections_url']
     gm = contact(site, 'general')
-    n = len(site.cards)
+    n = len(getattr(site, 'all_cards', site.cards))
     st = Counter(badges.status_of(c)[0] for c in getattr(site, 'all_cards', site.cards))
     inline = lambda tone, right, dark=False: badges.svg(tone, right, dark=dark, title=False).strip()
     vdate = badges.status_of(ex)[1]
@@ -2719,7 +2728,7 @@ def build_badge_page(site):
 <h3>Markdown (README)</h3><pre><code>{e(md)}</code></pre>
 <h3>Plain link</h3><pre><code>{e(link)}</code></pre>
 <h2 id="variants">Light and dark</h2>
-<p><code>{b}/badge/&lt;id&gt;.svg</code> is made for light backgrounds, <code>{b}/badge/&lt;id&gt;-dark.svg</code> for dark ones (a lighter edge keeps it readable on black). Both carry the same status. Each entry\u2019s JSON (<code>{b}/platforms/&lt;id&gt;.json</code>) lists its <code>badge_svg</code>, <code>badge_svg_dark</code> and <code>badge_page</code> URLs.</p>
+<p><code>{b}/badge/&lt;id&gt;.svg</code> is made for light backgrounds, <code>{b}/badge/&lt;id&gt;-dark.svg</code> for dark ones (a lighter edge keeps it readable on black). Both carry the same status. Each current entry\u2019s JSON (<code>{b}/platforms/&lt;id&gt;.json</code>) lists its <code>badge_svg</code>, <code>badge_svg_dark</code> and <code>badge_page</code> URLs. Closed JSON intentionally omits badge fields; the stable badge endpoints remain available by permanent ID.</p>
 <div class="badge-previews badge-on-dark-row"><span class="badge-on-dark">{inline('verified', vdate, True)} {inline('listed', 'Listed', True)} {inline('closed', 'Closed · history', True)}</span></div>
 <h2 id="corrections">Wrong status or date?</h2>
 <p>The badge only shows what the card says. If the card is wrong or out of date, <a href="{e(corr)}" rel="nofollow noopener">open a correction request on GitHub</a> (requests there are public){(', or email ' + mailto(gm)) if gm else ''}, with the card\u2019s permanent ID and a link to a source that shows the right fact. When the card is corrected, the badge follows on the next rebuild. See <a href="{b}/about/#corrections">how corrections work</a>.</p>
@@ -2860,23 +2869,18 @@ def write_github_mirror(out, b):
                  'can read it via raw.githubusercontent.com. The site is canonical; cite Atlas URLs, not this mirror.\n\n'
                  '`api/v1/` holds the API description of https://commonworld.one/api/v1/ (index.json, openapi.json, schemas/, changelog). '
                  'The API data documents carry the same records as the files above, plus `schema_version`.\n\n'
-                 'The `preview` field (homepage screenshot URLs on commonworld.one) is left out here: the screenshots live on the '
-                 'orphan branch `atlas-screens`, not on main. Read it from the site\'s JSON files.\n\n'
+                 'The `preview` field (source-page screenshot URLs on commonworld.one) is left out here: the screenshots live on the '
+                 'pinned base branch plus reviewed main-branch capture layers. Read preview metadata from the site\'s JSON files.\n\n'
                  'The `link_safety` field and the link safety report (https://commonworld.one/atlas/safety.json) are left out here too: '
                  'they change with every daily check. Read them from the site.\n\n'
                  'The public events log of card changes is not mirrored here: read https://commonworld.one/atlas/events.json (newest first) '
                  'or https://commonworld.one/atlas/events.md; its source is `atlas/data/events.jsonl` on main.\n\n'
                  'The historical screenshot workflow (`.github/workflows/screens.yml`) is retained. This build does not activate it or authorize a new visit cadence. '
-                 'which opens a pull request to the `atlas-screens` branch; it is never auto-merged.\n\n'
-                 'Source dates (schema_version 1.10.0): a refreshed claim in `platforms/<id>.json` may carry `source_as_of` (when the source '
-                 'computed the figure) and `last_settlement_seen_at` (the newest settlement event the source reported), ISO 8601 UTC or null, '
-                 'kept apart from `observed_at` (when the Atlas read the source).\n\n'
-                 'Confirmed dates (schema_version 1.11.0): a claim in `platforms/<id>.json` may carry `confirmed_at`, the newest weekly '
-                 're-check that read the same fact again and found it unchanged (ISO 8601 UTC or null; never earlier than `observed_at`, '
-                 'which a re-check never changes). `replications` and `preview` carry `confirmed_at` the same way.\n\n'
-                 'Cards v2: money and activity claims carry `evidence_level` and `evidence_label`; where a curator opened the source and set '
-                 'the level by hand, the claim also carries `evidence_note`, a short reason (rules: '
-                 'https://github.com/commonworld-one/commonworld/blob/main/atlas/CURATION.md#curator-review-of-a-level).\n')
+                 'The saved workflow describes a manual-review capture path, not an active cadence.\n\n'
+                 'Current records carry overview text, visit date, sources, revision and optional real-use trials. '
+                 'The preview and live safety fields are omitted in this mirror. Closed history is separate and inert. '
+                 'Earlier claim confirmation, first-task and Cards v2 definitions are historical source documentation, not fields in these current records.\n')
+
 
 
 def current_guide(site):
@@ -2932,7 +2936,7 @@ def build_agent_files(site, write):
     gen, src = site.generated, iso(site.source_generated)
     recs = [agent_record(site, c) for c in site.cards]
     site.agent_recs, site.snapshot_id = recs, snapshot_id_of(recs)
-    meta = {'name': 'Commonworld Atlas of Agent Platforms', 'description': 'Verified catalog of AI-agent platforms',
+    meta = {'name': 'Commonworld Atlas of Agent Platforms', 'description': 'Dated source catalogue of AI-agent platforms',
             'url': site.abs(f'{b}/'), 'generated_at': iso(gen), 'source_snapshot_at': src, 'newest_observation': iso(site.latest),
             'licence': lic, 'licence_url': f'{REPO_URL}/blob/main/LICENSE-DATA.md', 'source': REPO_URL,
             'corrections': f'{REPO_URL}/issues/new/choose', 'protocol': f'{REPO_URL}/blob/main/atlas/PROTOCOL.md',
@@ -3553,7 +3557,7 @@ def build_api(site, write):
     write(f'{V}/changelog.json', api_json({'schema_version': api_v1.SCHEMA_VERSION, 'versioning': api_v1.VERSIONING, 'releases': api_v1.CHANGELOG}))
     write(f'{V}/CHANGELOG.md', api_v1.changelog_md())
     live = sum(1 for c in site.cards if c['status'] == 'live')
-    atlas = {'schema_version': api_v1.SCHEMA_VERSION, 'name': 'Commonworld Atlas of Agent Platforms', 'description': 'Verified catalog of AI-agent platforms',
+    atlas = {'schema_version': api_v1.SCHEMA_VERSION, 'name': 'Commonworld Atlas of Agent Platforms', 'description': 'Dated source catalogue of AI-agent platforms',
              'url': A(f'{b}/'), 'generated_at': gen, 'source_snapshot_at': src, 'newest_observation': iso(site.latest), 'licence': lic,
              'counts': {'platforms': len(site.cards), 'live': live, 'closed': len(site.cards) - live, 'categories': len(site.cats), 'earn_rows': len(site.earn['rows']),
                         'pages': site.page_counts[None]},
@@ -3569,7 +3573,7 @@ def build_api(site, write):
                        'az_page': A(V + api_v1.page_json('{page}', AZ)),
                        'html': A(f'{b}/'), 'method': A(f'{b}/about/'), 'docs': A(API_DOCS), 'openapi': A(f'{V}/openapi.json'),
                        'events': A(atlas_events.JSON_PATH)},
-             'id_rule': 'IDs are permanent readable slugs. Never construct or guess an ID: take it from platforms.json or a category file.'}
+             'id_rule': 'IDs are permanent readable slugs. Never construct or guess an ID: take current IDs from platforms.json or a category file, and closed IDs from /atlas/closed.json.'}
     if getattr(site, 'catalogue_mode', False):
         atlas['description'] = 'Current Live source overviews; closed history is separate.'
         atlas['counts_note'] = 'Default counts include current Live overview cards only. Closed history is separate; source visits are not functional tests.'
@@ -3967,7 +3971,7 @@ def main():
         site.by_cat = defaultdict(list)
         for c in site.cards: site.by_cat[c['category']].append(c)
     if getattr(site, 'catalogue_mode', False):
-        site.latest = max(filter(None, (parse_time(c['_overview'].get('visited_at')) for c in site.cards)), default=None)
+        site.latest = max(filter(None, (parse_time(c['_overview'].get('visited_at'), preserve_seconds=True) for c in site.cards)), default=None)
         site.generated = data_generated(site.source_generated, site.latest)
     site.limitations = getattr(site, 'limitations', {})
     earning.attach(site, os.path.join(HERE, '..', 'catalogue', 'earning.json'))

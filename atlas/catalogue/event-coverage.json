@@ -1,0 +1,1861 @@
+{
+  "format": "commonworld-atlas-event-coverage/1",
+  "baseline": {
+    "date": "2026-11-25",
+    "commit": "5be6bf010c22cbd2ac6f59a11b0b63c4dbf7dd64",
+    "scope": "Current-only public contract integrated on main; packaging event, not a new visit or trial. Existing source history is preserved."
+  },
+  "current": {
+    "1f916": {
+      "revision": "d7ec55ff696589d3327bcf35011f58b7ed37511b88f2dc8d6a20b8b5c758ccdf",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "1human": {
+      "revision": "c2984071047a8a99ec73aad30328912c76cd22e8f24436cda70945e41eac82ae",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "402atlas": {
+      "revision": "0a1c43c9195aa93244df2ba86612adf521e4d02b0579f4b78bc28395215555c5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "402rates-com": {
+      "revision": "e7f2b8e03519f26a13ffcb692df843122aad84fbf2d4a42e4a4af1936c375b86",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "4claw": {
+      "revision": "f4813a0249e7749778fb8e8227b7927ee724b223fb8577b2d29abbfa4978bad8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "8004agents": {
+      "revision": "58de94f1f85caad5c141da4e9dea9676db9d03b07594a86f072c49c129cefb26",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "8004scan": {
+      "revision": "ddebb85a62087c16aadc358246c14f9cc6fc33b8a09db8e783d9510e561ea1d2",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "a2a-directory": {
+      "revision": "311f4b8e25363eab557d58c33dcc73bf0388f706f2d20620e4dea60f9e9e8af1",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "a2a-list": {
+      "revision": "e8d1f66738c890f1ec13fc14153639cf0d469e5ee1dde6c19e7612033d3a165f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "a2a-protocol": {
+      "revision": "4a04e29f36b159c6a9b95039cab2b110faaba54437f83b6385d4c7410b630d6b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "a2a-registry-org": {
+      "revision": "65067e21740f6d39c45d56695715399672456cd8954f83455ada14a4e5cc7c3b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "a2a-registry-a2aregistry-org": {
+      "revision": "b329d592ab3036c8c70e8cfdca7b4a4f830d01043222fac26fbcf07c8c499480",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "aamio-board": {
+      "revision": "d20cefa3f2b7d8f9f78052da56581a03a263b9ed67c038e6bdb2efc90a71f75e",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "abund-ai": {
+      "revision": "9aa360217bae52513edc7ecac2b9cf98475d4cd57b27f9d7051bf014fffbd148",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentic-commerce-protocol-openai-stripe": {
+      "revision": "a7acbbe0ef071fbefb6c4db2ccdd38c7d4b2e32820a45c2ac9bc1e9523ed44e4",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "adam-message": {
+      "revision": "bcd110c70162e6f14e13f01e9689e227567aa223e1bd29f2feab1d98f6aced22",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-arena-agentarena-de": {
+      "revision": "b91f7ede35f56ef1f0dea04fa36cde84db2a637a3653f0b8cfe827093eaf5eb9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-board-juleskreuer": {
+      "revision": "56ffe2be99f15f772026c6dbc7c07328336e43a6a9e13d5bb9a8b736a7f80a11",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-colony-juluo": {
+      "revision": "bc2467e3f89d84d3b1a06631091d10e160d29b549c61bf9cf7b1f16b1c9700d0",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-commons": {
+      "revision": "a9583a470e8fe45301226268b77cb2c074e5aa0d0ebe43ea12ec07887fe138ed",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-commons-algo": {
+      "revision": "51362135994685a91d15c0325f3d719e9f3ffda44c6007fb4a8b3dea02fb8199",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-commons-dooza": {
+      "revision": "2d8220c6c5f51883bd7dc9205383b1f283e473c2227a8654152ce1d3de9cecab",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-communication-platform": {
+      "revision": "76defce0a5c15b898922520a4cdd7e4a9c7adbea3d63254fe1146bb1055c8f75",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-ctf-events": {
+      "revision": "c91e392c7d593c432e074475dec1e10ae1cb274b9855d19f7e898b873c85bfb6",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-errata": {
+      "revision": "df6f6681662168dd6ba62e707209f7dfabfdffd0c367fa46521a77888d10352b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-memory-wiki": {
+      "revision": "31f00e31eee423a70137dc69661d297f3f1d11d86327e87e74e943357334ff12",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "username-md-agent-names": {
+      "revision": "9a3a36610ecb70c4899d1956b796e60f26564eaf2f307b2ebdcba3f4dc3a7084",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-relay-greenwave": {
+      "revision": "cdec13800774c952633fa0b1020866864a8859ce05e1dd7e7c8ff481b8a572f3",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-tavern": {
+      "revision": "d0974e8f638ef0b25a86a7d45c224834b43007a37d77bbbcc3bb54db4a9ae9f0",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentbadge-agent-venue": {
+      "revision": "675cad79c2c742776de58ccee8eb3c7fd976fb6afcf807f5f98d70fb12c8d4c0",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-wikis": {
+      "revision": "ce9e039993309ece15130b73785c9e1e546a31cba68a8d9e393516afa72b33b7",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-x-ossoonline": {
+      "revision": "08393940908c6f1aefb2c4318cf193110a6bd45c6d3da07dadcbacc375cf0501",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent402-tools": {
+      "revision": "4d2d4863e48b70eacc35a9af0be9534261fddd0b77c1337221b1549df2966fbf",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent4science": {
+      "revision": "61ae7b983404fbbe8d25a09216c4ccdf6fa123ae744d684f85db9b4904c7f112",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentagon": {
+      "revision": "024f59c2c594697ab145234d521e87f1dc1b126d16d9b1b7b8d4eb8b7cf83e4d",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentarxiv-agxiv": {
+      "revision": "353521865ad0d4948624cc86e283847670071e35aa709427c8ef260b93d4edb0",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentbazaar": {
+      "revision": "d482c0bef41c8e3cf6204a996195830d5695adc7897b5c202557146b02b11355",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentboard-ai": {
+      "revision": "f5e6d38901c0c60419006cf2516b698e9556d2f59a800a7e0a1369f30e8fd4f7",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentcard": {
+      "revision": "b88771c78bac811d7582bb32eb794c8d6d930027e2f617d3badfcf5b6b14157d",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentchan": {
+      "revision": "c3e07e2142a63ab3462f7268a34a06050b78b2cd3b3fa4ce87523465389a24fe",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentconnex": {
+      "revision": "c2cf183860e6d2ce4c85089dcb9352d432b92cc394bca6144cbca907ee49f829",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentdm": {
+      "revision": "02728126663842721864e33de62f9caff2c97a34f793a50cc2957241d996461f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentel": {
+      "revision": "e2f5745e2e0cfd7f6f9d9bd078f171da111c98bc6d1d6afd4a025b8ddc5ccce4",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentgigs": {
+      "revision": "39ca4421ae2d70370c9f54801c9041a785dfb2f2bae2a2e0752bcc2dea7c0573",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentgram": {
+      "revision": "b61d543c110908f2b23c461d67b7e725634e8f027011e2f3964c39d02c1e6f5b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agenthansa": {
+      "revision": "7bdb1a7ede1b12a1cf843c4c9574ec3fec1c86046e0b31047a41fb5e72092cb7",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentic-market": {
+      "revision": "8f2adced5b2c06e799e8569d3e24107acfa5236fe28d6688a6a55b58e0d5eb53",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agenticmarket": {
+      "revision": "e8ba488fb9bacccaad8478c48366f0429639a88fba2a63605b2794549aa637cb",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentindex-x402looker": {
+      "revision": "5ab81f39616ba81d00c09181a5a4d86bf87f46827db48d02287d1370a972fcdf",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agent-bounties": {
+      "revision": "c6bcf2ad5e327912dd00768de2c5abfae39ea447eb73d6fdefadbdbea6fe7d80",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentleague": {
+      "revision": "7080e0dd5f16c33abadd2a67208150588b7b14aa7d383c8ca410b61a53ef8a33",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentlux": {
+      "revision": "2efa22e4f992b68d9ae201142f179577386529d92e4051ccc343acc7c9232236",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentndx": {
+      "revision": "c900f9aa4b738108b77803343cd65bbe6330b5f4c6e9bbf03468687aec40fea9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentpedia-openagents": {
+      "revision": "63f2a85e0a003a18f4a3be89a926a8ee889d3d703887ba0895a749b4bc21b994",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentpedia-io": {
+      "revision": "7487269f285b0bca06fcb096cf28d93de2ecf20f07c9571c027840d6b5723d62",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentpub": {
+      "revision": "a8b6d973ec85df8d5a2490023805f994a907a11977d80bd168a8a55f97345b1d",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentrust-trace-registry": {
+      "revision": "b1a6d80adc368a656605cbd25046ff29e360f811fc98ebad58453fce321d00bb",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agents-gather": {
+      "revision": "1007978e976ff3cde3c44afc9b0b670b337de324c86b85006d42667075108bb9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agents-trust": {
+      "revision": "9380d74eb460de92597001b752154081d10cb0453c3981c5f9430eff4c74d2aa",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agents-json": {
+      "revision": "14a8dfda8b2fbd03593cc95213b7e8ef695417599558ea58ab7b2e2c3fbe6ea5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agents4science-2025": {
+      "revision": "547a955ebabc3ff4822502007a2b58a1eba452a2e862ee4e7d86598ee465221a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentscan": {
+      "revision": "9cc40963abd3cdf303063fc00c4a47cf4cd9b9a4eaa35c3759d0813e50cacfd3",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentsports": {
+      "revision": "dd3aa15147486861d1e63bc3333df6b545471496d56d22576d2b4eebe7575438",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentstore-agentpay": {
+      "revision": "a77874498aa36dd8d2621a74cde759fddc1f8f876ec06a2a44af3a6f6901a2ad",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentsvc-io": {
+      "revision": "1645411a6411973531fb408c8bd44a52575f3af0f2a26abf5998e7338c58368f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentsy": {
+      "revision": "32c9dfc2c7abda081a428d8e74ffd17cc6e770cbae64ae80a28ca4f8dbc9f45e",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agentworld": {
+      "revision": "0e536b4ef8cd28e4577e39ff9d25dd18b94885f410ceb8a3865af3b074e4c53a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agenty": {
+      "revision": "8ca5292fe9e295fbefd84314a9931db54755750a426c51cc4fe4d4a5c190f342",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agonaut": {
+      "revision": "ef76a7af574ad7a379562bf44d11a746b3575b4a5422e390b1b7ab850d5782da",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agora-burmaster": {
+      "revision": "fa5e632a226e983b624f3058f396f08f3271c2053f46d0daa3b1a5960f3c7bda",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agora-tundrabit": {
+      "revision": "c1111e91ab8191f0326eefd7c2d8e05e86df4b07b3ce08411e067cbb135ed002",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agoragentic": {
+      "revision": "7637f936e656620dbf311a25e558427944bf6b0c55f6bc85bf358d9643c353cb",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "agrenting": {
+      "revision": "312bfd0256607499574e8eb3d5cd1af555f588b4450e26337021d780ed6809e8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ai-agent-message-board": {
+      "revision": "102b9b2ca74b63528fac3ebacdbbfdb7500341c4e3b0873a3becf736975ce7ef",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ai-agents-hotline": {
+      "revision": "3c2baa0413847a099ce1af8620bad232ead8add58f640a152df706636a870ed5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ai-commons-forum": {
+      "revision": "0952a5715d2a1c3e5ecfe9ffb8d313b9250b9083da7a6a7dc6d84cd58c0f4192",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ai-societies-network-openwitness": {
+      "revision": "dc1061fa932b87fc3dc21569123a65ed622308169632fd5f23bc88219b52be18",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ai-village": {
+      "revision": "6c3541fe34e25186d85eddba1ed71e8eae34318864c3597a1b5cb5430a2b67d9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "aibtc-bounty-board": {
+      "revision": "d496a8e6a798cafc77a72f9494191f16d90b22aafc3c4732fc0be9b72f722f08",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "aicq": {
+      "revision": "1da90e83813ec387f36cd6c5cd0bade933f01fb29d5ec4a9fefe7a27103980c2",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ainglish": {
+      "revision": "7a3d8913e3d59eecadcdbb4e5984a0ca14a9c306a3228330ce8f5c9b50489482",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "airaxiv": {
+      "revision": "d5ebc1b99c5cbfbf622ec48ff3795b31333e196876a6d25c865d8dd9c2e9113d",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "aixiv-online": {
+      "revision": "aadc37374ce36f5b4497ab410caa9e94cf14dac7d455ec92702ff3f67d25c91a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "aixiv-science": {
+      "revision": "0eb1bfcad146b6e2412dacc0d983e01951663ba94b9dd6e589c8a6eee6041198",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "algora": {
+      "revision": "60e8e9f0b45693491c8fd67610bbe8b571ac9a8ba82f81ebc84943b208d2d404",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "alipay-ai-pay": {
+      "revision": "8e6a247c14406183d066fe60709f8a26b7c52deeb747f8a16821547bac729a08",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "amazon-alexa-for-shopping": {
+      "revision": "378e7696f86839dadaf2ef48e46fdb9ccefecc5eaeafe9875ce0d22cee4bc477",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "anthropic-claude-commerce-agents-blueprint": {
+      "revision": "0eb2318e4d86d82f4337ffe692d4dc1a550613adf09f1f90d96c9b11ba34efd8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "apify-store": {
+      "revision": "cb863aca544787ae7ca3c32bcc582e58189ff329a7ddecd57fe0f2eae3a15bec",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "aptets": {
+      "revision": "2e285057c86f45fbe72aa147802bd3e769d982973394ce47a37910abf163f98a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "arena42-agent-arena": {
+      "revision": "7f19f9fd7438e7779eaaf22741e4329527ee27975b4555d4d58a8cb87c9912e5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "arenabot": {
+      "revision": "0f8cadbf1985187ec8d0436846089b5ced0f5e50207d6e1c6cf1bfedcbc1fbf2",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "arkham": {
+      "revision": "d24391fec8a7073b0feefb3e8de3065b486f523c51f8a9ce8146b3e6247a66b6",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "allium-x402-data": {
+      "revision": "bf22837714d5e7162ede9c18ada85f3a006e088c1db5dccc3df6a4ed42ae406a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "artifact-council": {
+      "revision": "4ef76d445e687f47f6f6988c83186168888406fcf517c6196ec53df328b2fcd5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "artificiety": {
+      "revision": "981e8d94d65c5d12016985a3a70d3cc39f2da8c7b1a192810964b16f5b94899f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "asterpay": {
+      "revision": "4905b7f265aa0822e64c4fd34e390b670f79679736001cc96d65854098d57e4e",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "austinsdomain-bot-hq": {
+      "revision": "d8288ee22f59d131b6ffa39689dc919a2c28b3e562e78c350464ed6aa805d817",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "awesome-agent-native-social": {
+      "revision": "ec81a491380d9f2212388de55703aea7212d8e0519581f336acb80f4d7cd52b1",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ax1-console": {
+      "revision": "f4658e00d08db3d4bf0e9004cef01740b65478877c3b62931276cf4562e4b2b4",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "bags": {
+      "revision": "02e090e3739ef15b37f38ed59d9f917cf3010aac1b20bc6d639b2df647d69ab9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "basedagents": {
+      "revision": "1ceeba4e9482b87d3ab1e9440caa348f75f86f12fdd7537ef37354943fa8fc6f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "basis-theory": {
+      "revision": "995a280a4dcd5f917062d99f1cd90e2698cc0435b933913e0595db5e7098c08d",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "bitrefill-api-x402": {
+      "revision": "3ed7a9b7e99a4b127311db70f9b2b0896b20aa63956f8ac34ded224e78ca00a4",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "blockrun": {
+      "revision": "1f502e0005317857e0a5e3733eea46540853c2d013cfd0b70914b40fa92dfcfb",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "botmural": {
+      "revision": "dba684870c6aeb7a39b1883c3629fff836e39dff2f9f6051fabcae4cec848333",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "botnet": {
+      "revision": "903014e36a6861a3afc93b4dae1ab163aab5fc53ff0adf99fb034e6fbf0ae16e",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "botxiv": {
+      "revision": "4c096485249c4fffe3860f1861f6d6a82e133c814226f27cace87df866694285",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "bountix": {
+      "revision": "8091e3cec3961285dd360fe049cfbbd0b4451da520ae51725b07c8888a992bcf",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "trybounty": {
+      "revision": "3990d70adfeba5ac9a6c10ab8f038316df88959376b7b6178230ce3fcc074129",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "bountyhub": {
+      "revision": "50b860b5e1d095e7e9629ec18dc30667dd37f1284805506084d7439d5c21853b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "campfire-agents-board": {
+      "revision": "d1c285e8eba3b72ef2440ab9db44ed9673e1f9c991c0074d0fb963074ad9c5be",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "catena-labs": {
+      "revision": "67229f6c5471a4aedaf6c82af9632fbe58e09187edd512c4566ae3779a4122b9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "celo-x402-facilitator": {
+      "revision": "368374a31662b29a80c96674668fa6fd900b206e3d36eb9ab7d0572d89dc7913",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "centaurxiv": {
+      "revision": "35e756122c7d5e67163b0f61355e845544cfcf48244bdd54ffe7b8906aaad25a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "cheaptokens": {
+      "revision": "e6df428e82e0a0a4941154026afd7c85bc03d83ddd3c24e509f13456313c48ee",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "chirper": {
+      "revision": "a89cd51a92ec37c4ddf073269b752d8025ecbe49cc50294190a4f861d3503e77",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "church-of-molt": {
+      "revision": "49f12f3f4dd10b39c2a209bef853742ab53d199327237d5dc74fd9fa0d33c896",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "circle-agent-stack": {
+      "revision": "b83cc44a860bdca754c3839668764f87de520bbc215395724669aa06217465e9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clash-of-coins-checkout": {
+      "revision": "441b00f19b5f3c1cc8fb4ea9088a8782995e2554eb8e16512485772675dc9344",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "claw-earn": {
+      "revision": "aa353d8f7755a3c36de3adbfb653b877a9dae9f3def965fae8d96556c907632a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "claw402": {
+      "revision": "b22db60d3bbe9febd4029011bf883a014598180b86f2b66c5f0f0feb163aefcc",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawarena": {
+      "revision": "c04226287b8c7924164e964185277d836f803abf89a847f77836225ef6900a5f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawcaster": {
+      "revision": "c7c4f6a3c670dfa4ee65872160286d76f8afcc3a2654bdc4603a962ae5b7d7f4",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawcredit": {
+      "revision": "c2da80c9e7b3372acc376b0258ef55acb0717242d1ae9d39f1c73d4cc45c1024",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawdchat": {
+      "revision": "09d507bd993509cb6a1e69c11e36efe0979da6d7a9aa541f26e115c2f70f3d64",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawfetch-ai": {
+      "revision": "98bac7d0d8aa25f3688040cb1d02ac2afcda205d959831c86595e6b139e6e0ea",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawhunt": {
+      "revision": "b0daa18db09c925d16920c45715b22a33611c39a19fd2d79de43b32759f7d237",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawk": {
+      "revision": "17b23f244445a577ef87a392fe3c650397ebaab9c0cc1a0b511384c2314ccf2b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawlancer": {
+      "revision": "b82fa038813d123275cd2155a9a21b9a47eb49c133672c19334b9afe29568436",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawnch": {
+      "revision": "6c61529efaeb33436083fe0e2f03f49658e65a753b12bb95df796eba1f7c1344",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawprint": {
+      "revision": "5204f88a7102b26fb316f1d7c8923484854c9391a1820d56a458a6ce48a12895",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawrxiv": {
+      "revision": "b2d5821d6a0ecfc9635be5aec97137c10b5a3507f8a835244aa2f5a2a3417fc5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawsites": {
+      "revision": "5e25facb8e427181436456d9a27564fd7b9f8352c58d63043a07241ae9f28424",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawstr": {
+      "revision": "20e050419e61710bfbc7caefc15b881ac197f3973efca5b671753f46b62b3689",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawtasks": {
+      "revision": "01cee4ecf1d901bad8226bc43a8dbf78d2a3d3c8a21d694dde655d1d8eb1b021",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawtavista": {
+      "revision": "07b358fd771faf3f4d4a2e8b55cae6ffdaaf1fb9d719df48fbfa5cd3e0755e06",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "clawxiv": {
+      "revision": "7a68a3347162b6703a58113d5eab7f8777169d8d653e3b27e27b009ad7dc4245",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "cloudflare-monetization-gateway": {
+      "revision": "4112f5727500e2b728e7bb52aa7af9350b05a657257153b5120f3c3cd356ece8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "cluster-protocol": {
+      "revision": "79493c54191af9103be579e625c15517f41135722c02b049fc19c47a12ba0712",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "coarena": {
+      "revision": "0539598f335909a13a937e1f0ceb5bc6a2c5db5b342aa41692ec02375fd3fd27",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "coinbase-agentic-wallet": {
+      "revision": "87ea7a166e9cd407580e81d230fd7b4a5a758e2f5312e28f47529e0b5b23e319",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "coinbase-cdp-x402-bazaar": {
+      "revision": "cf546ea5cb49a9606602b5213bfd9dc2d77f960aa7e148fe7a4b7a5cec2d711c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "coingecko": {
+      "revision": "ae4e70f7bf92f1eb694e97c2ab4377e1e6ad507963e2726a2986471a750d198a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "colony-chat": {
+      "revision": "bd6e0d1174e4b98de0ce63a1a3a4dd7eb7e51f950e784d3349264ddc3a5f8f2a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "corbits": {
+      "revision": "7ecff8f41efff6401c1b9f4a4a817b74b0576f13469e2ec86b0d0e1eb73ec363",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "crossmint": {
+      "revision": "a757a0e86cd4a11795e503bd5e93c219a7e17a00e86b2e8815338670d5005a79",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "cyberarena": {
+      "revision": "fff5bc3f06b4d4cfaf17bba563dd552fa2e240655f497610beecfa84cbaaf6a8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "cyberwarex": {
+      "revision": "f2869bcfb352189a526e3a32b946ddb3a2c57c8738d0bdc5b60684a283c32fdf",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "dail-agent-world": {
+      "revision": "30ca9411db47f4371e19f018fb0af0446416c5626462d6c7377411b2deea3423",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "daydreams-systems": {
+      "revision": "b2ea042d9399066e3486397e16c4e9dd03026f7eacfc29c4309c44ba51db975c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "dead-internet-society": {
+      "revision": "71895bc815e4ecdacde47e4b6a094e1f2fe2af93ac5eb0b0913bbe33f3c72461",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "dealwork-ai": {
+      "revision": "dc2dd038fce4db7d725fdfdd82b2f7bc74dabb6c41f49a64ec7be127bb7fcd75",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "deskcrew": {
+      "revision": "ea6d9546ec8ba8405cb4dd7dd88bad4033b8ac4aeac98320b79c1959a9d2801f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "devaintart": {
+      "revision": "be9271ffc7113f8e7367588add5e26e8c5e1f60ef74ddb3b3fccc3533f8f72a7",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "dexter-indexter": {
+      "revision": "a3d0a29925b26e0a6a8883002983676f929a89a2a17e48d9b6d26a39d0529f55",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "dtelecom-x402-gateway": {
+      "revision": "1b26079fbc8f2cf15218779189a48e88ad5869355d2c2af344fbd7ec1f632284",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "erc-8004-trustless-agents": {
+      "revision": "5bafad236c25479f366016508cdb16c61ad77705075367f17727a549d4e4f7f7",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "exa": {
+      "revision": "80ad4fa915171c8c3846e076f52f01886d9dbb15517cc2776302ff1533b067b8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "execution-market": {
+      "revision": "5476adf5b84ea6f9a0325f6b8703c8ed1441cdbc3ea986b0efb1a0af2d94d139",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "figment-x402-facilitator": {
+      "revision": "50677e5ffb5ae65f6d79860ebdde810f396d38d4755314fa8b901ae2c72a674b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "flatboard-nyrds": {
+      "revision": "42d5776911bd6d56c898760e7de48b8de4d5d462850a5978af501767e2e8b45b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "fluxa": {
+      "revision": "ab9d328d714902bdcc4a140f8f24249a642354645a1507480d2c6eeb57fe0239",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "for-agents-only": {
+      "revision": "9065da046b32a454042d6e190358889dbcd69d85f63ff395a0096655af489641",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "foragents-site": {
+      "revision": "9de7092d85ff43a2a864d23892e46cf2413aeaae6c719ada54c31d807b4f815c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "forgemesh-labs": {
+      "revision": "4f9b597102d9a6e659622da0e5f41113d9f3e205e3f744dc51c3dfe8c93530ca",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "fork-zone": {
+      "revision": "41e7a08257e2b07016d72152162755d9e4fd0863acd3b314fcf27866f63a614d",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "mcpay-frames": {
+      "revision": "ffe142ea9ed9433e89b3f4d9f9a78f97e81395225d2581b45d53d6bf42bc9196",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "frantic": {
+      "revision": "aca9b8761dade49350153289416ff643e8eb694474f4e42ca3bd8f5056f54881",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "freeq": {
+      "revision": "6bdf3e7836bd280a4c0e649184b3b8c716ebdfb9f4b4c4564f119796aa32fdee",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "fruitflies": {
+      "revision": "4bfd4a83a5138762a9ec0630c98c631952d75ffba90a59cbebfb8f7c2222d32d",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "get-posting-board": {
+      "revision": "bab54ef9d944580dbde94d96e1d9da151a7db0dd1deb27be6e61890116b09f6a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "gittensor": {
+      "revision": "e5479d03a80de6cd514eb12014c98988d0e1a1ee654b15408b7325784d295fe6",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "glim-sh": {
+      "revision": "12220d70c5807ac321ecc6073fc9a52b7025f3b120bac73abb4e0df390561ec5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "global-chat": {
+      "revision": "052fd546a49f3bf8ddb9e1b9529a1c3e9588631b1e04b78bcd0f11a788142b11",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "gnamiblast": {
+      "revision": "96513a861ba0bb1a055fa6bee2913cab77a7c0b22dda3fc99c8dfe13e6db081b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "golden-cat": {
+      "revision": "5340695b923d1a8b512eee4e6df2bd0c2d1022d7b5bd3554bc4569b7b3da8b4f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "gondola-ai": {
+      "revision": "8072bec55e6fdf42bb029f0584a6ccae8ce22267b1c6bec64a29da43e3b943ab",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "google-agent-payments-protocol": {
+      "revision": "915a3a3e6aef0cdc896189fe25dc20fd74668617c0431b893c8d02909cdb1c7b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "universal-commerce-protocol": {
+      "revision": "e87e90288a90baec06705a441ce67bd97bf8bf208161e3e17020b0233bd31a9e",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "grift-san-verano": {
+      "revision": "fbb5cbca68008950b2a7062c728908fc0f8df0b652279524599ee9d2bc054001",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "the-guild-hall": {
+      "revision": "295705e6ce17bd8fca10b5e29ce3ac90f7e94617affdf81fcb4e8b8605ef158b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "hal-holistic-agent-leaderboard": {
+      "revision": "58f1e3dc200fd449f2e8f11ae4222b326f6d316afb982d6501f2e3cef4174881",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "halowerk": {
+      "revision": "f985b48787a0cc01e7e3b1619c777f349f0e31b06e885f70dddbea46c227d651",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "heurist-x402-facilitator": {
+      "revision": "cf53eca075874f6016ca27c7c638e3faa9f7dafc469d26f2df3965dce54bd89e",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "hivebook": {
+      "revision": "42068fd1120b3874877f57219910074554bfa8255e7936e557cd18299f0e356a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "hyperextend": {
+      "revision": "69deedbfba292da9a9857a2546420869baa9d886aa710a6a7ce337b8a674cdc9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "hypothesishub-medresearch-ai": {
+      "revision": "f01a15286f24616d8d03875cf66bb8a62090d01ca7494aab61bec6510e5b6390",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ilands": {
+      "revision": "dd249351a73f2c0340f2fdedf60f0f3f6d263c8b5dbe07cc6d8298bfad76acbf",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "inwith-ai": {
+      "revision": "b05883841b3e56cec8fe8c66b859718681f49656aed5562f06357226e854cdc9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "jobbi-agent-gig-index": {
+      "revision": "c335b33758278fe1874e890c06632c1b0a42ae112838fb86c15d16dc2787ec51",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "kaggle-agent-competitions": {
+      "revision": "af1b5020ca5d1fb6d9bb401f3685480f1e5375e7b17917ccdb916a88d69e0d4f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "keyring-agent": {
+      "revision": "e922cbf170dbadcb22c84e2c394a5942b8d3af315874080c25561b1618429632",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "kite-ai": {
+      "revision": "4c761b1a5f11b341623520de823095b494a1949f8ad70cf8af778e09413a316f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "kradleverse": {
+      "revision": "95a6e4b22e15a9a5d5de8f6c8819848005c8097374f6ab59713bf63187c5c06f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "laevitas-api-v2": {
+      "revision": "d1af3b4afd27c3bdf07bd3b167dd68738b70e2155a93c924525b60cc9899a589",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "laso-finance": {
+      "revision": "8476e8dbb2a5893a28b3a06c7d10a7ceed8233c02ee3d90091a9e86f22bf44f8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "leviathan-news": {
+      "revision": "1dc0fb51f29ea4e93829534ad17493fea85b2270163d0f90ab1ab942a8f4e065",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "lightning-faucet-agent-board": {
+      "revision": "862e351a5ca9e674cbd7b8b3cc474341391858404b7b0e9c7471a3b23a21a616",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "lightning-agent-tools": {
+      "revision": "ab9fe0daa5734f57d28c36a12bd3c28882debf841a7213f00d86aca4df78b3d8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "lightspark": {
+      "revision": "370c33e62e83c7cc87e5452cf4b46f9a6b59b28d5851338672799ecca0a74f9e",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "linkclaws": {
+      "revision": "466f9b10cbc7efb8868f350d2eed61b392215810811283fdba9f5a054296df88",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "lockzone-qevrulan": {
+      "revision": "6b569811d83e3eaaab458a281019d1c571f27006cb2fb7e6219af1f5e97dc300",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "locus": {
+      "revision": "1625aa1aa6cc275815ade58404ae719c64d730755d8470659c51d090ab8014a0",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "losbeto": {
+      "revision": "6cf1758ddea0e27f2d5843d3a5d9047c0841ab405763522f5aebfefebc56c85f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "machins": {
+      "revision": "aaf5880f58a87f4b04db476c00fdfb551318561a0c418db24195baee30bd877a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "manifold-markets": {
+      "revision": "77ceca9525e0c6bf048e470cb91d10cc7bc263039d9e46aea521d32abe3ae3e9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "mastercard-agent-pay": {
+      "revision": "b961b964815d9d549f926f7f28696291e86352de8175929e351f1b21d9d5fe6c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "material-model": {
+      "revision": "73366e0001d76474339b6262bba231379abd9c722191a54a62116da02d6f953c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "matrix-agent-net": {
+      "revision": "a931f518efe355c30bef89f4fac7ad993a8b5d5c7aa5faaa3808d20cfce34da9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "mcp-marketplace": {
+      "revision": "c7c3ac2f9957b9ce7cdaa5f4b347d0f02836d260fa1c5ccf7849977c214cba45",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "mcpize": {
+      "revision": "439491ac132a6eabca8b401efcebc7e7a81c5f82c9836c5500ad745370061d48",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "meatlayer": {
+      "revision": "17b009fe6687c5503aa0892ca1a0c3e640d9d6c357f09b98577b5af6168c83c1",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "memecorp": {
+      "revision": "cfd2bb21720d94b75d6da9ec1fbb494c6518c59b0ebc1c7071c09770b0c40ac1",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "meridian-mrdn": {
+      "revision": "88dd8da28a845a36cd49789b06d56e3e38d882b5c8ad9a89c4e5be44b1723df6",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "meta-muse": {
+      "revision": "52e53be4bac7512a6b7a454f35cdb9561eb62f5abe0229e7f64653418af283f2",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "metaculus-futureeval-bot-tournament": {
+      "revision": "e5686879d0a2bfb95248dc682285d26b6b7d8c1037130b851ff610187bb01a6b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "microlancer": {
+      "revision": "2583ff14f583f00af04b3f1680465f0d3d46f8c8577efb9f2c1a7e99dd25c4b0",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "microsoft-copilot-checkout": {
+      "revision": "c248f7b14929d2dda241e033ade6c1d0425e47732e076a1fec1143ed5613198c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "microtap": {
+      "revision": "4d8da8ffce3df4213ea6761c20a5d3f43bbbc09ae7ef304e169dbdbc6de4094a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "molt-road": {
+      "revision": "60e5170723536331faf09990a280662808e29e2faa2e66c53783465eea9fff85",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "moltbook": {
+      "revision": "07173caa20fc5fa46f0acf8296be275474f2af0f50180412e32d36246ad4306c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "moltbot-den": {
+      "revision": "480c3f253f984775095273a919204b8772207a4d7ca798326d917152d8bd9f80",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "moltchan": {
+      "revision": "006665c7853782a121fae46c5881e30729a2afe8062a4edbd1bf22c1a23341ee",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "moltexchange": {
+      "revision": "1bbd4b9621bece5b1b167f3877eda123577e47ed70513fe4963c9f5297ca582d",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "moltjobs": {
+      "revision": "8cdab47e19909b069d8412aa567df211620a6ce4bdbe85b2d1d9353f3013599f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "moltlaunch": {
+      "revision": "0b251cb4ef9c78e294071a2fbf4a4004accbf10cdae1c4d7d4063f2ebcd8cda2",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "moltr": {
+      "revision": "435d3446a4061220980243d28d9728b59a5d9cb00d9e47345164412d9b53b5bd",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "moltstack": {
+      "revision": "1b7eca66a06371ac2ca93f169e7f717a0efb0cafc5c77354041699962c73d0b3",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "molttok": {
+      "revision": "08f33cef162355dc6e2b69f1080f02054bf29c89a1cc58ec4442b3d02e1d0a84",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "mos-aisley-cantina": {
+      "revision": "937f4a17dd70149aa18b5581f276fcd31b5b9fd556d42ad7444caaa16685558d",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "msgboard-dev": {
+      "revision": "72d4a68306594d3d65a13fedf10884ededdf85dfea54c2a49ec17267af681b29",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "musedin": {
+      "revision": "3671285392808c190994e3d00011639c71a96fc46c3826fb9c55d51364a995d8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "my-dead-internet": {
+      "revision": "2a3862b040b25e6d84a30a82a71f3d36b037f94b1d18830724f2a0e7c86db14c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "mycelia-signal": {
+      "revision": "4fe0ff99cbf231ba0c571014522616281989f8eafa4b38e664e76c7ed156d2a7",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "nansen": {
+      "revision": "85a68e2e9368344b3bb427e590e68af57af780b6f28c57dfdce462b5efb9c04c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "natural-agentic-payments": {
+      "revision": "ec7b1ff470e1b79546bf0b29fc214fda43419ddc84b40d7c3c6fe71e792a6e9f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "near-ai-agent-market": {
+      "revision": "4ee9a081090af3aacf8dc432b3096f00fca31bb0cd0b2dc04c2bfa77cd14fcf1",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "nebils": {
+      "revision": "36451b0abd00e57a1c634dde432819c7f67336a9c7ded0023e7352c2d53c9ad9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "nekuda": {
+      "revision": "3234492be385bfdd57c986502f72e4f03d503c6c945e01db2de1f9fc5be6b935",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "netintel": {
+      "revision": "a3fdffac3b9a8da90ade729b412794fa051e9ab282ffb78c87ee41492b224120",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "nevermined": {
+      "revision": "f75ccaadc831cb373d3aabf4c0d046c0d64b0832f3023571437822cc2ba1a016",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "nexus-0": {
+      "revision": "5566175d1aa6a07d224295ef1b9a74bb11763ac736319d5211b347c3f12806c6",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "northreach": {
+      "revision": "f29b0e204938f1c9d81f1eb1a61adb7b51c8df140555abe60495cd0f894d5469",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "nothing-gripe": {
+      "revision": "e6ba0f06141bc515f2521128a8656571431f3755fde586cc2f4b0bba6824961e",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "official-mcp-registry": {
+      "revision": "7677d4066104aec4e1997310b7b6ffe8307f5fbc1fc38d2c7d3871c281bb5c20",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "okx-ai": {
+      "revision": "866fb4387f86034339027a85ea3f99510318938a269ea02dc878a4e5f7115842",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "olas-mech-marketplace": {
+      "revision": "94839fa31b3f78cd306d4c88ae863ca606c750e040ac4d5f106fee90bebab48f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "olas-predict": {
+      "revision": "c11d6b172ff4e467ba62b5123328364d51bf95252473e9e837af4d9385ca7778",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "oneshot-agent": {
+      "revision": "903d4b5002974d766cf660720b29edb5069233c395208726f57b600a055e8c7a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "onesource": {
+      "revision": "defa8370ce5845efad0ccb29bad958a3d154d8d188515779f4afc100f995f3a8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "open-agent-leaderboard-exgentic": {
+      "revision": "e30a97902ea87e5e8f91fbbab4b993ff0a34684045da566729311990769a0d1a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "open-standard-ousd": {
+      "revision": "6091a7b910d449ab73d8e18260c92c2c04cbdda86301cf00c7cc3ee240c3b133",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "openagentforum": {
+      "revision": "6f3b43ed92d462789f84c8f8d8f3af2605dfe12c03bb54b1953a3d1ceb5d92ad",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "openclawcity": {
+      "revision": "0d079740690e12be7ba93b477b3074cc15c7bebd41399700ba9148e6bedf674b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "openwork-bot": {
+      "revision": "e32fadac194e60f9101347c2cd691fcf90b5a2899b200965f61803f1f915649a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "opire": {
+      "revision": "edea4e4693fe4c4490d0bb29921f8e021cf43cf25c45840e8831bc1914d79ba7",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "orbiobook": {
+      "revision": "01cc3a0ee57af8fec41217765de63d89ee85e3791cb6d4c219deb998dd0d4263",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "orkas": {
+      "revision": "954a01804c2c2ce16dbbf0eb704deab46a76449f90b735cb67c7a7da54046a5b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "otto-ai": {
+      "revision": "0b6a8b230fd7ef25413612db2522af4bc4b07c2af8c7e08fa9c42ec7e678d1c8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "p2pclaw": {
+      "revision": "9afadceee6c117d193bb21233cd9764e81b027745c07cdc3ac7e95b6a456e7c3",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "payai": {
+      "revision": "7e1a6ad36ed15b9aee3405729698eebaa1c72456f7c5a4d77adb67e728dd7a64",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "payapi-market": {
+      "revision": "f62c57dafcb11b264dd5bcdb5fb05bbda49d69d9e19a6d08c8eab88a7fc111f0",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "payman-ai": {
+      "revision": "f05f3d3ab81b903c75ce8d861b7050fb572dfc7d5ed7cd55ad36a262016fb1ba",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "payos": {
+      "revision": "a96181bba613c2421097459927b838791aea84d6acbea3ae7654527d2b608794",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "paypal-agentic-commerce-services": {
+      "revision": "b4dd24e44f81f093eaf7a17f07be48f2263c7c428a884ec3f89358a61df47fa5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "perplexity-instant-buy-paypal": {
+      "revision": "6a485a450f5d2cd75022181be26546f169d6e5d320e3ad3cf38f84c88fd4a3f8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "plazmi": {
+      "revision": "70e01d938086af153b2d441cabff31a88313252bff627cc245f18ba728a43fa2",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "pocket-network": {
+      "revision": "4b77ce47a583f022f3ddd0e1dc6566d0dd9dc5360bfc4d6c25b6fdb1b254f5a8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "polygon-x402-facilitator": {
+      "revision": "1ed437bbc3d59c1df2d1b59213e134555df4f520a51a8d027e2419c928500ebf",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "progenly": {
+      "revision": "af619cd056373aa45d18dcc3af008d13030e7aa2473b64faacb5fff8aa283fc1",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ramp-agent-cards": {
+      "revision": "c73702a8d7ea42e9542f2af44cf5e1f970eb6ad56d356b30cb5e8f8fb75d00da",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "relay-russian-agent-board": {
+      "revision": "aa25ecb83a858b22a4023b36502a7e0ca0e894445aa63ccf1e6d7799a98e4706",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "relay-commons": {
+      "revision": "867b2b6d5ac75da536584a1b69b43c5d42366d59e9960264c2d7a48d2335a4f2",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "rentahuman": {
+      "revision": "d5c273c7b44356d1ca21995d964014a4a5d4c26397d50cc93b7bbabf3294b785",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "robinhood-chain": {
+      "revision": "06f8e194cf602f0d5036b8fe59abf451f98b9073306f788c004dc9e4a121ceec",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "rooms-by-aurmada": {
+      "revision": "eef1db6337558e4db052dfafdf7ade0f8707987e35d287c1c6dd1c4f04247738",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "rstation": {
+      "revision": "7802eba7f76dea869a9b1f1db67f46a96aa850b869c15d66a01b3edec1aebefe",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "sanctum-beacon": {
+      "revision": "557a3534b9ad14bbfd3e1a7f7967bed75ac9e82e49c10dcf907513817824d47b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "sasame-gec": {
+      "revision": "b6c00d30b556b552d2b871c58fcf818da5b839a05bd9af8e672e06367a94e1c8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "bio-openlabs": {
+      "revision": "73646c549eaca086cdca5019beadd8309095505c27511e0adf8276c685a30125",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "shellbook": {
+      "revision": "be3176d3a54694eb3e22a103aa6e5e5717201130c88c21ed91685942dffcd55b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "shopify-agentic-storefronts": {
+      "revision": "7fd033dbabdab2b47e332ebfaf2d9631943bc209670059f0a760da5e31505013",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "skyfire-kyapay": {
+      "revision": "0a47a311c5a1f9b8dd396c2ba1371c1e71447a19cb2a2d87edb9214526585ca9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "slop-cash": {
+      "revision": "d33d4812b13f071725f57e811f2a9980c7713eed7e6c753198e2ba191f8673bd",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "smithtalks": {
+      "revision": "67114410ae9eebad772c87323cc3861ff4d28452d1fd5bc710f2bc21f0a0a6a7",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "solana-x402": {
+      "revision": "6c3654def0e64c845801097b935d05d16cfd3fd46fdbb913fe174e1294c60848",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "solenrich": {
+      "revision": "020878ebbc74dec0f71e1cb2c7a70d4635248f18e81fc618a8bd2d8a7ca5e830",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "paysponge": {
+      "revision": "ad869c2c6f538c4c067db70c0ceefbd5baf089c336b6ab7b1670663d227960e4",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "sssnack": {
+      "revision": "cfa4c72c8160fdf52529ea1d934b3eff1cc5a2eb1b5cb9ab8de2ff65a1168fcd",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "stabledomains-net": {
+      "revision": "f74ee62dcc7cf7ecb59e606efd5810903ec022150c445aa8c7dd4fa75e8c7329",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "stableenrich": {
+      "revision": "8b8cf9fd8f013882532b8e02bd49ae8854497fba641ee9e649801c73af2f75f1",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "stabletravel": {
+      "revision": "21f1b7fb3621fac88bde8307323761e47fc7075f29c06daa5c03bb12d5e2bc54",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "stacker-news-bounties": {
+      "revision": "b3259442f4eb9db9d846cfd15d4a9147cb0e2e4126da6daece80abfdea26fdec",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "stoa": {
+      "revision": "c84525566ff6d61fe78d8d880b230f01b1a194d7e1ed933919f9313b2823b022",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "strale": {
+      "revision": "2c59ee5cfac720086750c925bc8ef60984887544b55324f65b96eaa7247bf954",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "stripe-agentic-commerce-suite": {
+      "revision": "8e13aeaa32870b35f0b67708ea61263539459c181fc5549f5864cf837f0f9ed6",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "stripe-link-agent-wallet": {
+      "revision": "cf7baf6b1574cd102e5e8839fa4976c30e6d0c3568efbdb2490b40b1251b7c2a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "superteam-earn": {
+      "revision": "4106b754e06499fcdbdc91d47010c23004d38d7a9b1fcda825d9d1679661793f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "svm402": {
+      "revision": "0851b77adeecc129520c7fe98d7499a27595623e436b3848db49e08ca7fb1bc9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "swarm-bar": {
+      "revision": "180ad60c0e1d9259e810b40ecb0654882820805e04d936c983af82372c916129",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "swarmmemo": {
+      "revision": "a00f3130ee541dd78780686d8f4ed9607015b975b06a2932477318af684c7067",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "swarmsay": {
+      "revision": "61973500e03d843984b57114b464e7beafe9758ee6213d55e06161263df3d7b6",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "switchboard-ai": {
+      "revision": "64cbfd1b2da4f9ff3c47ae31a029c0a926cd9f7dd81f517b118844e573d319a4",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "t2000": {
+      "revision": "58a4dbe73308ffaafcc4089f78446a664684ba61ccdf7bd792c5574abfc1e9a5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "tantive-space": {
+      "revision": "3c2e8aee141223ce1699b84472e879b51849bb43e6601ee831e43e2fbcb81293",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "taskbounty": {
+      "revision": "a43deba92734f93dcffeaab81c804e18519a6a7e75660cfddd02eb7324607a19",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "taskmarket-daydreams": {
+      "revision": "c256291f3176f0883ae56db3c77fee8f6f4fb41910a99fbcab08b5100378db38",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "tempo-machine-payments-protocol": {
+      "revision": "cd9bdad2743025d52a555f2c75de97c8d244a65e5966d5cf254cf2f3189baa24",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "rubric-protocol-tenprint": {
+      "revision": "1a6e20f015a4319457091194b5faea5bf77ee88838ce4bec0ba81cf646fa18bc",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "termix-aacp": {
+      "revision": "1a586e49c7463e362c8b4a7be86bbf97b6d8886ada975d4fad3918096ccf9538",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "the-agent-museum": {
+      "revision": "d227fd7ade74ba60b24828308e7118494de06344306f32772a91fa81c08686b3",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "the-agent-must-grow": {
+      "revision": "55e587ea356083eb202746be3d4c78f7bfb5a9f7ee29920f01f49eb805708aa2",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "the-bureau-of-lost-context": {
+      "revision": "f769a22c2c2a03c49e6bcb02ef92eef5e670fb5d362ecc9c5a068736998e659f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "the-colony": {
+      "revision": "82294de335a11b4b13d19bab48eb9d009a8e8898df67c0eb4581f443745badd5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "the-continental": {
+      "revision": "2f243461fc09b4f187fd5dad4490ebce56a2933f4352c186c3f25b8429698284",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "the-crab-games": {
+      "revision": "9c41ecdcc2798657cbc4cdb81f7b443c29af12f6255f83b0716314bc770b7e19",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "the-wayside": {
+      "revision": "17b183ffa7f616f7d83e85e33a12a17fc42625ec6dcad5518c4df5931707eeec",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "the-wide-sarahos": {
+      "revision": "ef0d29637c09033f269229323b1cd0a8f1afebff714639b5bada4b80b0df9837",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "thebotique": {
+      "revision": "9ad24e58a5fdbe1b9dc7f826eab50e046a6b1d0e22f539e7d994e51dcd58a645",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "thirdweb-x402": {
+      "revision": "869fba4cc7b1e3bca042496a8e34470564fce18dcb5c46cfaf471bdf3dc41b2f",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "three-ws": {
+      "revision": "05305c03bbc47fcea68fbe2a5f1bb58ed1871c72fc47a66e540d50ad0acc16c9",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "toku-agency": {
+      "revision": "e97c3852903492dfac26b7a0e61b458ba2180b653a127cfb7810df53192936db",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "touchstone": {
+      "revision": "8dd5e1c0a7aff114eb2b5911fa6ad83a2d710cf00e6994949c8cb788697bb9f5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "trust-authority-ai": {
+      "revision": "c5ea0488f0b81c4e401ffda49b4da3363fd6849e6ee4d312892cf67a3479d913",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "trust8004": {
+      "revision": "b958b1aa6a64789ba847054ba8473df702c0b21358cbf5fa961379fdbba14131",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "turnfeed": {
+      "revision": "684b2b0d5fa50bc58486d4717c20a9aa2fe447b84e7ba04109592ec16c43ec22",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "twit-sh": {
+      "revision": "d1babb27a440d1ffe4807cbc8376a29520369c659abdd2802e72c2cb2be925ae",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ugig-net": {
+      "revision": "216a1c0a31905720939d77ae7b46dd4dc952c41730c000731faae08bf5ad1224",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "ultravioleta-dao-x402-facilitator": {
+      "revision": "1ab0ea2b43a282eef46dfbdc3c057fcc88cae5cddbe2c250a84da919640c7eaa",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "universal-agent-forum": {
+      "revision": "11177a2bf583647098ba473a81534b27bc96eabbb58a06135f3da4fd6221917c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "verano-square": {
+      "revision": "e23378765546705f4b7ad41d25a077d52464d96bd7798ffce3ffef9c1fafbe12",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "vextorium": {
+      "revision": "f801d42c166079cb7defc5a55d45ee3fc9ac75fe098ea9316773b3a990e011df",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "virtuals-agent-commerce-protocol": {
+      "revision": "e644ef6d96f2c49472ec0d3c1847bdc7701ee6438349e20b09bcf9870f728c4b",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "visa-intelligent-commerce": {
+      "revision": "ba62a3a7e18cdaf4d0f65fbaab08456cf3cf1a9164e4a4e6f595e657d93306b4",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "voicescape": {
+      "revision": "157581e42bb6d8e8343a9fec76fbe7b581929aabe47d396573e79f0bf9dde480",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "voidpay": {
+      "revision": "2b14d14d4aace23a5d08e03222261d5801eb774a2a9f520709f6cda4d1e3682e",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "waystation-agent-commons": {
+      "revision": "d9fd232bb3ed653284c3ab0fc69b1985f428a44db18eb5c893d50eb1e1366f2c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "wenrwa-agent-marketplace": {
+      "revision": "f66ef5dbb0d0ac8387fb0c9ba422a9e272374f1d1a930223312007184f74f556",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "x-pay-api-xpay": {
+      "revision": "430d1e4e7e8aabcbdf05f0661bc5a98cdf01543f0f5989ae553cc159713ff2b0",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "x402-atlas": {
+      "revision": "2b944f7522a9fa0509326c17c05f628489e162d75f036c3defd6c62afd4c0a33",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "x402-foundation": {
+      "revision": "33767aa6bef015e89566ae94da8f2d46ba17ec9eb9282b699e846908ee8063a8",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "x402-list": {
+      "revision": "53ed9aef2433aaf0a21fff20cec2e6cba06574be686fe8bdd5edce94e62da4be",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "x402node": {
+      "revision": "5b68112b9cc0c8279c816346a6a920392445e20c8173ba8e44b6f79f3f52572c",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "x402scan": {
+      "revision": "75592280c6620631b6d8538473bb1ce1f40144eb002a1355c8c4838ccdb42a7a",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "x402stats": {
+      "revision": "ab6b61a41ff1b9ab8fda1e9611424bd39129f3d30f7ec77f211aa95f4cdc13e5",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "x402watch-printmoneylab": {
+      "revision": "e583f9afebef851306c60b0ce12c25ecce6ba06242f874fcb885814b42cb9c64",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "you-com": {
+      "revision": "1fb7b18c51f39509f616dc5126412c6d3ea54e26f65e6fc912cf1e3ddc409d45",
+      "date": "2026-11-25",
+      "type": "corrected"
+    },
+    "youraitools": {
+      "revision": "bf7beec9dc95ff3d887ad002e87ebcb579ab37a2f8a4c49cd89ea54b9ab3bc05",
+      "date": "2026-11-25",
+      "type": "corrected"
+    }
+  },
+  "closed": {
+    "snail": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "botbeat": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "the-wire-qualium": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "common-room": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "vynly": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "opentask": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "bountybook": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "the-spawn": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "agent-almanac": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "clawbench": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "moltcities": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "substrate-journal": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "the-door": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "clawcard": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "commonlog": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "public-agent-lounge": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "agent-room-agentmessageboards": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    },
+    "agent-knowledge-network": {
+      "recorded_on": "2026-11-24",
+      "date": "2026-11-24",
+      "type": "closed"
+    }
+  },
+  "additions": {
+    "aptets": {
+      "sha256": "81842eb117755ab78eb563d2fcc2779bfe069b255c8080e04b7a368fd2863ddc",
+      "date": "2026-11-24",
+      "type": "added"
+    }
+  },
+  "revisions": {
+    "meta-muse": {
+      "sha256": "b46e7bb8353c44381c3699bfcf9a9b2cc3960c0a18d12c5f00881b80b7ed62a0",
+      "date": "2026-11-24",
+      "type": "corrected"
+    }
+  }
+}

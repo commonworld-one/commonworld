@@ -22,8 +22,9 @@ FIELDS = ('date', 'slug', 'type', 'reason', 'source')
 DATE = re.compile(r'\d{4}-\d{2}-\d{2}')
 SLUG = re.compile(r'[a-z0-9][a-z0-9-]{0,80}')
 MAX_REASON = 300
-LEAD = ('Every change to an Atlas card, one line each: the day, the entry ID, what happened (added, closed, reopened, corrected, '
-        'relabelled), a short reason and the page it was checked on.')
+LEAD = ('Recorded editorial card changes: event date, permanent entry ID, change type, reason and supporting source. '
+        'The 25 November 2026 migration was backfilled from repository records; its events do not claim new source visits or trials. '
+        'Earlier rows retain their original scope. Build time is not event time.')
 
 
 def load(path=FILE):
@@ -93,6 +94,37 @@ def amendment_gaps(amendments, events, start=START):
     return gaps
 
 
+def current_layer_gaps(catalogue, events, current_records):
+    """Revision-bound editorial coverage. The baseline is explicit, never inferred from build time."""
+    import hashlib
+    from pathlib import Path
+    cat = Path(catalogue)
+    try:
+        ledger = json.loads((cat / 'event-coverage.json').read_text())
+        closures = json.loads((cat / 'closures.json').read_text())
+        additions = json.loads((cat / 'additions.json').read_text())
+        revisions = json.loads((cat / 'current-revisions.json').read_text())
+    except (OSError, ValueError) as ex:
+        return ['current event coverage missing or invalid: ' + str(ex)]
+    have = {(e.get('date'), e.get('slug'), e.get('type')) for e in events}
+    errors = []
+    def covered(group, slug, field, value):
+        row = ledger.get(group, {}).get(slug, {})
+        if row.get(field) != value:
+            errors.append(slug + ': current ' + group + ' event coverage is stale or missing')
+        if (row.get('date'), slug, row.get('type')) not in have:
+            errors.append(slug + ': current ' + group + ' event is missing')
+    for record in current_records:
+        covered('current', record['id'], 'revision', record.get('overview', {}).get('revision'))
+    for slug in closures.get('ids', []):
+        covered('closed', slug, 'recorded_on', closures.get('recorded_on'))
+    for group, values in [('additions', {r['slug']: r for r in additions.get('platforms', [])}), ('revisions', revisions.get('cards', {}))]:
+        for slug, record in values.items():
+            digest = hashlib.sha256(json.dumps(record, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+            covered(group, slug, 'sha256', digest)
+    return errors
+
+
 def newest_first(events):
     return [e for _, e in sorted(enumerate(events), key=lambda x: (x[1].get('date') or '', x[0]), reverse=True)]
 
@@ -108,7 +140,7 @@ def doc(site, events, generated_at):
     return {'name': 'Commonworld Atlas events log', 'url': site.abs(JSON_PATH), 'markdown': site.abs(MD_PATH),
             'source': 'https://github.com/commonworld-one/commonworld/blob/main/atlas/data/events.jsonl',
             'generated_at': generated_at, 'licence': site.cfg.get('data_licence') or 'not yet specified',
-            'about': LEAD, 'types': list(TYPES), 'count': len(events), 'events': [dict(e) for e in newest_first(publication_events(site, events))]}
+            'coverage': {'migration_backfill': '2026-11-25', 'event_dates_are_not_build_dates': True}, 'about': LEAD, 'types': list(TYPES), 'count': len(events), 'events': [dict(e) for e in newest_first(publication_events(site, events))]}
 
 
 def markdown(site, events):

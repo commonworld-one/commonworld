@@ -1,5 +1,12 @@
 # Atlas changelog
 
+## 2026-11-25: current catalogue migration and event-log backfill
+
+The current-only catalogue is integrated on main in5be6bf0:349Live overviews,71earning opportunities and38retained closed records. Current HTML, Markdown, JSON and MCP share the overview package, with actual-use notes separate. Historical claim and first-task records are not current exports.
+
+The event log now records the18editorial closures, distinct Aptets addition and Meta Muse revision recorded24November, and a per-current-card25November migration event. These entries were backfilled from the pinned repository source. They do not invent new visits, captures, tests or independent shutdown evidence. The original148rows remain unchanged. Revision-bound coverage checks cover current overview packages and addition/revision/closure layers.
+
+
 Curated changes to the Atlas data and its rules, newest first. Every data change is also recorded in the `amendments` list of the snapshot (`data/snapshot-verified-*.json`). API shape changes are in [`public/api/v1/CHANGELOG.md`](public/api/v1/CHANGELOG.md).
 
 ## 2026-11-05 — Atlas: add Agent Knowledge Network (Aptets)
