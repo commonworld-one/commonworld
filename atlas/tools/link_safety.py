@@ -5,11 +5,15 @@
     python3 atlas/tools/link_safety.py --apply    # ... and remove the entries of every flagged domain (the rule below)
     python3 atlas/tools/link_safety.py --report-in r.json   # use an engine report you already have (tests, re-runs)
 
-1. Every outbound host linked from the published Atlas data (official URLs, claim and QA sources, any other URL in an
-   entry, and every URL in the card's slug-keyed cards v2 curation records: first task proposal and links, keys-and-
-   books and evidence-level sources, replication-count sources in replications.json) plus the hosts of removed entries go to the engine, which asks every source (Google Safe Browsing, MetaMask
-   eth-phishing-detect, ScamSniffer, CERT Polska) and combines the answers: flagged when ANY one source flags the domain,
-   clean when at least one source answered and none flags it, no_data when no source could answer.
+1. The hosts to check go to the engine, which asks every source (Google Safe Browsing, MetaMask eth-phishing-detect,
+   ScamSniffer, CERT Polska) and combines the answers: flagged when ANY one source flags the domain, clean when at
+   least one source answered and none flags it, no_data when no source could answer. Which hosts:
+   - with --catalogue-dir (what the daily workflow runs): the host of each live (not closed) card's official URL, plus the
+     links in its current overview and limitation fields, plus the hosts of removed entries. Closed-history records and
+     older source material (compat-export claims and QA, notes, cards v2 curation files, reachability reads) are not
+     checked and never decide a removal.
+   - without it (older snapshot mode, not used by the workflow): every host linked from the live cards of the snapshot and
+     from their cards v2 curation records.
 2. A source that could not answer for a host this run keeps its previous answer for that host (marked stale), so a
    network error never hides an earlier flag.
 3. atlas/data/link-safety.json gets the summary, the per-source answers for every host (verdict, checked_at, evidence
@@ -209,10 +213,11 @@ def build_report(linked, removed_hosts, eng, prev_doc):
         'name': REPORT_NAME,
         'engine': eng.get('engine'), 'engine_version': eng.get('engine_version'), 'standard': TRUST_URL,
         'sources': eng['sources'],
-        'rule': 'A domain is flagged when ANY one source flags it; every Atlas entry that links to a flagged domain is removed at once, '
-                'with a public decision (who, reason, evidence). clean = at least one source answered and none flags it; no_data = no source could answer.',
-        'method': 'Every outbound host linked from the published Atlas data is checked daily by the Commonworld trust engine against every source listed under sources. '
-                  'Each host carries the answer of each source (verdict, checked_at, evidence_url).',
+        'rule': 'A domain is flagged when ANY one source flags it; every live Atlas entry that links to a flagged domain gets a removal decision '
+                '(who, reason, evidence) in the repository; the live site changes with the next release. clean = at least one source answered and none flags it; no_data = no source could answer.',
+        'method': 'Each day the Commonworld trust engine checks the hosts of the current catalogue against every source listed under sources: the official URL of each live card, '
+                  'the links in its current overview and limitation fields, and the hosts of removed entries. Closed-history records and older source material '
+                  '(claims, QA, notes, curation, reachability) are not checked. Each host carries the answer of each source (verdict, checked_at, evidence_url).',
         'run_started_at': eng.get('run_started_at'), 'run_at': eng.get('run_at') or utc_now(),
         'summary': {'hosts': len(pub), 'clean': count('clean'), 'flagged': count('flagged'), 'no_data': count('no_data'),
                     'query_errors': sum(1 for r in pub.values() if r.get('error'))},
