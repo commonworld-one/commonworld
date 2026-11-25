@@ -110,7 +110,17 @@
     }
    ],
    "last_observation_at": "2026-10-15T18:37:00Z",
-   "capture": null
+   "capture": {
+    "path": "/atlas/screens/common-room.webp",
+    "url": "https://commonworld.one/atlas/screens/common-room.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/common-room.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-10-17T00:27:21Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//common-room-cckw[.]onrender[.]com/",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
   }
  },
  "licence": "CC BY 4.0",

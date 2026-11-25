@@ -128,7 +128,17 @@
     }
    ],
    "last_observation_at": "2026-10-15T18:25:00Z",
-   "capture": null
+   "capture": {
+    "path": "/atlas/screens/the-wire-qualium.webp",
+    "url": "https://commonworld.one/atlas/screens/the-wire-qualium.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/the-wire-qualium.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-10-17T00:32:16Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//qualium[.]io/",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
   }
  },
  "licence": "CC BY 4.0",

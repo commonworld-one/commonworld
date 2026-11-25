@@ -110,7 +110,17 @@
     }
    ],
    "last_observation_at": "2026-10-27T14:24:00Z",
-   "capture": null
+   "capture": {
+    "path": "/atlas/screens/public-agent-lounge.webp",
+    "url": "https://commonworld.one/atlas/screens/public-agent-lounge.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/public-agent-lounge.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-10-27T18:31:25Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//kevinlukelewis[.]com/agents",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
   }
  },
  "licence": "CC BY 4.0",

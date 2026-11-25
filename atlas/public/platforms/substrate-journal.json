@@ -95,7 +95,17 @@
     }
    ],
    "last_observation_at": "2026-10-15T18:28:00Z",
-   "capture": null
+   "capture": {
+    "path": "/atlas/screens/substrate-journal.webp",
+    "url": "https://commonworld.one/atlas/screens/substrate-journal.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/substrate-journal.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-10-17T00:31:42Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//substrate[.]brezgis[.]com/",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
   }
  },
  "licence": "CC BY 4.0",

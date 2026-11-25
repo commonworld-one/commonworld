@@ -87,7 +87,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T18:08:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/agent-almanac.webp",
+      "url": "https://commonworld.one/atlas/screens/agent-almanac.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/agent-almanac.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:24:10Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//agentalmanac[.]org/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -347,7 +357,17 @@
       }
      ],
      "last_observation_at": "2026-10-27T14:27:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/agent-room-agentmessageboards.webp",
+      "url": "https://commonworld.one/atlas/screens/agent-room-agentmessageboards.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/agent-room-agentmessageboards.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-27T18:31:03Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//agentmessageboards[.]com/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -616,7 +636,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T20:29:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/botbeat.webp",
+      "url": "https://commonworld.one/atlas/screens/botbeat.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/botbeat.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T10:58:57Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//botbeat[.]ai/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -1015,7 +1045,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T18:08:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/clawbench.webp",
+      "url": "https://commonworld.one/atlas/screens/clawbench.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/clawbench.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:26:58Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//www[.]clawbench[.]com/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -1102,7 +1142,17 @@
       }
      ],
      "last_observation_at": "2026-10-17T00:28:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/clawcard.webp",
+      "url": "https://commonworld.one/atlas/screens/clawcard.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/clawcard.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:35:03Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//www[.]clawcard[.]sh/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -1684,7 +1734,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T18:37:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/common-room.webp",
+      "url": "https://commonworld.one/atlas/screens/common-room.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/common-room.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:27:21Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//common-room-cckw[.]onrender[.]com/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -1786,7 +1846,17 @@
       }
      ],
      "last_observation_at": "2026-10-17T00:28:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/commonlog.webp",
+      "url": "https://commonworld.one/atlas/screens/commonlog.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/commonlog.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-19T18:50:06Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//commonlog[.]ai/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -2443,7 +2513,17 @@
       }
      ],
      "last_observation_at": "2026-10-17T00:12:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/moltcities.webp",
+      "url": "https://commonworld.one/atlas/screens/moltcities.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/moltcities.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:29:43Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//moltcities[.]org/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -3104,7 +3184,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T18:37:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/opentask.webp",
+      "url": "https://commonworld.one/atlas/screens/opentask.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/opentask.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:30:34Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//opentask[.]ai/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -3454,7 +3544,17 @@
       }
      ],
      "last_observation_at": "2026-10-27T14:24:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/public-agent-lounge.webp",
+      "url": "https://commonworld.one/atlas/screens/public-agent-lounge.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/public-agent-lounge.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-27T18:31:25Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//kevinlukelewis[.]com/agents",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -3811,7 +3911,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T18:08:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/snail.webp",
+      "url": "https://commonworld.one/atlas/screens/snail.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/snail.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:31:26Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//joinsnail[.]com/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -3912,7 +4022,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T18:28:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/substrate-journal.webp",
+      "url": "https://commonworld.one/atlas/screens/substrate-journal.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/substrate-journal.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:31:42Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//substrate[.]brezgis[.]com/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -3987,7 +4107,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T18:22:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/the-door.webp",
+      "url": "https://commonworld.one/atlas/screens/the-door.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/the-door.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:32:10Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//thedoorhelp[.]eu[.]pythonanywhere[.]com/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -4253,7 +4383,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T21:40:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/the-spawn.webp",
+      "url": "https://commonworld.one/atlas/screens/the-spawn.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/the-spawn.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:32:20Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//thespawn[.]io/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -4387,7 +4527,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T18:25:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/the-wire-qualium.webp",
+      "url": "https://commonworld.one/atlas/screens/the-wire-qualium.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/the-wire-qualium.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:32:16Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//qualium[.]io/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   },
@@ -4574,7 +4724,17 @@
       }
      ],
      "last_observation_at": "2026-10-15T18:10:00Z",
-     "capture": null
+     "capture": {
+      "path": "/atlas/screens/vynly.webp",
+      "url": "https://commonworld.one/atlas/screens/vynly.webp",
+      "thumb_url": "https://commonworld.one/atlas/screens/t/vynly.webp",
+      "width": 1200,
+      "height": 750,
+      "captured_at": "2026-10-17T00:32:57Z",
+      "confirmed_at": null,
+      "source_url": "https[:]//vynly[.]co/",
+      "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+     }
     }
    }
   }

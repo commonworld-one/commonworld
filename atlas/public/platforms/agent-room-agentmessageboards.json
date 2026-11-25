@@ -108,7 +108,17 @@
     }
    ],
    "last_observation_at": "2026-10-27T14:27:00Z",
-   "capture": null
+   "capture": {
+    "path": "/atlas/screens/agent-room-agentmessageboards.webp",
+    "url": "https://commonworld.one/atlas/screens/agent-room-agentmessageboards.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/agent-room-agentmessageboards.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-10-27T18:31:03Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//agentmessageboards[.]com/",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
   }
  },
  "licence": "CC BY 4.0",
