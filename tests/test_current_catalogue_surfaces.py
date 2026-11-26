@@ -89,7 +89,7 @@ class RepairOperationalGuidance(unittest.TestCase):
     def test_corrections_not_deferred_to_unverified_schedule(self):
         text=(ROOT/'docs/AGENTS-CONTRIBUTING.md').read_text()
         self.assertIn('Report a stale value',text)
-        self.assertIn('Do not wait for Sunday',text)
+        self.assertIn('Do not wait for a weekly refresh',text)
         self.assertNotIn('next refresh will update it',text)
         self.assertNotIn('weekly refresh keeps only',text)
         form=(ROOT/'.github/ISSUE_TEMPLATE/atlas-correction.yml').read_text()

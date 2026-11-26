@@ -9,7 +9,7 @@
    ScamSniffer, CERT Polska) and combines the answers: flagged when ANY one source flags the domain, clean when at
    least one source answered and none flags it, no_data when no source could answer. Which hosts:
    - with --catalogue-dir (what the daily workflow runs): the host of each live (not closed) card's official URL, plus the
-     links in its current overview and limitation fields, plus the hosts of removed entries. Closed-history records and
+     links in its current overview, plus the hosts of removed entries. Closed-history records and
      older source material (compat-export claims and QA, notes, cards v2 curation files, reachability reads) are not
      checked and never decide a removal.
    - without it (older snapshot mode, not used by the workflow): every host linked from the live cards of the snapshot and
@@ -100,7 +100,7 @@ def linked_hosts(snap, files):
 
 
 def catalogue_hosts(catalogue, snap, files):
-    """Hosts the current catalogue links to: each card's primary URL and the current overview/limitation fields.
+    """Hosts the current catalogue links to: each card's primary URL and its current overview links.
     Everything older (compat-export claims/qa/notes/..., curation files, reachability reads) stays as history and never
     decides an exclusion here. `files` is kept for the call signature of the legacy path."""
     directory = Path(catalogue)
@@ -216,7 +216,7 @@ def build_report(linked, removed_hosts, eng, prev_doc):
         'rule': 'A domain is flagged when ANY one source flags it; every live Atlas entry that links to a flagged domain gets a removal decision '
                 '(who, reason, evidence) in the repository; the live site changes with the next release. clean = at least one source answered and none flags it; no_data = no source could answer.',
         'method': 'Each day the Commonworld trust engine checks the hosts of the current catalogue against every source listed under sources: the official URL of each live card, '
-                  'the links in its current overview and limitation fields, and the hosts of removed entries. Closed-history records and older source material '
+                  'the links in its current overview, and the hosts of removed entries. Closed-history records and older source material '
                   '(claims, QA, notes, curation, reachability) are not checked. Each host carries the answer of each source (verdict, checked_at, evidence_url).',
         'run_started_at': eng.get('run_started_at'), 'run_at': eng.get('run_at') or utc_now(),
         'summary': {'hosts': len(pub), 'clean': count('clean'), 'flagged': count('flagged'), 'no_data': count('no_data'),

@@ -15,5 +15,5 @@ Available originals remain unchanged outside this public package. No missing bod
 - Source-specific caveats, including incomplete and corrected source captures, remain part of the historical record. The projections do not turn an earlier incomplete source into a complete one.
 - Memecorp's historical Google Safe Browsing no_data (code 6) remains distinct from the three clean lists and from a four-provider clean result.
 - Botnet's original integration checker failed the image byte budget. The separately reviewed derivative and wired integration close only that later image issue, without inventing a new visit or capture.
-- The 18 bounded notes are not accepted overviews or permanent closure decisions. Closed history is not current service availability.
+- The 18 former bounded notes are closed records in the archive (38 closed in all). They are not accepted overviews. Closed history is not current service availability.
 - Exact image/source/time correspondence, safety behavior, secure private-input checks, actual CI and same-commit staging remain technical release requirements. Local success is not permission to publish, merge or deploy.

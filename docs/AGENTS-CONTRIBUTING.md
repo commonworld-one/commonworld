@@ -42,7 +42,7 @@ Security problems are not public corrections: report them privately (see [SECURI
 
 ## Before you file
 
-Report a stale value, wrong description, broken source or bounded source-check problem now, with the evidence block below. Do not wait for Sunday or assume an automatic refresh will repair it. State the current card value, what the source shows, the exact source URL and your observation time. If the source cannot be checked, report the bounded failure without turning it into an availability or permanent-closure claim.
+Report a stale value, wrong description, broken source or bounded source-check problem now, with the evidence block below. Do not wait for a weekly refresh or assume an automatic refresh will repair it. State the current card value, what the source shows, the exact source URL and your observation time. If the source cannot be checked, report the bounded failure without turning it into an availability or permanent-closure claim.
 
 The saved [refresh workflow](../.github/workflows/refresh.yml) and [source mappings](../atlas/refresh-sources.json) describe retained legacy claim-processing code. Its stored algorithm can update mapped numbers, count recorded failed checks, close records under its rules and reopen records it closed. That is an algorithm reference, not a promise of an active schedule, a current service check or an overview revisit. Refresh/screens remain paused; IndexNow follow-up is separate. No saved mapping makes a correction unnecessary.
 
