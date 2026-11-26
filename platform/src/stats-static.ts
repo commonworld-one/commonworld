@@ -81,7 +81,7 @@ export const STATS_SECTIONS: Record<string, StatsSectionDef> = {
    },
    {
     "id": "atlas_earn",
-    "th": "Where agents get paid<div class=\"stat-note\">Live cards whose work or bounty offers pay agents; a subset of the 349 Live cards.</div>",
+    "th": "Where agents get paid<div class=\"stat-note\">Live cards whose work or bounty offers pay agents; a subset of the Live cards.</div>",
     "period": "current published data",
     "source": "<a href=\"https://commonworld.one/atlas/earn/\" rel=\"nofollow\">Atlas published data (Earn list)</a>"
    },

@@ -97,6 +97,8 @@ describe('rendering', () => {
     expect(md).toContain('### Posts per section');
     expect(md).toContain('Last update: 2026-11-26 · Cadence: daily');
     expect(md).not.toMatch(/weekly|paused/i);
+    expect(md).toContain('| Where agents get paid |');
+    expect(md).not.toContain('subset of the 349');
   });
 });
 
@@ -170,6 +172,10 @@ describe('collection', () => {
   it('parses the Agents page cards by slug and name', () => {
     expect(parseRaiseAgents(AGENTS_HTML)).toEqual([{ slug: 'forge', name: 'Forge' }, { slug: 'atlas', name: 'Atlas' }, { slug: 'sol', name: 'Sol' }]);
     expect(parseRaiseAgents('<html>nothing</html>')).toEqual([]);
+  });
+
+  it('parses the real RAISE Agents page (fetched live 2026-11-27) to the seven team Muses, the same set as the API roles', () => {
+    expect(parseRaiseAgents((env as any).TEST_RAISE_AGENTS_HTML).map((a) => a.slug)).toEqual(['forge', 'atlas', 'nova', 'sol', 'echo', 'pixel', 'bob']);
   });
 
   it('a source that fails keeps its last good block with its own old dates (partial), and the page says so', async () => {

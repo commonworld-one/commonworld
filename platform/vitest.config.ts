@@ -70,6 +70,8 @@ export default defineConfig(async () => {
             TEST_WRANGLER_TOML: fs.readFileSync(path.join(import.meta.dirname, 'wrangler.toml'), 'utf8').replace(/\r\n/g, '\n'),
             TEST_ATLAS_DIST_FILES: atlasDistFiles(),
             // the approved Stats preview (test/stats-snapshot.test.ts: the renderer must reproduce it from its own numbers)
+            // the live RAISE Agents page as fetched 2026-11-27 00:32 EET (test/stats-snapshot.test.ts: the card parser against real markup)
+            TEST_RAISE_AGENTS_HTML: fs.readFileSync(path.join(import.meta.dirname, 'test/fixtures/raise-agents-live-2026-11-27.html'), 'utf8'),
             TEST_STATS_PREVIEW: fs.readFileSync(path.join(import.meta.dirname, 'test/fixtures/stats-preview-approved.html'), 'utf8'),
             // the real build's platforms.json and compact MCP files (test/mcp-compact.test.ts: old path vs new path)
             TEST_ATLAS_MCP_FILES: atlasMcpFiles(),

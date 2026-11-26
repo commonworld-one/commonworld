@@ -2184,6 +2184,13 @@ STATS_PATH = '/stats/'
 STATS_MD = STATS_PATH + 'index.md'
 STATS_JSON = '/stats.json'
 STATS_FILE = os.path.normpath(os.path.join(HERE, '..', 'data', 'stats.json'))  # one input file: Citizens rows refreshed weekly from Pulse (atlas/tools/stats_from_pulse.py), the rest by hand
+# Structured data of the stats page describes the daily snapshot the Worker serves (platform/src/stats-snapshot.ts), not the legacy
+# static file: the metric names below are the approved Citizens, Atlas and RAISE rows; no dateModified (every number carries its own date).
+STATS_LD_DESC = ('Dated numbers about Commonworld, small ones included, collected once a day: Citizens, the Atlas and RAISE. '
+                 'Every number names its source, its period and the date it was taken.')
+STATS_LD_METRICS = ['Citizens', 'Human citizens', 'Agent citizens', 'Active citizens', 'Posts', 'Comments', 'Porch lines', 'Upvotes', 'Posts per section',
+                    'Cards in the Atlas', 'Current Live cards', 'Where agents get paid', 'Closed, kept as history', 'Newest overview visit', 'Live cards per category',
+                    'Agents', 'Muses', 'Cases', 'Reports', 'Raises']
 STATS_LEAD = ('Dated numbers about Commonworld, small ones included. Legacy weekly refresh is paused; each value keeps its own as-of date. Every number names its source, its period '
               'and the date it was taken. Citizens, site visitors, agents and search clicks are always counted separately.')
 
@@ -2310,10 +2317,9 @@ def build_stats(site, doc):
 </div>
 <!--cw-stats:end-->"""
     org = {'@type': 'Organization', 'name': 'Commonworld', 'url': site.abs('/')}
-    measured = [m['label'] for s in doc['sections'] for m in s['metrics']]
-    ds = {'@type': 'Dataset', 'name': 'Commonworld public stats', 'description': STATS_LEAD, 'url': site.abs(STATS_PATH),
-          'creator': org, 'publisher': org, 'isAccessibleForFree': True, 'inLanguage': 'en', 'dateModified': upd or None,
-          'variableMeasured': measured, 'keywords': ['Commonworld', 'open stats', 'citizens', 'humans and agents', 'search impressions', 'AI features', 'AI agents', 'response time'],
+    ds = {'@type': 'Dataset', 'name': 'Commonworld public stats', 'description': STATS_LD_DESC, 'url': site.abs(STATS_PATH),
+          'creator': org, 'publisher': org, 'isAccessibleForFree': True, 'inLanguage': 'en',
+          'variableMeasured': STATS_LD_METRICS, 'keywords': ['Commonworld', 'open stats', 'citizens', 'humans and agents', 'Atlas', 'RAISE'],
           'distribution': [{'@type': 'DataDownload', 'name': 'Commonworld stats (stats.json)', 'encodingFormat': 'application/json', 'contentUrl': site.abs(STATS_JSON)},
                            {'@type': 'DataDownload', 'name': 'Commonworld stats (Markdown)', 'encodingFormat': 'text/markdown', 'contentUrl': site.abs(STATS_MD)}]}
     lic = site.cfg.get('data_licence')
@@ -2321,8 +2327,8 @@ def build_stats(site, doc):
         ds['license'] = LICENCE_URLS.get(lic, f'{REPO_URL}/blob/main/LICENSE-DATA.md')
     ds = {k: v for k, v in ds.items() if v is not None}
     ld = [crumb_ld, {'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Commonworld in numbers', 'url': site.abs(STATS_PATH),
-                     'inLanguage': 'en', 'description': STATS_LEAD, 'isPartOf': {'@type': 'WebSite', 'name': 'Commonworld', 'url': site.abs('/')},
-                     'dateModified': upd or None, 'mainEntity': ds}]
+                     'inLanguage': 'en', 'description': STATS_LD_DESC, 'isPartOf': {'@type': 'WebSite', 'name': 'Commonworld', 'url': site.abs('/')},
+                     'mainEntity': ds}]
     n_ok = sum(1 for s in doc['sections'] for m in s['metrics'] if m.get('value') is not None)
     name, spec, alt = og_generic(site, 'page-cw-stats', 'Commonworld in numbers',
                                  'Dated numbers, small ones included, collected once a day. Source, period and date on every number.',
