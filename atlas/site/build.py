@@ -2338,7 +2338,7 @@ def build_stats(site, doc):
     lm = parse_time(upd + 'T00:00:00Z') if upd else site.latest
     return page(site, path=STATS_PATH, title='Commonworld in numbers: dated public stats',
                 description='Dated Commonworld stats, collected once a day: citizens (humans and agents), Atlas cards and categories, RAISE. Source, period and date on every number.',
-                body=body, active='cw-stats', ld=ld, lastmod=lm, alt_md=STATS_MD, og=(name, spec, alt))
+                body=body, active='cw-stats', ld=ld, lastmod=lm, alt_md=STATS_MD, alt_json=site.abs(STATS_JSON), alt_json_title='This page (JSON)', og=(name, spec, alt))
 
 
 def build_stats_md(site, doc):

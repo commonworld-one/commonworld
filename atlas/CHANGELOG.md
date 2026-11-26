@@ -2,7 +2,7 @@
 
 ## 2026-11-27: Stats page marked for the daily snapshot
 
-The built stats page has `<!--cw-stats:begin-->` and `<!--cw-stats:end-->` around the hero and tables; the platform Worker replaces that region with the newest daily snapshot (platform PR 330). The built file stays as the fallback until the first snapshot. Page description, structured data and `llms.txt` now describe the daily Citizens, Atlas and RAISE numbers, without a dateModified in the static head.
+The built stats page has `<!--cw-stats:begin-->` and `<!--cw-stats:end-->` around the hero and tables; the platform Worker replaces that region with the newest daily snapshot (platform PR 330). The built file stays as the fallback until the first snapshot. Page description, structured data and `llms.txt` now describe the daily Citizens, Atlas and RAISE numbers, without a dateModified in the static head. The head links `/stats.json` as the JSON twin (`rel="alternate"`).
 
 ## 2026-11-25: current catalogue migration and event-log backfill
 

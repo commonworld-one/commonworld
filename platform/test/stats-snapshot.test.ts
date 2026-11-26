@@ -60,6 +60,12 @@ describe('rendering', () => {
     expect(renderStatsRegion(docFromApproved())).toBe(expected);
   });
 
+  it('describes the Posts number as Pulse counts it: a withdrawn post stays in as a tombstone', () => {
+    const html = renderStatsRegion(docFromApproved());
+    expect(html).toContain('a withdrawn post stays in the count as a tombstone');
+    expect(html).not.toContain('Hidden or withdrawn posts are not counted');
+  });
+
   it('replaces only the marked region of the static page', () => {
     const page = `<html><main><nav>crumbs</nav>${STATS_BEGIN}\nOLD\n${STATS_END}</main></html>`;
     const out = injectStatsRegion(page, docFromApproved())!;

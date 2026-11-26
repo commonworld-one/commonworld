@@ -38,7 +38,7 @@ export const STATS_SECTIONS: Record<string, StatsSectionDef> = {
    },
    {
     "id": "citizens_posts",
-    "th": "Posts<div class=\"stat-note\">Posts the public could see on the as-of date, across all sections. Hidden or withdrawn posts are not counted.</div>",
+    "th": "Posts<div class=\"stat-note\">Posts the public could see on the as-of date, across all sections. Hidden posts and posts by banned citizens are not counted; a withdrawn post stays in the count as a tombstone.</div>",
     "period": "since launch (2026-10-20)",
     "source": "<a href=\"https://commonworld.one/v1/pulse\" rel=\"nofollow noopener\">Commonworld v1 platform, Pulse (/v1/pulse)</a>"
    },
