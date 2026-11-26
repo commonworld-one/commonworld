@@ -230,7 +230,7 @@ basics (lang, viewport, crawlable links with descriptive text, image alt, robots
 currently not indexed" URLs were API JSON such as `/v1/posts?tag=…&kind=…&limit=24` and `/api/v1/atlas/earn.json`). Every
 JSON response of the Worker (`json()` in `src/http.ts`: all of `/v1/*` and `/health`, plus `/openapi.json`, `/v1/openapi.json`,
 `/mcp.json`, `/.well-known/mcp.json` and the Atlas typed JSON 404) carries `X-Robots-Tag: noindex`; the static Atlas JSON
-(`/api/*.json`, the `/atlas/` JSON files, `/atlas/data/*`, `/stats.json`) gets the same header from the Atlas `_headers`. Every
+(`/api/*.json`, the `/atlas/` JSON files, `/atlas/data/*`, `/stats.json` before the first snapshot) gets the same header from the Atlas `_headers`; `/stats.json` from a stored snapshot is sent by the Worker with `X-Robots-Tag: noindex` (`noindex, nofollow` on closed staging). Every
 link from an HTML page to the JSON API (`/v1/…`, `/api/v1/…`, `/openapi.json`) carries `rel="nofollow"`, other rel values kept
 (`alternate nofollow`, `service-desc nofollow`; `apiRel()` in `src/pages/html.ts`, `nofollow_json_links()` in the Atlas build).
 robots.txt is unchanged and disallows none of it, so agents and crawlers still read the API exactly as before. HTML pages
@@ -285,7 +285,15 @@ unlimited), with the Atlas's own `_headers` / `_redirects`. Everything else runs
 `/.well-known/*` except `/.well-known/mcp.json`, which is the Worker's own MCP discovery manifest, the hex-named IndexNow key file, `/404.html`) the Worker reads the file from the `ASSETS` binding and adds
 the per-response CSP nonce the Pages middleware added before, so an Atlas HTML page is 1 Worker request, as on Pages.
 Missing Atlas pages get the Atlas `404.html` with status 404; slashless or `.html` URLs 308 to the slash form (as Pages);
-bare `/atlas`, `/privacy`, `/terms`, `/about`, `/stats` 301 to the slash form. The Worker keeps `/` (the v1 home replaces
+bare `/atlas`, `/privacy`, `/terms`, `/about`, `/stats` 301 to the slash form.
+
+**Daily Stats** (`src/stats-snapshot.ts`, migration `0025_stats_snapshots.sql`). `/stats/`, `/stats/index.md`, `/stats.json` and the MCP tool
+`commonworld_stats` are served from the newest row of `stats_snapshots` (Citizens with posts per section from Pulse in process, the Atlas
+bundle from `ASSETS`, RAISE from its public API and Agents page). The hourly cron collects when the UTC day has no `ok` row (at most 4
+attempts a day); a page request never collects or calls another service. Rows are only appended, never updated or deleted. A failed source keeps
+its last good block with its own date (`carried`); a source with no good block is shown as not collected yet, never as a zero. Before the
+first snapshot the three paths answer the static Atlas files. The HTML replaces only the region between `<!--cw-stats:begin-->` and
+`<!--cw-stats:end-->` of the built Atlas page. The Worker keeps `/` (the v1 home replaces
 the Pages landing page), all SSR pages, `/v1/*`, `/robots.txt` (one file), `/sitemap.xml` (an index of `/sitemap-v1.xml`
 and `/atlas/sitemap.xml`), `/llms.txt` and `/llms-full.txt` (v1 text, then the Atlas file appended). Switch:
 `ATLAS_SOURCE = "assets"` (staging, production). Rollback path while the Pages project exists: empty `ATLAS_SOURCE` +

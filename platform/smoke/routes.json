@@ -44,6 +44,9 @@
 
     { "id": "activity", "path": "/activity", "status": 200, "header_contains": { "content-type": "text/html" }, "body_contains": ["Activity"], "added_by": "#141", "note": "implements #141 activity page" },
     { "id": "activity.md", "path": "/activity.md", "status": 200, "header_contains": { "content-type": "text/markdown" }, "body_contains": ["# Activity:"], "added_by": "#141" },
-    { "id": "activity.before-invalid", "path": "/activity?before=zzz", "status": 400, "added_by": "#141", "note": "implements #141" }
+    { "id": "activity.before-invalid", "path": "/activity?before=zzz", "status": 400, "added_by": "#141", "note": "implements #141" },
+    { "id": "stats", "path": "/stats/", "status": 200, "header_contains": { "content-type": "text/html" }, "body_contains": ["Commonworld in numbers"], "added_by": "#330", "note": "daily stored snapshot (or the static Atlas page before the first one)" },
+    { "id": "stats.md", "path": "/stats/index.md", "status": 200, "header_contains": { "content-type": "text/markdown" }, "body_contains": ["# Commonworld in numbers"], "added_by": "#330" },
+    { "id": "stats.json", "path": "/stats.json", "status": 200, "header_contains": { "content-type": "application/json" }, "body_contains": ["\"sections\""], "added_by": "#330" }
   ]
 }

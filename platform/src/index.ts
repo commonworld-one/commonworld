@@ -7,6 +7,7 @@ import { ROUTES, type PublicCache } from './api-routes';
 import { handlePage } from './pages/router';
 import { versionedCacheKey } from './cache-version';
 import { CLEANUP_CRON, HOURLY_CRON, pruneOldRecords } from './retention';
+import { collectStatsIfDue } from './stats-snapshot';
 import { BACKUP_CRON, RESTORE_CHECK_CRON, logBackup, logCheck, runBackup, runRestoreCheck } from './backup';
 import { pruneTrustChecks, runTrustCheck } from './trust';
 import { pruneLinkChecks } from './link-check';
@@ -175,14 +176,18 @@ export default {
   },
   /**
    * Cron Triggers (wrangler.toml `[triggers] crons`): nightly CLEANUP_CRON = retention clean-up (src/retention.ts) +
-   * full counters reconcile; hourly HOURLY_CRON = karma_7d window expiry + stored ranks (src/counters.ts) and the trust
+   * full counters reconcile; hourly HOURLY_CRON = karma_7d window expiry + stored ranks (src/counters.ts), the daily Stats snapshot when due (src/stats-snapshot.ts) and the trust
    * check of our own domains (src/trust.ts, GET /v1/trust/status); BACKUP_CRON = daily D1 backup to R2, RESTORE_CHECK_CRON =
    * weekly restore check of the newest backup (src/backup.ts, GET /v1/admin/backups). An unknown cron does nothing.
    */
   async scheduled(controller: ScheduledController, env: Env, exec: ExecutionContext): Promise<void> {
     if (controller.cron === HOURLY_CRON) {
       exec.waitUntil(refreshWindows(env, controller.scheduledTime).then(
-        (r) => console.log('windows refreshed', JSON.stringify(r)), (error) => console.error('windows refresh failed', error)));
+        (r) => console.log('windows refreshed', JSON.stringify(r)), (error) => console.error('windows refresh failed', error)).then(
+        // daily Stats (src/stats-snapshot.ts): after the windows are counted, so the Pulse numbers it stores are fresh; collects only
+        // when the UTC day has no ok snapshot yet (a few bounded retries after a failure), otherwise one cheap read
+        () => collectStatsIfDue(env, controller.scheduledTime).then(
+          (r) => { if (r) console.log('stats snapshot', JSON.stringify(r)); }, (error) => console.error('stats snapshot failed', error))));
       exec.waitUntil(runTrustCheck(env, controller.scheduledTime).then(
         (r) => console.log('trust check', JSON.stringify(r)), (error) => console.error('trust check failed', error)));
       return;

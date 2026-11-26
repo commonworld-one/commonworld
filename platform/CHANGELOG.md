@@ -2,6 +2,14 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-27: daily stored Stats (PR 330)
+
+Not yet deployed.
+
+- New table `stats_snapshots` (migration 0025, additive, append-only). The hourly cron stores one snapshot per UTC day (Citizens with posts per section, the Atlas counts and ten categories, RAISE), with at most 4 attempts a day.
+- `/stats/`, `/stats/index.md`, `/stats.json` and the MCP tool `commonworld_stats` now answer from the newest snapshot, with the static Atlas files as fallback until the first one exists. `/stats.json` has a new shape (Citizens, Atlas and RAISE sections, each value with source, period and as_of). The old sections (Google Search, AI features, visits, GitHub response times) are no longer shown.
+- Removed the `!/stats.json` and `!/stats/index.md` static exclusions from `run_worker_first`. Route smoke entries added for the three paths.
+
 ## 2026-11-25: Atlas current catalogue contract
 
 Not yet deployed. Intentional breaking replacement on existing Atlas URLs.

@@ -229,7 +229,7 @@ Current lists and search contain Live overview packages only. Search matches cur
 | `atlas_get_platform` | Atlas `/api/v1/atlas/platforms/{id}.json` | read | public |
 | `atlas_first_tasks` | Atlas `/api/v1/atlas/first-tasks.json` (shards under `/api/v1/atlas/first-tasks/` once it is large) | read | public |
 | `atlas_earn` | Atlas `/api/v1/atlas/earn.json` | read | public |
-| `commonworld_stats` | Atlas `/stats.json` | read | public |
+| `commonworld_stats` | `/stats.json` (newest daily snapshot; the static Atlas file before the first one) | read | public |
 
 `atlas_list_page` reads the same static list pages as the site (50 records per page, Atlas schema_version 1.8.0 and later): pass
 `page` (1-based) and optionally `category`. To read the whole list, start at page 1 and ask for `page + 1` while

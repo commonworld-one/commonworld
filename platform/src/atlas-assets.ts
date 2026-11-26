@@ -39,8 +39,6 @@ export const ATLAS_RUN_WORKER_FIRST: readonly string[] = [
   '!/atlas/*.txt',
   '!/atlas/*.xml',
   '!/atlas/*.md',
-  '!/stats.json',
-  '!/stats/index.md',
   '!/about/index.md',
   '!/privacy/index.md',
   '!/terms/index.md',

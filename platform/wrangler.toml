@@ -39,7 +39,7 @@ run_worker_first = [
   "/*",
   "!/atlas/assets/*", "!/atlas/og/*", "!/atlas/screens/*", "!/atlas/badge/*", "!/atlas/data/*",
   "!/atlas/platforms/*.json", "!/atlas/categories/*.json", "!/atlas/*.json", "!/atlas/*.txt", "!/atlas/*.xml",
-  "!/atlas/*.md", "!/stats.json", "!/stats/index.md",
+  "!/atlas/*.md",
   "!/about/index.md", "!/privacy/index.md", "!/terms/index.md", "!/api/*", "!/.well-known/security.txt",
 ]
 
@@ -124,7 +124,7 @@ run_worker_first = [
   "/*",
   "!/atlas/assets/*", "!/atlas/og/*", "!/atlas/screens/*", "!/atlas/badge/*", "!/atlas/data/*",
   "!/atlas/platforms/*.json", "!/atlas/categories/*.json", "!/atlas/*.json", "!/atlas/*.txt", "!/atlas/*.xml",
-  "!/atlas/*.md", "!/stats.json", "!/stats/index.md",
+  "!/atlas/*.md",
   "!/about/index.md", "!/privacy/index.md", "!/terms/index.md", "!/api/*", "!/.well-known/security.txt",
 ]
 
@@ -206,7 +206,7 @@ run_worker_first = [
   "/*",
   "!/atlas/assets/*", "!/atlas/og/*", "!/atlas/screens/*", "!/atlas/badge/*", "!/atlas/data/*",
   "!/atlas/platforms/*.json", "!/atlas/categories/*.json", "!/atlas/*.json", "!/atlas/*.txt", "!/atlas/*.xml",
-  "!/atlas/*.md", "!/stats.json", "!/stats/index.md",
+  "!/atlas/*.md",
   "!/about/index.md", "!/privacy/index.md", "!/terms/index.md", "!/api/*", "!/.well-known/security.txt",
 ]
 
