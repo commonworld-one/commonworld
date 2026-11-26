@@ -52,7 +52,9 @@ class CatalogueLifecycle(unittest.TestCase):
             engine=root/'engine-replay.json';engine.write_text(json.dumps({'results':{h:{'sources':r['sources']} for h,r in (previous['hosts']|previous.get('removed_hosts',{})).items()},'sources':previous['sources'],'run_at':previous['run_at']}))
             regenerated=subprocess.run([sys.executable,str(root/'atlas/tools/link_safety.py'),'--catalogue-dir',str(cat),'--curation-dir',str(root/'atlas/data'),'--removed',str(root/'atlas/data/removed.json'),'--hold',str(root/'atlas/data/trust-hold.json'),'--out',str(safety),'--report-in',str(engine)],capture_output=True,text=True,timeout=30)
             self.assertEqual(regenerated.returncode,0,regenerated.stdout+regenerated.stderr)
-            self.assertNotIn('kradle.ai',json.loads(safety.read_text())['hosts'])
+            hosts=json.loads(safety.read_text())['hosts']
+            self.assertEqual(hosts['kradle.ai']['entries'],['kradlebench'])
+            self.assertNotIn('kradleverse',hosts['kradle.ai']['entries'])
             out=root/'out';env=dict(os.environ,CW_SCREENS_DIR=str(captures));env.pop('CW_SCREENS',None)
             r=subprocess.run([sys.executable,str(root/'atlas/site/build.py'),'--no-mirror','--out',str(out)],env=env,capture_output=True,text=True,timeout=90)
             self.assertEqual(r.returncode,0,r.stderr[-2000:]);self.assert_closed_projections(out,['kradleverse','aptets'])
