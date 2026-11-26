@@ -23,6 +23,19 @@
       "http_status": 200,
       "replaces_original": true,
       "transform": "Original1920x993capture scaled to fit1200x750with white padding; no content cropped"
+    },
+    "keyring-agent": {
+      "file": "keyring-agent.webp",
+      "sha256": "4c1fc73353e41f111d17d0931edc2640feaef41cb6e05a869cd571927746c673",
+      "source_url": "https://keyring.app/",
+      "captured_at": "2026-11-26T21:12:24Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 35154,
+      "title": "KEYRING PRO | Secure Ethereum & EVM Crypto Wallet",
+      "http_status": 200,
+      "replaces_original": true,
+      "transform": "Chrome 1200x750 viewport capture scrolled to the KEYRING AGENT section, converted PNG to WebP; no resize, no crop"
     }
   }
 }

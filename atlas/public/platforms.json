@@ -2,9 +2,9 @@
  "name": "Commonworld Atlas of Agent Platforms",
  "description": "Dated source catalogue of AI-agent platforms",
  "url": "https://commonworld.one/atlas/",
- "generated_at": "2026-11-24T22:00:49Z",
+ "generated_at": "2026-11-26T21:12:24Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
- "newest_observation": "2026-11-24T22:00:49Z",
+ "newest_observation": "2026-11-26T21:12:24Z",
  "licence": "CC BY 4.0",
  "licence_url": "https://github.com/commonworld-one/commonworld/blob/main/LICENSE-DATA.md",
  "source": "https://github.com/commonworld-one/commonworld",
@@ -5922,11 +5922,11 @@
   },
   {
    "id": "keyring-agent",
-   "name": "keyring-agent",
+   "name": "KEYRING AGENT",
    "url": "https://commonworld.one/atlas/platforms/keyring-agent/",
    "json_url": "https://commonworld.one/atlas/platforms/keyring-agent.json",
    "md_url": "https://commonworld.one/atlas/platforms/keyring-agent/index.md",
-   "website": "https://keyring-agent.blockchhub.link",
+   "website": "https://keyring.app/",
    "category": "projects",
    "category_label": "Projects (repos & frameworks)",
    "type": "project",
@@ -5937,15 +5937,15 @@
    ],
    "overview": {
     "state": "reviewed",
-    "text": "The earlier KEYRING AGENT address leads to KEYRING PRO's wallet homepage at keyring.app. Its agent section advertises market research, token transfers and liquidity-pool actions through an AI interface. The surrounding product is presented as a Bacoor-developed non-custodial Ethereum/EVM wallet with swaps, NFC backup and related tools. Account, Uniswap and chat panels are illustrations rather than a connected wallet or completed transactions. The page does not establish continued availability of the former standalone x402 execution service, fees or API. Security and open-source statements are publisher claims, not an independent code or custody audit. Transfers, swaps and liquidity actions involve assets, possible fees and market risk.",
-    "visited_at": "2026-11-23T01:35:43Z",
+    "text": "The KEYRING PRO wallet website presents KEYRING AGENT as a built-in AI assistant for researching markets, sending tokens and adding liquidity pools through a chat interface.\n\nA separate server at keyring-agent.blockchhub.link publishes an OpenAPI description for wallet-action fee endpoints using x402 payments in USDC on Base. It names Bacoor as its contact and states that callers broadcast blockchain transactions themselves. An unpaid request to the add-pool endpoint returned an x402 payment challenge; paid execution was not tested.\n\nThe wallet website names Bacoor as its developer, but does not describe whether its AI assistant uses this API.",
+    "visited_at": "2026-11-26T21:12:24Z",
     "sources": [
-     "https://keyring-agent.blockchhub.link",
-     "https://keyring.app/"
+     "https://keyring.app/",
+     "https://keyring-agent.blockchhub.link/openapi.json"
     ],
-    "revision": "e922cbf170dbadcb22c84e2c394a5942b8d3af315874080c25561b1618429632"
+    "revision": "5c539bdf5a21253ec31089b4e0f85d094a384877e40273158ddaafe9cec713ea"
    },
-   "badge_status": "Verified · 2026-11-23",
+   "badge_status": "Verified · 2026-11-26",
    "badge_svg": "https://commonworld.one/atlas/badge/keyring-agent.svg",
    "badge_svg_dark": "https://commonworld.one/atlas/badge/keyring-agent-dark.svg",
    "badge_page": "https://commonworld.one/atlas/badge/",
