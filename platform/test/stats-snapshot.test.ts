@@ -27,7 +27,7 @@ const PROD = 'https://commonworld.one';
 /** The approved preview's numbers, read back out of its own HTML, as a stored document. */
 function docFromApproved(): StatsDoc {
   const sec = (id: string) => approved.slice(approved.indexOf(`<section class="stats-sec" aria-labelledby="s-${id}">`), approved.indexOf('</section>', approved.indexOf(`aria-labelledby="s-${id}"`)));
-  const un = (s: string) => s.replace(/&amp;/g, '&').replace(/&#x27;/g, "'");
+  const un = (s: string) => s.replace(/&(?:amp|#x27);/g, (e) => (e === '&amp;' ? '&' : "'"));
   const num = (s: string, id: string) => Number(new RegExp(`<tr id="${id}">.*?<b class="stat-num">(\\d+)</b>`, 's').exec(s)![1]);
   const rows = (s: string, title: string) => {
     const t = s.slice(s.indexOf(`aria-label="${title}"`));

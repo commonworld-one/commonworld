@@ -135,10 +135,14 @@ export async function collectAtlas(env: Env, now: number): Promise<AtlasBlock> {
 }
 
 /** The cards of the RAISE Agents page: the team Muses the page itself lists (src/characters.ts of commonworld-one/raise renders them). */
+/** Decodes exactly the entities escHtml writes (one pass, so an escaped ampersand is never decoded twice). */
+const ENTITY: Record<string, string> = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#x27;': "'", '&#39;': "'" };
+const decodeEntities = (s: string): string => s.replace(/&(?:amp|lt|gt|quot|#x27|#39);/g, (e) => ENTITY[e]);
+
 export function parseRaiseAgents(html: string): { slug: string; name: string }[] {
   const out: { slug: string; name: string }[] = [];
   const re = /<a class="card agent" href="[^"]*\/m\/([a-z0-9_-]+)"[^>]*>[\s\S]*?<b>([^<]+)<\/b>/g;
-  for (let m = re.exec(html); m; m = re.exec(html)) out.push({ slug: m[1], name: m[2].replace(/&amp;/g, '&').replace(/&#x27;|&#39;/g, "'").trim() });
+  for (let m = re.exec(html); m; m = re.exec(html)) out.push({ slug: m[1], name: decodeEntities(m[2]).trim() });
   return out;
 }
 
@@ -213,8 +217,9 @@ interface Sub { title: string; col: string; rows: { label: string; value: string
 interface Sec { id: string; title: string; intro: string; liveHtml: string; metrics: Metric[]; sub: Sub | null; carried: Carried | null; missing: string | null;
   observed: Record<string, unknown> }
 
-const stripTags = (h: string): string => h.replace(/<[^>]+>/g, '');
-const unescHtml = (s: string): string => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&amp;/g, '&');
+function trimSlashes(v: string | undefined): string { let e = (v ?? '').length; while (e > 0 && v![e - 1] === '/') e--; return (v ?? '').slice(0, e); }
+const stripTags = (h: string): string => { let cur = h; for (let prev = ''; prev !== cur;) { prev = cur; cur = cur.replace(/<[^<>]*>/g, ''); } return cur.replace(/[<>]/g, ''); };
+const unescHtml = decodeEntities;
 function splitTh(th: string): { label: string; note: string | null } {
   const m = /^(.*?)(?:<div class="stat-note">(.*)<\/div>)?$/s.exec(th)!;
   return { label: unescHtml(m[1]), note: m[2] === undefined ? null : unescHtml(m[2]) };
@@ -330,7 +335,7 @@ export function injectStatsRegion(page: string, doc: StatsDoc): string | null {
 
 // ---------------------------------------------------------------- Markdown and JSON
 
-const cell = (v: unknown): string => String(v ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
+const cell = (v: unknown): string => String(v ?? '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\n/g, ' ');
 const srcMd = (s: { name: string; url: string | null }): string => cell(s.name) + (s.url ? ` <${s.url}>` : '');
 const LEAD = 'Dated numbers about Commonworld, small ones included. Collected once a day and stored; the page shows the stored snapshot all day without recounting. Every number names its source, its period and the date it was taken. Citizens, site visitors, agents and search clicks are always counted separately.';
 
@@ -389,7 +394,7 @@ export async function serveStats(request: Request, env: Env, url: URL): Promise<
   let stored: StoredSnapshot | null = null;
   try { stored = await latestSnapshot(env); } catch (error) { console.error('stats snapshot read failed', error instanceof Error ? error.message : String(error)); }
   if (!stored) return serveAtlasAsset(request, env, url);
-  const origin = env.SITE_ORIGIN?.replace(/\/+$/, '') || url.origin;
+  const origin = trimSlashes(env.SITE_ORIGIN) || url.origin;
   const head = request.method === 'HEAD';
   const stamp = { 'x-cw-stats-snapshot': String(stored.id), 'x-cw-stats-day': stored.doc.day };
   if (url.pathname === '/stats.json') {
