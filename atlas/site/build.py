@@ -838,7 +838,7 @@ def build_index(site):
                 body=body, active='index', ld=ld, index_search=True,
                 og=og_generic(site, 'atlas', 'Atlas of Agent Platforms',
                               'Dated source overviews. Not a guarantee of service availability or functionality.',
-                              [(f'{n} entries', 'olive'), ((f'{len(site.overviews)} dated overviews' if getattr(site, 'catalogue_mode', False) else f'{live} live'), 'live'), (f'{len(site.cats)} directions', None)],
+                              [((f'{len(site.overviews)} dated overviews' if getattr(site, 'catalogue_mode', False) else f'{live} live'), 'live'), (f'{len(site.cats)} directions', None)],
                               kicker='CATALOGUE' if getattr(site, 'catalogue_mode', False) else 'VERIFIED CATALOG', alt=(f'Commonworld Atlas: {n} entries with dated overviews' if getattr(site, 'catalogue_mode', False) else f'Commonworld Atlas of Agent Platforms: {n} verified entries, {live} live')))
 
 
