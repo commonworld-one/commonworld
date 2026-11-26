@@ -267,7 +267,7 @@ function buildModel(doc: StatsDoc): Sec[] {
 
   const a = doc.atlas;
   const asof = a ? isoDay(a.newest_visit) : '';
-  const as = base('atlas', a ? def('atlas').intro.replace('{asof}', asof).replace('{live}', fmtNum(a.cards_live)) : def('atlas').intro.replace('{asof}', 'the last collection').replace('{live}', '0'),
+  const as = base('atlas', a ? def('atlas').intro.replace('{asof}', asof).replace('{live}', fmtNum(a.cards_live)) : 'Published catalogue of the Atlas. No Atlas numbers have been collected yet.',
     a ? { fetched_at: a.fetched_at, generated_at: a.generated_at, source_snapshot_at: a.source_snapshot_at, newest_overview_visit: a.newest_visit } : {}, 'atlas');
   if (a) {
     as.metrics = [
@@ -399,12 +399,15 @@ export async function serveStats(request: Request, env: Env, url: URL): Promise<
   const stamp = { 'x-cw-stats-snapshot': String(stored.id), 'x-cw-stats-day': stored.doc.day };
   if (url.pathname === '/stats.json') {
     return new Response(head ? null : renderStatsJson(stored, origin), { status: 200, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': STATS_CACHE,
-      'access-control-allow-origin': '*', 'x-content-type-options': 'nosniff', 'x-robots-tag': 'noindex', ...stamp } });
+      'access-control-allow-origin': '*', 'x-content-type-options': 'nosniff', 'x-robots-tag': env.PAGES_NOINDEX === '1' ? 'noindex, nofollow' : 'noindex', ...stamp } });
   }
   if (url.pathname === '/stats/index.md') {
-    return new Response(head ? null : renderStatsMarkdown(stored, origin), { status: 200, headers: { 'content-type': 'text/markdown; charset=utf-8', 'cache-control': STATS_CACHE, 'x-content-type-options': 'nosniff', ...stamp } });
+    return new Response(head ? null : renderStatsMarkdown(stored, origin), { status: 200, headers: { 'content-type': 'text/markdown; charset=utf-8', 'cache-control': STATS_CACHE, 'x-content-type-options': 'nosniff', ...(env.PAGES_NOINDEX === '1' ? { 'x-robots-tag': 'noindex, nofollow' } : {}), ...stamp } });
   }
-  const res = await serveAtlasAsset(new Request(request, { method: 'GET' }), env, url);
+  // The shell is fetched unconditionally: a 304 from the static asset must never tell a browser to keep the legacy numbers
+  const shellHeaders = new Headers(request.headers);
+  for (const h of ['if-none-match', 'if-modified-since', 'if-match', 'if-unmodified-since', 'if-range', 'range']) shellHeaders.delete(h);
+  const res = await serveAtlasAsset(new Request(request, { method: 'GET', headers: shellHeaders }), env, url);
   if (res.status !== 200 || !(res.headers.get('content-type') || '').startsWith('text/html')) return res;
   const text = await res.text();
   const injected = injectStatsRegion(text, stored.doc);
@@ -417,4 +420,12 @@ export async function serveStats(request: Request, env: Env, url: URL): Promise<
   out.headers.set('cache-control', STATS_CACHE);
   for (const [k, v] of Object.entries(stamp)) out.headers.set(k, v);
   return new Response(head ? null : injected, { status: 200, headers: out.headers });
+}
+
+/** The stats JSON for the MCP tool commonworld_stats: the newest stored snapshot, the static Atlas file only when none is stored. */
+export async function readStatsJson(env: Env, fallback: () => Promise<unknown>): Promise<unknown> {
+  let stored: StoredSnapshot | null = null;
+  try { stored = await latestSnapshot(env); } catch (error) { console.error('stats snapshot read failed', error instanceof Error ? error.message : String(error)); }
+  if (!stored) return fallback();
+  return JSON.parse(renderStatsJson(stored, trimSlashes(env.SITE_ORIGIN) || 'https://commonworld.one'));
 }

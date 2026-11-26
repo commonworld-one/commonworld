@@ -9,7 +9,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import worker from '../src/index';
 import {
   STATS_BEGIN, STATS_END, STATS_MAX_ATTEMPTS_PER_DAY, collectStats, collectStatsIfDue, injectStatsRegion, latestSnapshot, parseRaiseAgents,
-  renderStatsJson, renderStatsMarkdown, renderStatsRegion, statsDue, type StatsDoc,
+  readStatsJson, renderStatsJson, renderStatsMarkdown, renderStatsRegion, statsDue, type StatsDoc,
 } from '../src/stats-snapshot';
 import { HOURLY_CRON } from '../src/retention';
 import { refreshWindows, resetDb } from './helpers';
@@ -209,6 +209,19 @@ describe('collection', () => {
     expect(html).not.toContain('id="raise_cases"');
   });
 
+  it('a missing Atlas block gives a neutral introduction, never a zero count', async () => {
+    const { e } = mockWorld({ atlasBad: true });
+    await refreshWindows(T0);
+    await collectStats(e, T0);
+    const s = (await latestSnapshot(e))!;
+    expect(s.doc.atlas).toBeNull();
+    const html = renderStatsRegion(s.doc);
+    expect(html).toContain('No Atlas numbers have been collected yet.');
+    expect(html).not.toMatch(/\b0 Live/);
+    expect(renderStatsMarkdown(s, PROD)).not.toMatch(/\b0 Live/);
+    expect(renderStatsJson(s, PROD)).not.toMatch(/\b0 Live/);
+  });
+
   it('a count that does not match its list is refused (Atlas), not stored', async () => {
     const { e } = mockWorld({ atlasBad: true });
     await refreshWindows(T0);
@@ -346,6 +359,44 @@ describe('serving', () => {
     expect(head.status).toBe(200);
     expect(head.text).toBe('');
     expect((await call('/stats.json', e, { method: 'POST' })).status).toBe(405);
+  });
+
+  it('a conditional request never gets the static shell back as a 304: the stored snapshot is always injected', async () => {
+    const w = mockWorld();
+    await refreshWindows(T0);
+    await collectStats(w.e, T0);
+    let seen: Record<string, string | null> = {};
+    const inner = withShell(w.e);
+    const e = { ...inner, ASSETS: { fetch: async (req: Request) => {
+      seen = { inm: req.headers.get('if-none-match'), ims: req.headers.get('if-modified-since') };
+      if (req.headers.get('if-none-match')) return new Response(null, { status: 304 });
+      return (inner.ASSETS as Fetcher).fetch(req);
+    } } as unknown as Fetcher };
+    const page = await call('/stats/', e, { headers: { 'if-none-match': '"x"', 'if-modified-since': 'Thu, 26 Nov 2026 00:00:00 GMT' } });
+    expect(page.status).toBe(200);
+    expect(page.text).toContain('<h2 id="s-citizens">Citizens</h2>');
+    expect(seen).toEqual({ inm: null, ims: null });
+  });
+
+  it('closed staging (PAGES_NOINDEX=1) keeps noindex on the stored JSON and Markdown answers', async () => {
+    const w = mockWorld();
+    await refreshWindows(T0);
+    await collectStats(w.e, T0);
+    const e = { ...withShell(w.e), PAGES_NOINDEX: '1' };
+    expect((await call('/stats/index.md', e)).headers.get('x-robots-tag')).toBe('noindex, nofollow');
+    expect((await call('/stats.json', e)).headers.get('x-robots-tag')).toBe('noindex, nofollow');
+    expect((await call('/stats/index.md', withShell(w.e))).headers.get('x-robots-tag')).toBeNull();
+  });
+
+  it('the MCP stats reader answers from the snapshot, and from the fallback only before the first one', async () => {
+    const w = mockWorld();
+    await refreshWindows(T0);
+    expect(await readStatsJson(w.e, async () => ({ legacy: true }))).toEqual({ legacy: true });
+    await collectStats(w.e, T0);
+    const out: any = await readStatsJson(w.e, async () => ({ legacy: true }));
+    expect(out.legacy).toBeUndefined();
+    expect(out.snapshot.day).toBe('2026-11-27');
+    expect(out.sections.map((x: any) => x.id)).toEqual(['citizens', 'atlas', 'raise']);
   });
 
   it('serves the same numbers on all three surfaces', async () => {

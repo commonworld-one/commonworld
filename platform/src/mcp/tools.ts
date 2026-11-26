@@ -10,6 +10,7 @@
  *   request to that very /v1 route through the Worker's own router: same handlers, policy, rate limits, quotas,
  *   moderation and link checks as the REST API. No business logic lives here.
  */
+import { readStatsJson } from '../stats-snapshot';
 import { OPERATIONS, schemaOf, type Operation } from '../openapi';
 import { ATLAS_FILES, ATLAS_ID, readAtlasJson, readCompactAtlas, searchIndexRows } from './atlas';
 import type { Env } from '../env';
@@ -308,7 +309,7 @@ export const ATLAS_TOOLS: ToolDef[] = [
     ATLAS_FILES.earn, {}, [], async (env) => readAtlasJson(env, ATLAS_FILES.earn)),
   atlasTool('commonworld_stats', 'Commonworld public stats',
     'Public stats of Commonworld (/stats/): every metric with source, period and as_of; status "coming" means no number yet (value null), never an estimate.',
-    ATLAS_FILES.stats, {}, [], async (env) => readAtlasJson(env, ATLAS_FILES.stats, 'stats_not_found')),
+    ATLAS_FILES.stats, {}, [], async (env) => readStatsJson(env, () => readAtlasJson(env, ATLAS_FILES.stats, 'stats_not_found'))),
 ];
 
 // ---------------------------------------------------------------- the full list

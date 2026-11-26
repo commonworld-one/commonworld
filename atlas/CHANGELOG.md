@@ -1,5 +1,9 @@
 # Atlas changelog
 
+## 2026-11-27: Stats page marked for the daily snapshot
+
+The built stats page has `<!--cw-stats:begin-->` and `<!--cw-stats:end-->` around the hero and tables; the platform Worker replaces that region with the newest daily snapshot (platform PR 330). The built file stays as the fallback until the first snapshot. Page description, structured data and `llms.txt` now describe the daily Citizens, Atlas and RAISE numbers, without a dateModified in the static head.
+
 ## 2026-11-25: current catalogue migration and event-log backfill
 
 The current-only catalogue is integrated on main in5be6bf0:349Live overviews,71earning opportunities and38retained closed records. Current HTML, Markdown, JSON and MCP share the overview package, with actual-use notes separate. Historical claim and first-task records are not current exports.
