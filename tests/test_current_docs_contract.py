@@ -73,7 +73,7 @@ class CurrentDocsContract(unittest.TestCase):
             bad['overview'][key] = value
             self.assertTrue(list(validator.iter_errors(bad)), (key, value))
         for mutate in (lambda d: d.pop('preview'), lambda d: d.update(preview=None), lambda d: d.update(claims=[]),
-                       lambda d: d.update(current_limitation={}), lambda d: d.update(first_task={}), lambda d: d.update(summary='old')):
+                       lambda d: d.update(first_task={}), lambda d: d.update(summary='old')):
             bad = copy.deepcopy(record)
             mutate(bad)
             self.assertTrue(list(validator.iter_errors(bad)), bad)

@@ -270,8 +270,6 @@
 .overview-legacy-note{padding:1rem;border:1px solid #bbb;border-radius:.4rem;max-width:76rem}
 
 /* Bounded checks are not live or completed dated overviews. */
-.chip.limited{color:var(--muted);border:1px solid currentColor;background:transparent}
-.limited-entry .cw-panel li{overflow-wrap:anywhere}
 
 /* Atlas API paths must not force a phone viewport wider than the page. */
 .atlas-api-prose { min-width:0; }

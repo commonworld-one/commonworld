@@ -111,7 +111,7 @@ export async function readAtlasJson<T = any>(env: Env, path: string, notFound = 
 }
 
 /** The fields of a platform row that search results carry (the full card comes from atlas_get_platform). */
-const ROW_FIELDS = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags', 'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure', 'md_url', 'preview', 'link_safety', 'badge_status', 'badge_svg', 'badge_svg_dark', 'badge_page', 'overview', 'current_limitation', 'earning_opportunity', 'closed_recorded_at', 'archive'] as const;
+const ROW_FIELDS = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags', 'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure', 'md_url', 'preview', 'link_safety', 'badge_status', 'badge_svg', 'badge_svg_dark', 'badge_page', 'overview', 'earning_opportunity', 'closed_recorded_at', 'archive'] as const;
 
 export function slimRow(p: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
@@ -137,12 +137,12 @@ function matcher(q: AtlasQuery, hasFirstTask: (p: Record<string, any>) => boolea
   const tag = q.tag?.toLowerCase();
   return (p) => {
     if (q.category && p.category !== q.category) return false;
-    if (q.status && (p.current_limitation ? 'limited' : p.status) !== q.status) return false;
+    if (q.status && p.status !== q.status) return false;
     if (tag && !(Array.isArray(p.tags) && p.tags.map((t: unknown) => String(t).toLowerCase()).includes(tag))) return false;
     if (q.has_money_flow !== undefined && !!p.has_money_flow !== q.has_money_flow) return false;
     if (q.has_first_task !== undefined && hasFirstTask(p) !== q.has_first_task) return false;
     if (!words.length) return true;
-    const hay = [p.id, p.name, p.current_limitation?.text ?? p.overview?.text ?? p.summary, p.website, p.category, p.category_label, ...(Array.isArray(p.tags) ? p.tags : [])].map((x) => String(x ?? '')).join(' ').toLowerCase();
+    const hay = [p.id, p.name, p.overview?.text ?? p.summary, p.website, p.category, p.category_label, ...(Array.isArray(p.tags) ? p.tags : [])].map((x) => String(x ?? '')).join(' ').toLowerCase();
     return words.every((w) => hay.includes(w));
   };
 }

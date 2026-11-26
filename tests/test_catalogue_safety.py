@@ -34,10 +34,9 @@ class CatalogueSafety(unittest.TestCase):
                     'history':[{'sources':['https://history.example/']}],
                     'editor_note':'https://private.example/','check':{'evidence':'https://review.example/'}}
             (cat/'overviews.json').write_text(json.dumps({'cards':{'sample':record}}))
-            (cat/'limitations.json').write_text(json.dumps({'cards':{'limited':{'sources':['https://limited.example/']}}}))
-            snap={'platforms':[{'slug':'sample','canonical_url':'https://official.example/'}, {'slug':'limited'}]}
+            snap={'platforms':[{'slug':'sample','canonical_url':'https://official.example/'}]}
             with patch.object(ls,'DATA',td):hosts=ls.catalogue_hosts(cat,snap,[])
-            self.assertEqual(set(hosts),{'official.example','prose.example','source.example','proof.example','result.example','capture.example','limited.example'})
+            self.assertEqual(set(hosts),{'official.example','prose.example','source.example','proof.example','result.example','capture.example'})
             self.assertEqual(hosts['capture.example'],['sample'])
 
     def test_legacy_snapshot_fields_do_not_create_safety_inputs(self):

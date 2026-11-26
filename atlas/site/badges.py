@@ -65,8 +65,6 @@ def status_of(card):
             return 'verified', 'Verified · ' + visit.strftime('%Y-%m-%d')
         # Pending or undated overviews never inherit a legacy Verified verdict.
         return 'listed', 'Listed'
-    if card.get('_limitation') or card.get('current_limitation'):
-        return 'listed', 'Listed'
     dt = card.get('_verified')
     if card.get('verdict') == 'include_verified' and dt:
         return 'verified', 'Verified · ' + dt.strftime('%Y-%m-%d')

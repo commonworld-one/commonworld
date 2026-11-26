@@ -533,7 +533,7 @@ def badge_checks(parsed, pages, locs):
         if u in pages:
             h = open(pages[u], encoding='utf-8').read()
             record = json.load(open(os.path.join(DIST, 'atlas', 'platforms', slug + '.json')))
-            simple = record.get('overview') is not None or record.get('current_limitation') is not None
+            simple = record.get('overview') is not None
             if simple and ('Disclosure correction history' in h):
                 fails.append(f'{u}: legacy badge/history UI in current overview')
             for need in (('id="badge"', '>Add this badge to your site<') if simple else ('id="badge"', '>Add this badge to your site<', 'Free. Never sold. Regenerated when the catalogue is rebuilt.',
@@ -830,7 +830,7 @@ def paged_list_checks(parsed, pages, locs):
     # a card rendered from its index row (atlas.js renderCard mirrors build.card_from_row) is the same card as on page 1
     sys.path.insert(0, HERE)
     import build
-    head = {k: si.get(k) for k in ('card_base', 'tag_href', 'thumb', 'cat_labels', 'reach_text', 'tag_limit', 'limited_ids', 'overview_ids')}
+    head = {k: si.get(k) for k in ('card_base', 'tag_href', 'thumb', 'cat_labels', 'reach_text', 'tag_limit', 'overview_ids')}
     grid = idx[idx.find('id="grid"'):]
     for r in si.get('cards', [])[:PAGE_SIZE]:
         if len(r) != len(build.SEARCH_FIELDS): fails.append(f'search-index.json: row {r[:1]} has {len(r)} fields, expected {len(build.SEARCH_FIELDS)}'); break
@@ -1169,17 +1169,13 @@ def screens_checks(pages):
         u = f'/atlas/platforms/{k}/'
         if u not in pages: continue
         h = open(pages[u], encoding='utf-8').read()
-        if r.get('current_limitation') is not None:
-            if 'entry-shot' in h or '<figure' in h:
-                fails.append(f'{u}: limitation must not imply a current product screenshot')
-            continue
         figs = re.findall(r'<figure class="entry-shot[^"]*">.*?</figure>', h, re.S)
         if len(figs) != 1:
             fails.append(f'{u}: {len(figs)} figure.entry-shot'); continue
         f = figs[0]
         hd = h.find('</header>', h.find('<header class="entry-head"'))
         fi = h.find('<figure class="entry-shot')
-        simple = r.get('overview') is not None or r.get('current_limitation') is not None
+        simple = r.get('overview') is not None
         fa = h.find('<section class="cw-panel') if simple else h.find('<dl class="facts">')
         ad = h.find('data-ad-slot="atlas-platform-top"')
         if not (hd < fi < fa) or (ad != -1 and not (hd < ad < fi)):
@@ -1439,7 +1435,7 @@ def _share_expectations():
     if os.path.exists(archive_path):
         snap = snap + [dict(r, slug=r['id']) for r in json.load(open(archive_path))['platforms']]
     for c in snap:
-        if c.get('overview') or c.get('current_limitation'):
+        if c.get('overview'):
             t = f"{c['name']} on Commonworld Atlas"
         elif c.get('status') == 'closed':
             t = f"{c['name']} (closed) — history on Commonworld Atlas"
@@ -1976,7 +1972,7 @@ def replications_checks(pages):
         h = open(pages[u], encoding='utf-8').read() if u in pages else ''
         mdp = os.path.join(DIST, 'atlas', 'platforms', slug, 'index.md')
         md = open(mdp, encoding='utf-8').read() if os.path.exists(mdp) else ''
-        if r.get('overview') is not None or r.get('current_limitation') is not None:
+        if r.get('overview') is not None:
             if 'id="h-repl"' in h:
                 fails.append(f'{w}: legacy history block in current overview')
             continue
@@ -2021,7 +2017,7 @@ def reachability_checks(pages):
         h = open(pages[u], encoding='utf-8').read() if u in pages else ''
         mdp = os.path.join(DIST, 'atlas', 'platforms', slug, 'index.md')
         md = open(mdp, encoding='utf-8').read() if os.path.exists(mdp) else ''
-        if r.get('overview') is not None or r.get('current_limitation') is not None:
+        if r.get('overview') is not None:
             if 'id="h-reach"' in h:
                 fails.append(f'{w}: legacy history block in current overview')
             continue
@@ -2102,19 +2098,6 @@ def cards_v2_checks(pages):
         u = f'/atlas/platforms/{slug}/'
         if u not in pages: fails.append(f'{w}: no card page'); continue
         h = open(pages[u], encoding='utf-8').read()
-        if r.get('current_limitation') is not None:
-            limited = r['current_limitation']
-            mdp = os.path.join(DIST, 'atlas', 'platforms', slug, 'index.md')
-            md = open(mdp, encoding='utf-8').read()
-            for value in (limited['text'], limited['attempted_on'], 'Could not verify'):
-                if html.escape(value) not in h or value not in md:
-                    fails.append(f'{w}: bounded note differs between HTML, Markdown and JSON')
-            for forbidden in ('chip live', 'Last verified', 'Verified facts', 'id="badge"', 'lastReviewed'):
-                if forbidden in h:
-                    fails.append(f'{w}: obsolete verified/live presentation in limitation')
-            if 'Source check attempted:' not in h:
-                fails.append(f'{w}: source attempt mislabeled as completed visit')
-            continue
         if r.get('overview') is not None:
             ov = r['overview']
             mdp = os.path.join(DIST, 'atlas', 'platforms', slug, 'index.md')
@@ -2155,9 +2138,8 @@ def cards_v2_checks(pages):
 
 
 def main():
-    global SHARE_LIVE, SHARE_ENTRY, SHARE_LIMITED
+    global SHARE_LIVE, SHARE_ENTRY
     SHARE_LIVE, SHARE_ENTRY = _share_expectations()
-    SHARE_LIMITED = any(c.get('current_limitation') for c in json.load(open(os.path.join(DIST, 'atlas', 'data', 'snapshot.json')))['platforms'])
     fails, pages, parsed = [], {}, {}
     for root, _, files in os.walk(DIST):
         for f in files:
@@ -2258,7 +2240,7 @@ def main():
                 if burl != p.canon: fails.append(f'{u}: share bar url {burl} != canonical')
                 want_txt = {'/': 'Commonworld — A shared world for humans and agents',
                             '/about/': 'About Commonworld — A shared world for humans and agents',
-                            '/atlas/': (f'Commonworld Atlas: {len(SHARE_ENTRY)} entries, with dated overviews and source-check limitations' if SHARE_LIMITED else f'Commonworld Atlas: {SHARE_LIVE} Live source overviews'),
+                            '/atlas/': f'Commonworld Atlas: {SHARE_LIVE} Live source overviews',
                             '/atlas/earn/': 'Where AI agents get paid | Commonworld Atlas'}.get(u) or SHARE_ENTRY.get(u)
                 if not btext or btext != want_txt: fails.append(f'{u}: share text {btext!r} != {want_txt!r}')
             enc = quote(p.canon or '', safe='')

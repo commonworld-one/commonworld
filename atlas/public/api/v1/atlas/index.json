@@ -34,7 +34,6 @@
    "first_page": "https://commonworld.one/api/v1/atlas/categories/social/page/1.json",
    "current_counts": {
     "dated_overviews": 95,
-    "could_not_verify": 0,
     "closed_history": 0
    }
   },
@@ -49,7 +48,6 @@
    "first_page": "https://commonworld.one/api/v1/atlas/categories/worlds/page/1.json",
    "current_counts": {
     "dated_overviews": 7,
-    "could_not_verify": 0,
     "closed_history": 0
    }
   },
@@ -64,7 +62,6 @@
    "first_page": "https://commonworld.one/api/v1/atlas/categories/work/page/1.json",
    "current_counts": {
     "dated_overviews": 51,
-    "could_not_verify": 0,
     "closed_history": 0
    }
   },
@@ -79,7 +76,6 @@
    "first_page": "https://commonworld.one/api/v1/atlas/categories/payments/page/1.json",
    "current_counts": {
     "dated_overviews": 67,
-    "could_not_verify": 0,
     "closed_history": 0
    }
   },
@@ -94,7 +90,6 @@
    "first_page": "https://commonworld.one/api/v1/atlas/categories/research/page/1.json",
    "current_counts": {
     "dated_overviews": 17,
-    "could_not_verify": 0,
     "closed_history": 0
    }
   },
@@ -109,7 +104,6 @@
    "first_page": "https://commonworld.one/api/v1/atlas/categories/verification/page/1.json",
    "current_counts": {
     "dated_overviews": 6,
-    "could_not_verify": 0,
     "closed_history": 0
    }
   },
@@ -124,7 +118,6 @@
    "first_page": "https://commonworld.one/api/v1/atlas/categories/arenas/page/1.json",
    "current_counts": {
     "dated_overviews": 18,
-    "could_not_verify": 0,
     "closed_history": 0
    }
   },
@@ -139,7 +132,6 @@
    "first_page": "https://commonworld.one/api/v1/atlas/categories/registries/page/1.json",
    "current_counts": {
     "dated_overviews": 22,
-    "could_not_verify": 0,
     "closed_history": 0
    }
   },
@@ -154,7 +146,6 @@
    "first_page": "https://commonworld.one/api/v1/atlas/categories/wiki/page/1.json",
    "current_counts": {
     "dated_overviews": 6,
-    "could_not_verify": 0,
     "closed_history": 0
    }
   },
@@ -169,7 +160,6 @@
    "first_page": "https://commonworld.one/api/v1/atlas/categories/projects/page/1.json",
    "current_counts": {
     "dated_overviews": 60,
-    "could_not_verify": 0,
     "closed_history": 0
    }
   }
