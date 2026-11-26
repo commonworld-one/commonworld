@@ -26,6 +26,7 @@ import { MCP_DOC_JSON, MCP_WELL_KNOWN } from '../mcp/server';
 import { versionedCacheKey, withoutSharedCache } from '../cache-version';
 import { ATLAS_SLASH_REDIRECT, atlasOrigin, atlasText, cleanAtlasDoc, isAtlasPath, proxyAtlas } from '../atlas-proxy';
 import { atlasAssetText, atlasAssetsOn, serveAtlasAsset } from '../atlas-assets';
+import { STATS_PATHS, serveStats } from '../stats-snapshot';
 import { queryStats } from '../stats';
 import { assertSameOrigin, clearSessionCookie, consumeLoginLink, csrfToken, hasSessionCookie, peekLoginLink, readForm, resolveSession, revokeSession, sessionCookie, type Viewer } from '../sessions';
 import { composePage, handleWrite, isWritePath } from './writes';
@@ -424,6 +425,8 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
     if (ATLAS_SLASH_REDIRECT.test(path)) {
       return respond(method, 301, '', { location: `${path}/${url.search}`, 'cache-control': 'public, max-age=86400' });
     }
+    // The daily Stats: the page, its Markdown twin and stats.json come from the newest stored snapshot (src/stats-snapshot.ts)
+    if (assetsOn && STATS_PATHS.has(path)) return serveStats(request, env, url);
     // /.well-known/mcp.json is the Worker's own (MCP discovery); every other /.well-known/* file belongs to the Atlas
     if (isAtlasPath(path) && path !== MCP_WELL_KNOWN) return assetsOn ? serveAtlasAsset(request, env, url) : proxyAtlas(request, env, url, proxyOrigin!);
   }

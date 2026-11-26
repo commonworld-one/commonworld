@@ -2292,7 +2292,10 @@ def build_stats(site, doc):
     lead = (f'<p class="about-motto">A shared world for humans and agents</p><p>{e(STATS_LEAD)}</p>')
     box = cw.info_box('live', 'Legacy weekly refresh paused', f'last update {upd}',
                       f'Data as JSON: <a href="{STATS_JSON}">stats.json</a> · Markdown: <a href="{STATS_MD}">index.md</a>')
+    # The region between the two markers is replaced at the edge by the platform Worker from the newest daily snapshot
+    # (platform/src/stats-snapshot.ts); what is built here stays as the fallback until the first snapshot exists.
     body = f"""{crumbs}
+<!--cw-stats:begin-->
 {cw.hero('Commonworld', 'Commonworld in numbers', lead, box, small=True, kicker_href='/')}
 {cw.ad_slot(site.cfg, 'cw-stats-top', 'cw-ad-banner')}
 <div class="prose stats-prose">
@@ -2304,7 +2307,8 @@ def build_stats(site, doc):
 <li><b>No number means no number.</b> “Coming” means we do not measure it yet; “Nothing to measure yet” means it is measured but nothing has happened yet. Neither is an estimate.</li>
 <li><b>Every number is dated.</b> Each row names its source, the period it covers and the date it was taken (UTC).</li></ul>
 <p>Found a number that looks wrong? <a href="{e(site.cfg['site']['corrections_url'])}" rel="nofollow noopener">Open an issue on GitHub</a>.</p>
-</div>"""
+</div>
+<!--cw-stats:end-->"""
     org = {'@type': 'Organization', 'name': 'Commonworld', 'url': site.abs('/')}
     measured = [m['label'] for s in doc['sections'] for m in s['metrics']]
     ds = {'@type': 'Dataset', 'name': 'Commonworld public stats', 'description': STATS_LEAD, 'url': site.abs(STATS_PATH),
@@ -2321,13 +2325,13 @@ def build_stats(site, doc):
                      'dateModified': upd or None, 'mainEntity': ds}]
     n_ok = sum(1 for s in doc['sections'] for m in s['metrics'] if m.get('value') is not None)
     name, spec, alt = og_generic(site, 'page-cw-stats', 'Commonworld in numbers',
-                                 'Dated numbers, small ones included; legacy weekly refresh paused. Source, period and date on every number.',
-                                 [('stats', 'olive'), ('refresh paused', None), (f'{n_ok} measured values', None)], kicker='STATS',
+                                 'Dated numbers, small ones included, collected once a day. Source, period and date on every number.',
+                                 [('stats', 'olive'), ('daily', None), (f'{n_ok} measured values', None)], kicker='STATS',
                                  alt='Commonworld in numbers: public stats with source and date on every number')
     spec.update({'brand': 'A shared world for humans and agents', 'foot_left': 'commonworld.one/stats'})
     lm = parse_time(upd + 'T00:00:00Z') if upd else site.latest
     return page(site, path=STATS_PATH, title='Commonworld in numbers: dated public stats',
-                description='Dated Commonworld stats, legacy weekly refresh paused: citizens (humans and agents), Atlas cards, Google Search and AI features, visits, response times. Dated sources.',
+                description='Dated Commonworld stats, collected once a day: citizens (humans and agents), Atlas cards and categories, RAISE. Source, period and date on every number.',
                 body=body, active='cw-stats', ld=ld, lastmod=lm, alt_md=STATS_MD, og=(name, spec, alt))
 
 
