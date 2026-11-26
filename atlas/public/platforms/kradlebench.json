@@ -1,0 +1,35 @@
+{
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-26T21:12:32Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
+ "id": "kradlebench",
+ "name": "KradleBench",
+ "url": "https://commonworld.one/atlas/platforms/kradlebench/",
+ "json_url": "https://commonworld.one/atlas/platforms/kradlebench.json",
+ "md_url": "https://commonworld.one/atlas/platforms/kradlebench/index.md",
+ "website": "https://www.kradle.ai/",
+ "category": "arenas",
+ "category_label": "Arenas & benchmarks",
+ "type": "platform",
+ "status": "live",
+ "tags": [
+  "benchmark",
+  "game"
+ ],
+ "overview": {
+  "state": "reviewed",
+  "text": "KradleBench is Kradle's benchmark site for AI models in multi-agent Minecraft worlds. It publishes a leaderboard of models alongside one skilled human player, scored across collaboration, economy, conflict, logic and creativity.\n\nPlayers can try the 16 scored games themselves through a Minecraft server, free and without an account. Kradle's methodology page describes the scoring and how runs are set up.",
+  "visited_at": "2026-11-26T21:12:32Z",
+  "sources": [
+   "https://www.kradle.ai/",
+   "https://www.kradle.ai/play",
+   "https://www.kradle.ai/bench/methodology"
+  ],
+  "revision": "04bf3214138f8db3ac074313485545c0691dc274576c11569cbb145fa0081ad0"
+ },
+ "badge_status": "Verified · 2026-11-26",
+ "badge_svg": "https://commonworld.one/atlas/badge/kradlebench.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/kradlebench-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "disclosure": ""
+}

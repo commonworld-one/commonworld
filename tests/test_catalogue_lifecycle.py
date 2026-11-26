@@ -45,7 +45,7 @@ class CatalogueLifecycle(unittest.TestCase):
         if not (captures/'manifest.json').exists():self.skipTest('exact reviewed captures required')
         with tempfile.TemporaryDirectory() as td:
             root=Path(td);self.copy(root);cat=root/'atlas/catalogue'
-            d=json.loads((cat/'closures.json').read_text());d['ids']+=['kradleverse','aptets'];(cat/'closures.json').write_text(json.dumps(d))
+            d=json.loads((cat/'closures.json').read_text());d['ids']+=['aptets'];(cat/'closures.json').write_text(json.dumps(d))
             # Rebuild the safety report through the real CLI from recorded engine
             # answers. This is offline replay, not a new live safety claim.
             safety=root/'atlas/data/link-safety.json';previous=json.loads(safety.read_text())
@@ -64,7 +64,7 @@ class CatalogueLifecycle(unittest.TestCase):
     def test_reviewed_to_closed_retains_history_not_current_dispatch(self):
         with tempfile.TemporaryDirectory() as td:
             root=Path(td);self.copy(root);cat=root/'atlas/catalogue'
-            closure=json.loads((cat/'closures.json').read_text());closure['ids']+=['kradleverse','aptets'];(cat/'closures.json').write_text(json.dumps(closure))
+            closure=json.loads((cat/'closures.json').read_text());closure['ids']+=['aptets'];(cat/'closures.json').write_text(json.dumps(closure))
             for n in ['overviews.json','additional-overviews.json','current-revisions.json']:
                 d=json.loads((cat/n).read_text())
                 for r in d['cards'].values():r.update(state='draft',check=None)
@@ -72,7 +72,7 @@ class CatalogueLifecycle(unittest.TestCase):
             # Both existing current and newly added current cards honor closure evidence.
             out=root/'out';self.run_build(root,['--data',str(cat/'snapshot.json'),'--overviews',str(cat/'overviews.json'),'--draft-preview','--no-mirror','--out',str(out)])
             self.assert_closed_projections(out,['kradleverse','aptets'])
-            current=json.loads((out/'atlas/platforms.json').read_text())['platforms'];self.assertEqual(len(current),347)
+            current=json.loads((out/'atlas/platforms.json').read_text())['platforms'];self.assertEqual(len(current),348)
             for slug in ['kradleverse','aptets']:
                 html=(out/f'atlas/platforms/{slug}/index.html').read_text();md=(out/f'atlas/platforms/{slug}/index.md').read_text();rec=json.loads((out/f'atlas/platforms/{slug}.json').read_text())
                 self.assertEqual(rec['status'],'closed');self.assertEqual(rec['archive']['external_links'],'disabled')

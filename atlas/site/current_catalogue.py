@@ -12,8 +12,10 @@ def apply_closures(data, directory):
         if c['slug'] not in ids: continue
         c['status'] = 'closed'
         if c['slug'] == 'agent-knowledge-network': c['name'] = 'Agent Knowledge Network'
-        event = {'to':'closed','reason':decision['reason'],'by':'human'}
-        if decision.get('recorded_on'): event['on'] = decision['recorded_on']
+        own = decision.get('overrides', {}).get(c['slug'], {})
+        event = {'to':'closed','reason':own.get('reason', decision['reason']),'by':'human'}
+        if own.get('recorded_on'): event['on'] = own['recorded_on']
+        elif decision.get('recorded_on'): event['on'] = decision['recorded_on']
         elif decision.get('recorded_at'): event['at'] = decision.get('at_by_id',{}).get(c['slug'], decision['recorded_at'])
         c.setdefault('status_history', []).append(event)
     return data

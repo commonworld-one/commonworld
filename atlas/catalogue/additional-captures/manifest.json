@@ -36,6 +36,18 @@
       "http_status": 200,
       "replaces_original": true,
       "transform": "Chrome 1200x750 viewport capture scrolled to the KEYRING AGENT section, converted PNG to WebP; no resize, no crop"
+    },
+    "kradlebench": {
+      "file": "kradlebench.webp",
+      "sha256": "26e58de87b969d13a2ac727f78e8b6dab3314cc0cbeeaeec626b8f4a341d8fb3",
+      "source_url": "https://www.kradle.ai/",
+      "captured_at": "2026-11-26T21:12:32Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 72990,
+      "title": "KradleBench | Multi-Agent AI Benchmark in Minecraft",
+      "http_status": 200,
+      "transform": "Chrome 1200x750 viewport capture of the page top, converted PNG to WebP; no resize, no crop"
     }
   }
 }

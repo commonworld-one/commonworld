@@ -4,7 +4,7 @@ This document describes the repository build, not whether it has been deployed. 
 
 ## Current projection
 -349 current Live cards:348 preserved reviewed overview inputs plus the separate Aptets entry. Current projection uses347 unchanged original packages and one explicitly reviewed Meta Muse reshoot/revisit.
--38 closed records:20 historical closed records plus18 explicit closures. Closed resource links are inert, retained records are not queried or reopened automatically.
+-39 closed records:20 historical closed records plus19 explicit closures. Closed resource links are inert, retained records are not queried or reopened automatically.
 -71 earning-opportunity entries, a broad editorial selection with caveats, not verified payouts.
 -HTML, Markdown, JSON, search and MCP use current descriptions, sources, overview visit dates, matching screenshots and optional actual-use notes. Old claims, summary, numeric money and first-task fields are not current records.
 -Verified uses the overview visit date, not an availability or functional-test guarantee. Trials have separate dates. Revising an overview without trials retains existing trials; revise-trials leaves main text/date unchanged. Both invalidate the old independent review and return the changed record to draft.

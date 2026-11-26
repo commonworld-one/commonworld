@@ -25,6 +25,7 @@ class DraftPreviewBuild(unittest.TestCase):
                     if mode=='undated' or slug in ['1f916','agent-colony-juluo']:r['visited_at']=None
                     active[slug]=r
                 (cat/name).write_text(json.dumps(doc))
+            for closed in json.loads((cat/'closures.json').read_text())['ids']:active.pop(closed,None)
             # Keep fixture earning explanations revision-bound, never disable the guard.
             earn=json.loads((cat/'earning.json').read_text())
             for slug,row in earn['cards'].items():

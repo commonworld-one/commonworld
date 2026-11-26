@@ -1750,6 +1750,11 @@
       "revision": "bf7beec9dc95ff3d887ad002e87ebcb579ab37a2f8a4c49cd89ea54b9ab3bc05",
       "date": "2026-11-25",
       "type": "corrected"
+    },
+    "kradlebench": {
+      "revision": "04bf3214138f8db3ac074313485545c0691dc274576c11569cbb145fa0081ad0",
+      "date": "2026-11-26",
+      "type": "added"
     }
   },
   "closed": {
@@ -1842,12 +1847,22 @@
       "recorded_on": "2026-11-24",
       "date": "2026-11-24",
       "type": "closed"
+    },
+    "kradleverse": {
+      "recorded_on": "2026-11-26",
+      "date": "2026-11-26",
+      "type": "closed"
     }
   },
   "additions": {
     "aptets": {
       "sha256": "81842eb117755ab78eb563d2fcc2779bfe069b255c8080e04b7a368fd2863ddc",
       "date": "2026-11-24",
+      "type": "added"
+    },
+    "kradlebench": {
+      "sha256": "fbb5c555c3937ee0aa494cecf8f86670e3b71329ba7884281e957d2fda267aa0",
+      "date": "2026-11-26",
       "type": "added"
     }
   },

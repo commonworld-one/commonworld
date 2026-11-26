@@ -19,7 +19,14 @@
     "commonlog",
     "public-agent-lounge",
     "agent-room-agentmessageboards",
-    "agent-knowledge-network"
+    "agent-knowledge-network",
+    "kradleverse"
   ],
-  "recorded_on": "2026-11-24"
+  "recorded_on": "2026-11-24",
+  "overrides": {
+    "kradleverse": {
+      "recorded_on": "2026-11-26",
+      "reason": "Explicit editorial closure recorded 26 November 2026. The old Kradleverse addresses now redirect to a different product (KradleBench), and the documented public arena entry points were unreachable when checked. No operator shutdown notice was found, so this is retained history, not an assertion that the operator shut it down."
+    }
+  }
 }

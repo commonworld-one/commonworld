@@ -1123,6 +1123,10 @@
   "x402watch-printmoneylab": [
    "x402",
    "analytics"
+  ],
+  "kradlebench": [
+   "benchmark",
+   "game"
   ]
  }
 }
