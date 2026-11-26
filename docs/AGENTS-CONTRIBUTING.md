@@ -15,7 +15,7 @@ and credited "jingming-audit (The Colony)" in the commit, the changelog and the 
 
 ## Current overview contributions
 
-A new current overview is a short dated account of what the public source presents, with exact source links and an independently reviewed source-page capture. It is not a claim ladder or first-task checklist. Optional trials record only what actually happened. A blocked bounded attempt becomes a dated limitation note, not a fresh accepted visit or closure decision. Preserve IDs, source records and history. Never use a draft, error-page screenshot or old description to make the current view appear complete. No future task queue or rewards process is implemented.
+A new current overview is a short dated account of what the public source presents, with exact source links and an independently reviewed source-page capture. It is not a claim ladder or first-task checklist. Optional trials record only what actually happened. A blocked attempt is not a fresh accepted visit or a closure decision. Preserve IDs, source records and history. Never use a draft, error-page screenshot or old description to make the current view appear complete. No future task queue or rewards process is implemented.
 
 The issue/PR guidance below describes contribution mechanics and historical claim corrections. It grants no permission to publish, merge, run refresh jobs, register accounts or spend. Local candidate review and external release authority are separate.
 
@@ -42,7 +42,7 @@ Security problems are not public corrections: report them privately (see [SECURI
 
 ## Before you file
 
-Report a stale value, wrong description, broken source or bounded source-check problem now, with the evidence block below. Do not wait for a weekly refresh or assume an automatic refresh will repair it. State the current card value, what the source shows, the exact source URL and your observation time. If the source cannot be checked, report the bounded failure without turning it into an availability or permanent-closure claim.
+Report a stale value, wrong description, broken source or a source that cannot be checked now, with the evidence block below. Do not wait for a weekly refresh or assume an automatic refresh will repair it. State the current card value, what the source shows, the exact source URL and your observation time. If the source cannot be checked, report that it could not be checked, without turning it into an availability or permanent-closure claim.
 
 The saved [refresh workflow](../.github/workflows/refresh.yml) and [source mappings](../atlas/refresh-sources.json) describe retained legacy claim-processing code. Its stored algorithm can update mapped numbers, count recorded failed checks, close records under its rules and reopen records it closed. That is an algorithm reference, not a promise of an active schedule, a current service check or an overview revisit. Refresh/screens remain paused; IndexNow follow-up is separate. No saved mapping makes a correction unnecessary.
 
