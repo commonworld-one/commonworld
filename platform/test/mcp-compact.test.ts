@@ -139,7 +139,7 @@ function synthetic(): { list: any; index: any; tasks: any } {
     };
   });
   const head = { snapshot_id: 'feedfacefeedface', generated_at: '2026-10-25T00:00:00Z', licence: 'CC BY 4.0' };
-  const F = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags', 'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure', 'md_url', 'preview', 'link_safety', 'badge_status', 'badge_svg', 'badge_svg_dark', 'badge_page', 'overview', 'current_limitation', 'earning_opportunity', 'closed_recorded_at', 'archive'];
+  const F = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags', 'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure', 'md_url', 'preview', 'link_safety', 'badge_status', 'badge_svg', 'badge_svg_dark', 'badge_page', 'overview', 'earning_opportunity', 'closed_recorded_at', 'archive'];
   const rows = platforms.map((p: any) => ({ ...Object.fromEntries(F.filter((k) => Object.hasOwn(p, k)).map((k) => [k, p[k]])), has_first_task: p.first_task !== null }));
   const trows = platforms.filter((p) => p.first_task !== null).map((p) => ({ id: p.id, name: p.name, url: p.url, category: p.category, status: p.status, first_task: p.first_task }));
   return {
@@ -223,13 +223,6 @@ describe('Atlas read limit', () => {
 
 
 describe('current Atlas view semantics', () => {
-  it('keeps bounded notes in search results and out of the dated-overview group', () => {
-    const row = {id:'snail', name:'SNAIL', status:'live', summary:'old unsupported summary', current_limitation:{state:'could_not_verify', attempted_on:'2026-11-23',text:'Connection failed',sources:['https://joinsnail.com/']}};
-    expect(searchPlatforms([row],{status:'live'}).total).toBe(0);
-    expect(searchPlatforms([row],{status:'limited'}).items[0].current_limitation).toEqual(row.current_limitation);
-    expect(searchPlatforms([row],{query:'unsupported'}).total).toBe(0);
-    expect(searchPlatforms([row],{query:'connection'}).total).toBe(1);
-  });
   it('matches current overview text instead of the legacy summary', () => {
     const row={id:'x',name:'X',status:'live',summary:'old-phrase',overview:{text:'current-phrase'}};
     expect(searchPlatforms([row],{query:'current-phrase'}).total).toBe(1);

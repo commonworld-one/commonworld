@@ -116,7 +116,7 @@ def catalogue_hosts(catalogue, snap, files):
         for h in sb.hosts_of_entry({'canonical_url': c.get('canonical_url')}):
             out.setdefault(h, set()).add(c['slug'])
     known = {c['slug'] for c in snap['platforms']}
-    for name in ('overviews.json', 'limitations.json'):
+    for name in ('overviews.json',):
         document = json.loads((directory / name).read_text())
         if name == 'overviews.json': document = new_overviews(document, directory)
         records = document['cards']

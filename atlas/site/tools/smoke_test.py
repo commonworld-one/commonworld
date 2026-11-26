@@ -26,7 +26,6 @@ CATALOGUE = any(c.get('overview') for c in _SNAP)
 ANNOUNCEMENT = json.load(open(os.path.join(HERE, '..', 'site-config.json'))).get('announcement', {})
 CURRENT_COUNTS = json.load(open(os.path.join(HERE, '..', 'dist', 'api', 'v1', 'atlas', 'index.json'))).get('current_counts', {})
 N_DATED = sum(bool(c.get('overview')) for c in _SNAP)
-N_LIMITED = sum(bool(c.get('current_limitation')) for c in _SNAP)
 N_ALL, N_CLOSED = len(_SNAP), sum(1 for c in _SNAP if c.get('status') == 'closed')
 N_PAY = sum(1 for c in _SNAP if c.get('category') == 'payments')
 PAGE_SIZE = 50  # cards per list page (D4)
@@ -185,8 +184,8 @@ with sync_playwright() as p:
     check(f'empty search: back to page 1 ({pg.evaluate(VIS)} cards, pager, indexable)', pg.evaluate(VIS) == N_PAGE1 and (N_PAGES == 1 or pg.is_visible('#pager'))
           and pg.get_attribute('meta[name="robots"]', 'content').startswith('index,follow'))
     if CATALOGUE:
-        check('current-only status controls exclude archive and limited',
-              pg.locator('[data-f-status="closed"],[data-f-status="limited"]').count() == 0)
+        check('current-only status controls exclude the archive',
+              pg.locator('[data-f-status="closed"]').count() == 0)
         check('current counts match current-only source', CURRENT_COUNTS == {'dated_overviews': N_DATED, 'live': N_DATED})
         pg.click('[data-f-status="live"]')
         nm = pg.evaluate(VIS)

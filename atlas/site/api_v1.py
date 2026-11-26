@@ -393,8 +393,7 @@ def schemas(origin, categories, draft_preview=False):
             'sources': {'type': 'array', 'minItems': 1, 'items': uri},
             'revision': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}}}
     summary_props['disclosure_history'] = {'type': 'array', 'description': 'Optional public dated disclosure history, separate from current relationship wording and practical trials. Not private editorial history. Local unreleased extension.', 'items': {'type': 'object', 'required': ['text', 'revision', 'replaced_by_revision', 'correction_date', 'original_record_date', 'reason'], 'properties': {'text': {'type': 'string'}, 'revision': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, 'replaced_by_revision': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, 'correction_date': {'type': 'string', 'format': 'date'}, 'original_record_date': {'type': ['string', 'null']}, 'reason': {'type': 'string'}}}}
-    summary_props['current_limitation'] = {'type': 'object', 'description': 'Local unreleased optional bounded source-check note. Takes priority over overview and legacy summary; not a closure or availability claim.', 'required': ['state', 'attempted_on', 'text', 'sources'], 'properties': {'state': {'const': 'could_not_verify'}, 'attempted_on': {'type': 'string', 'pattern': r'^\d{4}-\d{2}-\d{2}$'}, 'text': {'type': 'string'}, 'sources': {'type': 'array', 'items': uri}}}
-    optional = {'earning_opportunity', 'current_limitation', 'disclosure_history', 'overview', 'preview', 'link_safety', 'md_url', 'evidence_level', 'keys_and_books', 'first_task', 'replications', 'reachability'}  # added in 1.1.0 / 1.2.0 / 1.4.0 / 1.6.0: optional, so older records stay valid
+    optional = {'earning_opportunity', 'disclosure_history', 'overview', 'preview', 'link_safety', 'md_url', 'evidence_level', 'keys_and_books', 'first_task', 'replications', 'reachability'}  # added in 1.1.0 / 1.2.0 / 1.4.0 / 1.6.0: optional, so older records stay valid
     summary = {'type': 'object', 'description': 'Stable public fields of one published Atlas entry (as in platforms.json).',
                'required': [k for k in summary_props if k not in optional], 'properties': summary_props}
     closed_summary = {'type':'object', 'required':['id','name','url','json_url','category','category_label','status','archive','closed_recorded_at'],
@@ -408,7 +407,7 @@ def schemas(origin, categories, draft_preview=False):
     current_props['status'] = {'enum': ['draft', 'live'] if draft_preview else ['live']}
     current_props['preview'] = {'$ref': '#/$defs/preview'} if draft_preview else {'allOf': [{'$ref': '#/$defs/preview'}, {'type': 'object'}]}
     current_summary = {'type':'object','required':['id','name','url','json_url','category','category_label','status','overview'] + ([] if draft_preview else ['preview']),
-        'not': {'anyOf':[{'required':[k]} for k in ('archive','closed_recorded_at','current_limitation','has_money_flow','claims','summary','first_task','verified_at','last_checked','money_flow','key_number','claims_count','evidence_level','keys_and_books','replications','reachability')]},
+        'not': {'anyOf':[{'required':[k]} for k in ('archive','closed_recorded_at','has_money_flow','claims','summary','first_task','verified_at','last_checked','money_flow','key_number','claims_count','evidence_level','keys_and_books','replications','reachability')]},
         'properties': current_props}
     summary = {'oneOf':[closed_summary,current_summary], 'description': 'Accepted current package or inert closed history. Legacy input shapes are not public current records.'}
     preview = {'type': ['object', 'null'], 'description': 'Dated public source-page screenshot of the entry, or null. See source_url for the captured page. Third-party website content: '

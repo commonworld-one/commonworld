@@ -44,7 +44,7 @@
       + (r[9] ? ' data-money="1"' : '') + (r[10] ? ' data-num="1"' : '') + (r[11] ? ' data-claims="' + hesc(r[11]) + '"' : '') + (r[12] ? ' data-ver="' + hesc(r[12]) + '"' : '')  // 0 is left out, as cw.attrs() does
       + (r[7] ? ' data-tags="' + hesc(r[7]) + '"' : '');
     var thumb = r[8] ? '<img src="' + t.path + sl + '.webp" alt="" width="' + t.w + '" height="' + t.h + '" loading="lazy">' : '<i class="ph" aria-hidden="true"></i>';
-    var chip = (idx.overview_ids || []).indexOf(sl) !== -1 ? '<span class="chip live"><i class="dot"></i>Live</span>' : (idx.limited_ids || []).indexOf(sl) !== -1 ? '<span class="chip limited">Could not verify</span>' : st === 'closed' ? '<span class="chip closed"><i class="dot closed"></i>closed</span>'
+    var chip = (idx.overview_ids || []).indexOf(sl) !== -1 ? '<span class="chip live"><i class="dot"></i>Live</span>' : st === 'closed' ? '<span class="chip closed"><i class="dot closed"></i>closed</span>'
       : '<span class="chip live"><i class="dot"></i>live</span>' + (rc ? '<span class="chip reach ' + rc[0] + '" title="' + hesc(idx.reach_text[rc[0]]) + '">' + hesc(rc[1]) + '</span>' : '');
     var keynum = kn ? '<div class="keynum"><b>' + hesc(kn[0]) + '</b><span>' + hesc(kn[1]) + '</span></div>' : '';
     var tagHtml = tags.length ? '<div class="card-tags">' + tags.slice(0, lim).map(function (x) {
@@ -116,8 +116,7 @@
   function sortCards() {
     var by = state.sort, l = baseOrder.slice();
     var name = function (a, b) { return a._name < b._name ? -1 : a._name > b._name ? 1 : 0; };
-    if (by === 'claims') l.sort(function (a, b) { return (+b.dataset.claims) - (+a.dataset.claims) || name(a, b); });
-    else if (by === 'recent') l.sort(function (a, b) { return Number(b.dataset.ver || 0) - Number(a.dataset.ver || 0) || name(a, b); });
+    if (by === 'recent') l.sort(function (a, b) { return Number(b.dataset.ver || 0) - Number(a.dataset.ver || 0) || name(a, b); });
     else l.sort(name);
     return l;
   }
@@ -256,9 +255,8 @@
   }
 
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
-  var currentView = document.getElementById('catalog').getAttribute('data-current-view') === '1';
-  var FEAT = { money: currentView ? 'historical money-flow claim' : 'has money flow', num: currentView ? 'historical numeric claim' : 'has numbers' };
-  var STATUS = currentView ? {live:'Live', limited:'could not verify',closed:'closed history'} : {};
+  var FEAT = { money: 'historical money-flow claim', num: 'historical numeric claim' };
+  var STATUS = { live: 'Live' };
   function renderActive(n) {
     var parts = [];
     if (state.cat) parts.push(['cat', CATS[state.cat]]);
@@ -333,11 +331,13 @@
   var P = new URLSearchParams(location.search), list = function (k) { return (P.get(k) || '').split(',').filter(Boolean); };
   state.q = (P.get('q') || '').trim(); if (q) { q.value = state.q; q.dispatchEvent(new Event('input')); clearTimeout(timer); }
   if (CATS[P.get('category')]) state.cat = P.get('category');
-  list('status').forEach(function (s) { if (s === 'live' || s === 'closed' || s === 'limited') state.status.add(s); });
+  // Old addresses: status=closed (the retired Closed filter) leads to the archive page; any other retired value is dropped.
+  var oldStatus = list('status');
+  if (oldStatus.indexOf('closed') !== -1 && oldStatus.indexOf('live') === -1) { location.replace(location.pathname.replace(/[^\/]*$/, '') + 'closed/' + location.hash); return; }
+  if (oldStatus.indexOf('live') !== -1) state.status.add('live');
   list('type').forEach(function (s) { if (TYPES[s]) state.type.add(s); });
-  list('feature').forEach(function (s) { if (!currentView && FEAT[s]) state.feat.add(s); });
   list('tag').forEach(function (s) { state.tags.add(s.toLowerCase()); });
-  if ((currentView ? ['name','recent'] : ['name', 'claims', 'recent']).indexOf(P.get('sort')) !== -1) { state.sort = P.get('sort'); sortEl.value = state.sort; }
+  if (['name', 'recent'].indexOf(P.get('sort')) !== -1) { state.sort = P.get('sort'); sortEl.value = state.sort; }
   run(false);
 })();
 

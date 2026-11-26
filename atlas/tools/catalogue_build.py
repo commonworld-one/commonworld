@@ -24,12 +24,6 @@ def plan(mode, out=None, screens_dir=None):
         raise ValueError('accepted catalogue blocked: real revision-bound review receipts are incomplete')
     cmd = [sys.executable, str(ROOT / 'atlas/site/build.py'), '--data', str(CAT / 'snapshot.json'),
            '--overviews', str(CAT / 'overviews.json'), '--overview-selection', str(CAT / 'selection.json')]
-    limits = CAT / 'limitations.json'
-    if limits.exists():
-        limited_ids = set(json.loads(limits.read_text()).get('cards', {}))
-        if limited_ids != set(selection.get('deferred_slugs', [])):
-            raise ValueError('bounded notes must match deferred selection exactly')
-        cmd += ['--limitations', str(limits)]
     if mode == 'preview':
         cmd += ['--draft-preview', '--no-mirror']
     if out:

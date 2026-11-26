@@ -32,7 +32,6 @@ import screens  # noqa: E402  (homepage screenshots from the orphan branch atlas
 import events as atlas_events  # noqa: E402  (public events log: atlas/data/events.jsonl)
 import cards_v2 as cv2  # noqa: E402  (cards v2: evidence ladder, keys and books, first task; atlas/CURATION.md)
 import replications as repl  # noqa: E402  (replication counts on a card: atlas/data/replications.json)
-import limitations
 import earning
 import overviews  # simple editorial source; legacy snapshot stays API-compatible
 import reachability as reach  # noqa: E402  (stale / challenge-walled notes on live cards: atlas/data/reachability.json)
@@ -286,12 +285,10 @@ def keynum_html(c):
 
 
 def display_status(c):
-    return 'limited' if c.get('_limitation') else c['status']
+    return c['status']
 
 
 def status_chip(c):
-    if c.get('_limitation'):
-        return limitations.CHIP
     if c['status'] == 'closed':
         return '<span class="chip closed"><i class="dot closed"></i>closed</span>'
     r = c.get('_reach')
@@ -481,8 +478,6 @@ SHARE_TEXT_EARN = 'Where AI agents get paid | Commonworld Atlas'
 
 
 def share_text_entry(c):
-    if c.get('_limitation'):
-        return overviews.share_text(c)
     """Share text by badge status: only verified cards say 'verified'."""
     tone = badges.status_of(c)[0]
     if tone == 'verified':
@@ -586,8 +581,6 @@ def overview_of(site, c):
 
 
 def display_date(site, c):
-    if c.get('_limitation'):
-        return None
     r = overview_of(site, c)
     return parse_time(r.get('visited_at')) if r is not None else c['_verified']
 
@@ -597,9 +590,6 @@ def display_name(site, c):
 
 
 def display_desc(site, c):
-    if c.get('_limitation'):
-        r = c['_limitation']
-        return 'Attempt ' + r['attempted_on'] + ': ' + r['text']
     r = overview_of(site, c)
     text = r['text'] if r is not None else c['_desc']
     return closed_archive.inert_text(text) if getattr(site, 'catalogue_mode', False) and c.get('status') == 'closed' else text
@@ -612,7 +602,7 @@ def card_html(site, c, data=False, note=''):
              'data-money': '1' if c['_money'] else None, 'data-num': '1' if c['_num'] else None,
              'data-claims': len(c.get('claims', [])), 'data-ver': int(display_date(site, c).timestamp()) if display_date(site, c) else 0,
              'data-tags': ' '.join(c['_tags']) or None}
-    keynum = '' if overview_of(site, c) is not None or c.get('_limitation') else keynum_html(c)
+    keynum = '' if overview_of(site, c) is not None else keynum_html(c)
     if c.get('status') == 'closed':
         keynum = keynum.replace('current', 'historical')
     return cw.card(href=c['_url'], name=display_name(site, c), cat_label=CAT_LABEL[c['category']], cat_color='k-' + c['category'],
@@ -847,9 +837,9 @@ def build_index(site):
                 description=f'{n} places where AI agents talk, work, get paid, compete and publish research, each checked against its own sources, with dated numbers you can trace.',
                 body=body, active='index', ld=ld, index_search=True,
                 og=og_generic(site, 'atlas', 'Atlas of Agent Platforms',
-                              'Dated source overviews and bounded source-check notes. Not a guarantee of service availability or functionality.',
-                              [(f'{n} entries', 'olive'), ((f'{len(site.overviews)} dated overviews' if getattr(site, 'catalogue_mode', False) else f'{live} live'), 'live'), (f'{len(getattr(site, "limitations", {}))} could not verify', None), (f'{sum(c["status"] == "closed" for c in cards)} closed', 'closed'), (f'{len(site.cats)} directions', None)],
-                              kicker='CATALOGUE' if getattr(site, 'catalogue_mode', False) else 'VERIFIED CATALOG', alt=(f'Commonworld Atlas: {n} entries with dated overviews and bounded source-check notes' if getattr(site, 'catalogue_mode', False) else f'Commonworld Atlas of Agent Platforms: {n} verified entries, {live} live')))
+                              'Dated source overviews. Not a guarantee of service availability or functionality.',
+                              [(f'{n} entries', 'olive'), ((f'{len(site.overviews)} dated overviews' if getattr(site, 'catalogue_mode', False) else f'{live} live'), 'live'), (f'{sum(c["status"] == "closed" for c in cards)} closed', 'closed'), (f'{len(site.cats)} directions', None)],
+                              kicker='CATALOGUE' if getattr(site, 'catalogue_mode', False) else 'VERIFIED CATALOG', alt=(f'Commonworld Atlas: {n} entries with dated overviews' if getattr(site, 'catalogue_mode', False) else f'Commonworld Atlas of Agent Platforms: {n} verified entries, {live} live')))
 
 
 def index_page_text(site, n, m, cs):
@@ -915,8 +905,6 @@ def build_platform(site, c):
             historical = '<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Historical overview</h2></div><div class="cw-panel-body"><p>' + e(c['_overview']['text']).replace('\n', '<br>') + '</p></div></section>'
             raw = raw.replace('</article>', historical + '</article>', 1)
         return closed_archive.html_document(raw)
-    if c.get('status') != 'closed' and c.get('_limitation'):
-        return limitations.render_html(site, c, sys.modules[__name__])
     if c.get('status') != 'closed' and c.get('_overview') is not None:
         return overviews.render_html(site, c, sys.modules[__name__])
     b = site.base
@@ -1154,8 +1142,6 @@ def build_platform_md(site, c):
         if c.get('_overview'):
             raw += '\n\n## Historical overview\n\n' + c['_overview']['text'] + '\n'
         return closed_archive.markdown(raw)
-    if c.get('status') != 'closed' and c.get('_limitation'):
-        return limitations.render_md(site, c)
     if c.get('status') != 'closed' and c.get('_overview') is not None:
         return overviews.render_md(site, c)
     """Markdown twin of a card page (<card>/index.md): the same facts, ladder, keys and books, first task and claims."""
@@ -1302,7 +1288,6 @@ def build_category(site, k, n=1):
                       f'<a href="{b}/?category={k}">Filter and search this direction</a>.')
     if getattr(site, 'catalogue_mode', False):
         reviewed = sum(c['slug'] in site.overviews for c in allcs)
-        limited = sum(bool(c.get('_limitation')) for c in allcs)
         closed = sum(c['status'] == 'closed' for c in allcs)
         box = cw.info_box('live', f'{len(allcs)} Live', 'Current source overviews', f'Closed history is kept in the separate <a href="{b}/closed/">Archive</a>. <a href="{b}/?category={k}">Filter this direction</a>.')
     body = f"""{crumbs}
@@ -1317,7 +1302,7 @@ def build_category(site, k, n=1):
                      'mainEntity': page_item_list(site, cs, CAT_LABEL[k] + (f', page 1 of {m}' if m > 1 else ''), 1)},
           dataset_ld(site, allcs, name=f'Commonworld Atlas: {CAT_LABEL[k]}', url=first, keywords=DATASET_KEYWORDS + [CAT_LABEL[k]],
                      description=f'{CAT_DESC[k]} {len(allcs)} entries in the Commonworld Atlas. '
-                                 f'Read dated source overviews or bounded check notes; closed records retain their historical scope.',
+                                 f'Read dated source overviews; closed records retain their historical scope.',
                      downloads=[(f'{b}/categories/{k}.json', 'application/json', f'{CAT_LABEL[k]} entries (JSON)'),
                                 (f'{api_v1.API_BASE}/atlas/categories/{k}.json', 'application/json', f'API v1: {CAT_LABEL[k]} entries')])]
     return page(site, path=first, title=fit_title(f'{CAT_LABEL[k]}: {len(allcs)} catalogue AI-agent entries | Commonworld Atlas',
@@ -1328,7 +1313,6 @@ def build_category(site, k, n=1):
                 og=('category-' + k, {'kind': 'category', 'title': CAT_LABEL[k], 'kicker': 'DIRECTION', 'kicker_color': CAT_COLOR[k],
                                       'bar': [[1, CAT_COLOR[k]]], 'desc': CAT_DESC[k], 'foot_right': og_foot(site, lm),
                                       'chips': [{'text': f'{len(allcs)} entries', 'tone': 'olive'}, {'text': (f'{sum(c["slug"] in site.overviews for c in allcs)} dated overviews' if getattr(site, 'catalogue_mode', False) else f'{live} live'), 'tone': 'live'}]
-                                      + ([{'text': f'{sum(bool(c.get("_limitation")) for c in allcs)} could not verify', 'tone': 'olive'}] if getattr(site, 'catalogue_mode', False) else [])
                                       + ([{'text': f'{sum(c["status"] == "closed" for c in allcs)} closed', 'tone': 'closed'}] if len(allcs) - live else [])},
                     f'{CAT_LABEL[k]}: {len(allcs)} catalogue entries in the Commonworld Atlas'))
 
@@ -2810,7 +2794,6 @@ def agent_record(site, c):
             'md_url': site.abs(c['_url'] + 'index.md'), 'evidence_level': c['_ev'], 'keys_and_books': c['_kb'], 'first_task': c['_task'],
             'replications': c['_repl'], 'reachability': c['_reach']} | (
                 {'overview': overviews.public(c['_overview'])} if c.get('_overview') is not None else {}) | (
-                {'current_limitation': c['_limitation']} if c.get('_limitation') else {}) | (
                 {'disclosure_history': c['disclosure_history']} if c.get('disclosure_history') else {}) | ({'earning_opportunity': earning.public_marker(site, c)} if c.get('_earning') else {})
 
 
@@ -3070,12 +3053,12 @@ Some agent tools cannot reach the site directly. The same published files are mi
         start = txt.find('## Atlas\n')
         end = txt.find('## Categories', start)
         if start >= 0 and end > start:
-            txt = txt[:start] + f'## Atlas\n\nLocal dated-catalogue candidate: {len(site.overviews)} source overviews, {len(site.limitations)} bounded notes, {sum(c["status"] == "closed" for c in getattr(site, "all_cards", site.cards))} closed-history entries. Not a production update. Read current_limitation first, otherwise overview. Source visits do not prove functionality or current availability. Legacy claim/status/money/first-task fields below are compatibility history.\n\nCurrent Atlas guide: {A(b+"/llms.txt")}\nCurrent earning opportunities: {A(b+"/earn/")}\n\n' + txt[end:]
+            txt = txt[:start] + f'## Atlas\n\nLocal dated-catalogue candidate: {len(site.overviews)} source overviews, {sum(c["status"] == "closed" for c in getattr(site, "all_cards", site.cards))} closed-history entries. Not a production update. Read overview. Source visits do not prove functionality or current availability. Legacy claim/status/money/first-task fields below are compatibility history.\n\nCurrent Atlas guide: {A(b+"/llms.txt")}\nCurrent earning opportunities: {A(b+"/earn/")}\n\n' + txt[end:]
     if getattr(site, 'catalogue_mode', False):
         txt += f'\nRelated historical reports and navigation: {A(SAFETY_PATH)} {A(DECISIONS_PATH)} {A(DECISIONS_JSON)} {A(atlas_events.JSON_PATH)} {A(STATS_PATH)} {A(STATS_JSON)} {A(STATS_MD)} {A(b+"/badge/")}\n'
     if getattr(site, 'catalogue_mode', False):
-        txt = re.sub(r'This part of the file is about the Atlas,.*?dated\.', 'This part describes the local Atlas catalogue candidate: dated source overviews and bounded source-check notes, not a production update or availability guarantee.', txt)
-        txt = txt.replace('The Atlas: each card is a set of claims with source URL, basis and observation time.', 'The Atlas current view is overview or current_limitation; claim fields retain historical compatibility meaning.')
+        txt = re.sub(r'This part of the file is about the Atlas,.*?dated\.', 'This part describes the local Atlas catalogue candidate: dated source overviews, not a production update or availability guarantee.', txt)
+        txt = txt.replace('The Atlas: each card is a set of claims with source URL, basis and observation time.', 'The Atlas current view is the overview; claim fields retain historical compatibility meaning.')
     if getattr(site, 'catalogue_mode', False):
         txt = current_guide(site)
     write('/llms.txt', txt)
@@ -3121,13 +3104,13 @@ Data licence: {lic}. Please credit "Commonworld Atlas" with a link to {A(f'{b}/'
     if getattr(site, 'catalogue_mode', False):
         atxt = f'''# Commonworld Atlas: local dated catalogue candidate
 
-{len(site.cards)} entries: {len(site.overviews)} dated source overviews, {len(site.limitations)} bounded could-not-verify notes, {sum(c["status"] == "closed" for c in getattr(site, "all_cards", site.cards))} closed-history records. This local candidate is not evidence of a production deployment.
+{len(site.cards)} entries: {len(site.overviews)} dated source overviews, {sum(c["status"] == "closed" for c in getattr(site, "all_cards", site.cards))} closed-history records. This local candidate is not evidence of a production deployment.
 
-Read current_limitation first when present. Otherwise read overview.text, overview.visited_at and overview.sources. A source visit is not a functional test or availability guarantee. Optional trials record only actual actions. Screenshot source_url and captured_at identify the exact captured page; no new screenshot is claimed for a bounded note.
+Read overview.text, overview.visited_at and overview.sources. A source visit is not a functional test or availability guarantee. Optional trials record only actual actions. Screenshot source_url and captured_at identify the exact captured page.
 
 Legacy status, summary, verified_at, last_checked, claims, money-flow and first-task fields retain historical compatibility meaning. They do not certify a current service, payout or task opportunity. The earning-opportunity list uses current overviews only, not legacy money figures. Read /atlas/earn.json for the same broad selection and dated explanations shown on /atlas/earn/. disclosure_history is public dated disclosure history; private overview history and review notes are not exported.
 
-UI filters separate dated overviews, could-not-verify and closed history. The legacy query token live selects the dated-overview group in this local UI, not guaranteed current availability.
+The UI lists dated overviews; closed history is in the separate Archive. The legacy query token live selects the dated-overview group in this local UI, not guaranteed current availability.
 
 - Home: {A(b+'/')}
 - API: {A(api_v1.API_BASE+'/atlas/index.json')}
@@ -3137,7 +3120,7 @@ UI filters separate dated overviews, could-not-verify and closed history. The le
 - Method: {A(b+'/about/')}
 - Current earning opportunities: {A(b+'/earn.json')}
 
-MCP atlas_search_platforms and atlas_get_platform carry overview/current_limitation. Legacy API fields remain unchanged. A future task queue, contribution IDs and rewards are not implemented.
+MCP atlas_search_platforms and atlas_get_platform carry overview. Legacy API fields remain unchanged. A future task queue, contribution IDs and rewards are not implemented.
 
 Legacy periodic workflows are not a new overview schedule. Weekly MAIN-only substantive revisits are a proposal, not an active new job. Image branch/lock, periodic/IndexNow cutover and actual GitHub CI/release remain separate release work.
 
@@ -3177,8 +3160,8 @@ Data licence: {lic}. Official channels: {X_URL} and {REPO_URL}.
     if getattr(site, 'catalogue_mode', False):
         lines = ['# Commonworld Atlas: current source-view index', '', f'Official channels: site {A("/")} · X {X_URL} ({X_HANDLE}) · GitHub {REPO_URL}', f'API docs: {A(API_DOCS)} · Badges: {A(b+"/badge/")}', 'Current Live source overviews. Visit dates describe a description and matching screenshot, not a functional test. Actual trials are separate. Closed history is in /atlas/closed.json or accessible by permanent ID.', '']
         for rec in recs:
-            view = rec.get('current_limitation') or rec.get('overview')
-            state = 'could_not_verify' if rec.get('current_limitation') else ('Live' if rec.get('overview') else 'closed_history')
+            view = rec.get('overview')
+            state = 'Live' if view else 'closed_history'
             text = view['text'] if view else 'Retained closed-history record. Read its dated sources.'
             lines.append(f"- [{rec['name']}]({rec['url']}) · JSON: {rec['json_url']} · {state} · {text}")
     write('/llms-full.txt', '\n'.join(lines) + '\n')
@@ -3332,7 +3315,7 @@ def search_row(site, c):
     and the card itself need. card_from_row() turns it back into exactly card_html(data=True)."""
     x = c['_key']
     kn = 0
-    if x and overview_of(site, c) is None and not c.get('_limitation'):
+    if x and overview_of(site, c) is None:
         dt = parse_time(x.get('observed_at'))
         kn = [fmt_num(x['value']), ' · '.join(b for b in [x.get('unit') or '', x.get('window') or '', fmt_date(dt) if dt else ''] if b)]
     r = c.get('_reach')
@@ -3346,7 +3329,6 @@ def search_head(site):
     b = site.base
     w, h = (screens.THUMB_W, screens.THUMB_H) if site.thumbs_ok else (screens.SHOT_W, screens.SHOT_H)
     return {'card_base': f'{b}/platforms/', 'tag_href': f'{b}/?tag=', 'thumb': {'path': f'{b}{SHOTS_PATH}/t/' if site.thumbs_ok else f'{b}{SHOTS_PATH}/', 'w': w, 'h': h},
-            'limited_ids': sorted(getattr(site, 'limitations', {})),
             'overview_ids': sorted(getattr(site, 'overviews', {})),
             'cat_labels': {k: CAT_LABEL[k] for k in site.cats}, 'reach_text': dict(reach.STATE_TEXT), 'tag_limit': 6}
 
@@ -3360,9 +3342,7 @@ def card_from_row(head, row):
                      'data-claims': claims, 'data-ver': ver, 'data-tags': tags or None})
     t = head['thumb']
     thumb = f'<img src="{t["path"]}{sl}.webp" alt="" width="{t["w"]}" height="{t["h"]}" loading="lazy">' if th else '<i class="ph" aria-hidden="true"></i>'
-    if sl in head.get('limited_ids', []):
-        chip = limitations.CHIP
-    elif sl in head.get('overview_ids', []):
+    if sl in head.get('overview_ids', []):
         chip = '<span class="chip live"><i class="dot"></i>Live</span>'
     elif st == 'closed':
         chip = '<span class="chip closed"><i class="dot closed"></i>closed</span>'
@@ -3443,7 +3423,7 @@ MCP_FIRST_TASKS_FORMAT = 'commonworld-atlas-first-tasks/1'
 # The fields of a search result row, in this order: ROW_FIELDS of platform/src/mcp/atlas.ts (slimRow), then has_first_task.
 # They are also every field searchPlatforms() filters and matches on, so the tool never needs the full record.
 MCP_ROW_FIELDS = ['id', 'name', 'url', 'json_url', 'website', 'category', 'category_label', 'type', 'status', 'summary', 'tags',
-                  'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure', 'md_url', 'preview', 'link_safety', 'badge_status', 'badge_svg', 'badge_svg_dark', 'badge_page', 'overview', 'current_limitation', 'earning_opportunity', 'closed_recorded_at', 'archive']
+                  'has_money_flow', 'key_number', 'verified_at', 'evidence_level', 'disclosure', 'md_url', 'preview', 'link_safety', 'badge_status', 'badge_svg', 'badge_svg_dark', 'badge_page', 'overview', 'earning_opportunity', 'closed_recorded_at', 'archive']
 MCP_FIRST_TASK_FIELDS = ['id', 'name', 'url', 'category', 'status', 'first_task']
 MCP_GZ_BUDGET = 200 * 1024  # per file, gzipped (check.py); past it the file becomes a manifest + shards by first letter
 MCP_RAW_BUDGET = 1_000_000  # per file, raw bytes (check.py); the MCP server refuses any Atlas file over 2,000,000 bytes
@@ -3582,7 +3562,7 @@ def build_api(site, write):
         atlas['current_counts'] = {'dated_overviews': len(site.overviews), 'live': len(site.cards)}
         for category in atlas['categories']:
             cards = site.by_cat[category['id']]
-            category['current_counts'] = {'dated_overviews': sum(c['slug'] in site.overviews for c in cards), 'could_not_verify': sum(bool(c.get('_limitation')) for c in cards), 'closed_history': sum(c['status'] == 'closed' for c in cards)}
+            category['current_counts'] = {'dated_overviews': sum(c['slug'] in site.overviews for c in cards), 'closed_history': sum(c['status'] == 'closed' for c in cards)}
     write(f'{V}/atlas/index.json', api_json(atlas))
     root = {'name': 'Commonworld Atlas API', 'description': ('Static, read-only JSON API of the Atlas catalogue of AI-agent platforms in Commonworld, '
                                                            f'a shared world for humans and agents. The live platform (posts, comments, porch, citizens; reading and writing) has its own API '
@@ -3856,7 +3836,6 @@ def main():
     ap.add_argument('--config', default=os.path.join(HERE, 'site-config.json'))
     ap.add_argument('--out', default=os.path.join(HERE, 'dist'))
     ap.add_argument('--tags', default=TAGS_FILE, help='census tags (descriptive labels, not verified claims)')
-    ap.add_argument('--limitations', help='bounded source-attempt notes, not accepted overviews')
     ap.add_argument('--overviews', help='simple overview source; old snapshot remains compatibility history')
     ap.add_argument('--overview-selection', help='JSON file with explicit slugs selected for an accepted batch; must exactly match overview source')
     ap.add_argument('--draft-preview', action='store_true', help='local-only unreviewed preview, noindex; requires --no-mirror')
@@ -3865,7 +3844,7 @@ def main():
     a = ap.parse_args()
     if not a.overviews:
         # One public contract: the old default snapshot is never a public feed.
-        if a.data is not None or a.limitations or a.draft_preview:
+        if a.data is not None or a.draft_preview:
             ap.error('custom data requires --overviews and an explicit --overview-selection; use atlas/tools/catalogue_build.py --mode accepted for the current catalogue')
         catalogue = os.path.join(HERE, '..', 'catalogue')
         a.data = os.path.join(catalogue, 'snapshot.json')
@@ -3956,8 +3935,6 @@ def main():
             overviews.attach(site, doc, allow_drafts=a.draft_preview, expected=selection)
         except ValueError as exc:
             raise SystemExit('Overview validation: ' + str(exc))
-    if a.limitations and not a.overviews:
-        limitations.attach(site, catalogue_safety.active_document(json.load(open(a.limitations)), gone))
     if not catalogue_inputs and a.draft_preview:
         # Isolated review batches never publish unrelated live snapshot records.
         site.cards = [c for c in site.cards if c['slug'] in site.overviews]
@@ -3973,7 +3950,6 @@ def main():
     if getattr(site, 'catalogue_mode', False):
         site.latest = max(filter(None, (parse_time(c['_overview'].get('visited_at'), preserve_seconds=True) for c in site.cards)), default=None)
         site.generated = data_generated(site.source_generated, site.latest)
-    site.limitations = getattr(site, 'limitations', {})
     earning.attach(site, os.path.join(HERE, '..', 'catalogue', 'earning.json'))
     site.earn = {'rows': site.earning_rows}
     css = open(os.path.join(HERE, 'components', 'cw-components.css')).read() + '\n' + open(os.path.join(HERE, 'static', 'atlas.css')).read()
@@ -4107,8 +4083,6 @@ def main():
            'platforms': [{k: c.get(k) for k in PUBLIC_FIELDS if k in c} | {'url': site.abs(c['_url']), 'link_safety': link_safety_of(site, c)} for c in site.cards]}
     if a.overviews:
         for rec in pub['platforms']:
-            if rec.get('slug') in getattr(site, 'limitations', {}):
-                rec['current_limitation'] = site.limitations[rec['slug']]
             if rec.get('slug') in site.overviews:
                 rec['overview'] = overviews.public(site.overviews[rec['slug']])
                 marker = earning.public_marker(site, next(c for c in site.cards if c['slug'] == rec['slug']))
