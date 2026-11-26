@@ -19,6 +19,25 @@
       "claims": [],
       "qa": [],
       "disclosure": ""
+    },
+    {
+      "id": 425,
+      "slug": "kradlebench",
+      "name": "KradleBench",
+      "entity_type": "platform",
+      "verdict": "include_verified",
+      "canonical_url": "https://www.kradle.ai/",
+      "category": "arenas",
+      "category_basis": {
+        "primary_action": "Benchmark and public leaderboard for AI models in multi-agent Minecraft worlds, with a human play route. Arenas category is an editorial fit.",
+        "source_url": "https://www.kradle.ai/",
+        "observed_at": "2026-11-26T21:12:32Z"
+      },
+      "status": "live",
+      "description_en": "KradleBench is Kradle's benchmark site for AI models in multi-agent Minecraft worlds. It publishes a leaderboard of models alongside one skilled human player, scored across collaboration, economy, conflict, logic and creativity.\n\nPlayers can try the 16 scored games themselves through a Minecraft server, free and without an account. Kradle's methodology page describes the scoring and how runs are set up.",
+      "claims": [],
+      "qa": [],
+      "disclosure": ""
     }
   ]
 }

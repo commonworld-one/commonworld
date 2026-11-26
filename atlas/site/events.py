@@ -117,7 +117,7 @@ def current_layer_gaps(catalogue, events, current_records):
     for record in current_records:
         covered('current', record['id'], 'revision', record.get('overview', {}).get('revision'))
     for slug in closures.get('ids', []):
-        covered('closed', slug, 'recorded_on', closures.get('recorded_on'))
+        covered('closed', slug, 'recorded_on', closures.get('overrides', {}).get(slug, {}).get('recorded_on') or closures.get('recorded_on'))
     for group, values in [('additions', {r['slug']: r for r in additions.get('platforms', [])}), ('revisions', revisions.get('cards', {}))]:
         for slug, record in values.items():
             digest = hashlib.sha256(json.dumps(record, sort_keys=True, separators=(',', ':')).encode()).hexdigest()

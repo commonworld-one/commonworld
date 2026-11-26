@@ -14,6 +14,21 @@ class ReleasePreparation(unittest.TestCase):
         for row in json.loads((D/'atlas/closed.json').read_text())['platforms']:
             for event in row['archive']['history'].get('status_history',[]):
                 if event.get('on')=='2026-11-24':self.assertEqual(event.get('reason'),d['reason'])
+    def test_per_id_closure_override_keeps_older_closures_unchanged(self):
+        d=json.loads((ROOT/'atlas/catalogue/closures.json').read_text())
+        own=d['overrides']['kradleverse']
+        self.assertEqual(own['recorded_on'],'2026-11-26')
+        rows={r['id']:r for r in json.loads((D/'atlas/closed.json').read_text())['platforms']}
+        closed_events=lambda slug:[e for e in rows[slug]['archive']['history'].get('status_history',[]) if e.get('to')=='closed' and e.get('by')=='human']
+        mine=[e for e in closed_events('kradleverse') if e.get('on')=='2026-11-26']
+        self.assertEqual(len(mine),1)
+        self.assertEqual(mine[0]['reason'],own['reason'])
+        others=[s for s in d['ids'] if s!='kradleverse']
+        self.assertGreater(len(others),0)
+        for slug in others:
+            for e in closed_events(slug):
+                if e.get('on')=='2026-11-26':self.fail(slug+' picked up the override date')
+                if e.get('on')=='2026-11-24':self.assertEqual(e['reason'],d['reason'])
     def test_all_vanished_pagination_formats_have_real_last_page_and_no_store(self):
         lines=(D/'_redirects').read_text().splitlines();headers=(D/'_headers').read_text()
         redirects=[x.split() for x in lines if x.endswith(' 302')]
@@ -34,7 +49,7 @@ class ReleasePreparation(unittest.TestCase):
         self.assertEqual(current['visited_at'],'2026-11-24T22:00:49Z')
         self.assertEqual(json.loads((ROOT/'atlas/catalogue/current-revisions.json').read_text())['cards']['meta-muse']['screenshot']['sha256'],'523dc84c29836740cd3b6599f429f2c552c7b40855af7017ab264985622cbddf')
     def test_mirror_has_archive_index_and_no_legacy_search_arguments(self):
-        self.assertEqual(len(json.loads((ROOT/'atlas/public/closed.json').read_text())['platforms']),38)
+        self.assertEqual(len(json.loads((ROOT/'atlas/public/closed.json').read_text())['platforms']),39)
         s=(ROOT/'platform/src/mcp/tools.ts').read_text()
         self.assertNotIn("has_money_flow: { type:",s)
         self.assertNotIn("enum: ['live', 'limited', 'closed']",s)

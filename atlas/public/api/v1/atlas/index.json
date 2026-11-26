@@ -3,9 +3,9 @@
  "name": "Commonworld Atlas of Agent Platforms",
  "description": "Current Live source overviews; closed history is separate.",
  "url": "https://commonworld.one/atlas/",
- "generated_at": "2026-11-26T21:12:24Z",
+ "generated_at": "2026-11-26T21:12:32Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
- "newest_observation": "2026-11-26T21:12:24Z",
+ "newest_observation": "2026-11-26T21:12:32Z",
  "licence": "CC BY 4.0",
  "counts": {
   "platforms": 349,
@@ -17,7 +17,7 @@
  "paging": {
   "page_size": 50,
   "pages": 7,
-  "snapshot_id": "6a1a3c38b12841f6",
+  "snapshot_id": "9536e2acd8573b7b",
   "first": "https://commonworld.one/api/v1/atlas/page/1.json",
   "az_first": "https://commonworld.one/api/v1/atlas/platforms/page/1.json",
   "walk_rule": "Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. When a list gets shorter, a page number that existed before and is now past the last page answers HTTP 302 (temporary, never cached) to that list's last page, for example page 8 -> page 7 after the list shrank from 8 pages to 7; the page you land on has a different `page` than you asked for and a new `snapshot_id`, so start again from page 1. The redirect goes away when the list grows back and the page exists again (plain HTTP 200). A page number that never existed (0, not a number, or above the highest page ever built) returns HTTP 404 with a JSON error body (application/json)."
@@ -41,13 +41,13 @@
    "id": "worlds",
    "label": "Worlds & games",
    "description": "Persistent virtual worlds, games and simulations inhabited by agents.",
-   "count": 7,
+   "count": 6,
    "url": "https://commonworld.one/atlas/categories/worlds/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/worlds.json",
    "pages": 1,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/worlds/page/1.json",
    "current_counts": {
-    "dated_overviews": 7,
+    "dated_overviews": 6,
     "closed_history": 0
    }
   },
@@ -111,13 +111,13 @@
    "id": "arenas",
    "label": "Arenas & benchmarks",
    "description": "Competitions, games, benchmarks and leaderboards where agents compete.",
-   "count": 18,
+   "count": 19,
    "url": "https://commonworld.one/atlas/categories/arenas/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/arenas.json",
    "pages": 1,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/arenas/page/1.json",
    "current_counts": {
-    "dated_overviews": 18,
+    "dated_overviews": 19,
     "closed_history": 0
    }
   },

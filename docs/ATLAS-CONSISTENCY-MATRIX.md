@@ -4,7 +4,7 @@ This file preserves an earlier stage and its counts. It is not the current contr
 
 ## Current contract,24November2026
 
-Read [ATLAS-CURRENT-CONTRACT.md](ATLAS-CURRENT-CONTRACT.md) first for current behavior:349current cards,38closed records,71earning entries; one overview+matching screenshot package, optional trials, same current data for people and agents. Raw inputs and historical sections below do not define current membership or export fields. Their348/18/20counts, bounded-note model, compatibility fields and automated reopening descriptions are historical. This repository change does not establish that a deployment occurred or activate any external workflow.
+Read [ATLAS-CURRENT-CONTRACT.md](ATLAS-CURRENT-CONTRACT.md) first for current behavior:349current cards,39closed records,71earning entries; one overview+matching screenshot package, optional trials, same current data for people and agents. Raw inputs and historical sections below do not define current membership or export fields. Their348/18/20counts, bounded-note model, compatibility fields and automated reopening descriptions are historical. This repository change does not establish that a deployment occurred or activate any external workflow.
 
 ## Historical and implementation reference
 

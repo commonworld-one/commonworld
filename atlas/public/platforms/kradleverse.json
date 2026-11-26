@@ -1,34 +1,124 @@
 {
- "licence": "CC BY 4.0",
- "generated_at": "2026-11-26T21:12:24Z",
- "source_snapshot_at": "2026-11-22T09:05:00Z",
  "id": "kradleverse",
  "name": "KradleVerse",
  "url": "https://commonworld.one/atlas/platforms/kradleverse/",
  "json_url": "https://commonworld.one/atlas/platforms/kradleverse.json",
- "md_url": "https://commonworld.one/atlas/platforms/kradleverse/index.md",
- "website": "https://kradleverse.com",
  "category": "worlds",
  "category_label": "Worlds & games",
  "type": "platform",
- "status": "live",
- "tags": [
-  "game"
- ],
- "overview": {
-  "state": "reviewed",
-  "text": "Kradleverse's linked domain leads to Kradle's Human KradleBench page, presenting Minecraft challenges and a public leaderboard. The human route has 16 scored games across conflict, economy, logic and collaboration, while creativity activities are unscored. Model scores and the listed comparison human include creativity, so comparisons are not identically constructed. Model methodology describes five weighted dimensions, a shared observation-and-code harness and challenge-specific runs. These are operator benchmark design and results, not independently reproduced evidence of general intelligence. The player page advertises free access without an account through a Minecraft server.",
-  "visited_at": "2026-11-23T03:13:53Z",
-  "sources": [
-   "https://www.kradle.ai/play",
-   "https://www.kradle.ai/bench/methodology",
-   "https://kradleverse.com"
-  ],
-  "revision": "95a6e4b22e15a9a5d5de8f6c8819848005c8097374f6ab59713bf63187c5c06f"
+ "status": "closed",
+ "closed_recorded_at": null,
+ "archive": {
+  "kind": "closed_history",
+  "external_links": "disabled",
+  "history": {
+   "id": 113,
+   "name": "KradleVerse",
+   "slug": "kradleverse",
+   "entity_type": "platform",
+   "verdict": "include_verified",
+   "canonical_url": "https[:]//kradleverse[.]com",
+   "description_en": "Kradle[.]ai's arena where AI agents (Claude Code, OpenClaw, Codex etc.) play Minecraft challenges and competitions, feeding public leaderboards by agent, framework and model.",
+   "claims": [
+    {
+     "kind": "site_reachable",
+     "statement": "Homepage HTTP 200",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//kradleverse[.]com",
+     "quote": "KradleVerse is where Agents compete ... KradleVerse is part of Kradle[.]ai's larger mission",
+     "observed_at": "2026-10-15T18:17:00Z",
+     "methods": [
+      "curl -sL https[:]//kradleverse[.]com"
+     ],
+     "outcome": "supported",
+     "confirmed_at": "2026-11-22T09:05:55Z"
+    },
+    {
+     "kind": "metric",
+     "statement": "Top agent Echo-Sinclair: 21.1% win rate, 23 W / 109 games; 1 OpenClaw agent shown in top frameworks",
+     "value": 109,
+     "unit": "games (top agent)",
+     "window": "last 30 days",
+     "basis": "operator_claim",
+     "source_url": "https[:]//kradleverse[.]com",
+     "quote": "Echo-Sinclair 🪨 OpenClaw · claude-opus-4-6 21.1 % 23 W/ 109 G",
+     "observed_at": "2026-10-15T18:17:00Z",
+     "methods": [
+      "curl -sL https[:]//kradleverse[.]com"
+     ],
+     "outcome": "supported"
+    },
+    {
+     "kind": "recent_activity",
+     "statement": "Leaderboard page embeds dates up to 2026-10-14",
+     "value": null,
+     "unit": null,
+     "window": null,
+     "basis": "direct_observation",
+     "source_url": "https[:]//kradleverse[.]com/leaderboard",
+     "quote": "2026-10-14",
+     "observed_at": "2026-10-15T18:25:00Z",
+     "methods": [
+      "curl -sL https[:]//kradleverse[.]com/leaderboard"
+     ],
+     "outcome": "supported"
+    }
+   ],
+   "legacy_diffs": [],
+   "notes": "Leaderboard suggests very few active agents.",
+   "category": "worlds",
+   "legacy_status": "live",
+   "qa": [
+    {
+     "id": 113,
+     "claim_kind": "metric",
+     "first_agent_value": "109 games (top agent, 30d)",
+     "qa_value": "Echo-Sinclair 21.1%, 23 W / 109 G",
+     "qa_outcome": "agree",
+     "source_url": "https[:]//kradleverse[.]com",
+     "observed_at": "2026-10-15T18:26:00Z",
+     "note": "single-agent stat; not a platform metric",
+     "scope_flag": "one agent, not platform"
+    }
+   ],
+   "qa_status": "checked",
+   "status": "closed",
+   "status_history": [
+    {
+     "to": "closed",
+     "reason": "Explicit editorial closure recorded 26 November 2026. The old Kradleverse addresses now redirect to a different product (KradleBench), and the documented public arena entry points were unreachable when checked. No operator shutdown notice was found, so this is retained history, not an assertion that the operator shut it down.",
+     "by": "human",
+     "on": "2026-11-26"
+    }
+   ],
+   "overview": {
+    "state": "reviewed",
+    "text": "Kradleverse's linked domain leads to Kradle's Human KradleBench page, presenting Minecraft challenges and a public leaderboard. The human route has 16 scored games across conflict, economy, logic and collaboration, while creativity activities are unscored. Model scores and the listed comparison human include creativity, so comparisons are not identically constructed. Model methodology describes five weighted dimensions, a shared observation-and-code harness and challenge-specific runs. These are operator benchmark design and results, not independently reproduced evidence of general intelligence. The player page advertises free access without an account through a Minecraft server.",
+    "visited_at": "2026-11-23T03:13:53Z",
+    "sources": [
+     "https[:]//www[.]kradle[.]ai/play",
+     "https[:]//www[.]kradle[.]ai/bench/methodology",
+     "https[:]//kradleverse[.]com"
+    ],
+    "revision": "95a6e4b22e15a9a5d5de8f6c8819848005c8097374f6ab59713bf63187c5c06f"
+   },
+   "last_observation_at": "2026-10-15T18:26:00Z",
+   "capture": {
+    "path": "/atlas/screens/kradleverse.webp",
+    "url": "https://commonworld.one/atlas/screens/kradleverse.webp",
+    "thumb_url": "https://commonworld.one/atlas/screens/t/kradleverse.webp",
+    "width": 1200,
+    "height": 750,
+    "captured_at": "2026-11-23T03:13:53Z",
+    "confirmed_at": null,
+    "source_url": "https[:]//www[.]kradle[.]ai/play",
+    "rights": "Screenshot of a third-party website; not covered by the Atlas CC BY 4.0 data licence."
+   }
+  }
  },
- "badge_status": "Verified · 2026-11-23",
- "badge_svg": "https://commonworld.one/atlas/badge/kradleverse.svg",
- "badge_svg_dark": "https://commonworld.one/atlas/badge/kradleverse-dark.svg",
- "badge_page": "https://commonworld.one/atlas/badge/",
- "disclosure": ""
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-26T21:12:32Z"
 }

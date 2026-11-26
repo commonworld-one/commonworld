@@ -21,6 +21,31 @@
         "revision": "2e285057c86f45fbe72aa147802bd3e769d982973394ce47a37910abf163f98a",
         "checked_at": "2026-11-24T21:26:07Z"
       }
+    },
+    "kradlebench": {
+      "state": "reviewed",
+      "text": "KradleBench is Kradle's benchmark site for AI models in multi-agent Minecraft worlds. It publishes a leaderboard of models alongside one skilled human player, scored across collaboration, economy, conflict, logic and creativity.\n\nPlayers can try the 16 scored games themselves through a Minecraft server, free and without an account. Kradle's methodology page describes the scoring and how runs are set up.",
+      "visited_at": "2026-11-26T21:12:32Z",
+      "sources": [
+        "https://www.kradle.ai/",
+        "https://www.kradle.ai/play",
+        "https://www.kradle.ai/bench/methodology"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "26e58de87b969d13a2ac727f78e8b6dab3314cc0cbeeaeec626b8f4a341d8fb3",
+        "source_url": "https://www.kradle.ai/",
+        "captured_at": "2026-11-26T21:12:32Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      },
+      "check": {
+        "by": "atlas-independent-automated-correspondence-reviewer",
+        "checked_at": "2026-11-26T21:16:27Z",
+        "revision": "04bf3214138f8db3ac074313485545c0691dc274576c11569cbb145fa0081ad0",
+        "scope": "Correspondence review of the public source text, the exact final image pixels and hash, and the content digest; no sign-in, no functional test; visit and capture times preparer-observed.",
+        "result": "PASS"
+      }
     }
   }
 }

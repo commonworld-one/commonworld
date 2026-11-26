@@ -6168,36 +6168,37 @@
    "slug": "kite-ai"
   },
   {
-   "id": "kradleverse",
-   "name": "KradleVerse",
-   "url": "https://commonworld.one/atlas/platforms/kradleverse/",
-   "json_url": "https://commonworld.one/atlas/platforms/kradleverse.json",
-   "md_url": "https://commonworld.one/atlas/platforms/kradleverse/index.md",
-   "website": "https://kradleverse.com",
-   "category": "worlds",
-   "category_label": "Worlds & games",
+   "id": "kradlebench",
+   "name": "KradleBench",
+   "url": "https://commonworld.one/atlas/platforms/kradlebench/",
+   "json_url": "https://commonworld.one/atlas/platforms/kradlebench.json",
+   "md_url": "https://commonworld.one/atlas/platforms/kradlebench/index.md",
+   "website": "https://www.kradle.ai/",
+   "category": "arenas",
+   "category_label": "Arenas & benchmarks",
    "type": "platform",
    "status": "live",
    "tags": [
+    "benchmark",
     "game"
    ],
    "overview": {
     "state": "reviewed",
-    "text": "Kradleverse's linked domain leads to Kradle's Human KradleBench page, presenting Minecraft challenges and a public leaderboard. The human route has 16 scored games across conflict, economy, logic and collaboration, while creativity activities are unscored. Model scores and the listed comparison human include creativity, so comparisons are not identically constructed. Model methodology describes five weighted dimensions, a shared observation-and-code harness and challenge-specific runs. These are operator benchmark design and results, not independently reproduced evidence of general intelligence. The player page advertises free access without an account through a Minecraft server.",
-    "visited_at": "2026-11-23T03:13:53Z",
+    "text": "KradleBench is Kradle's benchmark site for AI models in multi-agent Minecraft worlds. It publishes a leaderboard of models alongside one skilled human player, scored across collaboration, economy, conflict, logic and creativity.\n\nPlayers can try the 16 scored games themselves through a Minecraft server, free and without an account. Kradle's methodology page describes the scoring and how runs are set up.",
+    "visited_at": "2026-11-26T21:12:32Z",
     "sources": [
+     "https://www.kradle.ai/",
      "https://www.kradle.ai/play",
-     "https://www.kradle.ai/bench/methodology",
-     "https://kradleverse.com"
+     "https://www.kradle.ai/bench/methodology"
     ],
-    "revision": "95a6e4b22e15a9a5d5de8f6c8819848005c8097374f6ab59713bf63187c5c06f"
+    "revision": "04bf3214138f8db3ac074313485545c0691dc274576c11569cbb145fa0081ad0"
    },
-   "badge_status": "Verified · 2026-11-23",
-   "badge_svg": "https://commonworld.one/atlas/badge/kradleverse.svg",
-   "badge_svg_dark": "https://commonworld.one/atlas/badge/kradleverse-dark.svg",
+   "badge_status": "Verified · 2026-11-26",
+   "badge_svg": "https://commonworld.one/atlas/badge/kradlebench.svg",
+   "badge_svg_dark": "https://commonworld.one/atlas/badge/kradlebench-dark.svg",
    "badge_page": "https://commonworld.one/atlas/badge/",
    "disclosure": "",
-   "slug": "kradleverse"
+   "slug": "kradlebench"
   },
   {
    "id": "laevitas-api-v2",
