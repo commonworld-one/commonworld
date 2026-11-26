@@ -45,7 +45,7 @@ def check(source,dist):
         html=(path/'index.html').read_text();md=(path/'index.md').read_text()
         parser=Links();parser.feed(html)
         if 'noindex' not in parser.robots:failures.append(slug+': draft indexable')
-        if r['text'] not in ''.join(parser.text) or r['text'] not in md:failures.append(slug+': overview text mismatch')
+        if any(part not in ''.join(parser.text) for part in r['text'].split('\n\n')) or r['text'] not in md:failures.append(slug+': overview text mismatch')
         if r.get('visited_at') is None and 'Not yet recorded for this overview' not in html:failures.append(slug+': fabricated visit display')
         for marker in ('id="h-claims"','id="h-task"','id="h-evidence"'):
             if marker in html:failures.append(slug+': old claim UI')

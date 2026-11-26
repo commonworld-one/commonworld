@@ -22,6 +22,30 @@
         "revision": "52e53be4bac7512a6b7a454f35cdb9561eb62f5abe0229e7f64653418af283f2",
         "scope": "Automated correspondence review of public source text, exact final hero image pixels/hash and content digest. Visit and capture timestamps are preparer-observed, not independently measured. No sign-in or functional test."
       }
+    },
+    "keyring-agent": {
+      "state": "reviewed",
+      "text": "The KEYRING PRO wallet website presents KEYRING AGENT as a built-in AI assistant for researching markets, sending tokens and adding liquidity pools through a chat interface.\n\nA separate server at keyring-agent.blockchhub.link publishes an OpenAPI description for wallet-action fee endpoints using x402 payments in USDC on Base. It names Bacoor as its contact and states that callers broadcast blockchain transactions themselves. An unpaid request to the add-pool endpoint returned an x402 payment challenge; paid execution was not tested.\n\nThe wallet website names Bacoor as its developer, but does not describe whether its AI assistant uses this API.",
+      "visited_at": "2026-11-26T21:12:24Z",
+      "sources": [
+        "https://keyring.app/",
+        "https://keyring-agent.blockchhub.link/openapi.json"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "4c1fc73353e41f111d17d0931edc2640feaef41cb6e05a869cd571927746c673",
+        "source_url": "https://keyring.app/",
+        "captured_at": "2026-11-26T21:12:24Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      },
+      "check": {
+        "by": "atlas-independent-automated-correspondence-reviewer",
+        "checked_at": "2026-11-26T21:16:27Z",
+        "revision": "5c539bdf5a21253ec31089b4e0f85d094a384877e40273158ddaafe9cec713ea",
+        "scope": "Correspondence review of the public source text, the exact final image pixels and hash, and the content digest; no sign-in, no functional test; visit and capture times preparer-observed.",
+        "result": "PASS"
+      }
     }
   }
 }

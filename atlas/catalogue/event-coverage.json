@@ -967,8 +967,8 @@
       "type": "corrected"
     },
     "keyring-agent": {
-      "revision": "e922cbf170dbadcb22c84e2c394a5942b8d3af315874080c25561b1618429632",
-      "date": "2026-11-25",
+      "revision": "5c539bdf5a21253ec31089b4e0f85d094a384877e40273158ddaafe9cec713ea",
+      "date": "2026-11-26",
       "type": "corrected"
     },
     "kite-ai": {
@@ -1855,6 +1855,11 @@
     "meta-muse": {
       "sha256": "b46e7bb8353c44381c3699bfcf9a9b2cc3960c0a18d12c5f00881b80b7ed62a0",
       "date": "2026-11-24",
+      "type": "corrected"
+    },
+    "keyring-agent": {
+      "sha256": "c3205a7919c739f35c5fb75bfe602850655661f15a65f006105d9b602e4a6c8a",
+      "date": "2026-11-26",
       "type": "corrected"
     }
   }

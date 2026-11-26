@@ -29522,11 +29522,11 @@
     },
     {
       "id": 316,
-      "name": "keyring-agent",
+      "name": "KEYRING AGENT",
       "slug": "keyring-agent",
       "entity_type": "project",
       "verdict": "include_verified",
-      "canonical_url": "https://keyring-agent.blockchhub.link",
+      "canonical_url": "https://keyring.app/",
       "description_en": "KEYRING AGENT is a DeFi-assistant x402 service from the KEYRING PRO wallet team, charging execution fees for token/NFT transfers, swaps and Uniswap V3 liquidity actions.",
       "claims": [
         {
