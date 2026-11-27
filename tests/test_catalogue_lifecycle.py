@@ -74,7 +74,7 @@ class CatalogueLifecycle(unittest.TestCase):
             # Both existing current and newly added current cards honor closure evidence.
             out=root/'out';self.run_build(root,['--data',str(cat/'snapshot.json'),'--overviews',str(cat/'overviews.json'),'--draft-preview','--no-mirror','--out',str(out)])
             self.assert_closed_projections(out,['kradleverse','aptets'])
-            current=json.loads((out/'atlas/platforms.json').read_text())['platforms'];self.assertEqual(len(current),348)
+            current=json.loads((out/'atlas/platforms.json').read_text())['platforms'];self.assertEqual(len(current),355)
             for slug in ['kradleverse','aptets']:
                 html=(out/f'atlas/platforms/{slug}/index.html').read_text();md=(out/f'atlas/platforms/{slug}/index.md').read_text();rec=json.loads((out/f'atlas/platforms/{slug}.json').read_text())
                 self.assertEqual(rec['status'],'closed');self.assertEqual(rec['archive']['external_links'],'disabled')

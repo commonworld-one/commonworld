@@ -32,14 +32,14 @@ class ReleasePreparation(unittest.TestCase):
     def test_all_vanished_pagination_formats_have_real_last_page_and_no_store(self):
         lines=(D/'_redirects').read_text().splitlines();headers=(D/'_headers').read_text()
         redirects=[x.split() for x in lines if x.endswith(' 302')]
-        self.assertEqual(len(redirects),12)
+        self.assertEqual(len(redirects),4)
         for old,new,status in redirects:
             p=D/new.lstrip('/')
             if new.endswith('/'):p=p/'index.html'
             self.assertTrue(p.is_file(),new)
             if not old.endswith('/') and not old.endswith(('.json','.md')):continue
             if old.endswith(('.json','.md')):self.assertIn(old+'\n  Cache-Control: no-store',headers)
-        for old in ['/atlas/page/8/','/atlas/platforms/page/8/','/atlas/categories/social/page/3/']:
+        for old in ['/atlas/categories/social/page/3/']:  # /atlas/ and /atlas/platforms/ page 8 are real pages again at 356 cards
             self.assertTrue(any(a==old for a,b,c in redirects))
 
     def test_current_revision_receipt_and_frozen_input_are_distinct(self):

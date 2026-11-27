@@ -37,7 +37,7 @@ class DraftPreviewBuild(unittest.TestCase):
             self.assertEqual(result.returncode,0,result.stdout[-3000:])
             self.assertTrue((out/'atlas/data/local-preview-marker.json').exists())
             rows=json.loads((out/'atlas/platforms.json').read_text())['platforms']
-            self.assertEqual(len(rows),349)
+            self.assertEqual(len(rows),356)
             newest=json.loads((out/'atlas/platforms.json').read_text())['newest_observation']
             expected=max((r['visited_at'] for r in active.values() if r.get('visited_at')),default=None)
             self.assertEqual(newest,expected)
@@ -73,7 +73,7 @@ class DraftPreviewBuild(unittest.TestCase):
             projected.write_text(json.dumps({'cards':active}))
             checker=subprocess.run([sys.executable,str(root/'atlas/site/tools/check_overview_preview.py'),'--source',str(projected),'--dist',str(out)],text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=30)
             self.assertEqual(checker.returncode,0,checker.stdout[-3000:])
-            self.assertEqual(json.loads(checker.stdout)['overviews_checked'],349)
+            self.assertEqual(json.loads(checker.stdout)['overviews_checked'],356)
 
 
     def test_mixed_dated_and_undated_full_preview(self):

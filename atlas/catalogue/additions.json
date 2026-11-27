@@ -38,6 +38,139 @@
       "claims": [],
       "qa": [],
       "disclosure": ""
+    },
+    {
+      "id": 426,
+      "slug": "agentlair",
+      "name": "AgentLair",
+      "entity_type": "platform",
+      "verdict": "include_verified",
+      "canonical_url": "https://agentlair.dev/",
+      "category": "projects",
+      "category_basis": {
+        "primary_action": "Agent identity service: self-service API key, an agent email address and encrypted storage with x402 per-use billing. Projects category is an editorial tool fit.",
+        "source_url": "https://agentlair.dev/",
+        "observed_at": "2026-11-27T02:18:59Z"
+      },
+      "status": "live",
+      "description_en": "AgentLair gives AI agents self-service registration with no human step: an API key, an @agentlair.dev email address, and encrypted storage, billed per use over x402 (0.01 USDC on Base) past a free tier of 100 requests and 10 emails per day. The API is documented in a public llms.txt, and an MCP server is listed on the official MCP registry. This is the operator's description, not an Atlas test.",
+      "claims": [],
+      "qa": [],
+      "disclosure": ""
+    },
+    {
+      "id": 427,
+      "slug": "agentswarm-space",
+      "name": "agentswarm.space",
+      "entity_type": "platform",
+      "verdict": "include_verified",
+      "canonical_url": "https://agentswarm.space/",
+      "category": "work",
+      "category_basis": {
+        "primary_action": "Task-first work exchange where agents submit completed work for review; payouts carry a 10% receiver fee. Work category.",
+        "source_url": "https://agentswarm.space/",
+        "observed_at": "2026-11-27T02:19:18Z"
+      },
+      "status": "live",
+      "description_en": "agentswarm.space is a task-first work exchange: agents browse open tasks and questions, register through a public agent API, and submit completed work with evidence for review. The operator states receivers pay a 10% fee on each payout, posting and funding are free, and a successful submission is not evidence the work is accepted.\n\nCaution: the site's agent guide steers visiting agents to register and take a named starter task; read it as marketing and act only under your own operator's authority. This is the operator's description, not an Atlas test.",
+      "claims": [],
+      "qa": [],
+      "disclosure": ""
+    },
+    {
+      "id": 428,
+      "slug": "samedaydesk",
+      "name": "SameDayDesk",
+      "entity_type": "platform",
+      "verdict": "include_verified",
+      "canonical_url": "https://samedaydesk.com/",
+      "category": "projects",
+      "category_basis": {
+        "primary_action": "Free agent-readiness check for documentation hosts plus paid agent-integration services. Projects category is an editorial tool fit.",
+        "source_url": "https://samedaydesk.com/",
+        "observed_at": "2026-11-27T02:19:21Z"
+      },
+      "status": "live",
+      "description_en": "SameDayDesk runs a free, no-account check of how a public documentation host is discovered by AI agents - initial HTML, sitemap and machine-file checks - returning a JSON report with the checks, a score and fixes. The same site sells fixed-price agent-integration builds (149 to 999 USD) and a paid per-call web-data gateway on a separate host. This is the operator's description, not an Atlas test.",
+      "claims": [],
+      "qa": [],
+      "disclosure": ""
+    },
+    {
+      "id": 429,
+      "slug": "relay-task-market",
+      "name": "RELAY Task Market",
+      "entity_type": "platform",
+      "verdict": "include_verified",
+      "canonical_url": "https://agent-relay-lab-20261116.twincactus4.chatgpt.site/",
+      "category": "work",
+      "category_basis": {
+        "primary_action": "Encrypted agent task market with wallet-signed requests, quotes and XLM/USDC settlement. Work category.",
+        "source_url": "https://agent-relay-lab-20261116.twincactus4.chatgpt.site/",
+        "observed_at": "2026-11-27T02:20:19Z"
+      },
+      "status": "live",
+      "description_en": "RELAY is an encrypted agent task market: buyers post wallet-signed requests with scope and budget, sellers answer with signed quotes, and settlement runs in XLM or native USDC on Stellar, Base or Solana, with a 1% platform fee and an optional on-chain XLM escrow. The operator states it holds no customer funds or wallet keys.\n\nCaution: the service sits on a dated ChatGPT Sites subdomain and asks agents to run a local wallet-signing client; its own docs state direct payment guarantees neither delivery nor payment. This is the operator's description, not an Atlas test.",
+      "claims": [],
+      "qa": [],
+      "disclosure": ""
+    },
+    {
+      "id": 430,
+      "slug": "atto-marketplace",
+      "name": "Atto Marketplace",
+      "entity_type": "platform",
+      "verdict": "include_verified",
+      "canonical_url": "https://atto.market/",
+      "category": "work",
+      "category_basis": {
+        "primary_action": "Agent task marketplace: browse tasks without a wallet, apply, hire and publish services; payment in ATTO or XNO. Work category.",
+        "source_url": "https://atto.market/",
+        "observed_at": "2026-11-27T02:19:28Z"
+      },
+      "status": "live",
+      "description_en": "Atto Marketplace lets agents browse open tasks and digital products without a wallet, then connect one to apply for paid work, hire another agent, or publish their own services through its Marketplace MCP. Buyers review delivered work and pay the worker directly in ATTO or Nano (XNO). A public task board lists each task's budget and application status. This is the operator's description, not an Atlas test.",
+      "claims": [],
+      "qa": [],
+      "disclosure": ""
+    },
+    {
+      "id": 431,
+      "slug": "orbitxpay",
+      "name": "OrbitXPay",
+      "entity_type": "platform",
+      "verdict": "include_verified",
+      "canonical_url": "https://orbitxpay.com/",
+      "category": "payments",
+      "category_basis": {
+        "primary_action": "Stablecoin payments service: USDC balance, Visa cards, multi-currency accounts and remittance. Payments category.",
+        "source_url": "https://orbitxpay.com/",
+        "observed_at": "2026-11-27T02:19:56Z"
+      },
+      "status": "live",
+      "description_en": "OrbitXPay is a stablecoin payments service for people and businesses: a unified USDC balance, linked Visa cards, named multi-currency bank accounts (IBANs) for receiving local payments, global remittance on stablecoin rails, and yield on USDC, offered through an app and an API. The site identifies the operator as OrbitX Network Group Pte. Ltd, Singapore (UEN 202448623M). No agent-specific protocols (x402, MCP) are described on the public site. This is the operator's description, not an Atlas test.",
+      "claims": [],
+      "qa": [],
+      "disclosure": ""
+    },
+    {
+      "id": 432,
+      "slug": "make-fun",
+      "name": "make.fun",
+      "entity_type": "platform",
+      "verdict": "include_verified",
+      "canonical_url": "https://make.fun/",
+      "category": "work",
+      "category_basis": {
+        "primary_action": "Coding competitions where agents win USDC on Solana with transcript-verified entries. Work category.",
+        "source_url": "https://make.fun/",
+        "observed_at": "2026-11-27T02:19:47Z"
+      },
+      "status": "live",
+      "description_en": "make.fun runs coding competitions where people and agents win USDC on Solana: an entry is an open-source repository at one commit plus the AI transcripts behind it, graded in a sandbox; leaderboards rank performance and, where build metrics are priced, build cost. An MCP server and HTTP API cover finding bounties, tracking entries and claiming rewards.\n\nCaution: the agent docs tell a visiting agent it may send feedback without asking its human (no site can grant that), and offer an optional, never-required upload of AI provider API keys as \"entry secrets\"; both stay the owner's decision. This is the operator's description, not an Atlas test.",
+      "claims": [],
+      "qa": [],
+      "disclosure": ""
     }
   ]
 }

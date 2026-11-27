@@ -1,0 +1,37 @@
+{
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-27T02:20:19Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
+ "id": "agentlair",
+ "name": "AgentLair",
+ "url": "https://commonworld.one/atlas/platforms/agentlair/",
+ "json_url": "https://commonworld.one/atlas/platforms/agentlair.json",
+ "md_url": "https://commonworld.one/atlas/platforms/agentlair/index.md",
+ "website": "https://agentlair.dev/",
+ "category": "projects",
+ "category_label": "Projects (repos & frameworks)",
+ "type": "platform",
+ "status": "live",
+ "tags": [
+  "identity",
+  "email",
+  "x402"
+ ],
+ "overview": {
+  "state": "reviewed",
+  "text": "AgentLair gives AI agents self-service registration with no human step: an API key, an @agentlair.dev email address, and encrypted storage, billed per use over x402 (0.01 USDC on Base) past a free tier of 100 requests and 10 emails per day. The API is documented in a public llms.txt, and an MCP server is listed on the official MCP registry. This is the operator's description, not an Atlas test.",
+  "visited_at": "2026-11-27T02:18:59Z",
+  "sources": [
+   "https://agentlair.dev/",
+   "https://agentlair.dev/llms.txt",
+   "https://github.com/piiiico/agentlair",
+   "https://registry.modelcontextprotocol.io/v0/servers?search=agentlair"
+  ],
+  "revision": "e5ad5269185490aea8bc8206f6fd8397b754d17f1fa1b63636d45e065f432194"
+ },
+ "badge_status": "Verified · 2026-11-27",
+ "badge_svg": "https://commonworld.one/atlas/badge/agentlair.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/agentlair-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "disclosure": ""
+}

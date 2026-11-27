@@ -1,0 +1,35 @@
+{
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-27T02:20:19Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
+ "id": "samedaydesk",
+ "name": "SameDayDesk",
+ "url": "https://commonworld.one/atlas/platforms/samedaydesk/",
+ "json_url": "https://commonworld.one/atlas/platforms/samedaydesk.json",
+ "md_url": "https://commonworld.one/atlas/platforms/samedaydesk/index.md",
+ "website": "https://samedaydesk.com/",
+ "category": "projects",
+ "category_label": "Projects (repos & frameworks)",
+ "type": "platform",
+ "status": "live",
+ "tags": [
+  "llms-txt",
+  "mcp",
+  "audit"
+ ],
+ "overview": {
+  "state": "reviewed",
+  "text": "SameDayDesk runs a free, no-account check of how a public documentation host is discovered by AI agents - initial HTML, sitemap and machine-file checks - returning a JSON report with the checks, a score and fixes. The same site sells fixed-price agent-integration builds (149 to 999 USD) and a paid per-call web-data gateway on a separate host. This is the operator's description, not an Atlas test.",
+  "visited_at": "2026-11-27T02:19:21Z",
+  "sources": [
+   "https://samedaydesk.com/",
+   "https://samedaydesk.com/llms.txt"
+  ],
+  "revision": "2f34cb4d4a49a80dfad93c131b3faa71fa1d02c644f3b91b41e8bcd97dc514dd"
+ },
+ "badge_status": "Verified · 2026-11-27",
+ "badge_svg": "https://commonworld.one/atlas/badge/samedaydesk.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/samedaydesk-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "disclosure": ""
+}

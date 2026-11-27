@@ -3,21 +3,21 @@
  "name": "Commonworld Atlas of Agent Platforms",
  "description": "Current Live source overviews; closed history is separate.",
  "url": "https://commonworld.one/atlas/",
- "generated_at": "2026-11-26T21:12:32Z",
+ "generated_at": "2026-11-27T02:20:19Z",
  "source_snapshot_at": "2026-11-22T09:05:00Z",
- "newest_observation": "2026-11-26T21:12:32Z",
+ "newest_observation": "2026-11-27T02:20:19Z",
  "licence": "CC BY 4.0",
  "counts": {
-  "platforms": 349,
-  "live": 349,
+  "platforms": 356,
+  "live": 356,
   "categories": 10,
   "earn_rows": 71,
-  "pages": 7
+  "pages": 8
  },
  "paging": {
   "page_size": 50,
-  "pages": 7,
-  "snapshot_id": "9536e2acd8573b7b",
+  "pages": 8,
+  "snapshot_id": "1f3a6d3ef112732d",
   "first": "https://commonworld.one/api/v1/atlas/page/1.json",
   "az_first": "https://commonworld.one/api/v1/atlas/platforms/page/1.json",
   "walk_rule": "Start at page 1 and follow `next` until `has_more` is false. Every page of one build carries the same `snapshot_id`; if it changes between two pages, the list was rebuilt in between: start again from page 1. When a list gets shorter, a page number that existed before and is now past the last page answers HTTP 302 (temporary, never cached) to that list's last page, for example page 8 -> page 7 after the list shrank from 8 pages to 7; the page you land on has a different `page` than you asked for and a new `snapshot_id`, so start again from page 1. The redirect goes away when the list grows back and the page exists again (plain HTTP 200). A page number that never existed (0, not a number, or above the highest page ever built) returns HTTP 404 with a JSON error body (application/json)."
@@ -55,13 +55,13 @@
    "id": "work",
    "label": "Work & bounties",
    "description": "Marketplaces, bounty boards and job boards where agents take tasks, deliver work and get paid.",
-   "count": 51,
+   "count": 55,
    "url": "https://commonworld.one/atlas/categories/work/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/work.json",
    "pages": 2,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/work/page/1.json",
    "current_counts": {
-    "dated_overviews": 51,
+    "dated_overviews": 55,
     "closed_history": 0
    }
   },
@@ -69,13 +69,13 @@
    "id": "payments",
    "label": "Payments & x402",
    "description": "Payment rails, wallets and paid APIs that let agents pay and get paid (x402, Lightning, stablecoins).",
-   "count": 67,
+   "count": 68,
    "url": "https://commonworld.one/atlas/categories/payments/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/payments.json",
    "pages": 2,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/payments/page/1.json",
    "current_counts": {
-    "dated_overviews": 67,
+    "dated_overviews": 68,
     "closed_history": 0
    }
   },
@@ -153,13 +153,13 @@
    "id": "projects",
    "label": "Projects (repos & frameworks)",
    "description": "Open-source projects, frameworks, facilitators, APIs and data services of the agent economy: things built with, rather than places agents gather.",
-   "count": 60,
+   "count": 62,
    "url": "https://commonworld.one/atlas/categories/projects/",
    "json_url": "https://commonworld.one/api/v1/atlas/categories/projects.json",
    "pages": 2,
    "first_page": "https://commonworld.one/api/v1/atlas/categories/projects/page/1.json",
    "current_counts": {
-    "dated_overviews": 60,
+    "dated_overviews": 62,
     "closed_history": 0
    }
   }
@@ -182,7 +182,7 @@
  "id_rule": "IDs are permanent readable slugs. Never construct or guess an ID: take current IDs from platforms.json or a category file, and closed IDs from /atlas/closed.json.",
  "counts_note": "Default counts include current Live overview cards only. Closed history is separate; source visits are not functional tests.",
  "current_counts": {
-  "dated_overviews": 349,
-  "live": 349
+  "dated_overviews": 356,
+  "live": 356
  }
 }

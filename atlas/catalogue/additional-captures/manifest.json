@@ -48,6 +48,90 @@
       "title": "KradleBench | Multi-Agent AI Benchmark in Minecraft",
       "http_status": 200,
       "transform": "Chrome 1200x750 viewport capture of the page top, converted PNG to WebP; no resize, no crop"
+    },
+    "agentlair": {
+      "file": "agentlair.webp",
+      "sha256": "c5efaa92036940e9084affcb72e912027817e1e1435d6b8866831910c570d44b",
+      "source_url": "https://agentlair.dev/",
+      "captured_at": "2026-11-27T02:18:59Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 44594,
+      "title": "AgentLair — Persistent Identity Infrastructure for AI Agents",
+      "http_status": 200,
+      "transform": "Original 1920x993 capture scaled to fit 1200x750 with white padding; no content cropped"
+    },
+    "agentswarm-space": {
+      "file": "agentswarm-space.webp",
+      "sha256": "60290f3261e68c4910b6524e8dd00636b46e4048e885218477b5b20f8abf4574",
+      "source_url": "https://agentswarm.space/",
+      "captured_at": "2026-11-27T02:19:18Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 35414,
+      "title": "agentswarm.space",
+      "http_status": 200,
+      "transform": "Original 1920x993 capture scaled to fit 1200x750 with white padding; no content cropped"
+    },
+    "samedaydesk": {
+      "file": "samedaydesk.webp",
+      "sha256": "dc86ed8cf759cc4264d967e006dde8993445b8509a0673dbec9aa21ff671a55d",
+      "source_url": "https://samedaydesk.com/",
+      "captured_at": "2026-11-27T02:19:21Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 38162,
+      "title": "SameDayDesk: make your business usable by AI",
+      "http_status": 200,
+      "transform": "Original 1920x993 capture scaled to fit 1200x750 with white padding; no content cropped"
+    },
+    "relay-task-market": {
+      "file": "relay-task-market.webp",
+      "sha256": "40f330f8d6efda0e9694907fa54eff3179c92f82aedcf5eeedabcf326790692f",
+      "source_url": "https://agent-relay-lab-20261116.twincactus4.chatgpt.site/",
+      "captured_at": "2026-11-27T02:20:19Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 226424,
+      "title": "RELAY protocol document (relay-market/0.8)",
+      "http_status": 200,
+      "transform": "Original 1920x993 capture scaled to fit 1200x750 with white padding; no content cropped; recompressed to WebP quality 70 to meet the 256 KB capture budget"
+    },
+    "atto-marketplace": {
+      "file": "atto-marketplace.webp",
+      "sha256": "d90a0520cc90b284645112ac3a9f94db037daf8cc86ed4a73ac4d47a58c447a1",
+      "source_url": "https://atto.market/",
+      "captured_at": "2026-11-27T02:19:28Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 21904,
+      "title": "Hire AI agents and find paid tasks | Marketplace",
+      "http_status": 200,
+      "transform": "Original 1920x993 capture scaled to fit 1200x750 with white padding; no content cropped"
+    },
+    "orbitxpay": {
+      "file": "orbitxpay.webp",
+      "sha256": "1202e9b2f22df5189b363b83889231922575f630d37c739a4f7e700cb08b0f1e",
+      "source_url": "https://orbitxpay.com/",
+      "captured_at": "2026-11-27T02:19:56Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 49636,
+      "title": "Card as a Service - OrbitX",
+      "http_status": 200,
+      "transform": "Original 1920x993 capture scaled to fit 1200x750 with white padding; no content cropped"
+    },
+    "make-fun": {
+      "file": "make-fun.webp",
+      "sha256": "c892fd465ef31280740c2b51e3f5509ad4a57f00cd360f81054d95b91c6f0dac",
+      "source_url": "https://make.fun/",
+      "captured_at": "2026-11-27T02:19:47Z",
+      "width": 1200,
+      "height": 750,
+      "bytes": 67106,
+      "title": "make.fun: makefun, skill-based coding bounties for AI agents",
+      "http_status": 200,
+      "transform": "Original 1920x993 capture scaled to fit 1200x750 with white padding; no content cropped"
     }
   }
 }

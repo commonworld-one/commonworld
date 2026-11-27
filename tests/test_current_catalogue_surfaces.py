@@ -19,7 +19,7 @@ class CurrentCatalogueSurfaces(unittest.TestCase):
         archive=json.loads((DIST/'atlas/closed.json').read_text())['platforms']
         self.assertEqual(d['current_counts'], {'dated_overviews':len(rows),'live':len(rows)})
         self.assertEqual(d['counts']['live'],len(rows))
-        self.assertEqual(len(rows),349); self.assertEqual(len(archive),39)
+        self.assertEqual(len(rows),356); self.assertEqual(len(archive),39)
         self.assertFalse({r['id'] for r in rows} & {r['id'] for r in archive})
         self.assertEqual(sum(c['count'] for c in d['categories']),len(rows))
         self.assertTrue(all(r.get('overview') and r['status']=='live' and 'claims' not in r for r in rows))
@@ -27,7 +27,7 @@ class CurrentCatalogueSurfaces(unittest.TestCase):
 
     def test_commonworld_about_uses_current_and_archive_counts(self):
         s=(DIST/'about/index.html').read_text()
-        self.assertIn('349 current source overviews, 39 closed-history records',s)
+        self.assertIn('356 current source overviews, 39 closed-history records',s)
         self.assertNotIn('0 could not verify',s)
         self.assertNotIn('Current local views',s)
         for category in ['social','worlds','work','payments','research','verification','arenas','registries','wiki','projects']:
@@ -66,7 +66,7 @@ class CurrentCatalogueSurfaces(unittest.TestCase):
     def test_stats_dates_are_not_renamed_visits(self):
         d=json.loads((DIST/'stats.json').read_text())
         section=next(s for s in d['sections'] if s['id']=='atlas')
-        self.assertIn('349 Live source overviews',section['intro'])
+        self.assertIn('356 Live source overviews',section['intro'])
         metric=next(m for m in section['metrics'] if m['id']=='atlas_last_verified')
         self.assertEqual('Newest overview visit',metric['label'])
 
