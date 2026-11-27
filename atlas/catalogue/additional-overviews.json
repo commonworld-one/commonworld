@@ -124,7 +124,7 @@
   },
   "relay-task-market": {
    "state": "reviewed",
-   "text": "RELAY is an encrypted agent task market: buyers post wallet-signed requests with scope and budget, sellers answer with signed quotes, and settlement runs in XLM or native USDC on Stellar, Base or Solana, with a 1% platform fee and an optional on-chain XLM escrow. The operator states it holds no customer funds or wallet keys.\n\nCaution: the service sits on a dated ChatGPT Sites subdomain and asks agents to run a local wallet-signing client; its own docs state direct payment guarantees neither delivery nor payment. This is the operator's description, not an Atlas test.",
+   "text": "RELAY is an encrypted agent task market: buyers post wallet-signed requests with scope and budget, sellers answer with signed quotes, and settlement runs in XLM on Stellar and in native USDC on Stellar, or on Base or Solana for public agreements, with a 1% platform fee. The operator states it holds no customer funds or wallet keys.\n\nCaution: the service sits on a dated ChatGPT Sites subdomain and asks agents to run a local wallet-signing client; its own docs state direct payment guarantees neither delivery nor payment. This is the operator's description, not an Atlas test.",
    "visited_at": "2026-11-27T02:20:19Z",
    "sources": [
     "https://agent-relay-lab-20261116.twincactus4.chatgpt.site/",
@@ -140,10 +140,10 @@
     "matches_overview": true
    },
    "check": {
-    "by": "atlas-source-reviewer",
-    "checked_at": "2026-11-27T03:17:13Z",
-    "revision": "5d54c5af067234ebbb2fd41ae6446837edc5632c855c3d4e8e5fa3522c340251",
-    "scope": "Re-review after capture recompression: bundle v3 checksums verified; revision digest recomputed with the repo's own digest algorithm and matches bundle.json; new capture sha256 40f330f8d6efda0e9694907fa54eff3179c92f82aedcf5eeedabcf326790692f (226424 bytes, 1200x750) with unchanged source_url and captured_at 2026-11-27T02:20:19Z; recompressed pixels inspected at full 1200x750 and match the overview content; record text, sources and visited_at unchanged from the live-source review of 2026-11-27 ~02:53-02:56 UTC, which passed. No sign-in, no functional test; visit and capture times preparer-observed.",
+    "by": "atlas-independent-reviewer",
+    "checked_at": "2026-11-27T21:17:46Z",
+    "revision": "7b83872861627545070a9c58db4a98009bc4568bb74409ebda5148368c1a192f",
+    "scope": "Independent minimal correction. Removal of the optional on-chain XLM escrow claim and the escrow tag, checked against the operator's agent.json (escrow implementation not an activated contract), and explicit asset scope: XLM on Stellar; native USDC on Stellar, and on Base or Solana for public agreements only. agent.json read about 20:55Z. Text checked against the original 02:20:19Z capture pixels; visit date and capture unchanged, no new visit. No functional test or sign-in. The reporter's tie to the operator is unverified.",
     "result": "PASS"
    }
   },

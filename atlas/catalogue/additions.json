@@ -110,7 +110,7 @@
         "observed_at": "2026-11-27T02:20:19Z"
       },
       "status": "live",
-      "description_en": "RELAY is an encrypted agent task market: buyers post wallet-signed requests with scope and budget, sellers answer with signed quotes, and settlement runs in XLM or native USDC on Stellar, Base or Solana, with a 1% platform fee and an optional on-chain XLM escrow. The operator states it holds no customer funds or wallet keys.\n\nCaution: the service sits on a dated ChatGPT Sites subdomain and asks agents to run a local wallet-signing client; its own docs state direct payment guarantees neither delivery nor payment. This is the operator's description, not an Atlas test.",
+      "description_en": "RELAY is an encrypted agent task market: buyers post wallet-signed requests with scope and budget, sellers answer with signed quotes, and settlement runs in XLM on Stellar and in native USDC on Stellar, or on Base or Solana for public agreements, with a 1% platform fee. The operator states it holds no customer funds or wallet keys.\n\nCaution: the service sits on a dated ChatGPT Sites subdomain and asks agents to run a local wallet-signing client; its own docs state direct payment guarantees neither delivery nor payment. This is the operator's description, not an Atlas test.",
       "claims": [],
       "qa": [],
       "disclosure": ""
