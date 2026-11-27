@@ -3,7 +3,7 @@ import { intParam } from '../http';
 import { moderationLogData } from '../routes/moderation';
 import { APPEAL, RULES, RULES_NOTE } from '../rules';
 import { goneRefs, search } from './data';
-import { type Raw, esc, fmt, h, plainText, raw } from './html';
+import { type Raw, esc, fmt, h, raw, readableBody } from './html';
 import {
   type PageCtx, adBanner, catchip, citizenUrl, crumbs, document, emptyState, excerptText, postUrl, sectionUrl, tagpill, timeAgo, who,
 } from './layout';
@@ -78,7 +78,7 @@ export async function searchPage(p: PageCtx, env: Env, page: URL): Promise<strin
       const href = r.ref.type === 'post' ? postUrl(r.ref.number) : r.ref.type === 'porch' ? `/porch/${r.ref.number}` : r.ref.type === 'citizen' ? citizenUrl(r.ref.handle!) : `/comments/${r.ref.number}`;
       cards.push(h`<article class="cw-card"><div class="cw-meta"><span class="result-type">ref</span></div><h3><a href="${href}">Open ${r.ref.type}-${r.ref.number} →</a></h3></article>`);
     }
-    if (show('posts')) for (const x of r.posts) cards.push(h`<article class="cw-card" data-type="posts"><div class="cw-meta"><span class="result-type">post</span>${catchip(x.section.slug, x.section.name)}<a class="ref" href="${postUrl(x.number)}">post-${x.number}</a></div><h3><a href="${postUrl(x.number)}">${highlight(x.title, q)}</a></h3><p>${highlight(around(x.format === 'markdown' ? plainText(x.body) : x.body, q), q)}</p><div class="byline">${who(x.author)}<span>·</span>${timeAgo(x.created_at, p.now)}</div></article>`);
+    if (show('posts')) for (const x of r.posts) cards.push(h`<article class="cw-card" data-type="posts"><div class="cw-meta"><span class="result-type">post</span>${catchip(x.section.slug, x.section.name)}<a class="ref" href="${postUrl(x.number)}">post-${x.number}</a></div><h3><a href="${postUrl(x.number)}">${highlight(x.title, q)}</a></h3><p>${highlight(around(readableBody(x, { near: q }), q), q)}</p><div class="byline">${who(x.author)}<span>·</span>${timeAgo(x.created_at, p.now)}</div></article>`);
     if (show('comments')) for (const c of r.comments) cards.push(h`<article class="cw-card" data-type="comments"><div class="cw-meta"><span class="result-type">comment</span><a class="ref" href="/comments/${c.number}">comment-${c.number}</a><span>on post-${c.post_number}</span></div><p class="u-ink u-fs13 u-mt8">${highlight(around(c.body, q), q)}</p><div class="byline">${who(c.author)}<span>·</span>${timeAgo(c.created_at, p.now)}</div></article>`);
     if (show('porch')) for (const l of r.porch) cards.push(h`<article class="cw-card" data-type="porch"><div class="cw-meta"><span class="result-type">porch</span><a class="ref" href="/porch/${l.number}">porch-${l.number}</a></div><p class="u-ink u-fs13 u-mt8">${highlight(around(l.body, q), q)}</p><div class="byline">${who(l.author)}<span>·</span>${timeAgo(l.created_at, p.now)}</div></article>`);
     if (show('tags') && (secs.length || tags.length)) cards.push(h`<article class="cw-card" data-type="tags"><div class="cw-meta"><span class="result-type">section &amp; tag</span></div><div class="card-tags u-mt6">${tags.map((t) => tagpill(t.slug, t.post_count))}${secs.map((s) => h`<a class="link-pill" href="${sectionUrl(s.slug)}"><span class="catchip u-inherit"><i class="k-${s.slug}"></i>${s.name}</span><small>${s.post_count}</small></a>`)}</div></article>`);

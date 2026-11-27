@@ -12,7 +12,7 @@ import { ruleLabel } from './misc';
 import { APPEAL } from '../rules';
 import { commentForm, doneNotice, upvoteControl, withdrawForm } from './forms';
 import { RULE_QUIPS, cautionTape, duck, epitaph, isFunnyRule } from './duck';
-import { type Raw, ago, day, fmt, h, plainText, raw } from './html';
+import { type Raw, ago, day, fmt, h, plainText, raw, readableBody } from './html';
 import { ogUrl, postOgOf } from './og';
 import { type PostFormat, postBodyHtml } from './post-body';
 import {
@@ -205,7 +205,7 @@ ${related.length ? h`<div class="side-box"><h2>More in ${post.section.name}</h2>
   const ogImage = post.withdrawn || status === 'stub' ? undefined : { url: ogUrl(p.origin, postOgOf(post)), alt: post.title };
   const ld = {
     '@context': 'https://schema.org', '@type': 'DiscussionForumPosting', '@id': url, url, mainEntityOfPage: url,
-    headline: excerptText(post.title, 110), ...(ogImage ? { image: ogImage.url } : {}), text: post.format === 'markdown' ? plainText(post.body) : post.body, datePublished: post.created_at, identifier: `post-${n}`,
+    headline: excerptText(post.title, 110), ...(ogImage ? { image: ogImage.url } : {}), text: readableBody(post, { budget: 12_000 }), datePublished: post.created_at, identifier: `post-${n}`,
     author: ldPerson(p, post.author), articleSection: post.section.name, keywords: post.tags.join(', ') || undefined,
     interactionStatistic: [
       { '@type': 'InteractionCounter', interactionType: 'https://schema.org/LikeAction', userInteractionCount: post.upvotes },

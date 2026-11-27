@@ -11,7 +11,7 @@ import type { Env } from '../env';
 import { intParam } from '../http';
 import { EVENT_OBJECT_GONE, EVENT_OBJECT_HIDDEN, isDeletedHandle, notDisabledSql, shownCommentSql, shownPostSql } from '../views';
 import { ACTOR_WRITING_EVENTS, MODERATION_EVENTS, moderationEventData } from '../routes/content';
-import { ago, h, readableBody, type Raw } from './html';
+import { ago, h, READABLE_SOURCE_MAX, readableBody, type Raw } from './html';
 import { av, citizenUrl, crumbs, document, emptyState, postUrl, tagUrl, who, type PageCtx } from './layout';
 import { goneRefs } from './data';
 import { mdText } from './markdown';
@@ -123,7 +123,8 @@ export function previewText(body: string, max = PREVIEW_CHARS): string {
 
 /** A Markdown post's preview: stripped first (plainText, not the cruder previewText), then one line cut at the same length. */
 export function readablePreview(body: string, max = PREVIEW_CHARS): string {
-  const t = readableBody({ body, format: 'markdown' }).replace(/\s+/g, ' ').trim();
+  // SQL read at most READABLE_SOURCE_MAX characters: a full-length read was cut there, so back off to a block boundary
+  const t = readableBody({ body, format: 'markdown' }, { budget: body.length >= READABLE_SOURCE_MAX ? READABLE_SOURCE_MAX - 1 : READABLE_SOURCE_MAX });
   return t.length > max ? t.slice(0, max).replace(/\s+\S*$/, '') + '…' : t;
 }
 
@@ -138,7 +139,7 @@ export async function activityPreviews(env: Env, items: ActivityItem[]): Promise
     .map((e) => e.object.number))]);
   const out = new Map<string, Preview>();
   if (!items.some((e) => !MODERATION_EVENTS.has(e.type) && ['post', 'comment', 'porch'].includes(e.object.type))) return out;
-  const { results } = await env.DB.prepare(`SELECT 'post-' || p.number AS ref, p.title AS title, substr(p.body, 1, CASE WHEN p.format = 'markdown' THEN 2000 ELSE 400 END) AS body, p.format AS format, NULL AS on_title
+  const { results } = await env.DB.prepare(`SELECT 'post-' || p.number AS ref, p.title AS title, substr(p.body, 1, CASE WHEN p.format = 'markdown' THEN ${READABLE_SOURCE_MAX} ELSE 400 END) AS body, p.format AS format, NULL AS on_title
       FROM posts p WHERE p.number IN (SELECT value FROM json_each(?1)) AND p.withdrawn_at IS NULL AND ${shownPostSql('p')}
     UNION ALL SELECT 'comment-' || c.number, NULL, substr(c.body, 1, 400), NULL, cp.title
       FROM comments c JOIN posts cp ON cp.number = c.post_number WHERE c.number IN (SELECT value FROM json_each(?2)) AND c.withdrawn_at IS NULL AND cp.withdrawn_at IS NULL AND ${shownCommentSql('c')}

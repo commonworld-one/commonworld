@@ -11,7 +11,7 @@ import { metamask } from '../src/trust-engine/index.ts';
 import { invalidateSettings } from '../src/settings';
 import { linkRefsInHtml, postBodyHtml } from '../src/pages/post-body';
 import { postExcerpt } from '../src/pages/layout';
-import { plainText } from '../src/pages/html';
+import { plainText, readableBody } from '../src/pages/html';
 import { readablePreview } from '../src/pages/activity';
 import { register, resetDb, setSetting } from './helpers';
 
@@ -474,5 +474,60 @@ describe('readable snippets everywhere a post is cut short (connections, Activit
     const c2 = new RegExp(`<h3><a href="/posts/${b.json.number}">[\\s\\S]*?</p>`).exec(h2)?.[0] ?? '';
     expect(c2).toContain('needle-token');
     expect(c2).not.toContain('**');
+  });
+});
+
+describe('snippet window boundaries (never mid-syntax, nothing silently lost)', () => {
+  beforeEach(async () => { await resetDb(); await setMarkdown(true); await setSetting('limits.daily.post', 100); });
+  const pad = (n: number) => 'filler words. '.repeat(Math.ceil(n / 14)).slice(0, n);
+
+  it('a cut inside a link, a fence or emphasis at 2,000 characters leaves no raw syntax; plain posts are untouched', () => {
+    const link = `${pad(1960)}\n\n[a long label here](https://commonworld.one/posts/294 "title") tail`;
+    const fence = `${pad(1960)}\n\n\`\`\`js\nconst open = 1;\n${'x = 2;\n'.repeat(60)}\`\`\`\n\nafter`;
+    const emph = `${pad(1985)} **bold text that runs past the end** after`;
+    for (const body of [link, fence, emph]) {
+      const t = readableBody({ body, format: 'markdown' });
+      expect(t).not.toMatch(/\]\(|```|\*\*|https:\/\/commonworld/);
+      expect(t.length).toBeGreaterThan(1500);
+    }
+    expect(readableBody({ body: link, format: 'plain' })).toBe(link);
+    expect(readableBody({ body: link })).toBe(link);
+  });
+
+  it('nine cuts exactly at the 2,000-character window end leave no raw syntax and no link target', () => {
+    const tails = ['[label text here](https://commonworld.one/posts/294)', '[label](https://commonworld.one/posts/294 "title text")', '**bold words here**', '*italic words here*', '__bold words here__',
+      '![alt words here](https://commonworld.one/img.png)', '`code words here`', '<https://commonworld.one/posts/294>', '| cell one | cell two | cell three |'];
+    for (const tail of tails) {
+      for (const cutAt of [3, 8, 14, tail.length - 3]) {
+        // one long paragraph (no blank line), the window end (2,000) falls inside the tail
+        const body = `${pad(2000 - cutAt)}${tail} and then more words follow here`;
+        const t = readableBody({ body, format: 'markdown' });
+        expect(t, `${tail} @${cutAt}`).not.toMatch(/\]\(|\*\*|__|`|https:\/\/|!\[|<https|\[label|\*italic/);
+        expect(t.length, `${tail} @${cutAt}`).toBeGreaterThan(1400);
+      }
+    }
+  });
+
+  it('search finds a term after 2,500 characters and shows it in context, stripped', async () => {
+    const me = await register('md-deep', 'agent', 24 * 10);
+    const body = `# Intro\n\n${pad(2600)}\n\nThe **needle-deep** is [here](https://commonworld.one/posts/294) at the end.`;
+    const r = await api(me.key, 'POST', '/v1/posts', { title: 'D', body, format: 'markdown', section: 'general' });
+    expect(r.status).toBe(201);
+    const html = await (await call('/search?q=needle-deep')).text();
+    const card = new RegExp(`<h3><a href="/posts/${r.json.number}">[\\s\\S]*?</p>`).exec(html)?.[0] ?? '';
+    expect(card).toContain('needle-deep');
+    expect(card).toContain('is here at the end');
+    expect(card).not.toMatch(/\*\*|\]\(/);
+  });
+
+  it('JSON-LD text is the whole readable body (up to the 12,000-character limit), not a 2,000-character cut', async () => {
+    const me = await register('md-ld', 'agent', 24 * 10);
+    const body = `# Top\n\n${pad(6000)}\n\nFINAL **marker** [x](https://commonworld.one/posts/294).`;
+    const r = await api(me.key, 'POST', '/v1/posts', { title: 'L', body, format: 'markdown', section: 'general' });
+    const html = await page(r.json.number);
+    const ld = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)![1]!);
+    const text = JSON.stringify(ld);
+    expect(text).toContain('FINAL marker x.');
+    expect(text).not.toContain('**marker**');
   });
 });
