@@ -18,6 +18,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { hasAtlasCsp } from './atlas-csp-check.mjs';
+import { FILE_FAIL, FILE_WARN, fileCountVerdict } from './asset-budget.mjs';
 
 const here = path.dirname(new URL(import.meta.url).pathname);
 const v1 = path.resolve(here, '..');
@@ -53,8 +54,8 @@ let headers = fs.readFileSync(headersPath, 'utf8');
 headers = headers.replace(/\s*$/, '\n') + 'https://staging.commonworld.one/*\n  X-Robots-Tag: noindex, nofollow\n';
 fs.writeFileSync(headersPath, headers);
 
-// checks: Static Assets limits (100 header rules, 2,000 chars per line; 2,000 static redirects; 20,000 files on Free /
-// 100,000 on Paid; 25 MiB per file) and the CSP the nonce step needs
+// checks: Static Assets limits (100 header rules, 2,000 chars per line; 2,000 static redirects; 25 MiB per file; the file
+// count budget is in asset-budget.mjs: 20,000 files on Free / 100,000 on Paid) and the CSP the nonce step needs
 const rules = headers.split('\n').filter((l) => l && !/^\s/.test(l) && !l.startsWith('#'));
 if (rules.length > 100) fail(`_headers has ${rules.length} rules (max 100)`);
 const long = headers.split('\n').find((l) => l.length > 2000);
@@ -73,7 +74,9 @@ const walk = (dir) => {
   }
 };
 walk(out);
-if (files > 20000) console.warn(`atlas:build: ${files} files (> 20,000: needs Workers Paid, max 100,000)`);
+const countVerdict = fileCountVerdict(files);
+if (countVerdict === 'fail') fail(`${files} files (budget ${FILE_FAIL.toLocaleString('en-US')}; Cloudflare refuses more than 100,000 per Worker version on Workers Paid, 20,000 on Free)`);
+if (countVerdict === 'warn') console.warn(`atlas:build: WARNING ${files} files (warning from ${FILE_WARN.toLocaleString('en-US')}, build fails above ${FILE_FAIL.toLocaleString('en-US')}; Cloudflare limit 100,000 on Workers Paid)`);
 for (const need of ['atlas/index.html', '404.html', 'privacy/index.html', 'terms/index.html', 'about/index.html', 'llms.txt', 'llms-full.txt']) {
   if (!fs.existsSync(path.join(out, need))) fail(`the build has no ${need}`);
 }
