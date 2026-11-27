@@ -118,6 +118,27 @@ describe('on', () => {
     expect((await api(null, 'GET', `/v1/posts/${n}`)).json.comments.map((x: any) => x.format).sort()).toEqual(['markdown', 'markdown', 'plain', 'plain']);
   });
 
+  it('an explicit plain preview with line breaks is exactly what the published comment and porch line show', async () => {
+    const { me, n } = await setup('mc-plainpar');
+    const body = 'first **line** post-1\nsecond line\n\nthird & <b>';
+    const cp = await api(me.key, 'POST', '/v1/comments/preview', { body, format: 'plain' });
+    const pp = await api(me.key, 'POST', '/v1/porch/preview', { body, format: 'plain' });
+    expect(cp.json.rendered).toBe(false);
+    expect(cp.json.html).toContain('<br>');
+    expect(pp.json.html.startsWith('<p>')).toBe(true);
+    expect((await api(me.key, 'POST', `/v1/posts/${n}/comments`, { body, format: 'plain' })).status).toBe(201);
+    expect((await api(me.key, 'POST', '/v1/porch', { body, format: 'plain' })).status).toBe(201);
+    expect(await text(`/posts/${n}`)).toContain(`<div class="cmt-body">${cp.json.html}</div>`);
+    expect(await text('/porch')).toContain(pp.json.html);
+    // and a Markdown one, for both
+    const mcp = await api(me.key, 'POST', '/v1/comments/preview', { body: SAMPLE });
+    const mpp = await api(me.key, 'POST', '/v1/porch/preview', { body: 'a **b**\n\n- x' });
+    await api(me.key, 'POST', `/v1/posts/${n}/comments`, { body: SAMPLE });
+    await api(me.key, 'POST', '/v1/porch', { body: 'a **b**\n\n- x' });
+    expect(await text(`/posts/${n}`)).toContain(`<div class="cmt-body">${mcp.json.html}</div>`);
+    expect(await text('/porch')).toContain(mpp.json.html);
+  });
+
   it('keeps the existing limits: 5,000 for comments, 1,000 for porch lines, and no new ones', async () => {
     const { me, n } = await setup('mc-lim');
     expect((await api(me.key, 'POST', `/v1/posts/${n}/comments`, { body: 'a'.repeat(5_001) })).json.error.code).toBe('invalid_body');
@@ -135,14 +156,15 @@ describe('on', () => {
     expect([cp.status, cp.json.format, cp.json.rendered]).toEqual([200, 'markdown', true]);
     const made = await api(me.key, 'POST', `/v1/posts/${n}/comments`, { body: SAMPLE });
     const html = await text(`/posts/${n}`);
-    expect(html).toContain(`<div class="cw-md">${cp.json.html}</div>`);
+    expect(html).toContain(cp.json.html);
+    expect(cp.json.html.startsWith('<div class="cw-md">')).toBe(true);
     expect(made.status).toBe(201);
     const pp = await api(me.key, 'POST', '/v1/porch/preview', { body: 'a **b**' });
-    expect(pp.json.html).toBe('<p>a <strong>b</strong></p>\n');
+    expect(pp.json.html).toBe('<div class="cw-md"><p>a <strong>b</strong></p>\n</div>');
     const before = await env.DB.prepare('SELECT (SELECT COUNT(*) FROM comments) AS c, (SELECT COUNT(*) FROM porch_lines) AS p').first<any>();
     for (let i = 0; i < 4; i++) { await api(me.key, 'POST', '/v1/comments/preview', { body: 'x' }); await api(me.key, 'POST', '/v1/porch/preview', { body: 'x' }); }
     expect(await env.DB.prepare('SELECT (SELECT COUNT(*) FROM comments) AS c, (SELECT COUNT(*) FROM porch_lines) AS p').first<any>()).toEqual(before);
-    expect((await api(me.key, 'POST', '/v1/porch/preview', { body: '**x**\n\nsecond', format: 'plain' })).json).toEqual({ format: 'plain', rendered: false, html: '<p>**x**</p><p>second</p>' });
+    expect((await api(me.key, 'POST', '/v1/porch/preview', { body: '**x**\n\nsecond', format: 'plain' })).json).toEqual({ format: 'plain', rendered: false, html: '<p>**x**\n\nsecond</p>' });
     expect((await api(me.key, 'POST', '/v1/porch/preview', { body: 'x'.repeat(1_001) })).json.error.code).toBe('invalid_body');
     expect((await api(me.key, 'POST', '/v1/comments/preview', { body: 'x'.repeat(5_001) })).json.error.code).toBe('invalid_body');
     expect((await api(null, 'POST', '/v1/comments/preview', { body: 'x' })).status).toBe(401);

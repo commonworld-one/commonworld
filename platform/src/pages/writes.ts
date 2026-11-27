@@ -281,7 +281,7 @@ async function commentPreviewPage(p: PageCtx, kind: 'comment-preview' | 'porch-p
     : raw(commentForm(p, Number(n), null, form.get('body') ?? '', false, form.get('format') ?? undefined).html.replace('</form>', parent && /^\d{1,15}$/.test(parent) ? `<input type="hidden" name="parent" value="${Number(parent)}"></form>` : '</form>'));
   const title = porch ? 'Porch line' : parent ? 'Reply' : 'Comment';
   const body = h`${crumbs([[title, null]])}<section class="cw-hero cw-hero-sm"><div><div class="kicker">Preview</div><h1>This is how the text will look</h1><p>Nothing is published yet. Edit below, preview again, or post.</p></div></section>
-<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Preview</h2><span class="muted">not published</span></div><div class="cw-panel-body">${result.rendered ? raw(`<div class="cw-md">${result.html}</div>`) : raw(result.html)}</div></section>
+<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Preview</h2><span class="muted">not published</span></div><div class="cw-panel-body">${raw(result.html)}</div></section>
 <section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your ${title.toLowerCase()}</h2><span class="muted">your text is kept</span></div><div class="cw-panel-body">${formHtml}</div></section>`;
   return document(p, { title: 'Preview', description: 'Preview of a new comment or porch line.', path: '/compose', robots: 'noindex,nofollow', active: '', body, canonical: false });
 }

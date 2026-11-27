@@ -6,7 +6,7 @@ import { ASSETS, BOOT_SCRIPT } from './assets.gen';
 import { type Part, type Raw, ago, cutExcerpt, esc, fmt, h, join, jsonForScript, raw, readableBody } from './html';
 import type { CatalogSection, SiteFacts } from './data';
 import { isDeletedHandle } from '../views';
-import { markdownBlock } from './post-body';
+import { commentBodyHtml } from './post-body';
 
 export const ATLAS_URL = 'https://commonworld.one/atlas/';
 export const ABOUT_URL = 'https://commonworld.one/about/';
@@ -269,8 +269,7 @@ export function porchLine(l: { number: number; body: string; format?: string; au
 
 /** A porch line's text: Markdown rows as a rendered block (a long or failed one falls back to plain), plain rows as before. */
 function porchBodyHtml(l: { body: string; format?: string }, mentions: Mentions): Raw {
-  const md = markdownBlock(l.body, l.format, mentions);
-  return md !== null ? raw(md) : h`<p>${richText(l.body, mentions)}</p>`;
+  return raw(commentBodyHtml(l.body, l.format, mentions, 'porch').html);
 }
 
 export const emptyState = (title: string, text: Part = ''): Raw => h`<div class="empty-state"><b>${title}</b>${text ? h`<br>${text}` : ''}</div>`;

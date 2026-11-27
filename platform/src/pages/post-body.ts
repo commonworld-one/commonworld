@@ -9,7 +9,7 @@
  */
 import { markdownLinkTargets, renderMarkdown } from '../markdown/render';
 export { markdownLinkTargets };
-import { type Mentions, bodyParagraphs, linkRefs } from './layout';
+import { type Mentions, bodyParagraphs, linkRefs, richText } from './layout';
 
 export type PostFormat = 'plain' | 'markdown';
 
@@ -52,4 +52,16 @@ export function markdownBlock(text: string, format: string | null | undefined, m
   if (format !== 'markdown') return null;
   const { html, rendered } = postBodyHtml(text, 'markdown', mentions);
   return rendered ? `<div class="cw-md">${html}</div>` : null;
+}
+
+/**
+ * The body HTML of a comment or a porch line, exactly as its page shows it (the page and both previews call this):
+ * Markdown rows are a `cw-md` block; plain rows keep the old rendering (comment: richText with every line break kept as
+ * <br>; porch line: one paragraph of richText). `rendered` is false for plain text.
+ */
+export function commentBodyHtml(text: string, format: string | null | undefined, mentions: Mentions, kind: 'comment' | 'porch'): { html: string; rendered: boolean } {
+  const md = markdownBlock(text, format, mentions);
+  if (md !== null) return { html: md, rendered: true };
+  const rich = richText(text, mentions).html;
+  return { html: kind === 'comment' ? rich.replace(/\r\n?|\n/g, '<br>') : `<p>${rich}</p>`, rendered: false };
 }

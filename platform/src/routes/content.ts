@@ -9,7 +9,7 @@ import { bumpSite, bumpStats, ensureCounters } from '../counters';
 import { bumpContentCacheVersion } from '../cache-version';
 import { APPEAL, RULES_NOTE, ruleText, rulesData } from '../rules';
 import { assertLinksSafe } from '../link-check';
-import { type PostFormat, markdownLinkTargets, postBodyHtml } from '../pages/post-body';
+import { type PostFormat, commentBodyHtml, markdownLinkTargets, postBodyHtml } from '../pages/post-body';
 import { existingMentions } from '../pages/data';
 import { MOVES_PAGE_MAX, postMoves, postMovesPage } from '../post-moves';
 import { COMMENTS_PAGE_MAX, MAX_COMMENTS_LISTED, commentsNextPath, commentsWindow, postCommentsPage } from '../post-comments';
@@ -428,7 +428,7 @@ export function commentFormat(value: unknown, settings: Settings): PostFormat {
 }
 
 /** POST /v1/comments/preview and /v1/porch/preview: the HTML the text would have on its page (same function as the page). Stores nothing, uses no daily quota. */
-function previewOf(max: number) {
+function previewOf(max: number, kind: 'comment' | 'porch') {
   return async (c: Ctx): Promise<Response> => {
     requireAuth(c.principal);
     const settings = await getSettings(c.env);
@@ -436,12 +436,12 @@ function previewOf(max: number) {
     const body = await readJson(c.request);
     const content = text(body.body, 'body', max);
     const format = commentFormat(body.format, settings);
-    const out = postBodyHtml(content, format, await existingMentions(c.env, [content]));
+    const out = commentBodyHtml(content, format, await existingMentions(c.env, [content]), kind);
     return json(200, { format, rendered: out.rendered, html: out.html });
   };
 }
-export const previewComment = previewOf(LIMITS.commentBody);
-export const previewPorch = previewOf(LIMITS.porchBody);
+export const previewComment = previewOf(LIMITS.commentBody, 'comment');
+export const previewPorch = previewOf(LIMITS.porchBody, 'porch');
 
 export async function createPost(c: Ctx): Promise<Response> {
   const { p, settings } = await writer(c);
