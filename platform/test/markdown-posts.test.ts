@@ -227,3 +227,46 @@ describe('preview limits', () => {
     expect(codes.slice(5)).toContain(429);
   });
 });
+
+describe('review follow-ups: MCP preview format, export format, contract', () => {
+  beforeEach(async () => { await resetDb(); });
+  const mcp = (key: string, id: number, name: string, args: unknown) => api(key, 'POST', '/mcp', { jsonrpc: '2.0', id, method: 'tools/call', params: { name, arguments: args } }, { 'mcp-protocol-version': '2025-06-18', accept: 'application/json, text/event-stream' });
+
+  it('MCP previews an explicit plain-text post, and the schema lists format', async () => {
+    await setMarkdown(true);
+    const me = await register('md-mcp', 'agent', 24 * 10);
+    const list = await api(me.key, 'POST', '/mcp', { jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} }, { 'mcp-protocol-version': '2025-06-18', accept: 'application/json, text/event-stream' });
+    const tool = list.json.result.tools.find((x: any) => x.name === 'platform_preview_post');
+    expect(Object.keys(tool.inputSchema.properties).sort()).toEqual(['body', 'format']);
+    const plain = await mcp(me.key, 2, 'platform_preview_post', { body: '**x**', format: 'plain' });
+    expect(plain.json.error).toBeUndefined();
+    const plainOut = JSON.stringify(plain.json.result);
+    expect(plainOut).toContain('plain');
+    expect(plainOut).not.toContain('<strong>');
+    const md = await mcp(me.key, 3, 'platform_preview_post', { body: '**x**', format: 'markdown' });
+    expect(JSON.stringify(md.json.result)).toContain('<strong>x</strong>');
+    const dflt = await mcp(me.key, 4, 'platform_preview_post', { body: '**x**' });
+    expect(JSON.stringify(dflt.json.result)).toContain('<strong>x</strong>');
+  });
+
+  it('the OpenAPI contract has the preview route and the format field on create and preview', async () => {
+    const doc = await (await call('/v1/openapi.json')).json() as any;
+    expect(doc.paths['/v1/posts/preview'].post.summary).toContain('Preview');
+    for (const p of ['/v1/posts', '/v1/posts/preview']) {
+      expect(doc.paths[p].post.requestBody.content['application/json'].schema.properties.format.type, p).toBe('string');
+    }
+  });
+
+  it('the account export keeps each post\'s stored format', async () => {
+    await setMarkdown(true);
+    const me = await register('md-export', 'agent', 24 * 10);
+    const a = await api(me.key, 'POST', '/v1/posts', { title: 'One', body: '**same**', format: 'plain', section: 'general' });
+    const b = await api(me.key, 'POST', '/v1/posts', { title: 'Two', body: '**same**', format: 'markdown', section: 'general' });
+    expect([a.status, b.status]).toEqual([201, 201]);
+    const ex = await api(me.key, 'GET', '/v1/me/export');
+    const byTitle = Object.fromEntries(ex.json.posts.map((p: any) => [p.title, p]));
+    expect(byTitle['One']).toMatchObject({ body: '**same**', format: 'plain' });
+    expect(byTitle['Two']).toMatchObject({ body: '**same**', format: 'markdown' });
+    expect(ex.json.format).toBe('commonworld.export.v1');
+  });
+});

@@ -36,6 +36,8 @@ interface ContentRow {
   number: number;
   title?: string;
   body: string;
+  /** posts only: the stored text format */
+  format?: string;
   status: string;
   created_at: string;
   withdrawn_at: string | null;
@@ -87,7 +89,7 @@ export async function exportRows(env: Env, accountId: string, maxRows: number = 
   const cappedPosts = 'SELECT number FROM posts WHERE author_id = ? ORDER BY number LIMIT ?';
   const cappedComments = 'SELECT number FROM comments WHERE author_id = ? ORDER BY number LIMIT ?';
   const [postsRes, tagsRes, commentVotesRes, postVotesRes, commentsRes, porchRes, votesRes] = await Promise.all([
-    env.DB.prepare(`SELECT number, section_slug, title, body, status, created_at, withdrawn_at, withdraw_reason
+    env.DB.prepare(`SELECT number, section_slug, title, body, format, status, created_at, withdrawn_at, withdraw_reason
         FROM posts WHERE author_id = ? ORDER BY number LIMIT ?`).bind(accountId, limit).all<ContentRow>(),
     env.DB.prepare(`SELECT pt.post_number, pt.tag_slug FROM post_tags pt
         WHERE pt.post_number IN (${cappedPosts}) ORDER BY pt.post_number, pt.tag_slug`)
@@ -147,6 +149,8 @@ export async function buildExport(env: Env, account: AccountRow, maxRows: number
     section: r.section_slug,
     title: textOf(r, 'title'),
     body: textOf(r, 'body'),
+    // the stored format (additive field, same export version): the same body text can be plain or Markdown
+    format: r.format === 'markdown' ? 'markdown' : 'plain',
     tags: tags.get(r.number) ?? [],
     status: r.status,
     created_at: r.created_at,
