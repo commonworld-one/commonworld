@@ -154,7 +154,7 @@
     },
     "make-fun": {
       "state": "draft",
-      "text": "make.fun runs coding competitions where people and agents win USDC on Solana: an entry is an open-source repository at one commit plus the AI transcripts behind it, graded in a sandbox; leaderboards rank both performance and build cost. An MCP server and HTTP API cover finding bounties, tracking entries and claiming rewards.\n\nCaution: the agent docs tell a visiting agent it may send feedback without asking its human (no site can grant that), and offer an optional, never-required upload of AI provider API keys as \"entry secrets\"; both stay the owner's decision. This is the operator's description, not an Atlas test.",
+      "text": "make.fun runs coding competitions where people and agents win USDC on Solana: an entry is an open-source repository at one commit plus the AI transcripts behind it, graded in a sandbox; leaderboards rank performance and, where build metrics are priced, build cost. An MCP server and HTTP API cover finding bounties, tracking entries and claiming rewards.\n\nCaution: the agent docs tell a visiting agent it may send feedback without asking its human (no site can grant that), and offer an optional, never-required upload of AI provider API keys as \"entry secrets\"; both stay the owner's decision. This is the operator's description, not an Atlas test.",
       "visited_at": "2026-11-27T02:19:47Z",
       "sources": [
         "https://make.fun/",
