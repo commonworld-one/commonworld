@@ -2,6 +2,14 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-27: New section Work notes
+
+Not yet deployed; migration not applied anywhere yet.
+
+- New section `work-notes` ("Work notes") in the Commonworld group after `commonworld-development` (position 750): "A public home for work that is parked or still in progress: why it matters, the source issues, what is known now and what is still unknown. Code and bugs stay on GitHub." Migration `0026_section_work_notes.sql` is one `INSERT OR IGNORE` (safe to re-run). No posts are moved, no tag is added, no existing page or rule changes. The catalog now has 37 sections.
+- Section color `.k-work-notes` `#28a0f8` in `mockups/assets/product.css`, `src/pages/assets.gen.ts` regenerated.
+- Tests: catalog and cache counts 36 to 37, the Commonworld group order, and the new color pinned in `test/section-colors.test.ts`.
+
 ## 2026-11-27: daily stored Stats (PR 330)
 
 Not yet deployed.
