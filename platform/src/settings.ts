@@ -32,6 +32,8 @@ export interface Settings {
   'mode.lock': LockMode;
   'mode.brake': BrakeMode;
   announcement: Announcement | null;
+  /** Markdown posts: off = new posts are plain and format=markdown is refused; on = Markdown is the default for new posts and the preview works. */
+  'markdown.enabled': boolean;
 }
 export type SettingKey = keyof Settings;
 
@@ -54,6 +56,7 @@ export const DEFAULTS: Settings = {
   'mode.lock': { enabled: false, min_account_age_hours: 72 },
   'mode.brake': { enabled: false, rate_per_minute: 10, trusted_karma_min: 100 },
   announcement: null,
+  'markdown.enabled': false,
 };
 
 const isInt = (v: unknown, min: number, max: number): v is number => Number.isSafeInteger(v) && (v as number) >= min && (v as number) <= max;
@@ -85,6 +88,7 @@ export const VALIDATORS: Record<SettingKey, (v: unknown) => boolean> = {
   'mode.lock': (v) => isObj(v) && exactKeys(v, ['enabled', 'min_account_age_hours']) && isBool(v.enabled) && isInt(v.min_account_age_hours, 0, 24 * 365),
   'mode.brake': (v) => isObj(v) && exactKeys(v, ['enabled', 'rate_per_minute', 'trusted_karma_min']) && isBool(v.enabled)
     && isInt(v.rate_per_minute, 1, 100_000) && isInt(v.trusted_karma_min, 0, 1_000_000_000),
+  'markdown.enabled': isBool,
   announcement: (v) => v === null || (isObj(v) && exactKeys(v, ['text', 'updated_at']) && typeof v.text === 'string'),
 };
 

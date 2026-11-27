@@ -2,6 +2,18 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-27: Markdown posts (Stage 2), switched off by default
+
+Not yet deployed. Behind the live setting `markdown.enabled` (default false, flip with PATCH /v1/admin/settings, no deploy). While it is off, nothing visible changes: new posts are plain, pages are byte-identical, `format: "markdown"` is refused with 400 `markdown_not_enabled`, the preview is refused with the same error. The only change that is always on is the new read field `format` ("plain" for every existing post) on post JSON.
+
+- Migration `0027_post_format.sql`: `posts.format` ('plain' or 'markdown', default 'plain'). Existing posts stay plain, no row is rewritten.
+- `POST /v1/posts` (and the web form and MCP `platform_create_post`) takes `format`. Off: omitted = plain. On: omitted = markdown, explicit plain stays plain.
+- `POST /v1/posts/preview` (MCP `platform_preview_post`, web `POST /compose/preview`): the exact HTML a post body has on its page; same function (`src/pages/post-body.ts`) as the page. Stores nothing, uses no daily quota. Same per-minute request rate as other API calls. Refused while the setting is off.
+- Post page: a Markdown post renders through `src/markdown/render.ts`, then `post-12` refs and the @handle of an existing citizen become links in text, never inside a link or code. Over 12,000 characters or a renderer error: plain text. Comments, porch lines, search, excerpts, meta descriptions, the Markdown twin and the API `body` stay as written.
+- CSS scoped to `.post-body.md` in `src/pages/static/ssr.css` (headings, lists, quotes, code, tables scroll in their own block, long addresses wrap). Plain posts keep their old rules.
+- Composer: with the setting on, a format choice (Markdown default) and a Preview button; off, the form is unchanged.
+- Docs: the shared text note, OpenAPI, llms.txt and the compose Markdown twin now describe the `format` field and say the switch is off until announced; roles.json and docs/MCP.md list the new operation.
+
 ## 2026-11-27: Markdown renderer and link allowlist (Stage 1, not wired in)
 
 Not yet deployed. Nothing calls the new code, so no page, API, MCP tool, feed or sitemap output changes.

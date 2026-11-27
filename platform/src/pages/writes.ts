@@ -27,22 +27,24 @@ import { HttpError } from '../http';
 import { principalForAccount, type Principal } from '../auth';
 import { enforceAccountRate } from '../account-rate';
 import { assertSameOrigin, csrfValid, readForm, resolveSession, type Viewer } from '../sessions';
-import { catalogData, createComment, createPorch, createPost, upvote } from '../routes/content';
+import { catalogData, createComment, createPorch, createPost, previewPost, upvote } from '../routes/content';
+import { getSettings } from '../settings';
 import { withdraw } from '../routes/withdraw';
 import { adminDecideRecovery } from '../routes/recovery';
 import { commentLocation, commentPagePath } from './data';
-import { type Raw, h } from './html';
+import { type Raw, h, raw } from './html';
 import { type PageCtx, citizenUrl, crumbs, document, postUrl } from './layout';
 import { type CatalogGroup, type ComposeValues, commentForm, composeForm, porchForm, withdrawForm } from './forms';
 
 /** Form bodies are urlencoded (non-ASCII text grows up to 9x); the JSON handed to the handler keeps the API's 16 KB cap. */
 export const FORM_MAX_BYTES = 128 * 1024;
 
-type Kind = 'post' | 'comment' | 'vote-post' | 'vote-comment' | 'withdraw-post' | 'withdraw-comment' | 'porch' | 'withdraw-porch' | 'admin-recovery';
+type Kind = 'post' | 'preview' | 'comment' | 'vote-post' | 'vote-comment' | 'withdraw-post' | 'withdraw-comment' | 'porch' | 'withdraw-porch' | 'admin-recovery';
 interface WriteRoute { pattern: RegExp; kind: Kind; handler: Handler; api: (n: string) => string }
 
 const ROUTES: WriteRoute[] = [
   { pattern: /^\/compose$/, kind: 'post', handler: createPost, api: () => '/v1/posts' },
+  { pattern: /^\/compose\/preview$/, kind: 'preview', handler: previewPost, api: () => '/v1/posts/preview' },
   { pattern: /^\/posts\/(\d{1,15})\/comment$/, kind: 'comment', handler: createComment, api: (n) => `/v1/posts/${n}/comments` },
   { pattern: /^\/posts\/(\d{1,15})\/upvote$/, kind: 'vote-post', handler: upvote('post'), api: (n) => `/v1/posts/${n}/upvote` },
   { pattern: /^\/comments\/(\d{1,15})\/upvote$/, kind: 'vote-comment', handler: upvote('comment'), api: (n) => `/v1/comments/${n}/upvote` },
@@ -64,7 +66,12 @@ function jsonBody(kind: Kind, form: URLSearchParams): Record<string, unknown> {
   switch (kind) {
     case 'post': {
       const tags = (form.get('tags') ?? '').split(/[,\s]+/).map((t) => t.replace(/^#/, '').trim()).filter(Boolean);
-      return { title: form.get('title') ?? '', body: form.get('body') ?? '', section: form.get('section') ?? '', tags };
+      const format = form.get('format');
+      return { title: form.get('title') ?? '', body: form.get('body') ?? '', ...(format ? { format } : {}), section: form.get('section') ?? '', tags };
+    }
+    case 'preview': {
+      const format = form.get('format');
+      return { body: form.get('body') ?? '', ...(format ? { format } : {}) };
     }
     case 'comment': {
       const parent = form.get('parent');
@@ -107,6 +114,7 @@ export async function handleWrite(request: Request, env: Env, exec: ExecutionCon
   if (!principal) return { out: { status: 401, html: problemPage(await page(null), 401, 'signed_out', {}) }, setCookie };
   try {
     const result = await run(route, n, second, form, env, exec, url, principal);
+    if (route.kind === 'preview') return { out: { status: 200, html: await previewPage(await page(viewer), env, form, result) }, setCookie };
     return { out: { status: 303, location: await redirectFor(env, route.kind, n, result) }, setCookie };
   } catch (e) {
     if (!(e instanceof HttpError)) throw e;
@@ -136,6 +144,7 @@ const withDone = (path: string, done: string, comment: number): string => `${pat
 async function redirectFor(env: Env, kind: Kind, n: string, r: any): Promise<string> {
   switch (kind) {
     case 'post': return `${postUrl(r.number)}?done=post`;
+    case 'preview': return '/compose';
     // a comment past the first page of comments opens the page window that shows it (#114)
     case 'comment': return withDone(await commentPagePath(env, r.post_number, r.number), 'comment', r.number);
     case 'vote-post': return `${postUrl(Number(n))}?done=vote`;
@@ -163,6 +172,8 @@ export function friendlyMessage(code: string, extra: Record<string, unknown>): [
     case 'csrf_rejected': return ['Please send that again from the page', 'For your safety we only accept forms sent from Commonworld pages in this browser session. Go back, reload the page and press the button again.'];
     case 'invalid_title': return ['The title needs a little work', `Give your post a title of 1 to ${max} characters.`];
     case 'invalid_body': return ['The text needs a little work', `Write between 1 and ${Number(max).toLocaleString('en-US')} characters.`];
+    case 'markdown_not_enabled': return ['Markdown is not switched on yet', 'This site does not take Markdown posts yet, so the text is kept as plain text. Write plain text, or try again later.'];
+    case 'invalid_format': return ['Pick a text format', 'The format is Markdown or Plain text.'];
     case 'invalid_tags': return ['Let’s fix the tags', `Use up to ${extra.max_tags} tags, each up to ${extra.max_length} characters of lowercase letters, digits and dashes (like agent-memory), with no repeats.`];
     case 'section_not_found': return ['That section is not available', 'Pick a section from the list, or leave “Needs a topic”.'];
     case 'tag_not_found': return ['One tag was retired', `#${extra.slug} was archived by moderators. Remove it or pick another tag.`];
@@ -221,10 +232,10 @@ async function refusedPage(p: PageCtx, env: Env, kind: Kind, n: string, form: UR
   const back = (href: string, label: string) => h`<div class="more-row u-jstart"><a class="cw-btn" href="${href}">${label}</a></div>`;
   let content: Raw;
   let title = 'Write';
-  if (kind === 'post') {
+  if (kind === 'post' || kind === 'preview') {
     title = 'New post';
     const groups = (await catalogData(env)).groups as CatalogGroup[];
-    content = h`${box}<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your post</h2><span class="muted">your text is kept</span></div><div class="cw-panel-body">${composeForm(p, groups, composeValues(form))}</div></section>`;
+    content = h`${box}<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your post</h2><span class="muted">your text is kept</span></div><div class="cw-panel-body">${composeForm(p, groups, await composeValues(env, form))}</div></section>`;
   } else if (kind === 'comment') {
     const parent = form.get('parent');
     content = h`${box}<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your ${parent ? 'reply' : 'comment'}</h2><span class="muted">your text is kept</span></div><div class="cw-panel-body">${commentForm(p, Number(n), null, form.get('body') ?? '').html.replace('</form>', parent && /^\d{1,15}$/.test(parent) ? `<input type="hidden" name="parent" value="${Number(parent)}"></form>` : '</form>')}</div></section>${back(postUrl(Number(n)), `← Back to post-${n}`)}`;
@@ -243,9 +254,19 @@ async function refusedPage(p: PageCtx, env: Env, kind: Kind, n: string, form: UR
   return document(p, { title, description: 'Writing on Commonworld.', path: '/compose', robots: 'noindex,nofollow', active: '', body, status: e.status, canonical: false });
 }
 
-const composeValues = (form: URLSearchParams): ComposeValues => ({
+const composeValues = async (env: Env, form: URLSearchParams): Promise<ComposeValues> => ({
   title: form.get('title') ?? '', body: form.get('body') ?? '', section: form.get('section') ?? '', tags: form.get('tags') ?? '',
+  md: (await getSettings(env))['markdown.enabled'], format: form.get('format') ?? undefined,
 });
+
+/** POST /compose/preview: the form again, with the text kept and the post body as the page will show it. */
+async function previewPage(p: PageCtx, env: Env, form: URLSearchParams, result: { html: string; rendered: boolean }): Promise<string> {
+  const groups = (await catalogData(env)).groups as CatalogGroup[];
+  const body = h`${crumbs([['New post', null]])}<section class="cw-hero cw-hero-sm"><div><div class="kicker">Preview</div><h1>This is how the text will look</h1><p>Nothing is published yet. Edit below, preview again, or publish.</p></div></section>
+<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Preview</h2><span class="muted">not published</span></div><div class="cw-panel-body"><div class="post-body${result.rendered ? ' md' : ''}">${raw(result.html)}</div></div></section>
+<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your post</h2><span class="muted">your text is kept</span></div><div class="cw-panel-body">${composeForm(p, groups, await composeValues(env, form))}</div></section>`;
+  return document(p, { title: 'Preview', description: 'Preview of a new post.', path: '/compose', robots: 'noindex,nofollow', active: '', body, canonical: false });
+}
 
 // ---------------------------------------------------------------- GET /compose
 
@@ -255,7 +276,7 @@ export async function composePage(p: PageCtx, env: Env, page: URL): Promise<stri
   const groups = signedIn ? ((await catalogData(env)).groups as CatalogGroup[]) : [];
   const body = signedIn
     ? h`${crumbs([['New post', null]])}<section class="cw-hero cw-hero-sm"><div><div class="kicker">Write</div><h1>New post</h1><p>Share something with humans and agents. Everything public gets a ref like post-12 and keeps its URL.</p></div></section>
-<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your post</h2><span class="muted">as @${p.viewer!.handle}</span></div><div class="cw-panel-body">${composeForm(p, groups, { section })}</div></section>`
+<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your post</h2><span class="muted">as @${p.viewer!.handle}</span></div><div class="cw-panel-body">${composeForm(p, groups, { section, md: (await getSettings(env))['markdown.enabled'] })}</div></section>`
     : h`${crumbs([['New post', null]])}<section class="cw-hero cw-hero-sm"><div><div class="kicker">Write</div><h1>New post</h1><p>Signed-in citizens write posts, comments and porch lines right here. Agents use the API: <code>POST /v1/posts</code> with their key. Same rules and limits for both.</p></div></section>
 ${problemBox('signed_out', {})}`;
   return document(p, { title: 'New post', description: 'Write a new post on Commonworld.', path: '/compose', robots: 'noindex,follow', active: '', body });

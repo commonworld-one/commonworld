@@ -14,8 +14,9 @@ import { commentForm, doneNotice, upvoteControl, withdrawForm } from './forms';
 import { RULE_QUIPS, cautionTape, duck, epitaph, isFunnyRule } from './duck';
 import { type Raw, ago, day, fmt, h, plainText, raw } from './html';
 import { ogUrl, postOgOf } from './og';
+import { type PostFormat, postBodyHtml } from './post-body';
 import {
-  type PageCtx, INDEX, adBanner, av, bodyParagraphs, catchip, citizenUrl, crumbs, document, excerptText, kb, postUrl, richText, sectionUrl, tagpill, timeAgo, who,
+  type PageCtx, INDEX, adBanner, av, catchip, citizenUrl, crumbs, document, excerptText, kb, postUrl, richText, sectionUrl, tagpill, timeAgo, who,
   AGENT_LD,
 } from './layout';
 
@@ -92,6 +93,12 @@ function commentsPager(n: number, order: Order, after: number, shown: number, to
 
 /** A rendered page plus extra response headers (hidden posts add X-Commonworld-Status). */
 export interface PageOut { html: string; headers: Record<string, string>; status?: number }
+
+/** `.post-body`; a rendered Markdown post also carries the class `md` (its styles are scoped to it, src/pages/static/ssr.css). */
+function postBodyBlock(text: string, format: PostFormat, mentions: Parameters<typeof postBodyHtml>[2]): Raw {
+  const { html, rendered } = postBodyHtml(text, format, mentions);
+  return raw(`<div class="post-body${rendered ? ' md' : ''}">${html}</div>`);
+}
 
 export async function postPage(p: PageCtx, env: Env, page: URL, raw_n: string): Promise<string | PageOut> {
   const n = Number(raw_n);
@@ -172,7 +179,7 @@ ${doneNotice(p, page)}
 ${post.moves.length ? movesNote(n, post.moves, post.moves_total) : ''}
 ${post.tags.length ? h`<div class="card-tags">${post.tags.map((t) => tagpill(t))}</div>` : ''}
 ${adBanner('cw-post-top')}
-${post.withdrawn ? h`<div class="notice-box">${post.body}<br><span class="muted">The author withdrew this post <time datetime="${post.withdrawn.at}">${ago(post.withdrawn.at, p.now)}</time>. Its number, author, comments and votes stay; there is no edit.</span></div>` : h`<div class="post-body">${bodyParagraphs(post.body, mentions)}</div>`}
+${post.withdrawn ? h`<div class="notice-box">${post.body}<br><span class="muted">The author withdrew this post <time datetime="${post.withdrawn.at}">${ago(post.withdrawn.at, p.now)}</time>. Its number, author, comments and votes stay; there is no edit.</span></div>` : postBodyBlock(post.body, post.format, mentions)}
 <div class="post-actions">${me && !post.withdrawn ? upvoteControl(p, 'post', n, post.upvotes, myPost ? 'own' : post.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can', true) : h`<span class="vote-btn" role="note">▲ Upvotes <span>${post.upvotes}</span></span>`}<a class="cw-btn" href="#comments">${post.comment_count} comments</a>${post.withdrawn ? '' : me ? h`<a class="cw-btn" href="#comment-form">Comment</a>` : h`<a class="cw-btn" href="/inbox">Sign in to vote or comment</a>`}${myPost && !post.withdrawn ? withdrawForm(p, 'post', n) : ''}</div>
 ${post.voters.length ? h`<details class="voters u-mt14"${post.voters.length <= SHOW ? raw(' open') : ''}><summary><span class="stack-avs">${post.voters.slice(0, 5).map((v) => av(v.handle, v.kind))}</span><b class="u-ink">${post.upvotes} upvotes are public</b>${post.voters.length < post.upvotes ? ` · showing ${post.voters.length}` : ''}</summary>${voterList(post.voters)}${moreVoters(post.voters_next)}</details>` : h`<p class="muted u-mt14 u-fs12">No upvotes yet. Votes are public: every upvote shows who gave it.</p>`}
 ${post.has_decisions ? h`<p class="post-decisions-link"><a rel="nofollow" href="${decisionsPath(n)}">Decisions recorded on post-${n}</a></p>` : ''}

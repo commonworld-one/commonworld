@@ -9,6 +9,8 @@ import { bumpSite, bumpStats, ensureCounters } from '../counters';
 import { bumpContentCacheVersion } from '../cache-version';
 import { APPEAL, RULES_NOTE, ruleText, rulesData } from '../rules';
 import { assertLinksSafe } from '../link-check';
+import { type PostFormat, postBodyHtml } from '../pages/post-body';
+import { existingMentions } from '../pages/data';
 import { MOVES_PAGE_MAX, postMoves, postMovesPage } from '../post-moves';
 import { COMMENTS_PAGE_MAX, MAX_COMMENTS_LISTED, commentsNextPath, commentsWindow, postCommentsPage } from '../post-comments';
 import { VOTERS_PAGE_MAX, decodeVoteCursor, encodeVoteCursor, votersNextPath, votersPage } from '../voters';
@@ -390,11 +392,36 @@ export async function postData(c: ReadCtx, opts: { commentsAfter?: number } = {}
   };
 }
 
+/**
+ * The `format` of a new post. Off (setting markdown.enabled, default): new posts are plain and "markdown" is refused
+ * (400 markdown_not_enabled), never stored as plain without saying so. On: an omitted format means markdown.
+ */
+export function postFormat(value: unknown, settings: Settings): PostFormat {
+  if (value !== undefined && value !== null && value !== 'plain' && value !== 'markdown') throw new HttpError(400, 'invalid_format', { allowed: ['plain', 'markdown'] });
+  const on = settings['markdown.enabled'];
+  if (value === 'markdown' && !on) throw new HttpError(400, 'markdown_not_enabled');
+  return value ?? (on ? 'markdown' : 'plain');
+}
+
+/** POST /v1/posts/preview: the HTML a post's body would have on its page (same function as the page). Stores nothing, uses no daily quota. */
+export async function previewPost(c: Ctx): Promise<Response> {
+  const p = requireAuth(c.principal);
+  void p;
+  const settings = await getSettings(c.env);
+  if (!settings['markdown.enabled']) throw new HttpError(400, 'markdown_not_enabled');
+  const body = await readJson(c.request);
+  const content = text(body.body, 'body', LIMITS.postBody);
+  const format = postFormat(body.format, settings);
+  const out = postBodyHtml(content, format, await existingMentions(c.env, [content]));
+  return json(200, { format, rendered: out.rendered, html: out.html });
+}
+
 export async function createPost(c: Ctx): Promise<Response> {
   const { p, settings } = await writer(c);
   const body = await readJson(c.request);
   const title = text(body.title, 'title', LIMITS.title);
   const content = text(body.body, 'body', LIMITS.postBody);
+  const format = postFormat(body.format, settings);
   const section = body.section === undefined || body.section === null || body.section === '' ? NEEDS_TOPIC : String(body.section).trim().toLowerCase();
   const rawTags = body.tags === undefined ? [] : body.tags;
   const tagError = () => new HttpError(400, 'invalid_tags', { max_tags: MAX_TAGS, max_length: TAG_MAX_LENGTH, pattern: SLUG.source });
@@ -417,7 +444,8 @@ export async function createPost(c: Ctx): Promise<Response> {
       if (!tags.includes(slug)) tags.push(slug);
     }
   }
-  const idem = await idempotency(c, p, 'post', { title, content, section, tags: [...tags].sort() });
+  const idemBody = { title, content, section, tags: [...tags].sort(), ...(format === 'markdown' ? { format } : {}) };
+  const idem = await idempotency(c, p, 'post', idemBody);
   if (idem.existing) return json(200, postView(await c.env.DB.prepare(`${POST_SELECT} WHERE p.id = ?`).bind(idem.existing).first<any>()));
   // link check at publish (src/link-check.ts): a flagged domain refuses the post before any quota is used
   await assertLinksSafe(c.env, p.account.id, 'post', [title, content]);
@@ -438,7 +466,7 @@ export async function createPost(c: Ctx): Promise<Response> {
         db.prepare("INSERT INTO events (type, object_type, object_number, actor_id, data_json, created_at) SELECT 'tag.created', 'tag', number, ?, json_object('slug', slug), ? FROM tags WHERE slug = ? AND changes() = 1")
           .bind(p.account.id, createdAt, tag),
       ]),
-      db.prepare('INSERT INTO posts (id, author_id, section_slug, title, body, created_at) VALUES (?, ?, ?, ?, ?, ?)').bind(id, p.account.id, section, title, content, createdAt),
+      db.prepare('INSERT INTO posts (id, author_id, section_slug, title, body, format, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)').bind(id, p.account.id, section, title, content, format, createdAt),
       ...tags.map((tag) => db.prepare('INSERT INTO post_tags (post_number, tag_slug) SELECT number, ? FROM posts WHERE id = ?').bind(tag, id)),
       db.prepare("INSERT INTO events (type, object_type, object_number, actor_id, created_at) SELECT 'post.created', 'post', number, author_id, created_at FROM posts WHERE id = ?").bind(id),
       // stored counters (src/counters.ts)
@@ -453,7 +481,7 @@ export async function createPost(c: Ctx): Promise<Response> {
   } catch (error) {
     await release();
     if (idem.key && isUnique(error)) {
-      const replay = await idempotency(c, p, 'post', { title, content, section, tags: [...tags].sort() });
+      const replay = await idempotency(c, p, 'post', idemBody);
       if (replay.existing) return json(200, postView(await db.prepare(`${POST_SELECT} WHERE p.id = ?`).bind(replay.existing).first<any>()));
     }
     throw error;

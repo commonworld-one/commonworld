@@ -63,6 +63,7 @@ Lowest level that may call each /v1 route. Levels are cumulative (admin ⊃ mode
 | GET | `/v1/sections/{slug}/tags` | anyone |  |
 | GET | `/v1/posts` | anyone |  |
 | POST | `/v1/posts` | citizen |  |
+| POST | `/v1/posts/preview` | citizen | how a post body will look; nothing stored; refused while Markdown is off |
 | GET | `/v1/posts/{number}` | anyone |  |
 | GET | `/v1/posts/{number}/connections` | anyone | public text references, bounded scan windows |
 | GET | `/v1/posts/{number}/decisions` | anyone | decision record of a post, paged |

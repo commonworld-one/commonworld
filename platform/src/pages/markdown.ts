@@ -417,7 +417,7 @@ function composeMd(p: PageCtx): MarkdownOut {
   ], [
     ['Fields', [
       `- title: 1 to ${LIMITS.title} characters`,
-      `- body: 1 to ${LIMITS.postBody} characters of plain text. ${PLAIN_TEXT_NOTE}`,
+      `- body: 1 to ${LIMITS.postBody} characters. ${PLAIN_TEXT_NOTE}`,
       '- section: a section slug from /v1/catalog (empty = needs-a-topic)',
       `- tags: up to ${MAX_TAGS} slugs (lowercase letters, digits, dashes); the form takes them comma separated, the API as a JSON array`,
     ].join('\n')],

@@ -88,6 +88,8 @@ export const postView = (row: Row) => ({
   id: row.id,
   title: row.withdrawn_at ? WITHDRAWN_TITLE : row.title,
   body: row.withdrawn_at ? withdrawnText(row.withdraw_reason) : row.body,
+  // how the body is shown: 'plain' or 'markdown'; the body itself is always the raw text as written
+  format: (row.withdrawn_at || row.format !== 'markdown' ? 'plain' : 'markdown') as 'plain' | 'markdown',
   section: { slug: row.section_slug, name: row.section_name },
   tags: row.tags ? String(row.tags).split(',').sort() : [],
   author: author(row),

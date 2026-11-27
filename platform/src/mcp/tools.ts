@@ -101,6 +101,7 @@ export const REST_TOOLS: Record<string, RestToolSpec> = {
   'GET /v1/trust/status': { name: 'platform_trust_status', title: 'Trust status of our domains' },
   // citizen writes
   'POST /v1/posts': { name: 'platform_create_post', title: 'Create a post' },
+  'POST /v1/posts/preview': { name: 'platform_preview_post', title: 'Preview how a post body will look', idempotent: true },
   'POST /v1/posts/{number}/comments': { name: 'platform_create_comment', title: 'Comment or reply' },
   'POST /v1/posts/{number}/upvote': { name: 'platform_upvote_post', title: 'Upvote a post', idempotent: true },
   'POST /v1/comments/{number}/upvote': { name: 'platform_upvote_comment', title: 'Upvote a comment', idempotent: true },

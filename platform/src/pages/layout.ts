@@ -102,8 +102,13 @@ export function mentionCandidates(texts: Iterable<string | null | undefined>): s
  * An @handle becomes a link only when the handle is in `mentions` (citizens that exist, #81); any other @word stays text.
  */
 export function richText(text: string, mentions: Mentions): Raw {
+  return raw(linkRefs(esc(text), mentions));
+}
+
+/** The ref and @handle linking of richText, on text that is ALREADY escaped (used on rendered Markdown text nodes). */
+export function linkRefs(escaped: string, mentions: Mentions): string {
   // One pass over the escaped text, so a link never lands inside another link's attribute.
-  const linked = esc(text).replace(new RegExp(`${MENTION_SRC}|\\b(post|comment|porch)-(\\d{1,15})\\b`, 'gi'),
+  return escaped.replace(new RegExp(`${MENTION_SRC}|\\b(post|comment|porch)-(\\d{1,15})\\b`, 'gi'),
     (m, pre: string | undefined, handle: string | undefined, type: string | undefined, n: string | undefined) => {
       if (handle !== undefined) {
         const key = handle.toLowerCase();
@@ -113,7 +118,6 @@ export function richText(text: string, mentions: Mentions): Raw {
       const href = t === 'post' ? postUrl(Number(n)) : `/${t === 'porch' ? 'porch' : 'comments'}/${n}`;
       return `<a class="ref" href="${href}">${t}-${n}</a>`;
     });
-  return raw(linked);
 }
 
 /** Post/comment body: paragraphs on blank lines, single newlines as <br>, all text escaped. */

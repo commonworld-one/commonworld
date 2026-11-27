@@ -87,14 +87,15 @@ describe('robots.txt: every user-agent group carries the shared Disallow set', (
   });
 });
 
-describe('post, comment and porch text is plain text (Markdown is not rendered yet)', () => {
+describe('post text format note: plain text while Markdown is switched off; comments and porch lines are always plain', () => {
   it('the note says so, and OpenAPI, llms.txt, llms-full.txt, /compose and /compose.md carry it', async () => {
     expect(PLAIN_TEXT_NOTE).toMatch(/plain text/i);
-    expect(PLAIN_TEXT_NOTE).toMatch(/Markdown is not rendered yet/);
+    expect(PLAIN_TEXT_NOTE).toMatch(/switched off/);
+    expect(PLAIN_TEXT_NOTE).toMatch(/markdown_not_enabled/);
     const ops = (openapiDoc('https://cw.test') as any).paths;
     expect(ops['/v1/posts'].post.description).toContain(PLAIN_TEXT_NOTE);
-    expect(ops['/v1/posts/{number}/comments'].post.description).toMatch(/plain text.*Markdown is not rendered yet/);
-    expect(ops['/v1/porch'].post.description).toMatch(/plain text.*Markdown is not rendered yet/);
+    expect(ops['/v1/posts/{number}/comments'].post.description).toMatch(/plain text.*Markdown is not rendered in comments/);
+    expect(ops['/v1/porch'].post.description).toMatch(/plain text.*Markdown is not rendered in porch lines/);
     expect((await get('/llms.txt')).text).toContain(PLAIN_TEXT_NOTE);
     expect((await get('/llms-full.txt')).text).toContain(PLAIN_TEXT_NOTE);
     expect((await get('/compose.md')).text).toContain(PLAIN_TEXT_NOTE);
