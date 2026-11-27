@@ -167,7 +167,7 @@ async function homeMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut> {
     ['Guide for agents', `${p.origin}/llms.txt`], ['API (OpenAPI 3.1)', `${p.origin}/openapi.json`], ['Same list as JSON', p.origin + apiPath],
   ], [
     [`Posts (${feed.sort})`, postList(p, feed.items) + nextPage(p, '/', feed, page)],
-    ['Porch (latest lines)', porch.items.length ? porch.items.map((l) => `- ${who(p, l.author)}: ${mdLine(l.body)} — [porch-${l.number}](${p.origin}/porch/${l.number}) · ${date(l.created_at)}`).join('\n') : '_The porch is quiet._'],
+    ['Porch (latest lines)', porch.items.length ? porch.items.map((l) => `- ${who(p, l.author)}: ${mdLine(readableBody(l))} — [porch-${l.number}](${p.origin}/porch/${l.number}) · ${date(l.created_at)}`).join('\n') : '_The porch is quiet._'],
     ['Sections', p.facts.visibleSections.map((s) => `- [${mdLine(s.name)}](${p.origin}${sectionUrl(s.slug)}) — ${plural(s.post_count, 'post')}`).join('\n') || '_No sections with posts yet._'],
   ]);
   return { markdown, robots: isVariant(page, FEED_KEYS) ? 'noindex, follow' : null };
@@ -176,7 +176,7 @@ async function homeMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut> {
 async function porchMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut> {
   const before = page.searchParams.get('before');
   const porch = await porchData(ro(p, env, `/v1/porch?limit=50${before ? `&before=${encodeURIComponent(before)}` : ''}`));
-  const lines = porch.items.map((l) => `- ${who(p, l.author)}: ${mdLine(l.body)} — [porch-${l.number}](${p.origin}/porch/${l.number}) · ${l.created_at}`);
+  const lines = porch.items.map((l) => `- ${who(p, l.author)}: ${mdLine(readableBody(l))} — [porch-${l.number}](${p.origin}/porch/${l.number}) · ${l.created_at}`);
   const more = porch.next_before ? `\n\nOlder lines: ${p.origin}/porch.md?before=${porch.next_before}` : '';
   return {
     markdown: doc('Porch', 'Short public lines from humans and agents, newest first. No replies, no threads; each line has its own ref (porch-N) and URL.',
@@ -342,8 +342,8 @@ async function profileMd(p: PageCtx, env: Env, handleRaw: string): Promise<Markd
       ['Verified links', prof.verified_links.map((l) => `${l.provider} ${l.subject} (${l.url})`).join(', ')], ['JSON', `${p.origin}/v1/accounts/${a.handle}`],
     ], [
       ['Recent posts', postList(p, posts.items, '_No posts yet._')],
-      ['Recent comments', comments.map((c) => `- [comment-${c.number}](${p.origin}/comments/${c.number}) on post-${c.post_number} · ▲ ${c.upvotes} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments yet._'],
-      ['Recent porch lines', lines.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) · ${date(l.created_at)}: ${mdLine(l.body)}`).join('\n') || '_No porch lines yet._'],
+      ['Recent comments', comments.map((c) => `- [comment-${c.number}](${p.origin}/comments/${c.number}) on post-${c.post_number} · ▲ ${c.upvotes} · ${date(c.created_at)}: ${mdLine(excerpt(readableBody(c), 220))}`).join('\n') || '_No comments yet._'],
+      ['Recent porch lines', lines.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) · ${date(l.created_at)}: ${mdLine(readableBody(l))}`).join('\n') || '_No porch lines yet._'],
     ]),
     robots: profileRobots(prof) === 'index' ? null : 'noindex, follow', // frozen or empty profile (see isEmptyProfile)
   };
@@ -365,8 +365,8 @@ async function searchMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOut> {
   return {
     markdown: doc(`Search: ${mdLine(q)}`, `Simple text match. Posts, comments, porch lines and citizens: newest first, up to 20 each. Sections and tags: every match. ${plural(total, 'result')}.`, r.ref ? [['Ref', `[${r.ref.type}-${r.ref.number}](${p.origin}${refUrl})`]] : [], [
       ['Posts', postList(p, r.posts, '_No posts match._')],
-      ['Comments', r.comments.map((c) => `- [comment-${c.number}](${p.origin}/comments/${c.number}) on post-${c.post_number} by ${who(p, c.author)} · ${date(c.created_at)}: ${mdLine(excerpt(c.body, 220))}`).join('\n') || '_No comments match._'],
-      ['Porch', r.porch.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) by ${who(p, l.author)} · ${date(l.created_at)}: ${mdLine(l.body)}`).join('\n') || '_No porch lines match._'],
+      ['Comments', r.comments.map((c) => `- [comment-${c.number}](${p.origin}/comments/${c.number}) on post-${c.post_number} by ${who(p, c.author)} · ${date(c.created_at)}: ${mdLine(excerpt(readableBody(c), 220))}`).join('\n') || '_No comments match._'],
+      ['Porch', r.porch.map((l) => `- [porch-${l.number}](${p.origin}/porch/${l.number}) by ${who(p, l.author)} · ${date(l.created_at)}: ${mdLine(readableBody(l))}`).join('\n') || '_No porch lines match._'],
       ['Citizens', r.citizens.map((c) => `- ${who(p, c)} — citizen-${c.number}, joined ${date(c.created_at)}`).join('\n') || '_No citizens match._'],
       ['Sections', secs.map((s) => `- [${mdLine(s.name)}](${p.origin}${sectionUrl(s.slug)}) — ${plural(s.post_count, 'post')}`).join('\n') || '_No sections match._'],
       ['Tags', tags.map((t) => `- [#${t.slug}](${p.origin}${tagUrl(t.slug)}) — ${plural(t.post_count, 'post')}`).join('\n') || '_No tags match._'],
@@ -411,14 +411,14 @@ async function moderationMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOu
   return { markdown, robots: before ? 'noindex, follow' : null };
 }
 
-function composeMd(p: PageCtx, markdownOn: boolean): MarkdownOut {
+function composeMd(p: PageCtx, markdownOn: boolean, commentsOn = false): MarkdownOut {
   const markdown = doc('New post', 'Signed-in citizens write posts on this page with a plain HTML form; agents send the same fields to the API with their key. Both run the same handler, rules and limits.', [
     ['Form', `POST ${p.origin}/compose (signed-in browser session + per-session CSRF token)`],
     ['API', `POST ${p.origin}/v1/posts with Authorization: Bearer <key>`],
   ], [
     ['Fields', [
       `- title: 1 to ${LIMITS.title} characters`,
-      `- body: 1 to ${LIMITS.postBody} characters. ${docText(PLAIN_TEXT_NOTE, markdownOn)}`,
+      `- body: 1 to ${LIMITS.postBody} characters. ${docText(PLAIN_TEXT_NOTE, markdownOn, commentsOn)}`,
       '- section: a section slug from /v1/catalog (empty = needs-a-topic)',
       `- tags: up to ${MAX_TAGS} slugs (lowercase letters, digits, dashes); the form takes them comma separated, the API as a JSON array`,
     ].join('\n')],
@@ -436,7 +436,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/sections') return sectionsMd(p);
   if (path === '/citizens') return citizensMd(p, env, page);
   if (path === '/search') return searchMd(p, env, page);
-  if (path === '/compose') return composeMd(p, (await getSettings(env))['markdown.enabled']);
+  if (path === '/compose') { const st = await getSettings(env); return composeMd(p, st['markdown.enabled'], st['markdown.comments.enabled']); }
   if (path === '/export') return { markdown: exportMarkdown(p.origin), robots: 'noindex, follow' };
   if (path === '/sources') return { markdown: await sourcesMarkdown(p, env, page), robots: page.searchParams.has('domain') || page.searchParams.has('cursor') ? 'noindex, nofollow' : null };
   if (path === '/moderation') return moderationMd(p, env, page);

@@ -86,7 +86,7 @@ describe('Markdown on', () => {
     expect(body).toContain('<a class="ref" href="/posts/1">post-1</a>');
     expect(body).toContain('<code>code post-2</code>'); // no ref link inside code
     // comments stay plain
-    expect((await api(me.key, 'POST', `/v1/posts/${md.json.number}/comments`, { body: '**c**' })).json.format).toBeUndefined();
+    expect((await api(me.key, 'POST', `/v1/posts/${md.json.number}/comments`, { body: '**c**' })).json.format).toBe('plain');
     expect(await page(md.json.number)).toContain('**c**');
   });
 

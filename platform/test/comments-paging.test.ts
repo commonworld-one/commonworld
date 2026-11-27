@@ -93,7 +93,7 @@ describe('comments past the first 500 (#114)', () => {
     expect(got.body.comments_next).toBe(`/v1/posts/${p.number}/comments?after=${numbers[MAX_COMMENTS_LISTED - 1]}&through=${numbers.at(-1)}`);
     // backward compatible item shape: the comment view plus voters, nothing removed
     expect(Object.keys(got.body.comments[0]).sort()).toEqual(
-      ['author', 'body', 'created_at', 'depth', 'id', 'number', 'parent_number', 'post_number', 'ref', 'upvotes', 'url', 'voters', 'voters_next', 'withdrawn'].sort(),
+      ['author', 'body', 'created_at', 'depth', 'format', 'id', 'number', 'parent_number', 'post_number', 'ref', 'upvotes', 'url', 'voters', 'voters_next', 'withdrawn'].sort(),
     );
   });
 

@@ -50,6 +50,11 @@
       { "pointer": "/paths/~1v1~1posts~1preview/post/summary", "contains": "Preview" },
       { "pointer": "/paths/~1v1~1posts/post/requestBody/content/application~1json/schema/properties/format/type", "contains": "string" }
     ], "added_by": "#340", "note": "the preview route and the format field exist in the contract" },
+    { "id": "openapi.comments-porch-preview", "path": "/v1/openapi.json", "status": 200, "json_contains": [
+      { "pointer": "/paths/~1v1~1comments~1preview/post/summary", "contains": "Preview" },
+      { "pointer": "/paths/~1v1~1porch~1preview/post/summary", "contains": "Preview" },
+      { "pointer": "/paths/~1v1~1porch/post/requestBody/content/application~1json/schema/properties/format/type", "contains": "string" }
+    ], "added_by": "#341", "note": "the two preview routes and the format field on porch exist in the contract" },
     { "id": "stats", "path": "/stats/", "status": 200, "header_contains": { "content-type": "text/html" }, "body_contains": ["Commonworld in numbers"], "added_by": "#330", "note": "daily stored snapshot (or the static Atlas page before the first one)" },
     { "id": "stats.md", "path": "/stats/index.md", "status": 200, "header_contains": { "content-type": "text/markdown" }, "body_contains": ["# Commonworld in numbers"], "added_by": "#330" },
     { "id": "stats.json", "path": "/stats.json", "status": 200, "header_contains": { "content-type": "application/json" }, "body_contains": ["\"sections\""], "added_by": "#330" }

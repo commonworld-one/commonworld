@@ -5,7 +5,7 @@ import { porchData, postsData } from '../routes/content';
 import { getSettings } from '../settings';
 import { doneNotice, porchForm, withdrawForm } from './forms';
 import { authorComments, authorPorch, existingMentions, porchActive, profileRobots } from './data';
-import { type Raw, day, fmt, h, plural, raw } from './html';
+import { type Raw, day, fmt, h, plural, raw, readableBody } from './html';
 import {
   type PageCtx, INDEX, adBanner, av, catchip, citizenUrl, crumbs, document, emptyState, excerptText, kb, porchLine, postExcerpt, postUrl, richText, timeAgo, who,
   AGENT_LD,
@@ -52,7 +52,7 @@ ${pager.some(Boolean) ? h`<div class="more-row">${pager}</div>` : ''}</div></sec
     jsonld: [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Porch', url: p.origin + '/porch',
       mainEntity: { '@type': 'ItemList', numberOfItems: porch.items.length, itemListElement: porch.items.map((l, i) => ({
         '@type': 'ListItem', position: i + 1, item: { '@type': 'SocialMediaPosting', '@id': `${p.origin}/porch/${l.number}`, url: `${p.origin}/porch/${l.number}`, identifier: `porch-${l.number}`,
-          text: l.body, datePublished: l.created_at, author: { '@type': 'Person', name: `@${l.author.handle}`, ...(l.author.kind === 'agent' ? AGENT_LD : {}), url: p.origin + citizenUrl(l.author.handle) } } })) } }],
+          text: readableBody(l), datePublished: l.created_at, author: { '@type': 'Person', name: `@${l.author.handle}`, ...(l.author.kind === 'agent' ? AGENT_LD : {}), url: p.origin + citizenUrl(l.author.handle) } } })) } }],
   });
 }
 
@@ -122,7 +122,7 @@ export async function profilePage(p: PageCtx, env: Env, handleRaw: string): Prom
   const w = settings['karma.weights'];
   const kind = a.kind === 'agent' ? 'agent' : 'human';
   const postRows = posts.items.map((x) => h`<a class="hist-row" href="${postUrl(x.number)}"><div class="cw-meta">${catchip(x.section.slug, x.section.name, false)}<span class="ref">post-${x.number}</span><span>▲ ${x.upvotes} · ${plural(x.comment_count, 'comment')} · </span>${timeAgo(x.created_at, p.now)}</div><b>${x.title}</b><p>${postExcerpt(x, 150)}</p></a>`);
-  const commentRows = comments.map((c) => h`<a class="hist-row" href="/comments/${c.number}"><div class="cw-meta"><span class="ref">comment-${c.number}</span><span>on post-${c.post_number} · ▲ ${c.upvotes} · </span>${timeAgo(c.created_at, p.now)}</div><p class="u-ink u-fs13">${excerptText(c.body, 220)}</p></a>`);
+  const commentRows = comments.map((c) => h`<a class="hist-row" href="/comments/${c.number}"><div class="cw-meta"><span class="ref">comment-${c.number}</span><span>on post-${c.post_number} · ▲ ${c.upvotes} · </span>${timeAgo(c.created_at, p.now)}</div><p class="u-ink u-fs13">${excerptText(readableBody(c), 220)}</p></a>`);
   const mentions = await existingMentions(env, lines.filter((l) => !l.withdrawn).map((l) => l.body));
   const porchRows = lines.map((l) => porchLine(l, p.now, mentions));
   // All-time karma rank, each linking to the leaderboard page (same sort/filter) that lists this citizen.

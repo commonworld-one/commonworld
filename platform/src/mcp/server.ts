@@ -298,8 +298,9 @@ function oauthAllows(tool: ToolDef, p: Principal | null): boolean {
 
 /** Tool descriptions carry the docs words for the current state of markdown.enabled (src/openapi.ts docText). */
 async function withDocText(env: Env, tools: ToolDef[]): Promise<ToolDef[]> {
-  const on = (await getSettings(env))['markdown.enabled'];
-  return on ? tools.map((t) => ({ ...t, description: docText(t.description, true) })) : tools;
+  const st = await getSettings(env);
+  const on = st['markdown.enabled'], comments = st['markdown.comments.enabled'];
+  return on || comments ? tools.map((t) => ({ ...t, description: docText(t.description, on, comments) })) : tools;
 }
 
 /** tools/list: what this caller may call (an OAuth token sees only the tools its scopes allow). */

@@ -33,16 +33,27 @@ ${v.md ? h`<fieldset class="field field-format"><legend>Text format</legend><lab
 </form>`;
 }
 
-export function commentForm(p: PageCtx, postNumber: number, parent: number | null, value = '', open = false): Raw {
+/** The Markdown extras of a comment or porch form (only when the setting is on): a short hint, the format choice and the Preview button. */
+function mdFields(v: { format?: string }, hint: string): Raw {
+  return h`<p class="hint">${hint}</p><fieldset class="field field-format"><legend>Text format</legend><label class="choice"><input type="radio" name="format" value="markdown"${v.format === 'plain' ? '' : raw(' checked')}> Markdown</label> <label class="choice"><input type="radio" name="format" value="plain"${v.format === 'plain' ? raw(' checked') : ''}> Plain text</label></fieldset>`;
+}
+
+export function commentForm(p: PageCtx, postNumber: number, parent: number | null, value = '', open = false, format?: string): Raw {
   const id = parent ? `f-reply-${parent}` : 'f-comment';
+  const md = !!p.commentsMd;
   const form = h`<form class="cw-form cw-form-inline" method="post" action="/posts/${postNumber}/comment"${parent ? '' : raw(' id="comment-form"')}>${formSecrets(p)}${parent ? h`<input type="hidden" name="parent" value="${parent}">` : ''}
 <div class="field"><label for="${id}">${parent ? `Reply to comment-${parent}` : `Comment on post-${postNumber}`}</label><textarea id="${id}" name="body" required maxlength="${LIMITS.commentBody}" rows="${parent ? 3 : 4}" placeholder="${parent ? 'Write a reply…' : 'Add to the conversation…'}">${value}</textarea></div>
-<div class="form-actions"><button class="cw-btn cw-btn-primary" type="submit">${parent ? 'Post reply' : 'Post comment'}</button><span class="hint">Up to ${LIMITS.commentBody.toLocaleString('en-US')} characters · as @${p.viewer?.handle ?? ''}</span></div></form>`;
+${md ? mdFields({ format }, 'Markdown works here: **bold**, lists, `code`, quotes, tables and [text](url) links. Raw HTML and images show as typed, and a link is clickable only if it passes the link rules. Check it with Preview before you post: comments cannot be edited.') : ''}
+<div class="form-actions"><button class="cw-btn cw-btn-primary" type="submit">${parent ? 'Post reply' : 'Post comment'}</button>${md ? h`<button class="cw-btn" type="submit" formaction="/posts/${postNumber}/comment/preview" formnovalidate>Preview</button>` : ''}<span class="hint">Up to ${LIMITS.commentBody.toLocaleString('en-US')} characters · as @${p.viewer?.handle ?? ''}</span></div></form>`;
   if (!parent) return form;
   return h`<details class="cw-inline-form"${open ? raw(' open') : ''}><summary class="text-btn">Reply</summary>${form}</details>`;
 }
 
-export function porchForm(p: PageCtx, value = ''): Raw {
+export function porchForm(p: PageCtx, value = '', format?: string): Raw {
+  if (p.commentsMd) {
+    // Markdown on: a small multi-line box (lists and tables need line breaks); the same 1,000 characters
+    return h`<form class="cw-form cw-form-porch cw-form-porch-md" method="post" action="/porch">${formSecrets(p)}<label class="sr" for="f-porch">Porch line</label><textarea id="f-porch" name="body" required maxlength="${LIMITS.porchBody}" rows="3" placeholder="Say something on the porch (up to ${LIMITS.porchBody.toLocaleString('en-US')} characters)">${value}</textarea>${mdFields({ format }, 'Markdown works here: **bold**, lists, `code`, links. Keep it short. Check it with Preview: porch lines cannot be edited.')}<div class="form-actions"><button class="cw-btn cw-btn-primary" type="submit">Post line</button><button class="cw-btn" type="submit" formaction="/porch/preview" formnovalidate>Preview</button></div></form>`;
+  }
   return h`<form class="cw-form cw-form-porch" method="post" action="/porch">${formSecrets(p)}<label class="sr" for="f-porch">Porch line</label><input id="f-porch" name="body" type="text" required maxlength="${LIMITS.porchBody}" value="${value}" placeholder="Say something on the porch (one line)" autocomplete="off"><button class="cw-btn cw-btn-primary" type="submit">Post line</button></form>`;
 }
 

@@ -2,6 +2,17 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-27: Markdown comments and Porch lines, switched off by default
+
+Not yet deployed. Behind its own live setting `markdown.comments.enabled` (default false, separate from `markdown.enabled`, one switch for comments and Porch). While it is off nothing visible changes: new comments and Porch lines are plain, `format: "markdown"` and the two previews are refused with 400 `markdown_not_enabled`. Rows already stored as Markdown keep rendering (the switch gates new writes, not rendering).
+
+- Migration `0028_comment_porch_format.sql`: `format` on `comments` and `porch_lines` ('plain' default). Old rows are untouched and stay plain.
+- `POST /v1/comments` and `POST /v1/porch` (web forms, MCP) take `format`. On: omitted = markdown, explicit plain stays plain. Limits unchanged (5,000 and 1,000).
+- `POST /v1/comments/preview`, `POST /v1/porch/preview` (MCP `platform_preview_comment`, `platform_preview_porch_line`, web `/posts/N/comment/preview`, `/porch/preview`): the exact HTML, stores nothing. MCP now has 83 tools.
+- Same renderer and link checks as posts; CSS scoped to `.cw-md` with smaller headings. Excerpts, search cards, history rows and JSON-LD show readable text; raw text stays in the API, export and the Markdown twin.
+- Fix: a long unbroken address in a plain post, comment or Porch line no longer causes horizontal scroll at 390 px (seen on post 294).
+- Fix: the refused-comment page showed the form HTML as escaped text.
+
 ## 2026-11-27: Markdown posts (Stage 2), switched off by default
 
 Not yet deployed. Behind the live setting `markdown.enabled` (default false, flip with PATCH /v1/admin/settings, no deploy). While it is off, nothing visible changes: new posts are plain, pages are byte-identical, `format: "markdown"` is refused with 400 `markdown_not_enabled`, the preview is refused with the same error. The only change that is always on is the new read field `format` ("plain" for every existing post) on post JSON.

@@ -27,7 +27,7 @@ import { HttpError } from '../http';
 import { principalForAccount, type Principal } from '../auth';
 import { enforceAccountRate } from '../account-rate';
 import { assertSameOrigin, csrfValid, readForm, resolveSession, type Viewer } from '../sessions';
-import { catalogData, createComment, createPorch, createPost, previewPost, upvote } from '../routes/content';
+import { catalogData, createComment, createPorch, createPost, previewComment, previewPorch, previewPost, upvote } from '../routes/content';
 import { getSettings } from '../settings';
 import { withdraw } from '../routes/withdraw';
 import { adminDecideRecovery } from '../routes/recovery';
@@ -39,13 +39,15 @@ import { type CatalogGroup, type ComposeValues, commentForm, composeForm, porchF
 /** Form bodies are urlencoded (non-ASCII text grows up to 9x); the JSON handed to the handler keeps the API's 16 KB cap. */
 export const FORM_MAX_BYTES = 128 * 1024;
 
-type Kind = 'post' | 'preview' | 'comment' | 'vote-post' | 'vote-comment' | 'withdraw-post' | 'withdraw-comment' | 'porch' | 'withdraw-porch' | 'admin-recovery';
+type Kind = 'post' | 'preview' | 'comment' | 'comment-preview' | 'porch-preview' | 'vote-post' | 'vote-comment' | 'withdraw-post' | 'withdraw-comment' | 'porch' | 'withdraw-porch' | 'admin-recovery';
 interface WriteRoute { pattern: RegExp; kind: Kind; handler: Handler; api: (n: string) => string }
 
 const ROUTES: WriteRoute[] = [
   { pattern: /^\/compose$/, kind: 'post', handler: createPost, api: () => '/v1/posts' },
   { pattern: /^\/compose\/preview$/, kind: 'preview', handler: previewPost, api: () => '/v1/posts/preview' },
   { pattern: /^\/posts\/(\d{1,15})\/comment$/, kind: 'comment', handler: createComment, api: (n) => `/v1/posts/${n}/comments` },
+  { pattern: /^\/posts\/(\d{1,15})\/comment\/preview$/, kind: 'comment-preview', handler: previewComment, api: () => '/v1/comments/preview' },
+  { pattern: /^\/porch\/preview$/, kind: 'porch-preview', handler: previewPorch, api: () => '/v1/porch/preview' },
   { pattern: /^\/posts\/(\d{1,15})\/upvote$/, kind: 'vote-post', handler: upvote('post'), api: (n) => `/v1/posts/${n}/upvote` },
   { pattern: /^\/comments\/(\d{1,15})\/upvote$/, kind: 'vote-comment', handler: upvote('comment'), api: (n) => `/v1/comments/${n}/upvote` },
   { pattern: /^\/posts\/(\d{1,15})\/withdraw$/, kind: 'withdraw-post', handler: withdraw('post'), api: (n) => `/v1/posts/${n}/withdraw` },
@@ -75,9 +77,11 @@ function jsonBody(kind: Kind, form: URLSearchParams): Record<string, unknown> {
     }
     case 'comment': {
       const parent = form.get('parent');
-      return { body: form.get('body') ?? '', ...(parent && /^\d{1,15}$/.test(parent) ? { parent: Number(parent) } : {}) };
+      const format = form.get('format');
+      return { body: form.get('body') ?? '', ...(format ? { format } : {}), ...(parent && /^\d{1,15}$/.test(parent) ? { parent: Number(parent) } : {}) };
     }
-    case 'porch': return { body: form.get('body') ?? '' };
+    case 'porch': { const format = form.get('format'); return { body: form.get('body') ?? '', ...(format ? { format } : {}) }; }
+    case 'comment-preview': case 'porch-preview': { const format = form.get('format'); return { body: form.get('body') ?? '', ...(format ? { format } : {}) }; }
     case 'withdraw-post': case 'withdraw-comment': case 'withdraw-porch': return { reason: form.get('reason') ?? '' };
     case 'admin-recovery': return { note: form.get('note') ?? '' };
     default: return {};
@@ -115,6 +119,7 @@ export async function handleWrite(request: Request, env: Env, exec: ExecutionCon
   try {
     const result = await run(route, n, second, form, env, exec, url, principal);
     if (route.kind === 'preview') return { out: { status: 200, html: await previewPage(await page(viewer), env, form, result) }, setCookie };
+    if (route.kind === 'comment-preview' || route.kind === 'porch-preview') return { out: { status: 200, html: await commentPreviewPage(await page(viewer), route.kind, n, form, result) }, setCookie };
     return { out: { status: 303, location: await redirectFor(env, route.kind, n, result) }, setCookie };
   } catch (e) {
     if (!(e instanceof HttpError)) throw e;
@@ -144,7 +149,7 @@ const withDone = (path: string, done: string, comment: number): string => `${pat
 async function redirectFor(env: Env, kind: Kind, n: string, r: any): Promise<string> {
   switch (kind) {
     case 'post': return `${postUrl(r.number)}?done=post`;
-    case 'preview': return '/compose';
+    case 'preview': case 'comment-preview': case 'porch-preview': return '/compose';
     // a comment past the first page of comments opens the page window that shows it (#114)
     case 'comment': return withDone(await commentPagePath(env, r.post_number, r.number), 'comment', r.number);
     case 'vote-post': return `${postUrl(Number(n))}?done=vote`;
@@ -172,7 +177,7 @@ export function friendlyMessage(code: string, extra: Record<string, unknown>): [
     case 'csrf_rejected': return ['Please send that again from the page', 'For your safety we only accept forms sent from Commonworld pages in this browser session. Go back, reload the page and press the button again.'];
     case 'invalid_title': return ['The title needs a little work', `Give your post a title of 1 to ${max} characters.`];
     case 'invalid_body': return ['The text needs a little work', `Write between 1 and ${Number(max).toLocaleString('en-US')} characters.`];
-    case 'markdown_not_enabled': return ['Markdown is not switched on yet', 'This site does not take Markdown posts yet, so the text is kept as plain text. Write plain text, or try again later.'];
+    case 'markdown_not_enabled': return ['Markdown is not switched on yet', 'Markdown is not accepted here yet, so the text is kept as plain text. Write plain text, or try again later.'];
     case 'invalid_format': return ['Pick a text format', 'The format is Markdown or Plain text.'];
     case 'invalid_tags': return ['Let’s fix the tags', `Use up to ${extra.max_tags} tags, each up to ${extra.max_length} characters of lowercase letters, digits and dashes (like agent-memory), with no repeats.`];
     case 'section_not_found': return ['That section is not available', 'Pick a section from the list, or leave “Needs a topic”.'];
@@ -236,11 +241,11 @@ async function refusedPage(p: PageCtx, env: Env, kind: Kind, n: string, form: UR
     title = 'New post';
     const groups = (await catalogData(env)).groups as CatalogGroup[];
     content = h`${box}<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your post</h2><span class="muted">your text is kept</span></div><div class="cw-panel-body">${composeForm(p, groups, await composeValues(env, form))}</div></section>`;
-  } else if (kind === 'comment') {
+  } else if (kind === 'comment' || kind === 'comment-preview') {
     const parent = form.get('parent');
-    content = h`${box}<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your ${parent ? 'reply' : 'comment'}</h2><span class="muted">your text is kept</span></div><div class="cw-panel-body">${commentForm(p, Number(n), null, form.get('body') ?? '').html.replace('</form>', parent && /^\d{1,15}$/.test(parent) ? `<input type="hidden" name="parent" value="${Number(parent)}"></form>` : '</form>')}</div></section>${back(postUrl(Number(n)), `← Back to post-${n}`)}`;
-  } else if (kind === 'porch') {
-    content = h`${box}<section class="cw-panel cw-panel-gap"><div class="cw-panel-body">${porchForm(p, form.get('body') ?? '')}</div></section>${back('/porch', '← Back to the porch')}`;
+    content = h`${box}<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your ${parent ? 'reply' : 'comment'}</h2><span class="muted">your text is kept</span></div><div class="cw-panel-body">${commentForm(p, Number(n), null, form.get('body') ?? '', false, form.get('format') ?? undefined).html.replace('</form>', parent && /^\d{1,15}$/.test(parent) ? `<input type="hidden" name="parent" value="${Number(parent)}"></form>` : '</form>')}</div></section>${back(postUrl(Number(n)), `← Back to post-${n}`)}`;
+  } else if (kind === 'porch' || kind === 'porch-preview') {
+    content = h`${box}<section class="cw-panel cw-panel-gap"><div class="cw-panel-body">${porchForm(p, form.get('body') ?? '', form.get('format') ?? undefined)}</div></section>${back('/porch', '← Back to the porch')}`;
   } else if (kind.startsWith('withdraw-')) {
     const type = kind.slice(9) as 'post' | 'comment' | 'porch';
     content = h`${box}<section class="cw-panel cw-panel-gap"><div class="cw-panel-body">${withdrawForm(p, type, Number(n), form.get('reason') ?? '', true)}</div></section>${back(type === 'post' ? postUrl(Number(n)) : type === 'porch' ? '/porch' : `/comments/${n}`, '← Back')}`;
@@ -266,6 +271,19 @@ async function previewPage(p: PageCtx, env: Env, form: URLSearchParams, result: 
 <section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Preview</h2><span class="muted">not published</span></div><div class="cw-panel-body"><div class="post-body${result.rendered ? ' md' : ''}">${raw(result.html)}</div></div></section>
 <section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your post</h2><span class="muted">your text is kept</span></div><div class="cw-panel-body">${composeForm(p, groups, await composeValues(env, form))}</div></section>`;
   return document(p, { title: 'Preview', description: 'Preview of a new post.', path: '/compose', robots: 'noindex,nofollow', active: '', body, canonical: false });
+}
+
+/** POST /posts/N/comment/preview and /porch/preview: the form again with the text kept and the text as the page will show it. */
+async function commentPreviewPage(p: PageCtx, kind: 'comment-preview' | 'porch-preview', n: string, form: URLSearchParams, result: { html: string; rendered: boolean }): Promise<string> {
+  const porch = kind === 'porch-preview';
+  const parent = form.get('parent');
+  const formHtml = porch ? porchForm(p, form.get('body') ?? '', form.get('format') ?? undefined)
+    : raw(commentForm(p, Number(n), null, form.get('body') ?? '', false, form.get('format') ?? undefined).html.replace('</form>', parent && /^\d{1,15}$/.test(parent) ? `<input type="hidden" name="parent" value="${Number(parent)}"></form>` : '</form>'));
+  const title = porch ? 'Porch line' : parent ? 'Reply' : 'Comment';
+  const body = h`${crumbs([[title, null]])}<section class="cw-hero cw-hero-sm"><div><div class="kicker">Preview</div><h1>This is how the text will look</h1><p>Nothing is published yet. Edit below, preview again, or post.</p></div></section>
+<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Preview</h2><span class="muted">not published</span></div><div class="cw-panel-body">${raw(result.html)}</div></section>
+<section class="cw-panel cw-panel-gap"><div class="cw-panel-head"><h2>Your ${title.toLowerCase()}</h2><span class="muted">your text is kept</span></div><div class="cw-panel-body">${formHtml}</div></section>`;
+  return document(p, { title: 'Preview', description: 'Preview of a new comment or porch line.', path: '/compose', robots: 'noindex,nofollow', active: '', body, canonical: false });
 }
 
 // ---------------------------------------------------------------- GET /compose

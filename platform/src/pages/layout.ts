@@ -6,6 +6,7 @@ import { ASSETS, BOOT_SCRIPT } from './assets.gen';
 import { type Part, type Raw, ago, cutExcerpt, esc, fmt, h, join, jsonForScript, raw, readableBody } from './html';
 import type { CatalogSection, SiteFacts } from './data';
 import { isDeletedHandle } from '../views';
+import { commentBodyHtml } from './post-body';
 
 export const ATLAS_URL = 'https://commonworld.one/atlas/';
 export const ABOUT_URL = 'https://commonworld.one/about/';
@@ -29,6 +30,7 @@ export interface PageCtx {
   now: number;
   analytics: { ga4: string | null; beacon: string | null }; // validated env config (router.ts analyticsConfig)
   viewer: { handle: string; kind: string; csrf?: string } | null; // signed-in browser session (__Host-cw_session), else null; csrf = per-session form token
+  commentsMd?: boolean;    // Markdown for comments and porch lines is switched on (setting markdown.comments.enabled): their forms then show the format choice and Preview
 }
 
 export const asset = (name: string): string => `/assets/${name}?v=${ASSETS[name]?.hash ?? '0'}`;
@@ -261,8 +263,13 @@ export function gridWithAds(cards: Raw[], id?: string): Raw {
   return h`<div class="cw-grid"${id ? h` id="${id}"` : ''}>${out}</div>`;
 }
 
-export function porchLine(l: { number: number; body: string; author: { handle: string; kind: string }; created_at: string; withdrawn?: { at: string; reason: string | null } | null }, now: number, mentions: Mentions, extra?: Raw): Raw {
-  return h`<div class="porch-line" id="porch-${l.number}" data-kind="${kindOf(l.author.kind)}">${av(l.author.handle, l.author.kind)}<div><div class="pl-head">${who(l.author, true, false)}</div>${l.withdrawn ? h`<p class="muted">${l.body}</p>` : h`<p>${richText(l.body, mentions)}</p>`}${extra ?? ''}</div><div class="pl-side"><a class="ref" href="/porch/${l.number}">porch-${l.number}</a>${timeAgo(l.created_at, now)}</div></div>`;
+export function porchLine(l: { number: number; body: string; format?: string; author: { handle: string; kind: string }; created_at: string; withdrawn?: { at: string; reason: string | null } | null }, now: number, mentions: Mentions, extra?: Raw): Raw {
+  return h`<div class="porch-line" id="porch-${l.number}" data-kind="${kindOf(l.author.kind)}">${av(l.author.handle, l.author.kind)}<div><div class="pl-head">${who(l.author, true, false)}</div>${l.withdrawn ? h`<p class="muted">${l.body}</p>` : porchBodyHtml(l, mentions)}${extra ?? ''}</div><div class="pl-side"><a class="ref" href="/porch/${l.number}">porch-${l.number}</a>${timeAgo(l.created_at, now)}</div></div>`;
+}
+
+/** A porch line's text: Markdown rows as a rendered block (a long or failed one falls back to plain), plain rows as before. */
+function porchBodyHtml(l: { body: string; format?: string }, mentions: Mentions): Raw {
+  return raw(commentBodyHtml(l.body, l.format, mentions, 'porch').html);
 }
 
 export const emptyState = (title: string, text: Part = ''): Raw => h`<div class="empty-state"><b>${title}</b>${text ? h`<br>${text}` : ''}</div>`;

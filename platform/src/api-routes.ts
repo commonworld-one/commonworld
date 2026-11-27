@@ -82,6 +82,8 @@ export const ROUTES: ApiRoute[] = [
   r('POST', '/v1/comments/{number}/withdraw', new RegExp(`^/v1/comments/${N}/withdraw$`), withdraw('comment')),
   r('GET', '/v1/porch', /^\/v1\/porch$/, content.listPorch, PUBLIC_30),
   r('POST', '/v1/porch', /^\/v1\/porch$/, content.createPorch),
+  r('POST', '/v1/porch/preview', /^\/v1\/porch\/preview$/, content.previewPorch),
+  r('POST', '/v1/comments/preview', /^\/v1\/comments\/preview$/, content.previewComment),
   r('GET', '/v1/porch/{number}', new RegExp(`^/v1/porch/${N}$`), content.getPorch, PUBLIC_30),
   r('POST', '/v1/porch/{number}/withdraw', new RegExp(`^/v1/porch/${N}/withdraw$`), withdraw('porch')),
   r('GET', '/v1/feed', /^\/v1\/feed$/, content.feed),

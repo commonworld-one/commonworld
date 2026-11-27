@@ -174,9 +174,9 @@ describe('Markdown wiring is scoped (Stage 2)', () => {
     // post-body.ts is the one place that renders a post body (the page and the preview both call it)
     expect(hits.map((n) => n.replace(/^.*\/src\//, ''))).toEqual(['pages/post-body.ts']);
   });
-  it('only the post page and the content routes (create, preview) import post-body', () => {
+  it('only the post page, the porch line, and the content routes (create, preview) import post-body', () => {
     const files = (import.meta as unknown as { glob: (p: string, o: object) => Record<string, string> }).glob('../src/**/*.ts', { query: '?raw', import: 'default', eager: true });
     const hits = Object.keys(files).filter((n) => !n.endsWith('/pages/post-body.ts') && /from ['"][./]*(pages\/)?post-body(\.ts)?['"]/.test(files[n]!)).map((n) => n.replace(/^.*\/src\//, '')).sort();
-    expect(hits).toEqual(['pages/post.ts', 'routes/content.ts']);
+    expect(hits).toEqual(['pages/layout.ts', 'pages/post.ts', 'routes/content.ts']); // layout.ts: the porch line, only for rows stored as Markdown
   });
 });

@@ -295,6 +295,7 @@ async function pageCtx(env: Env, url: URL, viewer: Viewer | null = null): Promis
   return {
     origin: (env.SITE_ORIGIN || url.origin).replace(/\/+$/, ''),
     facts, announcement: settings.announcement, forceNoindex: env.PAGES_NOINDEX === '1', now: Date.now(), analytics: analyticsConfig(env),
+    commentsMd: settings['markdown.comments.enabled'],
     viewer: viewer ? { handle: viewer.account.handle, kind: viewer.account.kind, csrf: await csrfToken(env, viewer.sessionId) } : null,
   };
 }
@@ -549,7 +550,8 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
   if (path === LLMS_PATHS.llms || path === LLMS_PATHS.llmsFull || path === LLMS_PATHS.openapi || path === OPENAPI_V1_ALIAS) {
     const origin = (env.SITE_ORIGIN || url.origin).replace(/\/+$/, '');
     if (path === LLMS_PATHS.openapi || path === OPENAPI_V1_ALIAS) {
-      return done(respond(method, 200, JSON.stringify(docDeep(openapiDoc(origin), (await getSettings(env))['markdown.enabled']), null, 1) + '\n', docHeaders(env, 'application/json; charset=utf-8')));
+      const st = await getSettings(env);
+      return done(respond(method, 200, JSON.stringify(docDeep(openapiDoc(origin), st['markdown.enabled'], st['markdown.comments.enabled']), null, 1) + '\n', docHeaders(env, 'application/json; charset=utf-8')));
     }
     const [own, atlasDoc] = await Promise.all([
       path === LLMS_PATHS.llms ? llmsTxt(env, origin) : llmsFullTxt(env, origin, contentSecurityPolicy(env), SECURITY_HEADERS),
@@ -557,7 +559,8 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
     ]);
     // merged agent docs: the v1 text first, then the Atlas file as served by the Pages project
     const text = atlasDoc ? `${own.trimEnd()}\n\n---\n\n<!-- The Atlas (${origin}/atlas/) — same domain, separate static site. -->\n\n${cleanAtlasDoc(atlasDoc)}` : own;
-    return done(respond(method, 200, docText(text, (await getSettings(env))['markdown.enabled']), docHeaders(env, 'text/plain; charset=utf-8')));
+    const st = await getSettings(env);
+    return done(respond(method, 200, docText(text, st['markdown.enabled'], st['markdown.comments.enabled']), docHeaders(env, 'text/plain; charset=utf-8')));
   }
 
   const route = PAGES.find((r) => (m = path.match(r.pattern)));

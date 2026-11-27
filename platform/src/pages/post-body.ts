@@ -9,7 +9,7 @@
  */
 import { markdownLinkTargets, renderMarkdown } from '../markdown/render';
 export { markdownLinkTargets };
-import { type Mentions, bodyParagraphs, linkRefs } from './layout';
+import { type Mentions, bodyParagraphs, linkRefs, richText } from './layout';
 
 export type PostFormat = 'plain' | 'markdown';
 
@@ -41,4 +41,27 @@ export function postBodyHtml(text: string, format: PostFormat, mentions: Mention
     if (html !== null) return { html: linkRefsInHtml(html.replace(/ style="text-align:(left|center|right)"/g, ' class="md-$1"'), mentions), rendered: true };
   }
   return { html: bodyParagraphs(text, mentions).html, rendered: false };
+}
+
+/**
+ * A Markdown comment or porch line as `<div class="cw-md">…</div>` (scoped styles in ssr.css, smaller headings than a post),
+ * or null when it is not rendered as Markdown (a plain row, or a text over the length cap or a renderer error): the caller
+ * then shows it as plain text exactly as before. Same renderer, link rules and ref linking as a post.
+ */
+export function markdownBlock(text: string, format: string | null | undefined, mentions: Mentions): string | null {
+  if (format !== 'markdown') return null;
+  const { html, rendered } = postBodyHtml(text, 'markdown', mentions);
+  return rendered ? `<div class="cw-md">${html}</div>` : null;
+}
+
+/**
+ * The body HTML of a comment or a porch line, exactly as its page shows it (the page and both previews call this):
+ * Markdown rows are a `cw-md` block; plain rows keep the old rendering (comment: richText with every line break kept as
+ * <br>; porch line: one paragraph of richText). `rendered` is false for plain text.
+ */
+export function commentBodyHtml(text: string, format: string | null | undefined, mentions: Mentions, kind: 'comment' | 'porch'): { html: string; rendered: boolean } {
+  const md = markdownBlock(text, format, mentions);
+  if (md !== null) return { html: md, rendered: true };
+  const rich = richText(text, mentions).html;
+  return { html: kind === 'comment' ? rich.replace(/\r\n?|\n/g, '<br>') : `<p>${rich}</p>`, rendered: false };
 }

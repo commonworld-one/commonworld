@@ -108,6 +108,8 @@ export const commentView = (row: Row) => ({
   parent_number: row.parent_number ?? null,
   depth: row.depth,
   body: row.withdrawn_at ? withdrawnText(row.withdraw_reason) : row.body,
+  // how the body is shown: 'plain' or 'markdown'; the body itself is always the raw text as written
+  format: (row.withdrawn_at || row.format !== 'markdown' ? 'plain' : 'markdown') as 'plain' | 'markdown',
   author: author(row),
   upvotes: row.upvotes,
   created_at: row.created_at,
@@ -120,6 +122,7 @@ export const porchView = (row: Row) => ({
   url: `/porch/${row.number}`,
   id: row.id,
   body: row.withdrawn_at ? withdrawnText(row.withdraw_reason) : row.body,
+  format: (row.withdrawn_at || row.format !== 'markdown' ? 'plain' : 'markdown') as 'plain' | 'markdown',
   author: author(row),
   created_at: row.created_at,
   withdrawn: withdrawn(row),

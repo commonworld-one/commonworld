@@ -80,7 +80,7 @@ export async function connectionsData(c: ReadCtx) {
       ? `SELECT p.number, p.number AS post_number, p.title, p.body, p.format, a.handle, a.kind, p.created_at
           FROM posts p JOIN accounts a ON a.id = p.author_id WHERE p.number IN (${placeholders})
           AND ${shownPostSql('p')} AND ${notDisabledSql('p.author_id')} AND p.withdrawn_at IS NULL ORDER BY p.number`
-      : `SELECT c.number, c.post_number, '' AS title, c.body, NULL AS format, a.handle, a.kind, c.created_at
+      : `SELECT c.number, c.post_number, '' AS title, c.body, c.format, a.handle, a.kind, c.created_at
           FROM comments c JOIN accounts a ON a.id = c.author_id WHERE c.number IN (${placeholders})
           AND ${shownCommentSql('c')} AND c.withdrawn_at IS NULL ORDER BY c.number`;
     const bindings = window.map((x) => x.number);

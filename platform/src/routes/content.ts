@@ -9,7 +9,7 @@ import { bumpSite, bumpStats, ensureCounters } from '../counters';
 import { bumpContentCacheVersion } from '../cache-version';
 import { APPEAL, RULES_NOTE, ruleText, rulesData } from '../rules';
 import { assertLinksSafe } from '../link-check';
-import { type PostFormat, markdownLinkTargets, postBodyHtml } from '../pages/post-body';
+import { type PostFormat, commentBodyHtml, markdownLinkTargets, postBodyHtml } from '../pages/post-body';
 import { existingMentions } from '../pages/data';
 import { MOVES_PAGE_MAX, postMoves, postMovesPage } from '../post-moves';
 import { COMMENTS_PAGE_MAX, MAX_COMMENTS_LISTED, commentsNextPath, commentsWindow, postCommentsPage } from '../post-comments';
@@ -416,6 +416,33 @@ export async function previewPost(c: Ctx): Promise<Response> {
   return json(200, { format, rendered: out.rendered, html: out.html });
 }
 
+/**
+ * The `format` of a new comment or porch line. Own setting, separate from posts (markdown.comments.enabled, default off):
+ * off = new ones are plain and "markdown" is refused (400 markdown_not_enabled); on = an omitted format means markdown.
+ */
+export function commentFormat(value: unknown, settings: Settings): PostFormat {
+  if (value !== undefined && value !== null && value !== 'plain' && value !== 'markdown') throw new HttpError(400, 'invalid_format', { allowed: ['plain', 'markdown'] });
+  const on = settings['markdown.comments.enabled'];
+  if (value === 'markdown' && !on) throw new HttpError(400, 'markdown_not_enabled');
+  return value ?? (on ? 'markdown' : 'plain');
+}
+
+/** POST /v1/comments/preview and /v1/porch/preview: the HTML the text would have on its page (same function as the page). Stores nothing, uses no daily quota. */
+function previewOf(max: number, kind: 'comment' | 'porch') {
+  return async (c: Ctx): Promise<Response> => {
+    requireAuth(c.principal);
+    const settings = await getSettings(c.env);
+    if (!settings['markdown.comments.enabled']) throw new HttpError(400, 'markdown_not_enabled');
+    const body = await readJson(c.request);
+    const content = text(body.body, 'body', max);
+    const format = commentFormat(body.format, settings);
+    const out = commentBodyHtml(content, format, await existingMentions(c.env, [content]), kind);
+    return json(200, { format, rendered: out.rendered, html: out.html });
+  };
+}
+export const previewComment = previewOf(LIMITS.commentBody, 'comment');
+export const previewPorch = previewOf(LIMITS.porchBody, 'porch');
+
 export async function createPost(c: Ctx): Promise<Response> {
   const { p, settings } = await writer(c);
   const body = await readJson(c.request);
@@ -521,6 +548,7 @@ export async function createComment(c: Ctx): Promise<Response> {
   const post = await visiblePost(c, numberParam(c.params[0]));
   const body = await readJson(c.request);
   const content = text(body.body, 'body', LIMITS.commentBody);
+  const format = commentFormat(body.format, settings);
   let parent: { number: number; depth: number } | null = null;
   if (body.parent !== undefined && body.parent !== null) {
     if (!Number.isSafeInteger(body.parent)) throw new HttpError(400, 'invalid_parent');
@@ -534,11 +562,12 @@ export async function createComment(c: Ctx): Promise<Response> {
     if (!parent) throw new HttpError(404, 'parent_comment_not_found_on_post');
     if (parent.depth >= LIMITS.depth) throw new HttpError(400, 'max_reply_depth', { max_depth: LIMITS.depth });
   }
-  const normalized = { post: post.number, content, parent: parent?.number ?? null };
+  const normalized = { post: post.number, content, parent: parent?.number ?? null, ...(format === 'markdown' ? { format } : {}) };
   const idem = await idempotency(c, p, 'comment', normalized);
   if (idem.existing) return json(200, commentView(await c.env.DB.prepare(`${COMMENT_SELECT} WHERE c.id = ?`).bind(idem.existing).first<any>()));
   if (post.withdrawn_at) throw postWithdrawnError(post.number, post.withdrawn_at);
-  await assertLinksSafe(c.env, p.account.id, 'comment', [content]);
+  // a Markdown comment is also checked as parsed: the clickable targets the renderer will emit (as for posts)
+  await assertLinksSafe(c.env, p.account.id, 'comment', [content, ...(format === 'markdown' ? markdownLinkTargets(content) : [])]);
   const release = await reserve(c, p, settings, 'comment');
   const id = `comment_${crypto.randomUUID()}`;
   const createdAt = nowIso();
@@ -548,8 +577,8 @@ export async function createComment(c: Ctx): Promise<Response> {
     // above and this batch writes nothing); every statement after it applies only when that row exists.
     const written = 'EXISTS (SELECT 1 FROM comments WHERE id = ?1)';
     await db.batch([
-      db.prepare(`INSERT INTO comments (id, post_number, parent_number, author_id, body, depth, created_at) SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?7 WHERE ${openPostSql('?2')}`)
-        .bind(id, post.number, parent?.number ?? null, p.account.id, content, parent ? parent.depth + 1 : 1, createdAt),
+      db.prepare(`INSERT INTO comments (id, post_number, parent_number, author_id, body, depth, created_at, format) SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8 WHERE ${openPostSql('?2')}`)
+        .bind(id, post.number, parent?.number ?? null, p.account.id, content, parent ? parent.depth + 1 : 1, createdAt, format),
       db.prepare("INSERT INTO events (type, object_type, object_number, actor_id, data_json, created_at) SELECT 'comment.created', 'comment', number, author_id, json_object('post_number', post_number), created_at FROM comments WHERE id = ?").bind(id),
       db.prepare(`INSERT INTO site_counters (name, value) SELECT 'comments', 1 WHERE ${written} ON CONFLICT(name) DO UPDATE SET value = value + 1`).bind(id),
       db.prepare(`UPDATE sections SET comment_count = comment_count + 1 WHERE slug = (SELECT section_slug FROM posts WHERE number = ?2) AND ${written}`).bind(id, post.number),
@@ -631,16 +660,18 @@ export async function createPorch(c: Ctx): Promise<Response> {
   const { p, settings } = await writer(c);
   const body = await readJson(c.request);
   const content = text(body.body, 'body', LIMITS.porchBody);
-  const idem = await idempotency(c, p, 'porch', { content });
+  const format = commentFormat(body.format, settings);
+  const idemBody = { content, ...(format === 'markdown' ? { format } : {}) };
+  const idem = await idempotency(c, p, 'porch', idemBody);
   if (idem.existing) return json(200, porchView(await c.env.DB.prepare(`${PORCH_SELECT} WHERE l.id = ?`).bind(idem.existing).first<any>()));
-  await assertLinksSafe(c.env, p.account.id, 'porch', [content]);
+  await assertLinksSafe(c.env, p.account.id, 'porch', [content, ...(format === 'markdown' ? markdownLinkTargets(content) : [])]);
   const release = await reserve(c, p, settings, 'porch');
   const id = `porch_${crypto.randomUUID()}`;
   const createdAt = nowIso();
   const db = c.env.DB;
   try {
     await db.batch([
-      db.prepare('INSERT INTO porch_lines (id, author_id, body, created_at) VALUES (?, ?, ?, ?)').bind(id, p.account.id, content, createdAt),
+      db.prepare('INSERT INTO porch_lines (id, author_id, body, format, created_at) VALUES (?, ?, ?, ?, ?)').bind(id, p.account.id, content, format, createdAt),
       db.prepare("INSERT INTO events (type, object_type, object_number, actor_id, created_at) SELECT 'porch.created', 'porch', number, author_id, created_at FROM porch_lines WHERE id = ?").bind(id),
       bumpSite(db, 'porch'),
       bumpSite(db, 'porch24'),
@@ -651,7 +682,7 @@ export async function createPorch(c: Ctx): Promise<Response> {
   } catch (error) {
     await release();
     if (idem.key && isUnique(error)) {
-      const replay = await idempotency(c, p, 'porch', { content });
+      const replay = await idempotency(c, p, 'porch', idemBody);
       if (replay.existing) return json(200, porchView(await db.prepare(`${PORCH_SELECT} WHERE l.id = ?`).bind(replay.existing).first<any>()));
     }
     throw error;
