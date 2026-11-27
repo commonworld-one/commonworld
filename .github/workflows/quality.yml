@@ -1,7 +1,7 @@
 name: Quality (links + Lighthouse)
 # Public quality standard for commonworld.one (see README "Quality gates"):
 #   - internal links of the built site must all resolve (lychee --offline)      -> blocking
-#   - outbound links are checked with retries + cache                            -> warning; weekly run keeps one tracking issue
+#   - outbound links are checked with retries + cache                            -> warning; weekly run keeps one tracking issue and closes it after a clean sweep
 #   - platform post links (/posts/N, /v1/posts/N) that lychee skips as Worker routes are checked against the live
 #     Worker (scripts/check-worker-post-links.py, read-only, no secrets)          -> blocking only on 404/410
 #   - Lighthouse on 6 representative pages, mobile and desktop: performance,
@@ -130,6 +130,19 @@ jobs:
             n=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
             if [ -n "$n" ]; then gh issue edit "$n" --body-file "$REPORT"; else gh issue create --title "$title" --body-file "$REPORT"; fi
           fi
+      - name: Close the report after a clean sweep
+        # A clean scheduled or manual sweep closes the open report so it cannot go stale. If errors come back, the
+        # Report step above opens a new report (it only looks at open issues); a closed one is never reopened.
+        if: steps.lychee.outputs.exit_code == '0' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Outbound link report"
+          for n in $(gh issue list --state open --search "in:title \"$title\"" --json number,title --jq ".[] | select(.title == \"$title\") | .number"); do
+            gh issue comment "$n" --body "Closing: the outbound link sweep found no errors ($RUN_URL). If a later sweep finds errors, it opens a new report."
+            gh issue close "$n" --reason completed
+          done
 
   lighthouse:
     needs: build
