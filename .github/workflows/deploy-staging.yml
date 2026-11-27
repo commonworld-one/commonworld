@@ -40,6 +40,8 @@ on:
         type: boolean
 permissions:
   contents: read
+# No job here uses the Actions cache, and both check out the dispatched ref and run its npm scripts.
+cache-mode: none
 concurrency:
   group: deploy-platform-staging
   cancel-in-progress: false
