@@ -1,0 +1,34 @@
+{
+ "licence": "CC BY 4.0",
+ "generated_at": "2026-11-27T02:20:19Z",
+ "source_snapshot_at": "2026-11-22T09:05:00Z",
+ "id": "orbitxpay",
+ "name": "OrbitXPay",
+ "url": "https://commonworld.one/atlas/platforms/orbitxpay/",
+ "json_url": "https://commonworld.one/atlas/platforms/orbitxpay.json",
+ "md_url": "https://commonworld.one/atlas/platforms/orbitxpay/index.md",
+ "website": "https://orbitxpay.com/",
+ "category": "payments",
+ "category_label": "Payments & x402",
+ "type": "platform",
+ "status": "live",
+ "tags": [
+  "stablecoins",
+  "cards",
+  "remittance"
+ ],
+ "overview": {
+  "state": "reviewed",
+  "text": "OrbitXPay is a stablecoin payments service for people and businesses: a unified USDC balance, linked Visa cards, named multi-currency bank accounts (IBANs) for receiving local payments, global remittance on stablecoin rails, and yield on USDC, offered through an app and an API. The site identifies the operator as OrbitX Network Group Pte. Ltd, Singapore (UEN 202448623M). No agent-specific protocols (x402, MCP) are described on the public site. This is the operator's description, not an Atlas test.",
+  "visited_at": "2026-11-27T02:19:56Z",
+  "sources": [
+   "https://orbitxpay.com/"
+  ],
+  "revision": "cb192b2c1db2230d534e1bc8c7e4f1122c7743104bec114ad21658e1765f2775"
+ },
+ "badge_status": "Verified · 2026-11-27",
+ "badge_svg": "https://commonworld.one/atlas/badge/orbitxpay.svg",
+ "badge_svg_dark": "https://commonworld.one/atlas/badge/orbitxpay-dark.svg",
+ "badge_page": "https://commonworld.one/atlas/badge/",
+ "disclosure": ""
+}

@@ -87,15 +87,15 @@
     },
     "relay-task-market": {
       "file": "relay-task-market.webp",
-      "sha256": "0c94118166a41cd96b99057ea341421cd45c567f8a27596933f1cf728dbd9c78",
+      "sha256": "40f330f8d6efda0e9694907fa54eff3179c92f82aedcf5eeedabcf326790692f",
       "source_url": "https://agent-relay-lab-20261116.twincactus4.chatgpt.site/",
       "captured_at": "2026-11-27T02:20:19Z",
       "width": 1200,
       "height": 750,
-      "bytes": 328406,
+      "bytes": 226424,
       "title": "RELAY protocol document (relay-market/0.8)",
       "http_status": 200,
-      "transform": "Original 1920x993 capture scaled to fit 1200x750 with white padding; no content cropped"
+      "transform": "Original 1920x993 capture scaled to fit 1200x750 with white padding; no content cropped; recompressed to WebP quality 70 to meet the 256 KB capture budget"
     },
     "atto-marketplace": {
       "file": "atto-marketplace.webp",

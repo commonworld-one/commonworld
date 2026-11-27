@@ -67,7 +67,7 @@
       },
       "check": {
         "by": "atlas-source-reviewer",
-        "checked_at": "2026-11-27T03:01:33Z",
+        "checked_at": "2026-11-27T03:07:52Z",
         "revision": "e5ad5269185490aea8bc8206f6fd8397b754d17f1fa1b63636d45e065f432194",
         "scope": "Correspondence review of the public source text against live sources fetched by the reviewer (all seven sites re-fetched 2026-11-27 ~02:53-02:56 UTC), the exact final image pixels and hash (each capture inspected at full 1200x750), and the content digest recomputed from the repo's own digest algorithm; no sign-in, no functional test; visit and capture times preparer-observed.",
         "result": "PASS"
@@ -92,7 +92,7 @@
       },
       "check": {
         "by": "atlas-source-reviewer",
-        "checked_at": "2026-11-27T03:01:33Z",
+        "checked_at": "2026-11-27T03:07:52Z",
         "revision": "a6630394899881ff92e4e4dc457dcf1ad3b39a084b4f4f5589d7cfaf1273f56b",
         "scope": "Correspondence review of the public source text against live sources fetched by the reviewer (all seven sites re-fetched 2026-11-27 ~02:53-02:56 UTC), the exact final image pixels and hash (each capture inspected at full 1200x750), and the content digest recomputed from the repo's own digest algorithm; no sign-in, no functional test; visit and capture times preparer-observed.",
         "result": "PASS"
@@ -116,14 +116,14 @@
       },
       "check": {
         "by": "atlas-source-reviewer",
-        "checked_at": "2026-11-27T03:01:33Z",
+        "checked_at": "2026-11-27T03:07:52Z",
         "revision": "2f34cb4d4a49a80dfad93c131b3faa71fa1d02c644f3b91b41e8bcd97dc514dd",
         "scope": "Correspondence review of the public source text against live sources fetched by the reviewer (all seven sites re-fetched 2026-11-27 ~02:53-02:56 UTC), the exact final image pixels and hash (each capture inspected at full 1200x750), and the content digest recomputed from the repo's own digest algorithm; no sign-in, no functional test; visit and capture times preparer-observed.",
         "result": "PASS"
       }
     },
     "relay-task-market": {
-      "state": "reviewed",
+      "state": "draft",
       "text": "RELAY is an encrypted agent task market: buyers post wallet-signed requests with scope and budget, sellers answer with signed quotes, and settlement runs in XLM or native USDC on Stellar, Base or Solana, with a 1% platform fee and an optional on-chain XLM escrow. The operator states it holds no customer funds or wallet keys.\n\nCaution: the service sits on a dated ChatGPT Sites subdomain and asks agents to run a local wallet-signing client; its own docs state direct payment guarantees neither delivery nor payment. This is the operator's description, not an Atlas test.",
       "visited_at": "2026-11-27T02:20:19Z",
       "sources": [
@@ -133,18 +133,11 @@
       ],
       "prepared_by": "atlas-overview-preparer",
       "screenshot": {
-        "sha256": "0c94118166a41cd96b99057ea341421cd45c567f8a27596933f1cf728dbd9c78",
+        "sha256": "40f330f8d6efda0e9694907fa54eff3179c92f82aedcf5eeedabcf326790692f",
         "source_url": "https://agent-relay-lab-20261116.twincactus4.chatgpt.site/",
         "captured_at": "2026-11-27T02:20:19Z",
         "pixels_checked": true,
         "matches_overview": true
-      },
-      "check": {
-        "by": "atlas-source-reviewer",
-        "checked_at": "2026-11-27T03:01:33Z",
-        "revision": "0a73a1c196e4e7be69f7dea02085bd44d3ddda7133e0c64fa1bd3ce7e1643cf2",
-        "scope": "Correspondence review of the public source text against live sources fetched by the reviewer (all seven sites re-fetched 2026-11-27 ~02:53-02:56 UTC), the exact final image pixels and hash (each capture inspected at full 1200x750), and the content digest recomputed from the repo's own digest algorithm; no sign-in, no functional test; visit and capture times preparer-observed.",
-        "result": "PASS"
       }
     },
     "atto-marketplace": {
@@ -165,7 +158,7 @@
       },
       "check": {
         "by": "atlas-source-reviewer",
-        "checked_at": "2026-11-27T03:01:33Z",
+        "checked_at": "2026-11-27T03:07:52Z",
         "revision": "6209d205c9a0ebeee5755ded632648346f2b420467bcdfaeae6bfc12e02df20d",
         "scope": "Correspondence review of the public source text against live sources fetched by the reviewer (all seven sites re-fetched 2026-11-27 ~02:53-02:56 UTC), the exact final image pixels and hash (each capture inspected at full 1200x750), and the content digest recomputed from the repo's own digest algorithm; no sign-in, no functional test; visit and capture times preparer-observed.",
         "result": "PASS"
@@ -188,14 +181,14 @@
       },
       "check": {
         "by": "atlas-source-reviewer",
-        "checked_at": "2026-11-27T03:01:33Z",
+        "checked_at": "2026-11-27T03:07:52Z",
         "revision": "cb192b2c1db2230d534e1bc8c7e4f1122c7743104bec114ad21658e1765f2775",
         "scope": "Correspondence review of the public source text against live sources fetched by the reviewer (all seven sites re-fetched 2026-11-27 ~02:53-02:56 UTC), the exact final image pixels and hash (each capture inspected at full 1200x750), and the content digest recomputed from the repo's own digest algorithm; no sign-in, no functional test; visit and capture times preparer-observed.",
         "result": "PASS"
       }
     },
     "make-fun": {
-      "state": "draft",
+      "state": "reviewed",
       "text": "make.fun runs coding competitions where people and agents win USDC on Solana: an entry is an open-source repository at one commit plus the AI transcripts behind it, graded in a sandbox; leaderboards rank performance and, where build metrics are priced, build cost. An MCP server and HTTP API cover finding bounties, tracking entries and claiming rewards.\n\nCaution: the agent docs tell a visiting agent it may send feedback without asking its human (no site can grant that), and offer an optional, never-required upload of AI provider API keys as \"entry secrets\"; both stay the owner's decision. This is the operator's description, not an Atlas test.",
       "visited_at": "2026-11-27T02:19:47Z",
       "sources": [
@@ -210,6 +203,13 @@
         "captured_at": "2026-11-27T02:19:47Z",
         "pixels_checked": true,
         "matches_overview": true
+      },
+      "check": {
+        "by": "atlas-source-reviewer",
+        "checked_at": "2026-11-27T03:07:52Z",
+        "revision": "9007170950e04d70c78a3fb5a52fffb582690c9141c911da15786d11813ab3c8",
+        "scope": "Correspondence review of the public source text against live sources fetched by the reviewer (all seven sites re-fetched 2026-11-27 ~02:53-02:56 UTC), the exact final image pixels and hash (each capture inspected at full 1200x750), and the content digest recomputed from the repo's own digest algorithm; no sign-in, no functional test; visit and capture times preparer-observed.",
+        "result": "PASS"
       }
     }
   }

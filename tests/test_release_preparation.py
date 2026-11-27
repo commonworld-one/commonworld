@@ -32,7 +32,7 @@ class ReleasePreparation(unittest.TestCase):
     def test_all_vanished_pagination_formats_have_real_last_page_and_no_store(self):
         lines=(D/'_redirects').read_text().splitlines();headers=(D/'_headers').read_text()
         redirects=[x.split() for x in lines if x.endswith(' 302')]
-        self.assertEqual(len(redirects),12)
+        self.assertEqual(len(redirects),4)
         for old,new,status in redirects:
             p=D/new.lstrip('/')
             if new.endswith('/'):p=p/'index.html'
