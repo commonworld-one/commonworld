@@ -103,3 +103,22 @@ export function renderMarkdown(text: string): string | null {
     return null;
   }
 }
+
+const HTML_ENTITIES: Record<string, string> = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" };
+
+/**
+ * The clickable targets of a Markdown text: the `href` of every `<a>` the renderer really emits (only allowlisted
+ * https addresses reach it), in order, already decoded from HTML escaping. Used by the publish link check so a
+ * destination written with a backslash or character references ("https\://host", "host&#46;tld") is checked as what a
+ * reader can click, not only as the raw text. [] when the text is not rendered (too long or a renderer error).
+ */
+export function markdownLinkTargets(text: string): string[] {
+  const html = renderMarkdown(text);
+  if (html === null) return [];
+  const out: string[] = [];
+  for (const m of html.matchAll(/<a\s[^>]*?href="([^"]*)"/g)) {
+    const href = m[1]!.replace(/&(amp|lt|gt|quot|#39);/g, (e) => HTML_ENTITIES[e] ?? e);
+    if (!out.includes(href)) out.push(href);
+  }
+  return out;
+}

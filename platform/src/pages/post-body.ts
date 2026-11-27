@@ -7,7 +7,8 @@
  *              post-12 style refs and the @handle of an existing citizen become links in text, but never inside a link
  *              (no nested anchors) and never inside code. Over the length cap or a renderer error: plain text, as before.
  */
-import { renderMarkdown } from '../markdown/render';
+import { markdownLinkTargets, renderMarkdown } from '../markdown/render';
+export { markdownLinkTargets };
 import { type Mentions, bodyParagraphs, linkRefs } from './layout';
 
 export type PostFormat = 'plain' | 'markdown';

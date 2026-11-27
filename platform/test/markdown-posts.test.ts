@@ -3,10 +3,14 @@
  * preview and the read-side `format` field. Off: nothing changes for anyone except the new `format: "plain"` field.
  */
 import { env, exports } from 'cloudflare:workers';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { createExecutionContext, waitOnExecutionContext } from 'cloudflare:test';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import worker from '../src/index';
+import { resetLinkCheckMemo } from '../src/link-check';
+import { metamask } from '../src/trust-engine/index.ts';
 import { invalidateSettings } from '../src/settings';
 import { linkRefsInHtml, postBodyHtml } from '../src/pages/post-body';
-import { register, resetDb } from './helpers';
+import { register, resetDb, setSetting } from './helpers';
 
 beforeEach(resetDb);
 
@@ -268,5 +272,64 @@ describe('review follow-ups: MCP preview format, export format, contract', () =>
     expect(byTitle['One']).toMatchObject({ body: '**same**', format: 'plain' });
     expect(byTitle['Two']).toMatchObject({ body: '**same**', format: 'markdown' });
     expect(ex.json.format).toBe('commonworld.export.v1');
+  });
+});
+
+describe('publish safety covers the parsed link targets', () => {
+  beforeEach(async () => { resetLinkCheckMemo(); await resetDb(); await env.DB.prepare('DELETE FROM link_checks').run(); await setMarkdown(true); });
+  afterEach(() => vi.restoreAllMocks());
+  const sources = (blacklist: string[]) => vi.spyOn(globalThis, 'fetch').mockImplementation((async (input: RequestInfo | URL) => {
+    const u = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+    if (u === metamask.url) return new Response(JSON.stringify({ version: 2, fuzzylist: [], whitelist: [], blacklist }));
+    return new Response('not found', { status: 404 });
+  }) as typeof fetch);
+  const publish = async (key: string, body: string, format = 'markdown') => {
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(new Request('https://api.test/v1/posts', { method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ title: 'T', body, format, section: 'general' }) }), { ...env, LINK_CHECK_OFFLINE: '0' } as any, ctx);
+    await waitOnExecutionContext(ctx);
+    return { status: res.status, json: (await res.json()) as any };
+  };
+
+  it('every clickable target is checked: escaped scheme, escaped dots, entities, nested in text', async () => {
+    const me = await register('md-safe', 'agent', 24 * 10);
+    sources(['1f916.ai']);
+    const cases = ['[l](https\\://1f916.ai/about)', '[l](https://1f916&#46;ai/about)', '[l](https&#58;//1f916.ai/about)', '[**l**](<https://1f916.ai/about> "t")', '<https://1f916.ai/about>'];
+    for (const c of cases) {
+      // the renderer really makes it clickable (that is the bypass being closed), and publishing is refused
+      expect(postBodyHtml(c, 'markdown', new Set()).html, c).toContain('href="https://1f916.ai/about"');
+      const r = await publish(me.key, c);
+      expect(r.status, c).toBe(422);
+      expect(r.json.error.code, c).toBe('link_flagged');
+      expect(r.json.error.domains.map((d: any) => d.domain), c).toContain('1f916.ai');
+    }
+    expect((await env.DB.prepare('SELECT count(*) AS n FROM posts').first<any>()).n).toBe(0);
+  });
+
+  it('a normal allowed link still publishes, and is checked once with the raw copy (dedup)', async () => {
+    const me = await register('md-ok', 'agent', 24 * 10);
+    sources(['evil.example']);
+    const r = await publish(me.key, '[repo](https://github.com/commonworld-one/commonworld) and https://github.com/commonworld-one/commonworld');
+    expect(r.status).toBe(201);
+    const row = await env.DB.prepare('SELECT domains_json FROM link_checks ORDER BY id DESC').first<any>();
+    expect(JSON.parse(row.domains_json).map((d: any) => d.domain)).toEqual(['github.com']);
+  });
+
+  it('plain posts are unchanged: an escaped destination is plain text, no extra check', async () => {
+    const me = await register('md-plain', 'agent', 24 * 10);
+    sources(['1f916.ai']);
+    expect((await publish(me.key, '[l](https\\://1f916.ai/about)', 'plain')).status).toBe(201);
+  });
+
+  it('the 20-domain boundary counts parsed targets with the raw ones, once each', async () => {
+    const me = await register('md-cap', 'agent', 24 * 10);
+    sources([]);
+    const raw = (n: number) => Array.from({ length: n }, (_, i) => `https://d${i}.example`).join(' ');
+    expect((await publish(me.key, `${raw(19)} [l](https\\://1f916.ai/about)`)).status).toBe(201);
+    const over = await publish(me.key, `${raw(20)} [l](https\\://1f916.ai/about)`);
+    expect(over.status).toBe(400);
+    expect(over.json.error.code).toBe('too_many_link_domains');
+    // the same host twice (raw and escaped) is one domain
+    expect((await publish(me.key, `${raw(19)} https://1f916.ai/about [l](https\\://1f916.ai/about)`)).status).toBe(201);
   });
 });

@@ -9,7 +9,7 @@ import { bumpSite, bumpStats, ensureCounters } from '../counters';
 import { bumpContentCacheVersion } from '../cache-version';
 import { APPEAL, RULES_NOTE, ruleText, rulesData } from '../rules';
 import { assertLinksSafe } from '../link-check';
-import { type PostFormat, postBodyHtml } from '../pages/post-body';
+import { type PostFormat, markdownLinkTargets, postBodyHtml } from '../pages/post-body';
 import { existingMentions } from '../pages/data';
 import { MOVES_PAGE_MAX, postMoves, postMovesPage } from '../post-moves';
 import { COMMENTS_PAGE_MAX, MAX_COMMENTS_LISTED, commentsNextPath, commentsWindow, postCommentsPage } from '../post-comments';
@@ -448,7 +448,8 @@ export async function createPost(c: Ctx): Promise<Response> {
   const idem = await idempotency(c, p, 'post', idemBody);
   if (idem.existing) return json(200, postView(await c.env.DB.prepare(`${POST_SELECT} WHERE p.id = ?`).bind(idem.existing).first<any>()));
   // link check at publish (src/link-check.ts): a flagged domain refuses the post before any quota is used
-  await assertLinksSafe(c.env, p.account.id, 'post', [title, content]);
+  // a Markdown post is also checked as parsed: the clickable targets the renderer will emit (escaped schemes and character references decode there)
+  await assertLinksSafe(c.env, p.account.id, 'post', [title, content, ...(format === 'markdown' ? markdownLinkTargets(content) : [])]);
   // per-account cap on brand-new tags per UTC day (spam guard); using existing tags is never limited
   const newTagCap = settings['limits.new_tags_per_day'];
   if (newTags.length && newTagCap !== null && !isTrustedAccount(p)) {
