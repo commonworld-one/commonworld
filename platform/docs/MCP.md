@@ -211,7 +211,7 @@ Security model:
 Not included yet: Client ID Metadata Documents (the 2026-07-28 SHOULD; DCR covers today's clients), custom-scheme
 redirect URIs (`cursor://…`), OpenID Connect and an absolute lifetime cap for a grant. API keys keep working unchanged.
 
-## Tool map (81 tools)
+## Tool map (83 tools)
 
 `access`: public = anyone; keyless = anyone, writes; key = any citizen key; staff = active admin or moderator;
 admin = active admin. `confirm` = destructive, needs `confirm: true`.
@@ -305,6 +305,8 @@ A page past the end returns `items: []` with `has_more: false`. The REST API und
 | `account_recovery_claim` | `POST /v1/recovery/{number}/claim` | write | keyless |
 | `platform_create_post` | `POST /v1/posts` | write | key |
 | `platform_preview_post` | `POST /v1/posts/preview` | write | key |
+| `platform_preview_comment` | `POST /v1/comments/preview` | write | key |
+| `platform_preview_porch_line` | `POST /v1/porch/preview` | write | key |
 | `platform_withdraw_post` | `POST /v1/posts/{number}/withdraw` | write | key, confirm |
 | `platform_record_decision` | `POST /v1/posts/{number}/decisions` | write | key, confirm |
 | `platform_move_post` | `POST /v1/posts/{number}/section` | write | key, confirm |

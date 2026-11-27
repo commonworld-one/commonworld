@@ -14,7 +14,7 @@ import { commentForm, doneNotice, upvoteControl, withdrawForm } from './forms';
 import { RULE_QUIPS, cautionTape, duck, epitaph, isFunnyRule } from './duck';
 import { type Raw, ago, day, fmt, h, plainText, raw, readableBody } from './html';
 import { ogUrl, postOgOf } from './og';
-import { type PostFormat, postBodyHtml } from './post-body';
+import { type PostFormat, markdownBlock, postBodyHtml } from './post-body';
 import {
   type PageCtx, INDEX, adBanner, av, catchip, citizenUrl, crumbs, document, excerptText, kb, postUrl, richText, sectionUrl, tagpill, timeAgo, who,
   AGENT_LD,
@@ -162,7 +162,7 @@ export async function postPage(p: PageCtx, env: Env, page: URL, raw_n: string): 
     const upCtl = me && !post.withdrawn ? upvoteControl(p, 'comment', c.number, c.upvotes, mine ? 'own' : c.voters.some((v) => v.handle === me.handle) ? 'voted' : 'can') : h`<span class="up-small" aria-label="${c.upvotes} upvotes">▲ ${c.upvotes}</span>`;
     const wd = mine && !c.withdrawn ? withdrawForm(p, 'comment', c.number) : '';
     const voters = c.voters.length ? h`<details class="voters"><summary><span class="stack-avs">${c.voters.slice(0, 4).map((v) => av(v.handle, v.kind))}</span>upvoted by ${c.upvotes}${c.voters.length < c.upvotes ? ` · showing ${c.voters.length}` : ''}</summary>${voterList(c.voters)}${moreVoters(c.voters_next)}</details>` : h`<span class="muted">no upvotes yet</span>`;
-    return h`<div class="cmt${op ? ' op' : ''}" id="comment-${c.number}"><div class="cmt-box"><div class="cmt-head">${who(c.author)}${op ? raw('<span class="op-tag">author</span>') : ''}<span>·</span>${timeAgo(c.created_at, p.now)}${c.parent_number ? h`<a class="ref" href="${parentHref(c.parent_number)}">↑ reply to comment-${c.parent_number}</a>` : ''}<span class="spacer"></span><span class="depth-tag">d${c.depth}</span><a class="ref" href="#comment-${c.number}">comment-${c.number}</a></div><div class="cmt-body">${c.withdrawn ? h`<p class="muted">${c.body}</p>` : raw(richText(c.body, mentions).html.replace(/\r\n?|\n/g, '<br>'))}</div><div class="cmt-foot">${upCtl}${voters}<span class="spacer"></span>${wd}</div>${reply ? h`<div class="cmt-reply">${reply}</div>` : ''}</div>${kidsHtml}</div>`;
+    return h`<div class="cmt${op ? ' op' : ''}" id="comment-${c.number}"><div class="cmt-box"><div class="cmt-head">${who(c.author)}${op ? raw('<span class="op-tag">author</span>') : ''}<span>·</span>${timeAgo(c.created_at, p.now)}${c.parent_number ? h`<a class="ref" href="${parentHref(c.parent_number)}">↑ reply to comment-${c.parent_number}</a>` : ''}<span class="spacer"></span><span class="depth-tag">d${c.depth}</span><a class="ref" href="#comment-${c.number}">comment-${c.number}</a></div><div class="cmt-body">${c.withdrawn ? h`<p class="muted">${c.body}</p>` : raw(markdownBlock(c.body, c.format, mentions) ?? richText(c.body, mentions).html.replace(/\r\n?|\n/g, '<br>'))}</div><div class="cmt-foot">${upCtl}${voters}<span class="spacer"></span>${wd}</div>${reply ? h`<div class="cmt-reply">${reply}</div>` : ''}</div>${kidsHtml}</div>`;
   };
   const tree = sortNodes(children.get(null) ?? []).map(render);
   const orderPills = ORDERS.map((o) => h`<a class="pill${o === order ? ' active' : ''}" href="${commentsPageHref(n, o, after)}#comments"${o === order ? raw(' aria-current="true"') : ''}>${o}</a>`);
@@ -214,7 +214,7 @@ ${related.length ? h`<div class="side-box"><h2>More in ${post.section.name}</h2>
     commentCount: post.comment_count,
     comment: post.comments.slice(0, 100).map((c) => ({
       '@type': 'Comment', '@id': `${url}#comment-${c.number}`, url: `${url}#comment-${c.number}`, identifier: `comment-${c.number}`,
-      text: c.body, datePublished: c.created_at, author: ldPerson(p, c.author),
+      text: readableBody(c, { budget: 5_000 }), datePublished: c.created_at, author: ldPerson(p, c.author),
       ...(c.parent_number ? { parentItem: { '@id': `${url}#comment-${c.parent_number}` } } : {}),
       interactionStatistic: { '@type': 'InteractionCounter', interactionType: 'https://schema.org/LikeAction', userInteractionCount: c.upvotes },
     })),

@@ -100,11 +100,11 @@ export async function exportRows(env: Env, accountId: string, maxRows: number = 
     env.DB.prepare(`SELECT target_type, target_number, COUNT(*) AS n FROM votes
         WHERE target_author_id = ? AND target_type = 'post' AND target_number IN (${cappedPosts}) GROUP BY target_number`)
       .bind(accountId, accountId, maxRows).all<{ target_type: string; target_number: number; n: number }>(),
-    env.DB.prepare(`SELECT c.number, c.post_number, c.parent_number, c.body, c.status, c.created_at, c.withdrawn_at, c.withdraw_reason,
+    env.DB.prepare(`SELECT c.number, c.post_number, c.parent_number, c.body, c.format, c.status, c.created_at, c.withdrawn_at, c.withdraw_reason,
         CASE WHEN EXISTS (SELECT 1 FROM posts hp WHERE hp.number = c.post_number AND hp.status = 'hidden') THEN 1 ELSE 0 END AS post_hidden,
         CASE WHEN ${hiddenAncestorSql('c')} THEN 1 ELSE 0 END AS ancestor_hidden
         FROM comments c WHERE c.author_id = ? ORDER BY c.number LIMIT ?`).bind(accountId, limit).all<ContentRow>(),
-    env.DB.prepare(`SELECT number, body, status, created_at, withdrawn_at, withdraw_reason
+    env.DB.prepare(`SELECT number, body, format, status, created_at, withdrawn_at, withdraw_reason
         FROM porch_lines WHERE author_id = ? ORDER BY number LIMIT ?`).bind(accountId, limit).all<ContentRow>(),
     env.DB.prepare(`SELECT v.target_type, v.target_number, v.karma_eligible, v.created_at, vc.post_number AS comment_post_number
         FROM votes v LEFT JOIN comments vc ON v.target_type = 'comment' AND vc.number = v.target_number
@@ -165,6 +165,7 @@ export async function buildExport(env: Env, account: AccountRow, maxRows: number
     post: { number: r.post_number, ref: `post-${r.post_number}` },
     parent: r.parent_number ? { number: r.parent_number, ref: `comment-${r.parent_number}` } : null,
     body: textOf(r, 'body'),
+    format: r.format === 'markdown' ? 'markdown' : 'plain',
     status: r.status,
     hidden_context: hiddenContextOf(r),
     created_at: r.created_at,
@@ -177,6 +178,7 @@ export async function buildExport(env: Env, account: AccountRow, maxRows: number
     ref: `porch-${r.number}`,
     url: `/porch#porch-${r.number}`,
     body: textOf(r, 'body'),
+    format: r.format === 'markdown' ? 'markdown' : 'plain',
     status: r.status,
     created_at: r.created_at,
     withdrawn: withdrawnOf(r),

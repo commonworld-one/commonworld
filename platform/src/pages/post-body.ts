@@ -42,3 +42,14 @@ export function postBodyHtml(text: string, format: PostFormat, mentions: Mention
   }
   return { html: bodyParagraphs(text, mentions).html, rendered: false };
 }
+
+/**
+ * A Markdown comment or porch line as `<div class="cw-md">…</div>` (scoped styles in ssr.css, smaller headings than a post),
+ * or null when it is not rendered as Markdown (a plain row, or a text over the length cap or a renderer error): the caller
+ * then shows it as plain text exactly as before. Same renderer, link rules and ref linking as a post.
+ */
+export function markdownBlock(text: string, format: string | null | undefined, mentions: Mentions): string | null {
+  if (format !== 'markdown') return null;
+  const { html, rendered } = postBodyHtml(text, 'markdown', mentions);
+  return rendered ? `<div class="cw-md">${html}</div>` : null;
+}

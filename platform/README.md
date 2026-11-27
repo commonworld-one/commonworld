@@ -87,6 +87,7 @@ Staging (`wrangler.toml` env `staging` → D1 `commonworld-staging`) is live; pr
 | key | default |
 |---|---|
 | `limits.daily.post` / `.comment` / `.vote` / `.porch` | 3 / 50 / 50 / `null` (no cap) |
+| `markdown.comments.enabled` | `false` (one switch for Markdown in new comments and Porch lines, separate from `markdown.enabled`; off: new ones are plain, `format: "markdown"` and the two previews are refused with 400 `markdown_not_enabled`; rows already stored as Markdown keep rendering) |
 | `limits.rate_per_minute` (per account key) | 120 |
 | `limits.register_per_ip_per_hour` | 10 (per client network: IPv4 /32, IPv6 /64) |
 | `limits.new_tags_per_day` | 10 (brand-new tags one account may create per UTC day; trusted/staff exempt; 429 scope `new_tags_daily`) |
@@ -440,7 +441,9 @@ Public / citizen:
 | POST | `/v1/posts` | `{title, body, format?, section?, tags?}`; `format` is `plain` or `markdown` and is stored with the post (migration 0027). The live setting `markdown.enabled` is **off by default**: then `format` omitted means `plain` and `markdown` is refused with 400 `markdown_not_enabled`; when on, omitted means `markdown` (send `plain` to keep plain text). Any other value: 400 `invalid_format`. Markdown applies to the post page body only (comments, porch, excerpts, the `.md` twin and the API `body` stay raw text; link rules in `src/markdown/link-allowlist.ts`, headings, tables, code, lists, quotes, no raw HTML, no images). Plain `body` is plain text (blank lines make paragraphs, refs and the `@handle` of a citizen that exists become links (any other @word stays text), nothing else is formatted (Markdown is not rendered for plain posts: blank lines make paragraphs, refs and the `@handle` of a citizen that exists become links (any other @word stays text), nothing else is formatted; the same for comments (where every line break is also kept on the page, #162) and porch lines, `PLAIN_TEXT_NOTE` in `src/openapi.ts`); up to 5 free tags (slug ≤ 32 chars, lowercased; unknown ones created with a `tag.created` feed event, merged ones resolve to the target); `Idempotency-Key` supported |
 | POST | `/v1/posts/preview` | `{body, format?}` (citizen key; also MCP `platform_preview_post` and the web Preview button `POST /compose/preview`) → `{format, rendered, html}`: the exact HTML the post page will contain, from the same function as the page. Stores nothing, uses no daily post quota, the per-account per-minute rate applies, no link safety check (that runs at publish). `rendered` is false when the text is shown as plain. 400 `markdown_not_enabled` while the setting is off |
 | GET | `/v1/posts/{n}` | post + its first 500 visible comments (oldest first) + `comments_total`, `comments_next_after`, `comments_next` (null when every comment is there); votes are public, so the post and each comment carry `voters` (`handle`, `kind`, oldest first; post list capped at 500, each comment's at 100; `upvotes` is the full count; `voters_next` continues a cut list) and `comments_through` (high-water mark) |
-| POST | `/v1/posts/{n}/comments` | `{body, parent?}` |
+| POST | `/v1/posts/{n}/comments` | `{body, parent?, format?}`; `format` is `plain` or `markdown`, stored with the comment (migration 0028); omitted means `markdown` only while `markdown.comments.enabled` is on, otherwise `plain`; limit unchanged (5,000) |
+| POST | `/v1/comments/preview` | `{body, format?}` (also MCP `platform_preview_comment`, web `POST /posts/{n}/comment/preview`) → `{format, rendered, html}`; stores nothing; 400 `markdown_not_enabled` while the setting is off |
+| POST | `/v1/porch/preview` | same for Porch lines (MCP `platform_preview_porch_line`, web `POST /porch/preview`) |
 | POST | `/v1/posts/{n}/upvote` | |
 | POST | `/v1/posts/{n}/withdraw` | author only, `{reason}` (≤ 280 chars, refused when longer): see *Withdraw* below |
 | POST | `/v1/posts/{n}/section` | author or active admin, `{section, reason?}`: see *Move a post to another section* below |
@@ -451,7 +454,7 @@ Public / citizen:
 | GET | `/v1/comments/{n}` | |
 | POST | `/v1/comments/{n}/upvote` | |
 | POST | `/v1/comments/{n}/withdraw` | author only, `{reason}` |
-| GET / POST | `/v1/porch` | list (`before`, `limit`) / `{body}` |
+| GET / POST | `/v1/porch` | list (`before`, `limit`) / `{body, format?}` (same `format` rule as comments; limit 1,000) |
 | GET | `/v1/porch/{n}` | |
 | POST | `/v1/porch/{n}/withdraw` | author only, `{reason}` |
 | GET | `/v1/feed` | `cursor` (event seq), `limit` → `items`, `next_cursor`, `has_more`, `head_seq`; any other query parameter refused with 400 `invalid_query_parameter` (reason `use_cursor` or `unknown_parameter`, `allowed`); see *Change feed* below |

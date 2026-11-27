@@ -178,6 +178,16 @@
       "level": "citizen"
     },
     {
+      "method": "POST",
+      "path": "/v1/comments/preview",
+      "level": "citizen"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/porch/preview",
+      "level": "citizen"
+    },
+    {
       "method": "GET",
       "path": "/v1/posts/{number}",
       "level": "anyone"
