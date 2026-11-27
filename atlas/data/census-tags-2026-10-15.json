@@ -1,1132 +1,1167 @@
 {
- "_help": "Descriptive labels from the 2026-10-15 census (research/atlas/catalog_en.html), cleaned by atlas/site/tools/extract_census_tags.py. They are NOT verified claims. slug -> [tags].",
- "tags": {
-  "1f916": [
-   "api-registration",
-   "hash-chain",
-   "usdc",
-   "base",
-   "x402",
-   "token",
-   "mcp",
-   "a2a",
-   "open-source"
-  ],
-  "1human": [
-   "video"
-  ],
-  "402atlas": [
-   "x402"
-  ],
-  "4claw": [
-   "imageboard",
-   "anonymous"
-  ],
-  "8004agents": [
-   "erc-8004",
-   "indexer"
-  ],
-  "8004scan": [
-   "erc-8004",
-   "explorer",
-   "sybil"
-  ],
-  "a2a-protocol": [
-   "a2a",
-   "spec",
-   "linux-foundation"
-  ],
-  "a2a-registry-a2aregistry-org": [
-   "a2a",
-   "registry",
-   "liveness"
-  ],
-  "a2a-registry-org": [
-   "a2a",
-   "registry"
-  ],
-  "aamio-board": [
-   "board"
-  ],
-  "abund-ai": [
-   "open-source",
-   "mcp",
-   "wiki"
-  ],
-  "adam-message": [
-   "board"
-  ],
-  "agent-almanac": [
-   "aggregator"
-  ],
-  "agent-arena-agentarena-de": [
-   "mcp",
-   "open-source"
-  ],
-  "agent-board-juleskreuer": [
-   "board"
-  ],
-  "agent-bounties": [
-   "bounties",
-   "on-chain",
-   "usdc"
-  ],
-  "agent-colony-juluo": [
-   "chinese",
-   "ed25519",
-   "signed-receipts",
-   "mcp",
-   "a2a"
-  ],
-  "agent-commons": [
-   "debates",
-   "memory"
-  ],
-  "agent-commons-algo": [
-   "board"
-  ],
-  "agent-communication-platform": [
-   "anonymous",
-   "memory"
-  ],
-  "agent-ctf-events": [
-   "ctf"
-  ],
-  "agent-errata": [
-   "github",
-   "memory",
-   "open-source"
-  ],
-  "agent-governance-institute": [
-   "token"
-  ],
-  "agent-memory-wiki": [
-   "wiki",
-   "memory"
-  ],
-  "agent-tavern": [
-   "chat"
-  ],
-  "agent-wikis": [
-   "wiki",
-   "mcp"
-  ],
-  "agent-x-ossoonline": [
-   "feed"
-  ],
-  "agent4science": [
-   "social",
-   "academic",
-   "peer-review",
-   "karma",
-   "challenge",
-   "api-registration"
-  ],
-  "agentagon": [
-   "game"
-  ],
-  "agentarxiv-agxiv": [
-   "preprints",
-   "ed25519",
-   "xiv-clone"
-  ],
-  "agentbadge-agent-venue": [
-   "erc-8004",
-   "arc",
-   "usdc",
-   "escrow",
-   "attestation"
-  ],
-  "agentboard-ai": [
-   "forum",
-   "marketplace",
-   "api-registration",
-   "mcp"
-  ],
-  "agentchan": [
-   "imageboard",
-   "anonymous"
-  ],
-  "agentconnex": [
-   "marketplace"
-  ],
-  "agentdm": [
-   "dm",
-   "mcp"
-  ],
-  "agentel": [
-   "sdk"
-  ],
-  "agentgram": [
-   "feed",
-   "open-source",
-   "ed25519",
-   "mcp"
-  ],
-  "agenthansa": [
-   "forum",
-   "solana"
-  ],
-  "agentic-commerce-protocol-openai-stripe": [
-   "protocol",
-   "merchant-side",
-   "stripe"
-  ],
-  "agentic-market": [
-   "x402",
-   "directory"
-  ],
-  "agenticmarket": [
-   "mcp",
-   "marketplace"
-  ],
-  "agentpedia-io": [
-   "directory",
-   "mcp"
-  ],
-  "agentpedia-openagents": [
-   "wiki",
-   "debates",
-   "forecasting"
-  ],
-  "agentpub": [
-   "preprints",
-   "mit",
-   "sdk"
-  ],
-  "agentrust-trace-registry": [
-   "spec",
-   "attestation"
-  ],
-  "agents-gather": [
-   "forum"
-  ],
-  "agents-json": [
-   "spec"
-  ],
-  "agents4science-2025": [
-   "academic",
-   "disclosure"
-  ],
-  "agentscan": [
-   "erc-8004",
-   "indexer"
-  ],
-  "agonaut": [
-   "tee",
-   "crypto"
-  ],
-  "agora-burmaster": [
-   "pow"
-  ],
-  "agora-tundrabit": [
-   "pow"
-  ],
-  "ai-agent-message-board": [
-   "board",
-   "open-source"
-  ],
-  "ai-agents-hotline": [
-   "board"
-  ],
-  "ai-commons-forum": [
-   "board"
-  ],
-  "ai-societies-network-openwitness": [
-   "no-account"
-  ],
-  "ai-village": [
-   "curated",
-   "research"
-  ],
-  "aibtc-bounty-board": [
-   "bitcoin",
-   "bounties",
-   "x402",
-   "on-chain",
-   "referral"
-  ],
-  "aicq": [
-   "chat",
-   "api-registration",
-   "agent-webring"
-  ],
-  "ainglish": [
-   "colony-login",
-   "reproducible",
-   "hash-chain"
-  ],
-  "airaxiv": [
-   "preprints",
-   "peer-review"
-  ],
-  "aixiv-online": [
-   "preprints",
-   "disclosure"
-  ],
-  "aixiv-science": [
-   "preprints",
-   "peer-review",
-   "mcp"
-  ],
-  "algora": [
-   "open-source",
-   "github",
-   "bounties",
-   "stripe"
-  ],
-  "allium-x402-data": [
-   "x402",
-   "analytics"
-  ],
-  "amazon-alexa-for-shopping": [
-   "us"
-  ],
-  "apify-store": [
-   "mcp",
-   "x402",
-   "seller-lane"
-  ],
-  "arena42-agent-arena": [
-   "game",
-   "crypto"
-  ],
-  "artifact-council": [
-   "solana",
-   "token",
-   "colony-login",
-   "ed25519"
-  ],
-  "artificiety": [
-   "world"
-  ],
-  "awesome-agent-native-social": [
-   "directory",
-   "github"
-  ],
-  "ax1-console": [
-   "x402",
-   "x402-service"
-  ],
-  "basedagents": [
-   "escrow",
-   "usdc",
-   "base"
-  ],
-  "bio-openlabs": [
-   "crypto",
-   "human-claim"
-  ],
-  "bitrefill-api-x402": [
-   "x402",
-   "x402-service",
-   "commerce"
-  ],
-  "blockrun": [
-   "x402",
-   "x402-service",
-   "llm"
-  ],
-  "botbeat": [
-   "feed",
-   "mcp",
-   "human-claim"
-  ],
-  "botmural": [
-   "art"
-  ],
-  "botnet": [
-   "forum"
-  ],
-  "botxiv": [
-   "preprints",
-   "xiv-clone"
-  ],
-  "bountybook": [
-   "board",
-   "base"
-  ],
-  "bountyhub": [
-   "open-source",
-   "bounties"
-  ],
-  "bountysource": [
-   "open-source",
-   "bounties"
-  ],
-  "campfire-agents-board": [
-   "anonymous",
-   "no-account"
-  ],
-  "celo-x402-facilitator": [
-   "x402",
-   "facilitator"
-  ],
-  "centaurxiv": [
-   "preprints",
-   "memory",
-   "identity",
-   "disclosure",
-   "llms-txt"
-  ],
-  "cheaptokens": [
-   "x402",
-   "x402-service"
-  ],
-  "church-of-molt": [
-   "token",
-   "crypto"
-  ],
-  "circle-agent-stack": [
-   "usdc",
-   "arc",
-   "seller-lane"
-  ],
-  "clash-of-coins-checkout": [
-   "x402",
-   "x402-service",
-   "commerce"
-  ],
-  "claw-earn": [
-   "escrow",
-   "usdc",
-   "base",
-   "openclaw"
-  ],
-  "claw402": [
-   "x402",
-   "x402-service",
-   "data"
-  ],
-  "clawbench": [
-   "benchmark",
-   "commercial"
-  ],
-  "clawcaster": [
-   "token"
-  ],
-  "clawcity": [
-   "world"
-  ],
-  "clawdchat": [
-   "chinese",
-   "did",
-   "a2a",
-   "human-claim",
-   "mcp"
-  ],
-  "clawirc": [
-   "irc"
-  ],
-  "clawlancer": [
-   "marketplace"
-  ],
-  "clawnews": [
-   "news"
-  ],
-  "clawprint": [
-   "api-registration",
-   "bitcoin"
-  ],
-  "clawstr": [
-   "nostr",
-   "no-account",
-   "lightning",
-   "open-source"
-  ],
-  "clawtasks": [
-   "bounties"
-  ],
-  "clawtavista": [
-   "directory",
-   "leaderboard"
-  ],
-  "clawxiv": [
-   "preprints"
-  ],
-  "cloudflare-monetization-gateway": [
-   "x402",
-   "us-only"
-  ],
-  "cluster-protocol": [
-   "x402",
-   "x402-service"
-  ],
-  "coinbase-agentic-wallet": [
-   "wallet",
-   "x402",
-   "base",
-   "tee"
-  ],
-  "coinbase-cdp-x402-bazaar": [
-   "x402",
-   "facilitator",
-   "catalog",
-   "base"
-  ],
-  "colony-chat": [
-   "dm",
-   "sdk"
-  ],
-  "common-room": [
-   "board"
-  ],
-  "corbits": [
-   "x402"
-  ],
-  "crossmint": [
-   "wallet",
-   "cards",
-   "buyer-side",
-   "self-serve"
-  ],
-  "cyberarena": [
-   "ctf",
-   "benchmark",
-   "academic"
-  ],
-  "dail-agent-world": [
-   "signed-receipts"
-  ],
-  "daydreams-systems": [
-   "x402",
-   "facilitator",
-   "inference-router",
-   "token"
-  ],
-  "dead-internet-society": [
-   "board"
-  ],
-  "dealwork-ai": [
-   "board"
-  ],
-  "devaintart": [
-   "art",
-   "agent-webring"
-  ],
-  "dexter-indexter": [
-   "x402",
-   "facilitator",
-   "wallet",
-   "catalog"
-  ],
-  "dtelecom-x402-gateway": [
-   "x402",
-   "x402-service",
-   "prepaid"
-  ],
-  "erc-8004-trustless-agents": [
-   "erc-8004",
-   "identity",
-   "on-chain",
-   "sybil",
-   "x402"
-  ],
-  "execution-market": [
-   "escrow",
-   "usdc",
-   "erc-8004"
-  ],
-  "figment-x402-facilitator": [
-   "x402",
-   "facilitator"
-  ],
-  "flatboard-nyrds": [
-   "board"
-  ],
-  "fluxa": [
-   "x402",
-   "facilitator",
-   "throughput",
-   "wallet"
-  ],
-  "foragents-site": [
-   "board"
-  ],
-  "frantic": [
-   "bounties",
-   "x402"
-  ],
-  "freeq": [
-   "irc",
-   "did",
-   "signed-receipts"
-  ],
-  "fruitflies": [
-   "social",
-   "mcp",
-   "pow"
-  ],
-  "get-posting-board": [
-   "board"
-  ],
-  "gitcoin-bounties": [
-   "open-source",
-   "bounties"
-  ],
-  "gittensor": [
-   "open-source",
-   "github",
-   "merged-pr",
-   "token"
-  ],
-  "global-chat": [
-   "registry",
-   "usdc"
-  ],
-  "golden-cat": [
-   "board"
-  ],
-  "google-agent-payments-protocol": [
-   "spec"
-  ],
-  "grift-san-verano": [
-   "game"
-  ],
-  "hal-holistic-agent-leaderboard": [
-   "leaderboard",
-   "academic"
-  ],
-  "heurist-x402-facilitator": [
-   "x402",
-   "facilitator"
-  ],
-  "hiredagent-org": [
-   "bounties"
-  ],
-  "hivebook": [
-   "wiki",
-   "api-registration",
-   "mcp",
-   "trust-levels",
-   "mit"
-  ],
-  "ilands": [
-   "marketplace"
-  ],
-  "inwith-ai": [
-   "a2a",
-   "social",
-   "leaderboard"
-  ],
-  "issuehunt": [
-   "open-source",
-   "github",
-   "bounties",
-   "stripe"
-  ],
-  "jobbi-agent-gig-index": [
-   "aggregator",
-   "mcp"
-  ],
-  "keyring-agent": [
-   "x402",
-   "x402-service"
-  ],
-  "kite-ai": [
-   "token",
-   "x402"
-  ],
-  "kradleverse": [
-   "game"
-  ],
-  "laevitas-api-v2": [
-   "x402",
-   "x402-service",
-   "data"
-  ],
-  "laso-finance": [
-   "x402",
-   "x402-service",
-   "commerce"
-  ],
-  "leviathan-news": [
-   "news"
-  ],
-  "lightning-agent-tools": [
-   "lightning",
-   "open-source",
-   "seller-lane"
-  ],
-  "lightning-faucet-agent-board": [
-   "sats",
-   "lightning",
-   "bounties"
-  ],
-  "lobchan": [
-   "molt"
-  ],
-  "lockzone-qevrulan": [
-   "board"
-  ],
-  "machins": [
-   "marketplace"
-  ],
-  "manifold-markets": [
-   "forecasting",
-   "bots",
-   "api"
-  ],
-  "mastercard-agent-pay": [
-   "card-network",
-   "token",
-   "stablecoins",
-   "buyer-side"
-  ],
-  "material-model": [
-   "mcp"
-  ],
-  "mcp-marketplace": [
-   "mcp",
-   "marketplace"
-  ],
-  "mcpay-frames": [
-   "x402",
-   "mcp"
-  ],
-  "mcpize": [
-   "mcp",
-   "marketplace"
-  ],
-  "meridian-mrdn": [
-   "x402",
-   "facilitator",
-   "inference-router",
-   "throughput",
-   "prepaid"
-  ],
-  "meta-muse": [
-   "us"
-  ],
-  "metaculus-futureeval-bot-tournament": [
-   "forecasting",
-   "bots",
-   "leaderboard"
-  ],
-  "microlancer": [
-   "sats",
-   "lightning"
-  ],
-  "microsoft-copilot-checkout": [
-   "merchant-side",
-   "us"
-  ],
-  "molt-road": [
-   "marketplace"
-  ],
-  "moltbook": [
-   "karma",
-   "human-claim"
-  ],
-  "moltbot-den": [
-   "forum"
-  ],
-  "moltchan": [
-   "imageboard",
-   "molt"
-  ],
-  "moltcities": [
-   "world",
-   "solana",
-   "bounties"
-  ],
-  "molthunt": [
-   "molt"
-  ],
-  "moltjobs": [
-   "jobs",
-   "base",
-   "usdc",
-   "referral"
-  ],
-  "moltmatch": [
-   "dating"
-  ],
-  "moltslack": [
-   "molt"
-  ],
-  "msgboard-dev": [
-   "board"
-  ],
-  "musedin": [
-   "marketplace"
-  ],
-  "near-ai-agent-market": [
-   "escrow",
-   "usdc"
-  ],
-  "nevermined": [
-   "x402",
-   "mpp",
-   "cards",
-   "seller-lane",
-   "self-serve"
-  ],
-  "official-mcp-registry": [
-   "mcp",
-   "registry"
-  ],
-  "okx-ai": [
-   "marketplace",
-   "x402",
-   "escrow",
-   "stablecoins",
-   "evaluator",
-   "erc-8004"
-  ],
-  "olas-mech-marketplace": [
-   "a2a",
-   "on-chain",
-   "forecasting",
-   "token"
-  ],
-  "olas-predict": [
-   "forecasting",
-   "on-chain"
-  ],
-  "open-agent-leaderboard-exgentic": [
-   "leaderboard",
-   "reproducible"
-  ],
-  "openagentforum": [
-   "forum",
-   "ed25519",
-   "signed-receipts",
-   "irc",
-   "nostr",
-   "bounties",
-   "memory"
-  ],
-  "openclawcity": [
-   "world",
-   "mcp"
-  ],
-  "opentask": [
-   "board",
-   "usdc"
-  ],
-  "openwork-bot": [
-   "token"
-  ],
-  "opire": [
-   "open-source",
-   "bounties"
-  ],
-  "orbiobook": [
-   "feed",
-   "crypto"
-  ],
-  "p2pclaw": [
-   "research",
-   "ed25519"
-  ],
-  "payai": [
-   "x402",
-   "facilitator",
-   "solana"
-  ],
-  "payapi-market": [
-   "x402",
-   "marketplace",
-   "curated",
-   "mcp"
-  ],
-  "paypal-agentic-commerce-services": [
-   "merchant-side",
-   "us-only"
-  ],
-  "perplexity-instant-buy-paypal": [
-   "merchant-side",
-   "us"
-  ],
-  "plazmi": [
-   "world",
-   "api-registration",
-   "human-claim",
-   "mcp"
-  ],
-  "polar-issue-funding": [
-   "open-source",
-   "bounties"
-  ],
-  "polygon-x402-facilitator": [
-   "x402",
-   "facilitator"
-  ],
-  "progenly": [
-   "ed25519"
-  ],
-  "recensorium": [
-   "preprints"
-  ],
-  "relay-commons": [
-   "board"
-  ],
-  "relay-russian-agent-board": [
-   "board",
-   "anonymous"
-  ],
-  "rentahuman": [
-   "stripe"
-  ],
-  "replit-bounties": [
-   "open-source",
-   "bounties"
-  ],
-  "rstation": [
-   "research"
-  ],
-  "sanctum-beacon": [
-   "board"
-  ],
-  "shellbook": [
-   "crypto"
-  ],
-  "shellmates-app": [
-   "molt",
-   "dating"
-  ],
-  "shopify-agentic-storefronts": [
-   "merchant-side",
-   "catalog"
-  ],
-  "skyfire-kyapay": [
-   "kya",
-   "identity",
-   "wallet"
-  ],
-  "slop-cash": [
-   "open-source",
-   "github",
-   "merged-pr",
-   "solana",
-   "usdc",
-   "signed-receipts",
-   "leaderboard"
-  ],
-  "smithtalks": [
-   "board"
-  ],
-  "solana-x402": [
-   "x402"
-  ],
-  "sssnack": [
-   "irc",
-   "mcp",
-   "a2a"
-  ],
-  "stableenrich": [
-   "x402",
-   "x402-service",
-   "data"
-  ],
-  "stacker-news-bounties": [
-   "sats",
-   "lightning",
-   "nostr"
-  ],
-  "stoa": [
-   "token"
-  ],
-  "stripe-agentic-commerce-suite": [
-   "stripe",
-   "merchant-side",
-   "token"
-  ],
-  "stripe-link-agent-wallet": [
-   "stripe",
-   "buyer-side",
-   "us-only",
-   "cards"
-  ],
-  "superteam-earn": [
-   "solana",
-   "bounties"
-  ],
-  "swarm-bar": [
-   "challenge"
-  ],
-  "swarmmemo": [
-   "board",
-   "no-account",
-   "ed25519",
-   "bounties",
-   "directory",
-   "open-source",
-   "memory"
-  ],
-  "switchboard-ai": [
-   "ed25519",
-   "hash-chain",
-   "dm",
-   "usdc",
-   "base",
-   "bounties"
-  ],
-  "tantive-space": [
-   "no-account",
-   "challenge"
-  ],
-  "taskmarket-daydreams": [
-   "bounties",
-   "escrow",
-   "usdc",
-   "base",
-   "leaderboard"
-  ],
-  "tempo-machine-payments-protocol": [
-   "mpp",
-   "stablecoins",
-   "stripe",
-   "seller-lane"
-  ],
-  "termix-aacp": [
-   "erc-8004",
-   "erc-8183",
-   "escrow"
-  ],
-  "the-agent-must-grow": [
-   "game",
-   "mcp"
-  ],
-  "the-bureau-of-lost-context": [
-   "board"
-  ],
-  "the-colony": [
-   "forum",
-   "api-registration",
-   "karma",
-   "trust-levels",
-   "lightning",
-   "bounties",
-   "marketplace",
-   "mcp",
-   "sdk",
-   "wiki"
-  ],
-  "the-crab-games": [
-   "game"
-  ],
-  "the-door": [
-   "memory"
-  ],
-  "the-guild-hall": [
-   "board"
-  ],
-  "the-lounge-host": [
-   "mcp",
-   "jobs"
-  ],
-  "the-spawn": [
-   "erc-8004",
-   "indexer",
-   "liveness"
-  ],
-  "the-wayside": [
-   "forum",
-   "no-account"
-  ],
-  "the-wide-sarahos": [
-   "board"
-  ],
-  "the-wire-qualium": [
-   "board"
-  ],
-  "thirdweb-x402": [
-   "x402",
-   "facilitator"
-  ],
-  "three-ws": [
-   "x402",
-   "facilitator"
-  ],
-  "tikclawk": [
-   "molt"
-  ],
-  "toku-agency": [
-   "marketplace"
-  ],
-  "trust-authority-ai": [
-   "kya",
-   "commercial"
-  ],
-  "trust8004": [
-   "erc-8004",
-   "indexer"
-  ],
-  "ugig-net": [
-   "stablecoins"
-  ],
-  "ultravioleta-dao-x402-facilitator": [
-   "x402",
-   "facilitator"
-  ],
-  "universal-agent-forum": [
-   "pow"
-  ],
-  "universal-commerce-protocol": [
-   "protocol",
-   "merchant-side",
-   "us"
-  ],
-  "verano-square": [
-   "board"
-  ],
-  "virtuals-agent-commerce-protocol": [
-   "a2a",
-   "escrow",
-   "evaluator",
-   "erc-8183",
-   "token"
-  ],
-  "visa-intelligent-commerce": [
-   "card-network",
-   "token",
-   "buyer-side"
-  ],
-  "vynly": [
-   "video"
-  ],
-  "waystation-agent-commons": [
-   "board"
-  ],
-  "wenrwa-agent-marketplace": [
-   "marketplace"
-  ],
-  "x-pay-api-xpay": [
-   "x402",
-   "x402-service"
-  ],
-  "x402-foundation": [
-   "x402",
-   "spec",
-   "linux-foundation"
-  ],
-  "x402-list": [
-   "x402",
-   "directory",
-   "api",
-   "mcp",
-   "llms-txt",
-   "cc-by"
-  ],
-  "x402scan": [
-   "x402",
-   "explorer",
-   "open-source"
-  ],
-  "x402stats": [
-   "x402",
-   "analytics",
-   "cc-by"
-  ],
-  "x402watch-printmoneylab": [
-   "x402",
-   "analytics"
-  ],
-  "kradlebench": [
-   "benchmark",
-   "game"
-  ]
- }
+  "_help": "Descriptive labels from the 2026-10-15 census (research/atlas/catalog_en.html), cleaned by atlas/site/tools/extract_census_tags.py. They are NOT verified claims. slug -> [tags].",
+  "tags": {
+    "1f916": [
+      "api-registration",
+      "hash-chain",
+      "usdc",
+      "base",
+      "x402",
+      "token",
+      "mcp",
+      "a2a",
+      "open-source"
+    ],
+    "1human": [
+      "video"
+    ],
+    "402atlas": [
+      "x402"
+    ],
+    "4claw": [
+      "imageboard",
+      "anonymous"
+    ],
+    "8004agents": [
+      "erc-8004",
+      "indexer"
+    ],
+    "8004scan": [
+      "erc-8004",
+      "explorer",
+      "sybil"
+    ],
+    "a2a-protocol": [
+      "a2a",
+      "spec",
+      "linux-foundation"
+    ],
+    "a2a-registry-a2aregistry-org": [
+      "a2a",
+      "registry",
+      "liveness"
+    ],
+    "a2a-registry-org": [
+      "a2a",
+      "registry"
+    ],
+    "aamio-board": [
+      "board"
+    ],
+    "abund-ai": [
+      "open-source",
+      "mcp",
+      "wiki"
+    ],
+    "adam-message": [
+      "board"
+    ],
+    "agent-almanac": [
+      "aggregator"
+    ],
+    "agent-arena-agentarena-de": [
+      "mcp",
+      "open-source"
+    ],
+    "agent-board-juleskreuer": [
+      "board"
+    ],
+    "agent-bounties": [
+      "bounties",
+      "on-chain",
+      "usdc"
+    ],
+    "agent-colony-juluo": [
+      "chinese",
+      "ed25519",
+      "signed-receipts",
+      "mcp",
+      "a2a"
+    ],
+    "agent-commons": [
+      "debates",
+      "memory"
+    ],
+    "agent-commons-algo": [
+      "board"
+    ],
+    "agent-communication-platform": [
+      "anonymous",
+      "memory"
+    ],
+    "agent-ctf-events": [
+      "ctf"
+    ],
+    "agent-errata": [
+      "github",
+      "memory",
+      "open-source"
+    ],
+    "agent-governance-institute": [
+      "token"
+    ],
+    "agent-memory-wiki": [
+      "wiki",
+      "memory"
+    ],
+    "agent-tavern": [
+      "chat"
+    ],
+    "agent-wikis": [
+      "wiki",
+      "mcp"
+    ],
+    "agent-x-ossoonline": [
+      "feed"
+    ],
+    "agent4science": [
+      "social",
+      "academic",
+      "peer-review",
+      "karma",
+      "challenge",
+      "api-registration"
+    ],
+    "agentagon": [
+      "game"
+    ],
+    "agentarxiv-agxiv": [
+      "preprints",
+      "ed25519",
+      "xiv-clone"
+    ],
+    "agentbadge-agent-venue": [
+      "erc-8004",
+      "arc",
+      "usdc",
+      "escrow",
+      "attestation"
+    ],
+    "agentboard-ai": [
+      "forum",
+      "marketplace",
+      "api-registration",
+      "mcp"
+    ],
+    "agentchan": [
+      "imageboard",
+      "anonymous"
+    ],
+    "agentconnex": [
+      "marketplace"
+    ],
+    "agentdm": [
+      "dm",
+      "mcp"
+    ],
+    "agentel": [
+      "sdk"
+    ],
+    "agentgram": [
+      "feed",
+      "open-source",
+      "ed25519",
+      "mcp"
+    ],
+    "agenthansa": [
+      "forum",
+      "solana"
+    ],
+    "agentic-commerce-protocol-openai-stripe": [
+      "protocol",
+      "merchant-side",
+      "stripe"
+    ],
+    "agentic-market": [
+      "x402",
+      "directory"
+    ],
+    "agenticmarket": [
+      "mcp",
+      "marketplace"
+    ],
+    "agentpedia-io": [
+      "directory",
+      "mcp"
+    ],
+    "agentpedia-openagents": [
+      "wiki",
+      "debates",
+      "forecasting"
+    ],
+    "agentpub": [
+      "preprints",
+      "mit",
+      "sdk"
+    ],
+    "agentrust-trace-registry": [
+      "spec",
+      "attestation"
+    ],
+    "agents-gather": [
+      "forum"
+    ],
+    "agents-json": [
+      "spec"
+    ],
+    "agents4science-2025": [
+      "academic",
+      "disclosure"
+    ],
+    "agentscan": [
+      "erc-8004",
+      "indexer"
+    ],
+    "agonaut": [
+      "tee",
+      "crypto"
+    ],
+    "agora-burmaster": [
+      "pow"
+    ],
+    "agora-tundrabit": [
+      "pow"
+    ],
+    "ai-agent-message-board": [
+      "board",
+      "open-source"
+    ],
+    "ai-agents-hotline": [
+      "board"
+    ],
+    "ai-commons-forum": [
+      "board"
+    ],
+    "ai-societies-network-openwitness": [
+      "no-account"
+    ],
+    "ai-village": [
+      "curated",
+      "research"
+    ],
+    "aibtc-bounty-board": [
+      "bitcoin",
+      "bounties",
+      "x402",
+      "on-chain",
+      "referral"
+    ],
+    "aicq": [
+      "chat",
+      "api-registration",
+      "agent-webring"
+    ],
+    "ainglish": [
+      "colony-login",
+      "reproducible",
+      "hash-chain"
+    ],
+    "airaxiv": [
+      "preprints",
+      "peer-review"
+    ],
+    "aixiv-online": [
+      "preprints",
+      "disclosure"
+    ],
+    "aixiv-science": [
+      "preprints",
+      "peer-review",
+      "mcp"
+    ],
+    "algora": [
+      "open-source",
+      "github",
+      "bounties",
+      "stripe"
+    ],
+    "allium-x402-data": [
+      "x402",
+      "analytics"
+    ],
+    "amazon-alexa-for-shopping": [
+      "us"
+    ],
+    "apify-store": [
+      "mcp",
+      "x402",
+      "seller-lane"
+    ],
+    "arena42-agent-arena": [
+      "game",
+      "crypto"
+    ],
+    "artifact-council": [
+      "solana",
+      "token",
+      "colony-login",
+      "ed25519"
+    ],
+    "artificiety": [
+      "world"
+    ],
+    "awesome-agent-native-social": [
+      "directory",
+      "github"
+    ],
+    "ax1-console": [
+      "x402",
+      "x402-service"
+    ],
+    "basedagents": [
+      "escrow",
+      "usdc",
+      "base"
+    ],
+    "bio-openlabs": [
+      "crypto",
+      "human-claim"
+    ],
+    "bitrefill-api-x402": [
+      "x402",
+      "x402-service",
+      "commerce"
+    ],
+    "blockrun": [
+      "x402",
+      "x402-service",
+      "llm"
+    ],
+    "botbeat": [
+      "feed",
+      "mcp",
+      "human-claim"
+    ],
+    "botmural": [
+      "art"
+    ],
+    "botnet": [
+      "forum"
+    ],
+    "botxiv": [
+      "preprints",
+      "xiv-clone"
+    ],
+    "bountybook": [
+      "board",
+      "base"
+    ],
+    "bountyhub": [
+      "open-source",
+      "bounties"
+    ],
+    "bountysource": [
+      "open-source",
+      "bounties"
+    ],
+    "campfire-agents-board": [
+      "anonymous",
+      "no-account"
+    ],
+    "celo-x402-facilitator": [
+      "x402",
+      "facilitator"
+    ],
+    "centaurxiv": [
+      "preprints",
+      "memory",
+      "identity",
+      "disclosure",
+      "llms-txt"
+    ],
+    "cheaptokens": [
+      "x402",
+      "x402-service"
+    ],
+    "church-of-molt": [
+      "token",
+      "crypto"
+    ],
+    "circle-agent-stack": [
+      "usdc",
+      "arc",
+      "seller-lane"
+    ],
+    "clash-of-coins-checkout": [
+      "x402",
+      "x402-service",
+      "commerce"
+    ],
+    "claw-earn": [
+      "escrow",
+      "usdc",
+      "base",
+      "openclaw"
+    ],
+    "claw402": [
+      "x402",
+      "x402-service",
+      "data"
+    ],
+    "clawbench": [
+      "benchmark",
+      "commercial"
+    ],
+    "clawcaster": [
+      "token"
+    ],
+    "clawcity": [
+      "world"
+    ],
+    "clawdchat": [
+      "chinese",
+      "did",
+      "a2a",
+      "human-claim",
+      "mcp"
+    ],
+    "clawirc": [
+      "irc"
+    ],
+    "clawlancer": [
+      "marketplace"
+    ],
+    "clawnews": [
+      "news"
+    ],
+    "clawprint": [
+      "api-registration",
+      "bitcoin"
+    ],
+    "clawstr": [
+      "nostr",
+      "no-account",
+      "lightning",
+      "open-source"
+    ],
+    "clawtasks": [
+      "bounties"
+    ],
+    "clawtavista": [
+      "directory",
+      "leaderboard"
+    ],
+    "clawxiv": [
+      "preprints"
+    ],
+    "cloudflare-monetization-gateway": [
+      "x402",
+      "us-only"
+    ],
+    "cluster-protocol": [
+      "x402",
+      "x402-service"
+    ],
+    "coinbase-agentic-wallet": [
+      "wallet",
+      "x402",
+      "base",
+      "tee"
+    ],
+    "coinbase-cdp-x402-bazaar": [
+      "x402",
+      "facilitator",
+      "catalog",
+      "base"
+    ],
+    "colony-chat": [
+      "dm",
+      "sdk"
+    ],
+    "common-room": [
+      "board"
+    ],
+    "corbits": [
+      "x402"
+    ],
+    "crossmint": [
+      "wallet",
+      "cards",
+      "buyer-side",
+      "self-serve"
+    ],
+    "cyberarena": [
+      "ctf",
+      "benchmark",
+      "academic"
+    ],
+    "dail-agent-world": [
+      "signed-receipts"
+    ],
+    "daydreams-systems": [
+      "x402",
+      "facilitator",
+      "inference-router",
+      "token"
+    ],
+    "dead-internet-society": [
+      "board"
+    ],
+    "dealwork-ai": [
+      "board"
+    ],
+    "devaintart": [
+      "art",
+      "agent-webring"
+    ],
+    "dexter-indexter": [
+      "x402",
+      "facilitator",
+      "wallet",
+      "catalog"
+    ],
+    "dtelecom-x402-gateway": [
+      "x402",
+      "x402-service",
+      "prepaid"
+    ],
+    "erc-8004-trustless-agents": [
+      "erc-8004",
+      "identity",
+      "on-chain",
+      "sybil",
+      "x402"
+    ],
+    "execution-market": [
+      "escrow",
+      "usdc",
+      "erc-8004"
+    ],
+    "figment-x402-facilitator": [
+      "x402",
+      "facilitator"
+    ],
+    "flatboard-nyrds": [
+      "board"
+    ],
+    "fluxa": [
+      "x402",
+      "facilitator",
+      "throughput",
+      "wallet"
+    ],
+    "foragents-site": [
+      "board"
+    ],
+    "frantic": [
+      "bounties",
+      "x402"
+    ],
+    "freeq": [
+      "irc",
+      "did",
+      "signed-receipts"
+    ],
+    "fruitflies": [
+      "social",
+      "mcp",
+      "pow"
+    ],
+    "get-posting-board": [
+      "board"
+    ],
+    "gitcoin-bounties": [
+      "open-source",
+      "bounties"
+    ],
+    "gittensor": [
+      "open-source",
+      "github",
+      "merged-pr",
+      "token"
+    ],
+    "global-chat": [
+      "registry",
+      "usdc"
+    ],
+    "golden-cat": [
+      "board"
+    ],
+    "google-agent-payments-protocol": [
+      "spec"
+    ],
+    "grift-san-verano": [
+      "game"
+    ],
+    "hal-holistic-agent-leaderboard": [
+      "leaderboard",
+      "academic"
+    ],
+    "heurist-x402-facilitator": [
+      "x402",
+      "facilitator"
+    ],
+    "hiredagent-org": [
+      "bounties"
+    ],
+    "hivebook": [
+      "wiki",
+      "api-registration",
+      "mcp",
+      "trust-levels",
+      "mit"
+    ],
+    "ilands": [
+      "marketplace"
+    ],
+    "inwith-ai": [
+      "a2a",
+      "social",
+      "leaderboard"
+    ],
+    "issuehunt": [
+      "open-source",
+      "github",
+      "bounties",
+      "stripe"
+    ],
+    "jobbi-agent-gig-index": [
+      "aggregator",
+      "mcp"
+    ],
+    "keyring-agent": [
+      "x402",
+      "x402-service"
+    ],
+    "kite-ai": [
+      "token",
+      "x402"
+    ],
+    "kradleverse": [
+      "game"
+    ],
+    "laevitas-api-v2": [
+      "x402",
+      "x402-service",
+      "data"
+    ],
+    "laso-finance": [
+      "x402",
+      "x402-service",
+      "commerce"
+    ],
+    "leviathan-news": [
+      "news"
+    ],
+    "lightning-agent-tools": [
+      "lightning",
+      "open-source",
+      "seller-lane"
+    ],
+    "lightning-faucet-agent-board": [
+      "sats",
+      "lightning",
+      "bounties"
+    ],
+    "lobchan": [
+      "molt"
+    ],
+    "lockzone-qevrulan": [
+      "board"
+    ],
+    "machins": [
+      "marketplace"
+    ],
+    "manifold-markets": [
+      "forecasting",
+      "bots",
+      "api"
+    ],
+    "mastercard-agent-pay": [
+      "card-network",
+      "token",
+      "stablecoins",
+      "buyer-side"
+    ],
+    "material-model": [
+      "mcp"
+    ],
+    "mcp-marketplace": [
+      "mcp",
+      "marketplace"
+    ],
+    "mcpay-frames": [
+      "x402",
+      "mcp"
+    ],
+    "mcpize": [
+      "mcp",
+      "marketplace"
+    ],
+    "meridian-mrdn": [
+      "x402",
+      "facilitator",
+      "inference-router",
+      "throughput",
+      "prepaid"
+    ],
+    "meta-muse": [
+      "us"
+    ],
+    "metaculus-futureeval-bot-tournament": [
+      "forecasting",
+      "bots",
+      "leaderboard"
+    ],
+    "microlancer": [
+      "sats",
+      "lightning"
+    ],
+    "microsoft-copilot-checkout": [
+      "merchant-side",
+      "us"
+    ],
+    "molt-road": [
+      "marketplace"
+    ],
+    "moltbook": [
+      "karma",
+      "human-claim"
+    ],
+    "moltbot-den": [
+      "forum"
+    ],
+    "moltchan": [
+      "imageboard",
+      "molt"
+    ],
+    "moltcities": [
+      "world",
+      "solana",
+      "bounties"
+    ],
+    "molthunt": [
+      "molt"
+    ],
+    "moltjobs": [
+      "jobs",
+      "base",
+      "usdc",
+      "referral"
+    ],
+    "moltmatch": [
+      "dating"
+    ],
+    "moltslack": [
+      "molt"
+    ],
+    "msgboard-dev": [
+      "board"
+    ],
+    "musedin": [
+      "marketplace"
+    ],
+    "near-ai-agent-market": [
+      "escrow",
+      "usdc"
+    ],
+    "nevermined": [
+      "x402",
+      "mpp",
+      "cards",
+      "seller-lane",
+      "self-serve"
+    ],
+    "official-mcp-registry": [
+      "mcp",
+      "registry"
+    ],
+    "okx-ai": [
+      "marketplace",
+      "x402",
+      "escrow",
+      "stablecoins",
+      "evaluator",
+      "erc-8004"
+    ],
+    "olas-mech-marketplace": [
+      "a2a",
+      "on-chain",
+      "forecasting",
+      "token"
+    ],
+    "olas-predict": [
+      "forecasting",
+      "on-chain"
+    ],
+    "open-agent-leaderboard-exgentic": [
+      "leaderboard",
+      "reproducible"
+    ],
+    "openagentforum": [
+      "forum",
+      "ed25519",
+      "signed-receipts",
+      "irc",
+      "nostr",
+      "bounties",
+      "memory"
+    ],
+    "openclawcity": [
+      "world",
+      "mcp"
+    ],
+    "opentask": [
+      "board",
+      "usdc"
+    ],
+    "openwork-bot": [
+      "token"
+    ],
+    "opire": [
+      "open-source",
+      "bounties"
+    ],
+    "orbiobook": [
+      "feed",
+      "crypto"
+    ],
+    "p2pclaw": [
+      "research",
+      "ed25519"
+    ],
+    "payai": [
+      "x402",
+      "facilitator",
+      "solana"
+    ],
+    "payapi-market": [
+      "x402",
+      "marketplace",
+      "curated",
+      "mcp"
+    ],
+    "paypal-agentic-commerce-services": [
+      "merchant-side",
+      "us-only"
+    ],
+    "perplexity-instant-buy-paypal": [
+      "merchant-side",
+      "us"
+    ],
+    "plazmi": [
+      "world",
+      "api-registration",
+      "human-claim",
+      "mcp"
+    ],
+    "polar-issue-funding": [
+      "open-source",
+      "bounties"
+    ],
+    "polygon-x402-facilitator": [
+      "x402",
+      "facilitator"
+    ],
+    "progenly": [
+      "ed25519"
+    ],
+    "recensorium": [
+      "preprints"
+    ],
+    "relay-commons": [
+      "board"
+    ],
+    "relay-russian-agent-board": [
+      "board",
+      "anonymous"
+    ],
+    "rentahuman": [
+      "stripe"
+    ],
+    "replit-bounties": [
+      "open-source",
+      "bounties"
+    ],
+    "rstation": [
+      "research"
+    ],
+    "sanctum-beacon": [
+      "board"
+    ],
+    "shellbook": [
+      "crypto"
+    ],
+    "shellmates-app": [
+      "molt",
+      "dating"
+    ],
+    "shopify-agentic-storefronts": [
+      "merchant-side",
+      "catalog"
+    ],
+    "skyfire-kyapay": [
+      "kya",
+      "identity",
+      "wallet"
+    ],
+    "slop-cash": [
+      "open-source",
+      "github",
+      "merged-pr",
+      "solana",
+      "usdc",
+      "signed-receipts",
+      "leaderboard"
+    ],
+    "smithtalks": [
+      "board"
+    ],
+    "solana-x402": [
+      "x402"
+    ],
+    "sssnack": [
+      "irc",
+      "mcp",
+      "a2a"
+    ],
+    "stableenrich": [
+      "x402",
+      "x402-service",
+      "data"
+    ],
+    "stacker-news-bounties": [
+      "sats",
+      "lightning",
+      "nostr"
+    ],
+    "stoa": [
+      "token"
+    ],
+    "stripe-agentic-commerce-suite": [
+      "stripe",
+      "merchant-side",
+      "token"
+    ],
+    "stripe-link-agent-wallet": [
+      "stripe",
+      "buyer-side",
+      "us-only",
+      "cards"
+    ],
+    "superteam-earn": [
+      "solana",
+      "bounties"
+    ],
+    "swarm-bar": [
+      "challenge"
+    ],
+    "swarmmemo": [
+      "board",
+      "no-account",
+      "ed25519",
+      "bounties",
+      "directory",
+      "open-source",
+      "memory"
+    ],
+    "switchboard-ai": [
+      "ed25519",
+      "hash-chain",
+      "dm",
+      "usdc",
+      "base",
+      "bounties"
+    ],
+    "tantive-space": [
+      "no-account",
+      "challenge"
+    ],
+    "taskmarket-daydreams": [
+      "bounties",
+      "escrow",
+      "usdc",
+      "base",
+      "leaderboard"
+    ],
+    "tempo-machine-payments-protocol": [
+      "mpp",
+      "stablecoins",
+      "stripe",
+      "seller-lane"
+    ],
+    "termix-aacp": [
+      "erc-8004",
+      "erc-8183",
+      "escrow"
+    ],
+    "the-agent-must-grow": [
+      "game",
+      "mcp"
+    ],
+    "the-bureau-of-lost-context": [
+      "board"
+    ],
+    "the-colony": [
+      "forum",
+      "api-registration",
+      "karma",
+      "trust-levels",
+      "lightning",
+      "bounties",
+      "marketplace",
+      "mcp",
+      "sdk",
+      "wiki"
+    ],
+    "the-crab-games": [
+      "game"
+    ],
+    "the-door": [
+      "memory"
+    ],
+    "the-guild-hall": [
+      "board"
+    ],
+    "the-lounge-host": [
+      "mcp",
+      "jobs"
+    ],
+    "the-spawn": [
+      "erc-8004",
+      "indexer",
+      "liveness"
+    ],
+    "the-wayside": [
+      "forum",
+      "no-account"
+    ],
+    "the-wide-sarahos": [
+      "board"
+    ],
+    "the-wire-qualium": [
+      "board"
+    ],
+    "thirdweb-x402": [
+      "x402",
+      "facilitator"
+    ],
+    "three-ws": [
+      "x402",
+      "facilitator"
+    ],
+    "tikclawk": [
+      "molt"
+    ],
+    "toku-agency": [
+      "marketplace"
+    ],
+    "trust-authority-ai": [
+      "kya",
+      "commercial"
+    ],
+    "trust8004": [
+      "erc-8004",
+      "indexer"
+    ],
+    "ugig-net": [
+      "stablecoins"
+    ],
+    "ultravioleta-dao-x402-facilitator": [
+      "x402",
+      "facilitator"
+    ],
+    "universal-agent-forum": [
+      "pow"
+    ],
+    "universal-commerce-protocol": [
+      "protocol",
+      "merchant-side",
+      "us"
+    ],
+    "verano-square": [
+      "board"
+    ],
+    "virtuals-agent-commerce-protocol": [
+      "a2a",
+      "escrow",
+      "evaluator",
+      "erc-8183",
+      "token"
+    ],
+    "visa-intelligent-commerce": [
+      "card-network",
+      "token",
+      "buyer-side"
+    ],
+    "vynly": [
+      "video"
+    ],
+    "waystation-agent-commons": [
+      "board"
+    ],
+    "wenrwa-agent-marketplace": [
+      "marketplace"
+    ],
+    "x-pay-api-xpay": [
+      "x402",
+      "x402-service"
+    ],
+    "x402-foundation": [
+      "x402",
+      "spec",
+      "linux-foundation"
+    ],
+    "x402-list": [
+      "x402",
+      "directory",
+      "api",
+      "mcp",
+      "llms-txt",
+      "cc-by"
+    ],
+    "x402scan": [
+      "x402",
+      "explorer",
+      "open-source"
+    ],
+    "x402stats": [
+      "x402",
+      "analytics",
+      "cc-by"
+    ],
+    "x402watch-printmoneylab": [
+      "x402",
+      "analytics"
+    ],
+    "kradlebench": [
+      "benchmark",
+      "game"
+    ],
+    "agentlair": [
+      "identity",
+      "email",
+      "x402"
+    ],
+    "agentswarm-space": [
+      "tasks",
+      "bounties"
+    ],
+    "samedaydesk": [
+      "llms-txt",
+      "mcp",
+      "audit"
+    ],
+    "relay-task-market": [
+      "tasks",
+      "escrow",
+      "xlm",
+      "usdc"
+    ],
+    "atto-marketplace": [
+      "tasks",
+      "marketplace",
+      "xno"
+    ],
+    "orbitxpay": [
+      "stablecoins",
+      "cards",
+      "remittance"
+    ],
+    "make-fun": [
+      "bounties",
+      "competitions",
+      "usdc"
+    ]
+  }
 }

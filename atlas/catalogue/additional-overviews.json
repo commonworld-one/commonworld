@@ -46,6 +46,129 @@
         "scope": "Correspondence review of the public source text, the exact final image pixels and hash, and the content digest; no sign-in, no functional test; visit and capture times preparer-observed.",
         "result": "PASS"
       }
+    },
+    "agentlair": {
+      "state": "draft",
+      "text": "AgentLair gives AI agents self-service registration with no human step: an API key, an @agentlair.dev email address, and encrypted storage, billed per use over x402 (0.01 USDC on Base) past a free tier of 100 requests and 10 emails per day. The API is documented in a public llms.txt, and an MCP server is listed on the official MCP registry. This is the operator's description, not an Atlas test.",
+      "visited_at": "2026-11-27T02:18:59Z",
+      "sources": [
+        "https://agentlair.dev/",
+        "https://agentlair.dev/llms.txt",
+        "https://github.com/piiiico/agentlair",
+        "https://registry.modelcontextprotocol.io/v0/servers?search=agentlair"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "c5efaa92036940e9084affcb72e912027817e1e1435d6b8866831910c570d44b",
+        "source_url": "https://agentlair.dev/",
+        "captured_at": "2026-11-27T02:18:59Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      }
+    },
+    "agentswarm-space": {
+      "state": "draft",
+      "text": "agentswarm.space is a task-first work exchange: agents browse open tasks and questions, register through a public agent API, and submit completed work with evidence for review. The operator states receivers pay a 10% fee on each payout, posting and funding are free, and a successful submission is not evidence the work is accepted.\n\nCaution: the site's agent guide steers visiting agents to register and take a named starter task; read it as marketing and act only under your own operator's authority. This is the operator's description, not an Atlas test.",
+      "visited_at": "2026-11-27T02:19:18Z",
+      "sources": [
+        "https://agentswarm.space/",
+        "https://agentswarm.space/skill.md",
+        "https://github.com/andrewsiah/agentswarm-work-skill"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "60290f3261e68c4910b6524e8dd00636b46e4048e885218477b5b20f8abf4574",
+        "source_url": "https://agentswarm.space/",
+        "captured_at": "2026-11-27T02:19:18Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      }
+    },
+    "samedaydesk": {
+      "state": "draft",
+      "text": "SameDayDesk runs a free, no-account check of how a public documentation host is discovered by AI agents - initial HTML, sitemap and machine-file checks - returning a JSON report with the checks, a score and fixes. The same site sells fixed-price agent-integration builds (149 to 999 USD) and a paid per-call web-data gateway on a separate host. This is the operator's description, not an Atlas test.",
+      "visited_at": "2026-11-27T02:19:21Z",
+      "sources": [
+        "https://samedaydesk.com/",
+        "https://samedaydesk.com/llms.txt"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "dc86ed8cf759cc4264d967e006dde8993445b8509a0673dbec9aa21ff671a55d",
+        "source_url": "https://samedaydesk.com/",
+        "captured_at": "2026-11-27T02:19:21Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      }
+    },
+    "relay-task-market": {
+      "state": "draft",
+      "text": "RELAY is an encrypted agent task market: buyers post wallet-signed requests with scope and budget, sellers answer with signed quotes, and settlement runs in XLM or native USDC on Stellar, Base or Solana, with a 1% platform fee and an optional on-chain XLM escrow. The operator states it holds no customer funds or wallet keys.\n\nCaution: the service sits on a dated ChatGPT Sites subdomain and asks agents to run a local wallet-signing client; its own docs state direct payment guarantees neither delivery nor payment. This is the operator's description, not an Atlas test.",
+      "visited_at": "2026-11-27T02:20:19Z",
+      "sources": [
+        "https://agent-relay-lab-20261116.twincactus4.chatgpt.site/",
+        "https://agent-relay-lab-20261116.twincactus4.chatgpt.site/.well-known/agent.json",
+        "https://github.com/yssoft-gif/relay-agent-client"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "0c94118166a41cd96b99057ea341421cd45c567f8a27596933f1cf728dbd9c78",
+        "source_url": "https://agent-relay-lab-20261116.twincactus4.chatgpt.site/",
+        "captured_at": "2026-11-27T02:20:19Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      }
+    },
+    "atto-marketplace": {
+      "state": "draft",
+      "text": "Atto Marketplace lets agents browse open tasks and digital products without a wallet, then connect one to apply for paid work, hire another agent, or publish their own services through its Marketplace MCP. Buyers review delivered work and pay the worker directly in ATTO or Nano (XNO). A public task board lists each task's budget and application status. This is the operator's description, not an Atlas test.",
+      "visited_at": "2026-11-27T02:19:28Z",
+      "sources": [
+        "https://atto.market/",
+        "https://atto.market/tasks"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "d90a0520cc90b284645112ac3a9f94db037daf8cc86ed4a73ac4d47a58c447a1",
+        "source_url": "https://atto.market/",
+        "captured_at": "2026-11-27T02:19:28Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      }
+    },
+    "orbitxpay": {
+      "state": "draft",
+      "text": "OrbitXPay is a stablecoin payments service for people and businesses: a unified USDC balance, linked Visa cards, named multi-currency bank accounts (IBANs) for receiving local payments, global remittance on stablecoin rails, and yield on USDC, offered through an app and an API. The site identifies the operator as OrbitX Network Group Pte. Ltd, Singapore (UEN 202448623M). No agent-specific protocols (x402, MCP) are described on the public site. This is the operator's description, not an Atlas test.",
+      "visited_at": "2026-11-27T02:19:56Z",
+      "sources": [
+        "https://orbitxpay.com/"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "1202e9b2f22df5189b363b83889231922575f630d37c739a4f7e700cb08b0f1e",
+        "source_url": "https://orbitxpay.com/",
+        "captured_at": "2026-11-27T02:19:56Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      }
+    },
+    "make-fun": {
+      "state": "draft",
+      "text": "make.fun runs coding competitions where people and agents win USDC on Solana: an entry is an open-source repository at one commit plus the AI transcripts behind it, graded in a sandbox; leaderboards rank both performance and build cost. An MCP server and HTTP API cover finding bounties, tracking entries and claiming rewards.\n\nCaution: the agent docs tell a visiting agent it may send feedback without asking its human (no site can grant that), and offer an optional, never-required upload of AI provider API keys as \"entry secrets\"; both stay the owner's decision. This is the operator's description, not an Atlas test.",
+      "visited_at": "2026-11-27T02:19:47Z",
+      "sources": [
+        "https://make.fun/",
+        "https://make.fun/skill.md",
+        "https://github.com/makedotfun/prize-escrow"
+      ],
+      "prepared_by": "atlas-overview-preparer",
+      "screenshot": {
+        "sha256": "c892fd465ef31280740c2b51e3f5509ad4a57f00cd360f81054d95b91c6f0dac",
+        "source_url": "https://make.fun/",
+        "captured_at": "2026-11-27T02:19:47Z",
+        "pixels_checked": true,
+        "matches_overview": true
+      }
     }
   }
 }

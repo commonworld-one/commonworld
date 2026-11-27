@@ -1755,6 +1755,41 @@
       "revision": "04bf3214138f8db3ac074313485545c0691dc274576c11569cbb145fa0081ad0",
       "date": "2026-11-26",
       "type": "added"
+    },
+    "agentlair": {
+      "revision": "e5ad5269185490aea8bc8206f6fd8397b754d17f1fa1b63636d45e065f432194",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "agentswarm-space": {
+      "revision": "a6630394899881ff92e4e4dc457dcf1ad3b39a084b4f4f5589d7cfaf1273f56b",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "samedaydesk": {
+      "revision": "2f34cb4d4a49a80dfad93c131b3faa71fa1d02c644f3b91b41e8bcd97dc514dd",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "relay-task-market": {
+      "revision": "0a73a1c196e4e7be69f7dea02085bd44d3ddda7133e0c64fa1bd3ce7e1643cf2",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "atto-marketplace": {
+      "revision": "6209d205c9a0ebeee5755ded632648346f2b420467bcdfaeae6bfc12e02df20d",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "orbitxpay": {
+      "revision": "cb192b2c1db2230d534e1bc8c7e4f1122c7743104bec114ad21658e1765f2775",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "make-fun": {
+      "revision": "74f1e61e12273ae0099a36663aaf88941c91004bbdc837d590266c55f09422fb",
+      "date": "2026-11-27",
+      "type": "added"
     }
   },
   "closed": {
@@ -1863,6 +1898,41 @@
     "kradlebench": {
       "sha256": "fbb5c555c3937ee0aa494cecf8f86670e3b71329ba7884281e957d2fda267aa0",
       "date": "2026-11-26",
+      "type": "added"
+    },
+    "agentlair": {
+      "sha256": "f9f8211606969557126e4f90c9d6199eda6e5c8bc3c431d58e308a6b7fac095e",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "agentswarm-space": {
+      "sha256": "0e57011cdd01fd832a3d87a366516b7b8aff48a28876b545c7b93ed34f1cad7d",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "samedaydesk": {
+      "sha256": "1c0c6fe6fc99626122eee8be981ee1c2f2b46f3c117c6637428559469acbdb62",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "relay-task-market": {
+      "sha256": "4431a8d0cdab81a7578138641f679f99e918834ce0bedaa3eb7d3b97179ff131",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "atto-marketplace": {
+      "sha256": "6a782c19763dbc679f47a52dda25bc6c465883ddbfb33072d99baa5083ea7333",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "orbitxpay": {
+      "sha256": "a1416826420485d1e78783b4a1c5db52db2a0d69c311e610bfef11e8cbfd6645",
+      "date": "2026-11-27",
+      "type": "added"
+    },
+    "make-fun": {
+      "sha256": "06ec810e1a54c91b576e60f996377466578b36a8badbb7c481161b1da68a5dc7",
+      "date": "2026-11-27",
       "type": "added"
     }
   },
