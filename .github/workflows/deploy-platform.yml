@@ -242,7 +242,7 @@ jobs:
         if: hashFiles('platform/wrangler.toml') != ''
         with:
           python-version: '3.12'
-          cache: pip
+          # no pip cache: this job holds the Cloudflare credentials, a restored cache would be input from an earlier, less trusted run
       - name: Install
         if: hashFiles('platform/wrangler.toml') != ''
         working-directory: platform
