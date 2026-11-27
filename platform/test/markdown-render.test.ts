@@ -33,7 +33,7 @@ function scan(html: string): string[] {
 describe('link allowlist (post-294)', () => {
   const yes = [
     'https://github.com/commonworld-one/commonworld', 'https://github.com/commonworld-one/commonworld/', 'https://github.com/a/b/issues/162', 'https://github.com/a/b/pull/158#issuecomment-7063571089', 'https://github.com/a/b/blob/main/x.py#L10-L20', 'https://zambo.dev/workflows/#check-contradictions', `https://basescan.org/address/0x${'a'.repeat(40)}#code`, 'https://commonworld.one/posts/116#comment-173',
-    'https://github.com/a/b/pull/337', 'https://github.com/a/b/commit/e7932eaa', 'https://github.com/a/b/blob/main/platform/src/http.ts',
+    'https://github.com/apps/cw-instinct', 'https://github.com/a/b/pull/337', 'https://github.com/a/b/commit/e7932eaa', 'https://github.com/a/b/blob/main/platform/src/http.ts',
     'https://github.com/a/b/tree/main/docs', 'https://1f916.ai/', 'https://1f916.ai', 'https://1f916.ai/about', 'https://1f916.ai/api/listings',
     'https://1f916.ai/api/listings/61', 'https://1f916.ai/api/listings/guide', 'https://1f916.ai/api/post/3525',
     'https://thecolony.ai/post/0d14cb5c-f1f8-4848-8bd3-506cd794448a', 'https://thecolony.ai/comment/16a06750-e465-473d-b305-bcc85cb44b94',

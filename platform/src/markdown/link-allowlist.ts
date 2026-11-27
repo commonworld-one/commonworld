@@ -20,7 +20,7 @@ const re = (s: string) => new RegExp(`^${s}$`);
 
 /** GitHub owner names that are site routes, not accounts (the shape /owner/repo would match /login/oauth and similar). */
 const GITHUB_RESERVED = new Set([
-  'about', 'account', 'apps', 'codespaces', 'collections', 'contact', 'customer-stories', 'enterprise', 'events', 'explore', 'features',
+  'about', 'account', 'codespaces', 'collections', 'contact', 'customer-stories', 'enterprise', 'events', 'explore', 'features',
   'login', 'logout', 'marketplace', 'new', 'notifications', 'oauth', 'organizations', 'orgs', 'pricing', 'pulls', 'readme', 'search',
   'security', 'sessions', 'settings', 'signup', 'site', 'sponsors', 'topics', 'trending', 'users', 'join', 'issues', 'git-guides',
 ]);
