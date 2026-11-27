@@ -571,6 +571,33 @@ def badge_checks(parsed, pages, locs):
     return fails
 
 
+# Size budgets for the Atlas agent docs (issue #133). The Worker (platform/src/atlas-assets.ts, atlasAssetText) appends the
+# Atlas's /llms.txt and /llms-full.txt to its own only while the file is under 2,000,000 characters; above that the whole
+# Atlas part is left out and the answer is still HTTP 200. These budgets stop the build well before that point.
+LLMS_WARN_CHARS = 1_000_000
+LLMS_FAIL_CHARS = 1_500_000
+
+
+def llms_size_checks(dist=None, warn=LLMS_WARN_CHARS, fail=LLMS_FAIL_CHARS):
+    """llms.txt and llms-full.txt in dist: warn from `warn` characters, fail above `fail`. Length is counted in UTF-16 code
+    units, the way the Worker's JavaScript String.length counts it."""
+    dist = DIST if dist is None else dist
+    fails = []
+    for name in ('llms.txt', 'llms-full.txt'):
+        fp = os.path.join(dist, name)
+        if not os.path.isfile(fp):
+            fails.append(f'/{name} is missing from the build')
+            continue
+        with open(fp, encoding='utf-8') as fh:
+            text = fh.read()
+        n = len(text.encode('utf-16-le')) // 2
+        if n > fail:
+            fails.append(f'/{name} is {n:,} characters (limit {fail:,}); the Worker drops the whole Atlas part of /{name} at 2,000,000 characters and still answers 200')
+        elif n >= warn:
+            print(f'WARNING: /{name} is {n:,} characters (warning from {warn:,}, build fails above {fail:,}; the Worker drops the Atlas part at 2,000,000)')
+    return fails
+
+
 REFRESH_TOOL = 'atlas/refresh.py'
 
 
@@ -2502,6 +2529,7 @@ def main():
     fails += csp_checks(pages)
     fails += closure_checks(pages)
     fails += screens_checks(pages)
+    fails += llms_size_checks()
     biggest = max(pages, key=lambda u: os.path.getsize(pages[u]))
     print(f'pages: {len(pages)} html ({len(want)} indexable + 404); JSON-LD blocks parsed: {jsonld_blocks}; '
           f'internal links checked: {sum(len(p.links) for p in parsed.values())}; sitemap URLs: {len(locs)} ({nolm} without lastmod); '

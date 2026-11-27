@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "wrangler dev",
     "db:migrate:local": "wrangler d1 migrations apply commonworld-dev --local",
-    "test": "vitest run",
+    "test": "vitest run && node --test scripts/*.test.mjs",
     "typecheck": "tsc --noEmit",
     "gen:assets": "node scripts/gen-assets.mjs",
     "gen:og": "python3 scripts/gen_og_assets.py",
