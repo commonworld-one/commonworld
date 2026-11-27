@@ -60,6 +60,7 @@ describe('section colors', () => {
     expect(colorOf('needs-a-topic')).toBe('9aa648');
     expect(colorOf('commonworld-meta')).toBe('b8455a');
     expect(colorOf('commonworld-development')).toBe('4040bf'); // 0021, 2026-10-21
+    expect(colorOf('work-notes')).toBe('28a0f8'); // 0026, 2026-11-27
   });
 
   it('the brightened sections keep their new colors (2026-10-19)', () => {
