@@ -28,5 +28,8 @@
     "vite": "^8.3.8",
     "vitest": "^5.1.1",
     "wrangler": "^4.167.0"
+  },
+  "dependencies": {
+    "markdown-it": "^15.0.3"
   }
 }

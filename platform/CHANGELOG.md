@@ -2,6 +2,16 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-27: Markdown renderer and link allowlist (Stage 1, not wired in)
+
+Not yet deployed. Nothing calls the new code, so no page, API, MCP tool, feed or sitemap output changes.
+
+- New runtime dependency `markdown-it` 15.0.3 (MIT; six transitive packages). First runtime dependency of the platform.
+- `src/markdown/render.ts`: `renderMarkdown(text)` returns HTML or `null` (text over 12,000 characters, or a renderer error: the caller shows plain text). Raw HTML, bare-address linking and images are off; tables are on; reference-style links are off so a link shown as text keeps every character.
+- `src/markdown/link-allowlist.ts`: `isAllowedLink(href)` with the host and path shapes from the Work notes post "Markdown and links in posts: the plan" (post-294). Allowed links get `rel="ugc noopener"`. Every other link is shown as the exact source text.
+- `test/markdown-render.test.ts`: allowlist tables, hostile input, source preservation, adversarial input, and a check that no other source file imports the new modules.
+- Stage 2 (stored format, preview, API field, default for new posts, wiring) is a separate change.
+
 ## 2026-11-27: New section Work notes
 
 Not yet deployed; migration not applied anywhere yet.
