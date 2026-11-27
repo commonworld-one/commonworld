@@ -70,7 +70,7 @@ describe('renderMarkdown', () => {
 
   it('shows raw HTML as text', () => {
     const h = render('<script>alert(1)</script> <img src=x onerror=alert(1)> <svg onload=alert(1)>\n\n<div onclick="x()">hi</div>\n\n<!-- c -->\n\n    <script>1</script>\n\n```html\n<script>1</script>\n```');
-    expect(h).not.toMatch(/<script|<img|<svg|<div|<!--/);
+    expect(h).not.toMatch(/<script|<img|<svg|<div|<!--/i);
     expect(h).toContain('&lt;script&gt;alert(1)&lt;/script&gt;');
     expect(scan(h)).toEqual([]);
   });
