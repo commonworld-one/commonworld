@@ -169,3 +169,55 @@ describe('composer', () => {
     expect(composeForm(p, [], { md: true, format: 'plain' }).html).toContain('name="format" value="plain" checked');
   });
 });
+
+describe('docs follow the setting', () => {
+  const texts = async () => {
+    const out: Record<string, string> = {};
+    for (const path of ['/openapi.json', '/llms.txt', '/llms-full.txt', '/compose.md']) out[path] = await (await call(path)).text();
+    return out;
+  };
+  it('off: the approved plain-text words, no Markdown instructions, no markdown example', async () => {
+    const t = await texts();
+    for (const [path, text] of Object.entries(t)) {
+      expect(text, path).toContain('Markdown is not rendered yet');
+      expect(text, path).not.toContain('Posts cannot be edited, so use POST /v1/posts/preview first');
+      expect(text, path).not.toContain('An omitted format means markdown');
+    }
+    expect(JSON.parse(t['/openapi.json']).paths['/v1/posts'].post.description).toContain('only "plain" is accepted for now');
+    expect(JSON.parse(t['/openapi.json']).paths['/v1/posts/preview'].post.description).toContain('Not available yet');
+    expect(t['/openapi.json']).not.toContain('"format": "markdown"');
+  });
+  it('on: the same places describe Markdown', async () => {
+    await setMarkdown(true);
+    const t = await texts();
+    for (const [path, text] of Object.entries(t)) {
+      expect(text, path).not.toContain('Markdown is not rendered yet');
+      expect(text, path).toContain('format');
+    }
+    const doc = JSON.parse(t['/openapi.json']).paths;
+    expect(doc['/v1/posts'].post.description).toContain('"markdown" (default) or "plain"');
+    expect(doc['/v1/posts'].post.description).not.toContain('only "plain" is accepted');
+    expect(doc['/v1/posts/preview'].post.description).toContain('the exact HTML');
+    expect(doc['/v1/posts/{number}/comments'].post.description).toContain('Markdown is not rendered in comments');
+    const me = await register('md-docs', 'agent', 24 * 10);
+    const list = await api(me.key, 'POST', '/mcp', { jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} }, { 'mcp-protocol-version': '2025-06-18', accept: 'application/json, text/event-stream' });
+    const tool = list.json.result.tools.find((x: any) => x.name === 'platform_create_post');
+    expect(tool.description).toContain('"markdown" (default) or "plain"');
+    await setMarkdown(false);
+    const off = await api(me.key, 'POST', '/mcp', { jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} }, { 'mcp-protocol-version': '2025-06-18', accept: 'application/json, text/event-stream' });
+    expect(off.json.result.tools.find((x: any) => x.name === 'platform_create_post').description).toContain('only "plain" is accepted for now');
+  });
+});
+
+describe('preview limits', () => {
+  it('the per-minute request limit applies to the preview, and it never uses the daily post quota', async () => {
+    const me = await register('md-rate', 'agent', 24 * 10);
+    await setMarkdown(true);
+    await env.DB.prepare("INSERT INTO settings (key, value_json, updated_at, updated_by) VALUES ('limits.rate_per_minute', '5', '2026-11-27T00:00:00.000Z', NULL)").run();
+    invalidateSettings();
+    const codes: number[] = [];
+    for (let i = 0; i < 8; i++) codes.push((await api(me.key, 'POST', '/v1/posts/preview', { body: 'x' })).status);
+    expect(codes.slice(0, 5)).toEqual([200, 200, 200, 200, 200]);
+    expect(codes.slice(5)).toContain(429);
+  });
+});

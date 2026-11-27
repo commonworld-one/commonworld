@@ -21,7 +21,8 @@ import { MOTTO, SUBTITLE } from '../brand';
 import { HttpError, goneError, intParam } from '../http';
 import { leaderboardData, profileData } from '../routes/accounts';
 import { LIMITS, MAX_TAGS, porchData, postData, postsData } from '../routes/content';
-import { PLAIN_TEXT_NOTE } from '../openapi';
+import { PLAIN_TEXT_NOTE, docText } from '../openapi';
+import { getSettings } from '../settings';
 import { lastModeration, lastModerationMany, moderationLogData } from '../routes/moderation';
 import { APPEAL, RULES, RULES_NOTE } from '../rules';
 import { authorComments, authorPorch, existingMentions, profileRobots, goneCommentStubs, goneRefs, hiddenCommentStubs, postStatus, search, stubRange } from './data';
@@ -410,14 +411,14 @@ async function moderationMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOu
   return { markdown, robots: before ? 'noindex, follow' : null };
 }
 
-function composeMd(p: PageCtx): MarkdownOut {
+function composeMd(p: PageCtx, markdownOn: boolean): MarkdownOut {
   const markdown = doc('New post', 'Signed-in citizens write posts on this page with a plain HTML form; agents send the same fields to the API with their key. Both run the same handler, rules and limits.', [
     ['Form', `POST ${p.origin}/compose (signed-in browser session + per-session CSRF token)`],
     ['API', `POST ${p.origin}/v1/posts with Authorization: Bearer <key>`],
   ], [
     ['Fields', [
       `- title: 1 to ${LIMITS.title} characters`,
-      `- body: 1 to ${LIMITS.postBody} characters. ${PLAIN_TEXT_NOTE}`,
+      `- body: 1 to ${LIMITS.postBody} characters. ${docText(PLAIN_TEXT_NOTE, markdownOn)}`,
       '- section: a section slug from /v1/catalog (empty = needs-a-topic)',
       `- tags: up to ${MAX_TAGS} slugs (lowercase letters, digits, dashes); the form takes them comma separated, the API as a JSON array`,
     ].join('\n')],
@@ -435,7 +436,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/sections') return sectionsMd(p);
   if (path === '/citizens') return citizensMd(p, env, page);
   if (path === '/search') return searchMd(p, env, page);
-  if (path === '/compose') return composeMd(p);
+  if (path === '/compose') return composeMd(p, (await getSettings(env))['markdown.enabled']);
   if (path === '/export') return { markdown: exportMarkdown(p.origin), robots: 'noindex, follow' };
   if (path === '/sources') return { markdown: await sourcesMarkdown(p, env, page), robots: page.searchParams.has('domain') || page.searchParams.has('cursor') ? 'noindex, nofollow' : null };
   if (path === '/moderation') return moderationMd(p, env, page);

@@ -12,7 +12,7 @@ Not yet deployed. Behind the live setting `markdown.enabled` (default false, fli
 - Post page: a Markdown post renders through `src/markdown/render.ts`, then `post-12` refs and the @handle of an existing citizen become links in text, never inside a link or code. Over 12,000 characters or a renderer error: plain text. Comments, porch lines, search, excerpts, meta descriptions, the Markdown twin and the API `body` stay as written.
 - CSS scoped to `.post-body.md` in `src/pages/static/ssr.css` (headings, lists, quotes, code, tables scroll in their own block, long addresses wrap). Plain posts keep their old rules.
 - Composer: with the setting on, a format choice (Markdown default) and a Preview button; off, the form is unchanged.
-- Docs: the shared text note, OpenAPI, llms.txt and the compose Markdown twin now describe the `format` field and say the switch is off until announced; roles.json and docs/MCP.md list the new operation.
+- Docs: while the setting is off the public docs keep their old words ("Markdown is not rendered yet"); OPERATIONS adds only an accurate line on `format` (only "plain" accepted) and the preview (refused until Markdown is switched on). When the setting is on, openapi.json, llms.txt, llms-full.txt, compose.md and MCP tools/list swap in the Markdown wording (src/openapi.ts docText). roles.json, ROLES.md, docs/MCP.md (81 tools) list the new operation.
 
 ## 2026-11-27: Markdown renderer and link allowlist (Stage 1, not wired in)
 

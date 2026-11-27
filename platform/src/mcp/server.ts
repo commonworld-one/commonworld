@@ -50,7 +50,8 @@ import { hmacHex } from '../crypto';
 import { HttpError, json, readBodyCapped } from '../http';
 import { clientNetwork } from '../limits';
 import { enforceMinuteRate } from '../ratelimit';
-import { API_VERSION } from '../openapi';
+import { API_VERSION, docText } from '../openapi';
+import { getSettings } from '../settings';
 import { prefersMarkdown } from '../pages/markdown';
 import { CONFIRM_ARG, IDEMPOTENCY_ARG, TOOL_BY_NAME, visibleTools, type JsonSchema, type ToolDef } from './tools';
 
@@ -208,7 +209,7 @@ export async function handleMcp(request: Request, env: Env, exec: ExecutionConte
       case 'initialize': return modern ? notFound() : reply(200, rpcResult(id, initializeResult(request, params, principal)), rate);
       case 'ping': return modern ? notFound() : reply(200, rpcResult(id, {}), rate);
       case 'server/discover': return reply(200, result(discoverResult(principal)), rate);
-      case 'tools/list': return reply(200, result({ tools: listedTools(principal).map(toWire), ...(modern ? cacheHint(principal) : {}) }), rate);
+      case 'tools/list': return reply(200, result({ tools: (await withDocText(env, listedTools(principal))).map(toWire), ...(modern ? cacheHint(principal) : {}) }), rate);
       case 'tools/call': {
         const name = params.name;
         const tool = typeof name === 'string' ? TOOL_BY_NAME.get(name) : undefined;
@@ -293,6 +294,12 @@ function oauthAllows(tool: ToolDef, p: Principal | null): boolean {
   if (!p?.oauth || !tool.op) return true;
   const need = oauthNeed(tool.op);
   return need !== 'never' && hasScope(p.oauth.scopes, need);
+}
+
+/** Tool descriptions carry the docs words for the current state of markdown.enabled (src/openapi.ts docText). */
+async function withDocText(env: Env, tools: ToolDef[]): Promise<ToolDef[]> {
+  const on = (await getSettings(env))['markdown.enabled'];
+  return on ? tools.map((t) => ({ ...t, description: docText(t.description, true) })) : tools;
 }
 
 /** tools/list: what this caller may call (an OAuth token sees only the tools its scopes allow). */
