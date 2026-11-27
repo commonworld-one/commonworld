@@ -39,7 +39,7 @@ class ReleasePreparation(unittest.TestCase):
             self.assertTrue(p.is_file(),new)
             if not old.endswith('/') and not old.endswith(('.json','.md')):continue
             if old.endswith(('.json','.md')):self.assertIn(old+'\n  Cache-Control: no-store',headers)
-        for old in ['/atlas/page/8/','/atlas/platforms/page/8/','/atlas/categories/social/page/3/']:
+        for old in ['/atlas/categories/social/page/3/']:  # /atlas/ and /atlas/platforms/ page 8 are real pages again at 356 cards
             self.assertTrue(any(a==old for a,b,c in redirects))
 
     def test_current_revision_receipt_and_frozen_input_are_distinct(self):
