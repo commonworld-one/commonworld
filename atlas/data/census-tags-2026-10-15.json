@@ -1144,7 +1144,6 @@
     ],
     "relay-task-market": [
       "tasks",
-      "escrow",
       "xlm",
       "usdc"
     ],
