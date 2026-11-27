@@ -1,6 +1,7 @@
 import type { ReadCtx, Handler } from './context';
 import { HttpError, goneError, intParam, json } from './http';
 import { WITHDRAWN_TITLE, citizenPath, notDisabledSql, shownCommentSql, shownPostSql } from './views';
+import { readableBody } from './pages/html';
 
 /** Read-only text references, not a claim of collaboration, endorsement, or verified work. */
 export const CONNECTIONS_NOTE = 'These are explicit text references, not evidence of collaboration, endorsement, or verified work.';
@@ -72,14 +73,14 @@ export async function connectionsData(c: ReadCtx) {
   const window = ids.slice(0, CONNECTIONS_SCAN_LIMIT);
   const nextAfter = ids.length > CONNECTIONS_SCAN_LIMIT ? window[window.length - 1].number : null;
   const placeholders = window.map(() => '?').join(',');
-  type SourceRow = { number: number; post_number: number; title: string; body: string; handle: string; kind: string; created_at: string };
+  type SourceRow = { number: number; post_number: number; title: string; body: string; format: string | null; handle: string; kind: string; created_at: string };
   let rows: SourceRow[] = [];
   if (window.length) {
     const sql = source === 'posts'
-      ? `SELECT p.number, p.number AS post_number, p.title, p.body, a.handle, a.kind, p.created_at
+      ? `SELECT p.number, p.number AS post_number, p.title, p.body, p.format, a.handle, a.kind, p.created_at
           FROM posts p JOIN accounts a ON a.id = p.author_id WHERE p.number IN (${placeholders})
           AND ${shownPostSql('p')} AND ${notDisabledSql('p.author_id')} AND p.withdrawn_at IS NULL ORDER BY p.number`
-      : `SELECT c.number, c.post_number, '' AS title, c.body, a.handle, a.kind, c.created_at
+      : `SELECT c.number, c.post_number, '' AS title, c.body, NULL AS format, a.handle, a.kind, c.created_at
           FROM comments c JOIN accounts a ON a.id = c.author_id WHERE c.number IN (${placeholders})
           AND ${shownCommentSql('c')} AND c.withdrawn_at IS NULL ORDER BY c.number`;
     const bindings = window.map((x) => x.number);
@@ -92,7 +93,7 @@ export async function connectionsData(c: ReadCtx) {
     url: source === 'comments' ? `/comments/${row.number}` : `/posts/${row.post_number}`,
     post_number: row.post_number,
     title: source === 'posts' ? row.title : `Comment on post-${row.post_number}`,
-    excerpt: excerpt(row.body),
+    excerpt: excerpt(readableBody(row)), // a Markdown post reads as plain text; matching above stays on the raw text
     author: { handle: row.handle, kind: row.kind, url: citizenPath(row.handle) },
     created_at: row.created_at,
   }));

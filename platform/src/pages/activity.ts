@@ -11,7 +11,7 @@ import type { Env } from '../env';
 import { intParam } from '../http';
 import { EVENT_OBJECT_GONE, EVENT_OBJECT_HIDDEN, isDeletedHandle, notDisabledSql, shownCommentSql, shownPostSql } from '../views';
 import { ACTOR_WRITING_EVENTS, MODERATION_EVENTS, moderationEventData } from '../routes/content';
-import { ago, h, type Raw } from './html';
+import { ago, h, readableBody, type Raw } from './html';
 import { av, citizenUrl, crumbs, document, emptyState, postUrl, tagUrl, who, type PageCtx } from './layout';
 import { goneRefs } from './data';
 import { mdText } from './markdown';
@@ -121,6 +121,12 @@ export function previewText(body: string, max = PREVIEW_CHARS): string {
   return t.length > max ? t.slice(0, max).replace(/\s+\S*$/, '') + '…' : t;
 }
 
+/** A Markdown post's preview: stripped first (plainText, not the cruder previewText), then one line cut at the same length. */
+export function readablePreview(body: string, max = PREVIEW_CHARS): string {
+  const t = readableBody({ body, format: 'markdown' }).replace(/\s+/g, ' ').trim();
+  return t.length > max ? t.slice(0, max).replace(/\s+\S*$/, '') + '…' : t;
+}
+
 /**
  * Previews for every post, comment and porch line the page's events point at: ONE D1 query per page (json_each lists,
  * bodies cut to 400 chars in SQL), only what the public sees: shown posts/comments (same rules as the post page),
@@ -132,14 +138,14 @@ export async function activityPreviews(env: Env, items: ActivityItem[]): Promise
     .map((e) => e.object.number))]);
   const out = new Map<string, Preview>();
   if (!items.some((e) => !MODERATION_EVENTS.has(e.type) && ['post', 'comment', 'porch'].includes(e.object.type))) return out;
-  const { results } = await env.DB.prepare(`SELECT 'post-' || p.number AS ref, p.title AS title, substr(p.body, 1, 400) AS body, NULL AS on_title
+  const { results } = await env.DB.prepare(`SELECT 'post-' || p.number AS ref, p.title AS title, substr(p.body, 1, CASE WHEN p.format = 'markdown' THEN 2000 ELSE 400 END) AS body, p.format AS format, NULL AS on_title
       FROM posts p WHERE p.number IN (SELECT value FROM json_each(?1)) AND p.withdrawn_at IS NULL AND ${shownPostSql('p')}
-    UNION ALL SELECT 'comment-' || c.number, NULL, substr(c.body, 1, 400), cp.title
+    UNION ALL SELECT 'comment-' || c.number, NULL, substr(c.body, 1, 400), NULL, cp.title
       FROM comments c JOIN posts cp ON cp.number = c.post_number WHERE c.number IN (SELECT value FROM json_each(?2)) AND c.withdrawn_at IS NULL AND cp.withdrawn_at IS NULL AND ${shownCommentSql('c')}
-    UNION ALL SELECT 'porch-' || l.number, NULL, substr(l.body, 1, 400), NULL
+    UNION ALL SELECT 'porch-' || l.number, NULL, substr(l.body, 1, 400), NULL, NULL
       FROM porch_lines l WHERE l.number IN (SELECT value FROM json_each(?3)) AND l.status = 'visible' AND l.withdrawn_at IS NULL AND ${notDisabledSql('l.author_id')}`)
-    .bind(want('post'), want('comment'), want('porch')).all<{ ref: string; title: string | null; body: string; on_title: string | null }>();
-  for (const r of results) out.set(r.ref, { title: r.title, text: previewText(r.body), on: r.on_title });
+    .bind(want('post'), want('comment'), want('porch')).all<{ ref: string; title: string | null; body: string; format: string | null; on_title: string | null }>();
+  for (const r of results) out.set(r.ref, { title: r.title, text: r.format === 'markdown' ? readablePreview(r.body) : previewText(r.body), on: r.on_title });
   return out;
 }
 

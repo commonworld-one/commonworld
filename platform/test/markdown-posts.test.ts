@@ -10,6 +10,9 @@ import { resetLinkCheckMemo } from '../src/link-check';
 import { metamask } from '../src/trust-engine/index.ts';
 import { invalidateSettings } from '../src/settings';
 import { linkRefsInHtml, postBodyHtml } from '../src/pages/post-body';
+import { postExcerpt } from '../src/pages/layout';
+import { plainText } from '../src/pages/html';
+import { readablePreview } from '../src/pages/activity';
 import { register, resetDb, setSetting } from './helpers';
 
 beforeEach(resetDb);
@@ -331,5 +334,145 @@ describe('publish safety covers the parsed link targets', () => {
     expect(over.json.error.code).toBe('too_many_link_domains');
     // the same host twice (raw and escaped) is one domain
     expect((await publish(me.key, `${raw(19)} https://1f916.ai/about [l](https\\://1f916.ai/about)`)).status).toBe(201);
+  });
+});
+
+describe('readable excerpts for Markdown posts (cards, search, history, JSON-LD); plain posts and raw sources unchanged', () => {
+  beforeEach(async () => { await resetDb(); await setMarkdown(true); });
+  const MD = '## Update\n\nShipped **markdown** with [the notes](https://commonworld.one/posts/294) and `format`.\n\n```js\nconst zebra = 1;\n```\n\n| a | b |\n|---|---|\n| cell1 | cell2 |\n\nEscaped \\*stars\\* stay. Needle: quokka here.';
+  const PLAIN = 'Plain **stars** and [label](https://example.com) stay as typed. Needle: quokka here.';
+
+  it('plainText: headings, emphasis, code, fences, tables, link labels, escapes', () => {
+    const t = plainText(MD);
+    expect(t).toContain('Update');
+    expect(t).toContain('Shipped markdown with the notes and format.');
+    expect(t).toContain('const zebra = 1;');
+    expect(t).toContain('cell1 · cell2');
+    expect(t).toContain('Escaped *stars* stay.');
+    for (const raw of ['##', '**', '](', '```', '|---', 'https://commonworld.one/posts/294']) expect(t, raw).not.toContain(raw);
+  });
+
+  it('postExcerpt: markdown is stripped, plain is untouched, truncation never exposes syntax, cut stays within the limit', () => {
+    expect(postExcerpt({ body: MD, format: 'markdown' })).toContain('Shipped markdown with the notes and format.');
+    expect(postExcerpt({ body: MD, format: 'markdown' })).not.toContain('**');
+    expect(postExcerpt({ body: PLAIN, format: 'plain' })).toContain('**stars**');
+    expect(postExcerpt({ body: PLAIN })).toContain('[label](https://example.com)');
+    const long = `# Head\n\n${'word **bold** [l](https://commonworld.one/x) '.repeat(400)}`;
+    const e = postExcerpt({ body: long, format: 'markdown' }, 100);
+    expect(e.length).toBeLessThanOrEqual(101);
+    expect(e).not.toMatch(/\*\*|\]\(|#/);
+  });
+
+  it('cards, search, profile history and JSON-LD read as text for a Markdown post, raw search match still works, plain post unchanged', async () => {
+    const me = await register('md-exc', 'agent', 24 * 10);
+    const a = await api(me.key, 'POST', '/v1/posts', { title: 'Md post', body: MD, format: 'markdown', section: 'general' });
+    const b = await api(me.key, 'POST', '/v1/posts', { title: 'Plain post', body: PLAIN, format: 'plain', section: 'general' });
+    expect([a.status, b.status]).toEqual([201, 201]);
+    const card = (html: string, n: number) => new RegExp(`<h3><a href="/posts/${n}">[\\s\\S]*?</p>`).exec(html)?.[0] ?? '';
+    for (const path of ['/s/general', '/']) {
+      const html = await (await call(path)).text();
+      const c1 = card(html, a.json.number);
+      if (c1) { expect(c1, path).toContain('Shipped markdown with the notes and format.'); expect(c1, path).not.toContain('**'); expect(c1, path).not.toContain(']('); }
+    }
+    const sec = await (await call('/s/general')).text();
+    expect(card(sec, a.json.number)).toContain('Shipped markdown');
+    expect(card(sec, b.json.number)).toContain('**stars**');
+    // search matches the raw text (a hit that exists only in the source is still found) and shows the readable text
+    const s = await (await call('/search?q=quokka')).text();
+    expect(s).toContain(`/posts/${a.json.number}`);
+    expect(s).toContain(`/posts/${b.json.number}`);
+    const hit = card(s, a.json.number);
+    expect(hit).toContain('quokka');
+    expect(hit).not.toContain('**');
+    expect(card(s, b.json.number)).toContain('**stars**');
+    const raw = await (await call('/search?q=commonworld.one%2Fposts%2F294')).text();
+    expect(raw).toContain(`/posts/${a.json.number}`);
+    // profile history
+    const prof = await (await call(`/c/${me.handle}`)).text();
+    expect(prof).toContain('Shipped markdown');
+    expect(prof).not.toContain('**markdown**');
+    expect(prof).toContain('**stars**');
+    // JSON-LD text of the post page: readable for markdown, raw for plain
+    const ld = (html: string) => JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)![1]!);
+    const pm = ld(await page(a.json.number));
+    expect(JSON.stringify(pm)).toContain('Shipped markdown with the notes and format.');
+    expect(JSON.stringify(pm)).not.toContain('**markdown**');
+    expect(JSON.stringify(ld(await page(b.json.number)))).toContain('**stars**');
+    // raw sources are untouched: API body and the .md twin
+    expect((await api(me.key, 'GET', `/v1/posts/${a.json.number}`)).json.body).toBe(MD);
+    expect(await (await call(`/posts/${a.json.number}.md`)).text()).toContain('markdown');
+  });
+});
+
+describe('readable snippets everywhere a post is cut short (connections, Activity, .md lists and intro)', () => {
+  beforeEach(async () => { await resetDb(); await setMarkdown(true); });
+  const MDB = '## Heading\n\nSee post-1 with **bold** and [label](https://commonworld.one/posts/294) and `code`. Zeta: wombat.\n\n- item one';
+  const PLB = 'See post-1 with **bold** and [label](https://example.com) and `code`. Zeta: wombat.';
+
+  it('connections JSON: markdown excerpt readable, plain exact, matching still on the raw text', async () => {
+    await setSetting('limits.daily.post', 100);
+    const me = await register('md-conn', 'agent', 24 * 10);
+    const root = await api(me.key, 'POST', '/v1/posts', { title: 'Root', body: 'root text', format: 'plain', section: 'general' });
+    const n = root.json.number;
+    const body = (s: string) => s.replace(/post-1/g, `post-${n}`);
+    const a = await api(me.key, 'POST', '/v1/posts', { title: 'M', body: body(MDB), format: 'markdown', section: 'general' });
+    const b = await api(me.key, 'POST', '/v1/posts', { title: 'P', body: body(PLB), format: 'plain', section: 'general' });
+    // a post that references the root only through a Markdown link target (raw text still matches)
+    const c = await api(me.key, 'POST', '/v1/posts', { title: 'L', body: `[see](${new URL((env as any).SITE_ORIGIN ?? 'https://commonworld.one').origin}/posts/${n})`, format: 'markdown', section: 'general' });
+    const res = await api(null, 'GET', `/v1/posts/${n}/connections`);
+    expect(res.status).toBe(200);
+    const by = Object.fromEntries(res.json.items.map((i: any) => [i.ref, i]));
+    expect(by[`post-${a.json.number}`].excerpt).toContain('See post-' + n + ' with bold and label and code.');
+    expect(by[`post-${a.json.number}`].excerpt).not.toMatch(/\*\*|\]\(|##|`/);
+    expect(by[`post-${b.json.number}`].excerpt).toContain('**bold** and [label](https://example.com) and `code`');
+    expect(by[`post-${c.json.number}`]).toBeTruthy();
+    expect(by[`post-${c.json.number}`].excerpt).toBe('see');
+  });
+
+  it('.md twins: list snippets and the post intro read as text for markdown, plain posts keep their characters', async () => {
+    const me = await register('md-twin', 'agent', 24 * 10);
+    const a = await api(me.key, 'POST', '/v1/posts', { title: 'M', body: MDB, format: 'markdown', section: 'general' });
+    const b = await api(me.key, 'POST', '/v1/posts', { title: 'P', body: PLB, format: 'plain', section: 'general' });
+    const list = await (await call('/s/general.md')).text();
+    const line = (t: string, n: number) => t.split('\n').find((l, i, all) => all[i - 1]?.includes(`post-${n} `)) ?? '';
+    expect(line(list, a.json.number)).toContain('Heading See post-1');
+    expect(line(list, a.json.number)).not.toMatch(/\\\*\\\*|\]\(|##/);
+    expect(line(list, b.json.number)).toContain('bold');
+    expect(line(list, b.json.number)).toContain('\\*\\*bold\\*\\*');
+    // the full body stays the existing escaped source in the twin (unchanged contract)
+    const twin = await (await call(`/posts/${a.json.number}.md`)).text();
+    expect(twin).toContain('\\*\\*bold\\*\\*');
+  });
+
+  it('Activity: markdown previews strip before the cut; a long markdown source is not cut inside its syntax; plain unchanged', async () => {
+    await setSetting('limits.daily.post', 100);
+    const me = await register('md-act', 'agent', 24 * 10);
+    const long = `# Head\n\n${'**word** [l](https://commonworld.one/p) '.repeat(60)}`;
+    const a = await api(me.key, 'POST', '/v1/posts', { title: 'M', body: long, format: 'markdown', section: 'general' });
+    const b = await api(me.key, 'POST', '/v1/posts', { title: 'P', body: PLB, format: 'plain', section: 'general' });
+    expect([a.status, b.status]).toEqual([201, 201]);
+    const html = await (await call('/activity')).text();
+    expect(html).toContain('Head word l word l');
+    expect(html).not.toContain('](https://commonworld.one/p');
+    expect(html).not.toContain('**word**');
+    expect(html).toContain(`post-${b.json.number}`);
+    expect(readablePreview('## A\n\n**b** [c](https://x.y)')).toBe('A b c');
+  });
+
+  it('search: a hit that exists only in the link target is still found, no break in the snippet or highlight', async () => {
+    await setSetting('limits.daily.post', 100);
+    const me = await register('md-srch', 'agent', 24 * 10);
+    const a = await api(me.key, 'POST', '/v1/posts', { title: 'M', body: `# Intro\n\n${'filler words here. '.repeat(30)}[label](https://commonworld.one/posts/294)`, format: 'markdown', section: 'general' });
+    const html = await (await call('/search?q=posts%2F294')).text();
+    expect(html).toContain(`/posts/${a.json.number}`);
+    const card = new RegExp(`<h3><a href="/posts/${a.json.number}">[\\s\\S]*?</p>`).exec(html)?.[0] ?? '';
+    expect(card).toContain('Intro filler words');
+    expect(card).not.toContain('](');
+    // a hit deep inside the text is shown around the hit, in stripped text
+    const b = await api(me.key, 'POST', '/v1/posts', { title: 'D', body: `${'**pad** '.repeat(80)}needle-token end`, format: 'markdown', section: 'general' });
+    const h2 = await (await call('/search?q=needle-token')).text();
+    const c2 = new RegExp(`<h3><a href="/posts/${b.json.number}">[\\s\\S]*?</p>`).exec(h2)?.[0] ?? '';
+    expect(c2).toContain('needle-token');
+    expect(c2).not.toContain('**');
   });
 });

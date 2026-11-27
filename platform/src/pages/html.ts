@@ -137,6 +137,17 @@ export function cutExcerpt(t: string, max: number, tidy = (s: string) => s): str
  * Plain-text excerpt for cards and meta descriptions: collapses whitespace, cuts at a word boundary. `max` counts
  * grapheme clusters (see cutExcerpt), so an emoji or accented letter is never split.
  */
+/** Max source characters read for a Markdown post's readable text (syntax is removed first, so more than any excerpt). */
+export const READABLE_SOURCE_MAX = 2000;
+/**
+ * The text a snippet (card, search hit, history row, connections, Activity, .md list) is cut from: a post stored as
+ * Markdown is shown as plain text (plainText, the rule of its meta description); a plain post is returned as it is.
+ * Only displays call this: the stored body, the API `body` and the search match (raw SQL) are never changed.
+ */
+export function readableBody(post: { body: string; format?: string | null }): string {
+  return post.format === 'markdown' ? plainText(String(post.body ?? '').slice(0, READABLE_SOURCE_MAX)).replace(/\s+/g, ' ').trim() : String(post.body ?? '');
+}
+
 export function excerpt(text: string, max: number): string {
   const t = String(text ?? '').replace(/\s+/g, ' ').trim();
   return cutExcerpt(t, max, (s) => s.replace(/[\s,.;:–-]+$/, ''));

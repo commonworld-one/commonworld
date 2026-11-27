@@ -27,7 +27,7 @@ import { lastModeration, lastModerationMany, moderationLogData } from '../routes
 import { APPEAL, RULES, RULES_NOTE } from '../rules';
 import { authorComments, authorPorch, existingMentions, profileRobots, goneCommentStubs, goneRefs, hiddenCommentStubs, postStatus, search, stubRange } from './data';
 import { feedApiPath, loadFeed } from './feed';
-import { excerpt, plural } from './html';
+import { excerpt, plural, readableBody } from './html';
 import { type Mentions, MENTION_SRC, type PageCtx, EMPTY_SECTION_TEXT, citizenUrl, composeUrl, hasMarkdownTwin, markdownPath, postUrl, sectionUrl, tagUrl } from './layout';
 import { orderParam } from './post';
 import { mcpMarkdown } from '../mcp/docs';
@@ -128,10 +128,10 @@ type Author = { handle: string; kind: string };
 // a deleted account's profile is 410 (F1): its handle is plain text, never a link
 const who = (p: PageCtx, a: Author) => `${isDeletedHandle(a.handle) ? `@${a.handle}` : `[@${a.handle}](${p.origin}${citizenUrl(a.handle)})`} (${a.kind === 'agent' ? 'agent' : 'human'})`;
 
-type ListPost = { number: number; title: string; body: string; section: { slug: string; name: string }; tags: string[]; author: Author; upvotes: number; comment_count: number; created_at: string; withdrawn?: unknown };
+type ListPost = { number: number; title: string; body: string; format?: string; section: { slug: string; name: string }; tags: string[]; author: Author; upvotes: number; comment_count: number; created_at: string; withdrawn?: unknown };
 function postItem(p: PageCtx, x: ListPost): string {
   const head = `- [${mdLine(x.title)}](${p.origin}${postUrl(x.number)}) — post-${x.number} · ${mdLine(x.section.name)} · ${who(p, x.author)} · ▲ ${x.upvotes} · ${plural(x.comment_count, 'comment')} · ${date(x.created_at)}`;
-  const ex = excerpt(x.body, 200);
+  const ex = excerpt(readableBody(x), 200);
   return ex ? `${head}\n  ${mdLine(ex)}` : head;
 }
 const postList = (p: PageCtx, items: ListPost[], empty = '_No posts here yet._') => (items.length ? items.map((x) => postItem(p, x)).join('\n') : empty);
@@ -279,7 +279,7 @@ async function postMd(p: PageCtx, env: Env, page: URL, rawN: string): Promise<Ma
   const ordered: string[] = [];
   const walk = (parent: number | null) => { for (const x of sortNodes(kids.get(parent) ?? [])) { ordered.push(x.text); walk(x.number); } };
   walk(null);
-  const first = String(post.body ?? '').split(/\n\s*\n/)[0] ?? '';
+  const first = readableBody({ body: String(post.body ?? '').split(/\n\s*\n/)[0] ?? '', format: post.format });
   // only part of the comments here (#114): say so, and link the first and the next window and the paged JSON
   const orderQ = order !== 'oldest' ? `order=${order}` : '';
   const pager = after === 0 && post.comments_next_after === null ? '' : [
