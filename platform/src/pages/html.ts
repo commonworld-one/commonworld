@@ -169,20 +169,34 @@ function blockWindow(text: string, from: number, to: number, back = 600): string
   return (w.match(/^[ \t]*(```|~~~)/gm)?.length ?? 0) % 2 === 1 ? `${w}\n\`\`\`` : w;
 }
 
-/** A window cut mid-line can end inside a link, emphasis or code span: drop that unfinished tail so no syntax or URL shows. */
+/** How far from the cut end an unfinished construct is looked for (and the most text a drop can cost). */
+const OPEN_TAIL_MAX = 300;
+/**
+ * A window cut can end inside a link, emphasis or code span: drop that unfinished tail so no syntax or URL shows.
+ * Local on purpose: only the last OPEN_TAIL_MAX characters are inspected, so a stray mark early in the window (a `*`
+ * bullet, a literal asterisk, an escaped mark) can never throw away the prose after it; the most a drop can cost is that tail.
+ * Backslash escapes and list-bullet markers are blanked before counting, so they are not read as openers.
+ */
 function dropOpenSyntax(w: string): string {
-  let out = w;
-  const k = out.lastIndexOf('[');
-  if (k >= 0 && (/^!?\[[^\]\n]*$/.test(out.slice(k)) || /^\[[^\]\n]*\]\([^)]*$/.test(out.slice(k)))) out = out.slice(0, k);
+  const base = Math.max(0, w.length - OPEN_TAIL_MAX);
+  const tail = w.slice(base);
+  const blank = (m: string) => ' '.repeat(m.length);
+  // same length as `tail`, so indexes line up with `w`
+  const t = tail.replace(/\\[\\`*_{}[\]()#+\-.!|>~]/g, blank).replace(/^([ \t]*)[*+-](?=[ \t])/gm, (m) => blank(m));
+  let cut = w.length;
+  const at = (idx: number) => { if (idx >= 0) cut = Math.min(cut, base + idx); };
+  const k = t.lastIndexOf('[');
+  if (k >= 0 && (/^!?\[[^\]\n]*$/.test(t.slice(k)) || /^\[[^\]\n]*\]\([^)]*$/.test(t.slice(k)))) at(t[k - 1] === '!' ? k - 1 : k);
   for (const mark of ['**', '__', '~~']) {
-    if (((out.match(new RegExp(mark.replace(/[*_~]/g, '\\$&'), 'g')) ?? []).length) % 2 === 1) out = out.slice(0, out.lastIndexOf(mark));
+    const n = t.split(mark).length - 1;
+    if (n % 2 === 1) at(t.lastIndexOf(mark));
   }
-  const star = out.replace(/\*\*/g, '');
-  if (((star.match(/\*/g) ?? []).length) % 2 === 1) out = out.slice(0, out.lastIndexOf('*'));
-  const lt = out.lastIndexOf('<');
-  if (lt >= 0 && !out.includes('>', lt)) out = out.slice(0, lt);
-  if (!out.includes('```') && !out.includes('~~~') && ((out.match(/`/g) ?? []).length) % 2 === 1) out = out.slice(0, out.lastIndexOf('`'));
-  return out;
+  const single = t.replace(/\*\*/g, '  ');
+  if ((single.split('*').length - 1) % 2 === 1) at(single.lastIndexOf('*'));
+  if (!/```|~~~/.test(t) && (t.split('`').length - 1) % 2 === 1) at(t.lastIndexOf('`'));
+  const lt = t.lastIndexOf('<');
+  if (lt >= 0 && !t.includes('>', lt)) at(lt);
+  return w.slice(0, cut);
 }
 
 /**

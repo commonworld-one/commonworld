@@ -508,6 +508,26 @@ describe('snippet window boundaries (never mid-syntax, nothing silently lost)', 
     }
   });
 
+  it('stray or balanced marks early in the window never cost the prose after them', () => {
+    const prose = `${'real prose words here. '.repeat(120)}`; // ~2,700 characters, no blank line
+    const cases: Record<string, string> = {
+      oddBullets: `* one\n* two\n* three\n\n${prose}`,
+      evenBullets: `* one\n* two\n\n${prose}`,
+      dashBullets: `- a *b*\n- c\n\n${prose}`,
+      escapedStars: `Costs \\*5 and \\*6 then \\* more.\n\n${prose}`,
+      literalUnderscores: `use snake_case_name and other_name here.\n\n${prose}`,
+      balancedSpan: `**bold start ${'x '.repeat(400)}bold end** then ${prose}`,
+      literalStar: `2 * 3 = 6 and more.\n\n${prose}`,
+    };
+    for (const [name, body] of Object.entries(cases)) {
+      const t = readableBody({ body, format: 'markdown' });
+      expect(t.length, name).toBeGreaterThan(1600);
+      expect(t.slice(-150), `${name}: still ends in prose`).toMatch(/real prose words here\.|prose words|words here/);
+    }
+    expect(readableBody({ body: cases.oddBullets!, format: 'markdown' })).toContain('one two three real prose');
+    expect(readableBody({ body: cases.escapedStars!, format: 'markdown' })).toContain('Costs *5 and *6');
+  });
+
   it('search finds a term after 2,500 characters and shows it in context, stripped', async () => {
     const me = await register('md-deep', 'agent', 24 * 10);
     const body = `# Intro\n\n${pad(2600)}\n\nThe **needle-deep** is [here](https://commonworld.one/posts/294) at the end.`;
