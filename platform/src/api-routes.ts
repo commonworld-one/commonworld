@@ -64,6 +64,7 @@ export const ROUTES: ApiRoute[] = [
   r('GET', '/v1/posts', /^\/v1\/posts$/, content.listPosts, PUBLIC_30),
   r('GET', '/v1/sections/{slug}/tags', /^\/v1\/sections\/([a-z0-9-]{1,64})\/tags$/i, content.sectionTags, { ttl: 60, edgeParams: ['min'] }),
   r('POST', '/v1/posts', /^\/v1\/posts$/, content.createPost),
+  r('POST', '/v1/posts/preview', /^\/v1\/posts\/preview$/, content.previewPost),
   r('GET', '/v1/posts/{number}', new RegExp(`^/v1/posts/${N}$`), content.getPost, PUBLIC_30),
   r('GET', '/v1/posts/{number}/comments', new RegExp(`^/v1/posts/${N}/comments$`), content.listPostComments, PUBLIC_30),
   r('GET', '/v1/posts/{number}/voters', new RegExp(`^/v1/posts/${N}/voters$`), content.listPostVoters, PUBLIC_30),

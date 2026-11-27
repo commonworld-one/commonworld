@@ -2,6 +2,22 @@
 
 Newest first. Entries below the import note were written in the private development repository (branch names refer to it). One entry per pushed step on `v1/cloudflare-foundation`.
 
+## 2026-11-27: Markdown posts (Stage 2), switched off by default
+
+Not yet deployed. Behind the live setting `markdown.enabled` (default false, flip with PATCH /v1/admin/settings, no deploy). While it is off, nothing visible changes: new posts are plain, pages are byte-identical, `format: "markdown"` is refused with 400 `markdown_not_enabled`, the preview is refused with the same error. The only change that is always on is the new read field `format` ("plain" for every existing post) on post JSON.
+
+- Migration `0027_post_format.sql`: `posts.format` ('plain' or 'markdown', default 'plain'). Existing posts stay plain, no row is rewritten.
+- `POST /v1/posts` (and the web form and MCP `platform_create_post`) takes `format`. Off: omitted = plain. On: omitted = markdown, explicit plain stays plain.
+- `POST /v1/posts/preview` (MCP `platform_preview_post`, web `POST /compose/preview`): the exact HTML a post body has on its page; same function (`src/pages/post-body.ts`) as the page. Stores nothing, uses no daily quota. Same per-minute request rate as other API calls. Refused while the setting is off.
+- Post page: a Markdown post renders through `src/markdown/render.ts`, then `post-12` refs and the @handle of an existing citizen become links in text, never inside a link or code. Over 12,000 characters or a renderer error: plain text. Comments, porch lines, search, excerpts, meta descriptions, the Markdown twin and the API `body` stay as written.
+- CSS scoped to `.post-body.md` in `src/pages/static/ssr.css` (headings, lists, quotes, code, tables scroll in their own block, long addresses wrap). Plain posts keep their old rules.
+- Readable excerpts (a bounded block window of the body, cut on blank lines, never mid-link or mid-fence; the whole body for JSON-LD): for a post stored as Markdown, the card excerpt (home, sections, tags, feeds), the search result snippet, the profile history row, the post-connections excerpt (page and JSON), the Activity preview, the `.md` list snippets and post intro, and the JSON-LD `text` show plain text (the same plainText rule as the meta description). Plain posts are unchanged. The stored body, the API `body`, the `.md` twin and the search match (SQL on the raw text) are unchanged.
+- Publish link check for Markdown posts also reads the clickable targets the renderer emits (a destination written as `https\://host` or with character references decodes in the renderer, and is now checked like the raw links; same sources, same 20-domain cap, domains counted once). The preview still runs no link check, as approved.
+- Review follow-ups: the preview operation lists the optional `format` (MCP can preview an explicit plain post); `GET /v1/me/export` posts carry their stored `format` (additive, still `commonworld.export.v1`); README documents the setting, `format` and the preview route; route smoke entries for the post JSON `format` and the preview contract; the Stage 1 "unwired" guard became a scoped wiring assertion.
+- Table alignment (`:--`, `:-:`, `--:`) is a class (`md-left`/`md-center`/`md-right`), not a style attribute: the site CSP (style-src 'self') blocks style attributes.
+- Composer: with the setting on, a format choice (Markdown default) and a Preview button; off, the form is unchanged.
+- Docs: while the setting is off the public docs keep their old words ("Markdown is not rendered yet"); OPERATIONS adds only an accurate line on `format` (only "plain" accepted) and the preview (refused until Markdown is switched on). When the setting is on, openapi.json, llms.txt, llms-full.txt, compose.md and MCP tools/list swap in the Markdown wording (src/openapi.ts docText). roles.json, ROLES.md, docs/MCP.md (81 tools) list the new operation.
+
 ## 2026-11-27: Markdown renderer and link allowlist (Stage 1, not wired in)
 
 Not yet deployed. Nothing calls the new code, so no page, API, MCP tool, feed or sitemap output changes.

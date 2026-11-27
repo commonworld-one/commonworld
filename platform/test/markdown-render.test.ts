@@ -164,13 +164,19 @@ describe('renderMarkdown', () => {
   });
 });
 
-describe('Stage 1 does not change any page', () => {
-  it('nothing outside src/markdown imports the renderer or the allowlist', () => {
+describe('Markdown wiring is scoped (Stage 2)', () => {
+  it('only the approved sources import the renderer or the allowlist', () => {
     // every source file as text (Vite raw imports; the tests run inside the Workers runtime, which has no file system)
     const files = (import.meta as unknown as { glob: (p: string, o: object) => Record<string, string> }).glob('../src/**/*.ts', { query: '?raw', import: 'default', eager: true });
     const names = Object.keys(files);
     expect(names.length).toBeGreaterThan(40); // the glob really found the sources
     const hits = names.filter((n) => !n.includes('/src/markdown/') && /markdown\/(render|link-allowlist)|from ['"]markdown-it['"]/.test(files[n]!));
-    expect(hits).toEqual([]);
+    // post-body.ts is the one place that renders a post body (the page and the preview both call it)
+    expect(hits.map((n) => n.replace(/^.*\/src\//, ''))).toEqual(['pages/post-body.ts']);
+  });
+  it('only the post page and the content routes (create, preview) import post-body', () => {
+    const files = (import.meta as unknown as { glob: (p: string, o: object) => Record<string, string> }).glob('../src/**/*.ts', { query: '?raw', import: 'default', eager: true });
+    const hits = Object.keys(files).filter((n) => !n.endsWith('/pages/post-body.ts') && /from ['"][./]*(pages\/)?post-body(\.ts)?['"]/.test(files[n]!)).map((n) => n.replace(/^.*\/src\//, '')).sort();
+    expect(hits).toEqual(['pages/post.ts', 'routes/content.ts']);
   });
 });

@@ -3,7 +3,7 @@
  * crumbs, catbar, section tabs, tag visor, post card, porch line, sort bar). All markup goes through h``.
  */
 import { ASSETS, BOOT_SCRIPT } from './assets.gen';
-import { type Part, type Raw, ago, cutExcerpt, esc, fmt, h, join, jsonForScript, raw } from './html';
+import { type Part, type Raw, ago, cutExcerpt, esc, fmt, h, join, jsonForScript, raw, readableBody } from './html';
 import type { CatalogSection, SiteFacts } from './data';
 import { isDeletedHandle } from '../views';
 
@@ -102,8 +102,13 @@ export function mentionCandidates(texts: Iterable<string | null | undefined>): s
  * An @handle becomes a link only when the handle is in `mentions` (citizens that exist, #81); any other @word stays text.
  */
 export function richText(text: string, mentions: Mentions): Raw {
+  return raw(linkRefs(esc(text), mentions));
+}
+
+/** The ref and @handle linking of richText, on text that is ALREADY escaped (used on rendered Markdown text nodes). */
+export function linkRefs(escaped: string, mentions: Mentions): string {
   // One pass over the escaped text, so a link never lands inside another link's attribute.
-  const linked = esc(text).replace(new RegExp(`${MENTION_SRC}|\\b(post|comment|porch)-(\\d{1,15})\\b`, 'gi'),
+  return escaped.replace(new RegExp(`${MENTION_SRC}|\\b(post|comment|porch)-(\\d{1,15})\\b`, 'gi'),
     (m, pre: string | undefined, handle: string | undefined, type: string | undefined, n: string | undefined) => {
       if (handle !== undefined) {
         const key = handle.toLowerCase();
@@ -113,7 +118,6 @@ export function richText(text: string, mentions: Mentions): Raw {
       const href = t === 'post' ? postUrl(Number(n)) : `/${t === 'porch' ? 'porch' : 'comments'}/${n}`;
       return `<a class="ref" href="${href}">${t}-${n}</a>`;
     });
-  return raw(linked);
 }
 
 /** Post/comment body: paragraphs on blank lines, single newlines as <br>, all text escaped. */
@@ -227,7 +231,7 @@ export function tagVisor(tags: { slug: string; post_count: number }[], active: s
 }
 
 export interface PostItem {
-  number: number; title: string; body: string; section: { slug: string; name: string }; tags: string[];
+  number: number; title: string; body: string; /** stored text format (absent = plain) */ format?: 'plain' | 'markdown'; section: { slug: string; name: string }; tags: string[];
   author: { handle: string; kind: string }; upvotes: number; comment_count: number; created_at: string;
 }
 
@@ -240,9 +244,14 @@ export function excerptText(body: string, max = 220): string {
   return cutExcerpt(String(body ?? '').replace(/\s+/g, ' ').trim(), max);
 }
 
+/** Excerpt of a post body for cards and history rows (see readableBody: Markdown posts as plain text, plain posts untouched). */
+export function postExcerpt(post: { body: string; format?: string }, max = 220): string {
+  return excerptText(readableBody(post), max);
+}
+
 export function postCard(post: PostItem, now: number): Raw {
   const tg = [...post.tags.slice(0, 4).map((t) => tagpill(t)), post.tags.length > 4 ? h`<span class="more">+${post.tags.length - 4}</span>` : ''];
-  return h`<article class="cw-card post-card" data-kind="${kindOf(post.author.kind)}"><div class="cw-meta">${catchip(post.section.slug, post.section.name)}<a class="ref chip" href="${postUrl(post.number)}">post-${post.number}</a></div><h3><a href="${postUrl(post.number)}">${post.title}</a></h3><p>${excerptText(post.body)}</p><div class="keynum"><b>▲ ${post.upvotes}</b><span>upvotes</span><b>${post.comment_count}</b><span>comments</span></div><div class="byline">${who(post.author)}<span>·</span>${timeAgo(post.created_at, now)}</div>${post.tags.length ? h`<div class="card-tags">${tg}</div>` : ''}</article>`;
+  return h`<article class="cw-card post-card" data-kind="${kindOf(post.author.kind)}"><div class="cw-meta">${catchip(post.section.slug, post.section.name)}<a class="ref chip" href="${postUrl(post.number)}">post-${post.number}</a></div><h3><a href="${postUrl(post.number)}">${post.title}</a></h3><p>${postExcerpt(post)}</p><div class="keynum"><b>▲ ${post.upvotes}</b><span>upvotes</span><b>${post.comment_count}</b><span>comments</span></div><div class="byline">${who(post.author)}<span>·</span>${timeAgo(post.created_at, now)}</div>${post.tags.length ? h`<div class="card-tags">${tg}</div>` : ''}</article>`;
 }
 
 /** Card grid with a Sponsored card after every 12 posts. */

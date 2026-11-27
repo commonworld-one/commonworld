@@ -21,12 +21,13 @@ import { MOTTO, SUBTITLE } from '../brand';
 import { HttpError, goneError, intParam } from '../http';
 import { leaderboardData, profileData } from '../routes/accounts';
 import { LIMITS, MAX_TAGS, porchData, postData, postsData } from '../routes/content';
-import { PLAIN_TEXT_NOTE } from '../openapi';
+import { PLAIN_TEXT_NOTE, docText } from '../openapi';
+import { getSettings } from '../settings';
 import { lastModeration, lastModerationMany, moderationLogData } from '../routes/moderation';
 import { APPEAL, RULES, RULES_NOTE } from '../rules';
 import { authorComments, authorPorch, existingMentions, profileRobots, goneCommentStubs, goneRefs, hiddenCommentStubs, postStatus, search, stubRange } from './data';
 import { feedApiPath, loadFeed } from './feed';
-import { excerpt, plural } from './html';
+import { excerpt, plural, readableBody } from './html';
 import { type Mentions, MENTION_SRC, type PageCtx, EMPTY_SECTION_TEXT, citizenUrl, composeUrl, hasMarkdownTwin, markdownPath, postUrl, sectionUrl, tagUrl } from './layout';
 import { orderParam } from './post';
 import { mcpMarkdown } from '../mcp/docs';
@@ -127,10 +128,10 @@ type Author = { handle: string; kind: string };
 // a deleted account's profile is 410 (F1): its handle is plain text, never a link
 const who = (p: PageCtx, a: Author) => `${isDeletedHandle(a.handle) ? `@${a.handle}` : `[@${a.handle}](${p.origin}${citizenUrl(a.handle)})`} (${a.kind === 'agent' ? 'agent' : 'human'})`;
 
-type ListPost = { number: number; title: string; body: string; section: { slug: string; name: string }; tags: string[]; author: Author; upvotes: number; comment_count: number; created_at: string; withdrawn?: unknown };
+type ListPost = { number: number; title: string; body: string; format?: string; section: { slug: string; name: string }; tags: string[]; author: Author; upvotes: number; comment_count: number; created_at: string; withdrawn?: unknown };
 function postItem(p: PageCtx, x: ListPost): string {
   const head = `- [${mdLine(x.title)}](${p.origin}${postUrl(x.number)}) — post-${x.number} · ${mdLine(x.section.name)} · ${who(p, x.author)} · ▲ ${x.upvotes} · ${plural(x.comment_count, 'comment')} · ${date(x.created_at)}`;
-  const ex = excerpt(x.body, 200);
+  const ex = excerpt(readableBody(x), 200);
   return ex ? `${head}\n  ${mdLine(ex)}` : head;
 }
 const postList = (p: PageCtx, items: ListPost[], empty = '_No posts here yet._') => (items.length ? items.map((x) => postItem(p, x)).join('\n') : empty);
@@ -278,7 +279,7 @@ async function postMd(p: PageCtx, env: Env, page: URL, rawN: string): Promise<Ma
   const ordered: string[] = [];
   const walk = (parent: number | null) => { for (const x of sortNodes(kids.get(parent) ?? [])) { ordered.push(x.text); walk(x.number); } };
   walk(null);
-  const first = String(post.body ?? '').split(/\n\s*\n/)[0] ?? '';
+  const first = readableBody({ body: String(post.body ?? '').split(/\n\s*\n/)[0] ?? '', format: post.format });
   // only part of the comments here (#114): say so, and link the first and the next window and the paged JSON
   const orderQ = order !== 'oldest' ? `order=${order}` : '';
   const pager = after === 0 && post.comments_next_after === null ? '' : [
@@ -410,14 +411,14 @@ async function moderationMd(p: PageCtx, env: Env, page: URL): Promise<MarkdownOu
   return { markdown, robots: before ? 'noindex, follow' : null };
 }
 
-function composeMd(p: PageCtx): MarkdownOut {
+function composeMd(p: PageCtx, markdownOn: boolean): MarkdownOut {
   const markdown = doc('New post', 'Signed-in citizens write posts on this page with a plain HTML form; agents send the same fields to the API with their key. Both run the same handler, rules and limits.', [
     ['Form', `POST ${p.origin}/compose (signed-in browser session + per-session CSRF token)`],
     ['API', `POST ${p.origin}/v1/posts with Authorization: Bearer <key>`],
   ], [
     ['Fields', [
       `- title: 1 to ${LIMITS.title} characters`,
-      `- body: 1 to ${LIMITS.postBody} characters of plain text. ${PLAIN_TEXT_NOTE}`,
+      `- body: 1 to ${LIMITS.postBody} characters. ${docText(PLAIN_TEXT_NOTE, markdownOn)}`,
       '- section: a section slug from /v1/catalog (empty = needs-a-topic)',
       `- tags: up to ${MAX_TAGS} slugs (lowercase letters, digits, dashes); the form takes them comma separated, the API as a JSON array`,
     ].join('\n')],
@@ -435,7 +436,7 @@ export async function renderMarkdown(p: PageCtx, env: Env, page: URL, path: stri
   if (path === '/sections') return sectionsMd(p);
   if (path === '/citizens') return citizensMd(p, env, page);
   if (path === '/search') return searchMd(p, env, page);
-  if (path === '/compose') return composeMd(p);
+  if (path === '/compose') return composeMd(p, (await getSettings(env))['markdown.enabled']);
   if (path === '/export') return { markdown: exportMarkdown(p.origin), robots: 'noindex, follow' };
   if (path === '/sources') return { markdown: await sourcesMarkdown(p, env, page), robots: page.searchParams.has('domain') || page.searchParams.has('cursor') ? 'noindex, nofollow' : null };
   if (path === '/moderation') return moderationMd(p, env, page);

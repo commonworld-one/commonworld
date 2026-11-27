@@ -137,6 +137,89 @@ export function cutExcerpt(t: string, max: number, tidy = (s: string) => s): str
  * Plain-text excerpt for cards and meta descriptions: collapses whitespace, cuts at a word boundary. `max` counts
  * grapheme clusters (see cutExcerpt), so an emoji or accented letter is never split.
  */
+/** Source characters read for a snippet of a Markdown post (syntax is removed first, so more than any snippet needs). */
+export const READABLE_SOURCE_MAX = 2000;
+
+/**
+ * `text[from, to)` cut on Markdown block boundaries, never mid-syntax where it can be avoided: the start moves back to the
+ * start of its paragraph (at most `back` characters) and the end to the last blank line, else the last line break, else
+ * the last space before `to`. An odd number of code-fence lines (the window ends inside a fence) is closed again, so the
+ * fence markers are removed with the rest of the syntax instead of being shown.
+ */
+function blockWindow(text: string, from: number, to: number, back = 600): string {
+  let a = Math.max(0, from);
+  if (a > 0) {
+    const para = text.lastIndexOf('\n\n', a);
+    const line = text.lastIndexOf('\n', a);
+    a = para >= 0 && a - para <= back ? para + 2 : line >= 0 && a - line <= back ? line + 1 : a;
+  }
+  let b = Math.min(text.length, to);
+  const cut = b < text.length;
+  if (cut) {
+    // prefer a blank line, then a line break, then a space, but only in the second half of the window: a boundary
+    // right after the first heading would throw the rest of the window away
+    const floor = a + Math.floor((b - a) / 2);
+    const para = text.lastIndexOf('\n\n', b);
+    const line = text.lastIndexOf('\n', b);
+    const sp = text.lastIndexOf(' ', b);
+    b = para > floor ? para : line > floor ? line : sp > floor ? sp : b;
+  }
+  let w = text.slice(a, b);
+  if (cut) w = dropOpenSyntax(w);
+  return (w.match(/^[ \t]*(```|~~~)/gm)?.length ?? 0) % 2 === 1 ? `${w}\n\`\`\`` : w;
+}
+
+/** How far from the cut end an unfinished construct is looked for (and the most text a drop can cost). */
+const OPEN_TAIL_MAX = 300;
+/**
+ * A window cut can end inside a link, emphasis or code span: drop that unfinished tail so no syntax or URL shows.
+ * Local on purpose: only the last OPEN_TAIL_MAX characters are inspected, so a stray mark early in the window (a `*`
+ * bullet, a literal asterisk, an escaped mark) can never throw away the prose after it; the most a drop can cost is that tail.
+ * Backslash escapes and list-bullet markers are blanked before counting, so they are not read as openers.
+ */
+function dropOpenSyntax(w: string): string {
+  const base = Math.max(0, w.length - OPEN_TAIL_MAX);
+  const tail = w.slice(base);
+  const blank = (m: string) => ' '.repeat(m.length);
+  // same length as `tail`, so indexes line up with `w`
+  const t = tail.replace(/\\[\\`*_{}[\]()#+\-.!|>~]/g, blank).replace(/^([ \t]*)[*+-](?=[ \t])/gm, (m) => blank(m));
+  let cut = w.length;
+  const at = (idx: number) => { if (idx >= 0) cut = Math.min(cut, base + idx); };
+  const k = t.lastIndexOf('[');
+  if (k >= 0 && (/^!?\[[^\]\n]*$/.test(t.slice(k)) || /^\[[^\]\n]*\]\([^)]*$/.test(t.slice(k)))) at(t[k - 1] === '!' ? k - 1 : k);
+  for (const mark of ['**', '__', '~~']) {
+    const n = t.split(mark).length - 1;
+    if (n % 2 === 1) at(t.lastIndexOf(mark));
+  }
+  const single = t.replace(/\*\*/g, '  ');
+  if ((single.split('*').length - 1) % 2 === 1) at(single.lastIndexOf('*'));
+  if (!/```|~~~/.test(t) && (t.split('`').length - 1) % 2 === 1) at(t.lastIndexOf('`'));
+  const lt = t.lastIndexOf('<');
+  if (lt >= 0 && !t.includes('>', lt)) at(lt);
+  return w.slice(0, cut);
+}
+
+/**
+ * The text a snippet (card, search hit, history row, connections, Activity, .md list, JSON-LD) is cut from: a post stored
+ * as Markdown is shown as plain text (plainText, the rule of its meta description) over a bounded block window, so the
+ * cost stays small on pages with many cards; a plain post is returned as it is. `budget` is the source window
+ * (default READABLE_SOURCE_MAX; the 12,000-character post limit reads the whole body). `near` centres the window on the
+ * first raw occurrence of that text (search hits). Only displays call this: the stored body, the API `body` and the
+ * search match (raw SQL) are never changed.
+ */
+export function readableBody(post: { body: string; format?: string | null }, opts: { budget?: number; near?: string } = {}): string {
+  const body = String(post.body ?? '');
+  if (post.format !== 'markdown') return body;
+  const budget = opts.budget ?? READABLE_SOURCE_MAX;
+  let from = 0;
+  if (opts.near && body.length > budget) {
+    const i = body.toLowerCase().indexOf(opts.near.toLowerCase());
+    if (i > 0) from = Math.max(0, i - 300);
+  }
+  const win = body.length <= budget ? body : blockWindow(body, from, from + budget);
+  return plainText(win).replace(/\s+/g, ' ').trim();
+}
+
 export function excerpt(text: string, max: number): string {
   const t = String(text ?? '').replace(/\s+/g, ' ').trim();
   return cutExcerpt(t, max, (s) => s.replace(/[\s,.;:–-]+$/, ''));

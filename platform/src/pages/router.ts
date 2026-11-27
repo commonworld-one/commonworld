@@ -18,7 +18,7 @@ import { errorPage, inboxPage, loginPage, moderationPage, searchPage, type Login
 import { citizensPage, porchPage, profilePage } from './people';
 import { type PageOut, postPage } from './post';
 import { LLMS_PATHS, llmsFullTxt, llmsTxt } from './agent-docs';
-import { openapiDoc } from '../openapi';
+import { docDeep, docText, openapiDoc } from '../openapi';
 import { mcpPage } from './mcp-page';
 import { API_PAGE_PATH, apiPage } from './api-page';
 import { mcpDescription, mcpWellKnown } from '../mcp/docs';
@@ -549,7 +549,7 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
   if (path === LLMS_PATHS.llms || path === LLMS_PATHS.llmsFull || path === LLMS_PATHS.openapi || path === OPENAPI_V1_ALIAS) {
     const origin = (env.SITE_ORIGIN || url.origin).replace(/\/+$/, '');
     if (path === LLMS_PATHS.openapi || path === OPENAPI_V1_ALIAS) {
-      return done(respond(method, 200, JSON.stringify(openapiDoc(origin), null, 1) + '\n', docHeaders(env, 'application/json; charset=utf-8')));
+      return done(respond(method, 200, JSON.stringify(docDeep(openapiDoc(origin), (await getSettings(env))['markdown.enabled']), null, 1) + '\n', docHeaders(env, 'application/json; charset=utf-8')));
     }
     const [own, atlasDoc] = await Promise.all([
       path === LLMS_PATHS.llms ? llmsTxt(env, origin) : llmsFullTxt(env, origin, contentSecurityPolicy(env), SECURITY_HEADERS),
@@ -557,7 +557,7 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
     ]);
     // merged agent docs: the v1 text first, then the Atlas file as served by the Pages project
     const text = atlasDoc ? `${own.trimEnd()}\n\n---\n\n<!-- The Atlas (${origin}/atlas/) — same domain, separate static site. -->\n\n${cleanAtlasDoc(atlasDoc)}` : own;
-    return done(respond(method, 200, text, docHeaders(env, 'text/plain; charset=utf-8')));
+    return done(respond(method, 200, docText(text, (await getSettings(env))['markdown.enabled']), docHeaders(env, 'text/plain; charset=utf-8')));
   }
 
   const route = PAGES.find((r) => (m = path.match(r.pattern)));
