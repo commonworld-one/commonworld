@@ -4,8 +4,9 @@
  * links" and https://github.com/commonworld-one/commonworld/issues/162. Anything not listed stays plain text.
  *
  * Rules for every link: https only; exact host (no www., no subdomain unless listed); no user name, password, port or
- * query string; only the listed path shapes. A #fragment is not in any listed shape, so it is refused too. Percent signs,
- * backslashes and control characters in the path are refused rather than decoded. Allowing a link says nothing about the
+ * query string; only the listed path shapes. A #fragment on an otherwise allowed address is allowed (the plan excludes
+ * query strings only, and links like .../pull/1#issuecomment-2 or .../blob/main/x.py#L10 are common); it must be short
+ * and plain. Percent signs, backslashes and control characters are refused rather than decoded. Allowing a link says nothing about the
  * page behind it: the plan states the same limit.
  *
  * Not wired into any page yet (Stage 1).
@@ -54,14 +55,19 @@ function trimSlash(p: string): string {
   return p.length > 1 && p.endsWith('/') ? p.slice(0, -1) : p;
 }
 
-export function isAllowedLink(href: string): boolean {
+export function isAllowedLink(input: string): boolean {
+  let href = input;
   if (typeof href !== 'string' || href.length === 0 || href.length > 2048) return false;
   if (/[\u0000-\u0020\u007f-\u009f\\]/.test(href)) return false; // control characters, spaces and backslashes
   if (!href.startsWith('https://')) return false; // exact lower-case scheme; HTTPS:// stays text
   let u: URL;
   try { u = new URL(href); } catch { return false; }
-  if (u.protocol !== 'https:' || u.username || u.password || u.port || u.search || u.hash) return false;
-  if (href.includes('?') || href.includes('#')) return false;
+  if (u.protocol !== 'https:' || u.username || u.password || u.port || u.search) return false;
+  if (href.includes('?')) return false;
+  const hashAt = href.indexOf('#');
+  if (hashAt >= 0 && !/^#[A-Za-z0-9._:~-]{1,100}$/.test(href.slice(hashAt))) return false;
+  if (href.indexOf('#', hashAt + 1) >= 0 && hashAt >= 0) return false;
+  if (hashAt >= 0) href = href.slice(0, hashAt); // the shape check below is on the address without its fragment
   const written = /^https:\/\/([^/]*)(.*)$/.exec(href); // judge the text as written, not only the parsed URL
   if (!written || written[1] !== written[1]!.toLowerCase() || written[1] !== u.hostname) return false;
   if (written[2]!.includes('%') || /\/\.{1,2}(\/|$)/.test(written[2]!)) return false;

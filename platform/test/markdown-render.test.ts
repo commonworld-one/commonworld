@@ -11,7 +11,7 @@ const render = (s: string): string => {
 };
 
 // ---- a scanner for the output: only the planned subset of tags and attributes, and only allowlisted links
-const TAGS = new Set('p a em strong ul ol li blockquote code pre h1 h2 h3 h4 h5 h6 hr br table thead tbody tr th td s'.split(' '));
+const TAGS = new Set('p a em strong ul ol li blockquote code pre h2 h3 h4 br table thead tbody tr th td'.split(' '));
 const ATTRS: Record<string, string[]> = { a: ['href', 'rel', 'title'], th: ['style'], td: ['style'], ol: ['start'], code: ['class'] };
 function scan(html: string): string[] {
   const problems: string[] = [];
@@ -32,7 +32,7 @@ function scan(html: string): string[] {
 
 describe('link allowlist (post-294)', () => {
   const yes = [
-    'https://github.com/commonworld-one/commonworld', 'https://github.com/commonworld-one/commonworld/', 'https://github.com/a/b/issues/162',
+    'https://github.com/commonworld-one/commonworld', 'https://github.com/commonworld-one/commonworld/', 'https://github.com/a/b/issues/162', 'https://github.com/a/b/pull/158#issuecomment-7063571089', 'https://github.com/a/b/blob/main/x.py#L10-L20', 'https://zambo.dev/workflows/#check-contradictions', `https://basescan.org/address/0x${'a'.repeat(40)}#code`, 'https://commonworld.one/posts/116#comment-173',
     'https://github.com/a/b/pull/337', 'https://github.com/a/b/commit/e7932eaa', 'https://github.com/a/b/blob/main/platform/src/http.ts',
     'https://github.com/a/b/tree/main/docs', 'https://1f916.ai/', 'https://1f916.ai', 'https://1f916.ai/about', 'https://1f916.ai/api/listings',
     'https://1f916.ai/api/listings/61', 'https://1f916.ai/api/listings/guide', 'https://1f916.ai/api/post/3525',
@@ -46,7 +46,7 @@ describe('link allowlist (post-294)', () => {
     'https://raise.commonworld.one/',
   ];
   const no = [
-    'http://github.com/a/b', 'HTTPS://github.com/a/b', 'https://www.github.com/a/b', 'https://github.com/a/b?x=1', 'https://github.com/a/b#readme',
+    'http://github.com/a/b', 'HTTPS://github.com/a/b', 'https://www.github.com/a/b', 'https://github.com/a/b?x=1', 'https://github.com/a/b#a b', 'https://github.com/a/b#%41', 'https://github.com/a/b#<x>', 'https://github.com/a/b##x', 'https://github.com/a/b#', 'https://github.com/a/b/issues/new#x', 'https://evil.example/#x',
     'https://user@github.com/a/b', 'https://user:pw@github.com/a/b', 'https://github.com:8080/a/b', 'https://github.com/login', 'https://github.com/login/oauth/authorize',
     'https://github.com/settings/tokens', 'https://github.com/a/b/issues/new', 'https://github.com/a/b/archive/refs/heads/main.zip', 'https://github.com/a/b/raw/main/x',
     'https://github.com/a/b/releases/download/v1/x.zip', 'https://github.com/a', 'https://github.com/', 'https://github.com/a/b/blob/main/%2e%2e/x', 'https://github.com/a/b/../c/d',
@@ -63,9 +63,26 @@ describe('link allowlist (post-294)', () => {
 
 describe('renderMarkdown', () => {
   it('renders the planned subset', () => {
-    const h = render('# T\n\nA **bold** and *it* and `code`.\n\n- a\n- b\n\n1. x\n2. y\n\n> quote\n\n| a | b |\n|---|---|\n| 1 | 2 |\n\n```\nfence\n```\n\n---');
-    for (const t of ['<h1>', '<strong>bold</strong>', '<em>it</em>', '<code>code</code>', '<ul>', '<ol>', '<blockquote>', '<table>', '<pre><code>', '<hr>']) expect(h).toContain(t);
+    const h = render('# T\n\nA **bold** and *it* and `code`.\n\n- a\n- b\n\n1. x\n2. y\n\n> quote\n\n| a | b |\n|---|---|\n| 1 | 2 |\n\n```\nfence\n```');
+    for (const t of ['<strong>bold</strong>', '<em>it</em>', '<code>code</code>', '<ul>', '<ol>', '<blockquote>', '<table>', '<pre><code>', '<h2>T</h2>']) expect(h).toContain(t);
     expect(scan(h)).toEqual([]);
+  });
+
+  it('shows headings below the page title (h2 to h4)', () => {
+    const h = render('# one\n\n## two\n\n### three\n\n#### four\n\n###### six\n\nSetext\n======');
+    expect(h).not.toMatch(/<h1|<h5|<h6/);
+    for (const t of ['<h2>one</h2>', '<h3>two</h3>', '<h4>three</h4>', '<h4>four</h4>', '<h4>six</h4>', '<h2>Setext</h2>']) expect(h).toContain(t);
+  });
+
+  it('shows what is outside the approved subset as typed', () => {
+    const h = render('~~gone~~\n\n***\n\n![alt](https://evil.example/a.png)');
+    expect(h).toContain('~~gone~~');
+    expect(h).toContain('***');
+    expect(h).not.toMatch(/<s>|<hr|<img|<del/);
+  });
+
+  it('keeps single line breaks, as post pages do today', () => {
+    expect(render('line one\nline two')).toBe('<p>line one<br>\nline two</p>\n');
   });
 
   it('shows raw HTML as text', () => {

@@ -5,7 +5,8 @@
  *
  * Choices (each is covered by test/markdown-render.test.ts):
  *   - markdown-it with raw HTML OFF (it is shown as text), linkify OFF (a bare address is never made a link), the
- *     image rule OFF (image syntax is shown as typed) and tables ON. Everything else is CommonMark.
+ *     image, reference-link, strikethrough and horizontal-rule rules OFF (shown as typed) and tables ON. Headings are
+ *     shifted down one level (h2 to h4). A single newline is a line break, as on post pages today.
  *   - A link becomes clickable only if isAllowedLink() says so; it then gets rel="ugc noopener". Any other link,
  *     including [text](url), <url> and reference links, is shown as the exact source text that was written.
  *   - The link check runs as a core rule on the finished token stream. Wrapping inline rules to rewrite tokens
@@ -21,12 +22,15 @@ export const MAX_MARKDOWN_CHARS = 12_000;
 
 type InlineRule = (state: any, silent: boolean) => boolean;
 
-const md = new MarkdownIt({ html: false, linkify: false, typographer: false, breaks: false, maxNesting: 100 });
+const md = new MarkdownIt({ html: false, linkify: false, typographer: false, breaks: true, maxNesting: 100 });
 md.enable('table');
 md.disable('image');
 // Reference-style links ([x][y] with [y]: url) are off: the definition line would vanish from the page, and a link shown
 // "as written" must keep every character. They are shown as typed. (Open item for Stage 2: turn on if wanted.)
 md.disable('reference');
+// Only the subset in post-294 is rendered: paragraphs, headings, bold, italic, lists, quotes, code, tables, links.
+// Strikethrough and horizontal rules are not on that list, so they are shown as typed.
+md.disable(['strikethrough', 'hr']);
 
 /** Remember the exact source text of every link and autolink on its link_open token. No token is added or removed. */
 function recordSource(name: 'link' | 'autolink'): void {
@@ -48,6 +52,15 @@ function recordSource(name: 'link' | 'autolink'): void {
 }
 recordSource('link');
 recordSource('autolink');
+
+/** Headings sit below the page title: # is shown as h2, ## as h3, ### and deeper as h4 (issue #162: "h2 to h4"). */
+md.core.ruler.push('heading_levels', (state) => {
+  for (const t of state.tokens) {
+    if (t.type !== 'heading_open' && t.type !== 'heading_close') continue;
+    const level = Number(t.tag.slice(1));
+    t.tag = `h${Math.min(level + 1, 4)}`;
+  }
+});
 
 md.core.ruler.push('link_allowlist', (state) => {
   for (const block of state.tokens) {
