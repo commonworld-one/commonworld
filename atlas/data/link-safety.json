@@ -38,8 +38,8 @@
  "run_started_at": "2026-11-26T13:53:20Z",
  "run_at": "2026-11-26T13:53:27Z",
  "summary": {
-  "hosts": 362,
-  "clean": 362,
+  "hosts": 371,
+  "clean": 371,
   "flagged": 0,
   "no_data": 0,
   "query_errors": 0
@@ -14170,6 +14170,357 @@
    ],
    "entries": [
     "youraitools"
+   ]
+  },
+  "agent-relay-lab-20261116.twincactus4.chatgpt.site": {
+   "status": "clean",
+   "checked_at": "2026-11-27T03:04:16Z",
+   "flagged_by": [],
+   "sources": [
+    {
+     "name": "google_safe_browsing",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://transparencyreport.google.com/safe-browsing/search?url=agent-relay-lab-20261116.twincactus4.chatgpt.site",
+     "data": {
+      "code": 1,
+      "threats": [],
+      "google_updated_at": "2026-11-22T12:41:45Z"
+     }
+    },
+    {
+     "name": "metamask_phishing_detect",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://github.com/MetaMask/eth-phishing-detect/blob/main/src/config.json"
+    },
+    {
+     "name": "scamsniffer",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://github.com/scamsniffer/scam-database/blob/main/blacklist/domains.json"
+    },
+    {
+     "name": "cert_polska",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:16Z",
+     "evidence_url": "https://cert.pl/en/warning-list/"
+    }
+   ],
+   "entries": [
+    "relay-task-market"
+   ]
+  },
+  "agentbounties.app": {
+   "status": "clean",
+   "checked_at": "2026-11-27T03:04:16Z",
+   "flagged_by": [],
+   "sources": [
+    {
+     "name": "google_safe_browsing",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://transparencyreport.google.com/safe-browsing/search?url=agentbounties.app",
+     "data": {
+      "code": 1,
+      "threats": [],
+      "google_updated_at": "2026-11-25T15:37:58Z"
+     }
+    },
+    {
+     "name": "metamask_phishing_detect",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://github.com/MetaMask/eth-phishing-detect/blob/main/src/config.json"
+    },
+    {
+     "name": "scamsniffer",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://github.com/scamsniffer/scam-database/blob/main/blacklist/domains.json"
+    },
+    {
+     "name": "cert_polska",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:16Z",
+     "evidence_url": "https://cert.pl/en/warning-list/"
+    }
+   ],
+   "entries": [
+    "agent-bounties"
+   ]
+  },
+  "agentlair.dev": {
+   "status": "clean",
+   "checked_at": "2026-11-27T03:04:16Z",
+   "flagged_by": [],
+   "sources": [
+    {
+     "name": "google_safe_browsing",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://transparencyreport.google.com/safe-browsing/search?url=agentlair.dev",
+     "data": {
+      "code": 1,
+      "threats": [],
+      "google_updated_at": "2026-11-05T04:13:01Z"
+     }
+    },
+    {
+     "name": "metamask_phishing_detect",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://github.com/MetaMask/eth-phishing-detect/blob/main/src/config.json"
+    },
+    {
+     "name": "scamsniffer",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://github.com/scamsniffer/scam-database/blob/main/blacklist/domains.json"
+    },
+    {
+     "name": "cert_polska",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:16Z",
+     "evidence_url": "https://cert.pl/en/warning-list/"
+    }
+   ],
+   "entries": [
+    "agentlair"
+   ]
+  },
+  "agentswarm.space": {
+   "status": "clean",
+   "checked_at": "2026-11-27T03:04:16Z",
+   "flagged_by": [],
+   "sources": [
+    {
+     "name": "google_safe_browsing",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://transparencyreport.google.com/safe-browsing/search?url=agentswarm.space",
+     "data": {
+      "code": 1,
+      "threats": [],
+      "google_updated_at": "2026-11-11T06:49:20Z"
+     }
+    },
+    {
+     "name": "metamask_phishing_detect",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://github.com/MetaMask/eth-phishing-detect/blob/main/src/config.json"
+    },
+    {
+     "name": "scamsniffer",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://github.com/scamsniffer/scam-database/blob/main/blacklist/domains.json"
+    },
+    {
+     "name": "cert_polska",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:16Z",
+     "evidence_url": "https://cert.pl/en/warning-list/"
+    }
+   ],
+   "entries": [
+    "agentswarm-space"
+   ]
+  },
+  "atto.market": {
+   "status": "clean",
+   "checked_at": "2026-11-27T03:04:16Z",
+   "flagged_by": [],
+   "sources": [
+    {
+     "name": "google_safe_browsing",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://transparencyreport.google.com/safe-browsing/search?url=atto.market",
+     "data": {
+      "code": 1,
+      "threats": [],
+      "google_updated_at": "2026-11-26T06:04:37Z"
+     }
+    },
+    {
+     "name": "metamask_phishing_detect",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://github.com/MetaMask/eth-phishing-detect/blob/main/src/config.json"
+    },
+    {
+     "name": "scamsniffer",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://github.com/scamsniffer/scam-database/blob/main/blacklist/domains.json"
+    },
+    {
+     "name": "cert_polska",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:16Z",
+     "evidence_url": "https://cert.pl/en/warning-list/"
+    }
+   ],
+   "entries": [
+    "atto-marketplace"
+   ]
+  },
+  "make.fun": {
+   "status": "clean",
+   "checked_at": "2026-11-27T03:04:16Z",
+   "flagged_by": [],
+   "sources": [
+    {
+     "name": "google_safe_browsing",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://transparencyreport.google.com/safe-browsing/search?url=make.fun",
+     "data": {
+      "code": 1,
+      "threats": [],
+      "google_updated_at": "2026-11-27T01:51:34Z"
+     }
+    },
+    {
+     "name": "metamask_phishing_detect",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://github.com/MetaMask/eth-phishing-detect/blob/main/src/config.json"
+    },
+    {
+     "name": "scamsniffer",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://github.com/scamsniffer/scam-database/blob/main/blacklist/domains.json"
+    },
+    {
+     "name": "cert_polska",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:16Z",
+     "evidence_url": "https://cert.pl/en/warning-list/"
+    }
+   ],
+   "entries": [
+    "make-fun"
+   ]
+  },
+  "orbitxpay.com": {
+   "status": "clean",
+   "checked_at": "2026-11-27T03:04:16Z",
+   "flagged_by": [],
+   "sources": [
+    {
+     "name": "google_safe_browsing",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://transparencyreport.google.com/safe-browsing/search?url=orbitxpay.com",
+     "data": {
+      "code": 1,
+      "threats": [],
+      "google_updated_at": "2026-11-18T15:45:44Z"
+     }
+    },
+    {
+     "name": "metamask_phishing_detect",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://github.com/MetaMask/eth-phishing-detect/blob/main/src/config.json"
+    },
+    {
+     "name": "scamsniffer",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://github.com/scamsniffer/scam-database/blob/main/blacklist/domains.json"
+    },
+    {
+     "name": "cert_polska",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:16Z",
+     "evidence_url": "https://cert.pl/en/warning-list/"
+    }
+   ],
+   "entries": [
+    "orbitxpay"
+   ]
+  },
+  "samedaydesk.com": {
+   "status": "clean",
+   "checked_at": "2026-11-27T03:04:16Z",
+   "flagged_by": [],
+   "sources": [
+    {
+     "name": "google_safe_browsing",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://transparencyreport.google.com/safe-browsing/search?url=samedaydesk.com",
+     "data": {
+      "code": 1,
+      "threats": [],
+      "google_updated_at": "2026-11-15T12:19:26Z"
+     }
+    },
+    {
+     "name": "metamask_phishing_detect",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://github.com/MetaMask/eth-phishing-detect/blob/main/src/config.json"
+    },
+    {
+     "name": "scamsniffer",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://github.com/scamsniffer/scam-database/blob/main/blacklist/domains.json"
+    },
+    {
+     "name": "cert_polska",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:16Z",
+     "evidence_url": "https://cert.pl/en/warning-list/"
+    }
+   ],
+   "entries": [
+    "samedaydesk"
+   ]
+  },
+  "tempo.xyz": {
+   "status": "clean",
+   "checked_at": "2026-11-27T03:04:16Z",
+   "flagged_by": [],
+   "sources": [
+    {
+     "name": "google_safe_browsing",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://transparencyreport.google.com/safe-browsing/search?url=tempo.xyz",
+     "data": {
+      "code": 1,
+      "threats": [],
+      "google_updated_at": "2026-11-27T02:36:16Z"
+     }
+    },
+    {
+     "name": "metamask_phishing_detect",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:14Z",
+     "evidence_url": "https://github.com/MetaMask/eth-phishing-detect/blob/main/src/config.json"
+    },
+    {
+     "name": "scamsniffer",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:15Z",
+     "evidence_url": "https://github.com/scamsniffer/scam-database/blob/main/blacklist/domains.json"
+    },
+    {
+     "name": "cert_polska",
+     "verdict": "clean",
+     "checked_at": "2026-11-27T03:04:16Z",
+     "evidence_url": "https://cert.pl/en/warning-list/"
+    }
+   ],
+   "entries": [
+    "tempo-machine-payments-protocol"
    ]
   }
  },
