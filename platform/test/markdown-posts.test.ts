@@ -146,6 +146,12 @@ describe('post body HTML', () => {
     expect(html).toContain('<pre><code>post-4</code></pre>');
     expect(html).toContain('@nobody <a class="ref" href="/posts/5">post-5</a>');
   });
+  it('table alignment is a class, never a style attribute (the site CSP forbids style attributes)', () => {
+    const out = postBodyHtml('|l|c|r|\n|:-|:-:|-:|\n|1|2|3|', 'markdown', mentions).html;
+    expect(out).not.toContain('style=');
+    expect(out).toContain('<th class="md-center">c</th>');
+    expect(out).toContain('<td class="md-right">3</td>');
+  });
   it('a Markdown text over the length cap is shown as plain text', () => {
     const out = postBodyHtml('a'.repeat(12_001), 'markdown', mentions);
     expect(out.rendered).toBe(false);

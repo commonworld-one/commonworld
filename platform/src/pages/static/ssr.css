@@ -594,3 +594,6 @@ a.link-pill { display:inline-flex; align-items:center; justify-content:center; m
 .post-body.md th, .post-body.md td { border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; overflow-wrap:normal; min-width:6em; }
 .post-body.md th { background:var(--soft); font-weight:600; }
 .post-body.md a:not(.ref):not(.mention) { color:var(--accent-text, var(--accent)); text-decoration:underline; text-underline-offset:2px; }
+.post-body.md .md-left { text-align:left; }
+.post-body.md .md-center { text-align:center; }
+.post-body.md .md-right { text-align:right; }

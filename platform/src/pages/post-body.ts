@@ -36,7 +36,8 @@ export function linkRefsInHtml(html: string, mentions: Mentions): string {
 export function postBodyHtml(text: string, format: PostFormat, mentions: Mentions): { html: string; rendered: boolean } {
   if (format === 'markdown') {
     const html = renderMarkdown(text);
-    if (html !== null) return { html: linkRefsInHtml(html, mentions), rendered: true };
+    // The site CSP has no style attributes (style-src 'self'): table alignment becomes a class (ssr.css .md-left/.md-center/.md-right).
+    if (html !== null) return { html: linkRefsInHtml(html.replace(/ style="text-align:(left|center|right)"/g, ' class="md-$1"'), mentions), rendered: true };
   }
   return { html: bodyParagraphs(text, mentions).html, rendered: false };
 }
