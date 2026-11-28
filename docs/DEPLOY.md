@@ -96,12 +96,20 @@ workflow run on a pull request, a fork or any other branch never gets it.
 8. **Approve.** The run checks that the sha is on `main`, that `platform/` exists and that the same sha passed
    staging (next section), then stops at the `production` environment. The owner reviews and clicks
    *Approve and deploy*. Nothing waits for approval if the staging check fails.
-9. **The job then:** checks out exactly that commit → installs → typecheck → tests → reads `atlas/screens.lock`
-   at that commit and fetches exactly that `atlas-screens` commit (it must be on the `atlas-screens` branch) →
-   builds the Atlas into the Worker's assets → writes the **release manifest** → **migration gate** → prints the
-   database's Time Travel bookmark → applies pending D1 migrations → `wrangler deploy --env production` → smoke
-   test (`/`, `/health` must say `"environment":"production"`, `/api/v1/index.json`, each must answer 200) → route
-   smoke list (next section).
+9. **The jobs then:** *build* (no secrets, no environment) checks out exactly that commit → installs → typecheck → tests →
+   reads `atlas/screens.lock` at that commit and fetches exactly that `atlas-screens` commit (it must be on the
+   `atlas-screens` branch) → builds the Atlas into the Worker's assets (without `CW_PRIVATE_TERMS`) → writes the
+   **release manifest** → bundles the Worker with the pinned Wrangler of `main` (dry run) → packs the release as an
+   artifact. *private-scan* (only `CW_PRIVATE_TERMS`, trusted code of `main`) runs the forbidden-text check on the built
+   assets and fails when the secret is missing. Then *deploy*, the only job with the `production` approval and the
+   Cloudflare token, runs trusted code of `main` only (`.github/deploy-tools`, `scripts/check-migrations.py`): verifies the
+   artifact hash and sha, reads it as data, checks its `wrangler.toml` against an allowlist
+   (`check-production-config.py`) → prints the production version before the deploy → **migration gate** → prints the
+   database's Time Travel bookmark → applies pending D1 migrations → `wrangler deploy` of the prebuilt bundle
+   (`--env production`). *verify* (no secrets) runs the smoke test (`/`, `/health` must say `"environment":"production"`,
+   `/api/v1/index.json`, each must answer 200) and the route smoke list (next section). The release artifact is kept
+   for **3 days**: the owner has to approve within 3 days of the dispatch. A later approval finds no artifact, deploys
+   nothing and fails; start the run again.
 
 ### Route smoke list after every deploy
 
