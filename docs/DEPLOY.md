@@ -37,16 +37,22 @@ every request to `api.cloudflare.com` and overwrites that JWT, so `npm run deplo
 upload with `401 Unauthorized` (API-token calls such as D1 migrations still work). A GitHub runner sends the JWT as is.
 
 How: Actions → *Deploy platform (staging)* → *Run workflow*, "Use workflow from" = `main`, field `ref` = the branch or
-commit to try. The job checks that `env.staging` in that commit's `wrangler.toml` points only at
-`commonworld-api-staging` / `commonworld-staging` / `staging.commonworld.one`, runs typecheck + tests, builds the
-Atlas, lists and applies pending staging migrations (scanner in report-only mode), deploys with `--env staging` and
-smoke-tests `staging.commonworld.one`. A second job, *E2E against staging (read-only)*, then runs the Playwright suite
+commit to try. No runner holds the Cloudflare credentials and runs code of that commit at the same time. Job `resolve`
+fixes the commit sha and checks that `env.staging` in that commit's `wrangler.toml` points only at
+`commonworld-api-staging` / `commonworld-staging` / `staging.commonworld.one`. Job `build` (no secrets) runs typecheck +
+tests, builds the Atlas and a Worker bundle (`wrangler deploy --dry-run`). Job `private-scan` applies the forbidden-text
+check (`CW_PRIVATE_TERMS`) to the built assets. Job `migrate` lists and applies pending staging migrations (scanner in
+report-only mode) and job `deploy` uploads the prebuilt bundle with `--env staging`-equivalent settings; both use the
+pinned Wrangler in `.github/deploy-tools` and the scripts of `main`, read the build artifact only as data and take the
+Wrangler settings from an allowlist (`.github/deploy-tools/make-staging-config.py`: name, route, database and bucket are
+fixed; other settings in the commit's `wrangler.toml`, such as an extra binding or a build command, fail the run until
+they are on `main`). The job *Deploy to staging* then smoke-tests `staging.commonworld.one`. A second job, *E2E against staging (read-only)*, runs the Playwright suite
 (`platform/e2e`, projects `api`, `phone`, `tablet`, `desktop`) from the same commit against `staging.commonworld.one`.
 It gets no secrets and no test-citizen keys and sets `CW_E2E_ALLOW_REGISTER=0`, so every spec that writes skips itself;
 what runs only reads (plus log-only `POST /v1/csp-report` probes). A failing e2e job turns the whole run red and keeps
 the Playwright report as the artifact `staging-e2e-report-<sha>` (14 days).
 
-After its smoke test passes, the deploy job uploads the artifact `staging-deployed-<sha>` (90 days; the file inside
+After its smoke test passes, the job *Deploy to staging* uploads the artifact `staging-deployed-<sha>` (90 days; the file inside
 holds the deployed commit). The production workflow looks this artifact up to find the staging run of the commit it is
 about to release (see [Staging check before production](#staging-check-before-production)). A re-run of the same commit
 replaces it; a re-run that deployed a different commit (the `ref` was a branch that moved) adds a second
