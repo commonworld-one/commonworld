@@ -232,8 +232,11 @@ jobs:
           python-version: '3.12'
           # no pip cache: the job that holds the Cloudflare credentials uploads what this one built
       - name: Install the pinned Wrangler (lockfile of main, no lifecycle scripts)
-        working-directory: trusted/.github/deploy-tools
-        run: npm ci --ignore-scripts --no-audit --no-fund
+        run: |
+          mkdir -p "$RUNNER_TEMP/wrangler-tool"
+          cp trusted/.github/deploy-tools/package.json trusted/.github/deploy-tools/package-lock.json "$RUNNER_TEMP/wrangler-tool/"
+          cd "$RUNNER_TEMP/wrangler-tool"
+          npm ci --ignore-scripts --no-audit --no-fund
       - name: Install
         working-directory: platform
         run: npm ci --no-audit --no-fund
@@ -295,7 +298,7 @@ jobs:
           # byte-reproducible tarball of the built assets: sorted names, fixed mtime/owner, gzip without timestamp
           tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -C platform/.atlas-dist -cf - . | gzip -n > "$out/atlas-dist.tar.gz"
           dist_sha256=$(sha256sum "$out/atlas-dist.tar.gz" | cut -d' ' -f1)
-          wrangler_version=$(node trusted/.github/deploy-tools/node_modules/wrangler/bin/wrangler.js --version | tail -n1 | tr -d '\r')
+          wrangler_version=$(node "$RUNNER_TEMP/wrangler-tool/node_modules/wrangler/bin/wrangler.js" --version | tail -n1 | tr -d '\r')
           python - "$out/manifest.json" "$dist_sha256" "$wrangler_version" <<'PY'
           import json, os, sys
           path, dist, wrangler = sys.argv[1:4]
@@ -334,7 +337,7 @@ jobs:
         working-directory: platform
         env:
           WRANGLER_SEND_METRICS: 'false'
-        run: node "$GITHUB_WORKSPACE/trusted/.github/deploy-tools/node_modules/wrangler/bin/wrangler.js" deploy --env production --dry-run --outdir "$RUNNER_TEMP/bundle"
+        run: node "$RUNNER_TEMP/wrangler-tool/node_modules/wrangler/bin/wrangler.js" deploy --env production --dry-run --outdir "$RUNNER_TEMP/bundle"
       - name: Pack the release (bundle, assets, migrations, commit sha, contact address, wrangler.toml)
         id: pack
         run: |
