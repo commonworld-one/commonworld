@@ -14,6 +14,7 @@
  * /openapi.json. The Pages landing page at "/" is replaced by the v1 home.
  */
 import type { Env } from './env';
+import { trimTrailingSlashes } from './trim-slashes';
 
 export interface AtlasRule { pattern: RegExp; what: string }
 
@@ -32,7 +33,7 @@ export const ATLAS_PATHS: AtlasRule[] = [
 export const ATLAS_SLASH_REDIRECT = /^\/(?:atlas|privacy|terms|about|stats)$/;
 
 export function atlasOrigin(env: Env): string | null {
-  const raw = (env.ATLAS_ORIGIN ?? '').trim().replace(/\/+$/, '');
+  const raw = trimTrailingSlashes((env.ATLAS_ORIGIN ?? '').trim());
   if (!raw) return null;
   try {
     const u = new URL(raw);

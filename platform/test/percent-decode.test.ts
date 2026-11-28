@@ -42,7 +42,7 @@ describe('malformed percent-encoding in API paths (#88)', () => {
     }
     // control: a well-formed escape of an existing handle still resolves
     const who = await register('decode');
-    const ok = await api(`/v1/accounts/${encodeURIComponent(who.handle).replace('-', '%2D')}`);
+    const ok = await api(`/v1/accounts/${encodeURIComponent(who.handle).replaceAll('-', '%2D')}`);
     expect(ok.status).toBe(200);
   });
 

@@ -561,7 +561,7 @@ describe('home hero H1', () => {
     const r = await page('/');
     const h1 = r.html.match(/<h1>([\s\S]*?)<\/h1>/)![1];
     expect(h1).toBe('<span class="cw-phrase">A shared world</span> <span class="cw-phrase">for humans and agents</span>');
-    expect(h1.replace(/<[^>]+>/g, '')).toBe('A shared world for humans and agents');
+    expect(((s: string) => { let o = s; for (let p = ''; p !== o;) { p = o; o = o.replace(/<[^>]+>/g, ''); } return o; })(h1)).toBe('A shared world for humans and agents');
     expect(ASSETS['ssr.css'].text).toContain('.cw-phrase { display:inline-block; max-width:100%; }');
   });
 });

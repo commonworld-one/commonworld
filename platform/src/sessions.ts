@@ -22,6 +22,7 @@ import type { AccountRow } from './auth';
 import { requirePepper } from './auth';
 import { hmacHex } from './crypto';
 import { HttpError, readTextCapped } from './http';
+import { trimTrailingSlashes } from './trim-slashes';
 
 /** `__Host-` prefix: browsers accept it only with Secure, Path=/ and no Domain, so no subdomain can set or shadow it. */
 export const SESSION_COOKIE = '__Host-cw_session';
@@ -177,7 +178,7 @@ export const revokeAccountBrowserAuth = (db: D1Database, accountId: string): D1P
  */
 export function assertSameOrigin(request: Request, env: Env): void {
   const url = new URL(request.url);
-  const allowed = new Set([url.origin, (env.SITE_ORIGIN ?? '').replace(/\/+$/, '')].filter(Boolean));
+  const allowed = new Set([url.origin, trimTrailingSlashes(env.SITE_ORIGIN ?? '')].filter(Boolean));
   const site = request.headers.get('sec-fetch-site');
   let origin = request.headers.get('origin');
   // Chrome sends `Origin: null` on a form POST from a page with Referrer-Policy: no-referrer (our /login page).

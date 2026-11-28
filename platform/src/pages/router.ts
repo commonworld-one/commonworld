@@ -37,6 +37,7 @@ import { activityPage } from './activity';
 import { connectionsPage } from './connections';
 import { decisionsPage } from './decisions';
 import { handleOAuthPage, isOAuthPagePath } from './oauth-pages';
+import { trimTrailingSlashes } from '../trim-slashes';
 
 /** Validated analytics config from env: an invalid value is ignored (no tag, no CSP host), never echoed. */
 export function analyticsConfig(env: Env): { ga4: string | null; beacon: string | null } {
@@ -263,7 +264,7 @@ async function redirectFor(env: Env, path: string): Promise<string | null> {
     const n = Number(m[1]);
     return (await porchVisible(env, n)) ? `/porch?before=${n + 1}#porch-${n}` : null;
   }
-  if (path.length > 1 && path.endsWith('/') && !path.startsWith('/v1/')) return path.replace(/\/+$/, '') || '/';
+  if (path.length > 1 && path.endsWith('/') && !path.startsWith('/v1/')) return trimTrailingSlashes(path) || '/';
   return null;
 }
 
@@ -293,7 +294,7 @@ function assetResponse(method: string, name: string, version: string | null): Re
 async function pageCtx(env: Env, url: URL, viewer: Viewer | null = null): Promise<PageCtx> {
   const [facts, settings] = await Promise.all([siteFacts(env), getSettings(env)]);
   return {
-    origin: (env.SITE_ORIGIN || url.origin).replace(/\/+$/, ''),
+    origin: trimTrailingSlashes(env.SITE_ORIGIN || url.origin),
     facts, announcement: settings.announcement, forceNoindex: env.PAGES_NOINDEX === '1', now: Date.now(), analytics: analyticsConfig(env),
     commentsMd: settings['markdown.comments.enabled'],
     viewer: viewer ? { handle: viewer.account.handle, kind: viewer.account.kind, csrf: await csrfToken(env, viewer.sessionId) } : null,
@@ -483,11 +484,11 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
     const cookie: Record<string, string> = setCookie ? { 'set-cookie': setCookie } : {};
     const priv = { 'cache-control': 'private, no-store', 'x-robots-tag': 'noindex, nofollow', vary: 'Accept, Cookie', ...cookie };
     if (path === '/admin.md' || prefersMarkdown(request.headers.get('accept'))) {
-      const out = await adminPageMd(env, url, access, (env.SITE_ORIGIN || url.origin).replace(/\/+$/, ''));
+      const out = await adminPageMd(env, url, access, trimTrailingSlashes(env.SITE_ORIGIN || url.origin));
       return respond(method, out.status, out.markdown, { 'content-type': 'text/markdown; charset=utf-8', 'content-security-policy': "default-src 'none'; frame-ancestors 'none'", ...priv });
     }
     const out = await adminPageHtml(await pageCtx(env, url, viewer), env, url, access);
-    return respond(method, out.status, out.html, { ...htmlHeaders(env, url, 'private, no-store'), ...priv, link: `<${(env.SITE_ORIGIN || url.origin).replace(/\/+$/, '')}/admin.md>; rel="alternate"; type="text/markdown"` });
+    return respond(method, out.status, out.html, { ...htmlHeaders(env, url, 'private, no-store'), ...priv, link: `<${trimTrailingSlashes(env.SITE_ORIGIN || url.origin)}/admin.md>; rel="alternate"; type="text/markdown"` });
   }
 
   let m: RegExpMatchArray | null;
@@ -532,23 +533,23 @@ async function handlePageInner(request: Request, env: Env, exec: ExecutionContex
   };
 
   if (path === '/robots.txt') {
-    const origin = (env.SITE_ORIGIN || url.origin).replace(/\/+$/, '');
+    const origin = trimTrailingSlashes(env.SITE_ORIGIN || url.origin);
     return done(respond(method, 200, robotsTxt(env, origin), { 'content-type': 'text/plain; charset=utf-8', 'cache-control': PUBLIC_PAGE_CACHE }));
   }
   if (path === '/sitemap.xml' || path === '/sitemap-v1.xml') {
-    const origin = (env.SITE_ORIGIN || url.origin).replace(/\/+$/, '');
+    const origin = trimTrailingSlashes(env.SITE_ORIGIN || url.origin);
     // With the Atlas behind the same domain, /sitemap.xml is an index of the v1 sitemap and the Atlas sitemap.
     const xml = path === '/sitemap.xml' && atlas ? sitemapIndexXml(origin) : await sitemapXml(env, origin, atlas && env.PAGES_NOINDEX !== '1');
     return done(respond(method, 200, xml, { 'content-type': 'application/xml; charset=utf-8', 'cache-control': PUBLIC_PAGE_CACHE, ...noindexHeader(env) }));
   }
 
   if (path === MCP_DOC_JSON || path === MCP_WELL_KNOWN) {
-    const origin = (env.SITE_ORIGIN || url.origin).replace(/\/+$/, '');
+    const origin = trimTrailingSlashes(env.SITE_ORIGIN || url.origin);
     const doc = path === MCP_DOC_JSON ? mcpDescription(origin) : mcpWellKnown(origin);
     return done(respond(method, 200, JSON.stringify(doc, null, 1) + '\n', docHeaders(env, 'application/json; charset=utf-8')));
   }
   if (path === LLMS_PATHS.llms || path === LLMS_PATHS.llmsFull || path === LLMS_PATHS.openapi || path === OPENAPI_V1_ALIAS) {
-    const origin = (env.SITE_ORIGIN || url.origin).replace(/\/+$/, '');
+    const origin = trimTrailingSlashes(env.SITE_ORIGIN || url.origin);
     if (path === LLMS_PATHS.openapi || path === OPENAPI_V1_ALIAS) {
       const st = await getSettings(env);
       return done(respond(method, 200, JSON.stringify(docDeep(openapiDoc(origin), st['markdown.enabled'], st['markdown.comments.enabled']), null, 1) + '\n', docHeaders(env, 'application/json; charset=utf-8')));
@@ -670,7 +671,7 @@ const tokenEstimate = (text: string) => String(Math.ceil(text.length / 4));
 
 function markdownResponse(method: string, env: Env, url: URL, htmlPath: string, status: number, body: string, robots: string | null,
   extra: Record<string, string>, canonical = true): Response {
-  const origin = (env.SITE_ORIGIN || url.origin).replace(/\/+$/, '');
+  const origin = trimTrailingSlashes(env.SITE_ORIGIN || url.origin);
   // same robots rule as the HTML page: staging is noindex everywhere; error and variant twins say noindex too
   const xRobots = env.PAGES_NOINDEX === '1' ? 'noindex, nofollow' : status !== 200 ? 'noindex, follow' : robots;
   return respond(method, status, body, {

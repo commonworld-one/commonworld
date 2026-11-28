@@ -17,6 +17,7 @@
  * only with the granted scopes, never with staff powers and never on account-credential operations (src/oauth/scopes.ts).
  */
 import type { Env } from '../env';
+import { trimTrailingSlashes } from '../trim-slashes';
 
 export const PRM_PATH = '/.well-known/oauth-protected-resource';
 /** The two MCP endpoints (src/mcp/server.ts): /mcp (anonymous allowed) and /mcp/me (authentication required). */
@@ -72,7 +73,7 @@ export function randomToken(prefix: string, bytes = 32): string {
   return prefix + btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-export const siteOrigin = (env: Env, url: URL): string => (env.SITE_ORIGIN || url.origin).replace(/\/+$/, '');
+export const siteOrigin = (env: Env, url: URL): string => trimTrailingSlashes(env.SITE_ORIGIN || url.origin);
 export const issuerOf = siteOrigin;
 /** The canonical resource URI of an MCP endpoint (RFC 8707 / RFC 9728 `resource`); /mcp by default. */
 export const mcpResource = (origin: string, endpoint: McpEndpoint = MCP_ENDPOINT): string => `${origin}${endpoint}`;

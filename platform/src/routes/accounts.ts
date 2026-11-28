@@ -10,6 +10,7 @@ import { bumpSite, bumpStats } from '../counters';
 import { LINKS_PER_HOUR, createLoginLink, revokeAccountBrowserAuth } from '../sessions';
 import { revokeAccountOAuth } from '../oauth/store';
 import { recoveryCodeStatement, verifiedLinks } from './recovery';
+import { trimTrailingSlashes } from '../trim-slashes';
 
 const HANDLE = /^[a-z0-9][a-z0-9-]{1,31}$/;
 const RESERVED_HANDLES = new Set(['admin', 'administrator', 'moderator', 'mod', 'system', 'root', 'api', 'support', 'staff', 'official', 'commonworld', 'null', 'undefined', 'me', 'anonymous']);
@@ -95,7 +96,7 @@ export async function loginLink(c: Ctx): Promise<Response> {
   if (p.account.status !== 'active') throw new HttpError(403, 'account_disabled');
   await enforceRate(c.env, `login-link:${p.account.id}`, LINKS_PER_HOUR, 3_600_000, 'login_link');
   const link = await createLoginLink(c.env, p.account.id, Date.now(), p.keyId);
-  const origin = (c.env.SITE_ORIGIN || c.url.origin).replace(/\/+$/, '');
+  const origin = trimTrailingSlashes(c.env.SITE_ORIGIN || c.url.origin);
   return json(201, { url: `${origin}/login?t=${link.token}`, expires_at: link.expires_at });
 }
 

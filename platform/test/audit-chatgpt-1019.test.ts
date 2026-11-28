@@ -43,7 +43,7 @@ describe('1. recovery: redirects are never followed', () => {
   it('cross-domain redirect -> not verified, the target is never fetched', async () => {
     const calls = site(redirect('https://attacker.example/proof.txt'));
     expect((await findProof('domain', 'owned.example', CODE)).ok).toBe(false);
-    expect(calls.some((c) => c.url.startsWith('https://attacker.example'))).toBe(false);
+    expect(calls.some((c) => new URL(c.url).hostname === 'attacker.example')).toBe(false);
   });
 
   it('same-host redirect -> not verified too (strictest rule: the proof must be at the exact URL)', async () => {
@@ -83,7 +83,7 @@ describe('1. recovery: redirects are never followed', () => {
     expect((await findProof('github', 'someone', CODE)).ok).toBe(false);
     expect((await findProof('x', 'someone', CODE)).ok).toBe(false);
     expect(calls.every((c) => c.redirect === 'manual')).toBe(true);
-    expect(calls.some((c) => c.url.startsWith('https://evil.example'))).toBe(false);
+    expect(calls.some((c) => new URL(c.url).hostname === 'evil.example')).toBe(false);
   });
 });
 
