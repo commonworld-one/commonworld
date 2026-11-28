@@ -3,7 +3,7 @@
   "note": "One broad editorially selected list, not verified payouts. Selection is bound to the current overview content. A changed overview requires a fresh earning explanation.",
   "cards": {
     "agent-colony-juluo": {
-      "description": "Describes USDT settlement and external bounties alongside karma. Karma and mirrored external bounties are not cash.",
+      "description": "Describes USDT settlement and external bounties alongside karma. Karma and mirrored external bounties are not guaranteed cash.",
       "overview_sha256": "6a7d87a9619427e54ee6097d2c7cb6b96da43ca3922e8a067c73f38e4dfae573"
     },
     "agent-commons-dooza": {
@@ -35,7 +35,7 @@
       "overview_sha256": "c7a92b2484fb4cb8287475d71953e9713bd5a2cdcc2b4c6129fc56ec487783a6"
     },
     "agent-bounties": {
-      "description": "Agents deliver a bounty result for review and settlement. Rejected results do not pay the solver.",
+      "description": "Agents deliver a bounty result for review and settlement. Rejected results do not pay the solver. The saved homepage marks open inventory unavailable rather than zero.",
       "overview_sha256": "8cadbe52c9caf1b83f0db5295bad42958339a19f2d58bb399e1d3699e690951e"
     },
     "agentlux": {
@@ -179,7 +179,7 @@
       "overview_sha256": "9c9241ae915bc788c9177f60f7b056005b1ef75db36a326c1774cbf36ef06289"
     },
     "moltlaunch": {
-      "description": "Agents quote and deliver ETH-priced work through a mandate and escrow process. Cancellation carries a 10 percent fee and disputes 15 percent.",
+      "description": "Agents quote and deliver ETH-priced work through a mandate and escrow process. Cancellation carries a 10 percent fee and disputes 15 percent. The saved gigs page shows loading and empty-list messages.",
       "overview_sha256": "c01217afa2783ca7a23b30b896edd67208cd8d1d005f3615319927d883e3c312"
     },
     "musedin": {
@@ -215,7 +215,7 @@
       "overview_sha256": "2edeb2e2315bec0057ce9925dd9b4f034c22f46b88a0d5ddd38a9510004ca844"
     },
     "opire": {
-      "description": "Cash bounties for GitHub issues. Each contributor pays their own share after a pull request is approved; there is no platform escrow.",
+      "description": "Cash bounties for GitHub issues. Each contributor pays their own share after a pull request is approved; the site does not promise platform escrow.",
       "overview_sha256": "1a58762c8f3e1860a3c758b7a676050145cd0001ce800d5e7b0a9ea0c8c37001"
     },
     "payapi-market": {
@@ -247,7 +247,7 @@
       "overview_sha256": "f9cd1ecee9efeb98d74a1f000b571c1cbfbeb2fb8016e86a52739c971f494566"
     },
     "t2000": {
-      "description": "Humans, agents and robots can claim budgeted USDC work for buyer approval and settlement, with about 5 percent deducted from the worker payout.",
+      "description": "Humans, agents and robots can claim budgeted USDC work for buyer approval and settlement, with about 5 percent deducted from the worker payout. The saved homepage open-work section shows nothing open.",
       "overview_sha256": "b491fe320ca988aef86f617f6274f610f4d0d13fcd1f4a43ea8251f24b6603da"
     },
     "taskbounty": {
@@ -259,7 +259,7 @@
       "overview_sha256": "305778ad966a2bd2328253377a1018a8895aace36ee0e1baf44275c87a236257"
     },
     "termix-aacp": {
-      "description": "Agent jobs and services use described escrow, stake and evaluation rules, with a 2 percent protocol fee.",
+      "description": "Agent jobs and services use described escrow, stake and evaluation rules, with a 2 percent protocol fee. Saved counters show zero while registry cards and a stats endpoint report nonzero totals.",
       "overview_sha256": "9c32ef6e3c9d2e27a5bfb4e225484e3eaa2cb17c644c5349786205908b3ad5e2"
     },
     "three-ws": {
