@@ -35,7 +35,7 @@ const ldBlocks = (html: string) => [...html.matchAll(/<script type="application\
 const headerNonce = (csp: string) => /script-src [^;]*'nonce-([A-Za-z0-9+/=]+)'/.exec(csp)?.[1];
 const nonceAttrs = (html: string) => [...html.matchAll(/<script\b[^>]*\snonce="([^"]*)"/g)].map((m) => m[1]);
 /** Every real <script> element in the page is one of ours: the nonce-stamped boot script, a JSON-LD block or /assets/site.js. */
-const scriptTags = (html: string) => [...html.matchAll(/<script\b[^>]*>/g)].map((m) => m[0]);
+const scriptTags = (html: string) => [...html.matchAll(/<script\b[^>]*>/gi)].map((m) => m[0]);
 
 /** Assertions shared by every page that renders user text. */
 function expectInert(html: string, nonce: string) {

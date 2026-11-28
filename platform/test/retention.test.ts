@@ -106,7 +106,7 @@ describe('retention clean-up (daily_usage, idempotency_keys)', () => {
     // Invocation logs store full request URLs, and /login?t=… carries a one-time token: off in every env. (The staging
     // browser-agent visibility experiment had them on from 2026-10-18 and was ended early on 2026-10-19.)
     for (const prefix of ['', 'env.staging.', 'env.production.']) {
-      const esc = prefix.replace(/\./g, '\\.');
+      const esc = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       expect(wranglerToml).toMatch(new RegExp(`^\\[${esc}observability\\]\\nenabled = true\\n\\[${esc}observability\\.logs\\]\\ninvocation_logs = false$`, 'm'));
     }
     expect(wranglerToml).not.toMatch(/^invocation_logs = true$/m);

@@ -54,6 +54,7 @@ import { API_VERSION, docText } from '../openapi';
 import { getSettings } from '../settings';
 import { prefersMarkdown } from '../pages/markdown';
 import { CONFIRM_ARG, IDEMPOTENCY_ARG, TOOL_BY_NAME, visibleTools, type JsonSchema, type ToolDef } from './tools';
+import { trimTrailingSlashes } from '../trim-slashes';
 
 export const MCP_PATH = MCP_ENDPOINT;
 /** The same server with authentication required (OAuth "Connect" for connector clients); see the header comment. */
@@ -111,7 +112,7 @@ export function originProblem(request: Request, env: Env): string | null {
   if ((parsed.protocol !== 'https:' && parsed.protocol !== 'http:') || parsed.origin !== origin) return 'malformed_origin';
   const list = (env.MCP_ALLOWED_ORIGINS ?? '').split(',').map((s) => s.trim()).filter(Boolean);
   if (!list.length || list.includes('*')) return null;
-  const own = new Set([new URL(request.url).origin, (env.SITE_ORIGIN ?? '').replace(/\/+$/, '')]);
+  const own = new Set([new URL(request.url).origin, trimTrailingSlashes(env.SITE_ORIGIN ?? '')]);
   return own.has(origin) || list.includes(origin) ? null : 'origin_not_allowed';
 }
 

@@ -15,7 +15,8 @@ function web(pages: Record<string, unknown>) {
   const real = globalThis.fetch;
   vi.spyOn(globalThis, 'fetch').mockImplementation((async (input: RequestInfo | URL, init?: RequestInit) => {
     const u = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
-    if (u.startsWith('https://api.test') || u.startsWith('https://cw.test')) return real(input as any, init);
+    const host = (() => { try { return new URL(u).hostname; } catch { return ''; } })();
+    if (host === 'api.test' || host === 'cw.test') return real(input as any, init);
     calls.push(u);
     const hit = Object.keys(pages).find((k) => u.startsWith(k));
     if (!hit) return new Response('not found', { status: 404 });

@@ -25,7 +25,8 @@ async function get(path: string, method = 'GET') {
   const res: Response = await (exports as any).default.fetch(new Request(`https://cw.test${path}`, { method, redirect: 'manual' }));
   return { status: res.status, headers: res.headers, bytes: new Uint8Array(await res.arrayBuffer()) };
 }
-const unesc = (s: string) => s.replace(/&amp;/g, '&').replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+// &amp; last, so "&amp;lt;" becomes "&lt;" and not "<"
+const unesc = (s: string) => s.replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 const meta = (html: string, key: string) => {
   const v = html.match(new RegExp(`<meta (?:name|property)="${key}" content="([^"]*)"`))?.[1];
   return v === undefined ? undefined : unesc(v);

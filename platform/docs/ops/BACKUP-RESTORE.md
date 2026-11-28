@@ -298,7 +298,7 @@ state); the others are not recorded as done.
 - Tests `test/backup.test.ts`: dump → restore into an empty second D1 gives identical rows in every table, identical
   schema and `sqlite_sequence` (text with newlines, quotes, tabs, emoji, blobs); paging = one page; manifest + R2
   keys + both sha256; restore check PASS, and FAIL on no backup / stale (> 36 h) / changed manifest count / corrupted
-  file; cron dispatch (03:00 backs up, Mon 04:30 checks, the retention cron does neither); admin endpoints; no row
+  file; cron dispatch (03:00 backs up, Sun 04:30 checks, the retention cron does neither); admin endpoints; no row
   content in logs. OpenAPI contract test covers both endpoints.
 - Staging data, real R2: the same `src/backup.ts` code was rehearsed on staging on 2026-10-19 (staging D1 read-only,
   R2 bucket `commonworld-backups`, before the buckets were split): `staging/d1/2026-10-19.sql.gz` (24 935 B gzip,

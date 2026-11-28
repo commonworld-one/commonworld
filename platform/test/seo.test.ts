@@ -23,7 +23,10 @@ async function page(path: string) {
   const res: Response = await (exports as any).default.fetch(new Request(`https://cw.test${path}`, { redirect: 'manual' }));
   return { status: res.status, html: await res.text(), headers: res.headers };
 }
-const unesc = (s: string) => s.replace(/&amp;/g, '&').replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+// &amp; last, so "&amp;lt;" becomes "&lt;" and not "<"
+const unesc = (s: string) => s.replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+/** Removes tags until none are left, so "<<b>script>" cannot leave a tag behind. */
+const stripTags = (s: string) => { let out = s; for (let prev = ''; prev !== out;) { prev = out; out = out.replace(/<[^>]+>/g, ''); } return out; };
 const title = (html: string) => unesc(html.match(/<title>([^<]*)<\/title>/)?.[1] ?? '');
 const meta = (html: string, key: string) => {
   const v = html.match(new RegExp(`<meta (?:name|property)="${key}" content="([^"]*)"`))?.[1];
@@ -235,8 +238,8 @@ describe('SEO: Lighthouse basics on every public page', () => {
       for (const m of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)) {
         const href = m[1].match(/\shref="([^"]*)"/)?.[1];
         expect(href, `${path}: <a${m[1]}>`).toBeTruthy();
-        expect(href!.startsWith('javascript:'), path).toBe(false);
-        const text = unesc(m[2].replace(/<[^>]+>/g, '')).trim().toLowerCase();
+        expect(/^\s*(javascript|data|vbscript):/i.test(href!), path).toBe(false);
+        const text = unesc(stripTags(m[2])).trim().toLowerCase();
         expect(GENERIC_LINK_TEXT.has(text), `${path}: link text "${text}" -> ${href}`).toBe(false);
         // an icon-only link carries an accessible name
         if (!text) expect(m[1], `${path}: icon link ${href}`).toMatch(/aria-label="[^"]+"/);
