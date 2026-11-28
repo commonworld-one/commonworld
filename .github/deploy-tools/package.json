@@ -1,0 +1,8 @@
+{
+  "name": "commonworld-deploy-tools",
+  "private": true,
+  "description": "Pinned Wrangler for the trusted jobs of the staging deploy. Installed with npm ci --ignore-scripts from main; never from the deployed ref.",
+  "dependencies": {
+    "wrangler": "4.167.0"
+  }
+}

@@ -24,8 +24,23 @@ name: Deploy platform (staging)
 # After a passing smoke test and route smoke list the deploy job uploads the artifact staging-deployed-<deployed sha> (90 days). The production
 # workflow looks it up to require a green staging deploy + e2e of the exact commit it releases (#145, docs/DEPLOY.md).
 #
-# Secret: CLOUDFLARE_API_TOKEN of the GitHub environment `staging` = a staging-only token (Workers Scripts: Edit on the
-# staging Worker, D1: Edit). It must NOT be the production token. CLOUDFLARE_ACCOUNT_ID sits next to it.
+# Secrets: CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID of the GitHub environment `staging`. The token must NOT be the
+# production token. Intended scope: Workers Scripts Edit on the staging Worker and D1 Edit. The Cloudflare token form
+# offered no per-database scope for D1 Edit when last checked, so unless the token is limited some other way, what it can
+# reach beyond staging is decided by its scope in Cloudflare, which this workflow does not check. CW_PRIVATE_TERMS is a repository secret (read only by the job `private-scan`).
+#
+# Jobs (a runner never holds a secret and runs code of the dispatched ref at the same time):
+#   build         the ref's code (npm ci, tsc, tests, Atlas build, wrangler --dry-run bundle). No environment, no secrets.
+#                 Uploads one tar: Worker bundle, built assets, migration files, commit sha, the ref's wrangler.toml.
+#   private-scan  forbidden-text check of the built assets with CW_PRIVATE_TERMS. Trusted scripts of main only.
+#   migrate       (apply_migrations) report and apply D1 migrations on commonworld-staging. Trusted wrangler of main.
+#   deploy        wrangler deploy of the prebuilt bundle. Trusted wrangler of main, Wrangler config generated from an
+#                 allowlist (.github/deploy-tools/make-staging-config.py), never the ref's wrangler.toml itself.
+#   Deploy to staging  (named so for the production gate) smoke test, route smoke list and the staging-deployed artifact,
+#                 secret-free, on the exact commit that was deployed.
+# Trusted = .github/deploy-tools of this workflow's own commit (github.sha, pinned for the whole run). The ref's
+# migration files are read as data (SQL applied to commonworld-staging only); the ref's Worker code is what gets
+# deployed, which is the point of a staging run. Settings in the ref's wrangler.toml outside the allowlist fail the run.
 on:
   workflow_dispatch:
     inputs:
@@ -46,14 +61,13 @@ concurrency:
   group: deploy-platform-staging
   cancel-in-progress: false
 jobs:
-  deploy:
-    name: Deploy to staging
+  resolve:
+    # Runs no code of the ref: it only checks the ref out, parses wrangler.toml as data and fixes the commit sha that
+    # every later job uses. The sha therefore comes from this job, never from the job that runs the ref's code.
+    name: Resolve ref
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    environment:
-      name: staging
-      url: https://staging.commonworld.one/
+    timeout-minutes: 5
     outputs:
       sha: ${{ steps.target.outputs.sha }}
     env:
@@ -85,13 +99,28 @@ jobs:
           echo "deploying $(git rev-parse HEAD) ($REF) to staging"
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "## Staging deploy of \`$(git rev-parse HEAD)\` ($REF)" >> "$GITHUB_STEP_SUMMARY"
+  build:
+    name: Build candidate (no secrets)
+    needs: resolve
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      tar_sha256: ${{ steps.pack.outputs.tar_sha256 }}
+    env:
+      REF: ${{ inputs.ref }}
+      SHA: ${{ needs.resolve.outputs.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.resolve.outputs.sha }}
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '22'
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.12'
-          # no pip cache: this job holds the Cloudflare credentials, a restored cache would be input from an earlier, less trusted run
+          # no pip cache: the jobs that follow hold credentials and a restored cache would be input from an earlier, less trusted run
       - name: Install
         working-directory: platform
         run: npm ci --no-audit --no-fund
@@ -102,11 +131,10 @@ jobs:
         working-directory: platform
         run: npm test
       - name: Build the Atlas into the Worker's Static Assets
-        env:
-          CW_PRIVATE_TERMS: ${{ secrets.CW_PRIVATE_TERMS }}
+        # no CW_PRIVATE_TERMS here: this job runs the ref's code. check.py skips only its forbidden-text rule; the job
+        # `private-scan` applies that rule to the finished assets.
         run: |
           set -euo pipefail
-          [ -n "$CW_PRIVATE_TERMS" ] || echo "::warning::CW_PRIVATE_TERMS not set: forbidden-text check skipped for this staging build"
           python -m pip install -r requirements.txt
           node platform/scripts/build-atlas-assets.mjs --src "$GITHUB_WORKSPACE" --build
       - name: Routing check against this Atlas build
@@ -114,31 +142,177 @@ jobs:
         env:
           CW_REQUIRE_ATLAS_DIST: '1'
         run: npx vitest run test/atlas-assets.test.ts
-      - name: Migration report (staging has no gate, report only)
-        if: inputs.apply_migrations
+      - name: Worker bundle without credentials (wrangler --dry-run, no upload)
         working-directory: platform
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: 'false'
+        run: npx wrangler deploy --env staging --dry-run --outdir "$RUNNER_TEMP/bundle"
+      - name: Pack the candidate (bundle, assets, migrations, commit sha, contact address, wrangler.toml)
+        id: pack
         run: |
           set -euo pipefail
-          npx wrangler d1 migrations list commonworld-staging --remote --env staging 2>&1 | tee "$RUNNER_TEMP/migrations-pending.txt"
-          cd "$GITHUB_WORKSPACE"
-          python scripts/check-migrations.py --dir platform/migrations --pending-from "$RUNNER_TEMP/migrations-pending.txt" \
-            --sha "$(git rev-parse HEAD)" --warn-only
+          [ "$(git rev-parse HEAD)" = "$SHA" ] || { echo "::error::HEAD is not the resolved commit"; exit 1; }
+          s="$RUNNER_TEMP/stage"
+          mkdir -p "$s/bundle" "$s/assets" "$s/migrations" "$s/meta"
+          cp "$RUNNER_TEMP/bundle/index.js" "$s/bundle/index.js"
+          [ ! -f "$RUNNER_TEMP/bundle/index.js.map" ] || cp "$RUNNER_TEMP/bundle/index.js.map" "$s/bundle/"
+          cp -r platform/.atlas-dist/. "$s/assets/"
+          cp platform/migrations/*.sql "$s/migrations/"
+          printf '%s\n' "$SHA" > "$s/meta/sha.txt"
+          python3 -c "import json;print(json.load(open('atlas/site/site-config.json'))['contact']['general'])" > "$s/meta/contact.txt"
+          cp platform/wrangler.toml "$s/meta/ref-config.toml"
+          tar --owner=0 --group=0 --numeric-owner -cf "$RUNNER_TEMP/staging-build.tar" -C "$s" bundle assets migrations meta
+          echo "tar_sha256=$(sha256sum "$RUNNER_TEMP/staging-build.tar" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: staging-build-${{ needs.resolve.outputs.sha }}
+          path: ${{ runner.temp }}/staging-build.tar
+          retention-days: 1
+          if-no-files-found: error
+          overwrite: true
+  private-scan:
+    name: Forbidden-text check (trusted)
+    needs: [resolve, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          path: trusted
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: staging-build-${{ needs.resolve.outputs.sha }}
+          path: ${{ runner.temp }}/dl
+      - name: Unpack the artifact as data
+        env:
+          SHA: ${{ needs.resolve.outputs.sha }}
+          TAR_SHA256: ${{ needs.build.outputs.tar_sha256 }}
+        run: |
+          set -euo pipefail
+          [[ "$SHA" =~ ^[0-9a-f]{40}$ && "$TAR_SHA256" =~ ^[0-9a-f]{64}$ ]] || { echo "::error::malformed job output"; exit 1; }
+          [ "$(sha256sum "$RUNNER_TEMP/dl/staging-build.tar" | cut -d' ' -f1)" = "$TAR_SHA256" ] || { echo "::error::artifact hash differs from the one the build job reported"; exit 1; }
+          python3 trusted/.github/deploy-tools/safe-extract.py "$RUNNER_TEMP/dl/staging-build.tar" "$RUNNER_TEMP/x"
+          [ "$(tr -d '\n' < "$RUNNER_TEMP/x/meta/sha.txt")" = "$SHA" ] || { echo "::error::artifact is for another commit"; exit 1; }
+      - name: Forbidden-text check of the built assets
+        env:
+          CW_PRIVATE_TERMS: ${{ secrets.CW_PRIVATE_TERMS }}
+        run: python3 trusted/.github/deploy-tools/scan-private-terms.py "$RUNNER_TEMP/x/assets" "$RUNNER_TEMP/x/meta/contact.txt"
+  migrate:
+    name: Apply migrations (trusted)
+    needs: [resolve, build, private-scan]
+    if: inputs.apply_migrations
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: staging
+      url: https://staging.commonworld.one/
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          path: trusted
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: staging-build-${{ needs.resolve.outputs.sha }}
+          path: ${{ runner.temp }}/dl
+      - name: Unpack the artifact as data and generate the Wrangler config
+        env:
+          SHA: ${{ needs.resolve.outputs.sha }}
+          TAR_SHA256: ${{ needs.build.outputs.tar_sha256 }}
+        run: bash trusted/.github/deploy-tools/prepare.sh "$GITHUB_WORKSPACE/trusted" "$RUNNER_TEMP/dl/staging-build.tar" "$TAR_SHA256" "$SHA" "$RUNNER_TEMP/deploy"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+      - name: Install the pinned Wrangler (lockfile of main, no lifecycle scripts)
+        working-directory: trusted/.github/deploy-tools
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Migration report (staging has no gate, report only)
+        working-directory: ${{ runner.temp }}/deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: 'false'
+          SHA: ${{ needs.resolve.outputs.sha }}
+        run: |
+          set -euo pipefail
+          node "$GITHUB_WORKSPACE/trusted/.github/deploy-tools/node_modules/wrangler/bin/wrangler.js" d1 migrations list commonworld-staging --remote --config wrangler.json 2>&1 | tee "$RUNNER_TEMP/migrations-pending.txt"
+          python3 "$GITHUB_WORKSPACE/trusted/scripts/check-migrations.py" --dir "$RUNNER_TEMP/deploy/migrations" --pending-from "$RUNNER_TEMP/migrations-pending.txt" \
+            --sha "$SHA" --warn-only
       - name: Apply database migrations (staging)
-        if: inputs.apply_migrations
-        working-directory: platform
+        working-directory: ${{ runner.temp }}/deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx wrangler d1 migrations apply commonworld-staging --remote --env staging
+          WRANGLER_SEND_METRICS: 'false'
+        run: node "$GITHUB_WORKSPACE/trusted/.github/deploy-tools/node_modules/wrangler/bin/wrangler.js" d1 migrations apply commonworld-staging --remote --config wrangler.json
+  deploy:
+    name: Staging deploy (trusted)
+    needs: [resolve, build, private-scan, migrate]
+    if: ${{ !cancelled() && needs.resolve.result == 'success' && needs.build.result == 'success' && needs.private-scan.result == 'success' && (needs.migrate.result == 'success' || needs.migrate.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: staging
+      url: https://staging.commonworld.one/
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          path: trusted
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: staging-build-${{ needs.resolve.outputs.sha }}
+          path: ${{ runner.temp }}/dl
+      - name: Unpack the artifact as data and generate the Wrangler config
+        env:
+          SHA: ${{ needs.resolve.outputs.sha }}
+          TAR_SHA256: ${{ needs.build.outputs.tar_sha256 }}
+        run: bash trusted/.github/deploy-tools/prepare.sh "$GITHUB_WORKSPACE/trusted" "$RUNNER_TEMP/dl/staging-build.tar" "$TAR_SHA256" "$SHA" "$RUNNER_TEMP/deploy"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+      - name: Install the pinned Wrangler (lockfile of main, no lifecycle scripts)
+        working-directory: trusted/.github/deploy-tools
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Deploy the Worker (staging)
-        working-directory: platform
+        working-directory: ${{ runner.temp }}/deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx wrangler deploy --env staging --message "staging $(git rev-parse --short HEAD) ($REF)"
+          WRANGLER_SEND_METRICS: 'false'
+          SHA: ${{ needs.resolve.outputs.sha }}
+          REF: ${{ inputs.ref }}
+        run: node "$GITHUB_WORKSPACE/trusted/.github/deploy-tools/node_modules/wrangler/bin/wrangler.js" deploy bundle/index.js --no-bundle --config wrangler.json --message "staging ${SHA:0:7} ($REF)"
+  verify:
+    # The name is the one the production gate looks for (deploy-platform.yml: job "Deploy to staging" succeeded, plus the
+    # artifact below). It only runs after the trusted deploy succeeded, so "success" still means: deployed, smoke ok,
+    # route smoke ok, sha recorded.
+    name: Deploy to staging
+    needs: [resolve, deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      sha: ${{ needs.resolve.outputs.sha }}
+    env:
+      REF: ${{ inputs.ref }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.resolve.outputs.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
       - name: Smoke test (staging)
         run: |
           set -u
@@ -171,7 +345,7 @@ jobs:
           node platform/scripts/smoke.mjs https://staging.commonworld.one --environment staging
       - name: Record the deployed sha (read by the production workflow)
         env:
-          DEPLOYED_SHA: ${{ steps.target.outputs.sha }}
+          DEPLOYED_SHA: ${{ needs.resolve.outputs.sha }}
         run: |
           set -euo pipefail
           [ "$(git rev-parse HEAD)" = "$DEPLOYED_SHA" ] || { echo "::error::HEAD moved"; exit 1; }
@@ -182,7 +356,7 @@ jobs:
         with:
           # one name per deployed commit; a re-run of the same commit replaces it, a re-run that deployed another
           # commit adds a second name, which the production check treats as no proof
-          name: staging-deployed-${{ steps.target.outputs.sha }}
+          name: staging-deployed-${{ needs.resolve.outputs.sha }}
           path: ${{ runner.temp }}/staging-deployed/sha.txt
           retention-days: 90
           if-no-files-found: error
@@ -190,21 +364,21 @@ jobs:
   e2e:
     name: E2E against staging (read-only)
     # Same commit the deploy job shipped (not the ref again: a branch can move in between). No environment, no secrets.
-    needs: deploy
+    needs: verify
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
       BASE_URL: https://staging.commonworld.one
       CW_E2E_EXPECT_NOINDEX: '1'
       CW_E2E_ALLOW_REGISTER: '0'
-      SHA: ${{ needs.deploy.outputs.sha }}
+      SHA: ${{ needs.verify.outputs.sha }}
     defaults:
       run:
         working-directory: platform
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ needs.deploy.outputs.sha }}
+          ref: ${{ needs.verify.outputs.sha }}
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -226,7 +400,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: staging-e2e-report-${{ needs.deploy.outputs.sha }}
+          name: staging-e2e-report-${{ needs.verify.outputs.sha }}
           path: |
             platform/e2e/playwright-report/
             platform/e2e/test-results/
