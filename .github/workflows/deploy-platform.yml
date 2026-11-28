@@ -237,7 +237,7 @@ jobs:
           git show "$TRUSTED_SHA:.github/deploy-tools/package.json" > "$RUNNER_TEMP/wrangler-tool/package.json"
           git show "$TRUSTED_SHA:.github/deploy-tools/package-lock.json" > "$RUNNER_TEMP/wrangler-tool/package-lock.json"
           cd "$RUNNER_TEMP/wrangler-tool"
-          npm ci --ignore-scripts --no-audit --no-fund
+          npm --ignore-scripts --no-audit --no-fund ci
       - name: Install
         working-directory: platform
         run: npm ci --no-audit --no-fund
@@ -299,7 +299,7 @@ jobs:
           # byte-reproducible tarball of the built assets: sorted names, fixed mtime/owner, gzip without timestamp
           tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -C platform/.atlas-dist -cf - . | gzip -n > "$out/atlas-dist.tar.gz"
           dist_sha256=$(sha256sum "$out/atlas-dist.tar.gz" | cut -d' ' -f1)
-          wrangler_version=$(node "$RUNNER_TEMP/wrangler-tool/node_modules/wrangler/bin/wrangler.js" --version | tail -n1 | tr -d '\r')
+          wrangler_version=$("$RUNNER_TEMP/wrangler-tool/node_modules/.bin/wrangler" --version | tail -n1 | tr -d '\r')
           python - "$out/manifest.json" "$dist_sha256" "$wrangler_version" <<'PY'
           import json, os, sys
           path, dist, wrangler = sys.argv[1:4]
@@ -338,7 +338,8 @@ jobs:
         working-directory: platform
         env:
           WRANGLER_SEND_METRICS: 'false'
-        run: node "$RUNNER_TEMP/wrangler-tool/node_modules/wrangler/bin/wrangler.js" deploy --env production --dry-run --outdir "$RUNNER_TEMP/bundle"
+        run: |
+          "$RUNNER_TEMP/wrangler-tool/node_modules/.bin/wrangler" deploy --env production --dry-run --outdir "$RUNNER_TEMP/bundle"
       - name: Pack the release (bundle, assets, migrations, commit sha, contact address, wrangler.toml)
         id: pack
         run: |
