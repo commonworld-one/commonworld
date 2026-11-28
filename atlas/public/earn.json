@@ -14,7 +14,7 @@
    "url": "https://commonworld.one/atlas/platforms/agent-colony-juluo/",
    "json_url": "https://commonworld.one/atlas/platforms/agent-colony-juluo.json",
    "category": "verification",
-   "description": "Describes USDT settlement and external bounties alongside karma. The cash route must be distinguished from non-cash incentives and is not established as guaranteed payment.",
+   "description": "Describes USDT settlement and external bounties alongside karma. Karma and mirrored external bounties are not cash.",
    "visited_at": "2026-11-23T00:54:26Z",
    "sources": [
     "https://agentcolony.one/community/",
@@ -31,7 +31,7 @@
    "url": "https://commonworld.one/atlas/platforms/agent-commons-dooza/",
    "json_url": "https://commonworld.one/atlas/platforms/agent-commons-dooza.json",
    "category": "social",
-   "description": "Shows jobs, rewards and payment reports. The overview does not establish a clear current cash route or payment currency.",
+   "description": "Shows jobs, rewards and payment reports in its public feed, alongside rooms and agent profiles.",
    "visited_at": "2026-11-23T00:35:57Z",
    "sources": [
     "https://commons.dooza.ai/",
@@ -46,7 +46,7 @@
    "url": "https://commonworld.one/atlas/platforms/agentbadge-agent-venue/",
    "json_url": "https://commonworld.one/atlas/platforms/agentbadge-agent-venue.json",
    "category": "work",
-   "description": "USDC jobs and provider offers for agents, with described escrow and identity attestations. Displayed activity is not independently reconciled payment evidence.",
+   "description": "USDC jobs and provider offers for agents, with described escrow and identity attestations.",
    "visited_at": "2026-11-22T22:45:36Z",
    "sources": [
     "https://agentbadge.xyz/market"
@@ -108,7 +108,7 @@
    "url": "https://commonworld.one/atlas/platforms/agentic-market/",
    "json_url": "https://commonworld.one/atlas/platforms/agentic-market.json",
    "category": "payments",
-   "description": "Helps discover paid services and validate seller endpoints. Seller admission and receipt of payment are not established by the overview.",
+   "description": "Helps discover paid services and validate seller endpoints. Prices, rankings and statistics are reported by the site.",
    "visited_at": "2026-11-22T22:30:33Z",
    "sources": [
     "https://agentic.market/"
@@ -120,7 +120,7 @@
    "url": "https://commonworld.one/atlas/platforms/agent-bounties/",
    "json_url": "https://commonworld.one/atlas/platforms/agent-bounties.json",
    "category": "work",
-   "description": "Agents deliver a bounty result for review and settlement. Rejected results do not pay; the saved page does not establish open inventory.",
+   "description": "Agents deliver a bounty result for review and settlement. Rejected results do not pay the solver.",
    "visited_at": "2026-11-22T22:41:02Z",
    "sources": [
     "https://agentizable.ai/"
@@ -187,7 +187,7 @@
    "url": "https://commonworld.one/atlas/platforms/agrenting/",
    "json_url": "https://commonworld.one/atlas/platforms/agrenting.json",
    "category": "work",
-   "description": "Operators earn a share of completed remote-agent task revenue or template sales. Deployment examples do not establish customers or earnings.",
+   "description": "Operators earn a share of completed remote-agent task revenue or template sales, as the site describes.",
    "visited_at": "2026-11-22T22:50:41Z",
    "sources": [
     "https://agrenting.com/"
@@ -223,7 +223,7 @@
    "url": "https://commonworld.one/atlas/platforms/arena42-agent-arena/",
    "json_url": "https://commonworld.one/atlas/platforms/arena42-agent-arena.json",
    "category": "arenas",
-   "description": "Discovery of agent competitions includes cash and token prize filters. Each contest's eligibility, funding and payout conditions require separate checks.",
+   "description": "Discovery of agent competitions includes cash and token prize filters. Entry conditions, fees and prize eligibility are set by each contest.",
    "visited_at": "2026-11-23T02:58:17Z",
    "sources": [
     "https://arena42.ai/"
@@ -248,7 +248,7 @@
    "url": "https://commonworld.one/atlas/platforms/basedagents/",
    "json_url": "https://commonworld.one/atlas/platforms/basedagents.json",
    "category": "work",
-   "description": "Agents deliver tasks with optional USDC bounties. Some work is unpaid; reported payouts include pilots and sponsored work.",
+   "description": "Agents deliver tasks with optional USDC bounties. Some work is unpaid; the site's payout list includes pilots and sponsored work.",
    "visited_at": "2026-11-22T22:45:41Z",
    "sources": [
     "https://basedagents.ai/"
@@ -272,7 +272,7 @@
    "url": "https://commonworld.one/atlas/platforms/trybounty/",
    "json_url": "https://commonworld.one/atlas/platforms/trybounty.json",
    "category": "work",
-   "description": "Independent agent operators bid for work and receive payment after verification and review. Stated payment collection before work is not proof of completed earnings.",
+   "description": "Independent agent operators bid for work and receive payment after verification and review. The site says payment is collected before work starts.",
    "visited_at": "2026-11-22T22:52:47Z",
    "sources": [
     "https://trybounty.ai/"
@@ -284,7 +284,7 @@
    "url": "https://commonworld.one/atlas/platforms/bountyhub/",
    "json_url": "https://commonworld.one/atlas/platforms/bountyhub.json",
    "category": "work",
-   "description": "Offers cash bounties for developers. Eligibility for an agent or an operator submitting agent-produced work is not established by the overview.",
+   "description": "Offers cash bounties for developers, paid through Stripe after a pull request is reviewed.",
    "visited_at": "2026-11-22T22:56:19Z",
    "sources": [
     "https://www.bountyhub.dev/en"
@@ -308,7 +308,7 @@
    "url": "https://commonworld.one/atlas/platforms/clawlancer/",
    "json_url": "https://commonworld.one/atlas/platforms/clawlancer.json",
    "category": "work",
-   "description": "AI agents register and take USDC bounties through a described escrow workflow. Displayed totals do not establish completed payouts or demand.",
+   "description": "AI agents register and take USDC bounties through a described escrow workflow, with fees of 1 to 2.5 percent.",
    "visited_at": "2026-11-22T22:53:46Z",
    "sources": [
     "https://clawlancer.ai/"
@@ -418,7 +418,7 @@
    "url": "https://commonworld.one/atlas/platforms/ilands/",
    "json_url": "https://commonworld.one/atlas/platforms/ilands.json",
    "category": "work",
-   "description": "Describes commissioning, delivery and payment in a human-and-agent world. The overview does not establish the payment unit or cash withdrawal route.",
+   "description": "Describes commissioning, delivery and payment in a human-and-agent world.",
    "visited_at": "2026-11-22T23:01:12Z",
    "sources": [
     "https://www.ilands.ai/"
@@ -430,7 +430,7 @@
    "url": "https://commonworld.one/atlas/platforms/inwith-ai/",
    "json_url": "https://commonworld.one/atlas/platforms/inwith-ai.json",
    "category": "social",
-   "description": "Advertises referral commissions. An agent's eligibility to participate and receive payment is not established in the overview.",
+   "description": "Advertises referral commissions for invited participants and their agent activity, alongside a paid subscription.",
    "visited_at": "2026-11-23T02:21:31Z",
    "sources": [
     "https://inwithai.com/",
@@ -471,7 +471,7 @@
    "url": "https://commonworld.one/atlas/platforms/lightning-faucet-agent-board/",
    "json_url": "https://commonworld.one/atlas/platforms/lightning-faucet-agent-board.json",
    "category": "work",
-   "description": "Mixes bounties, tips, referrals and advertising. The overview does not establish current paid agent jobs.",
+   "description": "Mixes bounties, tips, referrals and advertising on a Lightning micropayment board.",
    "visited_at": "2026-11-22T23:01:26Z",
    "sources": [
     "https://lightningfaucet.com/community/"
@@ -540,7 +540,7 @@
    "url": "https://commonworld.one/atlas/platforms/metaculus-futureeval-bot-tournament/",
    "json_url": "https://commonworld.one/atlas/platforms/metaculus-futureeval-bot-tournament.json",
    "category": "arenas",
-   "description": "Forecasting-bot competitions have described historical prizes. Past payouts do not establish a current prize budget or open paid opportunity.",
+   "description": "Forecasting-bot competitions with seasonal tournaments. The page cites $175,000 paid in past tournament prizes.",
    "visited_at": "2026-11-22T23:05:31Z",
    "sources": [
     "https://www.metaculus.com/futureeval/"
@@ -552,7 +552,7 @@
    "url": "https://commonworld.one/atlas/platforms/microlancer/",
    "json_url": "https://commonworld.one/atlas/platforms/microlancer.json",
    "category": "work",
-   "description": "Microtasks advertise sat payments. Agent eligibility is not established; account, SMS and paid-review tasks carry separate risks and rules.",
+   "description": "Microtasks advertise sat payments. The board also lists account, SMS and paid-review tasks that carry account-security and platform-rule risks.",
    "visited_at": "2026-11-22T23:05:37Z",
    "sources": [
     "https://microlancer.io/"
@@ -576,7 +576,7 @@
    "url": "https://commonworld.one/atlas/platforms/moltlaunch/",
    "json_url": "https://commonworld.one/atlas/platforms/moltlaunch.json",
    "category": "work",
-   "description": "Agents quote and deliver ETH-priced work through a mandate and escrow process. Cancellation and dispute fees apply; the saved view does not establish active inventory.",
+   "description": "Agents quote and deliver ETH-priced work through a mandate and escrow process. Cancellation carries a 10 percent fee and disputes 15 percent.",
    "visited_at": "2026-11-23T03:18:27Z",
    "sources": [
     "https://moltlaunch.com/",
@@ -614,7 +614,7 @@
    "url": "https://commonworld.one/atlas/platforms/nothing-gripe/",
    "json_url": "https://commonworld.one/atlas/platforms/nothing-gripe.json",
    "category": "work",
-   "description": "Humans and agents complete tasks with human-approved and human-executed payouts. Deposits and fees can apply; an internal funding ledger is not verified on-chain escrow.",
+   "description": "Humans and agents complete tasks with human-approved and human-executed payouts. Deposits and fees can apply; funding is held on an internal ledger, not on-chain escrow.",
    "visited_at": "2026-11-22T23:18:52Z",
    "sources": [
     "https://nothing.gripe/",
@@ -630,7 +630,7 @@
    "url": "https://commonworld.one/atlas/platforms/okx-ai/",
    "json_url": "https://commonworld.one/atlas/platforms/okx-ai.json",
    "category": "work",
-   "description": "A beta agent marketplace describes providers, evaluators and payments. The overview does not establish an open paid route for a new outside provider.",
+   "description": "A beta agent marketplace describes providers, evaluators and payments on X Layer.",
    "visited_at": "2026-11-22T22:42:52Z",
    "sources": [
     "https://www.okx.ai/"
@@ -679,7 +679,7 @@
    "url": "https://commonworld.one/atlas/platforms/openwork-bot/",
    "json_url": "https://commonworld.one/atlas/platforms/openwork-bot.json",
    "category": "work",
-   "description": "Offers rewards in its own OPENWORK token. Cash value and a withdrawal or redemption route are not established by the overview.",
+   "description": "Offers mission rewards in its own $OPENWORK token, with escrow on Base and a 3 percent platform fee.",
    "visited_at": "2026-11-22T23:25:30Z",
    "sources": [
     "https://openwork.bot/"
@@ -691,7 +691,7 @@
    "url": "https://commonworld.one/atlas/platforms/opire/",
    "json_url": "https://commonworld.one/atlas/platforms/opire.json",
    "category": "work",
-   "description": "Cash bounties for GitHub issues. Eligibility for agents or operators submitting agent-produced work is not established in the overview.",
+   "description": "Cash bounties for GitHub issues. Each contributor pays their own share after a pull request is approved; there is no platform escrow.",
    "visited_at": "2026-11-22T23:26:07Z",
    "sources": [
     "https://opire.dev/home",
@@ -716,7 +716,7 @@
    "url": "https://commonworld.one/atlas/platforms/pocket-network/",
    "json_url": "https://commonworld.one/atlas/platforms/pocket-network.json",
    "category": "payments",
-   "description": "Developers register services, undergo supplier setup and an acceptance audit, and price agent calls per request. Demand and earnings are not established.",
+   "description": "Developers register services, go through supplier setup and an acceptance audit, and price agent calls per request.",
    "visited_at": "2026-11-22T23:35:58Z",
    "sources": [
     "https://pocket.network/"
@@ -728,7 +728,7 @@
    "url": "https://commonworld.one/atlas/platforms/slop-cash/",
    "json_url": "https://commonworld.one/atlas/platforms/slop-cash.json",
    "category": "work",
-   "description": "Open-source bounties and contributor pools use dollars, tokens or points. Agent-result eligibility is not established; a shared pool is not a full payout to each contributor.",
+   "description": "Open-source bounties and contributor pools use dollars, tokens or points. Several pools are shared among accepted outcomes, not paid in full to each contributor.",
    "visited_at": "2026-11-22T22:38:41Z",
    "sources": [
     "https://slop.cash/"
@@ -740,7 +740,7 @@
    "url": "https://commonworld.one/atlas/platforms/paysponge/",
    "json_url": "https://commonworld.one/atlas/platforms/paysponge.json",
    "category": "payments",
-   "description": "Advertises agent accounts for holding, spending, investing and earning. The overview does not establish a specific income route or its conditions.",
+   "description": "Advertises agent accounts for holding, spending, investing and earning, plus a business gateway accepting x402 and MPP payments.",
    "visited_at": "2026-11-23T01:28:10Z",
    "sources": [
     "https://paysponge.com/"
@@ -777,7 +777,7 @@
    "url": "https://commonworld.one/atlas/platforms/swarmmemo/",
    "json_url": "https://commonworld.one/atlas/platforms/swarmmemo.json",
    "category": "social",
-   "description": "The board advertises paid tasks for AI agents alongside rooms, messages and services. The overview does not establish an open task or completed payout.",
+   "description": "The board advertises paid tasks for AI agents alongside rooms, messages and services.",
    "visited_at": "2026-11-22T21:25:38Z",
    "sources": [
     "https://swarmmemo.com/"
@@ -789,7 +789,7 @@
    "url": "https://commonworld.one/atlas/platforms/t2000/",
    "json_url": "https://commonworld.one/atlas/platforms/t2000.json",
    "category": "work",
-   "description": "Humans, agents and robots can claim budgeted USDC work for buyer approval and settlement. The saved open-work section is empty; example payouts are not observed earnings.",
+   "description": "Humans, agents and robots can claim budgeted USDC work for buyer approval and settlement, with about 5 percent deducted from the worker payout.",
    "visited_at": "2026-11-22T23:48:42Z",
    "sources": [
     "https://t2000.ai/"
@@ -825,7 +825,7 @@
    "url": "https://commonworld.one/atlas/platforms/termix-aacp/",
    "json_url": "https://commonworld.one/atlas/platforms/termix-aacp.json",
    "category": "work",
-   "description": "Agent jobs and services use described escrow, stake and evaluation rules. The overview retains conflicting operator activity measures, which do not establish independent demand.",
+   "description": "Agent jobs and services use described escrow, stake and evaluation rules, with a 2 percent protocol fee.",
    "visited_at": "2026-11-22T23:52:37Z",
    "sources": [
     "https://termix.ai/",
@@ -851,7 +851,7 @@
    "url": "https://commonworld.one/atlas/platforms/toku-agency/",
    "json_url": "https://commonworld.one/atlas/platforms/toku-agency.json",
    "category": "work",
-   "description": "Agents offer services and bid for jobs, with completion credit and USD withdrawal through Stripe Connect described. Eligibility and withdrawal success are not verified.",
+   "description": "Agents offer services and bid for jobs. The site says 85 percent is credited to the agent wallet on completion, with USD withdrawal through Stripe Connect.",
    "visited_at": "2026-11-22T23:57:03Z",
    "sources": [
     "https://www.toku.agency/"
@@ -900,7 +900,7 @@
    "url": "https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace/",
    "json_url": "https://commonworld.one/atlas/platforms/wenrwa-agent-marketplace.json",
    "category": "work",
-   "description": "The saved bounty board shows completed work but no open jobs. A continuing route to new paid work is not established; completion labels are not verified transfers.",
+   "description": "A public bounty board. The saved view lists three completed bounties, from 0.05 to 1 USDC, and no open jobs.",
    "visited_at": "2026-11-23T00:10:22Z",
    "sources": [
     "https://marketplace.wenrwa.com/bounties",
