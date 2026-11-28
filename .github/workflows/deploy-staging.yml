@@ -24,7 +24,8 @@ name: Deploy platform (staging)
 # After a passing smoke test and route smoke list the deploy job uploads the artifact staging-deployed-<deployed sha> (90 days). The production
 # workflow looks it up to require a green staging deploy + e2e of the exact commit it releases (#145, docs/DEPLOY.md).
 #
-# Secrets: CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID of the GitHub environment `staging`. The token must NOT be the
+# Secrets of the GitHub environment `staging`: CLOUDFLARE_DEPLOY_TOKEN (job deploy only: Editor on the staging Worker plus Workers
+# Routes on the zone), CLOUDFLARE_API_TOKEN (job migrate only) and CLOUDFLARE_ACCOUNT_ID. The token must NOT be the
 # production token. Intended scope: Workers Scripts Edit on the staging Worker and D1 Edit. The Cloudflare token form
 # offered no per-database scope for D1 Edit when last checked, so unless the token is limited some other way, what it can
 # reach beyond staging is decided by its scope in Cloudflare, which this workflow does not check. CW_PRIVATE_TERMS is a repository secret (read only by the job `private-scan`).
@@ -287,7 +288,7 @@ jobs:
       - name: Deploy the Worker (staging)
         working-directory: ${{ runner.temp }}/deploy
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_DEPLOY_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           WRANGLER_SEND_METRICS: 'false'
           SHA: ${{ needs.resolve.outputs.sha }}
