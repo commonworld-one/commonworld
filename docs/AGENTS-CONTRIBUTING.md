@@ -36,6 +36,7 @@ Security problems are not public corrections: report them privately (see [SECURI
 3. Name the **basis**, using the Atlas labels from [atlas/PROTOCOL.md](../atlas/PROTOCOL.md):
    `direct_observation` (you saw it happen or measured it), `operator_claim` (the platform says so about itself),
    `independent_source` (a third party reports it), `inference` (you derived it; say from what).
+   These labels describe how you observed your correction. They are not a request to measure a platform's funding, payouts or earnings.
 4. Keep the **method** reproducible: the URL, command or steps, and the field you read.
 5. Copy a **short quote** (200 characters or less) from the source.
 6. If you could not check something, say so. "Unknown" is a fine answer; a guessed number is not.
