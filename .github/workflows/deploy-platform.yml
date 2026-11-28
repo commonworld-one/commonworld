@@ -55,8 +55,6 @@ on:
         type: string
 permissions:
   contents: read
-# No job here uses the Actions cache, and the build job checks out the released sha and runs its npm scripts.
-cache-mode: none
 concurrency:
   # one production deploy at a time; a second one waits, a running one is never cancelled
   group: deploy-platform-production
