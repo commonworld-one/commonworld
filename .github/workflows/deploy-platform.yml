@@ -218,11 +218,6 @@ jobs:
         run: |
           head=$(git rev-parse HEAD)
           [ "$head" = "$SHA" ] || { echo "::error::checked out $head, expected $SHA"; exit 1; }
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.sha }}
-          path: trusted
-          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '22'
@@ -232,9 +227,15 @@ jobs:
           python-version: '3.12'
           # no pip cache: the job that holds the Cloudflare credentials uploads what this one built
       - name: Install the pinned Wrangler (lockfile of main, no lifecycle scripts)
+        env:
+          TRUSTED_SHA: ${{ github.sha }}
         run: |
+          set -euo pipefail
+          # Only the two lockfile files of the workflow commit (main) are read as data from git; nothing of main runs here.
+          git fetch --quiet --no-tags --depth=1 origin "$TRUSTED_SHA"
           mkdir -p "$RUNNER_TEMP/wrangler-tool"
-          cp trusted/.github/deploy-tools/package.json trusted/.github/deploy-tools/package-lock.json "$RUNNER_TEMP/wrangler-tool/"
+          git show "$TRUSTED_SHA:.github/deploy-tools/package.json" > "$RUNNER_TEMP/wrangler-tool/package.json"
+          git show "$TRUSTED_SHA:.github/deploy-tools/package-lock.json" > "$RUNNER_TEMP/wrangler-tool/package-lock.json"
           cd "$RUNNER_TEMP/wrangler-tool"
           npm ci --ignore-scripts --no-audit --no-fund
       - name: Install
