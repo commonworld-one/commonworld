@@ -261,5 +261,107 @@ class StagingWorkflow(unittest.TestCase):
                 self.assertNotIn('${{', '\n'.join(body), f'{n}: expression inside a shell body')
 
 
+class StagingJobGraph(unittest.TestCase):
+    """Runs the job conditions of deploy-staging.yml against a model of GitHub's skip rules.
+
+    A job with no status function in its `if` gets an implicit success(), which is false when ANY job upstream, directly or
+    not, was skipped or failed. Jobs with `!cancelled()` or similar skip that check and decide from `needs.*.result`.
+    """
+    ORDER = ['resolve', 'build', 'private-scan', 'migrate', 'deploy', 'verify', 'e2e']
+
+    @classmethod
+    def graph(cls):
+        import re
+        text = StagingWorkflow.text
+        jobs = StagingWorkflow().jobs()
+        g = {}
+        for n in cls.ORDER:
+            b = jobs[n]
+            m = re.search(r'\n    needs: (\[[^\]]*\]|[a-z-]+)\n', '\n' + b)
+            needs = [x.strip() for x in m.group(1).strip('[]').split(',')] if m else []
+            c = re.search(r'\n    if: (.*)\n', '\n' + b)
+            cond = c.group(1).strip() if c else None
+            if cond and cond.startswith('${{'):
+                cond = cond[3:-2].strip()
+            g[n] = (needs, cond)
+        return g
+
+    @classmethod
+    def simulate(cls, apply_migrations, failing=None, cancelled=False):
+        g = cls.graph()
+        res = {}
+
+        def ancestors(n):
+            out = set()
+            for d in g[n][0]:
+                out |= {d} | ancestors(d)
+            return out
+
+        for n in cls.ORDER:
+            needs, cond = g[n]
+            has_status = bool(cond) and any(f in cond for f in ('cancelled()', 'always()', 'failure()', 'success()'))
+            implicit = (not has_status) and not cancelled and all(res[a] == 'success' for a in ancestors(n))
+            if cond is None:
+                run = implicit
+            else:
+                py = cond.replace('&&', ' and ').replace('||', ' or ')
+                py = py.replace('!cancelled()', '(not CANCELLED)')
+                import re
+                py = re.sub(r"needs\.([a-z-]+)\.result", lambda m: "NEEDS['%s']" % m.group(1), py)
+                py = py.replace("github.ref == 'refs/heads/main'", 'True').replace('inputs.apply_migrations', 'APPLY')
+                self_ok = eval(py, {'NEEDS': {d: res[d] for d in needs}, 'CANCELLED': cancelled, 'APPLY': apply_migrations})
+                run = bool(self_ok) and (has_status or implicit)
+            res[n] = ('failure' if n == failing else 'success') if run else 'skipped'
+        return res
+
+    def test_good_runs_reach_the_gate_jobs_with_and_without_migrations(self):
+        for apply in (False, True):
+            r = self.simulate(apply)
+            self.assertEqual(r['verify'], 'success', apply)
+            self.assertEqual(r['e2e'], 'success', apply)
+            self.assertEqual(r['migrate'], 'success' if apply else 'skipped')
+
+    def test_gate_jobs_only_succeed_when_everything_before_them_did(self):
+        for apply in (False, True):
+            for failing in [None] + self.ORDER:
+                if failing == 'migrate' and not apply:
+                    continue
+                r = self.simulate(apply, failing)
+                required = ['resolve', 'build', 'private-scan', 'deploy'] + (['migrate'] if apply else [])
+                good = failing is None or failing not in required
+                self.assertEqual(r['verify'] == 'success', good and failing != 'verify', (apply, failing, r))
+                self.assertEqual(r['e2e'] == 'success', good and failing not in ('verify', 'e2e'), (apply, failing, r))
+                if failing in required:
+                    self.assertEqual((r['verify'], r['e2e']), ('skipped', 'skipped'), (apply, failing, r))
+
+    def test_cancelled_run_deploys_and_verifies_nothing(self):
+        for apply in (False, True):
+            r = self.simulate(apply, None, cancelled=True)
+            self.assertEqual((r['deploy'], r['verify'], r['e2e']), ('skipped', 'skipped', 'skipped'), apply)
+
+    def test_old_default_condition_would_have_skipped_the_gate(self):
+        """The failure this model exists for: with no explicit condition, a skipped migrate skips verify and e2e."""
+        cls = self.__class__
+        saved = cls.graph
+        try:
+            def broken():
+                g = saved.__func__(cls)
+                g['verify'] = (g['verify'][0], None)
+                g['e2e'] = (g['e2e'][0], None)
+                return g
+            cls.graph = classmethod(lambda c: broken())
+            r = cls.simulate(False)
+            self.assertEqual((r['deploy'], r['verify'], r['e2e']), ('success', 'skipped', 'skipped'))
+        finally:
+            cls.graph = saved
+
+    def test_conditions_only_read_direct_needs(self):
+        import re
+        g = self.graph()
+        for n, (needs, cond) in g.items():
+            for dep in re.findall(r'needs\.([a-z-]+)\.result', cond or ''):
+                self.assertIn(dep, needs, f'{n} reads needs.{dep} but does not list it')
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -299,6 +299,9 @@ jobs:
     # route smoke ok, sha recorded.
     name: Deploy to staging
     needs: [resolve, deploy]
+    # An explicit condition is needed: the default one requires every job upstream to have succeeded, and `migrate` is
+    # skipped when apply_migrations is false, which would skip this job (and e2e) after a good deploy.
+    if: ${{ !cancelled() && needs.resolve.result == 'success' && needs.deploy.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     outputs:
@@ -365,6 +368,8 @@ jobs:
     name: E2E against staging (read-only)
     # Same commit the deploy job shipped (not the ref again: a branch can move in between). No environment, no secrets.
     needs: verify
+    # Same reason as in verify: the default condition would also look at the skipped migrate job.
+    if: ${{ !cancelled() && needs.verify.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
